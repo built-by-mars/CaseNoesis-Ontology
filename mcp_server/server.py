@@ -49,6 +49,11 @@ from document_processor import (
     TOOL_VERSION as DOCUMENT_PROCESSOR_TOOL_VERSION,
     process_document_file as _process_document_file,
 )
+from graph_validator import (
+    VALIDATOR_NAME as GRAPH_VALIDATOR_NAME,
+    report_to_dict as _validation_report_to_dict,
+    validate_graph_file as _validate_graph_file,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -169,6 +174,7 @@ def process_document_file(
     output_path: str,
     file_kind: str | None = None,
     upload_id: str | None = None,
+    progress_output: str | None = None,
 ) -> dict:
     """Process a supported local synthetic file into CASE/UCO JSON-LD.
 
@@ -183,6 +189,7 @@ def process_document_file(
             output_path=output_path,
             file_kind=file_kind,
             safe_metadata={"upload_id": upload_id} if upload_id else None,
+            progress_output=progress_output,
         )
     except ValueError as exc:
         return {
@@ -202,6 +209,31 @@ def process_document_file(
         "validation_status": "valid",
         "safe_summary": f"Processed {result.file_kind} into CASE/UCO JSON-LD.",
     }
+
+
+@mcp.tool
+def validate_graph(graph_path: str, allow_warning: bool = True) -> dict:
+    """Validate a CASE/UCO graph file with the local case_validate SHACL tool.
+
+    Runs the CASE Utilities case_validate CLI against a local JSON-LD or
+    Turtle graph file and returns a bounded conformance report (conforms,
+    warning_count, violation_count, safe_summary). Use this before submitting
+    a produced graph for human review. Fails honestly when case_validate is
+    not installed (error "validator_unavailable") or the graph file is
+    missing, oversized, or an unsupported format — it never fabricates a
+    passing result.
+    """
+    try:
+        report = _validate_graph_file(graph_path, allow_warning=allow_warning)
+    except ValueError as exc:
+        return {
+            "ok": False,
+            "error": str(exc),
+            "validator_name": GRAPH_VALIDATOR_NAME,
+        }
+    result = {"ok": True}
+    result.update(_validation_report_to_dict(report))
+    return result
 
 
 @mcp.tool

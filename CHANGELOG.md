@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- MCP server `validate_graph` tool: wraps the local CASE Utilities `case_validate` SHACL validator for produced JSON-LD/Turtle graph files and returns a bounded conformance report (`conforms`, `warning_count`, `violation_count`, `safe_summary`); fails honestly with typed errors (`validator_unavailable`, `graph_missing`, `unsupported_graph_extension`, `graph_oversized`, `validation_timeout`) and never fabricates a passing result (`mcp_server/graph_validator.py`, tests in `mcp_server/tests/test_graph_validator.py`)
+- MCP server README: `process_document_file`/`validate_graph` tool table entries and a "Running under Hermes Agent" deployment section with stdio config example and law-enforcement egress posture notes (supports Link-Look Spec025 agent-teaming planning)
+
 ## [1.11.0] - 2026-04-25
 
 ### Added

@@ -40,6 +40,8 @@ fastmcp dev mcp_server/server.py
 | `list_all_facets` | (none) | All Facet classes for the ObservableObject pattern |
 | `get_recipe` | `scenario: str` | Find a code recipe for a forensic workflow |
 | `list_all_vocabs` | (none) | All vocabulary/enum types with members |
+| `process_document_file` | `source_path, output_path, file_kind?, upload_id?, progress_output?` | Process a supported local synthetic document (receipt image, PDF, Office, CSV/table) into bounded CASE/UCO-shaped JSON-LD |
+| `validate_graph` | `graph_path: str, allow_warning: bool = True` | Run the local CASE Utilities `case_validate` SHACL validator against a JSON-LD/Turtle graph file and return a bounded conformance report; fails honestly (`validator_unavailable`) when `case_validate` is not installed |
 
 ## Available Resources
 
@@ -59,6 +61,39 @@ When you describe a forensic scenario in natural language, the AI agent:
 4. Writes correct SDK code using the exact class names and property names
 
 This is much faster and more accurate than the agent reading markdown documentation.
+
+## Running under Hermes Agent
+
+The server runs unmodified under any MCP-native agent harness. For the
+[Hermes Agent](https://github.com/NousResearch/hermes-agent) (Nous Research),
+register it as a stdio MCP server in `~/.hermes/config.yaml`:
+
+```yaml
+mcp_servers:
+  case-uco:
+    command: "/home/cory/CASE-UCO-Libraries/.venv/bin/python"
+    args: ["/home/cory/CASE-UCO-Libraries/mcp_server/server.py"]
+    env:
+      PYTHONPATH: "python:mcp_server"
+      # CASE_UCO_EXTENSIONS: "cac,aeo"   # optional extension registries
+```
+
+Run `/reload-mcp` in Hermes after editing the config. All tools are then
+discoverable by the agent alongside its built-in tools.
+
+Law-enforcement deployment notes:
+
+- The server is local-only (stdio); it performs no network calls at runtime.
+  Egress posture is determined entirely by the agent's configured LLM
+  provider — pair this server with a local model backend by default, and use
+  commercial backends only in agency-approved, accredited environments.
+  Hosting an MCP server inside an agent does not by itself satisfy CJIS or
+  any other compliance obligation.
+- `process_document_file` accepts bounded local files only and returns safe
+  metadata; `validate_graph` requires the CASE Utilities `case_validate` CLI
+  on PATH and never fabricates a passing result.
+- Agents should call `validate_graph` on every produced graph before
+  submitting it to downstream tools (e.g., Link-Look normalization review).
 
 ## Architecture
 

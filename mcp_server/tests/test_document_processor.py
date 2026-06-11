@@ -61,3 +61,53 @@ def test_process_live_acceptance_file_types(tmp_path: Path) -> None:
         assert any(node.get("@type") == "case-investigation:InvestigativeAction" for node in graph)
         assert any(node.get("@type") == "uco-tool:Tool" for node in graph)
         assert any(node.get("@type") == "uco-core:UcoObject" for node in graph)
+
+
+def test_process_document_file_emits_safe_progress_checkpoints(tmp_path: Path) -> None:
+    source = tmp_path / "receipt.png"
+    output = tmp_path / "receipt.jsonld"
+    progress = tmp_path / "progress.jsonl"
+    write_png_with_text(source, "Synthetic receipt total 12.34")
+
+    process_document_file(source, output, progress_output=progress)
+
+    events = [
+        json.loads(line)
+        for line in progress.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    stages = [event["stage"] for event in events]
+    assert stages == [
+        "started",
+        "inspect_source",
+        "extract_content",
+        "build_graph",
+        "write_graph",
+        "completed",
+    ]
+    assert events[-1]["percent"] == 100
+    serialized = json.dumps(events)
+    assert str(source) not in serialized
+    assert "12.34" not in serialized
+    assert "Synthetic receipt total" not in serialized
+
+
+def test_process_document_file_emits_safe_failure_checkpoint(tmp_path: Path) -> None:
+    progress = tmp_path / "progress.jsonl"
+    missing_source = tmp_path / "missing.pdf"
+
+    try:
+        process_document_file(missing_source, tmp_path / "out.jsonld", progress_output=progress)
+    except ValueError as exc:
+        assert str(exc) == "source_missing"
+    else:
+        raise AssertionError("missing source should fail")
+
+    events = [
+        json.loads(line)
+        for line in progress.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    assert events[-1]["stage"] == "failed"
+    assert events[-1]["percent"] == 100
+    assert str(missing_source) not in json.dumps(events)

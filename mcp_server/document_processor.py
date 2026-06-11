@@ -17,6 +17,7 @@ import sys
 import uuid
 import zipfile
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -28,6 +29,15 @@ SUPPORTED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff"}
 SUPPORTED_PDF_EXTENSIONS = {".pdf"}
 SUPPORTED_OFFICE_EXTENSIONS = {".docx", ".xlsx"}
 SUPPORTED_CSV_EXTENSIONS = {".csv", ".tsv"}
+PROGRESS_STAGES = {
+    "started",
+    "inspect_source",
+    "extract_content",
+    "build_graph",
+    "write_graph",
+    "completed",
+    "failed",
+}
 
 
 @dataclass(frozen=True)
@@ -41,43 +51,80 @@ class ProcessedDocument:
     graph: dict[str, Any]
 
 
+class ProgressReporter:
+    """Append safe line-delimited progress checkpoints for local callers."""
+
+    def __init__(self, progress_output: str | Path | None) -> None:
+        self.progress_output = Path(progress_output).expanduser().resolve() if progress_output else None
+
+    def emit(self, stage: str, message: str, percent: int | None = None) -> None:
+        if not self.progress_output:
+            return
+        if stage not in PROGRESS_STAGES:
+            raise ValueError("unsupported_progress_stage")
+        event: dict[str, Any] = {
+            "stage": stage,
+            "message": sanitize_text(message),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "tool_name": TOOL_NAME,
+            "tool_version": TOOL_VERSION,
+        }
+        if percent is not None:
+            event["percent"] = max(0, min(100, int(percent)))
+        self.progress_output.parent.mkdir(parents=True, exist_ok=True)
+        with self.progress_output.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, sort_keys=True) + "\n")
+
+
 def process_document_file(
     source_path: str | Path,
     output_path: str | Path,
     file_kind: str | None = None,
     safe_metadata: dict[str, Any] | None = None,
+    progress_output: str | Path | None = None,
 ) -> ProcessedDocument:
     """Process a supported local document file and write CASE/UCO JSON-LD."""
 
+    progress = ProgressReporter(progress_output)
     source = Path(source_path).expanduser().resolve()
     output = Path(output_path).expanduser().resolve()
-    if not source.exists() or not source.is_file():
-        raise ValueError("source_missing")
-    byte_size = source.stat().st_size
-    if byte_size > MAX_BYTES:
-        raise ValueError("source_oversized")
-    kind = normalize_file_kind(file_kind, source)
-    text_fields = extract_fields(source, kind)
-    sha256 = hashlib.sha256(source.read_bytes()).hexdigest()
-    graph = build_case_uco_graph(
-        source=source,
-        file_kind=kind,
-        byte_size=byte_size,
-        sha256=sha256,
-        fields=text_fields,
-        safe_metadata=safe_metadata or {},
-    )
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
-    return ProcessedDocument(
-        source_path=source,
-        output_path=output,
-        file_kind=kind,
-        sha256=sha256,
-        byte_size=byte_size,
-        extracted_fields=text_fields,
-        graph=graph,
-    )
+    try:
+        progress.emit("started", "case-uco document preprocessing started.", 0)
+        if not source.exists() or not source.is_file():
+            raise ValueError("source_missing")
+        byte_size = source.stat().st_size
+        if byte_size > MAX_BYTES:
+            raise ValueError("source_oversized")
+        progress.emit("inspect_source", "Inspected source metadata and size.", 15)
+        kind = normalize_file_kind(file_kind, source)
+        text_fields = extract_fields(source, kind)
+        progress.emit("extract_content", f"Extracted safe fields for {kind}.", 45)
+        sha256 = hashlib.sha256(source.read_bytes()).hexdigest()
+        graph = build_case_uco_graph(
+            source=source,
+            file_kind=kind,
+            byte_size=byte_size,
+            sha256=sha256,
+            fields=text_fields,
+            safe_metadata=safe_metadata or {},
+        )
+        progress.emit("build_graph", "Built CASE/UCO-shaped graph artifact.", 70)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+        progress.emit("write_graph", "Wrote graph artifact to the case run directory.", 90)
+        progress.emit("completed", "case-uco document preprocessing completed.", 100)
+        return ProcessedDocument(
+            source_path=source,
+            output_path=output,
+            file_kind=kind,
+            sha256=sha256,
+            byte_size=byte_size,
+            extracted_fields=text_fields,
+            graph=graph,
+        )
+    except ValueError as exc:
+        progress.emit("failed", f"case-uco document preprocessing failed: {exc}", 100)
+        raise
 
 
 def normalize_file_kind(file_kind: str | None, source: Path) -> str:
@@ -287,6 +334,7 @@ def cli_main(argv: list[str] | None = None) -> int:
     parser.add_argument("--format", default="jsonld", choices=["jsonld"])
     parser.add_argument("--file-kind", choices=["receipt_image", "pdf", "office", "csv_table"])
     parser.add_argument("--upload-id")
+    parser.add_argument("--progress-output")
     args = parser.parse_args(argv)
     try:
         result = process_document_file(
@@ -294,6 +342,7 @@ def cli_main(argv: list[str] | None = None) -> int:
             args.output,
             file_kind=args.file_kind,
             safe_metadata={"upload_id": args.upload_id} if args.upload_id else None,
+            progress_output=args.progress_output,
         )
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
