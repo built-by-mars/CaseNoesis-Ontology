@@ -1,0 +1,24 @@
+{
+  "@context": {
+    "kb": "http://example.org/kb/",
+    "proposed": "http://example.org/ontology/proposed/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/"
+  },
+  "@graph": [
+    {
+      "@id": "kb:observable-11111111-1111-4111-8111-111111111111",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:hasFacet": [
+        {
+          "@id": "kb:tlp-marking-22222222-2222-4222-8222-222222222222",
+          "@type": "proposed:TrafficLightProtocolMarking",
+          "proposed:tlpVersion": "2.0",
+          "proposed:tlpLevel": "AMBER",
+          "proposed:tlpSource": "https://www.first.org/tlp/",
+          "proposed:handlingStatement": "Synthetic example: share according to TLP 2.0 AMBER handling guidance."
+        }
+      ]
+    }
+  ]
+}

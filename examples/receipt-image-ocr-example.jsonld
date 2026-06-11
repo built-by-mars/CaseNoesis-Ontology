@@ -1,0 +1,415 @@
+{
+  "@context": {
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "kb": "https://example.org/kb/receipt-example/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "kb:tool-cursor-vision-ocr-4b0e2e66-5f35-4b92-83ab-342a7d0d5d1a",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "Cursor GPT-5.5 vision-assisted OCR",
+      "uco-tool:toolType": "Image OCR and CASE/UCO mapping"
+    },
+    {
+      "@id": "kb:location-auntie-annes-penns-grove-762cc3de-3634-45bd-a2f0-57c9224876de",
+      "@type": "uco-location:Location",
+      "uco-core:hasFacet": [
+        {
+          "@id": "kb:SimpleAddressFacet-cd81d7f3-0d43-4e84-8e25-b05d6f3bafa7",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:addressType": "business",
+          "uco-location:country": "US",
+          "uco-location:locality": "Penns Grove",
+          "uco-location:postalCode": "08069",
+          "uco-location:region": "NJ",
+          "uco-location:street": "Mile post 5.4 North NJ Turnpike"
+        }
+      ],
+      "uco-core:name": "Auntie Anne's - Penns Grove NJ Turnpike"
+    },
+    {
+      "@id": "kb:organization-auntie-annes-33f3ff8a-1f95-4e64-9f6c-0f1647693e4f",
+      "@type": "uco-identity:Organization",
+      "uco-core:description": [
+        "Merchant identified from OCR text on receipt image."
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "kb:AddressFacet-885eb46b-06ed-4010-99fa-93907439de95",
+          "@type": "uco-identity:AddressFacet",
+          "uco-identity:address": {
+            "@id": "kb:location-auntie-annes-penns-grove-762cc3de-3634-45bd-a2f0-57c9224876de"
+          }
+        }
+      ],
+      "uco-core:name": "Auntie Anne's"
+    },
+    {
+      "@id": "kb:payment-card-visa-ending-6177-5ab74465-f712-46dc-9b53-02143d70a86c",
+      "@type": "uco-observable:PaymentCard",
+      "uco-core:description": [
+        "Payment card represented only by masked PAN visible on the receipt. Card network: Visa."
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "kb:AccountFacet-1206f950-a01f-4641-850a-cc10e974b836",
+          "@type": "uco-observable:AccountFacet",
+          "uco-observable:accountIdentifier": "XXXXXXXXXXXX1234"
+        }
+      ],
+      "uco-core:name": "Visa payment card ending 1234"
+    },
+    {
+      "@id": "kb:observable-receipt-image-419fe3f8-9793-44b8-9a63-132f937f6fe5",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:description": [
+        "Digital image of a point-of-sale receipt used as the source artifact for OCR extraction."
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "kb:FileFacet-30c2b5a3-1810-423c-a096-1f2a36e1b211",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:extension": "png",
+          "uco-observable:fileName": [
+            "c__Users_CoryHall_AppData_Roaming_Cursor_User_workspaceStorage_6b34393acb6837408b66cd24bdb90d18_images_receipt_example2-5ba939ca-cc29-4bdb-b7cc-dea3d7604ea7.png"
+          ],
+          "uco-observable:filePath": [
+            "/home/cory/.cursor/projects/home-cory-CASE-UCO-Libraries/assets/c__Users_CoryHall_AppData_Roaming_Cursor_User_workspaceStorage_6b34393acb6837408b66cd24bdb90d18_images_receipt_example2-5ba939ca-cc29-4bdb-b7cc-dea3d7604ea7.png"
+          ],
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "142396"
+          }
+        },
+        {
+          "@id": "kb:ContentDataFacet-8bdc87b3-ee53-461e-815e-81515777022c",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "kb:Hash-f32aa938-8534-414a-9455-639db2a38ed8",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": [
+                "SHA256"
+              ],
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "19b940210a2b072aa8063d66ba6a8e373a95f478877ec68e8c0f89ce97241860"
+              }
+            }
+          ],
+          "uco-observable:mimeType": [
+            "image/jpeg"
+          ],
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "142396"
+          }
+        },
+        {
+          "@id": "kb:ExtractedStringsFacet-ba6def4a-bdb5-467a-bbfc-02ed6fbe6550",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "kb:ExtractedString-7fd07cba-f78b-4860-976c-1a2adf68095e",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:encoding": "UTF-8",
+              "uco-observable:language": "eng",
+              "uco-observable:length": {
+                "@type": "xsd:integer",
+                "@value": "414"
+              },
+              "uco-observable:stringValue": "John Fenwick\nAuntie Annes\nMile post 5.4 North NJ Turnpike\nPenns Grove NJ 08069\n9021416 Dewayne S\nCHK 322430\n24 Apr'26 12:57 PM\nEat In\n1 PRTZ DOG 14 MINI        11.49\n1 2 PRETZEL DOG           14.59\nVisa                       $27.81\nXXXXXXXXXXXX6177\nSubtotal                   $26.08\nState Tax                  $1.73\nPayment                    $27.81\nChange Due                 $0.00\nCheck Closed\n24 Apr'26 12:57 PM"
+            }
+          ]
+        }
+      ],
+      "uco-core:name": "Receipt image supplied by user"
+    },
+    {
+      "@id": "kb:event-pos-transaction-322430-cf7c1cae-6a04-4a61-8b6f-0994b7aef5e1",
+      "@type": "uco-core:Event",
+      "uco-core:description": [
+        "Structured facts extracted from the receipt image. Amounts are represented as USD decimal strings in event attributes."
+      ],
+      "uco-core:name": "Point-of-sale transaction CHK 322430",
+      "uco-core:endTime": [
+        {
+          "@type": "xsd:dateTime",
+          "@value": "2026-04-24T12:57:00-04:00"
+        }
+      ],
+      "uco-core:eventAttribute": [
+        {
+          "@id": "kb:ProperDictionary-6cf67a73-577a-46a6-826d-30de28321bb8",
+          "@type": "uco-types:ProperDictionary",
+          "uco-types:entry": [
+            {
+              "@id": "kb:DictionaryEntry-59723b9f-3aa1-4afa-b676-147d999067fc",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "receipt.check_number",
+              "uco-types:value": "322430"
+            },
+            {
+              "@id": "kb:DictionaryEntry-a59610c8-d71c-4c78-9ecf-263cf5278fe5",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "receipt.service_type",
+              "uco-types:value": "Eat In"
+            },
+            {
+              "@id": "kb:DictionaryEntry-02ce40cf-2af6-4f3f-ab62-fa952234f082",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "receipt.closed_time",
+              "uco-types:value": "2026-04-24T12:57:00-04:00"
+            },
+            {
+              "@id": "kb:DictionaryEntry-329c1d14-5590-4ead-8e3b-3e844ed440db",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "merchant.name",
+              "uco-types:value": "Auntie Anne's"
+            },
+            {
+              "@id": "kb:DictionaryEntry-ae7f6c5b-e9f3-4f09-975b-98465a546f3d",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "merchant.receipt_display_name",
+              "uco-types:value": "Auntie Annes"
+            },
+            {
+              "@id": "kb:DictionaryEntry-0cb51560-ea72-46eb-b858-c92d94c605dc",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "merchant.location.street",
+              "uco-types:value": "Mile post 5.4 North NJ Turnpike"
+            },
+            {
+              "@id": "kb:DictionaryEntry-64eedaf1-c71a-4691-882c-30c15de1f109",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "merchant.location.locality",
+              "uco-types:value": "Penns Grove"
+            },
+            {
+              "@id": "kb:DictionaryEntry-46b9f0d6-4353-43a7-a2e6-02566416f423",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "merchant.location.region",
+              "uco-types:value": "NJ"
+            },
+            {
+              "@id": "kb:DictionaryEntry-ba7d034f-7f63-4798-9a4a-831c368306d6",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "merchant.location.postal_code",
+              "uco-types:value": "08069"
+            },
+            {
+              "@id": "kb:DictionaryEntry-e73df8d4-86c8-41d1-ade0-f5351172c9ff",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "employee_or_register_line",
+              "uco-types:value": "9021416 Dewayne S"
+            },
+            {
+              "@id": "kb:DictionaryEntry-bc8a3518-0b55-4642-9159-876190f235cf",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "line_item.1.description",
+              "uco-types:value": "PRTZ DOG 14 MINI"
+            },
+            {
+              "@id": "kb:DictionaryEntry-36fb21c4-ea05-43ff-8011-7046bf667188",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "line_item.1.quantity",
+              "uco-types:value": "1"
+            },
+            {
+              "@id": "kb:DictionaryEntry-f4888d21-975b-4680-931e-02209232a2ca",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "line_item.1.amount_usd",
+              "uco-types:value": "11.49"
+            },
+            {
+              "@id": "kb:DictionaryEntry-96a43c8a-cb2f-49c1-9993-80476a4e7051",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "line_item.2.description",
+              "uco-types:value": "2 PRETZEL DOG"
+            },
+            {
+              "@id": "kb:DictionaryEntry-2740a8df-5dfa-4285-864e-bac3262abdae",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "line_item.2.quantity",
+              "uco-types:value": "1"
+            },
+            {
+              "@id": "kb:DictionaryEntry-7f40b46f-7295-4827-9617-eeb5c33afe99",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "line_item.2.amount_usd",
+              "uco-types:value": "14.59"
+            },
+            {
+              "@id": "kb:DictionaryEntry-8a5a3093-f96f-4c5e-973a-863853205a36",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "subtotal_usd",
+              "uco-types:value": "26.08"
+            },
+            {
+              "@id": "kb:DictionaryEntry-3ef46820-8f3f-400a-8730-c9f7e1472f58",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "state_tax_usd",
+              "uco-types:value": "1.73"
+            },
+            {
+              "@id": "kb:DictionaryEntry-ec1154cc-c08a-4372-9da8-deb55622e57c",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "payment.amount_usd",
+              "uco-types:value": "27.81"
+            },
+            {
+              "@id": "kb:DictionaryEntry-14d9d1a3-0c39-47eb-b357-d5dffbe1e5ce",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "payment.change_due_usd",
+              "uco-types:value": "0.00"
+            },
+            {
+              "@id": "kb:DictionaryEntry-91bd99c3-63f0-4823-bc6b-f0c48f610f25",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "payment.method",
+              "uco-types:value": "Visa"
+            },
+            {
+              "@id": "kb:DictionaryEntry-beeae290-9bc1-4749-9a0d-2a2964743146",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "payment.card_masked_pan",
+              "uco-types:value": "XXXXXXXXXXXX6177"
+            },
+            {
+              "@id": "kb:DictionaryEntry-df83a4bf-4166-40c3-97ca-6ba36a69aa99",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "image.width_pixels",
+              "uco-types:value": "768"
+            },
+            {
+              "@id": "kb:DictionaryEntry-1a7b14f0-1566-495c-8092-fa7ec6567ad5",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "image.height_pixels",
+              "uco-types:value": "1024"
+            },
+            {
+              "@id": "kb:DictionaryEntry-46a62671-17d6-4905-b2e3-7b34618e7862",
+              "@type": "uco-types:DictionaryEntry",
+              "uco-types:key": "ocr.method",
+              "uco-types:value": "Vision-assisted OCR; tesseract unavailable in local environment"
+            }
+          ]
+        }
+      ],
+      "uco-core:eventContext": [
+        {
+          "@id": "kb:organization-auntie-annes-33f3ff8a-1f95-4e64-9f6c-0f1647693e4f"
+        },
+        {
+          "@id": "kb:location-auntie-annes-penns-grove-762cc3de-3634-45bd-a2f0-57c9224876de"
+        },
+        {
+          "@id": "kb:payment-card-visa-ending-6177-5ab74465-f712-46dc-9b53-02143d70a86c"
+        },
+        {
+          "@id": "kb:observable-receipt-image-419fe3f8-9793-44b8-9a63-132f937f6fe5"
+        }
+      ],
+      "uco-core:eventType": [
+        "point-of-sale purchase",
+        "receipt transaction"
+      ],
+      "uco-core:startTime": [
+        {
+          "@type": "xsd:dateTime",
+          "@value": "2026-04-24T12:57:00-04:00"
+        }
+      ]
+    },
+    {
+      "@id": "kb:action-ocr-model-receipt-03e36de3-0b63-46fa-a388-e3cfce77b0b0",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:description": [
+        "Extracted visible receipt text from the supplied image and modeled source artifact plus transaction facts as CASE/UCO JSON-LD."
+      ],
+      "uco-core:name": "OCR and CASE/UCO modeling of receipt image",
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-05-14T17:28:00+00:00"
+      },
+      "uco-action:instrument": [
+        {
+          "@id": "kb:tool-cursor-vision-ocr-4b0e2e66-5f35-4b92-83ab-342a7d0d5d1a"
+        }
+      ],
+      "uco-action:object": [
+        {
+          "@id": "kb:observable-receipt-image-419fe3f8-9793-44b8-9a63-132f937f6fe5"
+        }
+      ],
+      "uco-action:result": [
+        {
+          "@id": "kb:event-pos-transaction-322430-cf7c1cae-6a04-4a61-8b6f-0994b7aef5e1"
+        }
+      ],
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-05-14T17:28:00+00:00"
+      }
+    },
+    {
+      "@id": "kb:annotation-ocr-confidence-0c30a452-7ea3-4f1f-b676-6384886cff91",
+      "@type": "uco-core:Annotation",
+      "uco-core:statement": [
+        "OCR was derived from the visible receipt image. The local environment did not include a native OCR engine, so the extracted text should be treated as vision-assisted and reviewable."
+      ],
+      "uco-core:object": [
+        {
+          "@id": "kb:observable-receipt-image-419fe3f8-9793-44b8-9a63-132f937f6fe5"
+        },
+        {
+          "@id": "kb:event-pos-transaction-322430-cf7c1cae-6a04-4a61-8b6f-0994b7aef5e1"
+        }
+      ]
+    },
+    {
+      "@id": "kb:investigation-receipt-modeling-5682f35e-7c27-46c1-8e68-57fa4d08ca86",
+      "@type": "case-investigation:Investigation",
+      "uco-core:description": [
+        "Example investigation context for modeling a receipt image as a validated CASE/UCO graph."
+      ],
+      "uco-core:name": "Receipt image knowledge graph modeling example",
+      "uco-core:object": [
+        {
+          "@id": "kb:observable-receipt-image-419fe3f8-9793-44b8-9a63-132f937f6fe5"
+        },
+        {
+          "@id": "kb:event-pos-transaction-322430-cf7c1cae-6a04-4a61-8b6f-0994b7aef5e1"
+        },
+        {
+          "@id": "kb:organization-auntie-annes-33f3ff8a-1f95-4e64-9f6c-0f1647693e4f"
+        },
+        {
+          "@id": "kb:location-auntie-annes-penns-grove-762cc3de-3634-45bd-a2f0-57c9224876de"
+        },
+        {
+          "@id": "kb:payment-card-visa-ending-6177-5ab74465-f712-46dc-9b53-02143d70a86c"
+        },
+        {
+          "@id": "kb:action-ocr-model-receipt-03e36de3-0b63-46fa-a388-e3cfce77b0b0"
+        },
+        {
+          "@id": "kb:annotation-ocr-confidence-0c30a452-7ea3-4f1f-b676-6384886cff91"
+        }
+      ],
+      "case-investigation:focus": [
+        "receipt image OCR",
+        "point-of-sale transaction extraction",
+        "file-to-knowledge-graph processing"
+      ]
+    }
+  ]
+}

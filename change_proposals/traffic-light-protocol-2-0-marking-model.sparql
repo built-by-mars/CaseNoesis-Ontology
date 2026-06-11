@@ -1,0 +1,14 @@
+# CQ 1.1: What values are recorded for TrafficLightProtocolMarking instances?
+PREFIX uco-observable: <https://ontology.unifiedcyberontology.org/uco/observable/>
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/>
+
+SELECT ?obj ?tlpVersion ?tlpLevel ?tlpSource
+WHERE {
+    ?obj a uco-observable:ObservableObject ;
+         uco-core:hasFacet ?facet .
+    ?facet a proposed:TrafficLightProtocolMarking ;
+           proposed:tlpVersion ?tlpVersion ;
+           proposed:tlpLevel ?tlpLevel ;
+           proposed:tlpSource ?tlpSource .
+}

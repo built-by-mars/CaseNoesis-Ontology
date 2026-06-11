@@ -38,7 +38,11 @@ from pathlib import Path
 from typing import Any
 
 TOOL_NAME = "case-uco-document-normalize"
-TOOL_VERSION = "0.2.0"
+TOOL_VERSION = "0.3.0"
+EXTRACTION_BUNDLE_CONTRACT_VERSION = "1.0"
+EXTRACTED_CONTENT_FILENAME = "extracted-content.json"
+ANNOTATIONS_FILENAME = "annotations.jsonld"
+RFC7111_CONFORMS_TO = "http://tools.ietf.org/rfc/rfc7111"
 MAX_BYTES = 10 * 1024 * 1024
 MAX_CSV_RECORDS = 100
 MAX_RECORD_TEXT = 400
@@ -66,10 +70,17 @@ _OOXML_TEXT_RE = re.compile(r"<(?:\w+:)?t(?:\s[^>]*)?>([^<]{1,400})</(?:\w+:)?t>
 
 @dataclass(frozen=True)
 class ExtractedRecord:
-    """One reviewable record extracted from a source document."""
+    """One reviewable record extracted from a source document.
+
+    ``anchor`` (Spec026 extraction-bundle contract 1.0) locates the record in
+    the canonical extracted content. Records that cannot be honestly located
+    carry ``anchor=None`` and are simply absent from ``annotations.jsonld`` —
+    anchors are never fabricated.
+    """
 
     label: str
     text: str
+    anchor: dict[str, Any] | None = None
 
 
 @dataclass(frozen=True)
@@ -78,6 +89,9 @@ class ExtractedContent:
     summary_fields: dict[str, str]
     records: list[ExtractedRecord]
     truncated: bool = False
+    # Canonical content model serialized into extracted-content.json
+    # ({"kind": "text", "sections": [...]} or {"kind": "table", "sheets": [...]}).
+    canonical: dict[str, Any] | None = None
 
 
 @dataclass(frozen=True)
@@ -91,6 +105,8 @@ class ProcessedDocument:
     graph: dict[str, Any]
     records: list[ExtractedRecord] = field(default_factory=list)
     truncated: bool = False
+    extracted_content_path: Path | None = None
+    annotations_path: Path | None = None
 
 
 class ProgressReporter:
@@ -159,6 +175,26 @@ def process_document_file(
         progress.emit("build_graph", "Built CASE/UCO-shaped graph artifact.", 70)
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
+
+        # Spec026 extraction bundle (contract 1.0): canonical extracted content
+        # plus the Web Annotation companion graph, written beside the case graph.
+        extracted_content_path: Path | None = None
+        annotations_path: Path | None = None
+        run_id = derive_run_id(source, sha256, kind)
+        extracted_doc = build_extracted_content_document(sha256, kind, content)
+        annotations_doc = build_annotations_document(run_id, content)
+        if extracted_doc is not None and annotations_doc is not None:
+            extracted_content_path = output.parent / EXTRACTED_CONTENT_FILENAME
+            annotations_path = output.parent / ANNOTATIONS_FILENAME
+            extracted_content_path.write_text(
+                json.dumps(extracted_doc, indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+            annotations_path.write_text(
+                json.dumps(annotations_doc, indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+
         progress.emit("write_graph", "Wrote graph artifact to the case run directory.", 90)
         progress.emit("completed", "case-uco document preprocessing completed.", 100)
         return ProcessedDocument(
@@ -171,6 +207,8 @@ def process_document_file(
             graph=graph,
             records=content.records,
             truncated=content.truncated,
+            extracted_content_path=extracted_content_path,
+            annotations_path=annotations_path,
         )
     except ValueError as exc:
         progress.emit("failed", f"case-uco document preprocessing failed: {exc}", 100)
@@ -218,16 +256,29 @@ def extract_csv_content(source: Path) -> ExtractedContent:
     if not data_rows:
         raise ValueError("empty_csv")
     records: list[ExtractedRecord] = []
+    canonical_rows: list[list[str]] = []
     for index, row in enumerate(data_rows[:MAX_CSV_RECORDS], start=1):
+        sanitized_cells = [sanitize_text(value) for value in row]
+        canonical_rows.append(sanitized_cells)
         pairs = []
-        for column, value in zip(headers, row):
-            value = sanitize_text(value)
+        for column, value in zip(headers, sanitized_cells):
             if value:
                 pairs.append(f"{column or 'column'}={value}")
         text = sanitize_text("; ".join(pairs))[:MAX_RECORD_TEXT]
         if not text:
             continue
-        records.append(ExtractedRecord(label=f"Row {index}: {text[:60]}", text=text))
+        records.append(
+            ExtractedRecord(
+                label=f"Row {index}: {text[:60]}",
+                text=text,
+                # RFC 7111 counts the header as row 1, so data row N is N+1.
+                anchor={
+                    "selector_kind": "csv_fragment",
+                    "row_index": index,
+                    "rfc7111_row": index + 1,
+                },
+            )
+        )
     if not records:
         raise ValueError("empty_csv")
     truncated = len(data_rows) > MAX_CSV_RECORDS
@@ -244,7 +295,41 @@ def extract_csv_content(source: Path) -> ExtractedContent:
         summary_fields=summary,
         records=records,
         truncated=truncated,
+        canonical={
+            "kind": "table",
+            "sheets": [
+                {
+                    "name": "default",
+                    "header": headers,
+                    "rows": canonical_rows,
+                    "total_source_rows": len(data_rows),
+                    "truncated": truncated,
+                }
+            ],
+        },
     )
+
+
+def text_section_content(full_text: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Canonical single-section text model plus the anchor for its lead record.
+
+    The record text is a bounded prefix of the canonical section text, so a
+    TextPositionSelector span starting at offset 0 is exact by construction.
+    """
+
+    record_text = full_text[:MAX_RECORD_TEXT]
+    canonical = {
+        "kind": "text",
+        "sections": [{"section_id": "s1", "text": full_text}],
+    }
+    anchor = {
+        "selector_kind": "text_position",
+        "section_id": "s1",
+        "start": 0,
+        "end": len(record_text),
+        "exact": record_text,
+    }
+    return canonical, anchor
 
 
 def extract_office_content(source: Path) -> ExtractedContent:
@@ -272,6 +357,7 @@ def extract_office_content(source: Path) -> ExtractedContent:
     joined = sanitize_text(" ".join(texts))
     if not joined:
         raise ValueError("office_text_missing")
+    canonical, anchor = text_section_content(joined)
     return ExtractedContent(
         document_type="Office document",
         summary_fields={
@@ -279,7 +365,14 @@ def extract_office_content(source: Path) -> ExtractedContent:
             "extracted_text": joined[:240],
             "source_part_count": str(len(texts)),
         },
-        records=[ExtractedRecord(label=f"Office text: {joined[:60]}", text=joined[:MAX_RECORD_TEXT])],
+        records=[
+            ExtractedRecord(
+                label=f"Office text: {joined[:60]}",
+                text=joined[:MAX_RECORD_TEXT],
+                anchor=anchor,
+            )
+        ],
+        canonical=canonical,
     )
 
 
@@ -305,13 +398,21 @@ def extract_pdf_content(source: Path) -> ExtractedContent:
         # Image-only/scanned PDFs carry no text streams; OCR for PDFs is not
         # implemented, so fail honestly instead of returning placeholders.
         raise ValueError("pdf_text_missing")
+    canonical, anchor = text_section_content(text)
     return ExtractedContent(
         document_type="PDF document",
         summary_fields={
             "document_type": "PDF document",
             "extracted_text": text[:240],
         },
-        records=[ExtractedRecord(label=f"PDF text: {text[:60]}", text=text[:MAX_RECORD_TEXT])],
+        records=[
+            ExtractedRecord(
+                label=f"PDF text: {text[:60]}",
+                text=text[:MAX_RECORD_TEXT],
+                anchor=anchor,
+            )
+        ],
+        canonical=canonical,
     )
 
 
@@ -331,6 +432,7 @@ def extract_image_content(source: Path) -> ExtractedContent:
         extraction_method = "ocr_tesseract"
         if not text:
             raise ValueError("no_extractable_content")
+    canonical, anchor = text_section_content(text)
     return ExtractedContent(
         document_type="Receipt image",
         summary_fields={
@@ -338,7 +440,14 @@ def extract_image_content(source: Path) -> ExtractedContent:
             "extracted_text": text[:240],
             "extraction_method": extraction_method,
         },
-        records=[ExtractedRecord(label=f"Image text: {text[:60]}", text=text[:MAX_RECORD_TEXT])],
+        records=[
+            ExtractedRecord(
+                label=f"Image text: {text[:60]}",
+                text=text[:MAX_RECORD_TEXT],
+                anchor=anchor,
+            )
+        ],
+        canonical=canonical,
     )
 
 
@@ -390,6 +499,93 @@ def unescape_pdf_text(value: str) -> str:
     )
 
 
+def derive_run_id(source: Path, sha256: str, file_kind: str) -> uuid.UUID:
+    """Deterministic run namespace shared by the graph and annotation bundle."""
+
+    return uuid.uuid5(uuid.NAMESPACE_URL, f"{source.name}:{sha256}:{file_kind}")
+
+
+def record_node_id(run_id: uuid.UUID, index: int) -> str:
+    """The graph @id for extracted record ``index`` (1-based)."""
+
+    return f"urn:uuid:{uuid.uuid5(run_id, f'record-{index}')}"
+
+
+def build_extracted_content_document(
+    sha256: str,
+    file_kind: str,
+    content: ExtractedContent,
+) -> dict[str, Any] | None:
+    """The extracted-content.json document (contract 1.0), or None when the
+    extractor produced no canonical content model (anchor-incapable path)."""
+
+    if content.canonical is None:
+        return None
+    canonical_serialized = json.dumps(content.canonical, sort_keys=True, ensure_ascii=False)
+    return {
+        "contract_version": EXTRACTION_BUNDLE_CONTRACT_VERSION,
+        "source_sha256": sha256,
+        "content_sha256": hashlib.sha256(canonical_serialized.encode("utf-8")).hexdigest(),
+        "extraction_tool": TOOL_NAME,
+        "extraction_tool_version": TOOL_VERSION,
+        "file_kind": file_kind,
+        "content": content.canonical,
+        "failures": [],
+    }
+
+
+def build_annotations_document(
+    run_id: uuid.UUID,
+    content: ExtractedContent,
+) -> dict[str, Any] | None:
+    """W3C Web Annotation companion graph anchoring record nodes to content.
+
+    One annotation per anchored record; records with ``anchor=None`` are
+    honestly absent. Returns None when no canonical content exists.
+    """
+
+    if content.canonical is None:
+        return None
+    annotations: list[dict[str, Any]] = []
+    for index, record in enumerate(content.records, start=1):
+        anchor = record.anchor
+        if anchor is None:
+            continue
+        if anchor["selector_kind"] == "text_position":
+            target_source = f"{EXTRACTED_CONTENT_FILENAME}#{anchor['section_id']}"
+            selectors: list[dict[str, Any]] = [
+                {
+                    "type": "TextPositionSelector",
+                    "start": anchor["start"],
+                    "end": anchor["end"],
+                },
+                {"type": "TextQuoteSelector", "exact": anchor["exact"]},
+            ]
+        elif anchor["selector_kind"] == "csv_fragment":
+            target_source = f"{EXTRACTED_CONTENT_FILENAME}#default"
+            selectors = [
+                {
+                    "type": "FragmentSelector",
+                    "conformsTo": RFC7111_CONFORMS_TO,
+                    "value": f"row={anchor['rfc7111_row']}",
+                }
+            ]
+        else:  # pragma: no cover - extractors only emit the kinds above
+            raise ValueError("unsupported_anchor_selector")
+        annotations.append(
+            {
+                "id": f"urn:link-look:anchor:{uuid.uuid5(run_id, f'anchor-{index}')}",
+                "type": "Annotation",
+                "body": record_node_id(run_id, index),
+                "target": {"source": target_source, "selector": selectors},
+            }
+        )
+    return {
+        "@context": ["http://www.w3.org/ns/anno.jsonld"],
+        "@graph": annotations,
+    }
+
+
 def build_case_uco_graph(
     source: Path,
     file_kind: str,
@@ -398,7 +594,7 @@ def build_case_uco_graph(
     content: ExtractedContent,
     safe_metadata: dict[str, Any],
 ) -> dict[str, Any]:
-    run_id = uuid.uuid5(uuid.NAMESPACE_URL, f"{source.name}:{sha256}:{file_kind}")
+    run_id = derive_run_id(source, sha256, file_kind)
     source_id = f"urn:uuid:{uuid.uuid5(run_id, 'source')}"
     tool_id = f"urn:uuid:{uuid.uuid5(run_id, 'tool')}"
     action_id = f"urn:uuid:{uuid.uuid5(run_id, 'action')}"
@@ -466,7 +662,7 @@ def build_case_uco_graph(
     relationship_nodes: list[dict[str, Any]] = []
     record_refs: list[dict[str, str]] = []
     for index, record in enumerate(content.records, start=1):
-        record_id = f"urn:uuid:{uuid.uuid5(run_id, f'record-{index}')}"
+        record_id = record_node_id(run_id, index)
         record_refs.append({"@id": record_id})
         record_nodes.append(
             {
@@ -557,6 +753,10 @@ def cli_main(argv: list[str] | None = None) -> int:
         json.dumps(
             {
                 "output_graph_path": str(result.output_path),
+                "extracted_content_path": (
+                    str(result.extracted_content_path) if result.extracted_content_path else None
+                ),
+                "annotations_path": str(result.annotations_path) if result.annotations_path else None,
                 "tool_name": TOOL_NAME,
                 "tool_version": TOOL_VERSION,
                 "file_kind": result.file_kind,

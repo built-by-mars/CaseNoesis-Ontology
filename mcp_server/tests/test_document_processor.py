@@ -290,6 +290,159 @@ def test_oversized_source_fails_honestly(tmp_path: Path, monkeypatch) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Spec026 extraction bundle (contract 1.0): extracted-content.json + annotations.jsonld
+# ---------------------------------------------------------------------------
+
+
+def load_bundle(output: Path) -> tuple[dict, dict]:
+    extracted = json.loads((output.parent / "extracted-content.json").read_text(encoding="utf-8"))
+    annotations = json.loads((output.parent / "annotations.jsonld").read_text(encoding="utf-8"))
+    return extracted, annotations
+
+
+def assert_bundle_contract_shape(extracted: dict) -> None:
+    assert extracted["contract_version"] == "1.0"
+    assert extracted["extraction_tool"] == document_processor.TOOL_NAME
+    assert extracted["extraction_tool_version"] == document_processor.TOOL_VERSION
+    assert len(extracted["source_sha256"]) == 64
+    assert len(extracted["content_sha256"]) == 64
+    assert isinstance(extracted["failures"], list)
+
+
+@pytest.mark.parametrize(
+    ("writer", "name"),
+    [
+        (write_png_with_text, "receipt.png"),
+        (write_pdf, "invoice.pdf"),
+        (write_flate_pdf, "compressed.pdf"),
+        (write_docx, "memo.docx"),
+        (write_xlsx, "sheet.xlsx"),
+    ],
+)
+def test_text_kinds_emit_anchored_bundle(tmp_path: Path, writer, name: str) -> None:
+    source = tmp_path / name
+    if writer is write_png_with_text:
+        writer(source, "Synthetic receipt total 12.34")
+    else:
+        writer(source)
+    output = tmp_path / "out.jsonld"
+    result = process_document_file(source, output)
+
+    assert result.extracted_content_path is not None
+    assert result.annotations_path is not None
+    extracted, annotations = load_bundle(output)
+    assert_bundle_contract_shape(extracted)
+
+    # Text canonical model with a single section.
+    assert extracted["content"]["kind"] == "text"
+    sections = {s["section_id"]: s["text"] for s in extracted["content"]["sections"]}
+    assert "s1" in sections
+
+    # Every record is anchored; selector bounds are valid against the section.
+    graph_record_ids = {
+        node["@id"]
+        for node in result.graph["@graph"]
+        if node.get("@type") == "uco-observable:ObservableObject"
+    }
+    annos = annotations["@graph"]
+    assert len(annos) == len(result.records) >= 1
+    for anno in annos:
+        assert anno["body"] in graph_record_ids
+        position = next(s for s in anno["target"]["selector"] if s["type"] == "TextPositionSelector")
+        quote = next(s for s in anno["target"]["selector"] if s["type"] == "TextQuoteSelector")
+        section_id = anno["target"]["source"].split("#", 1)[1]
+        section_text = sections[section_id]
+        assert 0 <= position["start"] < position["end"] <= len(section_text)
+        assert section_text[position["start"] : position["end"]] == quote["exact"]
+
+
+def test_csv_bundle_uses_rfc7111_row_selectors(tmp_path: Path) -> None:
+    source = tmp_path / "table.csv"
+    source.write_text("item,total\nalpha,12.34\nbravo,56.78\n", encoding="utf-8")
+    output = tmp_path / "table.jsonld"
+    result = process_document_file(source, output)
+
+    extracted, annotations = load_bundle(output)
+    assert_bundle_contract_shape(extracted)
+    sheet = extracted["content"]["sheets"][0]
+    assert extracted["content"]["kind"] == "table"
+    assert sheet["header"] == ["item", "total"]
+    assert sheet["rows"] == [["alpha", "12.34"], ["bravo", "56.78"]]
+
+    annos = annotations["@graph"]
+    assert len(annos) == 2
+    selectors = [a["target"]["selector"][0] for a in annos]
+    assert all(s["type"] == "FragmentSelector" for s in selectors)
+    assert all("rfc7111" in s["conformsTo"] for s in selectors)
+    # Header is RFC 7111 row 1, so data rows are rows 2 and 3.
+    assert [s["value"] for s in selectors] == ["row=2", "row=3"]
+    # Row selectors stay within the canonical table bounds.
+    for selector in selectors:
+        row_number = int(selector["value"].split("=", 1)[1])
+        assert 2 <= row_number <= len(sheet["rows"]) + 1
+
+
+def test_duplicate_values_get_distinct_row_anchors(tmp_path: Path) -> None:
+    """Two identical rows must anchor to distinct occurrences, never merged."""
+
+    source = tmp_path / "dupes.csv"
+    source.write_text("phone\n555-0100\n555-0100\n", encoding="utf-8")
+    output = tmp_path / "dupes.jsonld"
+    result = process_document_file(source, output)
+
+    _, annotations = load_bundle(output)
+    annos = annotations["@graph"]
+    assert len(annos) == len(result.records) == 2
+    assert annos[0]["target"]["selector"][0]["value"] != annos[1]["target"]["selector"][0]["value"]
+    assert annos[0]["body"] != annos[1]["body"]
+    assert annos[0]["id"] != annos[1]["id"]
+
+
+def test_annotations_reference_only_record_nodes(tmp_path: Path) -> None:
+    """Honest absence: source/tool/action nodes are never annotated."""
+
+    source = tmp_path / "receipt.png"
+    write_png_with_text(source, "Synthetic receipt total 12.34")
+    output = tmp_path / "receipt.jsonld"
+    result = process_document_file(source, output)
+
+    _, annotations = load_bundle(output)
+    non_record_ids = {
+        node["@id"]
+        for node in result.graph["@graph"]
+        if node.get("@type")
+        in ("uco-observable:RasterPicture", "uco-tool:Tool", "case-investigation:InvestigativeAction")
+    }
+    for anno in annotations["@graph"]:
+        assert anno["body"] not in non_record_ids
+
+
+def test_case_graph_vocabulary_unchanged_by_bundle(tmp_path: Path) -> None:
+    """The bundle is additive: no annotation vocabulary leaks into the case graph."""
+
+    source = tmp_path / "table.csv"
+    source.write_text("item,total\nalpha,12.34\n", encoding="utf-8")
+    output = tmp_path / "table.jsonld"
+    process_document_file(source, output)
+    raw = output.read_text(encoding="utf-8")
+    assert "TextPositionSelector" not in raw
+    assert "oa:" not in raw
+    assert "anno.jsonld" not in raw
+
+
+def test_cli_reports_bundle_paths(tmp_path: Path, capsys) -> None:
+    source = tmp_path / "table.csv"
+    source.write_text("item,total\nalpha,12.34\n", encoding="utf-8")
+    exit_code = document_processor.cli_main(
+        ["--input", str(source), "--output", str(tmp_path / "out.jsonld")]
+    )
+    assert exit_code == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["extracted_content_path"].endswith("extracted-content.json")
+    assert payload["annotations_path"].endswith("annotations.jsonld")
+
+
+# ---------------------------------------------------------------------------
 # Progress contract (unchanged)
 # ---------------------------------------------------------------------------
 
