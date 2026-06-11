@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - MCP server `validate_graph` tool: wraps the local CASE Utilities `case_validate` SHACL validator for produced JSON-LD/Turtle graph files and returns a bounded conformance report (`conforms`, `warning_count`, `violation_count`, `safe_summary`); fails honestly with typed errors (`validator_unavailable`, `graph_missing`, `unsupported_graph_extension`, `graph_oversized`, `validation_timeout`) and never fabricates a passing result (`mcp_server/graph_validator.py`, tests in `mcp_server/tests/test_graph_validator.py`)
 - MCP server README: `process_document_file`/`validate_graph` tool table entries and a "Running under Hermes Agent" deployment section with stdio config example and law-enforcement egress posture notes (supports Link-Look Spec025 agent-teaming planning)
+- Document processor extraction breadth with honest failure modes (Link-Look #103): real PDF text extraction (pypdf), OCR for receipt/scan images when an OCR engine is present (typed `ocr_unavailable` otherwise), per-record CSV row nodes, and real DOCX/XLSX extraction in `mcp_server/document_processor.py`; pytest coverage per document kind and per failure mode in `mcp_server/tests/test_document_processor.py`
+
+### Changed
+
+- Document processor output now uses canonical CASE/UCO terms instead of invented predicates (Link-Look #102; every term verified via the registry tools, output passes `validate_graph` with zero `NonExistentCDOConceptWarning`s): `uco-action:object`/`instrument`/`result`/`startTime`/`endTime` on `case-investigation:InvestigativeAction` (replacing ad-hoc `case-investigation:*` action properties), `uco-observable:FileFacet` (fileName/extension/sizeInBytes) plus `uco-observable:ContentDataFacet` with `uco-types:Hash` (SHA256, hexBinary) replacing `link-look:*` vocabulary, `uco-tool:version`, `uco-observable:ExtractedStringsFacet`/`ExtractedString` per extracted record, and directional `uco-core:Relationship` `Derived_From` edges. Consumers parsing the previous ad-hoc predicates must migrate (Link-Look migrated in Spec025 T007/T009)
 
 ## [1.11.0] - 2026-04-25
 
