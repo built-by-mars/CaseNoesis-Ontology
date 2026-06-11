@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] - 2026-06-10
+
+### Changed
+
+- Release workflow now pulls GitHub Release notes directly from the matching `CHANGELOG.md` section instead of using generic generated notes.
+- Package-registry publishing jobs in the release workflow are gated behind the `PUBLISH_PACKAGES` repository variable so tagged releases can build and attest artifacts without requiring all registry credentials to be enabled.
+- CodeQL scans now ignore the external Adversary Engagement Ontology submodule path; that upstream repository is not owned by this SDK and cannot be remediated from here.
+
+### Fixed
+
+- Restored Python registry compatibility with current `mypy` by removing stale `type: ignore` comments and typing extension entry-point discovery without the unused `_EXTENSIONS_LOADED` global.
+- Replaced silent MCP extension registry entry-point discovery failures with typed best-effort handling and debug logging.
+- Updated the CAC Ontology submodule to include upstream Python CodeQL cleanup for unused imports, unused demonstration locals, and `exit()` usage in validation scripts.
+- Resolved all open GitHub code scanning alerts for the SDK repository.
+
+### Dependencies
+
+- Bump `actions/dependency-review-action` from 4 to 5.
+- Bump `Microsoft.NET.Test.Sdk` from 18.4.0 to 18.6.0 in `/csharp`.
+- Bump `uuid` from 1.23.1 to 1.23.3 in `/rust`.
+- Bump `serde_json` from 1.0.149 to 1.0.150 in `/rust`.
+
 ## [1.11.0] - 2026-04-25
 
 ### Added
