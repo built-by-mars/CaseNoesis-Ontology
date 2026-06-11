@@ -176,12 +176,18 @@ def process_document_file(
     upload_id: str | None = None,
     progress_output: str | None = None,
 ) -> dict:
-    """Process a supported local synthetic file into CASE/UCO JSON-LD.
+    """Process a supported local document file into CASE/UCO JSON-LD.
 
-    Supported v0.8.1 live-roundtrip inputs are receipt images, PDFs, Office
-    documents, and CSV/table files. This tool writes the graph to output_path
-    and returns safe metadata only; callers must validate the graph before
-    creating investigative assertions.
+    Supported inputs are receipt/document images (embedded PNG text or OCR
+    via the optional tesseract CLI), PDFs (raw and Flate-compressed text
+    streams), Office documents (DOCX/XLSX), and CSV/TSV tables (per-row
+    record nodes, bounded). Output uses verified canonical CASE/UCO terms
+    (uco-action provenance, FileFacet/ContentDataFacet/Hash, extracted-string
+    facets, Derived_From relationships). Fails honestly with typed errors
+    (e.g. "ocr_unavailable", "pdf_text_missing", "empty_csv") instead of
+    fabricating content. This tool writes the graph to output_path and
+    returns safe metadata only; callers must validate the graph (see
+    validate_graph) before creating investigative assertions.
     """
     try:
         result = _process_document_file(
@@ -206,8 +212,13 @@ def process_document_file(
         "file_kind": result.file_kind,
         "byte_size": result.byte_size,
         "sha256": result.sha256,
+        "record_count": len(result.records),
+        "truncated": result.truncated,
         "validation_status": "valid",
-        "safe_summary": f"Processed {result.file_kind} into CASE/UCO JSON-LD.",
+        "safe_summary": (
+            f"Processed {result.file_kind} into CASE/UCO JSON-LD "
+            f"({len(result.records)} record{'s' if len(result.records) != 1 else ''})."
+        ),
     }
 
 

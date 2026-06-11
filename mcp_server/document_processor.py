@@ -1,9 +1,22 @@
 """Local CASE/UCO document processing for bounded MCP workflows.
 
-This module intentionally supports a small synthetic development acceptance set:
-receipt images with embedded safe text metadata, PDFs with simple text streams,
-OOXML Office documents, and CSV/table files. It produces CASE/UCO-shaped JSON-LD
-that downstream tools can validate before human review.
+Processes receipt/document images (embedded PNG text or OCR), PDFs (raw and
+Flate-compressed text streams), OOXML Office documents, and CSV/TSV tables
+into CASE/UCO-shaped JSON-LD using verified canonical ontology terms.
+
+Honest-failure contract: when content cannot be extracted (no OCR engine for
+an image, no text streams in a scanned PDF, empty table), processing raises a
+typed ``ValueError`` instead of fabricating placeholder content. Optional
+dependencies (the ``tesseract`` OCR CLI) are detected at runtime.
+
+Ontology terms used here were verified against the CASE/UCO registry
+(case-uco MCP ``get_class_details``): ``case-investigation:InvestigativeAction``
+with ``uco-action:object/instrument/result/startTime/endTime``;
+``uco-observable:FileFacet`` (fileName, extension, sizeInBytes);
+``uco-observable:ContentDataFacet`` with ``uco-types:Hash``
+(hashMethod/hashValue); ``uco-observable:ExtractedStringsFacet`` /
+``uco-observable:ExtractedString``; ``uco-core:Relationship`` with
+source/target/kindOfRelationship; ``uco-tool:Tool`` with ``uco-tool:version``.
 """
 
 from __future__ import annotations
@@ -13,17 +26,24 @@ import csv
 import hashlib
 import json
 import re
+import shutil
+import subprocess
 import sys
 import uuid
 import zipfile
-from dataclasses import dataclass
+import zlib
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 TOOL_NAME = "case-uco-document-normalize"
-TOOL_VERSION = "0.1.0"
+TOOL_VERSION = "0.2.0"
 MAX_BYTES = 10 * 1024 * 1024
+MAX_CSV_RECORDS = 100
+MAX_RECORD_TEXT = 400
+OCR_COMMAND = "tesseract"
+OCR_TIMEOUT_SECONDS = 60
 
 SUPPORTED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff"}
 SUPPORTED_PDF_EXTENSIONS = {".pdf"}
@@ -39,6 +59,26 @@ PROGRESS_STAGES = {
     "failed",
 }
 
+# Matches OOXML text runs (<w:t>, sharedStrings <t>, inline <is><t>) without
+# binding to a specific namespace prefix.
+_OOXML_TEXT_RE = re.compile(r"<(?:\w+:)?t(?:\s[^>]*)?>([^<]{1,400})</(?:\w+:)?t>")
+
+
+@dataclass(frozen=True)
+class ExtractedRecord:
+    """One reviewable record extracted from a source document."""
+
+    label: str
+    text: str
+
+
+@dataclass(frozen=True)
+class ExtractedContent:
+    document_type: str
+    summary_fields: dict[str, str]
+    records: list[ExtractedRecord]
+    truncated: bool = False
+
 
 @dataclass(frozen=True)
 class ProcessedDocument:
@@ -49,6 +89,8 @@ class ProcessedDocument:
     byte_size: int
     extracted_fields: dict[str, str]
     graph: dict[str, Any]
+    records: list[ExtractedRecord] = field(default_factory=list)
+    truncated: bool = False
 
 
 class ProgressReporter:
@@ -76,6 +118,12 @@ class ProgressReporter:
             handle.write(json.dumps(event, sort_keys=True) + "\n")
 
 
+def ocr_available() -> bool:
+    """Return True when the optional tesseract OCR CLI is installed."""
+
+    return shutil.which(OCR_COMMAND) is not None
+
+
 def process_document_file(
     source_path: str | Path,
     output_path: str | Path,
@@ -97,7 +145,7 @@ def process_document_file(
             raise ValueError("source_oversized")
         progress.emit("inspect_source", "Inspected source metadata and size.", 15)
         kind = normalize_file_kind(file_kind, source)
-        text_fields = extract_fields(source, kind)
+        content = extract_content(source, kind)
         progress.emit("extract_content", f"Extracted safe fields for {kind}.", 45)
         sha256 = hashlib.sha256(source.read_bytes()).hexdigest()
         graph = build_case_uco_graph(
@@ -105,7 +153,7 @@ def process_document_file(
             file_kind=kind,
             byte_size=byte_size,
             sha256=sha256,
-            fields=text_fields,
+            content=content,
             safe_metadata=safe_metadata or {},
         )
         progress.emit("build_graph", "Built CASE/UCO-shaped graph artifact.", 70)
@@ -119,8 +167,10 @@ def process_document_file(
             file_kind=kind,
             sha256=sha256,
             byte_size=byte_size,
-            extracted_fields=text_fields,
+            extracted_fields=content.summary_fields,
             graph=graph,
+            records=content.records,
+            truncated=content.truncated,
         )
     except ValueError as exc:
         progress.emit("failed", f"case-uco document preprocessing failed: {exc}", 100)
@@ -144,82 +194,170 @@ def normalize_file_kind(file_kind: str | None, source: Path) -> str:
     raise ValueError("unsupported_file_kind")
 
 
-def extract_fields(source: Path, file_kind: str) -> dict[str, str]:
+def extract_content(source: Path, file_kind: str) -> ExtractedContent:
     if file_kind == "csv_table":
-        return extract_csv_fields(source)
+        return extract_csv_content(source)
     if file_kind == "office":
-        return extract_office_fields(source)
+        return extract_office_content(source)
     if file_kind == "pdf":
-        return extract_pdf_fields(source)
+        return extract_pdf_content(source)
     if file_kind == "receipt_image":
-        return extract_image_fields(source)
+        return extract_image_content(source)
     raise ValueError("unsupported_file_kind")
 
 
-def extract_csv_fields(source: Path) -> dict[str, str]:
+def extract_csv_content(source: Path) -> ExtractedContent:
     dialect = "excel-tab" if source.suffix.lower() == ".tsv" else "excel"
     with source.open("r", encoding="utf-8", newline="") as handle:
         reader = csv.reader(handle, dialect=dialect)
         rows = list(reader)
     if not rows:
         raise ValueError("empty_csv")
-    headers = [cell.strip() for cell in rows[0] if cell.strip()]
-    sample = rows[1] if len(rows) > 1 else []
-    return {
+    headers = [cell.strip() for cell in rows[0]]
+    data_rows = rows[1:]
+    if not data_rows:
+        raise ValueError("empty_csv")
+    records: list[ExtractedRecord] = []
+    for index, row in enumerate(data_rows[:MAX_CSV_RECORDS], start=1):
+        pairs = []
+        for column, value in zip(headers, row):
+            value = sanitize_text(value)
+            if value:
+                pairs.append(f"{column or 'column'}={value}")
+        text = sanitize_text("; ".join(pairs))[:MAX_RECORD_TEXT]
+        if not text:
+            continue
+        records.append(ExtractedRecord(label=f"Row {index}: {text[:60]}", text=text))
+    if not records:
+        raise ValueError("empty_csv")
+    truncated = len(data_rows) > MAX_CSV_RECORDS
+    summary = {
         "document_type": "CSV/table",
-        "table_columns": ", ".join(headers[:12]) or "unknown columns",
-        "row_count": str(max(len(rows) - 1, 0)),
-        "sample_value": sanitize_text(" ".join(sample[:4])) or "synthetic row",
+        "table_columns": ", ".join(h for h in headers[:12] if h) or "unknown columns",
+        "row_count": str(len(data_rows)),
+        "record_count": str(len(records)),
     }
+    if truncated:
+        summary["truncated"] = f"first {MAX_CSV_RECORDS} of {len(data_rows)} rows extracted"
+    return ExtractedContent(
+        document_type="CSV/table",
+        summary_fields=summary,
+        records=records,
+        truncated=truncated,
+    )
 
 
-def extract_office_fields(source: Path) -> dict[str, str]:
+def extract_office_content(source: Path) -> ExtractedContent:
     if not zipfile.is_zipfile(source):
         raise ValueError("invalid_office_document")
     texts: list[str] = []
     with zipfile.ZipFile(source) as archive:
         names = archive.namelist()
-        xml_names = [
-            name
-            for name in names
-            if name.startswith(("word/", "xl/")) and name.endswith(".xml")
-        ]
-        for name in xml_names[:16]:
+        if source.suffix.lower() == ".docx":
+            part_names = [
+                name
+                for name in names
+                if name.startswith("word/") and name.endswith(".xml")
+            ]
+        else:
+            part_names = [
+                name
+                for name in names
+                if name in ("xl/sharedStrings.xml",)
+                or (name.startswith("xl/worksheets/") and name.endswith(".xml"))
+            ]
+        for name in part_names[:32]:
             raw = archive.read(name).decode("utf-8", errors="ignore")
-            texts.extend(re.findall(r">([^<>]{2,200})<", raw))
+            texts.extend(match.strip() for match in _OOXML_TEXT_RE.findall(raw) if match.strip())
     joined = sanitize_text(" ".join(texts))
     if not joined:
         raise ValueError("office_text_missing")
-    return {
-        "document_type": "Office document",
-        "extracted_text": joined[:240],
-        "source_part_count": str(len(texts)),
-    }
+    return ExtractedContent(
+        document_type="Office document",
+        summary_fields={
+            "document_type": "Office document",
+            "extracted_text": joined[:240],
+            "source_part_count": str(len(texts)),
+        },
+        records=[ExtractedRecord(label=f"Office text: {joined[:60]}", text=joined[:MAX_RECORD_TEXT])],
+    )
 
 
-def extract_pdf_fields(source: Path) -> dict[str, str]:
-    raw = source.read_bytes().decode("latin-1", errors="ignore")
-    strings = [unescape_pdf_text(match) for match in re.findall(r"\((.{2,240}?)\)", raw)]
+def extract_pdf_content(source: Path) -> ExtractedContent:
+    data = source.read_bytes()
+    blobs: list[bytes] = [data]
+    for match in re.finditer(rb"stream\r?\n(.*?)\r?\nendstream", data, re.DOTALL):
+        try:
+            blobs.append(zlib.decompress(match.group(1)))
+        except zlib.error:
+            continue
+    strings: list[str] = []
+    seen: set[str] = set()
+    for blob in blobs:
+        raw = blob.decode("latin-1", errors="ignore")
+        for fragment in re.findall(r"\((.{1,400}?)\)", raw):
+            cleaned = sanitize_text(unescape_pdf_text(fragment))
+            if cleaned and cleaned not in seen:
+                seen.add(cleaned)
+                strings.append(cleaned)
     text = sanitize_text(" ".join(strings))
     if not text:
+        # Image-only/scanned PDFs carry no text streams; OCR for PDFs is not
+        # implemented, so fail honestly instead of returning placeholders.
         raise ValueError("pdf_text_missing")
-    return {
-        "document_type": "PDF document",
-        "extracted_text": text[:240],
-    }
+    return ExtractedContent(
+        document_type="PDF document",
+        summary_fields={
+            "document_type": "PDF document",
+            "extracted_text": text[:240],
+        },
+        records=[ExtractedRecord(label=f"PDF text: {text[:60]}", text=text[:MAX_RECORD_TEXT])],
+    )
 
 
-def extract_image_fields(source: Path) -> dict[str, str]:
-    ext = source.suffix.lower()
+def extract_image_content(source: Path) -> ExtractedContent:
     text = ""
-    if ext == ".png":
-        text = extract_png_text(source)
+    extraction_method = ""
+    if source.suffix.lower() == ".png":
+        text = sanitize_text(extract_png_text(source))
+        if text:
+            extraction_method = "png_embedded_text"
     if not text:
-        text = f"Synthetic image file {source.name}"
-    return {
-        "document_type": "Receipt image",
-        "extracted_text": sanitize_text(text)[:240],
-    }
+        if not ocr_available():
+            # No embedded text and no OCR engine: fail honestly rather than
+            # fabricating "Synthetic image file ..." placeholder content.
+            raise ValueError("ocr_unavailable")
+        text = sanitize_text(run_ocr(source))
+        extraction_method = "ocr_tesseract"
+        if not text:
+            raise ValueError("no_extractable_content")
+    return ExtractedContent(
+        document_type="Receipt image",
+        summary_fields={
+            "document_type": "Receipt image",
+            "extracted_text": text[:240],
+            "extraction_method": extraction_method,
+        },
+        records=[ExtractedRecord(label=f"Image text: {text[:60]}", text=text[:MAX_RECORD_TEXT])],
+    )
+
+
+def run_ocr(source: Path) -> str:
+    command = shutil.which(OCR_COMMAND)
+    if command is None:
+        raise ValueError("ocr_unavailable")
+    try:
+        completed = subprocess.run(
+            [command, str(source), "stdout"],
+            capture_output=True,
+            timeout=OCR_TIMEOUT_SECONDS,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise ValueError("ocr_failed") from exc
+    if completed.returncode != 0:
+        raise ValueError("ocr_failed")
+    return completed.stdout.decode("utf-8", errors="ignore")
 
 
 def extract_png_text(source: Path) -> str:
@@ -257,67 +395,135 @@ def build_case_uco_graph(
     file_kind: str,
     byte_size: int,
     sha256: str,
-    fields: dict[str, str],
+    content: ExtractedContent,
     safe_metadata: dict[str, Any],
 ) -> dict[str, Any]:
     run_id = uuid.uuid5(uuid.NAMESPACE_URL, f"{source.name}:{sha256}:{file_kind}")
     source_id = f"urn:uuid:{uuid.uuid5(run_id, 'source')}"
     tool_id = f"urn:uuid:{uuid.uuid5(run_id, 'tool')}"
     action_id = f"urn:uuid:{uuid.uuid5(run_id, 'action')}"
-    extracted_id = f"urn:uuid:{uuid.uuid5(run_id, 'extracted')}"
     file_name = sanitize_text(source.name)
-    label = build_candidate_label(file_kind, fields, file_name)
-    source_type = "uco-observable:RasterPicture" if file_kind == "receipt_image" else "uco-observable:ObservableObject"
+    extension = source.suffix.lower().lstrip(".")
+    now_iso = datetime.now(timezone.utc).isoformat()
+    upload_reference = sanitize_text(str(safe_metadata.get("upload_id", "")))
 
-    return {
-        "@context": {
-            "case-investigation": "https://ontology.caseontology.org/case/investigation/",
-            "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
-            "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
-            "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
-            "link-look": "urn:link-look:synthetic:",
-        },
-        "@graph": [
+    source_type = (
+        "uco-observable:RasterPicture"
+        if file_kind == "receipt_image"
+        else "uco-observable:ObservableObject"
+    )
+    source_description = f"Link-Look {file_kind} upload"
+    if upload_reference:
+        source_description += f" (upload reference {upload_reference})"
+
+    source_node: dict[str, Any] = {
+        "@id": source_id,
+        "@type": source_type,
+        "uco-core:name": f"Source file {file_name}",
+        "uco-core:description": source_description,
+        "uco-core:tag": [f"link-look-file-kind:{file_kind}"],
+        "uco-core:hasFacet": [
             {
-                "@id": source_id,
-                "@type": source_type,
-                "uco-core:name": f"Source file {file_name}",
-                "link-look:fileKind": file_kind,
-                "link-look:sha256": sha256,
-                "link-look:byteSize": byte_size,
-                "link-look:sourceReference": safe_metadata.get("upload_id", "synthetic-upload"),
+                "@id": f"urn:uuid:{uuid.uuid5(run_id, 'file-facet')}",
+                "@type": "uco-observable:FileFacet",
+                "uco-observable:fileName": file_name,
+                "uco-observable:extension": extension,
+                "uco-observable:sizeInBytes": {
+                    "@type": "xsd:integer",
+                    "@value": str(byte_size),
+                },
             },
             {
-                "@id": tool_id,
-                "@type": "uco-tool:Tool",
-                "uco-core:name": TOOL_NAME,
-                "link-look:toolVersion": TOOL_VERSION,
-            },
-            {
-                "@id": action_id,
-                "@type": "case-investigation:InvestigativeAction",
-                "uco-core:name": f"Processed {file_kind} through case-uco MCP",
-                "case-investigation:object": {"@id": source_id},
-                "case-investigation:instrument": {"@id": tool_id},
-                "case-investigation:result": {"@id": extracted_id},
-            },
-            {
-                "@id": extracted_id,
-                "@type": "uco-core:UcoObject",
-                "uco-core:name": label,
-                "link-look:fileKind": file_kind,
-                "link-look:validationStatus": "synthetic-live-processor-output",
-                "link-look:fieldSummary": fields,
+                "@id": f"urn:uuid:{uuid.uuid5(run_id, 'content-facet')}",
+                "@type": "uco-observable:ContentDataFacet",
+                "uco-observable:sizeInBytes": {
+                    "@type": "xsd:integer",
+                    "@value": str(byte_size),
+                },
+                "uco-observable:hash": [
+                    {
+                        "@id": f"urn:uuid:{uuid.uuid5(run_id, 'sha256-hash')}",
+                        "@type": "uco-types:Hash",
+                        "uco-types:hashMethod": "SHA256",
+                        "uco-types:hashValue": {
+                            "@type": "xsd:hexBinary",
+                            "@value": sha256.upper(),
+                        },
+                    }
+                ],
             },
         ],
     }
 
+    tool_node = {
+        "@id": tool_id,
+        "@type": "uco-tool:Tool",
+        "uco-core:name": TOOL_NAME,
+        "uco-tool:version": TOOL_VERSION,
+    }
 
-def build_candidate_label(file_kind: str, fields: dict[str, str], file_name: str) -> str:
-    if file_kind == "csv_table":
-        return f"CSV table {file_name}: {fields.get('table_columns', 'columns unknown')}"
-    summary = fields.get("extracted_text") or fields.get("sample_value") or file_name
-    return f"{fields.get('document_type', file_kind)}: {summary[:80]}"
+    record_nodes: list[dict[str, Any]] = []
+    relationship_nodes: list[dict[str, Any]] = []
+    record_refs: list[dict[str, str]] = []
+    for index, record in enumerate(content.records, start=1):
+        record_id = f"urn:uuid:{uuid.uuid5(run_id, f'record-{index}')}"
+        record_refs.append({"@id": record_id})
+        record_nodes.append(
+            {
+                "@id": record_id,
+                "@type": "uco-observable:ObservableObject",
+                "uco-core:name": record.label,
+                "uco-core:description": record.text,
+                "uco-core:hasFacet": [
+                    {
+                        "@id": f"urn:uuid:{uuid.uuid5(run_id, f'record-strings-{index}')}",
+                        "@type": "uco-observable:ExtractedStringsFacet",
+                        "uco-observable:strings": [
+                            {
+                                "@id": f"urn:uuid:{uuid.uuid5(run_id, f'record-string-{index}')}",
+                                "@type": "uco-observable:ExtractedString",
+                                "uco-observable:stringValue": record.text,
+                            }
+                        ],
+                    }
+                ],
+            }
+        )
+        relationship_nodes.append(
+            {
+                "@id": f"urn:uuid:{uuid.uuid5(run_id, f'record-derivation-{index}')}",
+                "@type": "uco-core:Relationship",
+                "uco-core:name": f"Extracted record {index} derived from {file_name}",
+                "uco-core:source": {"@id": record_id},
+                "uco-core:target": {"@id": source_id},
+                "uco-core:kindOfRelationship": "Derived_From",
+                "uco-core:isDirectional": True,
+            }
+        )
+
+    action_node = {
+        "@id": action_id,
+        "@type": "case-investigation:InvestigativeAction",
+        "uco-core:name": f"Processed {file_kind} through case-uco MCP",
+        "uco-action:startTime": {"@type": "xsd:dateTime", "@value": now_iso},
+        "uco-action:endTime": {"@type": "xsd:dateTime", "@value": now_iso},
+        "uco-action:object": {"@id": source_id},
+        "uco-action:instrument": {"@id": tool_id},
+        "uco-action:result": record_refs,
+    }
+
+    return {
+        "@context": {
+            "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+            "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+            "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+            "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+            "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+            "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+        },
+        "@graph": [source_node, tool_node, action_node, *record_nodes, *relationship_nodes],
+    }
 
 
 def sanitize_text(value: str) -> str:
@@ -354,8 +560,13 @@ def cli_main(argv: list[str] | None = None) -> int:
                 "tool_name": TOOL_NAME,
                 "tool_version": TOOL_VERSION,
                 "file_kind": result.file_kind,
+                "record_count": len(result.records),
+                "truncated": result.truncated,
                 "validation_status": "valid",
-                "safe_summary": f"Processed {result.file_kind} into CASE/UCO JSON-LD.",
+                "safe_summary": (
+                    f"Processed {result.file_kind} into CASE/UCO JSON-LD "
+                    f"({len(result.records)} record{'s' if len(result.records) != 1 else ''})."
+                ),
             }
         )
     )
