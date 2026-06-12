@@ -216,11 +216,117 @@ def test_flate_compressed_pdf_text_is_extracted(tmp_path: Path) -> None:
     assert "compressed-stream invoice" in result.extracted_fields["extracted_text"]
 
 
-def test_scanned_pdf_without_text_fails_honestly(tmp_path: Path) -> None:
+def test_scanned_pdf_without_text_fails_honestly(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     source = tmp_path / "scanned.pdf"
     write_scanned_pdf(source)
+    # Force the no-extractor environment regardless of host tooling.
+    monkeypatch.setattr(document_processor, "extract_pdf_text_pdftotext", lambda _s: "")
+    monkeypatch.setattr(document_processor, "extract_pdf_text_pypdf", lambda _s: "")
+    monkeypatch.setattr(document_processor, "extract_pdf_text_ocr", lambda _s: "")
     with pytest.raises(ValueError, match="pdf_text_missing"):
         process_document_file(source, tmp_path / "out.jsonld")
+
+
+def write_mojibake_pdf(path: Path) -> None:
+    """Subset-font-shaped PDF: literal strings hold glyph indices, not text.
+
+    Decoding these as Latin-1 yields accented mojibake — the real-world
+    failure observed with word-processor exports. Synthetic T0 bytes only.
+    """
+
+    glyphs = bytes(range(0xC0, 0xFF)) * 4  # decodes to À..þ noise (<=400 chars per literal)
+    body = b"BT (" + glyphs.replace(b"(", b" ").replace(b")", b" ") + b") Tj ET"
+    path.write_bytes(
+        b"%PDF-1.7\n1 0 obj <<>> stream\n" + body + b"\nendstream\nendobj\n%%EOF\n"
+    )
+
+
+def test_mojibake_pdf_never_reaches_reviewer(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Glyph-index literal strings must be refused, not shown as text."""
+
+    source = tmp_path / "subsetfont.pdf"
+    write_mojibake_pdf(source)
+    monkeypatch.setattr(document_processor, "extract_pdf_text_pdftotext", lambda _s: "")
+    monkeypatch.setattr(document_processor, "extract_pdf_text_pypdf", lambda _s: "")
+    monkeypatch.setattr(document_processor, "extract_pdf_text_ocr", lambda _s: "")
+    with pytest.raises(ValueError, match="pdf_text_unreadable"):
+        process_document_file(source, tmp_path / "out.jsonld")
+
+
+def test_pdftotext_output_is_preferred_and_recorded(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    source = tmp_path / "report.pdf"
+    write_mojibake_pdf(source)
+    monkeypatch.setattr(
+        document_processor,
+        "extract_pdf_text_pdftotext",
+        lambda _s: "Synthetic arrest report narrative for officer review.",
+    )
+    result = process_document_file(source, tmp_path / "out.jsonld")
+    assert result.extracted_fields["extraction_method"] == "pdftotext"
+    assert "Synthetic arrest report narrative" in result.extracted_fields["extracted_text"]
+
+
+def test_pypdf_fallback_is_used_and_recorded(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    source = tmp_path / "report.pdf"
+    write_mojibake_pdf(source)
+    monkeypatch.setattr(document_processor, "extract_pdf_text_pdftotext", lambda _s: "")
+    monkeypatch.setattr(
+        document_processor,
+        "extract_pdf_text_pypdf",
+        lambda _s: "Synthetic pypdf-extracted narrative for officer review.",
+    )
+    result = process_document_file(source, tmp_path / "out.jsonld")
+    assert result.extracted_fields["extraction_method"] == "pypdf"
+
+
+def test_scanned_pdf_uses_ocr_fallback_when_available(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    source = tmp_path / "scanned.pdf"
+    write_scanned_pdf(source)
+    monkeypatch.setattr(document_processor, "extract_pdf_text_pdftotext", lambda _s: "")
+    monkeypatch.setattr(document_processor, "extract_pdf_text_pypdf", lambda _s: "")
+    monkeypatch.setattr(
+        document_processor,
+        "extract_pdf_text_ocr",
+        lambda _s: "Synthetic OCR text from scanned page.",
+    )
+    result = process_document_file(source, tmp_path / "out.jsonld")
+    assert result.extracted_fields["extraction_method"] == "ocr_tesseract"
+
+
+def test_simple_literal_string_pdf_still_extracts_with_method(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """T0 generated PDFs with real ASCII literals keep working offline."""
+
+    source = tmp_path / "invoice.pdf"
+    write_pdf(source)
+    monkeypatch.setattr(document_processor, "extract_pdf_text_pdftotext", lambda _s: "")
+    monkeypatch.setattr(document_processor, "extract_pdf_text_pypdf", lambda _s: "")
+    result = process_document_file(source, tmp_path / "out.jsonld")
+    assert result.extracted_fields["extraction_method"] == "literal_strings"
+    assert "Synthetic PDF invoice" in result.extracted_fields["extracted_text"]
+
+
+def test_text_looks_readable_gate() -> None:
+    assert document_processor.text_looks_readable(
+        "On 2026-01-15 the synthetic subject was arrested at 123 Demo Street."
+    )
+    assert not document_processor.text_looks_readable("¢ZÆÁ¿êéÆÅûþÂùuíEÜä¹îÄOÙøÚî¹ÉôÛb¹¦" * 4)
+    assert not document_processor.text_looks_readable("   ")
+
+
+def test_document_text_is_not_truncated_to_summary_bound(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Canonical reviewable text keeps full reports (bounded at MAX_DOCUMENT_TEXT)."""
+
+    source = tmp_path / "long.pdf"
+    write_mojibake_pdf(source)
+    long_text = "Synthetic narrative sentence for review. " * 200  # ~8K chars
+    monkeypatch.setattr(document_processor, "extract_pdf_text_pdftotext", lambda _s: long_text)
+    result = process_document_file(source, tmp_path / "out.jsonld")
+    extracted_doc = json.loads(
+        (tmp_path / "extracted-content.json").read_text(encoding="utf-8")
+    )
+    section_text = extracted_doc["content"]["sections"][0]["text"]
+    assert len(section_text) > 5000
+    assert result.extracted_fields["extracted_text"] == section_text[:240]
 
 
 def test_xlsx_shared_strings_are_extracted(tmp_path: Path) -> None:

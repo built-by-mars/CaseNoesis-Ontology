@@ -1,13 +1,20 @@
 """Local CASE/UCO document processing for bounded MCP workflows.
 
-Processes receipt/document images (embedded PNG text or OCR), PDFs (raw and
-Flate-compressed text streams), OOXML Office documents, and CSV/TSV tables
-into CASE/UCO-shaped JSON-LD using verified canonical ontology terms.
+Processes receipt/document images (embedded PNG text or OCR), PDFs, OOXML
+Office documents, and CSV/TSV tables into CASE/UCO-shaped JSON-LD using
+verified canonical ontology terms.
+
+PDF text extraction uses a best-available ladder: ``pdftotext`` (poppler) →
+``pypdf`` → a built-in literal-string scrape gated by a readability check
+(real-world PDFs with subset-embedded fonts carry glyph indices, not Unicode,
+in their literal strings — those must never be shown to a reviewer as text) →
+OCR (``pdftoppm`` + ``tesseract``) for image-only/scanned PDFs.
 
 Honest-failure contract: when content cannot be extracted (no OCR engine for
-an image, no text streams in a scanned PDF, empty table), processing raises a
+an image, no decodable text in a PDF, empty table), processing raises a
 typed ``ValueError`` instead of fabricating placeholder content. Optional
-dependencies (the ``tesseract`` OCR CLI) are detected at runtime.
+dependencies (``pdftotext``/``pdftoppm`` from poppler-utils, ``pypdf``, and
+the ``tesseract`` OCR CLI) are detected at runtime.
 
 Ontology terms used here were verified against the CASE/UCO registry
 (case-uco MCP ``get_class_details``): ``case-investigation:InvestigativeAction``
@@ -38,7 +45,7 @@ from pathlib import Path
 from typing import Any
 
 TOOL_NAME = "case-uco-document-normalize"
-TOOL_VERSION = "0.3.0"
+TOOL_VERSION = "0.4.0"
 EXTRACTION_BUNDLE_CONTRACT_VERSION = "1.0"
 EXTRACTED_CONTENT_FILENAME = "extracted-content.json"
 ANNOTATIONS_FILENAME = "annotations.jsonld"
@@ -46,8 +53,15 @@ RFC7111_CONFORMS_TO = "http://tools.ietf.org/rfc/rfc7111"
 MAX_BYTES = 10 * 1024 * 1024
 MAX_CSV_RECORDS = 100
 MAX_RECORD_TEXT = 400
+# Canonical reviewable text is bounded but large enough for full reports;
+# summary fields stay tightly bounded via sanitize_text().
+MAX_DOCUMENT_TEXT = 100_000
 OCR_COMMAND = "tesseract"
 OCR_TIMEOUT_SECONDS = 60
+PDFTOTEXT_COMMAND = "pdftotext"
+PDFTOPPM_COMMAND = "pdftoppm"
+PDF_RENDER_TIMEOUT_SECONDS = 120
+PDF_OCR_MAX_PAGES = 25
 
 SUPPORTED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff"}
 SUPPORTED_PDF_EXTENSIONS = {".pdf"}
@@ -354,7 +368,7 @@ def extract_office_content(source: Path) -> ExtractedContent:
         for name in part_names[:32]:
             raw = archive.read(name).decode("utf-8", errors="ignore")
             texts.extend(match.strip() for match in _OOXML_TEXT_RE.findall(raw) if match.strip())
-    joined = sanitize_text(" ".join(texts))
+    joined = sanitize_document_text(" ".join(texts))
     if not joined:
         raise ValueError("office_text_missing")
     canonical, anchor = text_section_content(joined)
@@ -376,7 +390,76 @@ def extract_office_content(source: Path) -> ExtractedContent:
     )
 
 
-def extract_pdf_content(source: Path) -> ExtractedContent:
+def pdftotext_available() -> bool:
+    """Return True when the optional poppler ``pdftotext`` CLI is installed."""
+
+    return shutil.which(PDFTOTEXT_COMMAND) is not None
+
+
+def pypdf_available() -> bool:
+    """Return True when the optional ``pypdf`` package is importable."""
+
+    import importlib.util
+
+    return importlib.util.find_spec("pypdf") is not None
+
+
+def pdf_ocr_available() -> bool:
+    """OCR for PDFs needs ``tesseract`` plus a page-image source.
+
+    Page images come from poppler ``pdftoppm`` (full-page render, preferred)
+    or, for scanned PDFs whose pages are embedded raster images, from
+    ``pypdf`` image extraction.
+    """
+
+    return ocr_available() and (shutil.which(PDFTOPPM_COMMAND) is not None or pypdf_available())
+
+
+def extract_pdf_text_pdftotext(source: Path) -> str:
+    """Extract Unicode text with poppler ``pdftotext``; '' on any failure."""
+
+    command = shutil.which(PDFTOTEXT_COMMAND)
+    if command is None:
+        return ""
+    try:
+        completed = subprocess.run(
+            [command, "-enc", "UTF-8", "-layout", str(source), "-"],
+            capture_output=True,
+            timeout=PDF_RENDER_TIMEOUT_SECONDS,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return ""
+    if completed.returncode != 0:
+        return ""
+    return completed.stdout.decode("utf-8", errors="ignore")
+
+
+def extract_pdf_text_pypdf(source: Path) -> str:
+    """Extract text with ``pypdf`` when installed; '' on any failure."""
+
+    if not pypdf_available():
+        return ""
+    try:
+        from pypdf import PdfReader
+
+        reader = PdfReader(str(source))
+        pages: list[str] = []
+        for page in reader.pages:
+            pages.append(page.extract_text() or "")
+        return "\n".join(pages)
+    except Exception:  # noqa: BLE001 - malformed PDFs raise many pypdf types
+        return ""
+
+
+def extract_pdf_text_literal_strings(source: Path) -> str:
+    """Legacy literal-string scrape of raw/Flate streams (Latin-1 decode).
+
+    Only trustworthy for simple generated PDFs whose ``(...)`` literals hold
+    real text. Output MUST be gated with ``text_looks_readable`` before use:
+    subset-font PDFs carry glyph indices here, which decode to mojibake.
+    """
+
     data = source.read_bytes()
     blobs: list[bytes] = [data]
     for match in re.finditer(rb"stream\r?\n(.*?)\r?\nendstream", data, re.DOTALL):
@@ -393,17 +476,146 @@ def extract_pdf_content(source: Path) -> ExtractedContent:
             if cleaned and cleaned not in seen:
                 seen.add(cleaned)
                 strings.append(cleaned)
-    text = sanitize_text(" ".join(strings))
+    return " ".join(strings)
+
+
+def render_pdf_pages_pdftoppm(source: Path, tmp_dir: Path) -> list[Path]:
+    """Render bounded full pages to PNG with poppler ``pdftoppm``."""
+
+    render_command = shutil.which(PDFTOPPM_COMMAND)
+    if render_command is None:
+        return []
+    try:
+        completed = subprocess.run(
+            [
+                render_command,
+                "-png",
+                "-r",
+                "200",
+                "-f",
+                "1",
+                "-l",
+                str(PDF_OCR_MAX_PAGES),
+                str(source),
+                str(tmp_dir / "page"),
+            ],
+            capture_output=True,
+            timeout=PDF_RENDER_TIMEOUT_SECONDS,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return []
+    if completed.returncode != 0:
+        return []
+    return sorted(tmp_dir.glob("page*.png"))
+
+
+def extract_pdf_page_images_pypdf(source: Path, tmp_dir: Path) -> list[Path]:
+    """Write embedded page raster images (scanned PDFs) via ``pypdf``.
+
+    Poppler-free fallback for image-only PDFs whose pages are stored as
+    embedded JPEG/PNG XObjects. Bounded to ``PDF_OCR_MAX_PAGES`` pages.
+    """
+
+    if not pypdf_available():
+        return []
+    try:
+        from pypdf import PdfReader
+
+        reader = PdfReader(str(source))
+        written: list[Path] = []
+        for page_index, page in enumerate(reader.pages[:PDF_OCR_MAX_PAGES], start=1):
+            for image_index, image in enumerate(page.images, start=1):
+                suffix = Path(image.name or "image.png").suffix or ".png"
+                target = tmp_dir / f"page{page_index:03d}-{image_index:02d}{suffix}"
+                target.write_bytes(image.data)
+                written.append(target)
+        return written
+    except Exception:  # noqa: BLE001 - malformed PDFs raise many pypdf types
+        return []
+
+
+def extract_pdf_text_ocr(source: Path) -> str:
+    """OCR bounded page images (pdftoppm render or pypdf embedded images)."""
+
+    import tempfile
+
+    if not ocr_available():
+        return ""
+    with tempfile.TemporaryDirectory(prefix="case-uco-pdf-ocr-") as tmp:
+        tmp_dir = Path(tmp)
+        images = render_pdf_pages_pdftoppm(source, tmp_dir)
+        if not images:
+            images = extract_pdf_page_images_pypdf(source, tmp_dir)
+        pages: list[str] = []
+        for image in images:
+            try:
+                pages.append(run_ocr(image))
+            except ValueError:
+                continue
+        return "\n".join(pages)
+
+
+def text_looks_readable(text: str) -> bool:
+    """Reject Latin-1 glyph-index mojibake from the literal-string scrape.
+
+    Real reviewer-facing text from that path is overwhelmingly printable
+    ASCII; misdecoded subset-font glyph indices land in accented/high
+    Latin-1 codepoints. This gate is applied only to the untrusted built-in
+    scrape — pdftotext/pypdf/OCR output is honest Unicode and may legitimately
+    be non-ASCII (for example non-Latin-script documents).
+    """
+
+    stripped = text.strip()
+    if not stripped:
+        return False
+    sample = stripped[:4000]
+    ascii_reasonable = sum(
+        1 for ch in sample if ch.isascii() and (ch.isalnum() or ch.isspace() or ch in ".,;:!?()'\"$%&@#/\\-_+=[]{}|<>*")
+    )
+    return ascii_reasonable / len(sample) >= 0.8
+
+
+def extract_pdf_content(source: Path) -> ExtractedContent:
+    text = ""
+    extraction_method = ""
+
+    candidate = sanitize_document_text(extract_pdf_text_pdftotext(source))
+    if candidate:
+        text, extraction_method = candidate, "pdftotext"
+
     if not text:
-        # Image-only/scanned PDFs carry no text streams; OCR for PDFs is not
-        # implemented, so fail honestly instead of returning placeholders.
+        candidate = sanitize_document_text(extract_pdf_text_pypdf(source))
+        if candidate:
+            text, extraction_method = candidate, "pypdf"
+
+    scraped = ""
+    if not text:
+        scraped = sanitize_document_text(extract_pdf_text_literal_strings(source))
+        if scraped and text_looks_readable(scraped):
+            text, extraction_method = scraped, "literal_strings"
+
+    if not text:
+        candidate = sanitize_document_text(extract_pdf_text_ocr(source))
+        if candidate:
+            text, extraction_method = candidate, "ocr_tesseract"
+
+    if not text:
+        if scraped:
+            # Text streams exist but only decode to glyph-index mojibake and
+            # no real extractor is available. Never show mojibake to a
+            # reviewer; fail honestly with installation guidance.
+            raise ValueError("pdf_text_unreadable")
+        # Image-only/scanned PDF (or empty): OCR needs poppler + tesseract.
         raise ValueError("pdf_text_missing")
+
     canonical, anchor = text_section_content(text)
     return ExtractedContent(
         document_type="PDF document",
         summary_fields={
             "document_type": "PDF document",
             "extracted_text": text[:240],
+            "extraction_method": extraction_method,
         },
         records=[
             ExtractedRecord(
@@ -420,7 +632,7 @@ def extract_image_content(source: Path) -> ExtractedContent:
     text = ""
     extraction_method = ""
     if source.suffix.lower() == ".png":
-        text = sanitize_text(extract_png_text(source))
+        text = sanitize_document_text(extract_png_text(source))
         if text:
             extraction_method = "png_embedded_text"
     if not text:
@@ -428,7 +640,7 @@ def extract_image_content(source: Path) -> ExtractedContent:
             # No embedded text and no OCR engine: fail honestly rather than
             # fabricating "Synthetic image file ..." placeholder content.
             raise ValueError("ocr_unavailable")
-        text = sanitize_text(run_ocr(source))
+        text = sanitize_document_text(run_ocr(source))
         extraction_method = "ocr_tesseract"
         if not text:
             raise ValueError("no_extractable_content")
@@ -720,6 +932,22 @@ def build_case_uco_graph(
         },
         "@graph": [source_node, tool_node, action_node, *record_nodes, *relationship_nodes],
     }
+
+
+def sanitize_document_text(value: str) -> str:
+    """Bounded canonical document text for reviewer-facing content.
+
+    Applies the same printable/redaction cleaning as ``sanitize_text`` but
+    preserves line breaks (reviewers read whole reports) and uses the larger
+    ``MAX_DOCUMENT_TEXT`` bound instead of the 500-char summary bound.
+    """
+
+    cleaned = "".join(ch if ch.isprintable() or ch == "\n" else " " for ch in value)
+    cleaned = re.sub(r"\b(?:\d[ -]?){12,19}\b", "[redacted-number]", cleaned)
+    cleaned = re.sub(r"[ \t\f\v]+", " ", cleaned)
+    cleaned = re.sub(r" ?\n ?", "\n", cleaned)
+    cleaned = re.sub(r"\n{3,}", "\n\n", cleaned).strip()
+    return cleaned[:MAX_DOCUMENT_TEXT]
 
 
 def sanitize_text(value: str) -> str:
