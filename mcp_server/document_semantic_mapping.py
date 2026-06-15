@@ -18,8 +18,9 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Any
 
+from document_models import ExtractedRecord
+
 MAX_SEMANTIC_ENTITIES = 48
-MAX_EVENT_CONTEXT = 12
 
 EMAIL_RE = re.compile(
     r"\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b"
@@ -363,10 +364,8 @@ def extract_semantic_entities(
 
 def semantic_entities_to_records(
     entities: list[SemanticEntity],
-) -> list[Any]:
+) -> list[ExtractedRecord]:
     """Convert semantic entities into ``ExtractedRecord`` instances."""
-
-    from document_processor import ExtractedRecord
 
     records: list[ExtractedRecord] = []
     for entity in entities:

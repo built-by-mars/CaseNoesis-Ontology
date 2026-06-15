@@ -29,6 +29,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CAC content routing for Hermes/Link-Look: `route_cac_content` and `get_recipes` MCP tools, `cac_content_router.py` multi-recipe domain detection, `modeling_checklist` completeness guidance, and CAC press-release validation subset (`extensions/cac/validation-subset.json`) with `validate_graph(..., extensions=['cac'])` defaulting to subset mode (`cac:full` for full manifest).
 - Twelve CAC recipe family markdown files (`docs/recipes/cac-*.md`), ICAC search-warrant-arrest press-release recipe, Maryland ICAC Annapolis exemplar graph (`examples/maryland-icac-annapolis-arrest-2025.jsonld`), and `pyrightconfig.json` for IDE resolution of the local `python/case_uco` package.
 
+### Fixed
+
+- Resolved eight open CodeQL findings in `mcp_server/`: implicit string concatenation in `cac_content_router.py` modeling steps, duplicate `import`/`from` patterns in document-processor and graph-validator tests, unused local in CSV bundle test, and a `document_processor` ↔ `document_semantic_mapping` import cycle by extracting shared `ExtractedRecord` into `document_models.py`.
+- `graph_validator.extension_ontology_args()` now omits `--inference rdfs` whenever a CAC `validation-subset.json` is configured (even before submodule ontology files are present on disk); CAC validator tests skip cleanly when the CAC ontology submodule is uninitialized ([#34](https://github.com/vulnmaster/CASE-UCO-SDK/issues/34)).
+- Python packaging: added `python/README.md`, explicit `[tool.setuptools]` package discovery (`where = ["."]`), and `setuptools>=69` so `pip install ./python` builds `case-uco` instead of `UNKNOWN-0.0.0` and editable installs work on PEP 660-capable pip/setuptools ([#33](https://github.com/vulnmaster/CASE-UCO-SDK/issues/33)).
+
 ## [1.12.0] - 2026-06-10
 
 ### Changed

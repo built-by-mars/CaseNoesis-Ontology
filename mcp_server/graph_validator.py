@@ -89,6 +89,12 @@ def load_extension_ontology_paths(
     return paths
 
 
+def extension_has_validation_subset(ext_name: str, project_root: Path = PROJECT_ROOT) -> bool:
+    """Return True when an extension publishes a validation-subset manifest."""
+
+    return (project_root / "extensions" / ext_name / "validation-subset.json").is_file()
+
+
 def extension_ontology_args(
     extension_names: list[str] | None,
     project_root: Path = PROJECT_ROOT,
@@ -106,11 +112,11 @@ def extension_ontology_args(
     for ext_name in extension_names:
         mode = "full" if ext_name.endswith(":full") else "subset"
         clean_name = ext_name.removesuffix(":full")
+        if mode == "subset" and extension_has_validation_subset(clean_name, project_root):
+            used_subset = True
         rel_paths = load_extension_ontology_paths(
             clean_name, mode=mode, project_root=project_root
         )
-        if mode == "subset" and rel_paths:
-            used_subset = True
         for full_path in rel_paths:
             args.extend(["--ontology-graph", str(full_path)])
     if used_subset:

@@ -587,10 +587,14 @@ def build_workflow_steps(matched_domains: list[dict[str, Any]], output_format: s
             "sentencing) and link layers with explicit CASE/UCO properties."
         )
     steps.extend([
-        "Follow each matched recipe below; compose into one investigation graph unless "
-        "natural forensic boundaries require separate graphs.",
-        "Review modeling_checklist before finalize — connect suspect→crime, investigation→activities, "
-        "phases→actions, and charges→offenses.",
+        (
+            "Follow each matched recipe below; compose into one investigation graph unless "
+            "natural forensic boundaries require separate graphs."
+        ),
+        (
+            "Review modeling_checklist before finalize — connect suspect→crime, investigation→activities, "
+            "phases→actions, and charges→offenses."
+        ),
         "Call validate_graph with extensions=['cac'] on the finished graph.",
         "Link-Look users may perform additional visual validation in Normalize view.",
     ])

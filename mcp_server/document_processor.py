@@ -82,28 +82,7 @@ PROGRESS_STAGES = {
 _OOXML_TEXT_RE = re.compile(r"<(?:\w+:)?t(?:\s[^>]*)?>([^<]{1,400})</(?:\w+:)?t>")
 
 
-@dataclass(frozen=True)
-class ExtractedRecord:
-    """One reviewable record extracted from a source document.
-
-    ``anchor`` (Spec026 extraction-bundle contract 1.0) locates the record in
-    the canonical extracted content. Records that cannot be honestly located
-    carry ``anchor=None`` and are simply absent from ``annotations.jsonld`` —
-    anchors are never fabricated.
-
-    When ``ontology_class`` is set (semantic mapping stage), the case graph
-    node uses that verified CASE/UCO class instead of a generic
-    ``uco-observable:ObservableObject`` ExtractedString wrapper.
-    """
-
-    label: str
-    text: str
-    anchor: dict[str, Any] | None = None
-    ontology_class: str | None = None
-    graph_facets: tuple[dict[str, Any], ...] = ()
-    extra_properties: dict[str, Any] | None = None
-
-
+from document_models import ExtractedRecord, MAX_EVENT_CONTEXT
 @dataclass(frozen=True)
 class ExtractedContent:
     document_type: str
@@ -965,8 +944,6 @@ def build_case_uco_graph(
                 "uco-core:isDirectional": True,
             }
         )
-
-    from document_semantic_mapping import MAX_EVENT_CONTEXT
 
     for node in record_nodes:
         if node.get("@type") == "uco-core:Event" and event_context_ids:

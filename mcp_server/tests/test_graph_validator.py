@@ -16,13 +16,6 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import graph_validator
-from graph_validator import (
-    GraphValidationReport,
-    extension_ontology_args,
-    load_extension_ontology_paths,
-    validate_graph_file,
-    validator_available,
-)
 
 T0_CONFORMANT_GRAPH = {
     "@context": {
@@ -54,12 +47,19 @@ def write_graph(tmp_path: Path, payload: dict, name: str = "graph.jsonld") -> Pa
     return target
 
 
+def _cac_ontology_available(project_root: Path) -> bool:
+    sample = project_root / "extensions/cac/ontology/ontology/cacontology-core-shapes.ttl"
+    return sample.is_file()
+
+
 def test_extension_ontology_args_uses_cac_subset_by_default() -> None:
     project_root = Path(__file__).resolve().parent.parent.parent
     subset = project_root / "extensions" / "cac" / "validation-subset.json"
     if not subset.exists():
         pytest.skip("CAC validation subset not present")
-    args = extension_ontology_args(["cac"], project_root=project_root)
+    if not _cac_ontology_available(project_root):
+        pytest.skip("CAC ontology submodule not initialized")
+    args = graph_validator.extension_ontology_args(["cac"], project_root=project_root)
     assert "--built-version" in args
     assert "case-1.4.0" in args
     assert "--allow-info" in args
@@ -71,7 +71,7 @@ def test_extension_ontology_args_uses_cac_subset_by_default() -> None:
     ]
     assert any("cacontology-core" in path for path in ontology_flags)
     assert len(ontology_flags) == len(
-        load_extension_ontology_paths("cac", mode="subset", project_root=project_root)
+        graph_validator.load_extension_ontology_paths("cac", mode="subset", project_root=project_root)
     )
 
 
@@ -80,7 +80,9 @@ def test_extension_ontology_args_cac_full_uses_manifest() -> None:
     manifest = project_root / "extensions" / "cac" / "manifest.json"
     if not manifest.exists():
         pytest.skip("CAC extension manifest not present")
-    args = extension_ontology_args(["cac:full"], project_root=project_root)
+    if not _cac_ontology_available(project_root):
+        pytest.skip("CAC ontology submodule not initialized")
+    args = graph_validator.extension_ontology_args(["cac:full"], project_root=project_root)
     assert "--inference" in args
     ontology_flags = [
         value
@@ -94,7 +96,7 @@ def test_missing_validator_fails_honestly(tmp_path, monkeypatch):
     graph = write_graph(tmp_path, T0_CONFORMANT_GRAPH)
     monkeypatch.setattr(graph_validator.shutil, "which", lambda _name: None)
     with pytest.raises(ValueError, match="validator_unavailable"):
-        validate_graph_file(graph)
+        graph_validator.validate_graph_file(graph)
 
 
 def test_missing_graph_file_fails_honestly(tmp_path, monkeypatch):
@@ -102,7 +104,7 @@ def test_missing_graph_file_fails_honestly(tmp_path, monkeypatch):
         graph_validator.shutil, "which", lambda _name: "/usr/bin/case_validate"
     )
     with pytest.raises(ValueError, match="graph_missing"):
-        validate_graph_file(tmp_path / "does-not-exist.jsonld")
+        graph_validator.validate_graph_file(tmp_path / "does-not-exist.jsonld")
 
 
 def test_unsupported_extension_fails_honestly(tmp_path, monkeypatch):
@@ -112,7 +114,7 @@ def test_unsupported_extension_fails_honestly(tmp_path, monkeypatch):
     target = tmp_path / "graph.csv"
     target.write_text("not,a,graph\n", encoding="utf-8")
     with pytest.raises(ValueError, match="unsupported_graph_extension"):
-        validate_graph_file(target)
+        graph_validator.validate_graph_file(target)
 
 
 def test_oversized_graph_fails_honestly(tmp_path, monkeypatch):
@@ -122,7 +124,7 @@ def test_oversized_graph_fails_honestly(tmp_path, monkeypatch):
     monkeypatch.setattr(graph_validator, "MAX_GRAPH_BYTES", 16)
     graph = write_graph(tmp_path, T0_CONFORMANT_GRAPH)
     with pytest.raises(ValueError, match="graph_oversized"):
-        validate_graph_file(graph)
+        graph_validator.validate_graph_file(graph)
 
 
 def test_parse_conforms_handles_report_lines():
@@ -132,19 +134,19 @@ def test_parse_conforms_handles_report_lines():
 
 
 @pytest.mark.skipif(
-    not validator_available(), reason="case_validate CLI not installed"
+    not graph_validator.validator_available(), reason="case_validate CLI not installed"
 )
 def test_live_conformant_graph_passes(tmp_path):
     graph = write_graph(tmp_path, T0_CONFORMANT_GRAPH)
-    report = validate_graph_file(graph)
-    assert isinstance(report, GraphValidationReport)
+    report = graph_validator.validate_graph_file(graph)
+    assert isinstance(report, graph_validator.GraphValidationReport)
     assert report.conforms is True
     assert report.violation_count == 0
     assert "conforms" in report.safe_summary.lower()
 
 
 @pytest.mark.skipif(
-    not validator_available(), reason="case_validate CLI not installed"
+    not graph_validator.validator_available(), reason="case_validate CLI not installed"
 )
 def test_live_nonconformant_graph_reports_violations(tmp_path):
     bad_graph = {
@@ -162,6 +164,6 @@ def test_live_nonconformant_graph_reports_violations(tmp_path):
         ],
     }
     graph = write_graph(tmp_path, bad_graph, name="bad.jsonld")
-    report = validate_graph_file(graph)
+    report = graph_validator.validate_graph_file(graph)
     assert report.conforms is False or report.violation_count > 0
     assert "not conform" in report.safe_summary or report.violation_count > 0

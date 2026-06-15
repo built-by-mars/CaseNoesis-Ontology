@@ -12,11 +12,6 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import document_processor
-from document_processor import (
-    MAX_CSV_RECORDS,
-    ocr_available,
-    process_document_file,
-)
 
 
 def write_png_with_text(path: Path, text: str) -> None:
@@ -110,7 +105,7 @@ def test_graph_uses_canonical_action_provenance_terms(tmp_path: Path) -> None:
     source = tmp_path / "receipt.png"
     write_png_with_text(source, "Synthetic receipt total 12.34")
     output = tmp_path / "receipt.jsonld"
-    process_document_file(source, output, safe_metadata={"upload_id": "synthetic-upload-1"})
+    document_processor.process_document_file(source, output, safe_metadata={"upload_id": "synthetic-upload-1"})
 
     raw = output.read_text(encoding="utf-8")
     # Invented predicates from v0.1.0 must be gone.
@@ -133,7 +128,7 @@ def test_source_node_carries_file_and_hash_facets(tmp_path: Path) -> None:
     source = tmp_path / "receipt.png"
     write_png_with_text(source, "Synthetic receipt total 12.34")
     output = tmp_path / "receipt.jsonld"
-    result = process_document_file(source, output)
+    result = document_processor.process_document_file(source, output)
 
     nodes = graph_nodes(output)
     sources = nodes_of_type(nodes, "uco-observable:RasterPicture")
@@ -154,7 +149,7 @@ def test_tool_node_uses_canonical_version_property(tmp_path: Path) -> None:
     source = tmp_path / "table.csv"
     source.write_text("item,total\nalpha,12.34\n", encoding="utf-8")
     output = tmp_path / "table.jsonld"
-    process_document_file(source, output)
+    document_processor.process_document_file(source, output)
 
     tools = nodes_of_type(graph_nodes(output), "uco-tool:Tool")
     assert len(tools) == 1
@@ -165,7 +160,7 @@ def test_records_carry_extracted_strings_facets_and_relationships(tmp_path: Path
     source = tmp_path / "table.csv"
     source.write_text("item,total\nalpha,12.34\nbravo,56.78\n", encoding="utf-8")
     output = tmp_path / "table.jsonld"
-    result = process_document_file(source, output)
+    result = document_processor.process_document_file(source, output)
 
     assert len(result.records) == 2
     nodes = graph_nodes(output)
@@ -190,29 +185,29 @@ def test_records_carry_extracted_strings_facets_and_relationships(tmp_path: Path
 
 
 def test_csv_yields_bounded_per_record_candidates(tmp_path: Path) -> None:
-    rows = "\n".join(f"row-{i},{i}.00" for i in range(1, MAX_CSV_RECORDS + 51))
+    rows = "\n".join(f"row-{i},{i}.00" for i in range(1, document_processor.MAX_CSV_RECORDS + 51))
     source = tmp_path / "big.csv"
     source.write_text("item,total\n" + rows + "\n", encoding="utf-8")
     output = tmp_path / "big.jsonld"
-    result = process_document_file(source, output)
+    result = document_processor.process_document_file(source, output)
 
-    assert len(result.records) == MAX_CSV_RECORDS
+    assert len(result.records) == document_processor.MAX_CSV_RECORDS
     assert result.truncated is True
-    assert result.extracted_fields["truncated"].startswith(f"first {MAX_CSV_RECORDS}")
+    assert result.extracted_fields["truncated"].startswith(f"first {document_processor.MAX_CSV_RECORDS}")
 
 
 def test_empty_csv_fails_honestly(tmp_path: Path) -> None:
     source = tmp_path / "empty.csv"
     source.write_text("item,total\n", encoding="utf-8")
     with pytest.raises(ValueError, match="empty_csv"):
-        process_document_file(source, tmp_path / "out.jsonld")
+        document_processor.process_document_file(source, tmp_path / "out.jsonld")
 
 
 def test_flate_compressed_pdf_text_is_extracted(tmp_path: Path) -> None:
     source = tmp_path / "compressed.pdf"
     write_flate_pdf(source)
     output = tmp_path / "compressed.jsonld"
-    result = process_document_file(source, output)
+    result = document_processor.process_document_file(source, output)
     assert "compressed-stream invoice" in result.extracted_fields["extracted_text"]
 
 
@@ -224,7 +219,7 @@ def test_scanned_pdf_without_text_fails_honestly(tmp_path: Path, monkeypatch: py
     monkeypatch.setattr(document_processor, "extract_pdf_text_pypdf", lambda _s: "")
     monkeypatch.setattr(document_processor, "extract_pdf_text_ocr", lambda _s: "")
     with pytest.raises(ValueError, match="pdf_text_missing"):
-        process_document_file(source, tmp_path / "out.jsonld")
+        document_processor.process_document_file(source, tmp_path / "out.jsonld")
 
 
 def write_mojibake_pdf(path: Path) -> None:
@@ -250,7 +245,7 @@ def test_mojibake_pdf_never_reaches_reviewer(tmp_path: Path, monkeypatch: pytest
     monkeypatch.setattr(document_processor, "extract_pdf_text_pypdf", lambda _s: "")
     monkeypatch.setattr(document_processor, "extract_pdf_text_ocr", lambda _s: "")
     with pytest.raises(ValueError, match="pdf_text_unreadable"):
-        process_document_file(source, tmp_path / "out.jsonld")
+        document_processor.process_document_file(source, tmp_path / "out.jsonld")
 
 
 def test_pdftotext_output_is_preferred_and_recorded(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -261,7 +256,7 @@ def test_pdftotext_output_is_preferred_and_recorded(tmp_path: Path, monkeypatch:
         "extract_pdf_text_pdftotext",
         lambda _s: "Synthetic arrest report narrative for officer review.",
     )
-    result = process_document_file(source, tmp_path / "out.jsonld")
+    result = document_processor.process_document_file(source, tmp_path / "out.jsonld")
     assert result.extracted_fields["extraction_method"] == "pdftotext"
     assert "Synthetic arrest report narrative" in result.extracted_fields["extracted_text"]
 
@@ -275,7 +270,7 @@ def test_pypdf_fallback_is_used_and_recorded(tmp_path: Path, monkeypatch: pytest
         "extract_pdf_text_pypdf",
         lambda _s: "Synthetic pypdf-extracted narrative for officer review.",
     )
-    result = process_document_file(source, tmp_path / "out.jsonld")
+    result = document_processor.process_document_file(source, tmp_path / "out.jsonld")
     assert result.extracted_fields["extraction_method"] == "pypdf"
 
 
@@ -289,7 +284,7 @@ def test_scanned_pdf_uses_ocr_fallback_when_available(tmp_path: Path, monkeypatc
         "extract_pdf_text_ocr",
         lambda _s: "Synthetic OCR text from scanned page.",
     )
-    result = process_document_file(source, tmp_path / "out.jsonld")
+    result = document_processor.process_document_file(source, tmp_path / "out.jsonld")
     assert result.extracted_fields["extraction_method"] == "ocr_tesseract"
 
 
@@ -300,7 +295,7 @@ def test_simple_literal_string_pdf_still_extracts_with_method(tmp_path: Path, mo
     write_pdf(source)
     monkeypatch.setattr(document_processor, "extract_pdf_text_pdftotext", lambda _s: "")
     monkeypatch.setattr(document_processor, "extract_pdf_text_pypdf", lambda _s: "")
-    result = process_document_file(source, tmp_path / "out.jsonld")
+    result = document_processor.process_document_file(source, tmp_path / "out.jsonld")
     assert result.extracted_fields["extraction_method"] == "literal_strings"
     assert "Synthetic PDF invoice" in result.extracted_fields["extracted_text"]
 
@@ -320,7 +315,7 @@ def test_document_text_is_not_truncated_to_summary_bound(tmp_path: Path, monkeyp
     write_mojibake_pdf(source)
     long_text = "Synthetic narrative sentence for review. " * 200  # ~8K chars
     monkeypatch.setattr(document_processor, "extract_pdf_text_pdftotext", lambda _s: long_text)
-    result = process_document_file(source, tmp_path / "out.jsonld")
+    result = document_processor.process_document_file(source, tmp_path / "out.jsonld")
     extracted_doc = json.loads(
         (tmp_path / "extracted-content.json").read_text(encoding="utf-8")
     )
@@ -333,7 +328,7 @@ def test_xlsx_shared_strings_are_extracted(tmp_path: Path) -> None:
     source = tmp_path / "sheet.xlsx"
     write_xlsx(source)
     output = tmp_path / "sheet.jsonld"
-    result = process_document_file(source, output)
+    result = document_processor.process_document_file(source, output)
     assert "Synthetic spreadsheet cell Bravo" in result.extracted_fields["extracted_text"]
 
 
@@ -343,7 +338,7 @@ def test_office_without_text_fails_honestly(tmp_path: Path) -> None:
         archive.writestr("[Content_Types].xml", "<Types></Types>")
         archive.writestr("word/document.xml", "<w:document><w:body/></w:document>")
     with pytest.raises(ValueError, match="office_text_missing"):
-        process_document_file(source, tmp_path / "out.jsonld")
+        document_processor.process_document_file(source, tmp_path / "out.jsonld")
 
 
 def test_image_without_embedded_text_fails_honestly_without_ocr(tmp_path: Path, monkeypatch) -> None:
@@ -353,26 +348,26 @@ def test_image_without_embedded_text_fails_honestly_without_ocr(tmp_path: Path, 
     source = tmp_path / "photo.jpg"
     source.write_bytes(b"\xff\xd8\xff\xe0synthetic-jpeg-bytes")
     with pytest.raises(ValueError, match="ocr_unavailable"):
-        process_document_file(source, tmp_path / "out.jsonld")
+        document_processor.process_document_file(source, tmp_path / "out.jsonld")
 
 
 def test_no_placeholder_content_in_output(tmp_path: Path) -> None:
     source = tmp_path / "receipt.png"
     write_png_with_text(source, "Synthetic receipt total 12.34")
     output = tmp_path / "receipt.jsonld"
-    process_document_file(source, output)
+    document_processor.process_document_file(source, output)
     raw = output.read_text(encoding="utf-8")
     assert "Synthetic image file" not in raw
 
 
-@pytest.mark.skipif(not ocr_available(), reason="tesseract OCR CLI not installed")
+@pytest.mark.skipif(not document_processor.ocr_available(), reason="tesseract OCR CLI not installed")
 def test_image_ocr_extracts_text_when_available(tmp_path: Path) -> None:
     """Live OCR path: a plain PNG goes through tesseract (may yield empty)."""
 
     source = tmp_path / "plain.png"
     write_plain_png(source)
     try:
-        result = process_document_file(source, tmp_path / "out.jsonld")
+        result = document_processor.process_document_file(source, tmp_path / "out.jsonld")
     except ValueError as exc:
         # A 1x1 image legitimately has no recognizable text.
         assert str(exc) == "no_extractable_content"
@@ -384,7 +379,7 @@ def test_unsupported_kind_fails_honestly(tmp_path: Path) -> None:
     source = tmp_path / "binary.exe"
     source.write_bytes(b"MZ")
     with pytest.raises(ValueError, match="unsupported_file_kind"):
-        process_document_file(source, tmp_path / "out.jsonld")
+        document_processor.process_document_file(source, tmp_path / "out.jsonld")
 
 
 def test_oversized_source_fails_honestly(tmp_path: Path, monkeypatch) -> None:
@@ -392,7 +387,7 @@ def test_oversized_source_fails_honestly(tmp_path: Path, monkeypatch) -> None:
     source = tmp_path / "table.csv"
     source.write_text("item,total\nalpha,12.34\n", encoding="utf-8")
     with pytest.raises(ValueError, match="source_oversized"):
-        process_document_file(source, tmp_path / "out.jsonld")
+        document_processor.process_document_file(source, tmp_path / "out.jsonld")
 
 
 # ---------------------------------------------------------------------------
@@ -432,7 +427,7 @@ def test_text_kinds_emit_anchored_bundle(tmp_path: Path, writer, name: str) -> N
     else:
         writer(source)
     output = tmp_path / "out.jsonld"
-    result = process_document_file(source, output)
+    result = document_processor.process_document_file(source, output)
 
     assert result.extracted_content_path is not None
     assert result.annotations_path is not None
@@ -475,7 +470,7 @@ def test_csv_bundle_uses_rfc7111_row_selectors(tmp_path: Path) -> None:
     source = tmp_path / "table.csv"
     source.write_text("item,total\nalpha,12.34\nbravo,56.78\n", encoding="utf-8")
     output = tmp_path / "table.jsonld"
-    result = process_document_file(source, output)
+    document_processor.process_document_file(source, output)
 
     extracted, annotations = load_bundle(output)
     assert_bundle_contract_shape(extracted)
@@ -503,7 +498,7 @@ def test_duplicate_values_get_distinct_row_anchors(tmp_path: Path) -> None:
     source = tmp_path / "dupes.csv"
     source.write_text("phone\n555-0100\n555-0100\n", encoding="utf-8")
     output = tmp_path / "dupes.jsonld"
-    result = process_document_file(source, output)
+    result = document_processor.process_document_file(source, output)
 
     _, annotations = load_bundle(output)
     annos = annotations["@graph"]
@@ -519,7 +514,7 @@ def test_annotations_reference_only_record_nodes(tmp_path: Path) -> None:
     source = tmp_path / "receipt.png"
     write_png_with_text(source, "Synthetic receipt total 12.34")
     output = tmp_path / "receipt.jsonld"
-    result = process_document_file(source, output)
+    result = document_processor.process_document_file(source, output)
 
     _, annotations = load_bundle(output)
     non_record_ids = {
@@ -538,7 +533,7 @@ def test_case_graph_vocabulary_unchanged_by_bundle(tmp_path: Path) -> None:
     source = tmp_path / "table.csv"
     source.write_text("item,total\nalpha,12.34\n", encoding="utf-8")
     output = tmp_path / "table.jsonld"
-    process_document_file(source, output)
+    document_processor.process_document_file(source, output)
     raw = output.read_text(encoding="utf-8")
     assert "TextPositionSelector" not in raw
     assert "oa:" not in raw
@@ -568,7 +563,7 @@ def test_process_document_file_emits_safe_progress_checkpoints(tmp_path: Path) -
     progress = tmp_path / "progress.jsonl"
     write_png_with_text(source, "Synthetic receipt total 12.34")
 
-    process_document_file(source, output, progress_output=progress)
+    document_processor.process_document_file(source, output, progress_output=progress)
 
     events = [
         json.loads(line)
@@ -596,7 +591,7 @@ def test_process_document_file_emits_safe_failure_checkpoint(tmp_path: Path) -> 
     missing_source = tmp_path / "missing.pdf"
 
     with pytest.raises(ValueError, match="source_missing"):
-        process_document_file(missing_source, tmp_path / "out.jsonld", progress_output=progress)
+        document_processor.process_document_file(missing_source, tmp_path / "out.jsonld", progress_output=progress)
 
     events = [
         json.loads(line)
