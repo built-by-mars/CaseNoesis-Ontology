@@ -12,11 +12,15 @@ installed, callers receive ``validator_unavailable`` instead of a fake pass.
 
 from __future__ import annotations
 
+import json
 import shutil
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_BUILT_VERSION = "case-1.4.0"
 
 VALIDATOR_NAME = "case_validate"
 SUPPORTED_GRAPH_EXTENSIONS = {".json", ".jsonld", ".json-ld", ".ttl", ".turtle"}
@@ -48,10 +52,80 @@ def validator_available() -> bool:
     return shutil.which(VALIDATOR_NAME) is not None
 
 
+def load_extension_ontology_paths(
+    ext_name: str,
+    *,
+    mode: str = "subset",
+    project_root: Path = PROJECT_ROOT,
+) -> list[Path]:
+    """Return ontology graph paths for an extension.
+
+    mode ``subset`` uses ``extensions/<ext>/validation-subset.json`` when present
+    (recommended for MCP / press-release KGs). mode ``full`` uses the extension
+    manifest (all owl/shacl/bridge files).
+    """
+
+    ext_dir = project_root / "extensions" / ext_name
+    paths: list[Path] = []
+    if mode == "subset":
+        subset_path = ext_dir / "validation-subset.json"
+        if subset_path.exists():
+            subset = json.loads(subset_path.read_text(encoding="utf-8"))
+            for rel in subset.get("ontology_files", []):
+                full = ext_dir / rel
+                if full.exists():
+                    paths.append(full)
+            if paths:
+                return paths
+    manifest_path = ext_dir / "manifest.json"
+    if not manifest_path.exists():
+        return paths
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    for key in ("owl_files", "shacl_files", "bridge_files"):
+        for rel_path in manifest.get(key, []):
+            full_path = ext_dir / rel_path
+            if full_path.exists():
+                paths.append(full_path)
+    return paths
+
+
+def extension_ontology_args(
+    extension_names: list[str] | None,
+    project_root: Path = PROJECT_ROOT,
+) -> list[str]:
+    """Build case_validate flags for one or more extension manifests."""
+
+    if not extension_names:
+        return []
+    args: list[str] = [
+        "--built-version",
+        DEFAULT_BUILT_VERSION,
+        "--allow-info",
+    ]
+    used_subset = False
+    for ext_name in extension_names:
+        mode = "full" if ext_name.endswith(":full") else "subset"
+        clean_name = ext_name.removesuffix(":full")
+        rel_paths = load_extension_ontology_paths(
+            clean_name, mode=mode, project_root=project_root
+        )
+        if mode == "subset" and rel_paths:
+            used_subset = True
+        for full_path in rel_paths:
+            args.extend(["--ontology-graph", str(full_path)])
+    if used_subset:
+        pass  # subset modules are self-contained; skip rdfs inference
+    else:
+        args.extend(["--inference", "rdfs"])
+    return args
+
+
 def validate_graph_file(
     graph_path: str | Path,
     allow_warning: bool = True,
     timeout_seconds: int = DEFAULT_TIMEOUT_SECONDS,
+    extensions: list[str] | None = None,
+    project_root: Path = PROJECT_ROOT,
 ) -> GraphValidationReport:
     """Validate a CASE/UCO graph file with the local case_validate tool.
 
@@ -73,6 +147,11 @@ def validate_graph_file(
     args = [VALIDATOR_NAME]
     if allow_warning:
         args.append("--allow-warning")
+    extension_args = extension_ontology_args(extensions, project_root=project_root)
+    if extension_args:
+        args.extend(extension_args)
+    elif extensions:
+        args.extend(["--built-version", DEFAULT_BUILT_VERSION])
     args.append(str(graph))
     try:
         completed = subprocess.run(
@@ -96,6 +175,14 @@ def validate_graph_file(
             summary = (
                 f"Graph conforms with {warning_count} validator warning(s); "
                 "review warnings before relying on extension concepts."
+            )
+        elif extensions:
+            mode_note = ""
+            if any(not ext.endswith(":full") for ext in extensions):
+                mode_note = " (validation-subset)"
+            summary = (
+                f"Graph conforms to CASE/UCO SHACL shapes with extension(s): "
+                f"{', '.join(extensions)}.{mode_note}"
             )
         else:
             summary = "Graph conforms to CASE/UCO SHACL shapes."

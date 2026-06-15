@@ -2,7 +2,7 @@
 
 > See [Recipe Index](INDEX.md) for all recipes.
 
-Model online grooming chat interactions using core CASE/UCO types and [CAC Ontology](https://cacontology.projectvic.org/) extension classes. This recipe covers the evidence and behavioral-interpretation layers. For the institutional reporting and investigation workflow, see [cybertip-ncmec-workflow.md](cybertip-ncmec-workflow.md). Based on the [snapchat-grooming-cybertip](../../examples/snapchat-grooming-cybertip.jsonld) example.
+Model online grooming chat interactions and **online sexual solicitation of minors** (including press-release narratives without full chat logs) using core CASE/UCO types and [CAC Ontology](https://cacontology.projectvic.org/) extension classes. This recipe covers the evidence and behavioral-interpretation layers. For institutional arrest workflow after investigation, see [cac-icac-search-warrant-arrest.md](cac-icac-search-warrant-arrest.md). For NCMEC reporting, see [cybertip-ncmec-workflow.md](cybertip-ncmec-workflow.md).
 
 ## Semantic layers
 
@@ -27,6 +27,16 @@ This pattern separates modeling into three distinct layers:
 | `VictimResponse` | Interpretation | Victim compliance tracking with `victimCompliance`, `seekingHelp` |
 | `GroomingPhase` subtypes | Interpretation | Temporal grooming phases with `hasPhaseBeginPoint` / `hasPhaseEndPoint` |
 | `EscalationPattern` | Interpretation | Cross-session escalation pattern with `escalationRate`, `patternConfidence` |
+
+## Press-release grooming (no chat logs)
+
+When the source is a **press article** or investigator summary without message-level evidence:
+
+- Model `OnlineGrooming` with `targetsVictim` → `ChildVictim` and **`uco-action:performer`** → suspect `Person`.
+- Link the grooming event to the investigation via `uco-core:Relationship` (`Concerns`) and to the investigative action via `Evidence_Basis_For`.
+- Pair with [cac-icac-search-warrant-arrest.md](cac-icac-search-warrant-arrest.md) for institutional workflow.
+
+Do **not** leave grooming nodes with only `targetsVictim` and no perpetrator link.
 
 ## Canonical pattern
 

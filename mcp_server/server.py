@@ -54,6 +54,7 @@ from graph_validator import (
     report_to_dict as _validation_report_to_dict,
     validate_graph_file as _validate_graph_file,
 )
+from cac_content_router import route_cac_content as _route_cac_content, search_recipes as _search_recipes
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -155,8 +156,11 @@ mcp = FastMCP(
         "gUFO, and FOAF for cross-ontology interoperability. "
         "Use guide_mapping to get step-by-step mapping guidance for a "
         "specific evidence source (e.g., filesystem report, mobile "
-        "extraction, email export, pcap). Use get_recipe to retrieve "
-        "full recipe content including code examples and JSON-LD output. "
+        "extraction, email export, pcap). Use get_recipe or get_recipes "
+        "to retrieve recipe content including code examples and JSON-LD "
+        "output. Use route_cac_content to detect CAC Ontology domains in "
+        "submitted text, documents, or partial graphs and return multiple "
+        "matching CAC recipes plus validation guidance. "
         "Use process_document_file to process approved local synthetic "
         "receipt image, PDF, Office, and CSV/table files into bounded "
         "CASE/UCO-shaped JSON-LD for downstream human review. "
@@ -223,19 +227,31 @@ def process_document_file(
 
 
 @mcp.tool
-def validate_graph(graph_path: str, allow_warning: bool = True) -> dict:
+def validate_graph(
+    graph_path: str,
+    allow_warning: bool = True,
+    extensions: list[str] | None = None,
+) -> dict:
     """Validate a CASE/UCO graph file with the local case_validate SHACL tool.
 
     Runs the CASE Utilities case_validate CLI against a local JSON-LD or
     Turtle graph file and returns a bounded conformance report (conforms,
-    warning_count, violation_count, safe_summary). Use this before submitting
-    a produced graph for human review. Fails honestly when case_validate is
-    not installed (error "validator_unavailable") or the graph file is
-    missing, oversized, or an unsupported format — it never fabricates a
-    passing result.
+    warning_count, violation_count, safe_summary). Pass extensions=['cac']
+    to validate against the CAC press-release subset
+    (extensions/cac/validation-subset.json). Pass extensions=['cac:full']
+    for the complete CAC manifest when upstream SHACL SPARQL constraints
+    are repaired. Use this before submitting a produced graph for human
+    review. Fails honestly when case_validate is not installed
+    (error "validator_unavailable") or the graph file is missing, oversized,
+    or an unsupported format — it never fabricates a passing result.
     """
     try:
-        report = _validate_graph_file(graph_path, allow_warning=allow_warning)
+        report = _validate_graph_file(
+            graph_path,
+            allow_warning=allow_warning,
+            extensions=extensions,
+            project_root=PROJECT_ROOT,
+        )
     except ValueError as exc:
         return {
             "ok": False,
@@ -243,6 +259,8 @@ def validate_graph(graph_path: str, allow_warning: bool = True) -> dict:
             "validator_name": GRAPH_VALIDATOR_NAME,
         }
     result = {"ok": True}
+    if extensions:
+        result["extensions"] = extensions
     result.update(_validation_report_to_dict(report))
     return result
 
@@ -719,6 +737,76 @@ def get_recipe(scenario: str) -> dict | None:
         "truncated": len(content) > 8000 if content else False,
         "tip": "This recipe contains complete code examples and JSON-LD output.",
     }
+
+
+@mcp.tool
+def get_recipes(
+    scenario: str,
+    limit: int = 5,
+    include_content: bool = False,
+) -> dict:
+    """Find multiple code recipes for a forensic workflow or CAC scenario.
+
+    Unlike get_recipe (single best match), returns ranked matches so agents
+    can compose multi-domain graphs (e.g., grooming + CyberTip + task force).
+
+    Examples: get_recipes("grooming cybertip"), get_recipes("trafficking icac"),
+              get_recipes("cac rescue", include_content=True)
+    """
+    matches = _search_recipes(scenario, limit=max(1, min(limit, 10)), include_content=include_content)
+    return {
+        "query": scenario,
+        "match_count": len(matches),
+        "recipes": matches,
+        "tip": (
+            "For CAC-specific routing from submitted content, use route_cac_content "
+            "to detect domains and return multiple CAC recipes with validation guidance."
+        ),
+    }
+
+
+@mcp.tool
+def route_cac_content(
+    content_text: str | None = None,
+    source_path: str | None = None,
+    output_format: str = "jsonld",
+    include_recipe_content: bool = True,
+    max_recipes: int = 6,
+) -> dict:
+    """Route submitted content to one or more CAC Ontology modeling recipes.
+
+    Accepts free text, structured narrative, paths to documents (txt/md/csv),
+    partial or validated CASE/UCO/CAC graphs (jsonld/ttl), or content_text
+    combined with a source_path. Returns multiple matched CAC recipes (guidance
+    only — the agent builds the graph), layer-ordered workflow steps, output
+    format guidance (jsonld or ttl), and CAC SHACL validation instructions.
+
+    For binary documents (PDF, Office, images), call process_document_file
+    first and pass extracted text via content_text.
+
+    Examples:
+      route_cac_content(content_text="ICAC task force rescued victims from trafficking ring")
+      route_cac_content(source_path="extensions/cac/ontology/examples_knowledge_graphs/hotline-lifecycle.ttl", output_format="ttl")
+      route_cac_content(content_text=..., source_path="case-notes.txt")
+    """
+    try:
+        return _route_cac_content(
+            project_root=PROJECT_ROOT,
+            content_text=content_text,
+            source_path=source_path,
+            output_format=output_format,
+            include_recipe_content=include_recipe_content,
+            max_recipes=max_recipes,
+        )
+    except ValueError as exc:
+        return {
+            "ok": False,
+            "error": str(exc),
+            "tip": (
+                "Provide content_text and/or source_path. For PDF/Office/images, "
+                "use process_document_file first, then pass extracted text here."
+            ),
+        }
 
 
 @mcp.tool

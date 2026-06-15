@@ -54,6 +54,25 @@ End-to-end mapping recipes that walk through source input, modeling choices, ant
 | Online Grooming Chat Modeling | [grooming-chat-modeling.md](grooming-chat-modeling.md) | Grooming chat evidence and CAC behavioral interpretation with phase progression | — |
 | NCMEC CyberTip Reporting Workflow | [cybertip-ncmec-workflow.md](cybertip-ncmec-workflow.md) | Platform detection, ESP reporting, CyberTip lifecycle, and CAC investigation | — |
 
+### Crimes Against Children (CAC Ontology)
+
+Requires `CASE_UCO_EXTENSIONS=cac`. Use `route_cac_content` via the MCP server to detect which recipes apply to submitted content. Validate output with `validate_graph(..., extensions=['cac'])` (uses `extensions/cac/validation-subset.json` by default) or `extensions=['cac:full']` for the complete manifest.
+
+| Recipe | File | Description |
+|---|---|---|
+| Child Sex Trafficking and Recruitment Networks | [cac-trafficking-recruitment-network.md](cac-trafficking-recruitment-network.md) | Trafficking enterprises, recruitment networks, pretext approaches, digital-to-physical bridges |
+| Multi-Jurisdictional Task Force Operations | [cac-multi-jurisdiction-task-force.md](cac-multi-jurisdiction-task-force.md) | ICAC task forces, joint investigations, jurisdictional handoffs, mass rescue |
+| ICAC Search Warrant Arrest | [cac-icac-search-warrant-arrest.md](cac-icac-search-warrant-arrest.md) | Routine warrant execution, custody without incident, booking (Maryland/ICAC press releases) |
+| Victim Rescue and Post-Rescue Services | [cac-victim-rescue-extraction.md](cac-victim-rescue-extraction.md) | Emergency response, extraction, safety planning, multi-agency services |
+| Tactical Arrest and Undercover Operations | [cac-tactical-undercover-operation.md](cac-tactical-undercover-operation.md) | High-risk arrests, dynamic entry, undercover stings, asset forfeiture |
+| Sextortion and Online Coercion | [cac-sextortion-coercion.md](cac-sextortion-coercion.md) | Sextortion schemes, coercion demands, compliance pressure |
+| Hotline Intake and Referral Lifecycle | [cac-hotline-intake-lifecycle.md](cac-hotline-intake-lifecycle.md) | Hotline intake, triage, referral, investigation escalation |
+| CSAM Forensic Provenance | [cac-csam-forensic-provenance.md](cac-csam-forensic-provenance.md) | Acquisition, custody, hashing, correlation, victim identification |
+| Legal Charges and Sentencing Outcomes | [cac-legal-sentencing-outcomes.md](cac-legal-sentencing-outcomes.md) | Indictments, pleas, sentencing, registry outcomes |
+| Missing Child Investigations | [cac-missing-child-investigation.md](cac-missing-child-investigation.md) | Missing-child reports, AMBER alerts, tracking, recovery |
+| International Coordination | [cac-international-coordination.md](cac-international-coordination.md) | Cross-border operations, Europol/Interpol, evidence sharing |
+| CSAM Production Cases | [cac-production-case.md](cac-production-case.md) | Hands-on abuse, offender-produced media, production environments |
+
 ### Devices, locations, and identity
 
 | Recipe | File | Description | CASE-Example |

@@ -1,0 +1,12 @@
+{
+  "include": [
+    "python",
+    "examples",
+    "example_agentmcp_outputs",
+    "mcp_server",
+    "generator"
+  ],
+  "extraPaths": ["python"],
+  "venvPath": ".",
+  "venv": ".venv"
+}

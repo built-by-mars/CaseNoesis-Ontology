@@ -45,7 +45,7 @@ from pathlib import Path
 from typing import Any
 
 TOOL_NAME = "case-uco-document-normalize"
-TOOL_VERSION = "0.4.0"
+TOOL_VERSION = "0.5.0"
 EXTRACTION_BUNDLE_CONTRACT_VERSION = "1.0"
 EXTRACTED_CONTENT_FILENAME = "extracted-content.json"
 ANNOTATIONS_FILENAME = "annotations.jsonld"
@@ -90,11 +90,18 @@ class ExtractedRecord:
     the canonical extracted content. Records that cannot be honestly located
     carry ``anchor=None`` and are simply absent from ``annotations.jsonld`` —
     anchors are never fabricated.
+
+    When ``ontology_class`` is set (semantic mapping stage), the case graph
+    node uses that verified CASE/UCO class instead of a generic
+    ``uco-observable:ObservableObject`` ExtractedString wrapper.
     """
 
     label: str
     text: str
     anchor: dict[str, Any] | None = None
+    ontology_class: str | None = None
+    graph_facets: tuple[dict[str, Any], ...] = ()
+    extra_properties: dict[str, Any] | None = None
 
 
 @dataclass(frozen=True)
@@ -324,6 +331,32 @@ def extract_csv_content(source: Path) -> ExtractedContent:
     )
 
 
+def records_for_text_document(
+    full_text: str,
+    *,
+    document_label_prefix: str,
+    run_seed: str,
+) -> list[ExtractedRecord]:
+    """Semantic CASE/UCO mapping records with anchors, or one honest fallback."""
+
+    from document_semantic_mapping import extract_semantic_entities, semantic_entities_to_records
+
+    entities = extract_semantic_entities(full_text, run_seed=run_seed)
+    records = semantic_entities_to_records(entities)
+    if records:
+        return records
+    record_text = full_text[:MAX_RECORD_TEXT]
+    _, anchor = text_section_content(full_text)
+    return [
+        ExtractedRecord(
+            label=f"{document_label_prefix}: {record_text[:60]}",
+            text=record_text,
+            anchor=anchor,
+            ontology_class="uco-observable:ObservableObject",
+        )
+    ]
+
+
 def text_section_content(full_text: str) -> tuple[dict[str, Any], dict[str, Any]]:
     """Canonical single-section text model plus the anchor for its lead record.
 
@@ -371,21 +404,20 @@ def extract_office_content(source: Path) -> ExtractedContent:
     joined = sanitize_document_text(" ".join(texts))
     if not joined:
         raise ValueError("office_text_missing")
-    canonical, anchor = text_section_content(joined)
+    canonical, _anchor = text_section_content(joined)
+    run_seed = f"{source.name}:{joined[:32]}"
+    records = records_for_text_document(
+        joined, document_label_prefix="Office text", run_seed=run_seed
+    )
     return ExtractedContent(
         document_type="Office document",
         summary_fields={
             "document_type": "Office document",
             "extracted_text": joined[:240],
             "source_part_count": str(len(texts)),
+            "semantic_entity_count": str(len(records)),
         },
-        records=[
-            ExtractedRecord(
-                label=f"Office text: {joined[:60]}",
-                text=joined[:MAX_RECORD_TEXT],
-                anchor=anchor,
-            )
-        ],
+        records=records,
         canonical=canonical,
     )
 
@@ -609,21 +641,18 @@ def extract_pdf_content(source: Path) -> ExtractedContent:
         # Image-only/scanned PDF (or empty): OCR needs poppler + tesseract.
         raise ValueError("pdf_text_missing")
 
-    canonical, anchor = text_section_content(text)
+    canonical, _anchor = text_section_content(text)
+    run_seed = f"{source.name}:{text[:32]}"
+    records = records_for_text_document(text, document_label_prefix="PDF text", run_seed=run_seed)
     return ExtractedContent(
         document_type="PDF document",
         summary_fields={
             "document_type": "PDF document",
             "extracted_text": text[:240],
             "extraction_method": extraction_method,
+            "semantic_entity_count": str(len(records)),
         },
-        records=[
-            ExtractedRecord(
-                label=f"PDF text: {text[:60]}",
-                text=text[:MAX_RECORD_TEXT],
-                anchor=anchor,
-            )
-        ],
+        records=records,
         canonical=canonical,
     )
 
@@ -644,21 +673,18 @@ def extract_image_content(source: Path) -> ExtractedContent:
         extraction_method = "ocr_tesseract"
         if not text:
             raise ValueError("no_extractable_content")
-    canonical, anchor = text_section_content(text)
+    canonical, _anchor = text_section_content(text)
+    run_seed = f"{source.name}:{text[:32]}"
+    records = records_for_text_document(text, document_label_prefix="Image text", run_seed=run_seed)
     return ExtractedContent(
         document_type="Receipt image",
         summary_fields={
             "document_type": "Receipt image",
             "extracted_text": text[:240],
             "extraction_method": extraction_method,
+            "semantic_entity_count": str(len(records)),
         },
-        records=[
-            ExtractedRecord(
-                label=f"Image text: {text[:60]}",
-                text=text[:MAX_RECORD_TEXT],
-                anchor=anchor,
-            )
-        ],
+        records=records,
         canonical=canonical,
     )
 
@@ -824,43 +850,62 @@ def build_case_uco_graph(
     if upload_reference:
         source_description += f" (upload reference {upload_reference})"
 
+    source_facets: list[dict[str, Any]] = [
+        {
+            "@id": f"urn:uuid:{uuid.uuid5(run_id, 'file-facet')}",
+            "@type": "uco-observable:FileFacet",
+            "uco-observable:fileName": file_name,
+            "uco-observable:extension": extension,
+            "uco-observable:sizeInBytes": {
+                "@type": "xsd:integer",
+                "@value": str(byte_size),
+            },
+        },
+        {
+            "@id": f"urn:uuid:{uuid.uuid5(run_id, 'content-facet')}",
+            "@type": "uco-observable:ContentDataFacet",
+            "uco-observable:sizeInBytes": {
+                "@type": "xsd:integer",
+                "@value": str(byte_size),
+            },
+            "uco-observable:hash": [
+                {
+                    "@id": f"urn:uuid:{uuid.uuid5(run_id, 'sha256-hash')}",
+                    "@type": "uco-types:Hash",
+                    "uco-types:hashMethod": "SHA256",
+                    "uco-types:hashValue": {
+                        "@type": "xsd:hexBinary",
+                        "@value": sha256.upper(),
+                    },
+                }
+            ],
+        },
+    ]
+    if content.canonical and content.canonical.get("kind") == "text":
+        sections = content.canonical.get("sections") or []
+        if sections:
+            full_text = str(sections[0].get("text") or "")
+            if full_text:
+                source_facets.append(
+                    {
+                        "@id": f"urn:uuid:{uuid.uuid5(run_id, 'source-strings')}",
+                        "@type": "uco-observable:ExtractedStringsFacet",
+                        "uco-observable:strings": [
+                            {
+                                "@id": f"urn:uuid:{uuid.uuid5(run_id, 'source-string')}",
+                                "@type": "uco-observable:ExtractedString",
+                                "uco-observable:stringValue": full_text[:MAX_DOCUMENT_TEXT],
+                            }
+                        ],
+                    }
+                )
     source_node: dict[str, Any] = {
         "@id": source_id,
         "@type": source_type,
         "uco-core:name": f"Source file {file_name}",
         "uco-core:description": source_description,
         "uco-core:tag": [f"link-look-file-kind:{file_kind}"],
-        "uco-core:hasFacet": [
-            {
-                "@id": f"urn:uuid:{uuid.uuid5(run_id, 'file-facet')}",
-                "@type": "uco-observable:FileFacet",
-                "uco-observable:fileName": file_name,
-                "uco-observable:extension": extension,
-                "uco-observable:sizeInBytes": {
-                    "@type": "xsd:integer",
-                    "@value": str(byte_size),
-                },
-            },
-            {
-                "@id": f"urn:uuid:{uuid.uuid5(run_id, 'content-facet')}",
-                "@type": "uco-observable:ContentDataFacet",
-                "uco-observable:sizeInBytes": {
-                    "@type": "xsd:integer",
-                    "@value": str(byte_size),
-                },
-                "uco-observable:hash": [
-                    {
-                        "@id": f"urn:uuid:{uuid.uuid5(run_id, 'sha256-hash')}",
-                        "@type": "uco-types:Hash",
-                        "uco-types:hashMethod": "SHA256",
-                        "uco-types:hashValue": {
-                            "@type": "xsd:hexBinary",
-                            "@value": sha256.upper(),
-                        },
-                    }
-                ],
-            },
-        ],
+        "uco-core:hasFacet": source_facets,
     }
 
     tool_node = {
@@ -873,30 +918,42 @@ def build_case_uco_graph(
     record_nodes: list[dict[str, Any]] = []
     relationship_nodes: list[dict[str, Any]] = []
     record_refs: list[dict[str, str]] = []
+    event_context_ids: list[str] = []
     for index, record in enumerate(content.records, start=1):
         record_id = record_node_id(run_id, index)
         record_refs.append({"@id": record_id})
-        record_nodes.append(
-            {
-                "@id": record_id,
-                "@type": "uco-observable:ObservableObject",
-                "uco-core:name": record.label,
-                "uco-core:description": record.text,
-                "uco-core:hasFacet": [
-                    {
-                        "@id": f"urn:uuid:{uuid.uuid5(run_id, f'record-strings-{index}')}",
-                        "@type": "uco-observable:ExtractedStringsFacet",
-                        "uco-observable:strings": [
-                            {
-                                "@id": f"urn:uuid:{uuid.uuid5(run_id, f'record-string-{index}')}",
-                                "@type": "uco-observable:ExtractedString",
-                                "uco-observable:stringValue": record.text,
-                            }
-                        ],
-                    }
-                ],
-            }
-        )
+        node_type = record.ontology_class or "uco-observable:ObservableObject"
+        node: dict[str, Any] = {
+            "@id": record_id,
+            "@type": node_type,
+            "uco-core:name": record.label,
+        }
+        if record.extra_properties:
+            for key, value in record.extra_properties.items():
+                node[key] = value
+        if record.graph_facets:
+            node["uco-core:hasFacet"] = list(record.graph_facets)
+        elif node_type == "uco-observable:ObservableObject":
+            node["uco-core:description"] = record.text
+            node["uco-core:hasFacet"] = [
+                {
+                    "@id": f"urn:uuid:{uuid.uuid5(run_id, f'record-strings-{index}')}",
+                    "@type": "uco-observable:ExtractedStringsFacet",
+                    "uco-observable:strings": [
+                        {
+                            "@id": f"urn:uuid:{uuid.uuid5(run_id, f'record-string-{index}')}",
+                            "@type": "uco-observable:ExtractedString",
+                            "uco-observable:stringValue": record.text,
+                        }
+                    ],
+                }
+            ]
+        else:
+            if "uco-core:description" not in node:
+                node["uco-core:description"] = record.text[:240]
+        record_nodes.append(node)
+        if node_type != "uco-core:Event":
+            event_context_ids.append(record_id)
         relationship_nodes.append(
             {
                 "@id": f"urn:uuid:{uuid.uuid5(run_id, f'record-derivation-{index}')}",
@@ -908,6 +965,14 @@ def build_case_uco_graph(
                 "uco-core:isDirectional": True,
             }
         )
+
+    from document_semantic_mapping import MAX_EVENT_CONTEXT
+
+    for node in record_nodes:
+        if node.get("@type") == "uco-core:Event" and event_context_ids:
+            node["uco-core:eventContext"] = [
+                {"@id": ref} for ref in event_context_ids[:MAX_EVENT_CONTEXT]
+            ]
 
     action_node = {
         "@id": action_id,
@@ -925,6 +990,8 @@ def build_case_uco_graph(
             "case-investigation": "https://ontology.caseontology.org/case/investigation/",
             "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
             "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+            "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+            "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
             "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
             "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
             "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",

@@ -1,0 +1,511 @@
+{
+  "@context": {
+    "kb": "https://example.org/cac/maryland-icac-annapolis-arrest-2025/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "cacontology": "https://cacontology.projectvic.org#",
+    "cac-core": "https://cacontology.projectvic.org/core#",
+    "cacontology-taskforce": "https://cacontology.projectvic.org/taskforce#",
+    "cacontology-specialized": "https://cacontology.projectvic.org/specialized-units#",
+    "cacontology-legal-outcomes": "https://cacontology.projectvic.org/legal-outcomes#",
+    "cacontology-tactical": "https://cacontology.projectvic.org/tactical#",
+    "cacontology-grooming": "https://cacontology.projectvic.org/grooming#",
+    "cacontology-physical": "https://cacontology.projectvic.org/physical#",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:6897afa6-c773-5d05-9dde-22f8eeb93b76",
+      "@type": [
+        "case-investigation:Investigation",
+        "cacontology:CACInvestigation"
+      ],
+      "uco-core:name": "Maryland ICAC Annapolis Online Solicitation Investigation",
+      "uco-core:description": "Maryland State Police Computer Crimes Unit and Maryland ICAC Task Force investigation into online child sex abuse material purchasing and sexual solicitation of a minor; search warrant executed in Annapolis December 2025.",
+      "cacontology:caseNumber": "MSP-ICAC-ANNAPOLIS-2025",
+      "cacontology:investigationStatus": "Arrest Made",
+      "cacontology:startDate": {
+        "@type": "xsd:date",
+        "@value": "2025-04-01"
+      },
+      "cacontology:leadAgency": "Maryland State Police Computer Crimes Unit",
+      "cacontology:jurisdiction": "Anne Arundel County, Maryland",
+      "cacontology:hasPhase": [
+        {
+          "@id": "urn:uuid:21352e30-ac98-56e1-8023-06557085449e"
+        },
+        {
+          "@id": "urn:uuid:c62f216a-2047-5bd6-9b41-27eda51b9369"
+        },
+        {
+          "@id": "urn:uuid:078eae95-5fee-5704-a129-0cb274301e14"
+        }
+      ],
+      "cacontology:hasStep": [
+        {
+          "@id": "urn:uuid:7e7348bb-47a1-592a-b507-d491b5ec6b13"
+        }
+      ],
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:ce7d0328-2f34-5cea-8e9c-e72eea51e615"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9a0c4b61-5154-5313-98e4-76bfb4d1baaa",
+      "@type": [
+        "uco-identity:Person"
+      ],
+      "uco-core:name": "Unnamed 38-Year-Old Annapolis Man",
+      "uco-core:description": "38-year-old Annapolis man arrested following ICAC investigation for online sexual solicitation of a minor and CSAM purchasing-related conduct. Residence searched in Annapolis (urn:uuid:7c11a18b-f108-59fd-a48d-02118bdb4745).",
+      "cacontology-legal-outcomes:chargedWith": [
+        {
+          "@id": "urn:uuid:378fb8da-1b90-540c-813b-0721212657d1"
+        },
+        {
+          "@id": "urn:uuid:d224833e-e5ce-55e4-8041-4ecf0477532f"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:18e9db75-b467-596f-8d69-62ae71095e0f",
+      "@type": [
+        "cacontology-taskforce:MarylandICACtaskForce",
+        "cacontology-taskforce:ICACtaskForce",
+        "cacontology-taskforce:StateICACtaskForce",
+        "uco-identity:Organization",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Maryland Internet Crimes Against Children Task Force",
+      "uco-core:description": "Statewide ICAC task force overseen by Maryland State Police Computer Crimes Unit.",
+      "cacontology-taskforce:dojGrantFunded": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "cacontology-taskforce:nationalTaskForceNetwork": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "cacontology-taskforce:partnersWith": [
+        {
+          "@id": "urn:uuid:c7a96481-5eb3-56ed-b954-1c08fc136925"
+        },
+        {
+          "@id": "urn:uuid:01bed85b-31fa-58be-944b-a326c65b8425"
+        }
+      ],
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:550e46b6-0323-5d7e-8c77-368bf2b1180a"
+        },
+        {
+          "@id": "urn:uuid:a4f75865-3159-5fd9-a332-c44f071ca698"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c7a96481-5eb3-56ed-b954-1c08fc136925",
+      "@type": [
+        "cacontology-specialized:MarylandStatePoliceComputerCrimesUnit",
+        "uco-identity:Organization",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Maryland State Police Computer Crimes Unit",
+      "uco-core:description": "Lead investigative unit coordinating Maryland ICAC Task Force investigations statewide."
+    },
+    {
+      "@id": "urn:uuid:e149bcb5-ed98-5ed5-b01d-7ede468d7270",
+      "@type": [
+        "uco-identity:Organization",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Maryland State Police Child Exploitation Unit",
+      "uco-core:description": "MSP unit that executed the residence search warrant with Anne Arundel County Police."
+    },
+    {
+      "@id": "urn:uuid:01bed85b-31fa-58be-944b-a326c65b8425",
+      "@type": [
+        "uco-identity:Organization"
+      ],
+      "uco-core:name": "Anne Arundel County Police Department",
+      "uco-core:description": "County law enforcement partner supporting search warrant execution."
+    },
+    {
+      "@id": "urn:uuid:21352e30-ac98-56e1-8023-06557085449e",
+      "@type": [
+        "cac-core:Phase",
+        "cacontology:InitialPhase"
+      ],
+      "uco-core:name": "Initial Investigation Phase",
+      "uco-core:description": "Online CSAM purchasing and sexual solicitation investigation (April\u2013December 2025).",
+      "cacontology:hasPhaseBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2025-04-01T00:00:00Z"
+      },
+      "cacontology:hasPhaseEndPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2025-12-10T23:59:59Z"
+      },
+      "cacontology:transitionsTo": {
+        "@id": "urn:uuid:c62f216a-2047-5bd6-9b41-27eda51b9369"
+      }
+    },
+    {
+      "@id": "urn:uuid:c62f216a-2047-5bd6-9b41-27eda51b9369",
+      "@type": [
+        "cac-core:Phase",
+        "cacontology:LegalProcessPhase"
+      ],
+      "uco-core:name": "Legal Process Phase",
+      "uco-core:description": "Search warrant execution, arrest, and charging.",
+      "cacontology:hasPhaseBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2025-12-11T00:00:00Z"
+      },
+      "cacontology:hasPhaseEndPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2025-12-11T23:59:59Z"
+      },
+      "cacontology:transitionsTo": {
+        "@id": "urn:uuid:078eae95-5fee-5704-a129-0cb274301e14"
+      }
+    },
+    {
+      "@id": "urn:uuid:078eae95-5fee-5704-a129-0cb274301e14",
+      "@type": [
+        "cac-core:Phase",
+        "cacontology:ConclusionPhase"
+      ],
+      "uco-core:name": "Conclusion Phase",
+      "uco-core:description": "Booking and detention without bond.",
+      "cacontology:hasPhaseBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2025-12-11T00:00:00Z"
+      },
+      "cacontology:hasPhaseEndPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2025-12-11T23:59:59Z"
+      }
+    },
+    {
+      "@id": "urn:uuid:51e9f491-6759-5af0-8ed2-720fb19c01a9",
+      "@type": [
+        "cacontology-physical:OnlinePurchase"
+      ],
+      "uco-core:name": "Online CSAM Purchasing Operation",
+      "uco-core:description": "Investigation began in April 2025 into an online child sex abuse material purchasing operation.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:9a0c4b61-5154-5313-98e4-76bfb4d1baaa"
+      },
+      "cacontology-physical:hasProcurementBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2025-04-01T00:00:00Z"
+      }
+    },
+    {
+      "@id": "urn:uuid:b067f765-31ef-5f07-865a-55cda0706396",
+      "@type": [
+        "cacontology-grooming:OnlineGrooming"
+      ],
+      "uco-core:name": "Online Sexual Solicitation of Minor",
+      "uco-core:description": "Detectives developed evidence that the suspect was sexually soliciting a minor online.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:9a0c4b61-5154-5313-98e4-76bfb4d1baaa"
+      },
+      "cacontology-grooming:targetsVictim": {
+        "@id": "urn:uuid:7cd95918-4141-54f7-9b8b-38627cbd50e2"
+      }
+    },
+    {
+      "@id": "urn:uuid:7cd95918-4141-54f7-9b8b-38627cbd50e2",
+      "@type": [
+        "uco-identity:Person",
+        "cacontology-grooming:ChildVictim"
+      ],
+      "uco-core:name": "Unidentified Minor Victim",
+      "uco-core:description": "Minor victim referenced in solicitation allegations."
+    },
+    {
+      "@id": "urn:uuid:6f81d3ce-49df-5f52-b8d2-c2c8cf075850",
+      "@type": [
+        "case-investigation:InvestigativeAction",
+        "cac-core:InvestigativeAction"
+      ],
+      "uco-core:name": "Online Exploitation Evidence Development",
+      "uco-core:description": "Detectives developed evidence of online sexual solicitation of a minor (urn:uuid:b067f765-31ef-5f07-865a-55cda0706396) and an online CSAM purchasing operation (urn:uuid:51e9f491-6759-5af0-8ed2-720fb19c01a9).",
+      "uco-action:performer": {
+        "@id": "urn:uuid:c7a96481-5eb3-56ed-b954-1c08fc136925"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:9a0c4b61-5154-5313-98e4-76bfb4d1baaa"
+      },
+      "uco-action:result": {
+        "@id": "urn:uuid:7e7348bb-47a1-592a-b507-d491b5ec6b13"
+      },
+      "cacontology:occursDuringPhase": {
+        "@id": "urn:uuid:21352e30-ac98-56e1-8023-06557085449e"
+      }
+    },
+    {
+      "@id": "urn:uuid:7e7348bb-47a1-592a-b507-d491b5ec6b13",
+      "@type": [
+        "case-investigation:InvestigativeAction",
+        "cac-core:InvestigativeAction"
+      ],
+      "uco-core:name": "Maryland ICAC Online Exploitation Investigation",
+      "uco-core:description": "Investigation by MSP Computer Crimes Unit and Maryland ICAC Task Force.",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2025-04-01T00:00:00Z"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2025-12-11T23:59:59Z"
+      },
+      "uco-action:performer": {
+        "@id": "urn:uuid:c7a96481-5eb3-56ed-b954-1c08fc136925"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:9a0c4b61-5154-5313-98e4-76bfb4d1baaa"
+      },
+      "uco-action:result": {
+        "@id": "urn:uuid:9eef01ce-dc07-51f9-a358-6ebb84cc3c73"
+      },
+      "case-investigation:wasInformedBy": {
+        "@id": "urn:uuid:6f81d3ce-49df-5f52-b8d2-c2c8cf075850"
+      },
+      "cacontology:occursDuringPhase": {
+        "@id": "urn:uuid:21352e30-ac98-56e1-8023-06557085449e"
+      }
+    },
+    {
+      "@id": "urn:uuid:6c95d88e-af81-52be-b388-0e4a39b7a6ab",
+      "@type": [
+        "case-investigation:Authorization"
+      ],
+      "uco-core:name": "Residence Search Warrant",
+      "uco-core:description": "Search warrant for suspect residence in Annapolis."
+    },
+    {
+      "@id": "urn:uuid:9eef01ce-dc07-51f9-a358-6ebb84cc3c73",
+      "@type": [
+        "case-investigation:InvestigativeAction",
+        "cac-core:InvestigativeAction"
+      ],
+      "uco-core:name": "Search Warrant Execution",
+      "uco-core:description": "Troopers from MSP Child Exploitation Unit and Anne Arundel County Police executed a search warrant at the suspect's Annapolis residence.",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2025-12-11T00:00:00Z"
+      },
+      "uco-action:authorization": {
+        "@id": "urn:uuid:6c95d88e-af81-52be-b388-0e4a39b7a6ab"
+      },
+      "uco-action:performer": {
+        "@id": "urn:uuid:e149bcb5-ed98-5ed5-b01d-7ede468d7270"
+      },
+      "uco-action:location": {
+        "@id": "urn:uuid:7c11a18b-f108-59fd-a48d-02118bdb4745"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:9a0c4b61-5154-5313-98e4-76bfb4d1baaa"
+      },
+      "uco-action:result": {
+        "@id": "urn:uuid:6bf5f77a-8cad-5da0-9474-4a3d4e38fa2a"
+      },
+      "case-investigation:wasInformedBy": {
+        "@id": "urn:uuid:7e7348bb-47a1-592a-b507-d491b5ec6b13"
+      },
+      "cacontology:occursDuringPhase": {
+        "@id": "urn:uuid:c62f216a-2047-5bd6-9b41-27eda51b9369"
+      }
+    },
+    {
+      "@id": "urn:uuid:6bf5f77a-8cad-5da0-9474-4a3d4e38fa2a",
+      "@type": [
+        "case-investigation:InvestigativeAction",
+        "cac-core:InvestigativeAction",
+        "cacontology-tactical:ArrestOperation"
+      ],
+      "uco-core:name": "Suspect Arrest Without Incident",
+      "uco-core:description": "Suspect taken into custody on scene without incident during warrant service.",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2025-12-11T00:00:00Z"
+      },
+      "cacontology-tactical:arrestType": "warrant_arrest",
+      "cacontology-tactical:targetCount": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "1"
+      },
+      "cacontology-tactical:resistanceExpected": {
+        "@type": "xsd:boolean",
+        "@value": "false"
+      },
+      "cacontology-tactical:weaponsExpected": {
+        "@type": "xsd:boolean",
+        "@value": "false"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:9a0c4b61-5154-5313-98e4-76bfb4d1baaa"
+      },
+      "uco-action:result": {
+        "@id": "urn:uuid:1fc65a1b-b964-50d6-9159-11e9b4919f9a"
+      },
+      "cacontology:occursDuringPhase": {
+        "@id": "urn:uuid:c62f216a-2047-5bd6-9b41-27eda51b9369"
+      }
+    },
+    {
+      "@id": "urn:uuid:1fc65a1b-b964-50d6-9159-11e9b4919f9a",
+      "@type": [
+        "case-investigation:InvestigativeAction",
+        "cac-core:InvestigativeAction",
+        "cacontology-tactical:BookingAction"
+      ],
+      "uco-core:name": "Booking at Anne Arundel County Detention Center",
+      "uco-core:description": "Suspect transported to Anne Arundel County Detention Center and held without bond.",
+      "uco-action:location": {
+        "@id": "urn:uuid:317bde8c-a3e0-5b86-8f0b-ee0af5d5129d"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:9a0c4b61-5154-5313-98e4-76bfb4d1baaa"
+      },
+      "cacontology:occursDuringPhase": {
+        "@id": "urn:uuid:078eae95-5fee-5704-a129-0cb274301e14"
+      }
+    },
+    {
+      "@id": "urn:uuid:317bde8c-a3e0-5b86-8f0b-ee0af5d5129d",
+      "@type": [
+        "cacontology-tactical:CorrectionalFacility",
+        "uco-core:UcoObject",
+        "uco-location:Location"
+      ],
+      "uco-core:name": "Anne Arundel County Detention Center",
+      "cacontology-tactical:facilityName": "Anne Arundel County Detention Center"
+    },
+    {
+      "@id": "urn:uuid:378fb8da-1b90-540c-813b-0721212657d1",
+      "@type": [
+        "cacontology-legal-outcomes:StateCharge"
+      ],
+      "uco-core:name": "Sexual Solicitation of a Minor",
+      "uco-core:description": "Maryland state charge for sexual solicitation of a minor; underlying conduct modeled as urn:uuid:b067f765-31ef-5f07-865a-55cda0706396.",
+      "cacontology-legal-outcomes:chargeLevel": "felony",
+      "cacontology-legal-outcomes:chargeCount": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "1"
+      }
+    },
+    {
+      "@id": "urn:uuid:d224833e-e5ce-55e4-8041-4ecf0477532f",
+      "@type": [
+        "cacontology-legal-outcomes:StateCharge"
+      ],
+      "uco-core:name": "Knowingly Permitting Sexual Solicitation of a Minor",
+      "uco-core:description": "Maryland state charge for knowingly permitting sexual solicitation of a minor; related to conduct at urn:uuid:b067f765-31ef-5f07-865a-55cda0706396.",
+      "cacontology-legal-outcomes:chargeLevel": "felony",
+      "cacontology-legal-outcomes:chargeCount": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "1"
+      }
+    },
+    {
+      "@id": "urn:uuid:550e46b6-0323-5d7e-8c77-368bf2b1180a",
+      "@type": [
+        "cacontology-taskforce:GovernorsOfficeCrimePreventionFunding"
+      ],
+      "uco-core:name": "Governor's Office of Crime Prevention, Youth and Victim Services Funding"
+    },
+    {
+      "@id": "urn:uuid:a4f75865-3159-5fd9-a332-c44f071ca698",
+      "@type": [
+        "cacontology-taskforce:StateLocalFundingCombination"
+      ],
+      "uco-core:name": "Combined State and Federal ICAC Funding",
+      "uco-core:description": "Grant funding from Maryland Governor's Office and U.S. Department of Justice."
+    },
+    {
+      "@id": "urn:uuid:7c11a18b-f108-59fd-a48d-02118bdb4745",
+      "@type": [
+        "uco-location:Location"
+      ],
+      "uco-core:name": "Suspect Residence - Annapolis, Maryland",
+      "uco-core:description": "Annapolis residence where search warrant was executed."
+    },
+    {
+      "@id": "urn:uuid:f85489f1-c96a-5d28-a8bf-cb42b39d81c9",
+      "@type": [
+        "uco-core:ExternalReference"
+      ],
+      "uco-core:url": "https://www.eyeonannapolis.net/2025/12/38-year-old-annapolis-man-charged-with-online-sexual-solicitation-of-minor/"
+    },
+    {
+      "@id": "urn:uuid:ce7d0328-2f34-5cea-8e9c-e72eea51e615",
+      "@type": [
+        "uco-observable:ObservableObject"
+      ],
+      "uco-core:name": "Maryland_ICAC_Arrest_Test_PDF.pdf",
+      "uco-core:description": "Eye On Annapolis press article used as synthetic test source.",
+      "uco-core:externalReference": {
+        "@id": "urn:uuid:f85489f1-c96a-5d28-a8bf-cb42b39d81c9"
+      },
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:19cae96c-26f8-5793-979b-2a7637b99f37",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "Maryland_ICAC_Arrest_Test_PDF.pdf",
+          "uco-observable:extension": "pdf"
+        },
+        {
+          "@id": "urn:uuid:ac14c993-0693-5301-9c0b-e4fb95d047b1",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:f2c92eb6-c742-5b62-9831-7c02f3ad2a7a",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "5580BC17B225B1DED95A11F8208E378D1CD0C05903860DAE339751DE1764F59E"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e566ce1e-cd24-5490-bf93-5967b5d1bf7e",
+      "@type": [
+        "uco-tool:Tool"
+      ],
+      "uco-core:name": "CASE-UCO MCP Document Processor",
+      "uco-tool:version": "1.12.0"
+    },
+    {
+      "@id": "urn:uuid:72b9bae1-aaa2-5281-bf28-de741dfbcd33",
+      "@type": [
+        "case-investigation:ProvenanceRecord"
+      ],
+      "uco-core:name": "Graph derivation from press article PDF",
+      "uco-core:description": "Knowledge graph produced from Eye On Annapolis article via CASE-UCO MCP document extraction and CAC recipe-guided mapping.",
+      "case-investigation:createdTime": "2026-06-15T00:00:00Z",
+      "case-investigation:wasInformedBy": [
+        {
+          "@id": "urn:uuid:ce7d0328-2f34-5cea-8e9c-e72eea51e615"
+        },
+        {
+          "@id": "urn:uuid:e566ce1e-cd24-5490-bf93-5967b5d1bf7e"
+        }
+      ]
+    }
+  ]
+}

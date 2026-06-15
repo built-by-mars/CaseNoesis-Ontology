@@ -39,9 +39,11 @@ fastmcp dev mcp_server/server.py
 | `find_classes_for_domain` | `domain: str` | Map a forensic task to the right classes |
 | `list_all_facets` | (none) | All Facet classes for the ObservableObject pattern |
 | `get_recipe` | `scenario: str` | Find a code recipe for a forensic workflow |
+| `get_recipes` | `scenario: str, limit?: int, include_content?: bool` | Find multiple ranked recipes for multi-domain scenarios |
+| `route_cac_content` | `content_text?, source_path?, output_format?, include_recipe_content?, max_recipes?` | Detect CAC domains in submitted content and return multiple CAC recipes plus validation guidance |
 | `list_all_vocabs` | (none) | All vocabulary/enum types with members |
 | `process_document_file` | `source_path, output_path, file_kind?, upload_id?, progress_output?` | Process a supported local synthetic document (receipt image, PDF, Office, CSV/table) into bounded CASE/UCO-shaped JSON-LD |
-| `validate_graph` | `graph_path: str, allow_warning: bool = True` | Run the local CASE Utilities `case_validate` SHACL validator against a JSON-LD/Turtle graph file and return a bounded conformance report; fails honestly (`validator_unavailable`) when `case_validate` is not installed |
+| `validate_graph` | `graph_path: str, allow_warning?: bool, extensions?: list[str]` | Run `case_validate` against JSON-LD/Turtle; `extensions=['cac']` uses the press-release subset; `extensions=['cac:full']` uses the full manifest |
 
 ## Available Resources
 
@@ -57,10 +59,43 @@ When you describe a forensic scenario in natural language, the AI agent:
 
 1. Calls `find_classes_for_domain` or `search_classes` to identify relevant types
 2. Calls `get_class_details` on each type to see its properties
-3. Optionally calls `get_recipe` to find a matching code example
-4. Writes correct SDK code using the exact class names and property names
+3. For CAC content, calls `route_cac_content` to get multiple matching recipes and validation guidance
+4. Optionally calls `get_recipe` or `get_recipes` to find code examples
+5. Writes correct SDK code using the exact class names and property names
+6. Calls `validate_graph` with `extensions=['cac']` on the finished graph (subset validation by default)
 
 This is much faster and more accurate than the agent reading markdown documentation.
+
+## CAC workflow for Hermes and Link-Look
+
+End-to-end pattern for press releases, ICAC bulletins, and investigator notes:
+
+1. **Extract** — `process_document_file(source_path="case.pdf", output_path="extract.jsonld")` for PDFs/images, or pass plain text directly.
+2. **Route** — `route_cac_content(content_text=<clean narrative excerpt>)` returns multiple matched recipes (e.g. task force + warrant arrest + grooming + legal charges + CSAM purchasing).
+3. **Build** — Agent reads returned recipe files and composes JSON-LD or TTL using CAC classes (`CASE_UCO_EXTENSIONS=cac`).
+4. **Validate** — `validate_graph("output.jsonld", extensions=["cac"])` uses `extensions/cac/validation-subset.json` (recommended for press-release KGs). Use `extensions=["cac:full"]` only when the full CAC manifest SHACL is repaired upstream.
+
+Example Hermes tool sequence for the Maryland ICAC Annapolis arrest press article:
+
+```text
+process_document_file(
+  source_path="/path/to/Maryland_ICAC_Arrest_Test_PDF.pdf",
+  output_path="/tmp/maryland-extract.jsonld",
+)
+route_cac_content(
+  content_text="Maryland State Police Computer Crimes Unit and Maryland ICAC Task Force ...",
+  output_format="jsonld",
+  include_recipe_content=true,
+  max_recipes=6,
+)
+# Agent builds graph using matched recipes and modeling_checklist
+validate_graph(
+  graph_path="examples/maryland-icac-annapolis-arrest-2025.jsonld",
+  extensions=["cac"],
+)
+```
+
+Noisy PDF extraction (navigation, ads, repeated URLs) lowers routing scores. When `route_cac_content` reports `extraction_quality.noisy_extraction: true`, summarize investigative facts into `content_text` before routing. Reference builder: `examples/build_maryland_icac_annapolis_arrest.py`.
 
 ## Running under Hermes Agent
 

@@ -928,7 +928,7 @@ RECIPE_INDEX: list[dict[str, str]] = [
     {
         "title": "Online Grooming Chat Modeling",
         "description": "Model grooming chat evidence and CAC behavioral interpretation with phase progression, role separation, and message-level classification.",
-        "keywords": "grooming csam child exploitation victim offender snapchat chat message phase escalation cac ontology crimes against children",
+        "keywords": "grooming csam child exploitation victim offender snapchat chat message phase escalation cac ontology crimes against children sexual solicitation soliciting a minor",
         "file": "docs/recipes/grooming-chat-modeling.md",
     },
     {
@@ -936,6 +936,78 @@ RECIPE_INDEX: list[dict[str, str]] = [
         "description": "Model platform detection, ESP reporting, NCMEC CyberTip lifecycle, investigation triggering, and platform cooperation using CAC Ontology classes.",
         "keywords": "cybertip ncmec platform reporting enticement detection investigation trigger esp cooperation cac ontology crimes against children",
         "file": "docs/recipes/cybertip-ncmec-workflow.md",
+    },
+    {
+        "title": "Child Sex Trafficking and Recruitment Networks",
+        "description": "Model trafficking enterprises, recruitment networks, pretext approaches, and digital-to-physical bridges using CAC Ontology classes.",
+        "keywords": "trafficking recruitment ring csec cse peer recruitment school street pretext cac ontology crimes against children",
+        "file": "docs/recipes/cac-trafficking-recruitment-network.md",
+    },
+    {
+        "title": "Multi-Jurisdictional Task Force Operations",
+        "description": "Model ICAC task forces, joint investigations, jurisdictional handoffs, and mass rescue operations.",
+        "keywords": "task force icac multi-jurisdiction joint investigation mutual aid handoff mass rescue cac ontology crimes against children",
+        "file": "docs/recipes/cac-multi-jurisdiction-task-force.md",
+    },
+    {
+        "title": "ICAC Search Warrant Arrest (Press Release Pattern)",
+        "description": "Model routine ICAC search warrant execution, custody without incident, booking, and Maryland/state police press-release arrests.",
+        "keywords": "icac search warrant arrest without incident detention center held without bond child exploitation unit computer crimes unit annapolis anne arundel cac ontology crimes against children",
+        "file": "docs/recipes/cac-icac-search-warrant-arrest.md",
+    },
+    {
+        "title": "Victim Rescue, Extraction, and Post-Rescue Services",
+        "description": "Model emergency response, victim extraction, safety planning, and multi-agency victim services.",
+        "keywords": "rescue extraction victim service safety planning trauma recantation dcfs cac ontology crimes against children",
+        "file": "docs/recipes/cac-victim-rescue-extraction.md",
+    },
+    {
+        "title": "Tactical Arrest and Undercover Operations",
+        "description": "Model high-risk arrests, dynamic entry, undercover stings, and asset forfeiture in CAC investigations.",
+        "keywords": "tactical arrest undercover swat dynamic entry warrant asset forfeiture cac ontology crimes against children",
+        "file": "docs/recipes/cac-tactical-undercover-operation.md",
+    },
+    {
+        "title": "Sextortion and Online Coercion",
+        "description": "Model sextortion schemes, coercion demands, and compliance pressure on minor victims.",
+        "keywords": "sextortion coercion blackmail explicit images financial extortion cac ontology crimes against children",
+        "file": "docs/recipes/cac-sextortion-coercion.md",
+    },
+    {
+        "title": "Hotline Intake and Referral Lifecycle",
+        "description": "Model hotline intake, triage, referral, and escalation to investigations.",
+        "keywords": "hotline intake referral cybertipline mandatory reporting cac ontology crimes against children",
+        "file": "docs/recipes/cac-hotline-intake-lifecycle.md",
+    },
+    {
+        "title": "CSAM Forensic Provenance and Victim Identification",
+        "description": "Model CSAM acquisition, chain of custody, hashing, correlation, and victim identification.",
+        "keywords": "csam forensic provenance photodna hash chain of custody victim identification cac ontology crimes against children purchasing operation csam purchasing",
+        "file": "docs/recipes/cac-csam-forensic-provenance.md",
+    },
+    {
+        "title": "Legal Charges, Sentencing, and Case Outcomes",
+        "description": "Model indictments, charges, plea agreements, sentencing, and sex-offender registry outcomes.",
+        "keywords": "sentencing plea conviction charges registry legal outcome cac ontology crimes against children charged with without bond detention center",
+        "file": "docs/recipes/cac-legal-sentencing-outcomes.md",
+    },
+    {
+        "title": "Missing Child Investigations",
+        "description": "Model missing-child reports, AMBER alerts, tracking, and recovery operations.",
+        "keywords": "missing child amber alert abduction runaway recovery cac ontology crimes against children",
+        "file": "docs/recipes/cac-missing-child-investigation.md",
+    },
+    {
+        "title": "International Coordination and Cross-Border Operations",
+        "description": "Model transnational investigations, Europol/Interpol coordination, and cross-border evidence sharing.",
+        "keywords": "international cross-border europol interpol extradition cac ontology crimes against children",
+        "file": "docs/recipes/cac-international-coordination.md",
+    },
+    {
+        "title": "CSAM Production and Manufacturing Cases",
+        "description": "Model hands-on abuse and offender-produced CSAM with production environments and equipment.",
+        "keywords": "production manufactured produced image video hands-on abuse cac ontology crimes against children",
+        "file": "docs/recipes/cac-production-case.md",
     },
     {
         "title": "Proposing Changes to CASE/UCO",
@@ -1268,6 +1340,47 @@ MAPPING_GUIDE_INDEX: list[dict] = [
             "verify = graph.create(EvidenceVerificationAction, name='SHA-256 verification')\n"
             "img = graph.create(RasterPicture, has_facet=[FileFacet(file_name=...), ContentDataFacet(hash_method='SHA-256', hash_value='...'), RasterPictureFacet(...)])\n"
             "vid = graph.create(VictimIdentificationProcess, name='Match against known-victim DB')"
+        ),
+    },
+    {
+        "source": "icac search warrant arrest",
+        "keywords": [
+            "search warrant", "warrant", "arrest", "without incident", "taken into custody",
+            "detention center", "held without bond", "child exploitation unit",
+            "computer crimes unit", "icac", "anne arundel", "annapolis", "booking",
+            "maryland state police", "internet crimes against children",
+        ],
+        "pattern": (
+            "CACInvestigation + MarylandICACtaskForce + InvestigativeAction chain "
+            "+ Authorization + ArrestOperation (warrant_arrest) + BookingAction "
+            "+ CorrectionalFacility + StateCharge"
+        ),
+        "classes": [
+            "CACInvestigation", "MarylandICACtaskForce", "MarylandStatePoliceComputerCrimesUnit",
+            "InvestigativeAction", "Authorization", "ArrestOperation", "BookingAction",
+            "CorrectionalFacility", "StateCharge", "OnlineGrooming", "OnlinePurchase",
+            "Identity", "Organization", "Location",
+        ],
+        "anti_patterns": [
+            "Don't use HighRiskArrest or DynamicEntry when the narrative says custody was without incident",
+            "Don't duplicate MSP CCU as both a specialized unit and a separate performer Organization",
+            "Don't leave OnlineGrooming or OnlinePurchase isolated — add uco-action:performer (suspect) and investigation Concerns links",
+            "Don't create empty Phase nodes — use typed phases with occursDuringPhase on actions or omit phases",
+            "Don't embed ExternalReference as a blank node — give it an explicit @id IRI",
+            "Don't put grooming events in Investigation.uco-core:object — reserve object for ObservableObject evidence",
+        ],
+        "starter_kit": "docs/recipes/cac-icac-search-warrant-arrest.md",
+        "code_skeleton": (
+            "# Requires CASE_UCO_EXTENSIONS=cac\n"
+            "grooming = graph.add_node('kb:grooming-1', 'cacontology-grooming:OnlineGrooming', {\n"
+            "    'uco-action:performer': {'@id': 'kb:suspect'},\n"
+            "    'cacontology-grooming:targetsVictim': {'@id': 'kb:minor-victim'},\n"
+            "})\n"
+            "graph.add_node('kb:rel-1', 'uco-core:Relationship', {\n"
+            "    'uco-core:source': [{'@id': 'kb:investigation'}],\n"
+            "    'uco-core:target': [{'@id': 'kb:grooming-1'}],\n"
+            "    'uco-core:kindOfRelationship': 'Concerns',\n"
+            "})"
         ),
     },
     {

@@ -448,7 +448,16 @@ def test_text_kinds_emit_anchored_bundle(tmp_path: Path, writer, name: str) -> N
     graph_record_ids = {
         node["@id"]
         for node in result.graph["@graph"]
-        if node.get("@type") == "uco-observable:ObservableObject"
+        if node.get("@type")
+        not in (
+            "uco-tool:Tool",
+            "case-investigation:InvestigativeAction",
+            "uco-core:Relationship",
+        )
+        and not any(
+            tag.startswith("link-look-file-kind:")
+            for tag in (node.get("uco-core:tag") or [])
+        )
     }
     annos = annotations["@graph"]
     assert len(annos) == len(result.records) >= 1

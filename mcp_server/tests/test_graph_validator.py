@@ -18,6 +18,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import graph_validator
 from graph_validator import (
     GraphValidationReport,
+    extension_ontology_args,
+    load_extension_ontology_paths,
     validate_graph_file,
     validator_available,
 )
@@ -50,6 +52,42 @@ def write_graph(tmp_path: Path, payload: dict, name: str = "graph.jsonld") -> Pa
     target = tmp_path / name
     target.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     return target
+
+
+def test_extension_ontology_args_uses_cac_subset_by_default() -> None:
+    project_root = Path(__file__).resolve().parent.parent.parent
+    subset = project_root / "extensions" / "cac" / "validation-subset.json"
+    if not subset.exists():
+        pytest.skip("CAC validation subset not present")
+    args = extension_ontology_args(["cac"], project_root=project_root)
+    assert "--built-version" in args
+    assert "case-1.4.0" in args
+    assert "--allow-info" in args
+    assert "--inference" not in args
+    ontology_flags = [
+        value
+        for index, value in enumerate(args)
+        if index > 0 and args[index - 1] == "--ontology-graph"
+    ]
+    assert any("cacontology-core" in path for path in ontology_flags)
+    assert len(ontology_flags) == len(
+        load_extension_ontology_paths("cac", mode="subset", project_root=project_root)
+    )
+
+
+def test_extension_ontology_args_cac_full_uses_manifest() -> None:
+    project_root = Path(__file__).resolve().parent.parent.parent
+    manifest = project_root / "extensions" / "cac" / "manifest.json"
+    if not manifest.exists():
+        pytest.skip("CAC extension manifest not present")
+    args = extension_ontology_args(["cac:full"], project_root=project_root)
+    assert "--inference" in args
+    ontology_flags = [
+        value
+        for index, value in enumerate(args)
+        if index > 0 and args[index - 1] == "--ontology-graph"
+    ]
+    assert any("shapes" in path for path in ontology_flags)
 
 
 def test_missing_validator_fails_honestly(tmp_path, monkeypatch):
