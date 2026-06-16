@@ -30,7 +30,7 @@ Pair with [cac-production-case.md](cac-production-case.md) for production-enviro
 - [cac-legal-sentencing-outcomes.md](cac-legal-sentencing-outcomes.md) — charge nodes and sentencing
 - [cac-csam-forensic-provenance.md](cac-csam-forensic-provenance.md) — forensic acquisition context
 - [cac-trafficking-recruitment-network.md](cac-trafficking-recruitment-network.md) — ring structure when applicable
-- [grooming-chat-modeling.md](grooming-chat-modeling.md) — enticement conduct
+- [cac-grooming-chat-modeling.md](cac-grooming-chat-modeling.md) — enticement conduct
 
 ## Key classes
 

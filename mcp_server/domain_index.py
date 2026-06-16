@@ -929,7 +929,7 @@ RECIPE_INDEX: list[dict[str, str]] = [
         "title": "Online Grooming Chat Modeling",
         "description": "Model grooming chat evidence and CAC behavioral interpretation with phase progression, role separation, and message-level classification.",
         "keywords": "grooming csam child exploitation victim offender snapchat chat message phase escalation cac ontology crimes against children sexual solicitation soliciting a minor",
-        "file": "docs/recipes/grooming-chat-modeling.md",
+        "file": "docs/recipes/cac-grooming-chat-modeling.md",
     },
     {
         "title": "NCMEC CyberTip Reporting Workflow",

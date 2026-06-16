@@ -98,7 +98,7 @@ def test_search_recipes_returns_multiple_cac_matches() -> None:
     matches = search_recipes("grooming cybertip trafficking", limit=5)
     assert len(matches) >= 3
     files = {item["file"] for item in matches}
-    assert "docs/recipes/grooming-chat-modeling.md" in files
+    assert "docs/recipes/cac-grooming-chat-modeling.md" in files
     assert "docs/recipes/cybertip-ncmec-workflow.md" in files
 
 

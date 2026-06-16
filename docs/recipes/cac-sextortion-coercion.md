@@ -6,7 +6,7 @@ Model sextortion schemes where offenders coerce minors through threats to share 
 
 ## Scope
 
-**Layer 2 — Behavioral interpretation** for coercion dynamics; link to [grooming-chat-modeling.md](grooming-chat-modeling.md) when grooming precedes sextortion.
+**Layer 2 — Behavioral interpretation** for coercion dynamics; link to [cac-grooming-chat-modeling.md](cac-grooming-chat-modeling.md) when grooming precedes sextortion.
 
 ## Key classes
 
@@ -59,6 +59,6 @@ make validate-extension EXT=cac DATA=sextortion-case.jsonld
 
 ## Related recipes
 
-- [grooming-chat-modeling.md](grooming-chat-modeling.md)
+- [cac-grooming-chat-modeling.md](cac-grooming-chat-modeling.md)
 - [threaded-messaging.md](threaded-messaging.md)
 - [cybertip-ncmec-workflow.md](cybertip-ncmec-workflow.md)

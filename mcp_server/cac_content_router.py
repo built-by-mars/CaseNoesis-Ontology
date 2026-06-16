@@ -55,7 +55,7 @@ CAC_DOMAIN_FAMILIES: tuple[CACDomainFamily, ...] = (
             "isolation", "sexualization", "online predator", "enticement",
             "minor victim",
         ),
-        recipe_file="docs/recipes/grooming-chat-modeling.md",
+        recipe_file="docs/recipes/cac-grooming-chat-modeling.md",
         mapping_source="cybertip grooming report",
         layer=2,
         related_core_recipes=("docs/recipes/threaded-messaging.md",),
@@ -131,7 +131,7 @@ CAC_DOMAIN_FAMILIES: tuple[CACDomainFamily, ...] = (
         related_core_recipes=(
             "docs/recipes/cac-multi-jurisdiction-task-force.md",
             "docs/recipes/cac-legal-sentencing-outcomes.md",
-            "docs/recipes/grooming-chat-modeling.md",
+            "docs/recipes/cac-grooming-chat-modeling.md",
         ),
     ),
     CACDomainFamily(
@@ -160,7 +160,7 @@ CAC_DOMAIN_FAMILIES: tuple[CACDomainFamily, ...] = (
         layer=2,
         related_core_recipes=(
             "docs/recipes/threaded-messaging.md",
-            "docs/recipes/grooming-chat-modeling.md",
+            "docs/recipes/cac-grooming-chat-modeling.md",
         ),
     ),
     CACDomainFamily(
@@ -510,7 +510,7 @@ def build_modeling_checklist(matched_domains: list[dict[str, Any]]) -> list[dict
                 "criminal-activity nodes isolated with only targetsVictim or a name."
             ),
             "recipes": [
-                "docs/recipes/grooming-chat-modeling.md",
+                "docs/recipes/cac-grooming-chat-modeling.md",
                 "docs/recipes/cac-csam-forensic-provenance.md",
             ],
         },
@@ -829,7 +829,7 @@ def route_cac_content(
             "layer": 2,
             "recipe_file": "docs/recipes/cross-domain-extensions.md",
             "mapping_source": None,
-            "related_core_recipes": ["docs/recipes/grooming-chat-modeling.md"],
+            "related_core_recipes": ["docs/recipes/cac-grooming-chat-modeling.md"],
         }]
 
     trimmed = matched_domains[: max(1, max_recipes)]

@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `docs/recipes/INDEX.md` now catalogs all 55 recipe files (alphabetized CAC section, fixed `cac-grooming-chat-modeling.md` link). Grooming recipe path corrected from obsolete `grooming-chat-modeling.md` across MCP router, domain index, and cross-recipe references.
 - `cac-production-case.md` expanded with federal filing cross-links, `MobileRecordingDevice` forfeiture patterns, and `relatedCriminalCharges` on `AssetForfeitureAction`.
 - `cac-legal-sentencing-outcomes.md` now points federal indictment graphs to the prosecution-relationships recipe.
 - `charge-offense-links` modeling checklist now requires `chargedWith` on every defendant, not only the principal suspect.

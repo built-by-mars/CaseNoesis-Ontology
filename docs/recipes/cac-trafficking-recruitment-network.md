@@ -68,6 +68,6 @@ Or via MCP: `validate_graph("trafficking-ring.jsonld", extensions=["cac"])`.
 
 ## Related recipes
 
-- [grooming-chat-modeling.md](grooming-chat-modeling.md) — when recruitment starts in chat/DM
+- [cac-grooming-chat-modeling.md](cac-grooming-chat-modeling.md) — when recruitment starts in chat/DM
 - [cac-multi-jurisdiction-task-force.md](cac-multi-jurisdiction-task-force.md) — joint enforcement response
 - [cross-domain-extensions.md](cross-domain-extensions.md) — extension setup

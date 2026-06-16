@@ -2,14 +2,14 @@
 
 > See [Recipe Index](INDEX.md) for all recipes.
 
-Model the institutional reporting and investigation workflow for NCMEC CyberTip reports using core CASE/UCO types and [CAC Ontology](https://cacontology.projectvic.org/) extension classes. This recipe covers how platform detection, ESP reporting, CyberTip generation, and law enforcement investigation are connected. For the grooming chat evidence and behavioral interpretation layers, see [grooming-chat-modeling.md](grooming-chat-modeling.md). Based on the [snapchat-grooming-cybertip](../../examples/snapchat-grooming-cybertip.jsonld) example.
+Model the institutional reporting and investigation workflow for NCMEC CyberTip reports using core CASE/UCO types and [CAC Ontology](https://cacontology.projectvic.org/) extension classes. This recipe covers how platform detection, ESP reporting, CyberTip generation, and law enforcement investigation are connected. For the grooming chat evidence and behavioral interpretation layers, see [cac-grooming-chat-modeling.md](cac-grooming-chat-modeling.md). Based on the [snapchat-grooming-cybertip](../../examples/snapchat-grooming-cybertip.jsonld) example.
 
 ## Scope
 
 This recipe covers **Layer 3 (Institutional Workflow)** of the three-layer pattern:
 
-1. **Observable evidence** — see [grooming-chat-modeling.md](grooming-chat-modeling.md)
-2. **CAC behavioral interpretation** — see [grooming-chat-modeling.md](grooming-chat-modeling.md)
+1. **Observable evidence** — see [cac-grooming-chat-modeling.md](cac-grooming-chat-modeling.md)
+2. **CAC behavioral interpretation** — see [cac-grooming-chat-modeling.md](cac-grooming-chat-modeling.md)
 3. **Institutional workflow** — *this recipe*: platform detection, ESP reporting obligations, NCMEC CyberTip lifecycle, and investigation triggering
 
 ## Key classes

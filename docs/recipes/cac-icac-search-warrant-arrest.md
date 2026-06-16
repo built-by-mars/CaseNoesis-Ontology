@@ -23,7 +23,7 @@ Do **not** use `HighRiskArrest` or `DynamicEntry` when the narrative explicitly 
 **Layer 3 — Institutional workflow** composed with:
 
 - [cac-multi-jurisdiction-task-force.md](cac-multi-jurisdiction-task-force.md) — task force structure
-- [grooming-chat-modeling.md](grooming-chat-modeling.md) — online solicitation (Layer 2)
+- [cac-grooming-chat-modeling.md](cac-grooming-chat-modeling.md) — online solicitation (Layer 2)
 - [cac-legal-sentencing-outcomes.md](cac-legal-sentencing-outcomes.md) — charges (Layer 3)
 - [cac-csam-forensic-provenance.md](cac-csam-forensic-provenance.md) — CSAM purchasing context (Layer 1)
 
@@ -136,5 +136,5 @@ make validate-extension EXT=cac DATA=icac-warrant-arrest.jsonld
 
 - [cac-multi-jurisdiction-task-force.md](cac-multi-jurisdiction-task-force.md)
 - [cac-tactical-undercover-operation.md](cac-tactical-undercover-operation.md) — high-risk / undercover only
-- [grooming-chat-modeling.md](grooming-chat-modeling.md)
+- [cac-grooming-chat-modeling.md](cac-grooming-chat-modeling.md)
 - [cac-legal-sentencing-outcomes.md](cac-legal-sentencing-outcomes.md)
