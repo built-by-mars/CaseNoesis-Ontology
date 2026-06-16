@@ -107,6 +107,12 @@ Before calling `validate_graph`, verify every applicable row:
 | 9 | **Conduct → equipment** | Devices alleged | Link `CSAMIncident` to `MobileRecordingDevice` via `uco-core:Relationship` (`used_equipment`) or `cacontology-production:usesEquipment` on production offense classes. |
 | 10 | **Forfeiture → devices + charges** | Forfeiture alleged | `targetedAsset` → **each** enumerated device (not only a generic aggregate stub). Add `relatedCriminalCharges` on `AssetForfeitureAction` per CAC SHACL. |
 | 11 | **Provenance** | Court document sourced | `ProvenanceRecord` + extraction `InvestigativeAction`; mark `ALLEGED` where appropriate. |
+| 12 | **Per-count defendant subsets** | Multi-defendant indictment | `DEFENDANT_COUNTS` must list **different count sets per defendant** when the source assigns subsets (not one flat list for all defendants). |
+| 13 | **Enterprise overt-act violations** | Count 1 embeds Violation One/Two/… | Model each embedded violation as a conduct node with its own defendant subset, venue, and `Relates_To` from enterprise charge. |
+| 14 | **Charge → venue Location** | Count names a judicial district | Each count or violation gets `Relates_To` → the `Location` for that venue (D. New Mexico, S.D. California, etc.), not only the filing court. |
+| 15 | **Forfeiture serial observables** | Devices enumerated with serials | Each forfeiture device is a typed `ObservableObject` with serial/model in `uco-core:description` or `FileFacet`; link seizure location when stated. |
+| 16 | **Transnational extradition chain** | Defendant abroad / extradited | Link `ExtraditionProcess` → defendant `Person` and `FederalProsecution` via `Relates_To`; foreign residence as `InternationalJurisdiction` or `Location`. |
+| 17 | **Financial charge stacking** | Wire fraud / identity theft counts | Link non-CSEA `FederalCharge` nodes (§ 1343, § 1028A) to underlying `SextortionScheme` or `CSAMIncident` via `Relates_To`. |
 
 ### Enterprise addendum (when § 2252A(g) alleged)
 
@@ -117,6 +123,60 @@ Before calling `validate_graph`, verify every applicable row:
 | E3 | Enterprise members | `hasMember` on enterprise → each defendant `Person` |
 | E4 | Relator participants | `gufo:hasParticipant` on every `gufo:Relator` (not label-only shells) |
 | E5 | Platform usage | `used_platform` from enterprise or conduct to platform nodes |
+| E6 | Overt-act violations inside Count 1 | Each **Violation** paragraph → `CSAMIncident` or overt-act node with `Relates_To` from Count 1 `FederalCharge` and enterprise |
+| E7 | Violation defendant subsets | `chargedWith` and `participatesInEvent` reflect **only** defendants named in that violation, not all enterprise members |
+| E8 | Violation venue | Each violation `Relates_To` → venue `Location` when the indictment names a district (e.g., D. New Mexico, S.D. California) |
+
+## Enterprise Count 1 overt-act / violation matrix
+
+Many § 2252A(g) indictments embed **multiple felony violations inside Count One** before separate numbered counts begin. Each violation is a mini-count with its own defendants, venue, date range, and minor victim reference.
+
+**Do not flatten** Count 1 into a single enterprise node with no violation subgraph.
+
+```
+FederalCharge (Count 1 — Enterprise § 2252A(g))
+  ├── Relates_To ──▶ ChildExploitationEnterprise
+  ├── Relates_To ──▶ OvertActViolation-1 (CSAMIncident or Event)
+  │     ├── Relates_To ──▶ Location (D. New Mexico)
+  │     ├── participatesInEvent ◀── Defendant-A, Defendant-B (subset only)
+  │     └── Relates_To ──▶ Minor Victim reference (aggregate or anonymized)
+  ├── Relates_To ──▶ OvertActViolation-2
+  │     ├── Relates_To ──▶ Location (S.D. California)
+  │     └── participatesInEvent ◀── Defendant-C, Defendant-D
+  └── ...
+
+FederalCharge (Count 4 — Access with intent)
+  ├── chargedWith ◀── Defendant-A, Defendant-C, Defendant-E  (different subset)
+  └── Relates_To ──▶ Location (E.D.N.Y.)
+```
+
+Modeling rules:
+
+1. Create one `FederalCharge` per **numbered count** in the instrument (Counts 2–10 remain separate nodes).
+2. For Count 1, add one conduct node per **embedded violation** (name from indictment: "Violation One", "Violation Two", …).
+3. Wire `Relates_To` from Count 1 to each violation node and from each violation to its venue `Location`.
+4. Apply `chargedWith` on each defendant for Count 1 **and** for each separate count — subsets differ per count.
+5. Use `uco-core:description` on violation nodes for date ranges and victim ordinal references when individual victim nodes are out of scope.
+
+## Per-count venue (intra-case multi-venue)
+
+Distinct from **multi-district parallel prosecution** (separate dockets), a single indictment may allege conduct **in multiple judicial districts** within one case (e.g., E.D.N.Y. filing court with overt acts in D. New Mexico and S.D. California).
+
+1. Model the **filing court** as primary `Location` on `CACInvestigation` (`located_at`).
+2. Model **each venue named in a count or violation** as its own `Location` with district name in `uco-core:name`.
+3. Link each `FederalCharge` or overt-act node to the venue where that count alleges conduct occurred.
+4. Do not collapse all venues into the filing court description — agents need queryable venue edges.
+
+```
+CACInvestigation
+  └── located_at ──▶ E.D.N.Y. (filing court)
+
+FederalCharge (Count 4)
+  └── Relates_To ──▶ E.D.N.Y. Location
+
+OvertActViolation-1 (inside Count 1)
+  └── Relates_To ──▶ D. New Mexico Location
+```
 
 ## Multi-district parallel prosecution
 
@@ -146,12 +206,24 @@ FederalCharge (TX_1)
 When indictments enumerate **specific devices** for seizure/forfeiture:
 
 1. Type each device as `MobileRecordingDevice` + `ObservableObject` with `deviceBrand`, `deviceModel`, `equipmentType`.
-2. Link conduct → device (this edge is often done correctly — preserve it).
-3. Link **forfeiture → each device** via `targetedAsset` (multiple assertions allowed).
-4. Link **forfeiture → charges** via `relatedCriminalCharges`.
-5. Do not leave a generic `forfeiture-asset` stub disconnected from enumerated device nodes when the source names them.
+2. Record **serial numbers**, capacity, and seizure location in `uco-core:description` or `FileFacet` when the forfeiture schedule lists them (common in enterprise indictments).
+3. Link conduct → device (this edge is often done correctly — preserve it).
+4. Link **forfeiture → each device** via `targetedAsset` (multiple assertions allowed).
+5. Link **forfeiture → charges** via `relatedCriminalCharges`.
+6. Do not leave a generic `forfeiture-asset` stub disconnected from enumerated device nodes when the source names them.
 
 Prefer `cacontology-production:usesEquipment` when the conduct node is a `ProductionOffense` subclass; use `uco-core:Relationship` (`used_equipment`) for `CSAMIncident` when no direct property exists.
+
+### Enumerated forfeiture example (serial numbers)
+
+```text
+FORFEITURE_DEVICES:
+  SanDisk SSD 2TB — serial S/N-001 — seized Hawaii
+  iBUYPOWER desktop tower — serial S/N-002 — seized New Mexico
+  Seagate HDD 4TB — serial S/N-003 — seized New Mexico
+```
+
+Each line becomes a distinct `ObservableObject` node; `AssetForfeitureAction.targetedAsset` references all of them.
 
 ## Fact-file template for agents
 
@@ -186,6 +258,36 @@ FOCUS_AREAS: CSAM Production; CSAM Possession; Multi-District Prosecution
 ```
 
 `DEFENDANT_COUNTS` and `PARALLEL_CASES` are the highest-value inputs for edge completeness.
+
+### Multi-defendant enterprise example (per-count subsets)
+
+```text
+CASE_ID: 1:25-cr-00361-PKC
+PRIMARY_COURT: U.S. District Court, Eastern District of New York
+FILING_DATE: 2025-11-18
+DEFENDANTS: 6
+EVIDENTIARY_BASIS: ALLEGED
+
+DEFENDANT_COUNTS:
+  BERMUDEZ: 1,2,3,4,5,6,7,8,9,10
+  BRILHANTE: 1,2,3
+  DOSCH: 1,2,3,5,7
+  RODRIGUEZ: 1,2,3,4,6,8
+  VALDEZ: 1,2,3,4,5,6,7,8,9
+  Defendant-6: 1,2,3
+
+COUNT_VENUES:
+  1-Violation-1: District of New Mexico
+  1-Violation-3: Southern District of California
+  4: Eastern District of New York
+  5: Eastern District of New York
+
+FORFEITURE_DEVICES:
+  SanDisk SSD 2TB — serial per schedule
+  iBUYPOWER desktop — serial per schedule
+```
+
+Note how **each defendant's count list differs** — agents must not assign all ten counts to every defendant.
 
 ## Python skeleton (multi-district production case)
 
@@ -284,6 +386,11 @@ graph.write("federal-prosecution-relationships.jsonld")
 | Devices linked to conduct but not forfeiture | Bridge forfeiture to same device nodes |
 | `MultiDefendantIndictment` for single defendant | Acceptable when instrument type is unknown; still wire all charge edges |
 | Empty `gufo:Relator` (enterprise cases) | Add `gufo:hasParticipant` |
+| Count 1 enterprise with no violation subgraph | Add overt-act nodes + venue + defendant subsets per violation |
+| All defendants charged on all counts | Parse per-count defendant lists from indictment |
+| Filing court only, no per-count venue | Add `Location` per count/violation + `Relates_To` |
+| Forfeiture stub, serial numbers in text only | One `ObservableObject` per enumerated device with serial in description |
+| Wire fraud / identity theft counts isolated | `Relates_To` from financial charges to underlying exploitation conduct |
 
 ## Validation
 
@@ -297,4 +404,6 @@ validate_graph("federal-prosecution-relationships.jsonld", extensions=["cac"])
 - [cac-legal-sentencing-outcomes.md](cac-legal-sentencing-outcomes.md) — press-release and sentencing patterns
 - [cac-trafficking-recruitment-network.md](cac-trafficking-recruitment-network.md) — recruitment ring structure
 - [cac-icac-search-warrant-arrest.md](cac-icac-search-warrant-arrest.md) — pre-indictment ICAC pattern
+- [cac-sextortion-coercion.md](cac-sextortion-coercion.md) — sextortion conduct + federal charge stacking
+- [cac-international-coordination.md](cac-international-coordination.md) — extradition and transnational defendants
 - [forensic-lifecycle.md](forensic-lifecycle.md) — provenance and extraction actions

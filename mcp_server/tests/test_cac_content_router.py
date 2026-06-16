@@ -235,3 +235,52 @@ def test_route_federal_production_includes_multi_district_checklist() -> None:
     assert "forfeiture-device-linkage" in checklist_ids
     assert "indictment-charge-links" in checklist_ids
     assert "prosecution-indictment-link" in checklist_ids
+
+
+FEDERAL_ENTERPRISE_OVERT_ACT_NARRATIVE = (
+    "U.S. v. Defendant-1 et al. Multi-defendant indictment under 18 U.S.C. "
+    "2252A(g). Count 1 alleges a child exploitation enterprise with Violation "
+    "One in the District of New Mexico and Violation Three in the Southern "
+    "District of California. Asset forfeiture schedule lists serial numbers "
+    "for seized SanDisk SSD and desktop tower devices."
+)
+
+
+SEXTORTION_FEDERAL_NARRATIVE = (
+    "Sextortion indictment in U.S. District Court, District of Alaska. Defendant "
+    "a citizen abroad extradited for prosecution. Counts include cyberstalking "
+    "under 18 U.S.C. 2261A, aggravated identity theft under 1028A, and wire "
+    "fraud under 1343. Coercion via Instagram and Snapchat with ban evasion "
+    "and impersonation of a teen influencer."
+)
+
+
+def test_route_enterprise_overt_act_includes_violation_checklist() -> None:
+    result = route_cac_content(
+        project_root=PROJECT_ROOT,
+        content_text=FEDERAL_ENTERPRISE_OVERT_ACT_NARRATIVE,
+        include_recipe_content=False,
+        max_recipes=8,
+    )
+    assert result["ok"] is True
+    checklist_ids = {item["id"] for item in result["modeling_checklist"]}
+    assert "enterprise-overt-act-violations" in checklist_ids
+    assert "charge-venue-locations" in checklist_ids
+    assert "forfeiture-device-linkage" in checklist_ids
+
+
+def test_route_sextortion_federal_includes_stacking_checklist() -> None:
+    result = route_cac_content(
+        project_root=PROJECT_ROOT,
+        content_text=SEXTORTION_FEDERAL_NARRATIVE,
+        include_recipe_content=False,
+        max_recipes=8,
+    )
+    assert result["ok"] is True
+    domain_ids = {item["domain_id"] for item in result["matched_domains"]}
+    assert "sextortion-coercion" in domain_ids
+    checklist_ids = {item["id"] for item in result["modeling_checklist"]}
+    assert "sextortion-federal-prosecution-bridge" in checklist_ids
+    assert "financial-charge-stacking" in checklist_ids
+    assert "transnational-extradition-chain" in checklist_ids
+    assert "platform-affordance-abuse" in checklist_ids

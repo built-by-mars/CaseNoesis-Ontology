@@ -153,14 +153,19 @@ CAC_DOMAIN_FAMILIES: tuple[CACDomainFamily, ...] = (
         keywords=(
             "sextortion", "coercion", "blackmail", "threaten to share", "nude",
             "explicit images", "financial extortion", "compliance demand",
-            "screenshot threat", "webcam", "catfish",
+            "screenshot threat", "webcam", "catfish", "impersonation",
+            "cyberstalking", "2261a", "wire fraud", "1343", "1028a",
+            "aggravated identity theft", "ban evasion", "account recreation",
+            "instagram", "snapchat", "dropbox",
         ),
         recipe_file="docs/recipes/cac-sextortion-coercion.md",
-        mapping_source="cybertip grooming report",
+        mapping_source="cybertip grooming report or sextortion indictment",
         layer=2,
         related_core_recipes=(
             "docs/recipes/threaded-messaging.md",
             "docs/recipes/cac-grooming-chat-modeling.md",
+            "docs/recipes/cac-federal-prosecution-relationships.md",
+            "docs/recipes/cac-international-coordination.md",
         ),
     ),
     CACDomainFamily(
@@ -226,6 +231,12 @@ CAC_DOMAIN_FAMILIES: tuple[CACDomainFamily, ...] = (
             "sexual exploitation of a minor", "mobile recording device",
             "asset forfeiture", "forfeiture", "18 u.s.c. 2251", "18 u.s.c. 2252",
             "18 u.s.c. 2253", "pre-trial", "pretrial phase",
+            "overt act", "violation one", "violation two", "judicial district",
+            "southern district of california", "district of new mexico",
+            "serial number", "forfeiture schedule",
+            "cyberstalking", "2261a", "wire fraud", "1343", "1028a",
+            "aggravated identity theft", "extradition", "extradited",
+            "ban evasion", "impersonation",
         ),
         recipe_file="docs/recipes/cac-federal-prosecution-relationships.md",
         mapping_source="federal court prosecution indictment or criminal complaint",
@@ -606,7 +617,8 @@ def build_modeling_checklist(matched_domains: list[dict[str, Any]]) -> list[dict
                     "For each defendant Person, add cacontology-legal-outcomes:chargedWith edges "
                     "to the specific FederalCharge nodes that defendant faces. Do not leave "
                     "numbered counts as orphan nodes. Use a DEFENDANT_COUNTS fact table when "
-                    "the source assigns different counts to different defendants."
+                    "the source assigns different counts to different defendants — subsets "
+                    "often vary per count in multi-defendant indictments."
                 ),
                 "recipes": ["docs/recipes/cac-federal-prosecution-relationships.md"],
             },
@@ -673,6 +685,83 @@ def build_modeling_checklist(matched_domains: list[dict[str, Any]]) -> list[dict
                     "ConspiracyToCommitCSA. Complete gufo:hasParticipant on all Relators."
                 ),
                 "recipes": ["docs/recipes/cac-federal-prosecution-relationships.md"],
+            },
+            {
+                "id": "enterprise-overt-act-violations",
+                "priority": "high",
+                "check": (
+                    "When Count 1 (§ 2252A(g)) embeds Violation One/Two/… paragraphs, model "
+                    "each violation as a conduct node with Relates_To from the enterprise "
+                    "charge, per-violation venue Location, and defendant subsets via "
+                    "participatesInEvent — do not flatten Count 1 into a single node."
+                ),
+                "recipes": ["docs/recipes/cac-federal-prosecution-relationships.md"],
+            },
+            {
+                "id": "charge-venue-locations",
+                "priority": "high",
+                "check": (
+                    "When counts or violations name judicial districts (e.g., D. New Mexico, "
+                    "S.D. California), link each FederalCharge or overt-act node to that "
+                    "venue Location via Relates_To — not only the filing court."
+                ),
+                "recipes": ["docs/recipes/cac-federal-prosecution-relationships.md"],
+            },
+            {
+                "id": "transnational-extradition-chain",
+                "priority": "high",
+                "check": (
+                    "When the defendant is abroad or extradition is alleged, link "
+                    "ExtraditionProcess to the defendant Person and FederalProsecution via "
+                    "Relates_To. Model foreign residence as InternationalJurisdiction or "
+                    "Location."
+                ),
+                "recipes": [
+                    "docs/recipes/cac-federal-prosecution-relationships.md",
+                    "docs/recipes/cac-international-coordination.md",
+                ],
+            },
+            {
+                "id": "financial-charge-stacking",
+                "priority": "high",
+                "check": (
+                    "When indictments stack wire fraud (§ 1343), aggravated identity theft "
+                    "(§ 1028A), or cyberstalking (§ 2261A) on CSEA counts, link each "
+                    "non-CSEA FederalCharge to SextortionScheme, CSAMIncident, or "
+                    "impersonation conduct via Relates_To."
+                ),
+                "recipes": [
+                    "docs/recipes/cac-federal-prosecution-relationships.md",
+                    "docs/recipes/cac-sextortion-coercion.md",
+                ],
+            },
+        ])
+    if "sextortion-coercion" in domain_ids:
+        checks.extend([
+            {
+                "id": "sextortion-federal-prosecution-bridge",
+                "priority": "critical",
+                "check": (
+                    "When the source is a sextortion indictment, wire SextortionScheme to "
+                    "FederalCharge nodes (cyberstalking, wire fraud, identity theft) and add "
+                    "chargedWith on the defendant. Run the federal prosecution relationship "
+                    "checklist for indictment, prosecution, and forfeiture edges."
+                ),
+                "recipes": [
+                    "docs/recipes/cac-sextortion-coercion.md",
+                    "docs/recipes/cac-federal-prosecution-relationships.md",
+                ],
+            },
+            {
+                "id": "platform-affordance-abuse",
+                "priority": "medium",
+                "check": (
+                    "Link used_platform from SextortionScheme or enterprise to Instagram, "
+                    "Snapchat, Dropbox, or other platforms named in the indictment. Record "
+                    "ban-evasion and account-recreation counts in uco-core:description when "
+                    "alleged — do not bury platform affordance detail only in Bundle text."
+                ),
+                "recipes": ["docs/recipes/cac-sextortion-coercion.md"],
             },
         ])
     if "production-case" in domain_ids and "federal-prosecution-relationships" not in domain_ids:

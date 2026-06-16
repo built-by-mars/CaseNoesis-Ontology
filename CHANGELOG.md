@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.2] - 2026-06-16
+
+### Added
+
+- Federal prosecution recipe extensions for complex indictment patterns from real PACER enterprise and sextortion cases: **enterprise Count 1 overt-act/violation matrix** (per-violation defendant subsets and venues), **intra-case per-count venue** `Location` nodes, **enumerated forfeiture with serial numbers**, and multi-defendant `DEFENDANT_COUNTS` examples showing per-count subsets (`docs/recipes/cac-federal-prosecution-relationships.md`).
+- Layer 3 federal prosecution bridge in `cac-sextortion-coercion.md`: cyberstalking (§ 2261A), aggravated identity theft (§ 1028A), wire fraud (§ 1343) charge stacking, extradition chain, platform affordance/ban-evasion modeling, co-conspirator narrative wiring, and sextortion fact-file template.
+- Six new MCP modeling checklist items: `enterprise-overt-act-violations`, `charge-venue-locations`, `transnational-extradition-chain`, and `financial-charge-stacking` (federal prosecution); `sextortion-federal-prosecution-bridge` and `platform-affordance-abuse` (sextortion).
+- CAC content router tests for enterprise overt-act and sextortion federal-stacking narratives (`mcp_server/tests/test_cac_content_router.py`).
+
+### Changed
+
+- `cac_content_router.py` keyword routing expanded for overt acts, judicial venues, serial-number forfeiture, cyberstalking, wire fraud, identity theft, extradition, ban evasion, and platform names; `sextortion-coercion` domain now links to federal prosecution and international coordination recipes.
+- `defendant-charge-matrix` checklist text clarifies that count subsets vary per defendant in multi-defendant indictments.
+
 ## [1.13.1] - 2026-06-16
 
 ### Added
