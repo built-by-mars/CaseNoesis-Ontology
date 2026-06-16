@@ -166,3 +166,72 @@ def test_assess_extraction_quality_flags_noisy_pdf_text() -> None:
     assert quality["noisy_extraction"] is True
     assert quality["noise_marker_hits"] >= 3
     assert "recommendation" in quality
+
+
+FEDERAL_ENTERPRISE_NARRATIVE = (
+    "U.S. v. Defendant-1 et al. in the U.S. District Court. A multi-defendant "
+    "indictment filed November 2025 charges six co-conspirators in a child "
+    "exploitation enterprise under 18 U.S.C. 2252A(g). Count 1 alleges the "
+    "enterprise; counts 2 through 10 include conspiracy to produce CSAM, "
+    "production of CSAM, and conspiracy to transmit interstate threats. "
+    "Federal prosecution is in pre-trial phase."
+)
+
+
+FEDERAL_PRODUCTION_NARRATIVE = (
+    "U.S. v. Defendant-1 in U.S. District Court, District of Alaska, case "
+    "3:24-cr-00091. Parallel federal prosecution in Western District of Texas. "
+    "Indictment filed 2024-08-22 with five federal counts: transportation of "
+    "CSAM, receipt of CSAM, possession of CSAM, attempted sexual exploitation "
+    "of a minor, and receipt under 18 U.S.C. 2252. Alleged CSAM production "
+    "and possession from 2021 to 2024. Asset forfeiture under 18 U.S.C. 2253 "
+    "of Samsung Galaxy smartphones seized as evidence."
+)
+
+
+def test_detect_federal_prosecution_relationships_domain() -> None:
+    matches = detect_cac_domains(FEDERAL_ENTERPRISE_NARRATIVE)
+    domain_ids = {item["domain_id"] for item in matches}
+    assert "federal-prosecution-relationships" in domain_ids
+    assert "legal-sentencing-outcomes" in domain_ids
+
+
+def test_detect_federal_production_multi_district_domain() -> None:
+    matches = detect_cac_domains(FEDERAL_PRODUCTION_NARRATIVE)
+    domain_ids = {item["domain_id"] for item in matches}
+    assert "federal-prosecution-relationships" in domain_ids
+    assert "production-case" in domain_ids
+
+
+def test_route_federal_prosecution_includes_relationship_checklist() -> None:
+    result = route_cac_content(
+        project_root=PROJECT_ROOT,
+        content_text=FEDERAL_ENTERPRISE_NARRATIVE,
+        include_recipe_content=False,
+        max_recipes=8,
+    )
+    assert result["ok"] is True
+    domain_ids = {item["domain_id"] for item in result["matched_domains"]}
+    assert "federal-prosecution-relationships" in domain_ids
+    checklist_ids = {item["id"] for item in result["modeling_checklist"]}
+    assert "defendant-charge-matrix" in checklist_ids
+    assert "indictment-charge-links" in checklist_ids
+    assert "enterprise-indictment-bridge" in checklist_ids
+    assert "investigation-legal-scope" in checklist_ids
+    recipe_files = {item["recipe_file"] for item in result["matched_domains"]}
+    assert "docs/recipes/cac-federal-prosecution-relationships.md" in recipe_files
+
+
+def test_route_federal_production_includes_multi_district_checklist() -> None:
+    result = route_cac_content(
+        project_root=PROJECT_ROOT,
+        content_text=FEDERAL_PRODUCTION_NARRATIVE,
+        include_recipe_content=False,
+        max_recipes=8,
+    )
+    assert result["ok"] is True
+    checklist_ids = {item["id"] for item in result["modeling_checklist"]}
+    assert "multi-district-charge-jurisdiction" in checklist_ids
+    assert "forfeiture-device-linkage" in checklist_ids
+    assert "indictment-charge-links" in checklist_ids
+    assert "prosecution-indictment-link" in checklist_ids

@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.1] - 2026-06-16
+
+### Added
+
+- Federal prosecution relationship recipe (`docs/recipes/cac-federal-prosecution-relationships.md`): relationship-completeness guidance for federal court prosecution graphs — defendant→count `chargedWith`, indictment→charge links, prosecution→indictment bridges, multi-district parallel prosecution, production equipment, and forfeiture→device wiring. Includes fact-file templates (`DEFENDANT_COUNTS`, `PARALLEL_CASES`, `FORFEITURE_DEVICES`) and enterprise addendum for § 2252A(g) relators.
+- MCP `federal-prosecution-relationships` domain family in `cac_content_router.py` with expanded keyword routing (multi-district, CSAM production/possession/transport, forfeiture) and seven relationship checklist items: `defendant-charge-matrix`, `indictment-charge-links`, `prosecution-indictment-link`, `investigation-legal-scope`, `multi-district-charge-jurisdiction`, `forfeiture-device-linkage`, and `enterprise-indictment-bridge`.
+- CAC content router tests for federal enterprise and multi-district production prosecution narratives (`mcp_server/tests/test_cac_content_router.py`).
+
+### Changed
+
+- `cac-production-case.md` expanded with federal filing cross-links, `MobileRecordingDevice` forfeiture patterns, and `relatedCriminalCharges` on `AssetForfeitureAction`.
+- `cac-legal-sentencing-outcomes.md` now points federal indictment graphs to the prosecution-relationships recipe.
+- `charge-offense-links` modeling checklist now requires `chargedWith` on every defendant, not only the principal suspect.
+- `production-case` domain keywords and `domain_index` recipe catalog updated for federal CSAM production filing narratives.
+
 ## [1.13.0] - 2026-06-15
 
 ### Added
@@ -35,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Resolved eight open CodeQL findings in `mcp_server/`: implicit string concatenation in `cac_content_router.py` modeling steps, duplicate `import`/`from` patterns in document-processor and graph-validator tests, unused local in CSV bundle test, and a `document_processor` ↔ `document_semantic_mapping` import cycle by extracting shared `ExtractedRecord` into `document_models.py`.
 - `graph_validator.extension_ontology_args()` now omits `--inference rdfs` whenever a CAC `validation-subset.json` is configured (even before submodule ontology files are present on disk); CAC validator tests skip cleanly when the CAC ontology submodule is uninitialized ([#34](https://github.com/vulnmaster/CASE-UCO-SDK/issues/34)).
 - Python packaging: added `python/README.md`, explicit `[tool.setuptools]` package discovery (`where = ["."]`), and `setuptools>=69` so `pip install ./python` builds `case-uco` instead of `UNKNOWN-0.0.0` and editable installs work on PEP 660-capable pip/setuptools ([#33](https://github.com/vulnmaster/CASE-UCO-SDK/issues/33)).
+- CAC Ontology submodule Python CodeQL alerts (unused imports/locals, `exit()` usage in demonstration scripts) resolved by pinning `extensions/cac/ontology` to upstream `ce95084` ([#30](https://github.com/Project-VIC-International/CAC-Ontology/pull/30)).
 
 ## [1.12.0] - 2026-06-10
 

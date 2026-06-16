@@ -211,6 +211,32 @@ CAC_DOMAIN_FAMILIES: tuple[CACDomainFamily, ...] = (
         related_core_recipes=("docs/recipes/event.md",),
     ),
     CACDomainFamily(
+        domain_id="federal-prosecution-relationships",
+        title="Federal Prosecution Relationship Completeness",
+        keywords=(
+            "child exploitation enterprise", "2252a", "2252a(g)", "co-conspirator",
+            "co-conspirators", "multi-defendant", "multi defendant", "superseding indictment",
+            "federal charge", "federal prosecution", "federal defendant", "count 1",
+            "count one", "numbered count", "conspiracy to commit", "conspiracy to produce",
+            "district court", "u.s. v.", "united states v", "indictment filed",
+            "enterprise member", "organized exploitation",
+            "multi-district", "multi district", "parallel jurisdiction", "parallel prosecution",
+            "western district", "district of alaska", "transportation of csam",
+            "possession of csam", "receipt of csam", "production of csam",
+            "sexual exploitation of a minor", "mobile recording device",
+            "asset forfeiture", "forfeiture", "18 u.s.c. 2251", "18 u.s.c. 2252",
+            "18 u.s.c. 2253", "pre-trial", "pretrial phase",
+        ),
+        recipe_file="docs/recipes/cac-federal-prosecution-relationships.md",
+        mapping_source="federal court prosecution indictment or criminal complaint",
+        layer=3,
+        related_core_recipes=(
+            "docs/recipes/cac-legal-sentencing-outcomes.md",
+            "docs/recipes/cac-production-case.md",
+            "docs/recipes/cac-trafficking-recruitment-network.md",
+        ),
+    ),
+    CACDomainFamily(
         domain_id="missing-child-investigation",
         title="Missing Child Investigations",
         keywords=(
@@ -243,12 +269,15 @@ CAC_DOMAIN_FAMILIES: tuple[CACDomainFamily, ...] = (
             "production", "manufacturing", "produced image", "produced video",
             "studio setup", "camera equipment", "offender-produced", "hands-on",
             "contact offense", "hands-on abuse",
+            "csam production", "production of csam", "mobile recording device",
+            "smartphone", "galaxy", "recording equipment",
         ),
         recipe_file="docs/recipes/cac-production-case.md",
         mapping_source=None,
         layer=2,
         related_core_recipes=(
             "docs/recipes/cac-csam-forensic-provenance.md",
+            "docs/recipes/cac-federal-prosecution-relationships.md",
             "docs/recipes/exif-data.md",
         ),
     ),
@@ -270,6 +299,8 @@ CAC_SIGNAL_MARKERS = (
     "icac", "child", "minor", "arrest", "charged", "solicitation",
     "trafficking", "cybertip", "ncmec", "search warrant", "csam",
     "exploitation", "task force", "rescue", "grooming",
+    "co-conspirator", "enterprise", "indictment", "federal charge",
+    "multi-district", "parallel jurisdiction", "forfeiture", "possession of csam",
 )
 
 
@@ -525,11 +556,15 @@ def build_modeling_checklist(matched_domains: list[dict[str, Any]]) -> list[dict
             "id": "charge-offense-links",
             "priority": "medium",
             "check": (
-                "Link StateCharge nodes to underlying exploitation events via charge "
+                "Link charge nodes to underlying exploitation events via charge "
                 "uco-core:description IRI references, or uco-core:Relationship (Relates_To) when "
-                "both endpoints are UcoObject. Always keep chargedWith on the suspect."
+                "both endpoints are UcoObject. Always keep chargedWith on every defendant Person — "
+                "not only the principal suspect."
             ),
-            "recipes": ["docs/recipes/cac-legal-sentencing-outcomes.md"],
+            "recipes": [
+                "docs/recipes/cac-legal-sentencing-outcomes.md",
+                "docs/recipes/cac-federal-prosecution-relationships.md",
+            ],
         },
         {
             "id": "subject-location",
@@ -562,6 +597,95 @@ def build_modeling_checklist(matched_domains: list[dict[str, Any]]) -> list[dict
             ),
             "recipes": ["docs/recipes/cac-tactical-undercover-operation.md"],
         })
+    if "federal-prosecution-relationships" in domain_ids:
+        checks.extend([
+            {
+                "id": "defendant-charge-matrix",
+                "priority": "critical",
+                "check": (
+                    "For each defendant Person, add cacontology-legal-outcomes:chargedWith edges "
+                    "to the specific FederalCharge nodes that defendant faces. Do not leave "
+                    "numbered counts as orphan nodes. Use a DEFENDANT_COUNTS fact table when "
+                    "the source assigns different counts to different defendants."
+                ),
+                "recipes": ["docs/recipes/cac-federal-prosecution-relationships.md"],
+            },
+            {
+                "id": "indictment-charge-links",
+                "priority": "critical",
+                "check": (
+                    "Link the charging instrument (indictment/complaint) to each FederalCharge via "
+                    "uco-core:Relationship (Relates_To). Set indictmentCounts on the instrument and "
+                    "chargeCount on each charge node."
+                ),
+                "recipes": ["docs/recipes/cac-federal-prosecution-relationships.md"],
+            },
+            {
+                "id": "prosecution-indictment-link",
+                "priority": "high",
+                "check": (
+                    "Connect FederalProsecution to the charging instrument via "
+                    "uco-core:Relationship (Relates_To). Add a FederalProsecution per lead "
+                    "district when parallel dockets exist."
+                ),
+                "recipes": ["docs/recipes/cac-federal-prosecution-relationships.md"],
+            },
+            {
+                "id": "investigation-legal-scope",
+                "priority": "high",
+                "check": (
+                    "Link CACInvestigation to indictment, prosecution, charges, and/or CSAMIncident "
+                    "via uco-core:Relationship (Relates_To) or case-investigation:object. "
+                    "case-investigation:focus text supplements but does not replace graph edges."
+                ),
+                "recipes": ["docs/recipes/cac-federal-prosecution-relationships.md"],
+            },
+            {
+                "id": "multi-district-charge-jurisdiction",
+                "priority": "high",
+                "check": (
+                    "When charges span multiple federal districts, link each district-prefixed "
+                    "FederalCharge to its court Location and add parallel_jurisdiction from "
+                    "CACInvestigation to each non-primary district."
+                ),
+                "recipes": ["docs/recipes/cac-federal-prosecution-relationships.md"],
+            },
+            {
+                "id": "forfeiture-device-linkage",
+                "priority": "high",
+                "check": (
+                    "When forfeiture enumerates specific devices, set targetedAsset on "
+                    "AssetForfeitureAction to each MobileRecordingDevice — not only a generic "
+                    "aggregate stub. Add relatedCriminalCharges linking forfeiture to "
+                    "supporting FederalCharge nodes."
+                ),
+                "recipes": [
+                    "docs/recipes/cac-federal-prosecution-relationships.md",
+                    "docs/recipes/cac-production-case.md",
+                ],
+            },
+            {
+                "id": "enterprise-indictment-bridge",
+                "priority": "high",
+                "check": (
+                    "When ChildExploitationEnterprise is alleged, connect it to the charging "
+                    "instrument via Relates_To and/or cacontology:resultsInIndictment from "
+                    "ConspiracyToCommitCSA. Complete gufo:hasParticipant on all Relators."
+                ),
+                "recipes": ["docs/recipes/cac-federal-prosecution-relationships.md"],
+            },
+        ])
+    if "production-case" in domain_ids and "federal-prosecution-relationships" not in domain_ids:
+        checks.append({
+            "id": "production-equipment-conduct",
+            "priority": "high",
+            "check": (
+                "Link CSAMIncident or production offense nodes to MobileRecordingDevice via "
+                "used_equipment Relationship or cacontology-production:usesEquipment. When "
+                "forfeiture is alleged, bridge the same devices through targetedAsset."
+            ),
+            "recipes": ["docs/recipes/cac-production-case.md"],
+        })
     return checks
 
 
@@ -593,7 +717,7 @@ def build_workflow_steps(matched_domains: list[dict[str, Any]], output_format: s
         ),
         (
             "Review modeling_checklist before finalize — connect suspect→crime, investigation→activities, "
-            "phases→actions, and charges→offenses."
+            "phases→actions, defendant→counts, enterprise→indictment, and charges→offenses."
         ),
         "Call validate_graph with extensions=['cac'] on the finished graph.",
         "Link-Look users may perform additional visual validation in Normalize view.",

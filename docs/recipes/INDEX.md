@@ -69,6 +69,7 @@ Requires `CASE_UCO_EXTENSIONS=cac`. Use `route_cac_content` via the MCP server t
 | Hotline Intake and Referral Lifecycle | [cac-hotline-intake-lifecycle.md](cac-hotline-intake-lifecycle.md) | Hotline intake, triage, referral, investigation escalation |
 | CSAM Forensic Provenance | [cac-csam-forensic-provenance.md](cac-csam-forensic-provenance.md) | Acquisition, custody, hashing, correlation, victim identification |
 | Legal Charges and Sentencing Outcomes | [cac-legal-sentencing-outcomes.md](cac-legal-sentencing-outcomes.md) | Indictments, pleas, sentencing, registry outcomes |
+| Federal Prosecution Relationships | [cac-federal-prosecution-relationships.md](cac-federal-prosecution-relationships.md) | Federal indictment relationship wiring: defendant–counts, multi-district, forfeiture, enterprise |
 | Missing Child Investigations | [cac-missing-child-investigation.md](cac-missing-child-investigation.md) | Missing-child reports, AMBER alerts, tracking, recovery |
 | International Coordination | [cac-international-coordination.md](cac-international-coordination.md) | Cross-border operations, Europol/Interpol, evidence sharing |
 | CSAM Production Cases | [cac-production-case.md](cac-production-case.md) | Hands-on abuse, offender-produced media, production environments |

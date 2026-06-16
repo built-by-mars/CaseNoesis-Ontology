@@ -71,8 +71,13 @@ CACInvestigation
 validate_graph("sentencing-outcome.jsonld", extensions=["cac"])
 ```
 
+## Federal court prosecution graphs
+
+For indictments and criminal complaints with **numbered federal counts** — single or multi-defendant, single or **multi-district parallel prosecution**, enterprise or production/possession cases — see [cac-federal-prosecution-relationships.md](cac-federal-prosecution-relationships.md). That recipe covers relationship edges agents often omit: per-defendant `chargedWith`, indictment→charge links, prosecution→indictment bridges, multi-district charge→court assignment, forfeiture→device linkage, and enterprise-specific relator participants.
+
 ## Related recipes
 
+- [cac-federal-prosecution-relationships.md](cac-federal-prosecution-relationships.md)
 - [cac-icac-search-warrant-arrest.md](cac-icac-search-warrant-arrest.md)
 - [cac-tactical-undercover-operation.md](cac-tactical-undercover-operation.md)
 - [event.md](event.md)

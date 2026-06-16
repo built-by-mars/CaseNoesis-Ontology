@@ -992,6 +992,12 @@ RECIPE_INDEX: list[dict[str, str]] = [
         "file": "docs/recipes/cac-legal-sentencing-outcomes.md",
     },
     {
+        "title": "Federal Prosecution Relationship Completeness",
+        "description": "Model federal indictment relationship wiring: defendant–counts, indictment–charges, multi-district prosecution, forfeiture–devices, and enterprise relators.",
+        "keywords": "federal prosecution indictment multi-defendant multi-district parallel jurisdiction co-conspirator 2252a federal charge conspiracy child exploitation enterprise csam production possession forfeiture cac ontology crimes against children",
+        "file": "docs/recipes/cac-federal-prosecution-relationships.md",
+    },
+    {
         "title": "Missing Child Investigations",
         "description": "Model missing-child reports, AMBER alerts, tracking, and recovery operations.",
         "keywords": "missing child amber alert abduction runaway recovery cac ontology crimes against children",
