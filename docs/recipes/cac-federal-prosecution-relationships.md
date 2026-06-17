@@ -113,6 +113,9 @@ Before calling `validate_graph`, verify every applicable row:
 | 15 | **Forfeiture serial observables** | Devices enumerated with serials | Each forfeiture device is a typed `ObservableObject` with serial/model in `uco-core:description` or `FileFacet`; link seizure location when stated. |
 | 16 | **Transnational extradition chain** | Defendant abroad / extradited | Link `ExtraditionProcess` → defendant `Person` and `FederalProsecution` via `Relates_To`; foreign residence as `InternationalJurisdiction` or `Location`. |
 | 17 | **Financial charge stacking** | Wire fraud / identity theft counts | Link non-CSEA `FederalCharge` nodes (§ 1343, § 1028A) to underlying `SextortionScheme` or `CSAMIncident` via `Relates_To`. |
+| 18 | **Per-victim charge bundles** | Indictment names Minor Victim 1–N | `VICTIM_COUNTS` maps each victim to their counts; `Relates_To` from each charge to victim role and conduct. |
+| 19 | **Superseding indictment chain** | Original + superseding filed | Link original → superseding instrument; prosecution → current instrument. See [cac-federal-trial-proceedings.md](cac-federal-trial-proceedings.md). |
+| 20 | **Grouped forfeiture notices** | Multiple forfeiture allegation sections | Separate `AssetForfeitureAction` or grouped `relatedCriminalCharges` per statute block (2253, 1594, 2428). |
 
 ### Enterprise addendum (when § 2252A(g) alleged)
 
@@ -289,6 +292,28 @@ FORFEITURE_DEVICES:
 
 Note how **each defendant's count list differs** — agents must not assign all ten counts to every defendant.
 
+### Per-victim charge bundle example (solo defendant)
+
+```text
+CASE_ID: 1:23-cr-00071-JMS
+DEFENDANTS: 1
+DEFENDANT_COUNTS:
+  RILEY: 1,2,3,4,5,6,7,8,9,10,11,12
+
+VICTIM_COUNTS:
+  MV1: 1,2,12
+  MV2: 3,4,5
+  MV3: 6,7,8
+  MV4: 9,10
+  MV5: 11
+
+CHARGING_INSTRUMENTS:
+  Original: Doc 1 — 2023-08-24 — counts 1-2
+  Superseding: Doc 70 — 2024-07-25 — counts 1-12 (active)
+```
+
+`VICTIM_COUNTS` drives charge→victim and charge→conduct edges when one defendant faces stacked statutes across multiple minors.
+
 ## Python skeleton (multi-district production case)
 
 ```python
@@ -406,4 +431,5 @@ validate_graph("federal-prosecution-relationships.jsonld", extensions=["cac"])
 - [cac-icac-search-warrant-arrest.md](cac-icac-search-warrant-arrest.md) — pre-indictment ICAC pattern
 - [cac-sextortion-coercion.md](cac-sextortion-coercion.md) — sextortion conduct + federal charge stacking
 - [cac-international-coordination.md](cac-international-coordination.md) — extradition and transnational defendants
+- [cac-federal-trial-proceedings.md](cac-federal-trial-proceedings.md) — superseding indictment, docket lifecycle, trial brief
 - [forensic-lifecycle.md](forensic-lifecycle.md) — provenance and extraction actions

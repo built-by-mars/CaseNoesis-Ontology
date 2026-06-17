@@ -998,6 +998,12 @@ RECIPE_INDEX: list[dict[str, str]] = [
         "file": "docs/recipes/cac-federal-prosecution-relationships.md",
     },
     {
+        "title": "Federal Trial Proceedings and Docket Lifecycle",
+        "description": "Model superseding indictments, PACER docket milestones, competency proceedings, and government trial briefs with anticipated evidence.",
+        "keywords": "superseding indictment trial brief pacer docket competency 4241 speedy trial act jury trial anticipated evidence cac ontology crimes against children",
+        "file": "docs/recipes/cac-federal-trial-proceedings.md",
+    },
+    {
         "title": "Missing Child Investigations",
         "description": "Model missing-child reports, AMBER alerts, tracking, and recovery operations.",
         "keywords": "missing child amber alert abduction runaway recovery cac ontology crimes against children",

@@ -81,11 +81,19 @@ CAC_DOMAIN_FAMILIES: tuple[CACDomainFamily, ...] = (
             "recruitment", "recruiter", "peer recruitment", "school-based",
             "street recruitment", "pretext", "rotation", "interstate transport",
             "digital-to-physical", "brooklyn trafficking",
+            "1591", "sex trafficking a minor", "commercial sex act",
+            "minor victim", "grindr", "victim transportation", "rideshare",
+            "uber", "lyft", "hotel room", "commercial sexual exploitation",
         ),
         recipe_file="docs/recipes/cac-trafficking-recruitment-network.md",
-        mapping_source="child sex trafficking ring or recruitment network",
+        mapping_source="child sex trafficking prosecution or recruitment network",
         layer=2,
-        related_core_recipes=("docs/recipes/location.md", "docs/recipes/accounts.md"),
+        related_core_recipes=(
+            "docs/recipes/cac-grooming-chat-modeling.md",
+            "docs/recipes/cac-federal-prosecution-relationships.md",
+            "docs/recipes/cac-federal-trial-proceedings.md",
+            "docs/recipes/cac-production-case.md",
+        ),
     ),
     CACDomainFamily(
         domain_id="multi-jurisdiction-task-force",
@@ -245,6 +253,27 @@ CAC_DOMAIN_FAMILIES: tuple[CACDomainFamily, ...] = (
             "docs/recipes/cac-legal-sentencing-outcomes.md",
             "docs/recipes/cac-production-case.md",
             "docs/recipes/cac-trafficking-recruitment-network.md",
+            "docs/recipes/cac-federal-trial-proceedings.md",
+        ),
+    ),
+    CACDomainFamily(
+        domain_id="federal-trial-proceedings",
+        title="Federal Trial Proceedings and Docket Lifecycle",
+        keywords=(
+            "superseding indictment", "superseding", "trial brief",
+            "government trial brief", "pacer docket", "docket sheet",
+            "competency hearing", "4241", "speedy trial act",
+            "motion in limine", "jury trial", "jury selection",
+            "trial conference", "anticipated evidence", "ecf no",
+            "document 70", "arraignment continuance", "detention hearing",
+        ),
+        recipe_file="docs/recipes/cac-federal-trial-proceedings.md",
+        mapping_source="federal docket export or government trial brief",
+        layer=3,
+        related_core_recipes=(
+            "docs/recipes/cac-federal-prosecution-relationships.md",
+            "docs/recipes/cac-csam-forensic-provenance.md",
+            "docs/recipes/cac-legal-sentencing-outcomes.md",
         ),
     ),
     CACDomainFamily(
@@ -762,6 +791,85 @@ def build_modeling_checklist(matched_domains: list[dict[str, Any]]) -> list[dict
                     "alleged — do not bury platform affordance detail only in Bundle text."
                 ),
                 "recipes": ["docs/recipes/cac-sextortion-coercion.md"],
+            },
+        ])
+    if "trafficking-recruitment" in domain_ids:
+        checks.extend([
+            {
+                "id": "per-victim-charge-bundles",
+                "priority": "critical",
+                "check": (
+                    "When indictments assign counts per Minor Victim 1–N, use a VICTIM_COUNTS "
+                    "fact table and Relates_To from each FederalCharge to the victim role and "
+                    "conduct node (CommercialSexualExploitation, CSAMIncident, enticement). "
+                    "Do not use TraffickingRing for solo-operator § 1591 cases."
+                ),
+                "recipes": [
+                    "docs/recipes/cac-trafficking-recruitment-network.md",
+                    "docs/recipes/cac-federal-prosecution-relationships.md",
+                ],
+            },
+            {
+                "id": "trafficking-conduct-charge-bridge",
+                "priority": "high",
+                "check": (
+                    "Link § 1591 FederalCharge nodes to CommercialSexualExploitation conduct "
+                    "and DigitalToPhysicalBridge (Grindr/messaging → in-person). Model "
+                    "VictimTransportation when rideshare/taxi/hotel transport is alleged."
+                ),
+                "recipes": ["docs/recipes/cac-trafficking-recruitment-network.md"],
+            },
+            {
+                "id": "stacked-statute-per-encounter",
+                "priority": "high",
+                "check": (
+                    "When one encounter supports production (§ 2251), trafficking (§ 1591), "
+                    "enticement (§ 2422), and distribution/receipt (§ 2252), link all applicable "
+                    "FederalCharge nodes to the same exploitation conduct node — not isolated charges."
+                ),
+                "recipes": [
+                    "docs/recipes/cac-trafficking-recruitment-network.md",
+                    "docs/recipes/cac-production-case.md",
+                ],
+            },
+        ])
+    if "federal-trial-proceedings" in domain_ids:
+        checks.extend([
+            {
+                "id": "superseding-indictment-chain",
+                "priority": "critical",
+                "check": (
+                    "Link original indictment to superseding instrument via supersededBy or "
+                    "Relates_To. Point FederalProsecution at the current superseding indictment. "
+                    "Record filing dates and ECF document numbers."
+                ),
+                "recipes": [
+                    "docs/recipes/cac-federal-trial-proceedings.md",
+                    "docs/recipes/cac-federal-prosecution-relationships.md",
+                ],
+            },
+            {
+                "id": "trial-brief-anticipated-evidence",
+                "priority": "high",
+                "check": (
+                    "When a government trial brief describes per-victim anticipated testimony "
+                    "and exhibits, link brief sections to victim roles, FederalCharge nodes, "
+                    "and ObservableObject exhibit devices (e.g., 1B10). Mark as ALLEGED."
+                ),
+                "recipes": [
+                    "docs/recipes/cac-federal-trial-proceedings.md",
+                    "docs/recipes/cac-csam-forensic-provenance.md",
+                ],
+            },
+            {
+                "id": "docket-procedural-milestones",
+                "priority": "medium",
+                "check": (
+                    "Extract competency hearings, detention orders, Speedy Trial Act exclusions, "
+                    "and trial date settings as dated InvestigativeAction or Event nodes — not "
+                    "only unstructured docket text on the Bundle."
+                ),
+                "recipes": ["docs/recipes/cac-federal-trial-proceedings.md"],
             },
         ])
     if "production-case" in domain_ids and "federal-prosecution-relationships" not in domain_ids:

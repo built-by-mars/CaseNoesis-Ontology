@@ -75,6 +75,10 @@ validate_graph("sentencing-outcome.jsonld", extensions=["cac"])
 
 For indictments and criminal complaints with **numbered federal counts** — single or multi-defendant, single or **multi-district parallel prosecution**, enterprise or production/possession cases — see [cac-federal-prosecution-relationships.md](cac-federal-prosecution-relationships.md). That recipe covers relationship edges agents often omit: per-defendant `chargedWith`, indictment→charge links, prosecution→indictment bridges, multi-district charge→court assignment, forfeiture→device linkage, and enterprise-specific relator participants.
 
+For **superseding indictments**, PACER docket exports, competency proceedings, and **government trial briefs**, see [cac-federal-trial-proceedings.md](cac-federal-trial-proceedings.md).
+
+For **§ 1591 child sex trafficking** with per-victim count bundles (solo operator or ring), see [cac-trafficking-recruitment-network.md](cac-trafficking-recruitment-network.md).
+
 ## Related recipes
 
 - [cac-federal-prosecution-relationships.md](cac-federal-prosecution-relationships.md)

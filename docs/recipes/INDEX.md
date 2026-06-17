@@ -59,10 +59,11 @@ Requires `CASE_UCO_EXTENSIONS=cac`. Use `route_cac_content` via the MCP server t
 
 | Recipe | File | Description |
 |---|---|---|
-| Child Sex Trafficking and Recruitment Networks | [cac-trafficking-recruitment-network.md](cac-trafficking-recruitment-network.md) | Trafficking enterprises, recruitment networks, pretext approaches, digital-to-physical bridges |
+| Child Sex Trafficking and Recruitment Networks | [cac-trafficking-recruitment-network.md](cac-trafficking-recruitment-network.md) | Solo-operator § 1591, trafficking rings, Grindr bridges, per-victim charge bundles |
 | CSAM Forensic Provenance | [cac-csam-forensic-provenance.md](cac-csam-forensic-provenance.md) | Acquisition, custody, hashing, correlation, victim identification |
 | CSAM Production Cases | [cac-production-case.md](cac-production-case.md) | Hands-on abuse, offender-produced media, production environments |
 | Federal Prosecution Relationships | [cac-federal-prosecution-relationships.md](cac-federal-prosecution-relationships.md) | Federal indictment relationship wiring: defendant–counts, multi-district, forfeiture, enterprise |
+| Federal Trial Proceedings | [cac-federal-trial-proceedings.md](cac-federal-trial-proceedings.md) | Superseding indictments, PACER docket lifecycle, trial briefs, anticipated evidence |
 | Hotline Intake and Referral Lifecycle | [cac-hotline-intake-lifecycle.md](cac-hotline-intake-lifecycle.md) | Hotline intake, triage, referral, investigation escalation |
 | ICAC Search Warrant Arrest | [cac-icac-search-warrant-arrest.md](cac-icac-search-warrant-arrest.md) | Routine warrant execution, custody without incident, booking (Maryland/ICAC press releases) |
 | International Coordination | [cac-international-coordination.md](cac-international-coordination.md) | Cross-border operations, Europol/Interpol, evidence sharing |

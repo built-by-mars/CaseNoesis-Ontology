@@ -1,0 +1,536 @@
+{
+  "@context": {
+    "kb": "https://example.org/cac/hawaii-riley-trafficking-2023/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "cacontology": "https://cacontology.projectvic.org#",
+    "cac-core": "https://cacontology.projectvic.org/core#",
+    "cacontology-trafficking": "https://cacontology.projectvic.org/trafficking#",
+    "cacontology-legal-outcomes": "https://cacontology.projectvic.org/legal-outcomes#",
+    "cacontology-usa-federal-law": "https://cacontology.projectvic.org/usa-federal-law#",
+    "cacontology-asset-forfeiture": "https://cacontology.projectvic.org/asset-forfeiture#",
+    "cacontology-production": "https://cacontology.projectvic.org/production#",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-victim": "https://ontology.unifiedcyberontology.org/uco/victim/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "kb:bundle-1",
+      "@type": "uco-core:Bundle",
+      "uco-core:name": "U.S. v. Riley — 1:23-cr-00071-JMS (reference exemplar)",
+      "uco-core:description": "ALLEGED. Reference graph from superseding indictment Doc 70 and government trial brief Doc 188. District of Hawaii.",
+      "uco-core:object": [
+        {"@id": "kb:investigation-1"},
+        {"@id": "kb:defendant-riley"},
+        {"@id": "kb:indictment-superseding"},
+        {"@id": "kb:prosecution-1"}
+      ]
+    },
+    {
+      "@id": "kb:investigation-1",
+      "@type": [
+        "case-investigation:Investigation",
+        "cacontology:CACInvestigation",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "U.S. v. Darren Patrick Riley — 1:23-cr-00071-JMS",
+      "case-investigation:focus": [
+        "CSAM Production",
+        "Sex Trafficking of Minors",
+        "Federal Prosecution"
+      ],
+      "cacontology:investigationStatus": "prosecution_phase"
+    },
+    {
+      "@id": "kb:court-hi",
+      "@type": [
+        "uco-location:Location",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "U.S. District Court, District of Hawaii"
+    },
+    {
+      "@id": "kb:prosecution-1",
+      "@type": [
+        "cacontology-usa-federal-law:FederalProsecution",
+        "cacontology-usa-federal-law:PreTrialPhase",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Federal prosecution — 1:23-cr-00071-JMS",
+      "cacontology-usa-federal-law:prosecutionStatus": "active",
+      "cacontology-usa-federal-law:prosecutedBy": {
+        "@id": "kb:prosecutor-usao-hi"
+      }
+    },
+    {
+      "@id": "kb:prosecutor-usao-hi",
+      "@type": "cacontology-usa-federal-law:FederalProsecutorRole",
+      "uco-core:name": "U.S. Attorney's Office, District of Hawaii"
+    },
+    {
+      "@id": "kb:indictment-original",
+      "@type": [
+        "cacontology:MultiDefendantIndictment",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Original indictment — Doc 1",
+      "uco-core:description": "Filed 2023-08-24. Counts 1-2 (18 U.S.C. 2251, 2252).",
+      "cacontology:indictmentCounts": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "2"
+      }
+    },
+    {
+      "@id": "kb:indictment-superseding",
+      "@type": [
+        "cacontology:MultiDefendantIndictment",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Superseding indictment — Doc 70",
+      "uco-core:description": "Filed 2024-07-25. Twelve counts: 2251, 1591, 2422, 2252.",
+      "cacontology:indictmentCounts": {
+        "@type": "xsd:nonNegativeInteger",
+        "@value": "12"
+      }
+    },
+    {
+      "@id": "kb:trial-brief-188",
+      "@type": [
+        "uco-observable:ObservableObject",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Government trial brief — Doc 188",
+      "uco-core:description": "Filed 2026-02-20. Anticipated per-victim testimony and CSAM exhibit presentation plan.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "kb:trial-brief-188-filefacet",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "Doc 188 — Government Trial Brief",
+          "uco-observable:extension": "pdf"
+        }
+      ]
+    },
+    {
+      "@id": "kb:defendant-riley",
+      "@type": [
+        "uco-identity:Person",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Darren Patrick Riley",
+      "cacontology-legal-outcomes:chargedWith": [
+        {"@id": "kb:charge-1"},
+        {"@id": "kb:charge-2"},
+        {"@id": "kb:charge-3"},
+        {"@id": "kb:charge-4"},
+        {"@id": "kb:charge-5"},
+        {"@id": "kb:charge-6"},
+        {"@id": "kb:charge-7"},
+        {"@id": "kb:charge-8"},
+        {"@id": "kb:charge-9"},
+        {"@id": "kb:charge-10"},
+        {"@id": "kb:charge-11"},
+        {"@id": "kb:charge-12"}
+      ]
+    },
+    {
+      "@id": "kb:subject-riley",
+      "@type": [
+        "case-investigation:Subject",
+        "cacontology:OffenderRole",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Darren Patrick Riley — principal subject",
+      "cacontology:hasRoleBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2019-08-01T00:00:00Z"
+      }
+    },
+    {
+      "@id": "kb:mv1",
+      "@type": [
+        "uco-victim:Victim",
+        "cacontology-trafficking:MinorTraffickingVictimRole",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Minor Victim 1",
+      "uco-core:description": "Counts 1, 2, 12. Embassy Suites Kapolei exploitation alleged."
+    },
+    {
+      "@id": "kb:mv2",
+      "@type": [
+        "uco-victim:Victim",
+        "cacontology-trafficking:MinorTraffickingVictimRole",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Minor Victim 2",
+      "uco-core:description": "Counts 3, 4, 5. Grindr contact; Waikiki apartment; rideshare transport alleged."
+    },
+    {
+      "@id": "kb:mv3",
+      "@type": [
+        "uco-victim:Victim",
+        "cacontology-trafficking:MinorTraffickingVictimRole",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Minor Victim 3",
+      "uco-core:description": "Counts 6, 7, 8."
+    },
+    {
+      "@id": "kb:mv4",
+      "@type": [
+        "uco-victim:Victim",
+        "cacontology-trafficking:MinorTraffickingVictimRole",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Minor Victim 4",
+      "uco-core:description": "Counts 9, 10."
+    },
+    {
+      "@id": "kb:mv5",
+      "@type": [
+        "uco-victim:Victim",
+        "cacontology-trafficking:MinorTraffickingVictimRole",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Minor Victim 5",
+      "uco-core:description": "Count 11."
+    },
+    {
+      "@id": "kb:charge-1",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 1 — Production of CSAM (MV1)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "1"},
+      "uco-core:description": "18 U.S.C. 2251(a), (e)."
+    },
+    {
+      "@id": "kb:charge-2",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 2 — Production of CSAM (MV1)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "2"},
+      "uco-core:description": "18 U.S.C. 2251(a), (e)."
+    },
+    {
+      "@id": "kb:charge-3",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 3 — Production of CSAM (MV2)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "3"},
+      "uco-core:description": "18 U.S.C. 2251(a), (e)."
+    },
+    {
+      "@id": "kb:charge-4",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 4 — Sex trafficking a minor (MV2)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "4"},
+      "uco-core:description": "18 U.S.C. 1591(a)(1), (b)(2)."
+    },
+    {
+      "@id": "kb:charge-5",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 5 — Distribution of CSAM (MV2)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "5"},
+      "uco-core:description": "18 U.S.C. 2252(a)(2), (b)(1)."
+    },
+    {
+      "@id": "kb:charge-6",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 6 — Sex trafficking a minor (MV3)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "6"},
+      "uco-core:description": "18 U.S.C. 1591(a)(1), (b)(2)."
+    },
+    {
+      "@id": "kb:charge-7",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 7 — Enticement of a minor (MV3)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "7"},
+      "uco-core:description": "18 U.S.C. 2422(b)."
+    },
+    {
+      "@id": "kb:charge-8",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 8 — Receipt of CSAM (MV3)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "8"},
+      "uco-core:description": "18 U.S.C. 2252(a)(2)."
+    },
+    {
+      "@id": "kb:charge-9",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 9 — Sex trafficking a minor (MV4)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "9"},
+      "uco-core:description": "18 U.S.C. 1591(a)(1), (b)(2)."
+    },
+    {
+      "@id": "kb:charge-10",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 10 — Enticement of a minor (MV4)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "10"},
+      "uco-core:description": "18 U.S.C. 2422(b)."
+    },
+    {
+      "@id": "kb:charge-11",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 11 — Sex trafficking a minor (MV5)",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "11"},
+      "uco-core:description": "18 U.S.C. 1591(a)(1), (b)(2)."
+    },
+    {
+      "@id": "kb:charge-12",
+      "@type": [
+        "cacontology-legal-outcomes:FederalCharge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Count 12 — Possession of CSAM",
+      "cacontology-legal-outcomes:chargeCount": {"@type": "xsd:nonNegativeInteger", "@value": "12"},
+      "uco-core:description": "18 U.S.C. 2252(a)(4)(B), (b)(2). Evidence item 1B10."
+    },
+    {
+      "@id": "kb:cse-mv2",
+      "@type": [
+        "cacontology-trafficking:CommercialSexualExploitation",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged commercial sexual exploitation — MV2",
+      "uco-core:description": "August 2019 Waikiki apartment encounter; commercial inducements and transport alleged."
+    },
+    {
+      "@id": "kb:csam-mv2",
+      "@type": [
+        "cacontology:CSAMIncident",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged CSAM production — MV2",
+      "uco-core:description": "22-second video from August 2019 encounter.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "kb:csam-mv2-artifact-facet",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "mv2-production-video-22s",
+          "uco-observable:extension": "mp4"
+        }
+      ]
+    },
+    {
+      "@id": "kb:bridge-mv2-grindr",
+      "@type": [
+        "cacontology-trafficking:DigitalToPhysicalBridge",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Grindr to in-person — MV2",
+      "uco-core:description": "Online contact on Grindr leading to in-person sexual encounters."
+    },
+    {
+      "@id": "kb:transport-mv2",
+      "@type": [
+        "cacontology-trafficking:VictimTransportation",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged rideshare transport — MV2",
+      "cacontology-trafficking:transportationMethod": "taxi/rideshare"
+    },
+    {
+      "@id": "kb:platform-grindr",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Grindr",
+      "uco-core:description": "Dating/social platform used to contact minor victims."
+    },
+    {
+      "@id": "kb:location-waikiki-apt",
+      "@type": [
+        "uco-location:Location",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Defendant Waikiki apartment",
+      "uco-core:description": "District of Hawaii."
+    },
+    {
+      "@id": "kb:location-embassy-suites",
+      "@type": [
+        "uco-location:Location",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Embassy Suites Kapolei",
+      "uco-core:description": "Hotel location alleged for MV1 exploitation."
+    },
+    {
+      "@id": "kb:device-1b10",
+      "@type": [
+        "uco-observable:ObservableObject",
+        "cacontology-production:MobileRecordingDevice"
+      ],
+      "uco-core:name": "Evidence item 1B10",
+      "uco-core:description": "Cellphone seized; CSAM possession count 12."
+    },
+    {
+      "@id": "kb:forfeiture-csam",
+      "@type": "cacontology-asset-forfeiture:AssetForfeitureAction",
+      "uco-core:name": "Forfeiture notice — 18 U.S.C. 2253",
+      "uco-core:description": "Counts 1-3, 5, 8, 12.",
+      "cacontology-asset-forfeiture:targetedAsset": {"@id": "kb:device-1b10"},
+      "cacontology-asset-forfeiture:relatedCriminalCharges": [
+        {"@id": "kb:charge-12"}
+      ]
+    },
+    {
+      "@id": "kb:competency-2024-06-21",
+      "@type": "uco-core:UcoObject",
+      "uco-core:name": "Competency hearing resolved",
+      "uco-core:description": "2024-06-21 competency hearing; arraignment on superseding indictment."
+    },
+    {
+      "@id": "kb:rel-supersede",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:indictment-original"},
+      "uco-core:target": {"@id": "kb:indictment-superseding"},
+      "uco-core:kindOfRelationship": "supersededBy",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-prosecution-indictment",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:prosecution-1"},
+      "uco-core:target": {"@id": "kb:indictment-superseding"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-inv-prosecution",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:investigation-1"},
+      "uco-core:target": {"@id": "kb:prosecution-1"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-inv-court",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:investigation-1"},
+      "uco-core:target": {"@id": "kb:court-hi"},
+      "uco-core:kindOfRelationship": "located_at",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-indictment-charges",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:indictment-superseding"},
+      "uco-core:target": {"@id": "kb:charge-4"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge4-mv2",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-4"},
+      "uco-core:target": {"@id": "kb:mv2"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge4-cse",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-4"},
+      "uco-core:target": {"@id": "kb:cse-mv2"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge3-csam",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-3"},
+      "uco-core:target": {"@id": "kb:csam-mv2"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge3-mv2",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-3"},
+      "uco-core:target": {"@id": "kb:mv2"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-bridge-platform",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:bridge-mv2-grindr"},
+      "uco-core:target": {"@id": "kb:platform-grindr"},
+      "uco-core:kindOfRelationship": "used_platform",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-cse-location",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:cse-mv2"},
+      "uco-core:target": {"@id": "kb:location-waikiki-apt"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-transport-cse",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:transport-mv2"},
+      "uco-core:target": {"@id": "kb:cse-mv2"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-brief-mv2",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:trial-brief-188"},
+      "uco-core:target": {"@id": "kb:mv2"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-subject-defendant",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:defendant-riley"},
+      "uco-core:target": {"@id": "kb:subject-riley"},
+      "uco-core:kindOfRelationship": "has_role",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-competency-defendant",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:competency-2024-06-21"},
+      "uco-core:target": {"@id": "kb:defendant-riley"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    }
+  ]
+}

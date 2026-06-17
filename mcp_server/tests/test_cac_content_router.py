@@ -284,3 +284,36 @@ def test_route_sextortion_federal_includes_stacking_checklist() -> None:
     assert "financial-charge-stacking" in checklist_ids
     assert "transnational-extradition-chain" in checklist_ids
     assert "platform-affordance-abuse" in checklist_ids
+
+
+HAWAII_TRAFFICKING_NARRATIVE = (
+    "U.S. v. Riley in U.S. District Court, District of Hawaii, case "
+    "1:23-cr-00071-JMS. Superseding indictment filed July 2024 with twelve "
+    "federal counts: sex trafficking a minor under 18 U.S.C. 1591, production "
+    "of child pornography, coercion and enticement under 2422(b), and possession "
+    "of CSAM. Five minor victims. Defendant met victims on Grindr, offered money "
+    "and hotel rooms, arranged Uber and taxi transportation. Government trial brief "
+    "Doc 188 describes anticipated testimony per minor victim. PACER docket shows "
+    "competency hearing under 4241 and jury trial scheduled."
+)
+
+
+def test_route_hawaii_trafficking_includes_victim_bundle_checklist() -> None:
+    result = route_cac_content(
+        project_root=PROJECT_ROOT,
+        content_text=HAWAII_TRAFFICKING_NARRATIVE,
+        include_recipe_content=False,
+        max_recipes=10,
+    )
+    assert result["ok"] is True
+    domain_ids = {item["domain_id"] for item in result["matched_domains"]}
+    assert "trafficking-recruitment" in domain_ids
+    assert "federal-prosecution-relationships" in domain_ids
+    assert "federal-trial-proceedings" in domain_ids
+    checklist_ids = {item["id"] for item in result["modeling_checklist"]}
+    assert "per-victim-charge-bundles" in checklist_ids
+    assert "trafficking-conduct-charge-bridge" in checklist_ids
+    assert "superseding-indictment-chain" in checklist_ids
+    assert "trial-brief-anticipated-evidence" in checklist_ids
+    recipe_files = {item["recipe_file"] for item in result["matched_domains"]}
+    assert "docs/recipes/cac-federal-trial-proceedings.md" in recipe_files

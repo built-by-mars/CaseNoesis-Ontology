@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.13.3] - 2026-06-17
+
+### Added
+
+- Federal trial proceedings recipe (`docs/recipes/cac-federal-trial-proceedings.md`): superseding indictment chains, PACER docket milestone events, competency/detention proceedings, government trial briefs, and anticipated per-victim evidence wiring.
+- Solo-operator § 1591 federal child sex trafficking guidance in `cac-trafficking-recruitment-network.md`: per-victim charge bundles (`VICTIM_COUNTS`), `DigitalToPhysicalBridge` (Grindr), `VictimTransportation`, stacked statute-per-encounter patterns, and distinction from multi-trafficker ring cases.
+- Validated reference exemplar `examples/hawaii-riley-trafficking-2023-example.jsonld` (U.S. v. Riley, D. Hawaii `1:23-cr-00071-JMS`): 12-count superseding indictment, five minor victims, prosecution relationship edges, and MV2 conduct subgraph.
+- MCP `federal-trial-proceedings` domain family and six new checklist items: `per-victim-charge-bundles`, `trafficking-conduct-charge-bridge`, `stacked-statute-per-encounter`, `superseding-indictment-chain`, `trial-brief-anticipated-evidence`, and `docket-procedural-milestones`.
+- CAC content router test for Hawaii solo-operator trafficking narrative (`mcp_server/tests/test_cac_content_router.py`).
+
+### Changed
+
+- `cac-federal-prosecution-relationships.md` extended with `VICTIM_COUNTS` fact-file template, superseding indictment checklist rows, and grouped forfeiture notice guidance.
+- `cac-trafficking-recruitment-network.md` keyword routing expanded for § 1591, Grindr, commercial sex act, rideshare transport, and minor victim bundles; related recipes now include federal prosecution and trial proceedings.
+- `cac-legal-sentencing-outcomes.md` cross-links federal trial proceedings and solo-operator trafficking recipes.
+- `docs/recipes/INDEX.md` catalogs 56 recipes (added Federal Trial Proceedings).
+
 ## [1.13.2] - 2026-06-16
 
 ### Added
