@@ -104,6 +104,27 @@ FederalCharge (Count 4)
 
 Use **`uco-action:object`** (not `uco-action:target`) for victim roles on UCO `Action`/`Crime` events. Put **`uco-action:startTime`** directly on the event node; reserve `uco-core:hasFacet` for artifact facets such as `FileFacet`.
 
+On **`GroomingSolicitation`**, also populate **`cacontology:participatesInEvent`** with subject + victim — CAC SHACL requires at least two participants on that class. Keep **`uco-action:performer`** / **`object`** as the primary action semantics; `participatesInEvent` satisfies shape validation.
+
+### MV2 encounter chain (precedes / part_of)
+
+When public documents describe online contact → transport → in-person exploitation → recording, chain events explicitly:
+
+```
+DigitalToPhysicalBridge (Grindr)
+  ├── uco-action:instrument ──▶ OnlineDatingPlatform
+  ├── precedes ──▶ VictimTransportation
+  └── precedes ──▶ CommercialSexualExploitation (encounter)
+
+VictimTransportation
+  └── precedes ──▶ CommercialSexualExploitation
+
+RecordingAction / CSAMIncident
+  └── part_of ──▶ CommercialSexualExploitation (same encounter)
+```
+
+Link **Count 12 (possession)** to the seized device **and** to production/receipt incidents whose material the indictment alleges was found on that device.
+
 Reference exemplar: [`examples/hawaii-riley-trafficking-2023-example.jsonld`](../../examples/hawaii-riley-trafficking-2023-example.jsonld).
 
 ### Per-victim charge bundle matrix
@@ -208,8 +229,11 @@ graph.write("trafficking-solo-operator.jsonld")
 | `uco-action:target` on UCO actions | Use canonical `uco-action:object` for victim roles |
 | `ActionReferences` inside `uco-core:hasFacet` | Put `uco-action:startTime` on the event; keep facets for artifacts |
 | Grooming enticement without participants | Add `cacontology:participatesInEvent` (subject + victim) on `GroomingSolicitation` |
-| Grindr as generic `ObservableObject` only | Type as `OnlineDatingPlatform` when using platform ontology |
-| Alleged PACER facts without source pointer | Add `ProvenanceRecord` on indictment / trial brief nodes |
+| Grindr as generic `ObservableObject` only | Type as `OnlineDatingPlatform`; set `uco-action:instrument` on bridge event |
+| Alleged PACER facts without source pointer | Add `ProvenanceRecord` on indictment / trial brief / seizure nodes |
+| MV2 bridge/transport disconnected from encounter | Chain with `precedes`; link production `part_of` exploitation |
+| Possession count linked to device only | Also link Count 12 to production/receipt CSAM incidents on the device |
+| Trial brief linked to one victim only | Link Doc 188 to prosecution and each anticipated victim (MV1–MV5) |
 
 ## Validation
 
