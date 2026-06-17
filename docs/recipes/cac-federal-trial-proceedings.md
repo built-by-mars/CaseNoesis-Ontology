@@ -197,8 +197,10 @@ graph.write("federal-trial-proceedings.jsonld")
 | Only superseding indictment, no supersession edge | Link original → superseding; record filing dates |
 | Trial brief facts only in Bundle description | Per-victim sections → victim roles + charge links |
 | Docket as unstructured text blob | Milestone `InvestigativeAction` / Event nodes with dates |
-| Competency proceedings omitted | Link competency events to defendant + pre-trial phase |
+| Competency proceedings omitted | Model as `cac-core:LegalEvent` with `uco-action:startTime`; link to prosecution phase |
 | Exhibit devices named in brief but not in graph | `ObservableObject` per device stem (`1B10`, etc.) |
+| Prosecution phase without temporal bounds | Add `cacontology-usa-federal-law:hasPhaseBeginPoint` on `FederalProsecution` / `PreTrialPhase` |
+| Source documents without assertion metadata | Add `case-investigation:ProvenanceRecord` on indictment and trial brief nodes |
 
 ## Validation
 

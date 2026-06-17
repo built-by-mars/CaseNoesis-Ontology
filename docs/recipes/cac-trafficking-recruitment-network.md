@@ -70,6 +70,41 @@ Modeling rules:
 5. Model **rideshare/taxi transport** as `VictimTransportation` with origin/destination `Location` nodes when the trial brief or indictment describes arranged transport.
 6. Document **substance facilitation** (drugs provided during encounters) in conduct `uco-core:description` when alleged — link to the same exploitation event.
 7. For **multiple victims across years**, use separate exploitation nodes with temporal bounds rather than one aggregate CSAM incident.
+8. Model **alleged criminal conduct as explicit events** (`CommercialSexualExploitation`, `RecordingAction`, `GroomingSolicitation`, `VictimTransportation`) with `uco-action:performer`, `uco-action:object`, `uco-action:instrument`, and `uco-action:location` — not only descriptive nodes linked by generic `Relates_To`.
+9. Type the solo operator as **`PrimaryTraffickerRole`** on the subject role and link **`controlsVictim`** to each `MinorTraffickingVictimRole` when indictment structure supports it.
+10. Create **parallel incident nodes for every minor victim** in the indictment, even when public documents provide less detail for some victims — this keeps per-victim SPARQL uniform.
+11. Add lightweight **`case-investigation:ProvenanceRecord`** nodes on source instruments (indictment, trial brief) when facts are **ALLEGED** from public docket documents.
+
+### Model conduct as explicit events (preferred over descriptive stubs)
+
+CASE/UCO/CAC favor queryable **events and actions** over summary nodes. For each victim with counts in the indictment:
+
+```
+PrimaryTraffickerRole (subject)
+  ├── controlsVictim ──▶ MinorTraffickingVictimRole (MV2)
+  └── participatesInEvent ──▶ CommercialSexualExploitation (MV2)
+
+CommercialSexualExploitation (MV2)
+  ├── uco-action:performer ──▶ subject role
+  ├── uco-action:object ──▶ MV2 victim role
+  ├── uco-action:location ──▶ Location (Waikiki apartment)
+  └── uco-action:startTime ──▶ 2019-08-01 (when known)
+
+RecordingAction / CSAMIncident (MV2 production)
+  ├── uco-action:performer / object / instrument / location (same encounter)
+  └── uco-core:hasFacet ──▶ FileFacet (artifact)
+
+GroomingSolicitation (enticement counts)
+  ├── uco-action:performer / object
+  └── cacontology:participatesInEvent ──▶ subject + victim (SHACL min 2)
+
+FederalCharge (Count 4)
+  └── Relates_To ──▶ CommercialSexualExploitation   # charge→conduct bridge
+```
+
+Use **`uco-action:object`** (not `uco-action:target`) for victim roles on UCO `Action`/`Crime` events. Put **`uco-action:startTime`** directly on the event node; reserve `uco-core:hasFacet` for artifact facets such as `FileFacet`.
+
+Reference exemplar: [`examples/hawaii-riley-trafficking-2023-example.jsonld`](../../examples/hawaii-riley-trafficking-2023-example.jsonld).
 
 ### Per-victim charge bundle matrix
 
@@ -85,8 +120,9 @@ VICTIM_COUNTS:
 ```
 
 Each row drives:
-- `Relates_To` from each `FederalCharge` → victim role node
-- `Relates_To` from each charge → conduct type (`CSAMIncident`, `CommercialSexualExploitation`, enticement event)
+- `Relates_To` from each `FederalCharge` → conduct event (`CSAMIncident`, `CommercialSexualExploitation`, `GroomingSolicitation`)
+- `uco-action:performer` / `uco-action:object` on each conduct event (replaces charge→victim `Relates_To` for query paths)
+- `controlsVictim` from `PrimaryTraffickerRole` → each victim role
 - Trial brief sections → same victim IRIs for anticipated testimony
 
 ### Stacked statutes per encounter
@@ -95,9 +131,11 @@ When one encounter supports multiple counts (production video + trafficking + di
 
 ```
 CommercialSexualExploitation (MV2 — Aug 2019, Waikiki apartment)
+  ├── uco-action:performer ──▶ subject role
+  ├── uco-action:object ──▶ MV2
   ├── Relates_To ◀── FederalCharge Count 4 (§ 1591)
-  ├── Relates_To ◀── FederalCharge Count 3 (§ 2251 production)
-  └── Relates_To ◀── FederalCharge Count 5 (§ 2252 distribution)
+  ├── Relates_To ◀── FederalCharge Count 3 (§ 2251 production via linked CSAMIncident)
+  └── Relates_To ◀── FederalCharge Count 5 (§ 2252 distribution via same CSAMIncident)
 ```
 
 ## Modeling rules (network cases)
@@ -125,6 +163,16 @@ victim2 = graph.add_node("kb:mv2", "cacontology-trafficking:MinorTraffickingVict
 
 exploitation = graph.add_node("kb:cse-mv2", "cacontology-trafficking:CommercialSexualExploitation", {
     "uco-core:name": "Alleged commercial sexual exploitation — MV2",
+    "uco-action:performer": {"@id": "kb:subject-riley"},
+    "uco-action:object": {"@id": "kb:mv2"},
+})
+
+subject = graph.add_node("kb:subject-riley", [
+    "case-investigation:Subject",
+    "cacontology-trafficking:PrimaryTraffickerRole",
+], {
+    "uco-core:name": "Defendant-1 — principal subject",
+    "cacontology-trafficking:controlsVictim": [{"@id": "kb:mv2"}],
 })
 
 charge_trafficking = graph.add_node("kb:charge-4", "cacontology-legal-outcomes:FederalCharge", {
@@ -138,7 +186,6 @@ defendant = graph.add_node("kb:defendant-1", "uco-identity:Person", {
 })
 
 for rel_id, src, tgt in [
-    ("rel-charge-victim", "kb:charge-4", "kb:mv2"),
     ("rel-charge-conduct", "kb:charge-4", "kb:cse-mv2"),
 ]:
     graph.add_node(f"kb:{rel_id}", "uco-core:Relationship", {
@@ -150,6 +197,19 @@ for rel_id, src, tgt in [
 
 graph.write("trafficking-solo-operator.jsonld")
 ```
+
+## Anti-patterns
+
+| Anti-pattern | Fix |
+|---|---|
+| Conduct only in victim `uco-core:description` | Add per-victim `CommercialSexualExploitation` / `CSAMIncident` event nodes |
+| MV2 rich subgraph, other victims description-only | Parallel lightweight incident nodes for every minor victim |
+| Generic `Relates_To` charge→victim only | Add `uco-action:performer`/`object` on conduct; use `controlsVictim` on trafficker role |
+| `uco-action:target` on UCO actions | Use canonical `uco-action:object` for victim roles |
+| `ActionReferences` inside `uco-core:hasFacet` | Put `uco-action:startTime` on the event; keep facets for artifacts |
+| Grooming enticement without participants | Add `cacontology:participatesInEvent` (subject + victim) on `GroomingSolicitation` |
+| Grindr as generic `ObservableObject` only | Type as `OnlineDatingPlatform` when using platform ontology |
+| Alleged PACER facts without source pointer | Add `ProvenanceRecord` on indictment / trial brief nodes |
 
 ## Validation
 

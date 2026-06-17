@@ -9,6 +9,7 @@
     "cacontology-usa-federal-law": "https://cacontology.projectvic.org/usa-federal-law#",
     "cacontology-asset-forfeiture": "https://cacontology.projectvic.org/asset-forfeiture#",
     "cacontology-production": "https://cacontology.projectvic.org/production#",
+    "cacontology-platforms": "https://cacontology.projectvic.org/platforms#",
     "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
     "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
     "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
@@ -64,6 +65,10 @@
       "cacontology-usa-federal-law:prosecutionStatus": "active",
       "cacontology-usa-federal-law:prosecutedBy": {
         "@id": "kb:prosecutor-usao-hi"
+      },
+      "cacontology-usa-federal-law:hasPhaseBeginPoint": {
+        "@type": "xsd:dateTimeStamp",
+        "@value": "2023-08-24T00:00:00Z"
       }
     },
     {
@@ -98,6 +103,17 @@
       }
     },
     {
+      "@id": "kb:prov-superseding-indictment",
+      "@type": [
+        "case-investigation:ProvenanceRecord",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Source assertion: Superseding indictment Doc 70",
+      "uco-core:description": "ALLEGED. Government charging instrument from PACER docket 1:23-cr-00071-JMS.",
+      "case-investigation:exhibitNumber": "Doc 70",
+      "uco-core:object": {"@id": "kb:indictment-superseding"}
+    },
+    {
       "@id": "kb:trial-brief-188",
       "@type": [
         "uco-observable:ObservableObject",
@@ -113,6 +129,17 @@
           "uco-observable:extension": "pdf"
         }
       ]
+    },
+    {
+      "@id": "kb:prov-trial-brief-188",
+      "@type": [
+        "case-investigation:ProvenanceRecord",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Source assertion: Government trial brief Doc 188",
+      "uco-core:description": "ALLEGED. Government anticipated-evidence narrative from PACER docket 1:23-cr-00071-JMS.",
+      "case-investigation:exhibitNumber": "Doc 188",
+      "uco-core:object": {"@id": "kb:trial-brief-188"}
     },
     {
       "@id": "kb:defendant-riley",
@@ -141,13 +168,35 @@
       "@type": [
         "case-investigation:Subject",
         "cacontology:OffenderRole",
+        "cacontology-trafficking:PrimaryTraffickerRole",
         "uco-core:UcoObject"
       ],
       "uco-core:name": "Darren Patrick Riley — principal subject",
       "cacontology:hasRoleBeginPoint": {
         "@type": "xsd:dateTimeStamp",
         "@value": "2019-08-01T00:00:00Z"
-      }
+      },
+      "cacontology-trafficking:controlsVictim": [
+        {"@id": "kb:mv1"},
+        {"@id": "kb:mv2"},
+        {"@id": "kb:mv3"},
+        {"@id": "kb:mv4"},
+        {"@id": "kb:mv5"}
+      ],
+      "cacontology:participatesInEvent": [
+        {"@id": "kb:cse-mv1"},
+        {"@id": "kb:csam-mv1"},
+        {"@id": "kb:cse-mv2"},
+        {"@id": "kb:csam-mv2"},
+        {"@id": "kb:bridge-mv2-grindr"},
+        {"@id": "kb:transport-mv2"},
+        {"@id": "kb:cse-mv3"},
+        {"@id": "kb:enticement-mv3"},
+        {"@id": "kb:csam-receipt-mv3"},
+        {"@id": "kb:cse-mv4"},
+        {"@id": "kb:enticement-mv4"},
+        {"@id": "kb:cse-mv5"}
+      ]
     },
     {
       "@id": "kb:mv1",
@@ -320,22 +369,72 @@
       "uco-core:description": "18 U.S.C. 2252(a)(4)(B), (b)(2). Evidence item 1B10."
     },
     {
+      "@id": "kb:cse-mv1",
+      "@type": [
+        "cacontology-trafficking:CommercialSexualExploitation",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged commercial sexual exploitation — MV1",
+      "uco-core:description": "Embassy Suites Kapolei encounter; commercial inducements alleged.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv1"},
+      "uco-action:location": {"@id": "kb:location-embassy-suites"}
+    },
+    {
+      "@id": "kb:csam-mv1",
+      "@type": [
+        "cacontology:CSAMIncident",
+        "cacontology-production:RecordingAction",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged CSAM production — MV1",
+      "uco-core:description": "Production counts 1 and 2 at Embassy Suites Kapolei.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv1"},
+      "uco-action:location": {"@id": "kb:location-embassy-suites"},
+      "uco-core:hasFacet": [
+        {
+          "@id": "kb:csam-mv1-artifact-facet",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "mv1-production-material",
+          "uco-observable:extension": "mp4"
+        }
+      ]
+    },
+    {
       "@id": "kb:cse-mv2",
       "@type": [
         "cacontology-trafficking:CommercialSexualExploitation",
         "uco-core:UcoObject"
       ],
       "uco-core:name": "Alleged commercial sexual exploitation — MV2",
-      "uco-core:description": "August 2019 Waikiki apartment encounter; commercial inducements and transport alleged."
+      "uco-core:description": "August 2019 Waikiki apartment encounter; commercial inducements and transport alleged.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv2"},
+      "uco-action:location": {"@id": "kb:location-waikiki-apt"},
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2019-08-01T00:00:00Z"
+      }
     },
     {
       "@id": "kb:csam-mv2",
       "@type": [
         "cacontology:CSAMIncident",
+        "cacontology-production:RecordingAction",
+        "cacontology-production:LiveProductionEvent",
         "uco-core:UcoObject"
       ],
       "uco-core:name": "Alleged CSAM production — MV2",
-      "uco-core:description": "22-second video from August 2019 encounter.",
+      "uco-core:description": "22-second video from August 2019 encounter; distribution count 5 references same material.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv2"},
+      "uco-action:instrument": {"@id": "kb:device-1b10"},
+      "uco-action:location": {"@id": "kb:location-waikiki-apt"},
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2019-08-01T00:00:00Z"
+      },
       "uco-core:hasFacet": [
         {
           "@id": "kb:csam-mv2-artifact-facet",
@@ -346,13 +445,97 @@
       ]
     },
     {
+      "@id": "kb:cse-mv3",
+      "@type": [
+        "cacontology-trafficking:CommercialSexualExploitation",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged commercial sexual exploitation — MV3",
+      "uco-core:description": "Count 6 sex trafficking conduct alleged.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv3"}
+    },
+    {
+      "@id": "kb:enticement-mv3",
+      "@type": [
+        "cacontology:GroomingSolicitation",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged online enticement — MV3",
+      "uco-core:description": "Count 7 — 18 U.S.C. 2422(b) enticement alleged.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv3"},
+      "cacontology:participatesInEvent": [
+        {"@id": "kb:subject-riley"},
+        {"@id": "kb:mv3"}
+      ]
+    },
+    {
+      "@id": "kb:csam-receipt-mv3",
+      "@type": [
+        "cacontology:CSAMIncident",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged CSAM receipt — MV3",
+      "uco-core:description": "Count 8 — receipt of CSAM alleged.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv3"},
+      "uco-core:hasFacet": [
+        {
+          "@id": "kb:csam-receipt-mv3-artifact-facet",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "mv3-received-csam",
+          "uco-observable:extension": "unknown"
+        }
+      ]
+    },
+    {
+      "@id": "kb:cse-mv4",
+      "@type": [
+        "cacontology-trafficking:CommercialSexualExploitation",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged commercial sexual exploitation — MV4",
+      "uco-core:description": "Count 9 sex trafficking conduct alleged.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv4"}
+    },
+    {
+      "@id": "kb:enticement-mv4",
+      "@type": [
+        "cacontology:GroomingSolicitation",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged online enticement — MV4",
+      "uco-core:description": "Count 10 — 18 U.S.C. 2422(b) enticement alleged.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv4"},
+      "cacontology:participatesInEvent": [
+        {"@id": "kb:subject-riley"},
+        {"@id": "kb:mv4"}
+      ]
+    },
+    {
+      "@id": "kb:cse-mv5",
+      "@type": [
+        "cacontology-trafficking:CommercialSexualExploitation",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Alleged commercial sexual exploitation — MV5",
+      "uco-core:description": "Count 11 sex trafficking conduct alleged.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv5"}
+    },
+    {
       "@id": "kb:bridge-mv2-grindr",
       "@type": [
         "cacontology-trafficking:DigitalToPhysicalBridge",
         "uco-core:UcoObject"
       ],
       "uco-core:name": "Grindr to in-person — MV2",
-      "uco-core:description": "Online contact on Grindr leading to in-person sexual encounters."
+      "uco-core:description": "Online contact on Grindr leading to in-person sexual encounters.",
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv2"}
     },
     {
       "@id": "kb:transport-mv2",
@@ -361,11 +544,19 @@
         "uco-core:UcoObject"
       ],
       "uco-core:name": "Alleged rideshare transport — MV2",
-      "cacontology-trafficking:transportationMethod": "taxi/rideshare"
+      "uco-core:description": "Arranged transport to Waikiki apartment for August 2019 encounter.",
+      "cacontology-trafficking:transportationMethod": "taxi/rideshare",
+      "cacontology-trafficking:destinationLocation": {"@id": "kb:location-waikiki-apt"},
+      "uco-action:performer": {"@id": "kb:subject-riley"},
+      "uco-action:object": {"@id": "kb:mv2"}
     },
     {
       "@id": "kb:platform-grindr",
-      "@type": "uco-observable:ObservableObject",
+      "@type": [
+        "cacontology-platforms:OnlineDatingPlatform",
+        "uco-observable:ObservableObject",
+        "uco-core:UcoObject"
+      ],
       "uco-core:name": "Grindr",
       "uco-core:description": "Dating/social platform used to contact minor victims."
     },
@@ -391,26 +582,53 @@
       "@id": "kb:device-1b10",
       "@type": [
         "uco-observable:ObservableObject",
-        "cacontology-production:MobileRecordingDevice"
+        "cacontology-production:MobileRecordingDevice",
+        "uco-core:UcoObject"
       ],
       "uco-core:name": "Evidence item 1B10",
       "uco-core:description": "Cellphone seized; CSAM possession count 12."
     },
     {
+      "@id": "kb:seizure-1b10",
+      "@type": [
+        "cacontology-asset-forfeiture:EquipmentSeizureAction",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Seizure of evidence item 1B10",
+      "uco-core:description": "Cellphone seized in support of CSAM counts.",
+      "uco-action:instrument": {"@id": "kb:device-1b10"},
+      "cacontology-asset-forfeiture:targetedAsset": {"@id": "kb:device-1b10"}
+    },
+    {
       "@id": "kb:forfeiture-csam",
-      "@type": "cacontology-asset-forfeiture:AssetForfeitureAction",
+      "@type": [
+        "cacontology-asset-forfeiture:AssetForfeitureAction",
+        "uco-core:UcoObject"
+      ],
       "uco-core:name": "Forfeiture notice — 18 U.S.C. 2253",
       "uco-core:description": "Counts 1-3, 5, 8, 12.",
       "cacontology-asset-forfeiture:targetedAsset": {"@id": "kb:device-1b10"},
       "cacontology-asset-forfeiture:relatedCriminalCharges": [
+        {"@id": "kb:charge-1"},
+        {"@id": "kb:charge-3"},
+        {"@id": "kb:charge-5"},
+        {"@id": "kb:charge-8"},
         {"@id": "kb:charge-12"}
-      ]
+      ],
+      "uco-action:performer": {"@id": "kb:prosecutor-usao-hi"}
     },
     {
       "@id": "kb:competency-2024-06-21",
-      "@type": "uco-core:UcoObject",
+      "@type": [
+        "cac-core:LegalEvent",
+        "uco-core:UcoObject"
+      ],
       "uco-core:name": "Competency hearing resolved",
-      "uco-core:description": "2024-06-21 competency hearing; arraignment on superseding indictment."
+      "uco-core:description": "2024-06-21 competency hearing; arraignment on superseding indictment.",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2024-06-21T00:00:00Z"
+      }
     },
     {
       "@id": "kb:rel-supersede",
@@ -445,18 +663,26 @@
       "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
     },
     {
-      "@id": "kb:rel-indictment-charges",
+      "@id": "kb:rel-charge1-csam",
       "@type": "uco-core:Relationship",
-      "uco-core:source": {"@id": "kb:indictment-superseding"},
-      "uco-core:target": {"@id": "kb:charge-4"},
+      "uco-core:source": {"@id": "kb:charge-1"},
+      "uco-core:target": {"@id": "kb:csam-mv1"},
       "uco-core:kindOfRelationship": "Relates_To",
       "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
     },
     {
-      "@id": "kb:rel-charge4-mv2",
+      "@id": "kb:rel-charge2-csam",
       "@type": "uco-core:Relationship",
-      "uco-core:source": {"@id": "kb:charge-4"},
-      "uco-core:target": {"@id": "kb:mv2"},
+      "uco-core:source": {"@id": "kb:charge-2"},
+      "uco-core:target": {"@id": "kb:csam-mv1"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge1-cse",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-1"},
+      "uco-core:target": {"@id": "kb:cse-mv1"},
       "uco-core:kindOfRelationship": "Relates_To",
       "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
     },
@@ -477,10 +703,66 @@
       "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
     },
     {
-      "@id": "kb:rel-charge3-mv2",
+      "@id": "kb:rel-charge5-csam",
       "@type": "uco-core:Relationship",
-      "uco-core:source": {"@id": "kb:charge-3"},
-      "uco-core:target": {"@id": "kb:mv2"},
+      "uco-core:source": {"@id": "kb:charge-5"},
+      "uco-core:target": {"@id": "kb:csam-mv2"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge6-cse",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-6"},
+      "uco-core:target": {"@id": "kb:cse-mv3"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge7-enticement",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-7"},
+      "uco-core:target": {"@id": "kb:enticement-mv3"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge8-csam",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-8"},
+      "uco-core:target": {"@id": "kb:csam-receipt-mv3"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge9-cse",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-9"},
+      "uco-core:target": {"@id": "kb:cse-mv4"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge10-enticement",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-10"},
+      "uco-core:target": {"@id": "kb:enticement-mv4"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge11-cse",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-11"},
+      "uco-core:target": {"@id": "kb:cse-mv5"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charge12-device",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:charge-12"},
+      "uco-core:target": {"@id": "kb:device-1b10"},
       "uco-core:kindOfRelationship": "Relates_To",
       "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
     },
@@ -490,14 +772,6 @@
       "uco-core:source": {"@id": "kb:bridge-mv2-grindr"},
       "uco-core:target": {"@id": "kb:platform-grindr"},
       "uco-core:kindOfRelationship": "used_platform",
-      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
-    },
-    {
-      "@id": "kb:rel-cse-location",
-      "@type": "uco-core:Relationship",
-      "uco-core:source": {"@id": "kb:cse-mv2"},
-      "uco-core:target": {"@id": "kb:location-waikiki-apt"},
-      "uco-core:kindOfRelationship": "Relates_To",
       "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
     },
     {
@@ -525,10 +799,18 @@
       "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
     },
     {
-      "@id": "kb:rel-competency-defendant",
+      "@id": "kb:rel-competency-prosecution",
       "@type": "uco-core:Relationship",
       "uco-core:source": {"@id": "kb:competency-2024-06-21"},
-      "uco-core:target": {"@id": "kb:defendant-riley"},
+      "uco-core:target": {"@id": "kb:prosecution-1"},
+      "uco-core:kindOfRelationship": "Relates_To",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-seizure-device",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": {"@id": "kb:seizure-1b10"},
+      "uco-core:target": {"@id": "kb:device-1b10"},
       "uco-core:kindOfRelationship": "Relates_To",
       "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
     }

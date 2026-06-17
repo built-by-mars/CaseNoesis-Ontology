@@ -416,6 +416,8 @@ graph.write("federal-prosecution-relationships.jsonld")
 | Filing court only, no per-count venue | Add `Location` per count/violation + `Relates_To` |
 | Forfeiture stub, serial numbers in text only | One `ObservableObject` per enumerated device with serial in description |
 | Wire fraud / identity theft counts isolated | `Relates_To` from financial charges to underlying exploitation conduct |
+| Charge→victim only via `Relates_To` | Prefer conduct events with `uco-action:performer`/`object`; link charges to conduct |
+| Device seizure implied but not modeled | Add `EquipmentSeizureAction` + `AssetForfeitureAction` with `targetedAsset` |
 
 ## Validation
 
