@@ -1,0 +1,1405 @@
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 1 of 19
+
+1 MICHELE BECKWITH
+Acting United States Attorney
+2 DAVID L. GAPPA
+Assistant United States Attorney
+3 2500 Tulare Street, Suite 4401
+Fresno, CA 93721
+4 Telephone: (559) 497-4000
+Facsimile: (559) 497-4099
+5
+MCKENZIE HIGHTOWER
+6 Trial Attorney
+U.S. Dept. of Justice, Criminal Division
+7 Child Exploitation and Obscenity Section
+1301 New York Avenue NW, 11TH Floor
+8 Washington, DC 20005
+Telephone: (202) 215-7126
+9
+Attorneys for Plaintiff
+10 United States of America
+11
+
+IN THE UNITED STATES DISTRICT COURT
+
+12
+
+EASTERN DISTRICT OF CALIFORNIA
+
+13
+14
+
+UNITED STATES OF AMERICA,
+Plaintiff,
+
+15
+v.
+
+16
+17
+
+CASE NO. 1:20-CR-00252 JCC-BAM
+UNITED STATES’S TRIAL BRIEF
+DATE: May 28, 2025
+TIME: 8:30 a.m.
+COURT: Hon. John C. Coughenour
+
+MONICO ERICH GASTELO
+Defendant.
+
+18
+19
+20
+21
+
+The United States, by and through its attorneys, Michele Beckwith, Acting United States
+
+22 Attorney, David L. Gappa, Assistant United States Attorney, and McKenzie Hightower, Trial Attorney,
+23 submits this trial brief to aid the Court in understanding the case and issues that may arise at trial.
+I.
+
+24
+25
+
+INTRODUCTION AND CASE STATUS
+
+Gastelo initially was charged in a complaint issued on December 8, 2020, and made an initial
+
+26 appearance, in custody, on December 9, 2020. Dkt. Nos. 1, 3. A magistrate judge ordered Gastelo’s
+27 release on conditions on December 9, 2020. Dkt. Nos. 6, 7. Gastelo has remained out of custody on
+28 those conditions.
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+1
+
+Case 1:20-cr-00252-JLT-BAM
+1
+
+Document 107
+
+Filed 05/14/25
+
+Page 2 of 19
+
+A grand jury returned an indictment on December 10, 2020, that charges Gastelo with two
+
+2 offenses. Count One alleges a violation of 18 U.S.C. sections 2251(a) and (e) for the actual and
+3 attempted sexual exploitation of children within the date range of at least March 2020 through May
+4 2020. Count Two alleges a violation of 18 U.S.C. section 2252(a)(2) and (b)(1) for the receipt and
+5 distribution of a visual depiction of a minor engaged in sexually explicit conduct. The indictment also
+6 contains a forfeiture allegation that references items used to commit the charged offenses as well as any
+7 device found to contain any visual depiction of a minor engaged in sexually explicit conduct.
+8 Indictment, Dkt. No. 9.
+9
+
+A jury trial is scheduled to begin on Wednesday, May 28, at 8:30 a.m. before the Honorable John
+
+10 C. Coughenour, Senior United States District Judge. The government estimates that it can complete the
+11 presentation of its case within two full court days. The defendant has not identified any potential
+12 exhibits but has suggested that the defendant might testify in his defense. Assuming Gastelo presents a
+13 case, the government anticipates that any rebuttal case should take less than half of a day.
+14
+15
+
+II.
+
+PROPOSED NEUTRAL STATEMENT OF THE CASE
+
+The parties have agreed upon the following proposed joint statement of the case: The
+
+16 government has charged the defendant, Monaco Erich Gastelo, with two crimes. First, the sexual
+17 exploitation of children or attempted sexual exploitation of children on dates ranging from
+18 approximately March 2020, continuing through approximately May 2020. Second, the receipt and
+19 distribution of child pornography on dates ranging from approximately January 2019 and continuing
+20 through approximately May 2020. The crimes are alleged to have occurred, at least in part, within the
+21 Eastern District of California in Fresno County, California. Mr. Gastelo is presumed innocent of the
+22 crimes charged. You may only find him guilty of the crimes if the prosecution proves beyond a
+23 reasonable doubt that he committed the crimes charged. At a later time, the court will instruct you in full
+24 detail about the law that applies in this case.
+25
+26
+
+III.
+
+FACTUAL BACKGROUND
+
+Forensic review of Monaco Erich Gastelo’s devices, seized under authority of search warrants,
+
+27 showed that he sought out multiple ways to sexually exploit children. The conduct stretches as far back
+28 as January 30, 2019. Analysis of Gastelo’s Samsung Galaxy Note 8 revealed a Grindr account utilized
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+2
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 3 of 19
+
+1 between approximately January 30, 2019, to October 17, 2019, where the defendant pretended to be an
+2 eighteen-year-old boy. Gastelo utilized the catfish account to converse with younger individuals,
+3 including a seventeen-year-old on October 15, 2019:
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+
+Grindr User
+Gastelo
+Minor
+Gastelo
+Minor
+Gastelo
+Minor
+Gastelo
+Gastelo
+Minor
+Gastelo
+Minor
+Gastelo
+Gastelo
+Minor
+Gastelo
+Minor
+Gastelo
+
+Date
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+10/15/2019
+
+Message
+U gots pics to
+You a top or bottom
+Vers top
+*sends three unrecovered photos*
+Mm I wish I could see ur hole
+What's your age if you don't mind me asking
+18
+U
+17 but 18 in 3 months
+Cool
+Is that ok or?
+We can chat
+I don't mind
+What do you like to do
+For fun or sexually lol
+Either or
+Fun: be lazy lol
+Sex: top eat ass get rimmed
+
+16 Gastelo utilized this account to receive many sexually explicit photos from multiple users. Although
+17 Grindr’s rules required users to be eighteen, Gastelo asked multiple purported eighteen-year-olds if they
+18 were actually eighteen, indicating that he suspected some of the users with whom he interacted were
+19 underage.
+20
+
+In April of 2019, Gastelo joined a WhatsApp group on his Samsung cellular phone dedicated to
+
+21 “CP o twinks.” Multiple images and videos of child pornography were shared in the WhatsApp group.
+22 On January 1, 2020, Gastelo began communicating on Wickr1, Snapchat, and Telegram2 utilizing the
+23 username “meheh” with other individuals sexually attracted to children. In one conversation on Wickr,
+24 he stated he would “want to watch” in response to the question “Have u fucked a kid?” Gastelo added
+25
+1
+Wickr was at that time an end-to-end encrypted messaging application that permitted users to
+26 share content including still images and video files.
+2
+Telegram is a cloud-based, cross-platform, social media and instant messaging service that uses
+27
+end-to-end encryption. Users can share content such as still images and video files. It has been known
+28 for its refusal to cooperate with law enforcement.
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+3
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 4 of 19
+
+1 that he “like[d] to see them get facials”.
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18 On March 23, 2020, Gastelo began communicating with multiple Telegram users to exchange child
+19 pornography utilizing the screen name “Meh Eh” on his Samsung Galaxy Note 8. Meh Eh sent multiple
+20 videos of child pornography to Telegram user “Chris,” including video file
+21 “4_5895719865125175743.avi.” This was a video file that showed a young male (perhaps age 3)
+22 performing oral sex on an adult male’s penis. After “Chris” sent multiple videos of child pornography,
+23 “Meh Eh” said, “Hot, thanks! I love to see tight holes, and them swallowing or taking cum up the ass.”
+24 Gastelo had approximately 788 videos and 1,035 images of suspected child pornography on his
+25 Samsung Cellular phone. Gastelo also had approximately 34 videos and 630 images of suspected child
+26 pornography on his Samsung Galaxy Note 8.
+27
+
+Gastelo’s conduct escalated in May of 2020. On May 8, 2020, law enforcement received reports
+
+28 that MINOR VICTIM 1 (“MV1”) was sexually exploited online. When interviewed, MV1 stated he
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+4
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 5 of 19
+
+1 connected with unknown adult males on the live-streaming app “Omegle.” Some of the adult males
+2 requested MV1’s Snapchat and Kik username. MV1 said that the unknown males would send him
+3 videos or photographs of their genitalia and then request that he send videos and photographs of his own
+4 genitalia. MV1 told these unknown males that he was twelve years old. MV1 specifically recalled one
+5 user on Kik with the username “Meh” who added him on Snapchat. Forensic review of Gastelo’s phone
+6 corroborated MV1’s statements, because the following conversation was recovered:
+7
+
+Kik Username
+Meh Eh
+
+Date
+4/27/2020
+
+Meh Eh
+
+4/27/2020
+
+Meh Eh
+MV1
+MV1
+Meh Eh
+Meh Eh
+MV1
+Meh Eh
+
+4/27/2020
+4/27/2020
+4/27/2020
+4/27/2020
+4/27/2020
+4/27/2020
+4/27/2020
+
+8
+9
+
+Message
+You added [MV1] from a group you are in together
+[REDACTED]
+
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+
+How old are you?
+I’m 13
+How old are you
+OMG you’re too young to be in the chat
+38
+Cool I’ll add u on snap
+You know you have to leave the chat, right? They’re going to kick
+you out
+
+20 Despite the defendant’s recognition of MV1’s age above, MV1 stated that the defendant continued to
+21 speak with him on Snapchat. Forensic review of the defendant’s phone corroborated MV1’s statement.
+22 Artifacts on the defendant’s phone showed that at least one conversation between “erichmg” and MV1
+23 occurred on May 3, 2020, from 10:38 UTC to 11:53 UTC. However, no messages or media files were
+24 recovered from the conversation due to Snapchat’s policy to not retain conversations unless a user
+25 affirmatively saves them. MV1 said that “Meh” then sent him sexually explicit pictures of himself on
+26 Snapchat and asked for similar pictures from MV1. Although MV1 initially refused, “Meh” kept
+27 insisting until MV1 eventually sent sexually explicit images of himself.
+28 ///
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+5
+
+Case 1:20-cr-00252-JLT-BAM
+1
+
+Document 107
+
+Filed 05/14/25
+
+Page 6 of 19
+
+When MV1’s family discovered these communications, MV1’s sister began communicating with
+
+2 some of MV1’s Snapchat contacts, pretending to be a thirteen-year-old boy. One individual with the
+3 username “erichmg” told MV1’s sister that he was 38 years old and worked for the County of Fresno,
+4 facts that are consistent with the defendant. MV1 stated that “erichmg” goes by display name “meh”
+5 and was the person he had been communicating with the most. Forensic review of Gastelo’s device
+6 revealed MV1’s Kik and Snapchat username saved on his cell phone, including a photo of MV1’s face.
+7
+8
+9
+
+IV.
+
+APPLICABLE STATUTES AND ELEMENTS OF THE OFFENSES
+A.
+Count One: Sexual Exploitation of Children and Attempt, 18 U.S.C. §§
+2251(a) and (e)
+1.
+
+10
+11
+
+Essential Elements
+
+Count One of the indictment charges Gastelo with sexual exploitation of children and attempt, in
+
+12 violation of 18 U.S.C. §§ 2251(a) and (e). Section 2251(a) provides:
+13
+14
+15
+16
+17
+18
+19
+
+Any person who employs, uses, persuades, induces, entices, or coerces
+any minor to engage in . . . any sexually explicit conduct for the purpose
+of producing any visual depiction of such conduct or for the purpose of
+transmitting a live visual depiction of such conduct, shall be punished as
+provided under subsection (e), if such person knows or has reason to know
+that such visual depiction will be transported or transmitted using any
+means or facility of interstate or foreign commerce or in or affecting
+interstate or foreign commerce . . . if that visual depiction was produced or
+transmitted using materials that have been mailed, shipped, or transported
+in or affecting interstate or foreign commerce by any means, including by
+computer, or if such visual depiction has actually been transported or
+transmitted using any means or facility of interstate or foreign commerce
+or in or affecting interstate or foreign commerce or mailed.
+
+20 18 U.S.C. § 2251(a).
+21
+
+There are three elements to sexual exploitation of a minor: (1) a victim was under the age of
+
+22 eighteen years; (2) the defendant employed, used, persuaded, or coerced a victim to engage in sexually
+23 explicit conduct for the purpose of producing a visual depiction of such conduct; and (3) the visual
+24 depiction was produced using materials that had been mailed, shipped, or transported across state lines
+25 or in foreign commerce or the defendant knew or had reason to know that the visual depiction would be
+26 mailed or transported across state lines or in foreign commerce or the visual depiction was mailed or
+27 actually transported across state lines or in foreign commerce. Ninth Circuit Manual of Model Criminal
+28 Jury Instructions § 20.18 sexual Exploitation of a Child.
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+6
+
+Case 1:20-cr-00252-JLT-BAM
+1
+
+2.
+
+Document 107
+
+Filed 05/14/25
+
+Page 7 of 19
+
+“Sexually Explicit Conduct”
+
+2
+
+The term “sexually explicit conduct” is defined in 18 U.S.C. § 2256(2) as actual or simulated:
+
+3
+
+(i) sexual intercourse, including genital-genital, oral-genital, anal-genital, or oralanal, whether between persons of the same or opposite sex;
+
+4
+5
+6
+7
+8
+9
+10
+11
+
+(ii) bestiality;
+(iii) masturbation;
+(iv) sadistic or masochistic abuse; or
+(v) lascivious exhibition of the genitals or pubic area of any person.
+18 U.S.C. § 2256(2).
+In determining whether a depiction includes lascivious exhibition of the genital or pubic area of
+any person, the trier of fact may consider any of the following factors:
+
+12
+
+(1)
+
+Whether the focal point of the depiction is the child’s genital or pubic area;
+
+13
+
+(2)
+
+Whether the setting of the depiction is sexually suggestive, for instance, the setting is in a
+place or pose generally associated with sexual activity;
+
+(3)
+
+Whether the child is depicted in an unnatural pose or in inappropriate attire, considering
+the age of the child;
+
+(4)
+
+Whether the child is fully or partially clothed or is nude;
+
+(5)
+
+Whether the depiction suggests sexual coyness or a willingness to engage in sexual
+activity;
+
+(6)
+
+Whether the depiction is intended or designed to elicit a sexual response from the viewer.
+
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+
+United States v. Overton, 567 F.3d 1148, 1151 (9th Cir. 2009) (quoting United States v. Dost, 636 F.
+Supp. 828, 832 (S.D. Cal. 1986)). The factors listed above are not an exhaustive list but merely factors
+that can be considered in determining the nature of an image.
+Additionally, whether a depiction is lewd or lascivious should be viewed from the perspective of
+the photographer, not from the perspective of the minor being photographed. An exhibition of the
+genitals or pubic area may encompass a visual depiction of a child’s genital or pubic area even where
+those areas are covered by clothing. United States v. Dost, 636 F. Supp. 828, 832 (S.D. Cal. 1986);
+
+28
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+7
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 8 of 19
+
+1 United States v. Wiegand, 812 F.2d 1239, 1244 (9th Cir. 1987); United States v. Villard, 885 F.2d 117,
+2 122 (3rd. Cir. 1989); United States v. Knox, 32 F.3d 733 (3rd Cir. 1994).
+3.
+
+3
+4
+
+Interstate Nexus
+
+The government can prove that a defendant knew or had reason to know that a visual depiction
+
+5 would be mailed or transported across state lines or in foreign commerce. Alternatively, the government
+6 can prove that a visual depiction was actually transported across state lines or in foreign commerce or
+7 that it was produced using materials that had been mailed, shipped, or transported across state lines or in
+8 foreign commerce. Presenting evidence of an electronic device’s “country-of-origin labels,” which
+9 indicate that a device had been manufactured overseas, is sufficient in the Ninth Circuit “to prove that
+10 the[y] moved in foreign commerce.” United States v. Fox, 357 Fed. Appx. 64, 65 (9th Cir. 2009) (citing
+11 United States v. Patterson, 820 F.2d 1524, 1526 (9th Cir. 1987).
+12
+
+B.
+
+13
+
+Count Two: Receipt or Distribution of Material Depicting the Sexual Exploitation of
+Minors, 18 U.S.C. § 2252(a)(2)
+
+Count Two charges Gastelo with receipt or distribution of a visual depiction of a minor engaged
+14
+in sexually explicit conduct, in violation of 18 U.S.C. § 2252(a)(2). Under 18 U.S.C. § 2252(a)(2):
+15
+Any person who ... knowingly receives, or distributes, any visual
+depiction using any means or facility of interstate or foreign commerce or
+that has been mailed, or has been shipped or transported in or affecting
+interstate or foreign commerce, or which contains materials which have
+been mailed or so shipped or transported, by any means including by
+computer, or knowingly reproduces any visual depiction for distribution
+using any means or facility of interstate or foreign commerce or in or
+affecting interstate or foreign commerce or through the mails, if –
+
+16
+17
+18
+19
+20
+21
+22
+
+(A)
+
+the producing of such visual depiction involves the use of a
+minor engaging in sexually explicit conduct; and
+
+(B)
+
+such visual depiction is of such conduct.
+
+23
+18 U.S.C. § 2252(a)(2).
+24
+In order to prove the crime of receipt and distribution of child pornography, the government must
+25
+prove four elements beyond a reasonable doubt:
+26
+1.
+
+Defendant knowingly received or distributed one or more visual depictions of a minor;
+
+2.
+
+The visual depiction involved one or more actual minors engaged in sexually explicit
+
+27
+28
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+8
+
+Case 1:20-cr-00252-JLT-BAM
+
+3.
+
+Page 9 of 19
+
+Defendant was aware of the sexually explicit nature and character of the materials and
+that the visual depiction was of a minor engaged in sexually explicit conduct; and
+
+3
+4
+
+Filed 05/14/25
+
+conduct;
+
+1
+2
+
+Document 107
+
+4.
+
+The image had been: mailed, shipped or transported in interstate or foreign commerce, or
+produced using materials that themselves were so mailed, shipped or transported.
+
+5
+6
+
+C.
+
+Attempt Offenses
+
+7
+
+The government has charged Gastelo with both the actual sexual exploitation of children as well
+
+8 as an attempt to commit that offense. Similarly, the government has charged Gastelo with the actual and
+9 attempted receipt of a visual depiction of a minor engaged in sexually explicit conduct. In order to be
+10 found guilty of an attempted offense, the government is required to prove that Gastelo had the intent to
+11 commit the offense and that he took a substantial step, beyond mere preparation, toward completion of
+12 the offense.
+13
+
+V.
+
+GOVERNMENT WITNESSES
+
+14
+
+The United States may call the following witnesses:
+
+15
+
+1. Adriana [REDACTED] – Minor Victim’s Sister
+
+16
+
+2. Cassie Stevens - Detective, Fresno Police Department
+
+17
+
+3. Kenneth Kalar – Forensic Analyst, Fresno County Sheriff’s Office
+
+18
+
+4. Snapchat Representative
+
+19
+
+5. Comcast Representative
+
+20
+
+6. Verizon Representative
+
+21
+
+7. Minor Victim 1 – Victim
+
+22
+
+8. Leandro [REDACTED] – Minor Victim’s Father
+
+23
+
+9. Evangelina [REDACTED] – Minor Victim’s Mother
+
+24
+
+It is possible that the government may have to call certain witnesses out of order, or re-call
+
+25 witnesses to testify to various events to maintain a chronological presentation. The government will
+26 strive for an orderly presentation of the evidence to assist the court and the defendant in understanding
+27 the evidence being presented and will attempt to let the court and counsel know in advance whether it
+28 would be preferable to have a witness recalled for later testimony.
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+9
+
+Case 1:20-cr-00252-JLT-BAM
+
+VI.
+
+1
+2
+
+Document 107
+
+Filed 05/14/25
+
+Page 10 of 19
+
+EXHIBITS
+
+The United States has prepared exhibit binders for the court and counsel. When an exhibit
+
+3 contains an image of a minor engaged in sexually explicit conduct, a redacted version has been placed in
+4 the exhibit binders. And there are placeholders for some items of physical evidence, such as digital
+5 devices seized from the defendant and victim. For the trial, the government intends to display most
+6 exhibits electronically through the OnCue program, although the size of some exhibits likely will require
+7 the government to use the court’s Elmo document camera. The government intends to meet with
+8 Courtroom Deputy Vue and defense counsel on the afternoon of May 22, 2025, to confirm equipment
+9 compatibility.
+VII.
+
+10
+
+LEGAL AND EVIDENTIARY ISSUES
+
+11
+
+A.
+
+Stipulations
+
+12
+
+The parties have discussed, but not yet finalized any stipulations. Should the parties finalize any
+
+13 stipulations before the close of evidence, the parties will notify the court.
+14
+
+B.
+
+Pretrial Discovery
+
+15
+
+The United States has complied with its discovery obligations, and it will continue to provide
+
+16 supplemental discovery as warranted. The court issued a protective order dated December 18, 2020,
+17 which enabled the government to provide copies of written reports and other items directly to defense
+18 counsel while also making other items available within the confines of law enforcement offices. Dkt.
+19 No. 14. Defense counsel has had access to other items at the Fresno office of Homeland Security
+20 Investigations. To date, the government has provided more than 1,647 pages of Bates-numbered
+21 discovery. Government counsel has also met several times with defense counsel at the HSI and U.S.
+22 Attorney offices to go over evidence and potential exhibits.
+23
+
+The defendant has not provided any reciprocal discovery to the government. Nor has the
+
+24 defendant provided the government with any expert disclosure notices as required under F. Rule Crim.
+25 P. 16(b)(1)(B), (C). Should the defense intend to introduce any evidence subject to reciprocal
+26 discovery, the government requests the defense provide the government with that discovery immediately
+27 given the impending trial date. In the event the defense does not provide such reciprocal discovery, the
+28 government reserves its right to move to exclude the evidence under Rule 16(d)(2) of the Federal Rules
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+10
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 11 of 19
+
+1 of Criminal Procedure. See Taylor v. Illinois, 484 U.S. 400, 415 (1988) (defendant’s failure to comply
+2 with, or object to, government’s discovery request before trial justified exclusion of unproduced
+3 evidence).
+4
+
+C.
+
+References to Consequences of Conviction
+
+5
+
+The government has filed a separate motion to preclude the defendant from making any
+
+6 reference to any possible punishment upon conviction. Dkt. No. 93.
+7
+
+D.
+
+References to MV1’s Past Sexual History
+
+8
+
+The government has filed a separate motion to preclude the defendant from referencing the
+
+9 minor victim’s past sexual history. Dkt. No. 93.
+10
+
+E.
+
+Admission of Consistent Statements
+
+11
+
+The government has filed a separate motion to admit prior consistent statements of MV1 if his
+
+12 credibility is challenged or if he is unable to testify to material facts as a trial witness. Dkt. No. 93.
+13
+
+F.
+
+404(b) Evidence Notice
+
+14
+
+The Ninth Circuit has recognized two categories of evidence that may be considered
+
+15 “inextricably intertwined” with a charged offense and therefore admitted without regard to Federal Rule
+16 of Evidence 404(b). See United States v. Vizcarra–Martinez, 66 F.3d 1006, 1012 (9th Cir.1995).
+17 First, evidence of prior acts may be admitted if the evidence “constitutes a part of the transaction that
+18 serves as the basis for the criminal charge.” Id. Second, prior act evidence may be admitted “when it was
+19 necessary to do so in order to permit the prosecutor to offer a coherent and comprehensible story
+20 regarding the commission of the crime.” Id. at 1012–13. The evidence that is referenced in this notice
+21 fits within both categories. United States v. DeGeorge, 380 F.3d 1203, 1220 (9th Cir. 2004).
+22
+
+The United States has charged Gastelo with the actual and attempted sexual exploitation of a minor
+
+23 (Count One) as well as the receipt or distribution of at least one image of a minor engaged in sexually
+24 explicit conduct (Count Two). The indictment alleges that the crimes were committed within the date
+25 range beginning no later than approximately January 2019 and continuing through approximately May
+26 2020. During this time, Gastelo posed as an eighteen-year-old on the dating application Grindr. As
+27 referenced above, he sent and received sexually explicit images utilizing this catfish account. Although
+28 the real ages of the users Gastelo communicated with are unknown due to the Grindr policy of stating
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+11
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 12 of 19
+
+1 users must be at least eighteen years old, Gastelo’s communications indicated he did not believe every
+2 user was eighteen or older. In fact, at least one was seventeen-years old. This activity is inextricably
+3 intertwined with the commission of Count Two, because it is an attempt to receive child pornography
+4 during the charging period of the indictment.
+5
+
+Alternatively, the evidence is admissible under FRE 404(b) to prove Gastelo’s intent, his
+
+6 preparation and planning to commit the offenses alleged in Count One and Two, as well as his motive.
+7 Under Rule 404(b), evidence of other acts is not admissible to prove character but may be admissible to
+8 prove “motive, opportunity, intent, preparation, plan, knowledge, identity, absence of mistake, or lack of
+9 accident.” Fed. R. Evid. 404(b). Evidence under Rule 404(b) may be admitted if: (1) the evidence tends
+10 to prove a material point; (2) the other act is not too remote in time; (3) the evidence is sufficient to support
+11 a finding that the defendant committed the other act; and (4) in cases like this one, where knowledge and
+12 intent are at issue, the other act is similar to the offense charged. See United States v. Cox, 963 F.3d 915,
+13 924 (9th Cir. 2020). Even if the evidence is admissible under Rule 404(b), it remains subject to the general
+14 balancing test under Federal Rule of Evidence 403. Id. at 925.
+15
+
+The jury should be given evidence that shows Gastelo’s intent and motive to create child
+
+16 pornography in the past, his lack of mistake in creating child pornography, as well as his intent to find
+17 images of minors that support the offense charged in Count Two. See United States v. Johnson, 132 F.3d
+18 1279, 1283 (9th Cir. 1997) (explaining “other acts” need not be identical to the conduct charged); see also
+19 United States v. Boam, 2023 WL 3722904 at *2. And “Rule 404(b) is a rule of inclusion—not exclusion—
+20 which references at least three categories of other ‘acts’ encompassing the inner workings of the mind:
+21 motive, intent, and knowledge.” United States v. Wells, 879 F.3d 900, 928 (9th Cir. 2018) (citing Curtin
+22 489 F.3d 93, 944 (9th Cir. 2007) (en banc) …).
+23
+
+This case is similar to United States v. Boudreau, 2023 WL 4197169 (D. Mont. June 27, 2023). In
+
+24 Boudreau, the defendant was charged with one count of attempted coercion and enticement of a minor
+25 and one count of possession of child pornography. The government moved to introduce a protective order
+26 against the defendant issued due to past interactions with a 17-year-old minor from whom he elicited nude
+27 pictures through social media accounts. The court ruled that the past act was admissible under 404(b) to
+28 show motive, intent, and lack of mistake. The court reasoned the evidence established the defendant’s
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+12
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 13 of 19
+
+1 intent, motive, and lack of mistake for the coercion and enticement charge by showing that since he knew
+2 it was wrong to harass a minor into sending him nude photos, he would also know it would be wrong to
+3 meet up with a minor to engage in sexual activity. Id. at *3. Similarly, here, if the defendant knew that he
+4 needed to pose as an eighteen-year-old to elicit sexual photos from teens—because it was wrong for a 385 year-old man to do it—he would have known that eliciting sexual photos from MV1 was wrong.
+6
+
+There is a similar line of reasoning for Count 2. In Bondreau, the court reasoned the past conduct
+
+7 was admissible under 404(b) as to the possession charge because the fact that he was alleged to have
+8 engaged in the stalking and solicitation of pictures from a minor using the internet during this period is
+9 highly relevant as to his intent, motive, and lack of mistake. Id. Similarly, posing as an eighteen-year-old
+10 to obtain sexually explicit images from teens shows the defendant’s intent, motive, and lack of mistake
+11 for soliciting those very same images from MV1. The act is close in time to the conduct charged. In fact,
+12 it is within the charging timeframe. Additionally, there is sufficient evidence to show that the defendant
+13 did commit this other act, because the chat conversations were discovered on the defendant’s own cell
+14 phone, which he stated in a recorded interview that no one else used. Finally, the prejudicial effect of this
+15 evidence is minimal and does not substantially outweigh its probative value.
+16
+17
+
+G.
+
+Allowing Use of An Unseen Animal-Assisted Therapy Dog in Courtroom During
+Trial
+
+MV1 was 12 years old when the defendant sexually exploited him. MV1 is now 17 years old and
+18
+still suffers from anxiety when confronted with his sexual exploitation. He has specifically requested that
+19
+an animal-assisted therapy team be with him at the witness stand during the trial. The dog would be placed
+20
+inside the witness box outside the presence of the jury, and it would leave the witness box outside the
+21
+presence of the jury.
+22
+23
+
+The 2004 Crime Victim Rights Act gives federal crime victims “the right to be treated with fairness
+and with respect for the victim’s dignity and privacy.” 18 U.S.C. § 3771(a)(8). Furthermore, the CVRA
+
+24
+makes it clear that these rights are not simply symbolic, but rather are enforceable by use of a writ of
+25
+mandamus in district court. 18 U.S.C. § 3771(d)(3). Several courts have held that the rights under CVRA
+26
+are meaningful and enforceable. United States v. Patkar, Cr. No. 06-00250, 2008 U.S. Dist. LEXIS 6055,
+27
+
+2008 WL 233062, at *6 (D. Hawaii 2008) (holding that the CVRA “was intended to provide meaningful
+
+28
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+13
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 14 of 19
+
+1 rights, and not a simple laundry list of aspirational goals as to how the government and courts should treat
+2 victims”); see also United States v. Heaton, 458 F. Supp. 2d 1271, 1272 (D. Utah 2006) (holding that §
+3 3771(a)(8) requires a court to consider the views of the victim before dismissing an indictment pursuant
+4 to Fed. R. Crim. P. 48(a)); United States v. Turner, 367 F. Supp. 2d 319, 335 (E.D.N.Y. 2005) (stating
+5 that the import of 18 U.S.C. § 3771(a)(8) is “to promote a liberal reading of the statute in favor of
+6 interpretations that promote victims’ interest in fairness, respect, and dignity.”).
+7
+
+Child victims are afforded additional rights in 18 U.S.C. § 3509, because Congress recognized that
+
+8 testifying in court presents severe challenges for “a person under the age of 18.” 18 U.S.C. § 3509(a)(2).
+9 Section 3509 permits anyone under the age of 18 who is a victim of sexual exploitation (defined as “child
+10 pornography or child prostitution”) to testify using alternatives such as 2-way closed circuit television or
+11 videotaped deposition. 18 U.S.C. § 3509(b)(1), (2). The law recognizes that child victims may be fearful,
+12 and that providing live, in-court testimony may cause them to “suffer emotional trauma.” 18 U.S.C. §
+13 3509(b)(1)(B).
+14
+
+The CVRA gives the minor victim the right to be treated with fairness and respect for their dignity,
+
+15 while Section 3509 acknowledges that special accommodations must be made for child victims of sexual
+16 exploitation. Allowing a therapy dog to accompany the minor victim at trial is a small accommodation
+17 that will likely make his statements and trial itself less traumatic.
+18
+
+Fresno County’s District Attorney’s Office (“FCDAO”) provides professionally trained, certified,
+
+19 volunteer, animal-assisted therapy teams to facilities throughout the Fresno area. FCDAO teams regularly
+20 attend state court and provide comfort to minor victims during their testimony. FCDAO teams are trained
+21 for service and facility work at the Assistance Service Dog Educational Center (ASDEC) in Woodlake,
+22 Ca. Both of their dogs, white goldendoodles, were trained for two years at the ASDEC facility where they
+23 learned a variety of 90 commands to help mentally, medically, or physically disabled persons. Both dogs
+24 have worked at FCDAO, comforting victims in court, since April of 2021. There have been no incidents
+25 with the two FCDAO dogs in their over four years of service.
+26
+
+Numerous courts across the country have authorized the use of service dogs in trials and other
+
+27 hearings. Indeed, the Michigan Court of Appeals specifically held that a Therapy Dogs International
+28 therapy dog could accompany a sexual assault victim while she testified. People v. Johnson, 2016 Mich.
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+14
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 15 of 19
+
+1 App. Lexis 781, *10, n.2 (April 19, 2016) (citing with approval other jurisdictions to allow the use of a
+2 canine support animal to accompany witnesses at trial).
+3
+
+In People v. Tohom, 109 A.D.3d 253, 969 N.Y.S.2d 123 (2013), a state appellate court in New
+
+4 York ruled:
+5
+6
+7
+8
+
+‘[Dogs] are such agreeable friends—they ask no questions, they pass no criticisms’
+(George Eliot, Scenes of Clerical Life [1857]), but do they belong in the courtroom? On
+this appeal, we examine the question of whether the courts of this state should permit the
+presence of a therapeutic “comfort dog” in a trial setting when the court determines that
+the animal may provide emotional support for a testifying crime victim. We conclude that
+this question should be answered in the affirmative.
+
+9 109 A.D.3d at 255. In Tohom, the trial court found that a 15-year-old victim’s testimony was likely to
+10 cause her severe stress and allowed a therapy dog to accompany her during her testimony. Id, 109 A.D.3d
+11 at 269. In State v. Jacobs, 2015 WL 6180908 (2015), the Ohio Court of Appeals upheld the trial court’s
+12 decision to allow a 17-year-old (aged 11-15 at time of the crimes) to have a therapy dog sit at her feet
+13 while she testified.
+14
+
+Other courts have upheld the use of therapy dogs to support victims of sexual assault. State v.
+
+15 Devon D., 321 Conn. 656 (2016) (Supreme Court of Connecticut upheld trial court’s decision to allow
+16 dog to sit near victim’s feet during testimony about sexual assault, finding that correct standard was
+17 whether the “special procedure . . . will aid the witness in testifying truthfully and reliably”); State v. Reyes
+18 2016 WL 3090904 (Tennessee Court of Appeals, 2016); People v. Chenault, 227 Cal. App. 4th 1503, 175
+19 Cal. Rptr. 3d 1 (2014); State v. Dye, 178 Wash. 2d 541, 309 P.3d 1192 (2013); Smith v. State, 2016 WL
+20 1444143 (Court of Appeals of Texas, 2016). All of these cases involve a victim testifying at trial.
+21
+
+Research shows that human-animal interactions can have both psychological and physiological
+
+22 benefits. “Such studies have shown that the mere presence of a friendly animal can result in decreased
+23 anxiety and lessened sympathetic nervous systems arousal. Benefits include reduced blood pressure,
+24 lowered heart rate, a decrease in depression, increased speech and memory functions, and heightened
+25 mental clarity.” Canines in the Courtroom, GPSolo, July/August 2009, at 54. Indeed, it is well accepted
+26 in medical and academic fields that a friendly dog can decrease anxiety and sympathetic nervous system
+27 arousal by providing a pleasant external focus for attention, promoting feelings of safety and providing a
+28 source of comfort. Allen, Karen. “Are Pets a Healthy Pleasure? The influence of pets on blood pressure.”
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+15
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 16 of 19
+
+1 Current Directions in Psychological Science 12 (2003): 236-39. Nagengast, Sunny L., Mara M. Baun,
+2 Mary Megel, and J.M. Leibowitz. “The effects of the presence of a companion animal on physiological
+3 arousal and behavioral distress in children during a physical examination.” Journal of Pediatric Nursing
+4 12 (1997): 323-30.
+5
+
+Courthouses and child advocacy centers across the country use therapy dog programs to provide
+
+6 victims, most frequently children, emotional support through trial. Id. at 54-56. Frequently, this means
+7 the therapy dog accompanies the child on the stand during testimony. Id.; see also Spence v. Beard, 2015
+8 WL 1956436, at *5 (S.D. Cal. Apr. 29, 2015) (therapy dog sat at child’s feet and behind the stand during
+9 the prosecution’s case-in-chief).
+10
+
+Here, it should go without saying that confronting for the first time in person the man who sexually
+
+11 abused him and telling a courtroom full of strangers about the worst parts of his life will be an extremely
+12 stressful event for MV1. As such, MV1 could use the emotional and physiological benefits that
+13 interactions with an animal-assisted therapy team could provide. The use of a service dog will assist the
+14 victim by helping to decrease his anxiety about seeing the defendant in court. When MV1 testifies, his
+15 statements will be easier to understand if he is composed, rather than distraught. Also, the use of a service
+16 dog to support the victim may preclude time-consuming breaks otherwise needed to let the upset victim
+17 emotionally compose himself. The time when the dog is needed the most is when this young man is on
+18 the witness stand.
+19
+
+While MV1 has now seen the inside of the courtroom in an informal tour, he has never had to
+
+20 testify in front of anyone, much less 12 strangers (and alternate jurors) in a jury box, and all the other
+21 people in the courtroom who will be completely unknown to him. Speaking about the most vulnerable
+22 moments in his life in front of a room full of strangers will be extremely intimidating. The dog’s presence
+23 will give MV1 courage and strength, and will do absolutely no harm.
+24
+
+The United States requests that the Court permit a support animal (a goldendoodle named Nikko
+
+25 or North) to accompany MV1 into the courtroom to sit beside him at the witness stand during his
+26 testimony. The United States has confirmed with the U.S. Marshal Service that it has no objection to the
+27 United States’ request for a trained canine to be present in the courthouse during Gastelo’s trial, if it is
+28 permitted by the Court. When government counsel discussed this proposal with defense counsel, he
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+16
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 17 of 19
+
+1 graciously stated no objection to letting a canine be present during MV1’s testimony. Accordingly, the
+2 United States respectfully requests that the Court permit CV1 to have a service animal discreetly present
+3 while testifying at the trial.
+4
+
+H.
+
+Affirmative Defenses
+
+5
+
+Defendant has not given notice of any intent to rely on any defense of entrapment, mental
+
+6 incapacity, alibi, or any other affirmative defense. Therefore, to the extent the defendant may attempt to
+7 rely on such a defense, the government will object and to move to preclude the defendant from asserting
+8 such a defense.
+9
+
+I.
+
+Expert Testimony
+
+10
+
+The admission of expert testimony is governed by Rule 702, which provides that a witness who
+
+11 is qualified as an expert by knowledge, skill, experience, training, or education may testify in the form
+12 of an opinion or otherwise if (1) the expert’s knowledge will help the trier of fact understand the
+13 evidence or determine a fact in issue, (2) the testimony is based on sufficient facts or data (3) the
+14 testimony is the product of reliable principles and methods, and (4) the witness has applied the
+15 principles and methods reliably to the facts of the case. Fed. R. Evid. 702.
+16
+
+The government provided notice to the defense that it expected to elicit testimony from Fresno
+
+17 County Sheriff Deputy IV Kenneth Kalar to explain digital forensic examinations that he conducted on
+18 Monaco Gastelo’s devices. A copy of the expert’s current resume was provided with the notice. The
+19 resume contains a summary of some of his relevant training and experience that will permit him to
+20 explain the use of various forensic tools to examine devices and to testify about the artifacts that he
+21 discovered and captured for use in this case. The devices were originally extracted by Sheriff Deputy IV
+22 Kalar, and he wrote a detailed forensic report on them. The report details the child pornography
+23 discovered on the devices, forensic artifacts that show Gastelo both received and distributed child
+24 pornography over multiple social media platforms, as well as discusses forensic artifacts discovered that
+25 corroborate MV1’s testimony. The government previously provided in discovery, at Bates 1-456, the
+26 forensic report written by Sheriff Deputy IV Kalar.
+27
+28
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+17
+
+Case 1:20-cr-00252-JLT-BAM
+1
+
+Document 107
+
+Filed 05/14/25
+
+Page 18 of 19
+
+As of the date of this filing, the defendant has not provided the government with an expert
+
+2 disclosure notice, nor has he provided any reciprocal discovery. If the defendant attempts to qualify a
+3 witness as an expert, the government reserves its right to object under Fed. R. Crim. P. 16(d)(2).
+4
+
+J.
+
+Jury Instructions
+
+5
+
+The Court has indicated in its pretrial order that it typically prepares a set of standard jury
+
+6 instructions. Dkt. No. 91. The parties have attempted to comply with the directive to jointly file
+7 proposed instructions, and they believe they have submitted a set about which there is no disagreement.
+8
+
+K.
+
+Verdict Form
+
+9
+
+The parties have submitted, at the Court’s direction, proposed verdict forms. The parties are
+
+10 unable to agree on a proposed verdict form, because the defense believes that it is entitled to have the
+11 jury instructed on lesser included offenses while the government objects to this proposal.
+VIII.
+
+12
+13
+
+FORFEITURE
+
+The indictment includes a forfeiture allegation, and the United States has since specified its
+
+14 intent to seek forfeiture of Gastelo’s residence and various electronic devices that he used to commit his
+15 crimes. Dkt. Nos. 9, 71, 75. Thus, the United States’ forfeiture allegations reflect the instrumentalities
+16 and facilitating property connected to Counts One and Two.
+17
+
+The procedures for proving the forfeiture allegation are set forth in Rule 32.2 of the Federal
+
+18 Rules of Criminal Procedure. As the United States seeks to forfeit “specific property” used in the
+19 defendant’s crimes, the Court must determine whether the “government has established the requisite
+20 nexus between the property and the offense.” Fed. R. Crim. P. 32.2(b)(1). The United States must
+21 prove this “nexus” by a preponderance of the evidence.
+22
+
+Because there will a jury trial for the criminal charges, the “court must determine before the jury
+
+23 begins deliberating whether either party requests that the jury be retained to determine the forfeitability
+24 of specific property if it returns a guilty verdict.” Fed. R. Crim. P. 32.2(b)(5). The Ninth Circuit has
+25 held that Rule 32.2(b)(5) places an “affirmative duty on the court” to determine whether either the
+26 United States or defendant requests a jury determination regarding forfeiture. Mancuso, 718 F.3d 780,
+27 799 (9th Cir. 2013). The inquiry must occur “before the jury retires,” but, in practice, many district
+28 courts initiate the inquiry when empaneling the jury “to avoid an inadvertent waiver of the right to a jury
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+18
+
+Case 1:20-cr-00252-JLT-BAM
+
+Document 107
+
+Filed 05/14/25
+
+Page 19 of 19
+
+1 determination, while also providing timely notice to the court and to the jurors themselves if they will be
+2 asked to make the forfeiture determination.” See United States v. Watts, No. 21-5302, 2022 WL
+3 706603, at *7 (6th Cir. Mar. 9, 2022) quoting Fed. R. Crim. P. 32.2(b)(5)(A) advisory committee's note.
+4
+
+The forfeiture of property connected to the defendant’s criminal conduct will be established
+
+5 through Snapchat, Comcast, and Verizon records, and the testimony of witnesses, consistent with the
+6 manner and expected trial witnesses described above. The United States is prepared to file a separate
+7 brief for the forfeiture trial. It has prepared a separate set of proposed jury instructions and a special
+8 verdict form. The defendant has not agreed to the proposed forfeiture of any item.
+IX.
+
+9
+10
+
+CONCLUSION
+
+The United States has attempted to identify and address some of the issues that might arise
+
+11 during the trial. Should any additional issues arise, the United States respectfully requests leave to
+12 submit any additional briefing that might be helpful.
+13
+
+Dated: May 14, 2025
+
+MICHELE BECKWITH
+United States Attorney
+
+14
+15
+
+By: /s/ DAVID L. GAPPA
+DAVID L. GAPPA
+Assistant United States Attorney
+
+16
+17
+
+/s/ McKenzie Hightower
+McKenzie Hightower
+Trial Attorney
+United States Department of Justice
+Criminal Division
+Child Exploitation and Obscenity Section
+
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+
+30
+
+GOVERNMENT’S TRIAL BRIEF
+
+19
+
+

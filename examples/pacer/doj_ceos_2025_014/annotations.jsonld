@@ -1,0 +1,102 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld"
+  ],
+  "@graph": [
+    {
+      "id": "urn:link-look:anchor:abde6e4f-4d5b-569b-a19a-140d2e0efa1e",
+      "type": "Annotation",
+      "body": "urn:uuid:14af6373-8f42-51b2-86c1-a922020003d9",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 46,
+            "end": 54
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/28/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:74bf42da-aae3-5d03-9a49-b77778431482",
+      "type": "Annotation",
+      "body": "urn:uuid:38641cda-bc26-573f-984f-b0b6ee3ba600",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 113,
+            "end": 121
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/28/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:bcca57bb-2d7a-5c48-9de0-8edff40af22b",
+      "type": "Annotation",
+      "body": "urn:uuid:3f2c3cd9-634c-5da0-87f7-b2f0b503c88c",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 180,
+            "end": 188
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/28/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:cf170e27-a802-57ee-b449-e1b02c7e428f",
+      "type": "Annotation",
+      "body": "urn:uuid:bd98aa84-0b86-53b0-af7b-5d72016e4e46",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 247,
+            "end": 255
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/28/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:bc28d25e-1fa4-5799-a170-b02aa4b13f09",
+      "type": "Annotation",
+      "body": "urn:uuid:908b339d-ebcd-5cc6-b539-8ba7b92047fa",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 314,
+            "end": 322
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/28/25"
+          }
+        ]
+      }
+    }
+  ]
+}

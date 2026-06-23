@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.14.0] - 2026-06-23
+
+### Added
+
+- Fraud / crypto / laundering investigation recipe (`docs/recipes/fraud-crypto-laundering.md`): messaging coercion, blockchain trace actions, exchange subpoena returns, wallet hops, and location correlation with validation SPARQL and anti-patterns (closes #37).
+- Cargo theft / route staging / warehouse movement recipe (`docs/recipes/cargo-theft-route-staging.md`): geofence deviation events, manifest handling, planning chats, and warehouse search workflows (closes #39).
+- Document semantic mapping extensions for fraud-crypto markdown sources (`mcp_server/document_semantic_mapping.py`; closes #41):
+  - Chat-log speaker lines (`Display Name (@handle):`) → `Person` plus `InstantMessagingAddress` with `InstantMessagingAddressFacet`
+  - Markdown table value cells (including `aka "alias"` parsing) for role-labeled rows
+  - Exchange account-holder prose (`Account holder:`, `Registered user:`)
+  - Expanded role-table labels (`Account Holder`, `Exchange User`, `Registered User`)
+  - Tier T0 regression fixtures in `mcp_server/tests/test_document_semantic_mapping.py`
+- Markdown table canonical output (`kind: table`) in `extract_markdown_content` when pipe-style tables are present; `table_sheet_count` recorded in extraction summary fields (`mcp_server/document_processor.py`).
+- PACER-derived CAC federal case exemplars under `examples/pacer/` — each folder includes a validated hand-built JSON-LD graph, MCP extraction bundle (`case-uco-mcp-output.jsonld`, `extracted-content.json`, `annotations.jsonld`), extracted text, and a build script that runs CAC subset validation via `validate_graph`:
+  - **U.S. v. Gastelo** (`examples/pacer/doj_ceos_2025_014/`): E.D. Cal. `1:20-cr-00252-JLT-BAM`, Doc 107 government trial brief — federal trial proceedings, prosecution relationships, grooming chat modeling, production case, and CSAM forensic provenance recipes; per-victim conduct events, Grindr/Kik/Snapchat platform accounts, anticipated witness testimony, Rule 404(b) evidentiary framing, and separate plea-agreement MCP extraction bundle
+  - **U.S. v. Hounsell** (`examples/pacer/doj_ceos_2026_012/`): E.D. Wis. `1:25-cr-00069-WCG`, Doc 34 AO 245B sentencing judgment — legal sentencing outcomes and post-plea federal prosecution wiring; prison term, supervised-release conditions (SORNA, sex-offender treatment, computer monitoring), and monetary assessments
+  - **U.S. v. Saucedo** (`examples/pacer/usss_2017_006/`): S.D. Cal. `3:17-cr-00095-JLS`, Doc 1 criminal complaint — ECWG/ICAC multi-jurisdiction task-force referral from Calgary, fabricated Kik persona grooming, per-victim CSAM conduct events, IP/account correlation actions, and non-graphic CSAM artifact summaries from complaint tables
+
+### Changed
+
+- All language package versions synchronized to **1.14.0** (`python/pyproject.toml`, `python/case_uco/__init__.py`, `csharp/CaseUco/CaseUco.csproj`, `java/pom.xml`, `rust/Cargo.toml`, README version matrix) — fixes stale `1.9.0` metadata on current release tags (closes #35).
+- Java `central-publishing-maven-plugin` bumped to **0.11.0** (incorporates [PR #36](https://github.com/vulnmaster/CASE-UCO-SDK/pull/36)).
+- `docs/recipes/INDEX.md` catalogs 58 recipes; MCP `RECIPE_INDEX` and `TASK_TO_CLASSES` updated for fraud-crypto and cargo-theft domains.
+- README header, Java dependency snippet, and version compatibility matrix updated to **1.14.0**.
+
+## [1.13.4] - 2026-06-22
+
 ### Added
 
 - Markdown document processing in `document_processor_cli` (`--file-kind markdown`) with warrant-oriented `return_kinds` filtering and extraction bundle output aligned with Link-Look document review.

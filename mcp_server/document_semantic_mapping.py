@@ -132,8 +132,25 @@ PERSON_OF_RE = re.compile(
     r"\bof\s+\*?\*?([A-Z][a-z]+)\s+([A-Z][a-z]+)\*?\*?\s*(?:\(|,|\.)"
 )
 ROLE_TABLE_PERSON_RE = re.compile(
-    r"\|\s*(?:Applying Agent|Victim|Groomer|Analyst|Mule(?:\s*/\s*cash-out)?)\s*\|\s*"
-    r"(?:Special Agent\s+)?([A-Z][a-z]+)\s+([A-Z][a-z]+)",
+    r"\|\s*(?:Applying Agent|Victim|Groomer|Analyst|Mule(?:\s*/\s*cash-out)?|"
+    r"Account Holder|Exchange User|Registered User)\s*\|\s*"
+    r"(?:Special Agent\s+)?([A-Z][a-z]+)\s+([A-Z][a-z]+)"
+    r"(?:\s*,\s*aka\s+[\"']([^\"']+)[\"'])?",
+    re.IGNORECASE,
+)
+MARKDOWN_TABLE_ROW_RE = re.compile(
+    r"^\|\s*([^|\n]+?)\s*\|\s*([^|\n]+?)\s*\|\s*$",
+    re.MULTILINE,
+)
+MARKDOWN_TABLE_SEPARATOR_RE = re.compile(r"^\|\s*[-: |]+\|\s*[-: |]+\|\s*$")
+TABLE_HEADER_LABELS = frozenset({"role", "field", "label", "column", "name", "attribute"})
+CHAT_SPEAKER_LINE_RE = re.compile(
+    r"^([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+)*)\s+\(@([A-Za-z0-9_]{3,64})\)\s*:",
+    re.MULTILINE,
+)
+ACCOUNT_HOLDER_RE = re.compile(
+    r"\b(?:Account(?:\s+holder|\s+name)|Customer(?:\s+name)?|Registered user)\s*:\s*"
+    r"([A-Z][a-z]+)\s+([A-Z][a-z]+)\b",
     re.IGNORECASE,
 )
 TELEGRAM_HANDLE_RE = re.compile(r"(?<![A-Za-z0-9])@([A-Za-z0-9_]{3,64})\b")
@@ -267,6 +284,79 @@ def _add_person_match(
             "uco-core:description": f"Person referenced in document text: {label}.",
         },
     )
+
+
+def _add_display_name_person(
+    matches: list[SemanticEntity],
+    seen_spans: set[tuple[int, int, str]],
+    seen_people: set[tuple[str, str]],
+    *,
+    display_name: str,
+    matched_text: str,
+    start: int,
+    end: int,
+    section_id: str,
+    run_seed: str,
+    alias: str | None = None,
+) -> None:
+    parts = [part for part in display_name.split() if part]
+    if len(parts) >= 2 and not any(
+        part.lower() in PERSON_NAME_STOPWORDS for part in parts
+    ):
+        _add_person_match(
+            matches,
+            seen_spans,
+            seen_people,
+            first=parts[0],
+            last=parts[-1],
+            alias=alias,
+            matched_text=matched_text,
+            start=start,
+            end=end,
+            section_id=section_id,
+            run_seed=run_seed,
+        )
+        return
+    label = display_name if not alias else f"{display_name} (aka {alias})"
+    _add_match(
+        matches,
+        seen_spans,
+        ontology_class="uco-identity:Person",
+        label=label[:120],
+        matched_text=matched_text,
+        start=start,
+        end=end,
+        section_id=section_id,
+        run_seed=run_seed,
+        extra_properties={
+            "uco-core:description": f"Person referenced in document text: {label}.",
+        },
+    )
+
+
+def _person_name_span(value_col: str, row_start: int, row_end: int, full_text: str) -> tuple[str, str, str | None, int, int] | None:
+    aka_match = PERSON_AKA_RE.search(value_col)
+    if aka_match:
+        first, last, alias = aka_match.group(1), aka_match.group(2), aka_match.group(3)
+        name_text = f"{first} {last}"
+        name_start = full_text.find(name_text, row_start, row_end)
+        if name_start < 0:
+            return None
+        return first, last, alias, name_start, name_start + len(name_text)
+    simple_match = re.match(
+        r"^(?:Special Agent\s+)?([A-Z][a-z]+)\s+([A-Z][a-z]+)\b",
+        value_col.strip(),
+    )
+    if not simple_match:
+        return None
+    first, last = simple_match.group(1), simple_match.group(2)
+    if first.lower() in PERSON_NAME_STOPWORDS or last.lower() in PERSON_NAME_STOPWORDS:
+        return None
+    name_text = f"{first} {last}"
+    name_start = full_text.find(name_text, row_start, row_end)
+    if name_start < 0:
+        return None
+    return first, last, None, name_start, name_start + len(name_text)
 
 
 def _add_match(
@@ -592,6 +682,98 @@ def extract_semantic_entities(
         )
 
     for match in ROLE_TABLE_PERSON_RE.finditer(full_text):
+        first, last = match.group(1), match.group(2)
+        alias = match.group(3)
+        if first.lower() in PERSON_NAME_STOPWORDS or last.lower() in PERSON_NAME_STOPWORDS:
+            continue
+        _add_person_match(
+            matches,
+            seen_spans,
+            seen_people,
+            first=first,
+            last=last,
+            alias=alias,
+            matched_text=f"{first} {last}",
+            start=match.start(1),
+            end=match.end(2),
+            section_id=section_id,
+            run_seed=run_seed,
+        )
+
+    for match in MARKDOWN_TABLE_ROW_RE.finditer(full_text):
+        if MARKDOWN_TABLE_SEPARATOR_RE.match(match.group(0)):
+            continue
+        label_col = match.group(1).strip()
+        value_col = match.group(2).strip()
+        if label_col.lower() in TABLE_HEADER_LABELS:
+            continue
+        parsed = _person_name_span(
+            value_col,
+            match.start(),
+            match.end(),
+            full_text,
+        )
+        if not parsed:
+            continue
+        first, last, alias, name_start, name_end = parsed
+        _add_person_match(
+            matches,
+            seen_spans,
+            seen_people,
+            first=first,
+            last=last,
+            alias=alias,
+            matched_text=full_text[name_start:name_end],
+            start=name_start,
+            end=name_end,
+            section_id=section_id,
+            run_seed=run_seed,
+        )
+
+    for match in CHAT_SPEAKER_LINE_RE.finditer(full_text):
+        display_name = match.group(1).strip()
+        handle = match.group(2)
+        display_start = match.start(1)
+        display_end = match.end(1)
+        _add_display_name_person(
+            matches,
+            seen_spans,
+            seen_people,
+            display_name=display_name,
+            matched_text=display_name,
+            start=display_start,
+            end=display_end,
+            section_id=section_id,
+            run_seed=run_seed,
+        )
+        handle_text = f"@{handle}"
+        handle_start = full_text.find(handle_text, match.start(), match.end())
+        if handle_start >= 0:
+            _add_match(
+                matches,
+                seen_spans,
+                ontology_class="uco-observable:InstantMessagingAddress",
+                label=f"Telegram {handle_text}",
+                matched_text=handle_text,
+                start=handle_start,
+                end=handle_start + len(handle_text),
+                section_id=section_id,
+                run_seed=run_seed,
+                facets=(
+                    {
+                        "@id": _facet_id(run_seed, f"im-chat-{handle_start}"),
+                        "@type": "uco-observable:InstantMessagingAddressFacet",
+                        "uco-observable:addressValue": handle_text,
+                    },
+                ),
+                extra_properties={
+                    "uco-core:description": (
+                        f"Instant messaging handle for chat speaker {display_name}."
+                    ),
+                },
+            )
+
+    for match in ACCOUNT_HOLDER_RE.finditer(full_text):
         first, last = match.group(1), match.group(2)
         if first.lower() in PERSON_NAME_STOPWORDS or last.lower() in PERSON_NAME_STOPWORDS:
             continue

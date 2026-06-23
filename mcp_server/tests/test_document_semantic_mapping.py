@@ -67,3 +67,65 @@ def test_semantic_mapping_extracts_warrant_markdown_anchors() -> None:
     assert any("Telegram @northstar_mike_synth" in label for label in labels)
     assert not any(label.startswith("Location THE UNITED") for label in labels)
     assert not any(label.startswith("Location the Matter") for label in labels)
+
+
+FRAUD_CRYPTO_CHAT_LOG = """
+[2026-01-04 09:12 UTC]
+Coach Mike (@northstar_mike_synth): Welcome back — portfolio review today.
+Marcus Hale (@northstar_mike_synth): Copy that.
+Priya Sundaram (@priya_analyst_synth): Analyst notes attached below.
+"""
+
+
+FRAUD_CRYPTO_VICTIM_STATEMENT = """
+| Role | Name |
+| Victim | Eleanor Vance |
+| Groomer | Marcus Hale, aka "Coach Mike" |
+| Analyst | Priya Sundaram |
+"""
+
+
+FRAUD_CRYPTO_EXCHANGE_RECORDS = """
+Account holder: Dylan Reyes
+Registered user: Eleanor Vance
+Exchange return notes for account DR-8812.
+"""
+
+
+def test_semantic_mapping_extracts_chat_speaker_display_names() -> None:
+    entities = extract_semantic_entities(
+        FRAUD_CRYPTO_CHAT_LOG,
+        run_seed="fraud-crypto-chat-t0",
+    )
+    person_labels = [entity.label for entity in entities if entity.ontology_class == "uco-identity:Person"]
+    im_labels = [
+        entity.label
+        for entity in entities
+        if entity.ontology_class == "uco-observable:InstantMessagingAddress"
+    ]
+    assert any("Marcus Hale" in label for label in person_labels)
+    assert any("Coach Mike" in label for label in person_labels)
+    assert any("Priya Sundaram" in label for label in person_labels)
+    assert any("@northstar_mike_synth" in label for label in im_labels)
+    assert any("@priya_analyst_synth" in label for label in im_labels)
+
+
+def test_semantic_mapping_extracts_role_table_persons() -> None:
+    entities = extract_semantic_entities(
+        FRAUD_CRYPTO_VICTIM_STATEMENT,
+        run_seed="fraud-crypto-victim-t0",
+    )
+    person_labels = [entity.label for entity in entities if entity.ontology_class == "uco-identity:Person"]
+    assert any("Eleanor Vance" in label for label in person_labels)
+    assert any("Marcus Hale" in label and "Coach Mike" in label for label in person_labels)
+    assert any("Priya Sundaram" in label for label in person_labels)
+
+
+def test_semantic_mapping_extracts_exchange_account_holders() -> None:
+    entities = extract_semantic_entities(
+        FRAUD_CRYPTO_EXCHANGE_RECORDS,
+        run_seed="fraud-crypto-exchange-t0",
+    )
+    person_labels = [entity.label for entity in entities if entity.ontology_class == "uco-identity:Person"]
+    assert any("Dylan Reyes" in label for label in person_labels)
+    assert any("Eleanor Vance" in label for label in person_labels)

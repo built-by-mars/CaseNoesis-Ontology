@@ -1,0 +1,18 @@
+{
+  "contract_version": "1.0",
+  "source_sha256": "fea27a403954a42466c8b3e712d2adc6617cd9d50e74a76154bdbd9aacb908a6",
+  "content_sha256": "968055498eb842d6aa37aa2c23958c2771fc73c013ab0f73437060d83c1dbe61",
+  "extraction_tool": "case-uco-document-normalize",
+  "extraction_tool_version": "0.6.0",
+  "file_kind": "pdf",
+  "content": {
+    "kind": "text",
+    "sections": [
+      {
+        "section_id": "s1",
+        "text": "Case 1:20-cr-00252-JLT-BAM Document 113 Filed 05/28/25 Page 1 of 5\nCase 1:20-cr-00252-JLT-BAM Document 113 Filed 05/28/25 Page 2 of 5\nCase 1:20-cr-00252-JLT-BAM Document 113 Filed 05/28/25 Page 3 of 5\nCase 1:20-cr-00252-JLT-BAM Document 113 Filed 05/28/25 Page 4 of 5\nCase 1:20-cr-00252-JLT-BAM Document 113 Filed 05/28/25 Page 5 of 5"
+      }
+    ]
+  },
+  "failures": []
+}
