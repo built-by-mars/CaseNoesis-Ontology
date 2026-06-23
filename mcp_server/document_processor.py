@@ -387,12 +387,51 @@ def text_section_content(full_text: str) -> tuple[dict[str, Any], dict[str, Any]
     return canonical, anchor
 
 
+def _markdown_table_sheets(raw_text: str) -> list[dict[str, Any]] | None:
+    """Parse pipe-style markdown tables into sheet rows for the extraction bundle."""
+
+    from document_semantic_mapping import MARKDOWN_TABLE_SEPARATOR_RE, TABLE_HEADER_LABELS
+
+    rows: list[list[str]] = []
+    for line in raw_text.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("|") or not stripped.endswith("|"):
+            continue
+        if MARKDOWN_TABLE_SEPARATOR_RE.match(stripped):
+            continue
+        cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+        if len(cells) >= 2:
+            rows.append(cells[:2])
+    if len(rows) < 2:
+        return None
+    header = rows[0]
+    data_rows = rows[1:]
+    if header[0].lower() in TABLE_HEADER_LABELS or header[1].lower() in TABLE_HEADER_LABELS:
+        pass
+    else:
+        data_rows = rows
+        header = ["Field", "Value"]
+    return [
+        {
+            "name": "markdown_table",
+            "header": header,
+            "rows": data_rows,
+            "total_source_rows": len(data_rows),
+            "truncated": False,
+        }
+    ]
+
+
 def extract_markdown_content(source: Path) -> ExtractedContent:
     raw = source.read_text(encoding="utf-8")
     joined = sanitize_document_text(raw)
     if not joined:
         raise ValueError("no_extractable_content")
-    canonical, _anchor = text_section_content(joined)
+    table_sheets = _markdown_table_sheets(raw)
+    if table_sheets:
+        canonical: dict[str, Any] = {"kind": "table", "sheets": table_sheets}
+    else:
+        canonical, _anchor = text_section_content(joined)
     run_seed = f"{source.name}:{joined[:32]}"
     records = records_for_text_document(
         joined, document_label_prefix="Markdown text", run_seed=run_seed
@@ -403,6 +442,7 @@ def extract_markdown_content(source: Path) -> ExtractedContent:
             "document_type": "Markdown document",
             "extracted_text": joined[:240],
             "semantic_entity_count": str(len(records)),
+            "table_sheet_count": str(len(table_sheets or [])),
         },
         records=records,
         canonical=canonical,

@@ -51,6 +51,8 @@ End-to-end mapping recipes that walk through source input, modeling choices, ant
 | Forensic Investigation Lifecycle | [forensic-lifecycle.md](forensic-lifecycle.md) | Ordered phases (survey, preservation, examination, analysis, reporting) | [forensic_lifecycle](https://github.com/casework/CASE-Examples/tree/master/examples/illustrations/forensic_lifecycle) |
 | Network Investigation with Bundle | [network-investigation.md](network-investigation.md) | Full investigation with warrant, PCAP extraction, provenance | [network_connection](https://github.com/casework/CASE-Examples/tree/master/examples/illustrations/network_connection) |
 | Spear Phishing and Attack Narratives | [spear-phishing.md](spear-phishing.md) | Attack chain modeling with extended ontology patterns | [spear_phishing](https://github.com/casework/CASE-Examples/tree/master/examples/illustrations/spear_phishing) |
+| Fraud, Cryptocurrency, and Money Laundering | [fraud-crypto-laundering.md](fraud-crypto-laundering.md) | Pig-butchering scams, blockchain trace, exchange returns, geofence correlation | — |
+| Cargo Theft and Route Staging | [cargo-theft-route-staging.md](cargo-theft-route-staging.md) | Freight theft, geofence deviation, warehouse staging, manifest anomalies | — |
 | NCMEC CyberTip Reporting Workflow | [cybertip-ncmec-workflow.md](cybertip-ncmec-workflow.md) | Platform detection, ESP reporting, CyberTip lifecycle, and CAC investigation | — |
 
 ### Crimes Against Children (CAC Ontology)

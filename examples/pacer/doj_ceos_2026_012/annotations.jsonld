@@ -1,0 +1,292 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld"
+  ],
+  "@graph": [
+    {
+      "id": "urn:link-look:anchor:b5eed38e-f48a-581e-b39b-9959204a977e",
+      "type": "Annotation",
+      "body": "urn:uuid:330779e4-2d33-5400-a3eb-4f4b75e6af3d",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 574,
+            "end": 590
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "November 8, 2023"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:8a5a55a5-b632-59e4-a8c2-72611dcf14dd",
+      "type": "Annotation",
+      "body": "urn:uuid:ec4f6e69-6013-596a-acf4-ce4e1450bfbe",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1223,
+            "end": 1235
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "May 14, 2026"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:e67208e8-b5dd-57e0-8111-d0f24542123b",
+      "type": "Annotation",
+      "body": "urn:uuid:fae6c042-a1dd-513e-93f7-7157c23b7875",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1314,
+            "end": 1326
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "May 18, 2026"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:70ec850b-2ad1-5429-93f7-e4d336bb5575",
+      "type": "Annotation",
+      "body": "urn:uuid:f4067cd9-2581-5e36-84dd-69d0e167d394",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1357,
+            "end": 1365
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/18/26"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:e3648057-9eed-553b-ae0e-63eeb6122392",
+      "type": "Annotation",
+      "body": "urn:uuid:c0a9431e-abee-595f-9ebb-a3d2dc04681f",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2443,
+            "end": 2451
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/18/26"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:ad6da675-1a8a-5950-8b80-0e72c6ed1a5c",
+      "type": "Annotation",
+      "body": "urn:uuid:51363174-f553-5894-916a-83a03b345e31",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 4085,
+            "end": 4093
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/18/26"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:8edeabee-519c-5204-9104-0b9fd94658f1",
+      "type": "Annotation",
+      "body": "urn:uuid:caef2ce7-c049-5a6d-a13f-cb8f3748392e",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 6155,
+            "end": 6363
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "ion officer.\n9. You shall notify the probation officer within 72 hours of being arrested or questioned by a law enforcement\nofficer.\n10. You shall not enter into any agreement to act as an informer or a speci"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:b4b60ca7-a92e-5574-82a0-d91e4450872d",
+      "type": "Annotation",
+      "body": "urn:uuid:2b263406-8f6c-5501-a3e3-c9b06d56c4c9",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 6467,
+            "end": 6475
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/18/26"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:d82ba0ea-f458-58eb-95f7-8dd694105fff",
+      "type": "Annotation",
+      "body": "urn:uuid:07e7d35f-ea64-5063-89be-72ce2ae702ce",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 10025,
+            "end": 10033
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/18/26"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:dec65a73-7cdd-5e93-8694-81e83416ef44",
+      "type": "Annotation",
+      "body": "urn:uuid:63eb8d38-7197-5a9f-9705-13529a75345c",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 10406,
+            "end": 10413
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "$100.00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:459e6c13-257d-5013-87d7-b829dbffa4e6",
+      "type": "Annotation",
+      "body": "urn:uuid:4bed4d54-d506-54e9-863b-1ac0eb06c248",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 10414,
+            "end": 10423
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "$5,000.00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:b37d5458-31f5-5924-a844-344d394e9b6a",
+      "type": "Annotation",
+      "body": "urn:uuid:8197038e-062d-5966-907e-e85c2d1cea91",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 11081,
+            "end": 11087
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "$2,500"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:c1886f4a-1408-5cca-8f2a-6f7604a419cf",
+      "type": "Annotation",
+      "body": "urn:uuid:8228b73b-320f-5271-9177-14d8e663cbb2",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 11739,
+            "end": 11747
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/18/26"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:e234673e-f80a-5464-b9fc-6c5d2a36c224",
+      "type": "Annotation",
+      "body": "urn:uuid:ac8c5bf5-e70a-5139-bbe8-98b2026d52ab",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 12051,
+            "end": 12060
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "$5,100.00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:db1db3ee-bf42-5531-a45c-9471c7cebc52",
+      "type": "Annotation",
+      "body": "urn:uuid:600979b2-75dd-5ab1-aa0a-1dc3aacc337c",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 14076,
+            "end": 14084
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "05/18/26"
+          }
+        ]
+      }
+    }
+  ]
+}
