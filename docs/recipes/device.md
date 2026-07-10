@@ -87,3 +87,10 @@ graph.write("device.jsonld")
 - `ComputerSpecificationFacet` has many optional fields: `hostname`, `total_ram`, `available_ram`, `cpu`, `cpu_family`, `gpu`, `bios_version`, `bios_serial_number`, `processor_architecture`, etc. Populate only what the source provides.
 - Use `Relationship` with `kind_of_relationship="Has_Operating_System"` to link devices to their OS.
 - For forensic lab documentation, include the workstation's specs to establish the examination environment.
+
+## Related
+
+- [mobile-device.md](mobile-device.md) — mobile-specific device modeling
+- [mobile-device-sim.md](mobile-device-sim.md) — handset + SIM card detail
+- [event.md](event.md) — authentication and system events on the device
+- [accounts.md](accounts.md) — accounts used from the device

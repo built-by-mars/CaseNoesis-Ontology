@@ -1,0 +1,1349 @@
+{
+  "extension": "cryptoinv",
+  "modules": [
+    "cryptoinv"
+  ],
+  "classes": {
+    "AssetSeizureAction": {
+      "iri": "http://example.org/ontology/cryptoinv/AssetSeizureAction",
+      "module": "cryptoinv",
+      "description": "An investigative action in which law enforcement takes custody of assets — including virtual assets seized by using recovered private keys to transfer wallet contents to government-controlled addresses — pursuant to a seizure warrant under Federal Rule of Criminal Procedure 41 (https://www.law.cornell.edu/rules/frcrmp/rule_41) and 21 U.S.C. § 853(f), or under exigent circumstances with subsequent judicial approval (see United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts para. 6).",
+      "parents": [
+        "InvestigativeAction"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        },
+        {
+          "name": "wasInformedBy",
+          "type": "InvestigativeAction",
+          "type_iri": "https://ontology.caseontology.org/case/investigation/InvestigativeAction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A re-implementation of the wasInformedBy property in W3C PROV-O, where an entity is exchanged by two activities, 'one activity using the entity generated by the other'. [Ref: https://www.w3.org/TR/prov-o/#wasInformedBy]"
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "CriminalCharge": {
+      "iri": "http://example.org/ontology/cryptoinv/CriminalCharge",
+      "module": "cryptoinv",
+      "description": "A criminal charge is a formal accusation, stated as a count within a charging instrument (indictment or information), that a person committed a specific statutory offense — e.g. Count One, Money Laundering Conspiracy in violation of 18 U.S.C. § 1956(h). Charging instruments and their required contents are governed by Federal Rule of Criminal Procedure 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7).",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "chargeDescription",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The plain-language name of the charged offense as stated in the charging instrument, e.g. 'Money Laundering Conspiracy' or 'Conspiracy To Defraud the United States'."
+        },
+        {
+          "name": "countNumber",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The ordinal number of this charge (count) within its charging instrument, per Federal Rule of Criminal Procedure 7(c) (https://www.law.cornell.edu/rules/frcrmp/rule_7)."
+        },
+        {
+          "name": "statuteCitation",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "The statutory citation for the charged offense, e.g. '18 U.S.C. § 1956(h)' (https://uscode.house.gov/)."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "CryptocurrencyAddressFacet": {
+      "iri": "http://example.org/ontology/cryptoinv/CryptocurrencyAddressFacet",
+      "module": "cryptoinv",
+      "description": "A cryptocurrency address facet is a grouping of characteristics unique to a blockchain address used to send and receive virtual assets on a distributed ledger network. A virtual currency address is roughly equivalent to an anonymous account number and has a corresponding private key needed to spend value held at the address (see the affidavit in United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts nn.4-9, and the INTERPOL DW-VA Taxonomy entity 'wallet': https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#wallet). Attach to a uco-observable:ObservableObject via uco-core:hasFacet.",
+      "parents": [
+        "Facet"
+      ],
+      "is_facet": true,
+      "properties": [
+        {
+          "name": "addressFormat",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The encoding format of the address as an open vocabulary. Recommended values: 'Base58Check', 'Bech32', 'Hex'. See BIP-173 (https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) for Bech32 and https://en.bitcoin.it/wiki/Base58Check_encoding for Base58Check."
+        },
+        {
+          "name": "addressValue",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The cryptocurrency address string, e.g. '1CGA4s...' (Base58Check), 'bc1q...' (Bech32), or '0x8CE693CB0626924583931F25f50AF8fC1C6517F0' (Ethereum hex). See Bitcoin address encodings in BIP-173 (https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki)."
+        },
+        {
+          "name": "blockchainNetwork",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The distributed ledger network the address or transaction belongs to, e.g. 'Bitcoin Mainnet', 'Ethereum', 'Litecoin'. A blockchain is a public transaction ledger that includes a record of every transaction that has ever occurred on the network (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#blockchain)."
+        },
+        {
+          "name": "cryptocurrencyType",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The type of cryptocurrency, as an open vocabulary of ticker symbols. Recommended values: BTC, ETH, LTC, XMR, ZEC, DASH, ETC, BCH, BSV, BTG, XRP, DOGE, SOL, ADA, DOT, AVAX, MATIC, USDT, USDC, WETH. Producers may use identifiers not in this list to accommodate new virtual assets (ticker symbols as listed by major data providers, e.g. https://coinmarketcap.com/)."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "CryptocurrencyMixingService": {
+      "iri": "http://example.org/ontology/cryptoinv/CryptocurrencyMixingService",
+      "module": "cryptoinv",
+      "description": "A cryptocurrency mixing service (mixer or tumbler) obscures the link between transaction inputs and outputs by combining or shuffling the virtual assets of multiple users — for example via coinjoin, a method where two or more user transactions are combined into a single blockchain transaction with multiple inputs and outputs (INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#coinjoin). Examples cited in federal prosecutions include Bitcoin Fog, Helix, and ChipMixer (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of the Offense para. 19; see also FinCEN guidance FIN-2019-G001, https://www.fincen.gov/resources/statutes-and-regulations/guidance).",
+      "parents": [
+        "Organization"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "CryptocurrencyTransactionFacet": {
+      "iri": "http://example.org/ontology/cryptoinv/CryptocurrencyTransactionFacet",
+      "module": "cryptoinv",
+      "description": "A cryptocurrency transaction facet is a grouping of characteristics unique to a transfer of value recorded on a blockchain distributed ledger. Attach to a uco-observable:ObservableObject representing the transaction; model the source and destination addresses as uco-observable:ObservableRelationship instances with uco-core:kindOfRelationship values 'Transaction_Input' and 'Transaction_Output' and a cryptoinv:transferAmount. This pattern natively supports UTXO-chain transactions (Bitcoin) with multiple inputs and outputs (see https://developer.bitcoin.org/devguide/transactions.html) as well as account-based chains (Ethereum).",
+      "parents": [
+        "Facet"
+      ],
+      "is_facet": true,
+      "properties": [
+        {
+          "name": "blockHash",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The hash of the block containing this transaction (https://developer.bitcoin.org/reference/block_chain.html)."
+        },
+        {
+          "name": "blockNumber",
+          "type": "integer",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#integer",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The block number (block height) in the blockchain at which the transaction was confirmed (https://developer.bitcoin.org/reference/block_chain.html)."
+        },
+        {
+          "name": "confirmationCount",
+          "type": "integer",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#integer",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of blockchain confirmations at the time of observation. This is a point-in-time snapshot, not a time-varying quality (time-varying properties are deferred to https://github.com/ucoProject/UCO/issues/535)."
+        },
+        {
+          "name": "transactionFee",
+          "type": "decimal",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#decimal",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The transaction fee in the native cryptocurrency unit of the network (https://developer.bitcoin.org/devguide/transactions.html#transaction-fees-and-change)."
+        },
+        {
+          "name": "transactionHash",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The unique hash identifier of the blockchain transaction, e.g. '6e0d701ac2ea3ad87fc8bcaa786b994aa943f5eb9a67a1e345769bb090bf5b9e' (a Bitcoin transaction identifier / txid; see https://developer.bitcoin.org/reference/transactions.html)."
+        },
+        {
+          "name": "transactionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The status of the transaction at the time of observation, as an open vocabulary. Recommended values: 'Confirmed', 'Pending', 'Failed'."
+        },
+        {
+          "name": "transactionType",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The investigative characterization of the transaction, as an open vocabulary. Recommended values: 'Transfer', 'Exchange', 'Purchase', 'Mixing', 'Withdrawal', 'Deposit', 'ContractExecution', 'Staking', 'Unstaking'. Mixing and chain-hopping transaction types are defined in the INTERPOL DW-VA Taxonomy (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#coinjoin)."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "CryptocurrencyWalletFacet": {
+      "iri": "http://example.org/ontology/cryptoinv/CryptocurrencyWalletFacet",
+      "module": "cryptoinv",
+      "description": "A cryptocurrency wallet facet is a grouping of characteristics unique to a wallet: software, a device, or a hosted service that keeps track of the private keys used to sign virtual-asset transactions, and which may contain many virtual currency addresses (INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#wallet). First proposed as CryptoWalletFacet in https://github.com/casework/CASE/issues/87; this revision omits time-varying balance properties, which remain blocked by https://github.com/ucoProject/UCO/issues/535 — use cryptoinv:VirtualAssetHoldingFacet for point-in-time holdings snapshots.",
+      "parents": [
+        "Facet"
+      ],
+      "is_facet": true,
+      "properties": [
+        {
+          "name": "addressCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of virtual currency addresses contained in the wallet at the time of observation (a wallet may include many addresses, each with a corresponding private key)."
+        },
+        {
+          "name": "walletIdentifier",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "An investigative identifier for the wallet or address cluster, e.g. the first characters of a representative address ('Wallet 1CGA4s') or a chain-analysis cluster label ('Cluster 36B6mu'). A cluster is a grouping of addresses believed to be contained within a single wallet (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts n.28)."
+        },
+        {
+          "name": "walletType",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The custody model and form factor of the wallet, as an open vocabulary. Recommended values: 'hosted' (a third party retains the customer's funds: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#hosted-wallet), 'unhosted' (the user exercises total, independent control over funds: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#unhosted-wallet), 'hardware' (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#hardware_wallet), 'software' (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#software_wallet), 'paper'."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "DarknetMarket": {
+      "iri": "http://example.org/ontology/cryptoinv/DarknetMarket",
+      "module": "cryptoinv",
+      "description": "A darknet market is an e-commerce platform, typically reachable only via anonymizing networks such as Tor, through which vendors can sell illegal goods and services such as narcotics, stolen financial information, and hacking tools. Darknet markets typically allow users to create accounts and deposit, store, and withdraw virtual currency, which makes them usable as money-laundering pass-throughs that break up fund-flow trails on public blockchains (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts n.12 and paras. 11-12; INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/).",
+      "parents": [
+        "Organization"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "ForfeitureOrder": {
+      "iri": "http://example.org/ontology/cryptoinv/ForfeitureOrder",
+      "module": "cryptoinv",
+      "description": "A forfeiture order (or forfeiture allegation, prior to conviction) requires a defendant to forfeit to the government property involved in or traceable to the offense, under statutes such as 18 U.S.C. § 981(a)(1)(C) (https://www.law.cornell.edu/uscode/text/18/981), 18 U.S.C. § 982(a)(1) (https://www.law.cornell.edu/uscode/text/18/982), 28 U.S.C. § 2461(c), and the substitute-assets provision 21 U.S.C. § 853(p) (https://www.law.cornell.edu/uscode/text/21/853). A forfeiture money judgment for a sum equal to the value of the property involved may accompany the forfeiture of specific property.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "moneyJudgmentAmount",
+          "type": "decimal",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#decimal",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The amount of the forfeiture money judgment, equal to the value of property involved in the offense (see 18 U.S.C. §§ 981-982, https://www.law.cornell.edu/uscode/text/18/981)."
+        },
+        {
+          "name": "moneyJudgmentCurrencyCode",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The ISO 4217 alphabetic currency code of the forfeiture money judgment, e.g. 'USD' (https://www.iso.org/iso-4217-currency-codes.html)."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "PleaAgreement": {
+      "iri": "http://example.org/ontology/cryptoinv/PleaAgreement",
+      "module": "cryptoinv",
+      "description": "A plea agreement is a negotiated agreement under Federal Rule of Criminal Procedure 11(c) (https://www.law.cornell.edu/rules/frcrmp/rule_11) in which a defendant agrees to plead guilty to one or more charges, typically in exchange for concessions such as dismissal of other charges, a sentencing recommendation, or non-prosecution commitments. This class models the legal instrument and its terms; model the underlying court-filed document separately as a uco-observable:ObservableObject with a uco-observable:FileFacet and link the two with a uco-core:Relationship.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "pleaDate",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The date the plea agreement was executed or the guilty plea was entered before the court (Federal Rule of Criminal Procedure 11, https://www.law.cornell.edu/rules/frcrmp/rule_11)."
+        },
+        {
+          "name": "pleadsGuiltyTo",
+          "type": "CriminalCharge",
+          "type_iri": "http://example.org/ontology/cryptoinv/CriminalCharge",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "Links a plea agreement to the criminal charge(s) the defendant agrees to plead guilty to under Federal Rule of Criminal Procedure 11 (https://www.law.cornell.edu/rules/frcrmp/rule_11)."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "RestitutionOrder": {
+      "iri": "http://example.org/ontology/cryptoinv/RestitutionOrder",
+      "module": "cryptoinv",
+      "description": "A restitution order (or restitution request) compensates victims for losses caused by the offense. For most federal property crimes restitution is mandatory under the Mandatory Victims Restitution Act, 18 U.S.C. § 3663A (https://www.law.cornell.edu/uscode/text/18/3663A). Restitution may be in-kind, e.g. return of forfeited virtual assets to the victim exchange.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "restitutionDescription",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "A description of the restitution proposed or ordered, e.g. 'in-kind restitution of forfeited cryptocurrency to the victim virtual currency exchange'."
+        },
+        {
+          "name": "restitutionInKind",
+          "type": "boolean",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#boolean",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "True when restitution is proposed or ordered in-kind (return of specific property, such as seized virtual assets) rather than as a monetary payment (18 U.S.C. § 3663A, https://www.law.cornell.edu/uscode/text/18/3663A)."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "SentencingOutcome": {
+      "iri": "http://example.org/ontology/cryptoinv/SentencingOutcome",
+      "module": "cryptoinv",
+      "description": "A sentencing outcome records a sentence recommended by a party or imposed by the court under 18 U.S.C. § 3553(a) (https://www.law.cornell.edu/uscode/text/18/3553) and the United States Sentencing Guidelines (https://www.ussc.gov/guidelines), including the term of imprisonment, supervised release, offense level, and advisory Guidelines range. Use cryptoinv:sentenceStatus to distinguish a party recommendation from an imposed judgment.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "guidelineRangeHighMonths",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The high end of the advisory Sentencing Guidelines range in months (U.S.S.G. Ch. 5 Pt. A Sentencing Table, https://www.ussc.gov/guidelines)."
+        },
+        {
+          "name": "guidelineRangeLowMonths",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The low end of the advisory Sentencing Guidelines range in months (U.S.S.G. Ch. 5 Pt. A Sentencing Table, https://www.ussc.gov/guidelines)."
+        },
+        {
+          "name": "offenseLevel",
+          "type": "integer",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#integer",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The total offense level under the United States Sentencing Guidelines used to derive the advisory range (U.S.S.G. Ch. 5 Pt. A Sentencing Table, https://www.ussc.gov/guidelines)."
+        },
+        {
+          "name": "sentenceDurationMonths",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The term of imprisonment in months (recommended or imposed) under 18 U.S.C. § 3553 (https://www.law.cornell.edu/uscode/text/18/3553)."
+        },
+        {
+          "name": "sentenceStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "Whether the sentencing outcome is a recommendation or an imposed judgment, as an open vocabulary. Recommended values: 'recommended-government', 'recommended-defense', 'recommended-probation', 'imposed'."
+        },
+        {
+          "name": "sentencingDate",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The date the sentencing outcome was recommended (date of the sentencing memorandum) or imposed (date of the judgment)."
+        },
+        {
+          "name": "supervisedReleaseMonths",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The term of supervised release in months under 18 U.S.C. § 3583 (https://www.law.cornell.edu/uscode/text/18/3583)."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "VirtualAssetHoldingFacet": {
+      "iri": "http://example.org/ontology/cryptoinv/VirtualAssetHoldingFacet",
+      "module": "cryptoinv",
+      "description": "A virtual asset holding facet is a grouping of characteristics describing a point-in-time quantity of a specific virtual asset held at, contained in, or seized from a wallet, address, or account — for example 'approximately 94,636 BTC seized on 2022-02-01, valued at $3.629 billion' (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts para. 6). Each holding is an observation snapshot with an optional fiat valuation, deliberately avoiding the time-varying balance problem deferred to https://github.com/ucoProject/UCO/issues/535.",
+      "parents": [
+        "Facet"
+      ],
+      "is_facet": true,
+      "properties": [
+        {
+          "name": "assetQuantity",
+          "type": "decimal",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#decimal",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The quantity of the virtual asset in its native unit at the observation time, e.g. 94643.29837084."
+        },
+        {
+          "name": "assetSymbol",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The ticker symbol of the held virtual asset, as an open vocabulary (same recommended values as cryptoinv:cryptocurrencyType, plus platform tokens such as aUSDC, aUSDT, yvUSDT)."
+        },
+        {
+          "name": "fiatCurrencyCode",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The ISO 4217 alphabetic currency code of the fiat valuation, e.g. 'USD' (https://www.iso.org/iso-4217-currency-codes.html)."
+        },
+        {
+          "name": "fiatValue",
+          "type": "decimal",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#decimal",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The fiat-currency valuation of the holding at the valuation date. Fiat money is a currency established as money by government regulation (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#fiat-money)."
+        },
+        {
+          "name": "valuationDate",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The date and time at which the fiat valuation of the holding was made. The trading value of virtual assets fluctuates over time depending on market demand."
+        }
+      ],
+      "source": "cryptoinv"
+    },
+    "VirtualAssetServiceProvider": {
+      "iri": "http://example.org/ontology/cryptoinv/VirtualAssetServiceProvider",
+      "module": "cryptoinv",
+      "description": "A virtual asset service provider (VASP) is any natural or legal person who as a business conducts one or more of the following activities for or on behalf of another natural or legal person: exchange between virtual assets and fiat currencies; exchange between one or more forms of virtual assets; transfer of virtual assets; safekeeping and/or administration of virtual assets or instruments enabling control over virtual assets; and participation in and provision of financial services related to an issuer's offer and/or sale of a virtual asset (FATF definition, as recorded in the INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#VASP). Virtual currency exchanges (VCEs) doing business in the United States are regulated by the U.S. Department of the Treasury and must establish anti-money-laundering programs under the Bank Secrecy Act (31 U.S.C. § 5311 et seq., https://www.fincen.gov/resources/statutes-and-regulations/bank-secrecy-act).",
+      "parents": [
+        "Organization"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        }
+      ],
+      "source": "cryptoinv"
+    }
+  },
+  "vocabs": {}
+}

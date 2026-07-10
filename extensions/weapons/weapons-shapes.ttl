@@ -1,0 +1,42 @@
+# Weapons and Firearms Extension — SHACL shapes
+# Permissive stubs: weapons recovered in investigations are often only
+# partially described, so no property is required; shapes constrain
+# datatypes and cardinality only.
+
+@prefix weap: <http://example.org/ontology/weapons/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+weap:Weapon-shape
+	a sh:NodeShape ;
+	sh:targetClass weap:Weapon ;
+	sh:property
+		[
+			sh:path weap:make ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path weap:model ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path weap:caliber ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path weap:serialNumber ;
+			sh:datatype xsd:string ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path weap:serialNumberObliterated ;
+			sh:datatype xsd:boolean ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] .

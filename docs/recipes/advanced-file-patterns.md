@@ -148,3 +148,7 @@ graph.write("advanced_file_patterns.jsonld")
 - `EncodedStreamFacet` has `encoding_method: Optional[str]`.
 - Common `kind_of_relationship` values for file chains: `"Contained_Within"`, `"Decoded_From"`, `"Decrypted_From"`, `"Decompressed_From"`.
 - Facets go on the `Relationship` itself (via `has_facet`) when they describe the relationship (e.g., byte offset), not the objects.
+
+## Related
+
+- [database-records.md](database-records.md) — record-level extraction from the SQLite files

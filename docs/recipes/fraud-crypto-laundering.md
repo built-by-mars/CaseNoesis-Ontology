@@ -183,8 +183,26 @@ SELECT ?handle WHERE {
 | Treating exchange CSV rows as anonymous strings | Map account holder names to `Person` and link to exchange `AccountFacet` observables |
 | Omitting provenance on derived wallet clusters | Add `ProvenanceRecord` from raw exchange/blockchain export files to analysis actions |
 
+## Typed crypto observables and legal process: the `cryptoinv` extension
+
+Core CASE/UCO has no cryptocurrency facets yet (pending [UCO #675](https://github.com/ucoProject/UCO/issues/675)). For typed modeling, load the SDK's [`extensions/cryptoinv/`](../../extensions/cryptoinv/) extension and pass `extensions=["cryptoinv"]` to `validate_graph`:
+
+| Need | cryptoinv class |
+|---|---|
+| Blockchain address | `ObservableObject` + `cryptoinv:CryptocurrencyAddressFacet` (`addressValue`, `cryptocurrencyType`, `blockchainNetwork`, `addressFormat`) |
+| Transaction | `ObservableObject` + `cryptoinv:CryptocurrencyTransactionFacet`; inputs/outputs as `ObservableRelationship` (`Transaction_Input` / `Transaction_Output`) with `cryptoinv:transferAmount` |
+| Wallet / cluster | `cryptoinv:CryptocurrencyWalletFacet` (`walletType`, `walletIdentifier`, `addressCount`) |
+| Point-in-time holdings / seized value | `cryptoinv:VirtualAssetHoldingFacet` (`assetSymbol`, `assetQuantity`, `fiatValue`, `valuationDate`) — snapshots only; time-varying balances are blocked by [UCO #535](https://github.com/ucoProject/UCO/issues/535) |
+| Exchanges, darknet markets, mixers | `cryptoinv:VirtualAssetServiceProvider`, `cryptoinv:DarknetMarket`, `cryptoinv:CryptocurrencyMixingService` |
+| Laundering conduct | `uco-action:Action` + `cryptoinv:launderingTechnique` (peel-chain, chain-hopping, mixing, …) |
+| Charges, pleas, sentencing, forfeiture | `cryptoinv:CriminalCharge`, `PleaAgreement`, `SentencingOutcome`, `ForfeitureOrder`, `RestitutionOrder`, `AssetSeizureAction` |
+
+Worked exemplar: `examples/pacer/doj_crypto_2023_239/build_lichtenstein_ddc_2023_crypto.py` (U.S. v. Lichtenstein & Morgan — Bitfinex hack laundering, validated with strict concept coverage).
+
 ## Related recipes
 
+- [elder-fraud-impersonation.md](elder-fraud-impersonation.md) — government-impersonation call centers, money couriers, and cash/prepaid-card schemes without a crypto layer
+- [racketeering-enterprise.md](racketeering-enterprise.md) — when the theft-and-laundering operation is charged as a RICO enterprise (enterprise, member roles, predicate categories via the `rico` extension)
 - [threaded-messaging.md](threaded-messaging.md) — ordered chat threads and participants
 - [accounts.md](accounts.md) — cross-platform identity correlation
 - [location.md](location.md) — registered addresses and geospatial correlation

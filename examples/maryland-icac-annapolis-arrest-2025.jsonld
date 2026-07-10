@@ -305,7 +305,7 @@
         "@type": "xsd:dateTime",
         "@value": "2025-12-11T00:00:00Z"
       },
-      "uco-action:authorization": {
+      "case-investigation:relevantAuthorization": {
         "@id": "urn:uuid:6c95d88e-af81-52be-b388-0e4a39b7a6ab"
       },
       "uco-action:performer": {
@@ -446,7 +446,10 @@
       "@type": [
         "uco-core:ExternalReference"
       ],
-      "uco-core:url": "https://www.eyeonannapolis.net/2025/12/38-year-old-annapolis-man-charged-with-online-sexual-solicitation-of-minor/"
+      "uco-core:referenceURL": {
+        "@type": "xsd:anyURI",
+        "@value": "https://www.eyeonannapolis.net/2025/12/38-year-old-annapolis-man-charged-with-online-sexual-solicitation-of-minor/"
+      }
     },
     {
       "@id": "urn:uuid:ce7d0328-2f34-5cea-8e9c-e72eea51e615",
@@ -497,7 +500,10 @@
       ],
       "uco-core:name": "Graph derivation from press article PDF",
       "uco-core:description": "Knowledge graph produced from Eye On Annapolis article via CASE-UCO MCP document extraction and CAC recipe-guided mapping.",
-      "case-investigation:createdTime": "2026-06-15T00:00:00Z",
+      "uco-core:objectCreatedTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-06-15T00:00:00Z"
+      },
       "case-investigation:wasInformedBy": [
         {
           "@id": "urn:uuid:ce7d0328-2f34-5cea-8e9c-e72eea51e615"

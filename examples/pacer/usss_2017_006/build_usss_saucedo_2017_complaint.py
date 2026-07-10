@@ -186,7 +186,7 @@ def build_graph() -> dict:
         },
         {
             "@id": offender_role,
-            "@type": ["uco-role:OffenderRole", "uco-core:UcoObject"],
+            "@type": ["case-investigation:Subject", "uco-core:UcoObject"],
             "uco-core:name": "Principal Offender — Saucedo",
             "uco-core:description": "Principal subject role for defendant in this complaint (ALLEGED).",
         },
@@ -222,7 +222,7 @@ def build_graph() -> dict:
                 {
                     "@id": uid("complaint-external-ref"),
                     "@type": "uco-core:ExternalReference",
-                    "uco-core:referenceType": "Magistrate Criminal Complaint",
+                    "uco-core:definingContext": "Magistrate Criminal Complaint",
                     "uco-core:referenceURL": {
                         "@type": "xsd:anyURI",
                         "@value": (
@@ -667,7 +667,7 @@ def build_graph() -> dict:
                 "text exchanges from iPhone 6s Plus."
             ),
             "uco-action:startTime": lit("xsd:dateTime", "2016-11-21T00:00:00Z"),
-            "uco-action:authorization": {"@id": warrant_auth},
+            "case-investigation:relevantAuthorization": {"@id": warrant_auth},
             "uco-action:performer": {"@id": ecwg},
             "uco-action:location": {"@id": vista},
             "uco-action:object": {"@id": defendant},
@@ -737,8 +737,8 @@ def build_graph() -> dict:
                 "Investigative graph derived from PACER criminal complaint PDF and MCP semantic "
                 "extraction bundle; counts and conduct described as ALLEGED in complaint."
             ),
-            "case-investigation:createdBy": {"@id": hsi_ceg},
-            "case-investigation:derivedFrom": {"@id": source_doc},
+            "uco-core:createdBy": {"@id": hsi_ceg},
+            "case-investigation:wasDerivedFrom": {"@id": source_doc},
         },
     ]
 

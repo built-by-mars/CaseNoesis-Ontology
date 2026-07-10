@@ -124,3 +124,8 @@ for i, chunk in enumerate(chunks):
 ```
 
 See [PERFORMANCE_GUIDE.md](../PERFORMANCE_GUIDE.md) for hardware sizing, memory benchmarks, and validation scaling guidance.
+
+## Related
+
+- [round-trip.md](round-trip.md) — serialize/deserialize at scale
+- [starter-filesystem-report.md](starter-filesystem-report.md) — the per-file mapping being scaled

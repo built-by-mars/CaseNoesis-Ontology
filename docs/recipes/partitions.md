@@ -176,3 +176,9 @@ graph.write("partitions.jsonld")
 - Use `DataRangeFacet` on the `Relationship` to specify the partition's sector offset and size.
 - `RecoveredObjectFacet` on a deleted partition records the recovery status.
 - For the full partition → volume → filesystem → files chain, create intermediate objects and link them with `Contained_Within` relationships.
+
+## Related
+
+- [file-system.md](file-system.md) — filesystems on the volumes
+- [file-recovery.md](file-recovery.md) — recovery from deleted partitions
+- [file-fragments.md](file-fragments.md) — fragments spanning volume boundaries

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <PackageId>CaseUco.AEO</PackageId>
+    <Version>0.2.1</Version>
+    <Description>Adversary Engagement Ontology bindings for CASE/UCO SDK</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CaseUco" Version="1.2.0"/>
+  </ItemGroup>
+</Project>

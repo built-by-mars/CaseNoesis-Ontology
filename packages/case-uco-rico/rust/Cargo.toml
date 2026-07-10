@@ -1,0 +1,9 @@
+[package]
+name = "case-uco-rico"
+version = "0.1.0"
+edition = "2021"
+description = "Racketeering and Criminal Enterprise Extension bindings for CASE/UCO SDK"
+
+[dependencies]
+case-uco = "1.4.0"
+serde = {{ version = "1", features = ["derive"] }}

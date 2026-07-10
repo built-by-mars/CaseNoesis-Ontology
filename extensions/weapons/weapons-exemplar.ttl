@@ -1,0 +1,51 @@
+# Weapons and Firearms Extension — exemplar A-Box
+# Condensed, synthetic-IRI rendering of public facts from
+# U.S. v. Lindell et al., No. 3:25-cr-00005 (D.N.D.) (SIG Sauer P365
+# pistol brandished during a kidnapping) and U.S. v. Perry & O'Dell,
+# No. 2:22-cr-04065-BCW (W.D. Mo.) (rifle and obliterated-serial pistol).
+# Demonstrates the firearm classes and every weap: property once.
+
+@prefix weap: <http://example.org/ontology/weapons/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:aa1b2c3d-4e5f-5a6b-8c7d-9e0f1a2b3c4d>
+	a weap:Handgun ;
+	uco-core:name "SIG Sauer P365 9mm pistol (Serial Number 66F717834)" ;
+	uco-core:description "Black pistol left behind by the defendant after crashing a stolen vehicle in Fargo in April 2024; subject of the felon-in-possession and 924(c) drug-trafficking counts." ;
+	weap:make "SIG Sauer" ;
+	weap:model "P365" ;
+	weap:caliber "9mm" ;
+	weap:serialNumber "66F717834" ;
+	weap:serialNumberObliterated false .
+
+<urn:uuid:bb2c3d4e-5f6a-5b7c-8d8e-0f1a2b3c4d5e>
+	a weap:Rifle ;
+	uco-core:name "Voodoo Innovations multi-caliber rifle" ;
+	weap:make "Voodoo Innovations" ;
+	weap:serialNumber "21221464" .
+
+<urn:uuid:cc3d4e5f-6a7b-5c8d-9e9f-1a2b3c4d5e6f>
+	a weap:Handgun ;
+	uco-core:name "Ruger Security-9 9mm pistol (obliterated serial number)" ;
+	weap:make "Ruger" ;
+	weap:model "Security-9" ;
+	weap:caliber "9mm" ;
+	weap:serialNumberObliterated true .
+
+<urn:uuid:dd4e5f6a-7b8c-5d9e-8f0a-2b3c4d5e6f7a>
+	a weap:Ammunition ;
+	uco-core:name "Seventeen 9mm rounds in a black magazine left in a backpack near the crashed vehicle" ;
+	weap:caliber "9mm" .
+
+<urn:uuid:ee5f6a7b-8c9d-5e0f-9a1b-3c4d5e6f7a8b>
+	a uco-identity:Person ;
+	uco-core:name "Defendant One" .
+
+<urn:uuid:ff6a7b8c-9d0e-5f1a-8b2c-4d5e6f7a8b9c>
+	a uco-core:Relationship ;
+	uco-core:source <urn:uuid:ee5f6a7b-8c9d-5e0f-9a1b-3c4d5e6f7a8b> ;
+	uco-core:target <urn:uuid:aa1b2c3d-4e5f-5a6b-8c7d-9e0f1a2b3c4d> ;
+	uco-core:kindOfRelationship "Possessed" ;
+	uco-core:isDirectional true .

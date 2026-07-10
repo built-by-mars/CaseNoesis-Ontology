@@ -1,0 +1,167 @@
+# Legal Process and Procedure Extension — SHACL shapes
+# Permissive stubs: open vocabularies stay strings; only the identity-bearing
+# property of each class is required.
+
+@prefix legalproc: <https://ontology.caseontology.org/case/criminal/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+legalproc:CriminalCharge-shape
+	a sh:NodeShape ;
+	sh:targetClass legalproc:CriminalCharge ;
+	sh:property
+		[
+			sh:path legalproc:statuteCitation ;
+			sh:datatype xsd:string ;
+			sh:minCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:countNumber ;
+			sh:datatype xsd:nonNegativeInteger ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:countLabel ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:offenseForm ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:chargeClassification ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:chargeDisposition ;
+			sh:datatype xsd:string ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:objectOffense ;
+			sh:class legalproc:CriminalCharge ;
+			sh:nodeKind sh:IRI ;
+		] ,
+		[
+			sh:path legalproc:assertedIn ;
+			sh:class legalproc:ChargingInstrument ;
+			sh:nodeKind sh:IRI ;
+		] .
+
+legalproc:ChargingInstrument-shape
+	a sh:NodeShape ;
+	sh:targetClass legalproc:ChargingInstrument ;
+	sh:property
+		[
+			sh:path legalproc:instrumentType ;
+			sh:datatype xsd:string ;
+			sh:minCount 1 ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] .
+
+legalproc:Plea-shape
+	a sh:NodeShape ;
+	sh:targetClass legalproc:Plea ;
+	sh:property
+		[
+			sh:path legalproc:pleaType ;
+			sh:datatype xsd:string ;
+			sh:minCount 1 ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:concernsCharge ;
+			sh:class legalproc:CriminalCharge ;
+			sh:nodeKind sh:IRI ;
+		] .
+
+legalproc:CriminalProceeding-shape
+	a sh:NodeShape ;
+	sh:targetClass legalproc:CriminalProceeding ;
+	sh:property
+		[
+			sh:path legalproc:proceedingType ;
+			sh:datatype xsd:string ;
+			sh:minCount 1 ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] .
+
+legalproc:Verdict-shape
+	a sh:NodeShape ;
+	sh:targetClass legalproc:Verdict ;
+	sh:property
+		[
+			sh:path legalproc:verdictType ;
+			sh:datatype xsd:string ;
+			sh:minCount 1 ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:concernsCharge ;
+			sh:class legalproc:CriminalCharge ;
+			sh:nodeKind sh:IRI ;
+		] .
+
+legalproc:Sentence-shape
+	a sh:NodeShape ;
+	sh:targetClass legalproc:Sentence ;
+	sh:property
+		[
+			sh:path legalproc:sentenceStatus ;
+			sh:datatype xsd:string ;
+			sh:minCount 1 ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:sentenceTerm ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] .
+
+legalproc:ForfeitureOrder-shape
+	a sh:NodeShape ;
+	sh:targetClass legalproc:ForfeitureOrder ;
+	sh:property
+		[
+			sh:path legalproc:monetaryAmount ;
+			sh:datatype xsd:decimal ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:currencyCode ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] .
+
+legalproc:RestitutionOrder-shape
+	a sh:NodeShape ;
+	sh:targetClass legalproc:RestitutionOrder ;
+	sh:property
+		[
+			sh:path legalproc:monetaryAmount ;
+			sh:datatype xsd:decimal ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path legalproc:currencyCode ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] .

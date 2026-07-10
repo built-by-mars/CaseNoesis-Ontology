@@ -1,0 +1,680 @@
+             Case 3:20-cr-00446-WHA        Document 48   Filed 01/21/25   Page 1 of 11
+
+
+
+
+ 1 ISMAIL J. RAMSEY (CABN 189820)
+   United States Attorney
+ 2
+   MARTHA A. BOERSCH (CABN 126569)
+ 3 Chief, Criminal Division
+
+ 4
+   COLIN SAMPSON (CABN 249784)
+ 5 Assistant United States Attorney
+   BRETT REYNOLDS
+ 6 Trial Attorney, National Security Division
+
+ 7           450 Golden Gate Ave., 11th Floor
+             San Francisco, California 94102
+ 8
+             Telephone: (415) 436-7200
+ 9           Fax: (415) 436-7009
+             Email: Colin.Sampson@usdoj.gov
+10
+
+11 Attorneys for the United States of America
+
+12
+                                   UNITED STATES DISTRICT COURT
+13
+                                 NORTHERN DISTRICT OF CALIFORNIA
+14
+                                       SAN FRANCISCO DIVISION
+15
+
+16
+     UNITED STATES OF AMERICA,                  )   CASE NO. CR 20-00446 WHA-2
+17                                              )
+             Plaintiff,                         )   GOVERNMENT’S SENTENCING
+18                                              )   MEMORANDUM
+        v.                                      )
+19                                              )   Date:     January 28, 2025
+     LIN CHEN,                                  )   Time:     11:30 a.m.
+20                                                  Judge:    William H. Alsup, Ctrm. 12
+                                                )
+             Defendant.
+21                                              )
+                                                )
+22
+
+23
+
+24
+
+25
+
+26
+
+27
+
+28
+
+     GOVERNMENT’S SENTENCING MEMORANDUM,
+     USA v. Chen, CR-20-446 WHA-2
+           Case 3:20-cr-00446-WHA          Document 48       Filed 01/21/25      Page 2 of 11
+
+
+
+
+ 1 I.       INTRODUCTION
+
+ 2          Pursuant to Criminal Local Rule 32-5(b), the United States respectfully submits its sentencing
+
+ 3 memorandum in the above-captioned case. On October 17, 2024, the defendant pleaded guilty to a
+
+ 4 single count of violation of the International Economic Emergency Powers Act (“IEEPA”), 50 U.S.C.
+
+ 5 § 1705. For the reasons set forth herein, the United States recommends a sentence of 27 months’
+
+ 6 imprisonment, three years of supervised release, a $100 special assessment, and a fine in the amount of
+
+ 7 $255,000.
+
+ 8 II.      BACKGROUND
+
+ 9          Defendant acted as the importer and end user in the People’s Republic of China (“PRC”) of a
+
+10 wafer scribe and break machine, used in the manufacture of semiconductors, that it actually sold to an
+
+11 entity that the U.S. Department of Commerce had subjected to a licensing requirement the year earlier.
+
+12 Her involvement in the scheme included traveling from the PRC to Santa Rosa to meet with the
+
+13 machine’s manufacturer and arranging for employees of the manufacturer to travel to the PRC to meet
+
+14 with the machine’s manufacturer in the months before the sales contract was signed. 1 Defendant, on
+
+15
+
+16
+
+17
+
+18
+19
+
+20
+
+21
+
+22
+
+23
+
+24
+
+25
+
+26
+
+27
+
+28          1
+              These visits likely related to two DTX-150 sales to Defendant’s company, JHI, in 2015. The
+     true end user on the other sale facilitated by JHI was China Electronics Technology Group Corporation
+     GOVERNMENT’S SENTENCING MEMORANDUM,
+     CR-20-00446 WHA                                   1
+           Case 3:20-cr-00446-WHA           Document 48       Filed 01/21/25      Page 3 of 11
+
+
+
+
+ 1 behalf of her employer, Jiangsu Sainty Hantang Trade Corp. (“JHI”), from Jiangsu, PRC, further
+
+ 2 communicated by email with Dynatex about the price, terms, and delivery instructions for the machine
+
+ 3 destined for Chengdu, PRC, to the true end-user Chengdu GaStone Technology Co., Ltd. (“GaStone”):
+
+ 4 After the delivery of the DTX-150 to GaStone for $216,750 (list price of $255,000, minus a 15%
+
+ 5 distributor discount) 2, Defendant continued to correspond with and procure consumables like scribe
+
+ 6 tools and lubricants from Dynatex for GaStone until July 2018.
+
+ 7          A sentence of incarceration for a period of no fewer than 27 months and a $255,000 fine is
+
+ 8 sufficient, but not greater than necessary, to reflect the seriousness of the offense she committed and to
+
+ 9 deter other individuals abroad from assisting prohibited entities from acquiring technology or equipment
+
+10 with the potential to undermine the United States’ economic and national security interests.
+
+11 III.     CHARGES AND CONVICTION
+
+12          On December 1, 2020, the Grand Jury returned an Indictment charging Defendant with four
+
+13 criminal offenses, including Causing an Unlawful Export in Violation of the Export Administration
+
+14 Regulations “IEEPA” in violation of 50 U.S.C. § 1705 and 15 C.F.R. § 764.2(b). See ECF No. 35. The
+
+15 criminal charges relate to Mrs. Chen’s involvement in the purchase and export of a DTX-150 Automatic
+
+16 Scriber Breaker machine sold in December 2015 to Chengdu Gastone, a PRC entity prohibited from
+
+17 exporting such items from the United States by the Department of Commerce. Rather than truthfully
+
+18 indicate that Chengdu Gastone was the end-user, which would have been a prohibited transaction, Chen
+19 listed her company, JHI, falsely indicating that it was the end-user of the machine.
+
+20          On October 17, 2024, following her arrest as she attempted to enter the United States on April
+
+21 23, 2024, Defendant pleaded guilty to a single count of violation of IEEPA.
+
+22 IV.      THE AMENDED PRESENTENCE INVESTIGATION REPORT
+
+23          A.     Legal Objections to the Amended Presentence Investigation Report
+
+24          The government has no legal objections to the Presentence Investigation Report (“PSIR”), other
+
+25 than its argument about the Judiciary Sentencing Information (“JSIN”) database information, discussed
+
+26
+   55th Research Institute (“CETC 55”), which was not subject to a license requirement at that time.
+27        2
+            Dynatexdrafted a distributor agreement with JHI as early as 2015, however, a Distributor
+28 Agreement   obtained from Dynatex and effective November 8, 2018, appears to be signed by Defendant
+   as JHI’s “Import Manager.”
+     GOVERNMENT’S SENTENCING MEMORANDUM,
+     CR-20-00446 WHA                     2
+           Case 3:20-cr-00446-WHA           Document 48        Filed 01/21/25     Page 4 of 11
+
+
+
+
+ 1 in section IV(G), below.
+
+ 2          B.      Factual Objections to the Amended PSIR
+
+ 3          The government has no legal objections to the Amended PSIR.
+
+ 4 V.       UNITED STATES SENTENCING GUIDELINES PROVISIONS
+ 5          A.      Evasion of Export Controls (U.S.S.G. § 2M5.1)
+ 6          Although the parties do not agree, the government respectfully asserts that the Court adopt the
+ 7 PSIR’s application of a Base Offense Level of 26, pursuant to U.S.S.G. § 2M5.1(a)(1).
+
+ 8          Under the International Emergency Economic Powers Act (“IEEPA”), 50 U.S.C. §§ 1701-07, the
+ 9 President of the United States has authority to deal with unusual and extraordinary threats to the national
+
+10 security and foreign policy of the United States. Under IEEPA, the President can declare a national
+
+11 emergency through Executive Orders that have the full force and effect of law.
+
+12          IEEPA also empower the U.S. Department of Commerce (“DOC”) to issue regulations
+13 governing exports. Initially, the Export Administration Act (“EAA”), 50 App. U.S.C. §§ 2401-2420,
+
+14 regulated the export of goods, technology, and software from the United States. Until the enactment of
+
+15 the Export Control Reform Act of 2018, P.L. 115-232 (Aug. 13, 2018), export of dual use goods and
+
+16 services was regulated pursuant to the authority of the EAA. Pursuant to the provisions of the EAA, the
+
+17 DOC promulgated the Export Administration Regulations (“EAR”), 15 C.F.R. §§ 730-774, which
+
+18 contain additional restrictions on the export of goods outside of the United States, consistent with the
+19 policies and provisions of the EAA. See 15 C.F.R. § 730.02. Although the EAA lapsed on August 17,
+
+20 2001, pursuant to the authority provided to the President under IEEPA, the President issued Executive
+
+21 Order 13222, which declared a national emergency with respect to the unusual and extraordinary threat
+
+22 to the national security, foreign policy, and economy of the United States in light of the expiration of the
+
+23 EAA. Accordingly, pursuant to IEEPA, the President ordered that the EAR’s provisions remain in full
+
+24 force and effect despite the expiration of the EAA. Presidents have issued annual Executive Notices
+
+25 extending the national emergency declared in Executive Order 13222 from the time period covered by
+
+26 that Executive Order. Under IEEPA, it is a crime to willfully violate any regulation promulgated
+
+27 thereunder, including the EAR. See 50 U.S.C. § 1705.
+
+28
+
+     GOVERNMENT’S SENTENCING MEMORANDUM,
+     CR-20-00446 WHA                     3
+            Case 3:20-cr-00446-WHA           Document 48        Filed 01/21/25      Page 5 of 11
+
+
+
+
+ 1          The EAR imposes, pursuant to the “Entity List” published at 15 C.F.R. § 774, Supp. No. 4,
+
+ 2 licensing and other requirements for sales to certain companies, businesses, research institutions,
+
+ 3 government and private organizations, individuals, and other types of legal persons that are subject to
+
+ 4 specific license requirements for the export, re-export and/or transfer (in-country) of specified items. If a
+
+ 5 license is required for a transaction, a U.S. party to the transaction must submit an export license
+
+ 6 application prior to export. Chengdu GaStone Technology Co., Ltd. was designated on the DOC Entity
+
+ 7 List on August 1, 2014.
+
+ 8          According to Section 2M5.1, a base level of 26 applies “if . . . national security controls or
+
+ 9 controls relating to the proliferation of nuclear, biological, or chemical weapons were evaded.” In this
+
+10 case, there is little doubt that national security controls were evaded when defendant Chen caused the
+
+11 export of a machine related to the manufacture of silicon wafer microchips to GaStone, a PRC
+
+12 institution on the Entity List of the Department of Commerce.
+
+13          Placement of an entity on the Entity List itself indicates a risk to national security. The Bureau of
+
+14 Industry and Security of the Department of Commerce “first published the Entity List in February 1997
+
+15 as part of its efforts to inform the public of entities who have engaged in activities that could result in an
+
+16 increased risk of the diversion of exported, reexported and transferred (in-country) items to weapons of
+
+17 mass destruction (WMD) programs. Since its initial publication, grounds for inclusion on the Entity List
+
+18 have expanded to activities sanctioned by the State Department and activities contrary to U.S. national
+19 security and/or foreign policy interests.” See https://www.bis.doc.gov/index.php/policy-guidance/lists-
+
+20 of-parties-of-concern/entity-list
+
+21          Particularly here, the Department of Commerce specifically cited the national security and
+
+22 foreign policy interests of the United States when it added Gastone to the Entity List. See
+
+23 https://www.federalregister.gov/documents/2014/08/01/2014-17960/addition-of-certain-persons-to-the-
+
+24 entity-list (explaining the addition of Gastone to the Entity List because of its “involvement in activities
+
+25 contrary to the national security and foreign policy interests of the United States”). Courts in this district
+
+26 and this circuit have also applied 2M5.1(a)(1) in analogous cases. See United States v. Shih, 119 F.4th
+
+27 1136, 1140-41 (9th Cir. 2024); United States v. Soong, No. 3:22-cr-00372-SI (May 3, 2023).
+
+28          As a result of the above, the appropriate Base Offense Level is 26.
+
+     GOVERNMENT’S SENTENCING MEMORANDUM,
+     CR-20-00446 WHA                     4
+           Case 3:20-cr-00446-WHA           Document 48        Filed 01/21/25      Page 6 of 11
+
+
+
+
+ 1          B.      Acceptance of Responsibility
+
+ 2          Mrs. Chen has demonstrated acceptance of responsibility for her offense. She is therefore
+
+ 3 entitled to a three-level decrease, to Offense Level 23, pursuant to U.S.S.G. § 3E1.1(b).
+
+ 4          C.      Adjustment for Zero-Point Offender Status
+
+ 5          The government does not dispute that, pursuant to U.S.S.G. § 4C1.1(a), Mrs. Chen is entitled to a
+
+ 6 two-level decrease, to Offense Level 21.
+
+ 7          D.      The Fine
+
+ 8          The PSIR specifically found that, based on Defendant’s significant net worth and monthly cash
+
+ 9 flow in the PRC, “she has the ability to pay a fine.” PSIR, ¶ 59. Money was the reason and motivation
+
+10 Defendant and her company assisted their client in acquiring a prohibited machine. No Guideline fine
+
+11 range applies to this offense, which has a maximum of $1,000,000. See U.S.S.G. § 5E1.2(c)(4). A fine
+
+12 of $255,000, representing the list price of the DTX-150 machine sold to JHI, is an appropriate deterrent
+
+13 to would-be evaders of export restrictions with a financial incentive in causing such violations, and well
+
+14 under the maximum statutory fine of $1,000,000.
+
+15          E.      The Applicable Sentencing Range
+
+16          At an Adjusted Offense Level 21, the applicable range for incarceration is 37 to 46 months.
+
+17 However, as agreed in the Plea agreement and argued in this Memorandum, the Court should vary
+
+18 downward by three levels, to Adjusted Offense Level 18. At Adjusted Offense Level 18, the applicable
+19 range for incarceration is 27 to 33 months.
+
+20          F.      JSIN Data
+
+21          According to the JSIN database, in the past five fiscal years (2019-2023), four defendants
+
+22 (excluding cooperators) sentenced pursuant to the Guideline applicable to IEEPA violations (U.S.S.G.
+
+23 § 2M5.1) at an Adjusted Offense Level 21 with Criminal History Category I, with an average sentence
+
+24 of 14 months and a median sentence of 15 months. This JSIN data may be of limited value here,
+
+25 however, given how few defendants with the same Adjusted Offense Level have been sentenced under
+
+26 the same Guideline. Given that the only options available for sentencings for IEEPA offenses begin
+
+27 with offense level 26 or 14, this relatively limited dataset likely captures only sentencings after the
+
+28 implementation of the zero-point offender departure under the First Step Act and U.S.S.G. § 4C1.1.
+
+     GOVERNMENT’S SENTENCING MEMORANDUM,
+     CR-20-00446 WHA                     5
+           Case 3:20-cr-00446-WHA           Document 48       Filed 01/21/25       Page 7 of 11
+
+
+
+
+ 1 Indeed, the JSIN database shows that for 2019-2023, there were many more defendants – 21 in total
+
+ 2 with Criminal History Category I – sentenced under § 2M5.1 whose Adjusted Offense Level was 23, as
+
+ 3 it would have been for defendants who received the three-point adjustment for acceptance of
+
+ 4 responsibility from the base offense level of 26. 3 For those 21 defendants, the average sentence
+
+ 5 imposed was 27 months with a median length of 26 months. An insufficient number of defendants (1)
+
+ 6 were sentenced at an Adjusted Offense Level 18, and therefore the average and median sentence were
+
+ 7 not reported by JSIN.
+
+ 8          VI.     18 U.S.C. § 3553(a)
+
+ 9          Section 3553(a)’s factors support the government’s recommended sentence of 27 months’
+
+10 imprisonment and a significant fine for the export of the DTX-150 machine to Chengdu GaStone.
+
+11          District courts are to impose a sentence sufficient, but not greater than necessary, to comply with
+
+12 the purposes set forth in the Sentencing Reform Act. See 18 U.S.C. § 3553(a). In so doing, the courts
+
+13 are to consider, among other things: (1) the nature and circumstances of the offense and the history and
+
+14 characteristics of the defendant; (2) the need for the sentence imposed (A) to reflect the seriousness of
+
+15 the offense, to promote respect for the law, and to provide just punishment for the offense, (B) to afford
+
+16 adequate deterrence to criminal conduct, (C) to protect the public from further crimes of the defendant,
+
+17 and (D) to provide the defendant with needed educational or vocational training, medical care, or other
+
+18 correctional treatment in the most effective manner; (3) the kinds of sentences available; (4) the kinds of
+19 sentence and the sentencing range established by the Guidelines; (5) any pertinent policy statement; and
+
+20 (6) the need to avoid unwarranted sentence disparities among defendants with similar records who have
+
+21 been found guilty of similar conduct. Id. While all of the Section 3553(a) factors should be considered,
+
+22 the government highlights a few that are particularly important in this case.
+
+23                  A.     Seriousness of the Offense
+
+24          Willfully exporting restricted machinery like the DTX-150 machine to restricted buyers without
+
+25
+
+26          3
+            Defendant may assert that the appropriate Guideline Base Offense Level is 14, which the
+27 government  disputes. For reference, the latest dataset for the eight defendants (other than cooperators)
+   sentenced to incarceration at that level with a reduction for acceptance of responsibility and Criminal
+28 History Category I received an average sentence of seven months and a median sentence of eight
+   months.
+     GOVERNMENT’S SENTENCING MEMORANDUM,
+     CR-20-00446 WHA                     6
+           Case 3:20-cr-00446-WHA           Document 48        Filed 01/21/25      Page 8 of 11
+
+
+
+
+ 1 a license from the Department of Commerce is a serious offense. The DTX-150’s applications include
+
+ 2 dicing of gallium arsenide (“GaAs”) wafers, which form the substrate under integrated circuits.
+
+ 3 Compared to silicon wafers, while more costly, GaAs wafers allow electrons to flow more quickly and
+
+ 4 to produce light, making them suited for telecommunications and optoelectronics. Moreover, GaAs
+
+ 5 wafers are less brittle and operate in a wider temperature range than Silicon. See, e.g., S. Kayali, GaAs
+
+ 6 Material Properties, available at https://parts.jpl.nasa.gov/mmic/3-I.PDF. The Department of Commerce
+
+ 7 has classified the DTX-150 machine as a “dual use” item pursuant to EAR99, meaning it has both
+
+ 8 potential military and civilian applications.
+
+ 9          From the PRC, Defendant earned JHI commissions by falsely posing as the end user of the DTX-
+
+10 150 wafer cutting machine purchased from Dynatex, when, in reality, the true end user was GaStone, an
+
+11 entity prohibited from receiving such items by the United States Department of Commerce. To execute
+
+12 the scheme, Defendant engaged with Dynatex Corporation in Santa Rosa and placed her company, JHI,
+
+13 in the middle of the transaction to conceal GaStone’s involvement from the United States government.
+
+14 This included the contract with Dynatex, but also the export paperwork to move the machine from
+
+15 California to Chengdu, PRC, where GaStone was located. According to an invitation letter sent to
+
+16 Dynatex in May 2015, Defendant was listed as the “Chief Representative” of JHI. Entities like JHI that
+
+17 falsely pose as true end-users undermine the United States government’s measures to protect its
+
+18 economy and national security. For its part in the export to GaStone, Dynatex Corporation pleaded
+19 guilty to an IEEPA violation and paid a significant fine. See United States v. Dynatex Corp., 3:21-CR-
+
+20 0360 CRB, ECF No. 10 ($100,000 fine).
+
+21          The Defendant’s willfulness and criminal intent is confirmed by the documentary evidence. Not
+
+22 only did she participate in falsely indicating that JHI – rather than GaStone – was the end-user of the
+
+23 DTX-150 machine, but she received an email from her co-defendant Anson Li in which he stated that
+
+24 “GaStone [is] listed in the black list” and therefore could not be listed on the master waybill for the
+
+25 device. See PSR ¶ 12.4
+
+26
+          4 As the PSR acknowledges, Chen’s counsel takes the position that she does not speak or write
+27 English and that she is not responsible for emails received or sent from the email account in her name.
+   See PSR ¶ 12 n. 1. Defense counsel concedes, though, that Chen “gave her team members access” to
+28 her email account to conduct business. See id. This gives rise to an inference that Chen was aware of
+   correspondence with her account, certainly in relation to the material terms of large contracts like the
+   GOVERNMENT’S SENTENCING MEMORANDUM,
+   CR-20-00446 WHA                                  7
+           Case 3:20-cr-00446-WHA           Document 48        Filed 01/21/25     Page 9 of 11
+
+
+
+
+ 1                  B.     Defendant’s History and Characteristics
+
+ 2          Defendant has lived and worked in the PRC all of her life. She is well educated, with a degree in
+
+ 3 engineering. Her children are all adults. Two of her daughters have been educated at universities in the
+
+ 4 United States, including her youngest daughter with whom she currently resides while on supervised
+
+ 5 release. She appears to be able to live and save well on her salary there and her deceased husband’s
+
+ 6 pension. The government’s recommendation of a below-Guidelines sentence adequately takes Mrs.
+
+ 7 Chen’s history and characteristics into account.
+
+ 8                  C.     General Deterrence – Respect for the Law
+
+ 9          The government’s recommended sentence of 27 months’ imprisonment is the minimum
+
+10 necessary to afford adequate general deterrence to the community. General deterrence is one of the
+
+11 prescribed goals of every sentencing, United States v. Pugh, 515 F.3d 1179, 1194 (11th Cir. 2008), but it
+
+12 occupies an especially important role in sentencing for regulatory offenses, because prosecutions of
+
+13 individuals working to earn a profit by evading export restrictions are rare and are afforded greater
+
+14 attention by their peers. Indeed, a deterrent sentence to an individual whose crime against the United
+
+15 States was committed largely from the PRC is relatively rare and will cause would-be violators to think
+
+16 twice about evading the federal government’s restrictions – or at least leaving the PRC afterward. A
+
+17 sentence of 27 months’ imprisonment would be sufficient, but not more than necessary to accomplish
+
+18 the goal of general deterrence. Both entities in the United States that produce or ship EAR99 items, and
+19 those abroad that purchase them, pay attention to cases like these, and a deterrent sentence is likely to
+
+20 promote enhanced compliance and scrutiny over such transactions and send a message that the potential
+
+21 losses and prison time far outweigh the potential gains from engaging in such prohibited sales.
+
+22          A sentence significantly below the government’s recommendation for Defendant’s crime could
+
+23 send the wrong public message and certainly would not fulfill the need for deterrence. Instead, it would
+
+24 foster a belief that regulatory crimes are not serious, and when caught are not punished like other crimes.
+
+25 The admonition of the Court of Appeals in United States v. Ture applies aptly: “the goal of deterrence
+
+26 rings hollow if a prison sentence is not imposed in this case.” 450 F.3d 352, 358 (8th Cir. 2006). Along
+
+27
+
+28
+     $255,000 contract for the DTX-150.
+     GOVERNMENT’S SENTENCING MEMORANDUM,
+     CR-20-00446 WHA                     8
+           Case 3:20-cr-00446-WHA          Document 48        Filed 01/21/25     Page 10 of 11
+
+
+
+
+ 1 those lines, there is a public perception in cases like this of defendants being charged and getting away
+
+ 2 with probation or a sentence significantly below the Guidelines, while other defendants in different sorts
+
+ 3 of cases are not so fortunate.
+
+ 4                  D.     Avoidance of Sentencing Disparities
+
+ 5          The government’s recommendation of 27 months is in line with recent national median sentences
+
+ 6 for offenses of this type calculated under U.S.S.G. § 2M5.1, subject to the caveat noted above about the
+
+ 7 paucity of data following the zero-point offender amendment following the passage of the First Step
+
+ 8 Act. The government’s recommendation is a deterrent, though variance-based sentence (based on the
+
+ 9 variance to Adjusted Offense Level of 21, minus the government’s recommended three-level variance to
+
+10 Adjusted Offense Level 18), sentence. Title 18, U.S.C. § 3553(a)(1), requires that “the nature and
+
+11 circumstances of the offense” be considered in sentencing. As detailed above, Mrs. Chen is now elderly
+
+12 and semi-retired. She has resided under restrictions while in the United States after her arrest here in
+
+13 April 2024. The nature and circumstances of Defendant’s offense demonstrates that her actions, while
+
+14 taken from outside the United States, were not without consequences.
+
+15          Section 3553(a) requires that the sentence imposed provide “adequate deterrence.” Id. The
+
+16 government’s recommended three-level variance recognizes Defendant’s prompt acceptance of
+
+17 responsibility. The United States respectfully asserts that, should the Court enter a sentence
+
+18 significantly below the government’s recommendation in this case, it will be insufficient and thus
+19 inadequate to provide general deterrence to those individuals in the United States vested with
+
+20 responsibility to ensure that goods and services subject to the EAR not be provided to end-users subject
+
+21 to Commerce Department licensing, and the individuals abroad who may believe that their actions
+
+22 harming the United States’ security and economic interests will go uninvestigated or unpunished and
+
+23 therefore engage in a calculus where the expected profit outweighs the risk of consequences like arrest
+
+24 or a prison sentence. To that end, the government recommends that the Court sentence Defendant to 27
+
+25 months’ imprisonment and impost a significant fine.
+
+26          VII.    CONCLUSION
+
+27          Lin Chen, on behalf of her company JHI, acted as an intermediary in order to procure a high-tech
+
+28 wafer cutting machine for their client, Chengdu GaStone Technology Co., Ltd., which the United Stated
+
+     GOVERNMENT’S SENTENCING MEMORANDUM,
+     CR-20-00446 WHA                     9
+          Case 3:20-cr-00446-WHA          Document 48        Filed 01/21/25     Page 11 of 11
+
+
+
+
+ 1 Department of Commerce had listed as a prohibited entity for such items. Taking into consideration the
+
+ 2 sentencing options available, and particularly the need for general deterrence to those in the PRC and
+
+ 3 elsewhere that would evade restrictions put in place to protect the United States’ economic and national
+
+ 4 security interests, an 27-month term of incarceration followed by three years of supervised release, a
+
+ 5 fine of $255,000 pursuant to U.S.S.G. § 5E1.2(c)(3) (2023), is sufficient – but not greater than necessary
+
+ 6 – to address the violations and comply with the sentencing goals laid out in Title 18. Finally, the United
+
+ 7 States recommends and will request of the Court at sentencing that Chen – who is currently on release
+
+ 8 pending sentencing, but has no long-term ties to the United States and is subject to potential removal
+
+ 9 from the United States as a consequence of her plea – be remanded immediately to the custody of the
+
+10 U.S. Marshal to begin serving her sentence rather than be permitted to voluntarily surrender.
+
+11
+
+12                                               Respectfully submitted,
+
+13                                               ISMAIL J. RAMSEY
+                                                 United States Attorney
+14
+     Dated: January 21, 2025.                    /s/ Colin Sampson
+15
+                                                 COLIN SAMPSON
+16                                               Assistant United States Attorney
+                                                 BRETT REYNOLDS
+17                                               Trial Attorney, National Security Division
+18
+19
+
+20
+
+21
+
+22
+
+23
+
+24
+
+25
+
+26
+
+27
+
+28
+
+     GOVERNMENT’S SENTENCING MEMORANDUM,
+     CR-20-00446 WHA                     10
+

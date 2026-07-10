@@ -1,0 +1,66 @@
+# Racketeering and Criminal Enterprise Extension — exemplar A-Box
+# Condensed, synthetic-IRI rendering of public facts from
+# U.S. v. Lam et al., No. 1:24-cr-00417-CKK (D.D.C.): the "SE Enterprise"
+# RICO conspiracy (18 U.S.C. § 1962(d)) — an association-in-fact
+# social-engineering enterprise that stole and laundered virtual currency.
+# Demonstrates every rico: class and property once, alongside a
+# legalproc:CriminalCharge carrying the predicate statutes.
+
+@prefix rico: <http://example.org/ontology/rico/> .
+@prefix legalproc: <https://ontology.caseontology.org/case/criminal/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:7f3a9c1b-2d5e-5a4f-8b6c-0e1d2f3a4b5c>
+	a rico:RacketeeringEnterprise ;
+	uco-core:name "The Social Engineering Enterprise (SE Enterprise)" ;
+	uco-core:description "Group of individuals associated in fact although not a legal entity (18 U.S.C. § 1961(4)), engaged in and affecting interstate and foreign commerce; operated from no later than October 2023 through at least May 2025. Purposes: stealing virtual currency through fraudulent pretenses; disguising the stolen funds through virtual-currency laundering; converting laundered funds to fiat and luxury goods." ;
+	rico:enterpriseType "association-in-fact" .
+
+<urn:uuid:8a4b0d2c-3e6f-5b5a-9c7d-1f2e3a4b5c6d>
+	a uco-identity:Person ;
+	uco-core:name "Defendant One" .
+
+<urn:uuid:9b5c1e3d-4f7a-5c6b-0d8e-2a3f4b5c6d7e>
+	a rico:EnterpriseRole ;
+	uco-core:name "Money launderer for the SE Enterprise" ;
+	rico:roleFunction "money-launderer" .
+
+<urn:uuid:0c6d2f4e-5a8b-5d7c-1e9f-3b4a5c6d7e8f>
+	a legalproc:CriminalCharge ;
+	uco-core:name "Count 1: RICO Conspiracy" ;
+	legalproc:statuteCitation "18 U.S.C. § 1962(d)" ;
+	legalproc:countNumber "1"^^xsd:nonNegativeInteger ;
+	legalproc:countLabel "Count 1ss" ;
+	legalproc:offenseForm "conspiracy" ;
+	legalproc:chargeDisposition "convicted-by-plea" ;
+	rico:predicateStatute "18 U.S.C. § 1028 (fraud in connection with identification documents)" ;
+	rico:predicateStatute "18 U.S.C. § 1029 (fraud in connection with access devices)" ;
+	rico:predicateStatute "18 U.S.C. § 1343 (wire fraud)" ;
+	rico:predicateStatute "18 U.S.C. § 1512 (tampering with a witness, victim, or an informant)" ;
+	rico:predicateStatute "18 U.S.C. § 1956 (laundering of monetary instruments)" ;
+	rico:predicateStatute "18 U.S.C. § 1957 (monetary transactions in property derived from specified unlawful activity)" ;
+	rico:predicateStatute "18 U.S.C. § 1960 (illegal money transmitters)" ;
+	rico:predicateStatute "18 U.S.C. § 2314 (interstate transportation of stolen property)" .
+
+<urn:uuid:1d7e3a5f-6b9c-5e8d-2f0a-4c5b6d7e8f9a>
+	a uco-core:Relationship ;
+	uco-core:source <urn:uuid:8a4b0d2c-3e6f-5b5a-9c7d-1f2e3a4b5c6d> ;
+	uco-core:target <urn:uuid:7f3a9c1b-2d5e-5a4f-8b6c-0e1d2f3a4b5c> ;
+	uco-core:kindOfRelationship "Member_Of" ;
+	uco-core:isDirectional true .
+
+<urn:uuid:2e8f4b6a-7c0d-5f9e-3a1b-5d6c7e8f9a0b>
+	a uco-core:Relationship ;
+	uco-core:source <urn:uuid:8a4b0d2c-3e6f-5b5a-9c7d-1f2e3a4b5c6d> ;
+	uco-core:target <urn:uuid:9b5c1e3d-4f7a-5c6b-0d8e-2a3f4b5c6d7e> ;
+	uco-core:kindOfRelationship "Has_Role" ;
+	uco-core:isDirectional true .
+
+<urn:uuid:3f9a5c7b-8d1e-5a0f-4b2c-6e7d8f9a0b1c>
+	a uco-core:Relationship ;
+	uco-core:source <urn:uuid:9b5c1e3d-4f7a-5c6b-0d8e-2a3f4b5c6d7e> ;
+	uco-core:target <urn:uuid:7f3a9c1b-2d5e-5a4f-8b6c-0e1d2f3a4b5c> ;
+	uco-core:kindOfRelationship "Role_Within" ;
+	uco-core:isDirectional true .

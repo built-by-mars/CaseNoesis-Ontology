@@ -122,3 +122,10 @@ println!("{}", graph.serialize().unwrap());
 ```
 
 </details>
+
+## Related
+
+- [configured-tool.md](configured-tool.md) — tool configurations and rulesets
+- [starter-tool-run.md](starter-tool-run.md) — end-to-end tool-run starter kit
+- [chain-of-custody.md](chain-of-custody.md) — custody around tool handling
+- [analysis.md](analysis.md) — classification results the tools produce

@@ -65,3 +65,9 @@ graph.write("location.jsonld")
 - `LatLongCoordinatesFacet` fields are all `Optional[float]`: `latitude`, `longitude`, `altitude`.
 - Locations are referenced by other objects via `location` fields on `Action`/`InvestigativeAction`, or linked via `Relationship` objects.
 - For GPS coordinates extracted from device data, see also the [cell-site recipe](cell-site.md) and [EXIF recipe](exif-data.md).
+
+## Related
+
+- [cargo-theft-route-staging.md](cargo-theft-route-staging.md) — routes, geofence deviations, and staging locations in freight theft
+- [cell-site.md](cell-site.md) — tower-derived locations
+- [exif-data.md](exif-data.md) — GPS embedded in image metadata

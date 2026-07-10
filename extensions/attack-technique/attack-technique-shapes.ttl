@@ -1,0 +1,29 @@
+# Technique metaclass extension — standalone SHACL shapes
+#
+# Reproduced verbatim from ucoProject/UCO PR #676 (Feature-Issue-666). The
+# node-shape constraints that live directly on core:UcoType and
+# action:Technique are declared alongside those classes in
+# attack-technique.ttl (both files are loaded together as ontology graphs);
+# this file carries the two standalone shapes the PR adds.
+
+@prefix core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+core:UcoThing-disjointWith-UcoType-shape
+	a sh:NodeShape ;
+	sh:message "core:UcoThing and core:UcoType are disjoint classes."@en ;
+	sh:not [
+		a sh:NodeShape ;
+		sh:class core:UcoType ;
+	] ;
+	sh:targetClass core:UcoThing ;
+	.
+
+action:techniqueID-subjects-shape
+	a sh:NodeShape ;
+	rdfs:comment "This shape enforces that action:techniqueID is only used on Techniques."@en ;
+	sh:class action:Technique ;
+	sh:targetSubjectsOf action:techniqueID ;
+	.

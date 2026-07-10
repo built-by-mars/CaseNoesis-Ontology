@@ -1,0 +1,15 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "case-uco-aeo"
+version = "0.2.1"
+description = "Adversary Engagement Ontology bindings for CASE/UCO SDK"
+requires-python = ">=3.10"
+dependencies = [
+    "case-uco>=1.2.0",
+]
+
+[project.entry-points."case_uco.extensions"]
+aeo = "case_uco_aeo:_REGISTRY_PATH"

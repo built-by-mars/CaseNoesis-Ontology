@@ -1,0 +1,93 @@
+{
+  "extension": "drugs",
+  "modules": [
+    "drugs"
+  ],
+  "classes": {
+    "ControlledSubstance": {
+      "iri": "http://example.org/ontology/drugs/ControlledSubstance",
+      "module": "drugs",
+      "description": "A concrete portion (lot, package, or charged quantity) of a drug or other substance included in a schedule of a controlled-substances regime (21 U.S.C. § 802(6)). Represents the seized/charged quantity of matter, not the chemical kind: identify the chemical with drug:substance referencing a ChEBI IRI (e.g. obo:CHEBI_6809 methamphetamine). Grounded as gufo:Quantity (amount of matter) via drugs-profile-gufo.ttl — not gufo:FunctionalComplex.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "substance",
+          "type": "IRI",
+          "type_iri": null,
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "IRI reference to the chemical entity class in an open chemical ontology, preferably ChEBI (methamphetamine CHEBI_6809, fentanyl CHEBI_119915, cocaine CHEBI_27958, heroin CHEBI_27808) or DrOn for pharmaceutical products."
+        },
+        {
+          "name": "substanceName",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "Substance name verbatim from the source record."
+        },
+        {
+          "name": "csaSchedule",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "Controlled-substance schedule, open vocabulary; recommended 'I'-'V' per 21 U.S.C. § 812."
+        },
+        {
+          "name": "substanceForm",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "Physical form, open vocabulary: 'powder', 'crystal', 'tablet', 'capsule', 'liquid', 'plant-material', 'blotter', 'residue'."
+        },
+        {
+          "name": "mass",
+          "type": "decimal",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#decimal",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "Measured or charged mass in the unit given by massUnit; for 'X grams or more' charges record the threshold and keep the verbatim text in quantityDescription."
+        },
+        {
+          "name": "massUnit",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "UCUM unit code for mass, e.g. 'g', 'kg', 'mg'."
+        },
+        {
+          "name": "purity",
+          "type": "decimal",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#decimal",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "Laboratory purity as a percentage (0-100)."
+        },
+        {
+          "name": "purityBasis",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "Whether quantities describe the whole mixture or the actual controlled substance: 'mixture' or 'actual' (21 U.S.C. § 841(b); USSG § 2D1.1)."
+        },
+        {
+          "name": "quantityDescription",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "Quantity as stated verbatim in the source record, to avoid fabricating precision."
+        }
+      ],
+      "source": "drugs"
+    }
+  },
+  "vocabs": {}
+}

@@ -1,0 +1,1293 @@
+{
+  "@context": {
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Source file pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:description": "Link-Look pdf upload",
+      "uco-core:tag": [
+        "link-look-file-kind:pdf"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:1bbcc22c-7460-5d9a-a014-5ff7b6b7fafd",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "pacer -- crypto -- Plea Agreement.pdf",
+          "uco-observable:extension": "pdf",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "1440523"
+          }
+        },
+        {
+          "@id": "urn:uuid:73253e99-9c61-5aa1-a8b9-5cecf6a758c7",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "1440523"
+          },
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:232e9545-862b-5f89-9b3f-a90c9aa83802",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "74A9E7B2DC38F916EBB5FFAB9186ECB90EAC92B428888234BDC7962D8DAD6C03"
+              }
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:00f913d2-eeab-57ca-b6b3-114e40ae78d8",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:8659f880-a622-572a-a9cb-2859a25a6551",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 1 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 2 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 3 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 4 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 5 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 6 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 7 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 8 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 9 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 10 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 11 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 12 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 13 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 14 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 15 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 16 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 17 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 18 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 19 of 20\nCase 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 20 of 20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:102ec577-f33e-592d-ac33-045f27eb6163",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "case-uco-document-normalize",
+      "uco-tool:version": "0.6.0"
+    },
+    {
+      "@id": "urn:uuid:b36d170f-2847-59d5-93e3-40726ca200b4",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Processed pdf through case-uco MCP",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-08T19:00:03.956739+00:00"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-08T19:00:03.956739+00:00"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-action:instrument": {
+        "@id": "urn:uuid:102ec577-f33e-592d-ac33-045f27eb6163"
+      },
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:c9c5d9f7-5eb6-5e2f-ae0c-8c7f257f1098"
+        },
+        {
+          "@id": "urn:uuid:3495b0ca-458a-55dd-8d7c-d9a0359823a1"
+        },
+        {
+          "@id": "urn:uuid:d43dceac-039f-552b-bf05-060d8d7e4c1d"
+        },
+        {
+          "@id": "urn:uuid:7823796c-90cd-540a-a079-f16695e64401"
+        },
+        {
+          "@id": "urn:uuid:ec1bc56a-cd2c-5a22-b668-ebf775fed3aa"
+        },
+        {
+          "@id": "urn:uuid:d1045c82-0800-5d26-bf54-17d7d99d1635"
+        },
+        {
+          "@id": "urn:uuid:91b776ee-805b-52a9-9478-3aa07a03ae70"
+        },
+        {
+          "@id": "urn:uuid:9e938ad0-c78d-5c62-b120-a8f97edcc10d"
+        },
+        {
+          "@id": "urn:uuid:b1df5e95-6668-5265-a7d4-a2481671d13e"
+        },
+        {
+          "@id": "urn:uuid:f65b5240-77ed-5777-9f83-85892b0da827"
+        },
+        {
+          "@id": "urn:uuid:2f38d4c5-272a-53b4-9ea0-41e4542f6e39"
+        },
+        {
+          "@id": "urn:uuid:ea600b8c-6831-580a-99ce-82c78f9cab63"
+        },
+        {
+          "@id": "urn:uuid:f3b36f61-6eb0-57eb-8a9d-05e7216bfc9e"
+        },
+        {
+          "@id": "urn:uuid:3354c739-6f3b-57b5-8ac3-44943a3c26ee"
+        },
+        {
+          "@id": "urn:uuid:3d130438-8373-5688-acca-4ab99d11fe11"
+        },
+        {
+          "@id": "urn:uuid:11a1d841-e64a-5720-9c30-6c7415fad83e"
+        },
+        {
+          "@id": "urn:uuid:b7e80595-2ef9-52a8-94f1-0456580fc041"
+        },
+        {
+          "@id": "urn:uuid:e183db0e-b15b-5c92-9bf5-e5b83cdaab78"
+        },
+        {
+          "@id": "urn:uuid:7f37708b-d88d-5eda-9f77-f98ab970ed68"
+        },
+        {
+          "@id": "urn:uuid:09cd3193-191a-5d64-9af9-a9c5cd4ae24c"
+        },
+        {
+          "@id": "urn:uuid:b7420bcb-9217-513c-8e85-3902d7a62b22"
+        },
+        {
+          "@id": "urn:uuid:bc33933d-4775-5c13-86ad-852095f9d9d8"
+        },
+        {
+          "@id": "urn:uuid:021b02fd-4caf-5f67-8a16-7f3fab9cf3ff"
+        },
+        {
+          "@id": "urn:uuid:9cc0b4b7-0b0d-54e4-824a-ab0ce93c904b"
+        },
+        {
+          "@id": "urn:uuid:e57096ea-9229-5c98-bbff-674702e0df85"
+        },
+        {
+          "@id": "urn:uuid:860805c9-0205-5c7d-bbbd-ad93b2a69d9a"
+        },
+        {
+          "@id": "urn:uuid:fcc000db-4386-53f1-87f5-bb74e4cd72d5"
+        },
+        {
+          "@id": "urn:uuid:8c2ae7f8-7990-56d5-b07c-6fc046caa0cb"
+        },
+        {
+          "@id": "urn:uuid:26dd9ae9-f5cb-5b93-a507-240e1fdb7664"
+        },
+        {
+          "@id": "urn:uuid:3daa6f9c-93e7-5377-afbc-b2bf881fc12c"
+        },
+        {
+          "@id": "urn:uuid:7643c584-a274-54a9-a3e8-46021bd2d530"
+        },
+        {
+          "@id": "urn:uuid:8570eb7f-a7c7-5a61-8358-c0b800a81a5c"
+        },
+        {
+          "@id": "urn:uuid:4bfb52d5-fe28-56de-82fd-49e7f7435eca"
+        },
+        {
+          "@id": "urn:uuid:e417b03c-2548-5fdc-88cf-1fe12c2943f5"
+        },
+        {
+          "@id": "urn:uuid:1147e27a-7079-5bf3-b503-7a6219e69a12"
+        },
+        {
+          "@id": "urn:uuid:19502cc6-a37d-59b3-949e-b5b028bc0a7f"
+        },
+        {
+          "@id": "urn:uuid:fe98b3e4-0d05-56f3-9b75-351692fce974"
+        },
+        {
+          "@id": "urn:uuid:c9d54334-109e-5876-a0ed-00e8709dfce2"
+        },
+        {
+          "@id": "urn:uuid:2ebb741c-ef59-5aff-9a1c-d07ecd1bdcda"
+        },
+        {
+          "@id": "urn:uuid:a16861d2-f2e4-5847-89fc-6a12eae7e307"
+        },
+        {
+          "@id": "urn:uuid:cd61ea5c-451c-569d-8cda-a01feea88bfc"
+        },
+        {
+          "@id": "urn:uuid:27e3c1f3-e1c5-51cf-a2ff-017986cfbd96"
+        },
+        {
+          "@id": "urn:uuid:28733e76-cbf2-519c-9323-f95dbf8f161d"
+        },
+        {
+          "@id": "urn:uuid:91076427-7f35-52b5-bb3d-ac7bc0c3d6cb"
+        },
+        {
+          "@id": "urn:uuid:60f0a84a-d156-5dd1-9409-32dff74b21b9"
+        },
+        {
+          "@id": "urn:uuid:eafee68d-282b-520a-bfcd-1176bfab2c1b"
+        },
+        {
+          "@id": "urn:uuid:2908457a-1d65-5d0b-b6d7-0ef86f5e017f"
+        },
+        {
+          "@id": "urn:uuid:2b8fcffd-b122-589b-8658-07a04570bc2b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c9c5d9f7-5eb6-5e2f-ae0c-8c7f257f1098",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:3495b0ca-458a-55dd-8d7c-d9a0359823a1",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:d43dceac-039f-552b-bf05-060d8d7e4c1d",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:7823796c-90cd-540a-a079-f16695e64401",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:ec1bc56a-cd2c-5a22-b668-ebf775fed3aa",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:d1045c82-0800-5d26-bf54-17d7d99d1635",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:91b776ee-805b-52a9-9478-3aa07a03ae70",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:9e938ad0-c78d-5c62-b120-a8f97edcc10d",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:b1df5e95-6668-5265-a7d4-a2481671d13e",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:f65b5240-77ed-5777-9f83-85892b0da827",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:2f38d4c5-272a-53b4-9ea0-41e4542f6e39",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:ea600b8c-6831-580a-99ce-82c78f9cab63",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:f3b36f61-6eb0-57eb-8a9d-05e7216bfc9e",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:3354c739-6f3b-57b5-8ac3-44943a3c26ee",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:3d130438-8373-5688-acca-4ab99d11fe11",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:11a1d841-e64a-5720-9c30-6c7415fad83e",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:b7e80595-2ef9-52a8-94f1-0456580fc041",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:e183db0e-b15b-5c92-9bf5-e5b83cdaab78",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:7f37708b-d88d-5eda-9f77-f98ab970ed68",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:09cd3193-191a-5d64-9af9-a9c5cd4ae24c",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:b7420bcb-9217-513c-8e85-3902d7a62b22",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:bc33933d-4775-5c13-86ad-852095f9d9d8",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:021b02fd-4caf-5f67-8a16-7f3fab9cf3ff",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:9cc0b4b7-0b0d-54e4-824a-ab0ce93c904b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:e57096ea-9229-5c98-bbff-674702e0df85",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:860805c9-0205-5c7d-bbbd-ad93b2a69d9a",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:fcc000db-4386-53f1-87f5-bb74e4cd72d5",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:8c2ae7f8-7990-56d5-b07c-6fc046caa0cb",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:26dd9ae9-f5cb-5b93-a507-240e1fdb7664",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:3daa6f9c-93e7-5377-afbc-b2bf881fc12c",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:7643c584-a274-54a9-a3e8-46021bd2d530",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:8570eb7f-a7c7-5a61-8358-c0b800a81a5c",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:4bfb52d5-fe28-56de-82fd-49e7f7435eca",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:e417b03c-2548-5fdc-88cf-1fe12c2943f5",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:1147e27a-7079-5bf3-b503-7a6219e69a12",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:19502cc6-a37d-59b3-949e-b5b028bc0a7f",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:fe98b3e4-0d05-56f3-9b75-351692fce974",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:c9d54334-109e-5876-a0ed-00e8709dfce2",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:2ebb741c-ef59-5aff-9a1c-d07ecd1bdcda",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:a16861d2-f2e4-5847-89fc-6a12eae7e307",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:cd61ea5c-451c-569d-8cda-a01feea88bfc",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:27e3c1f3-e1c5-51cf-a2ff-017986cfbd96",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:28733e76-cbf2-519c-9323-f95dbf8f161d",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:91076427-7f35-52b5-bb3d-ac7bc0c3d6cb",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:60f0a84a-d156-5dd1-9409-32dff74b21b9",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:eafee68d-282b-520a-bfcd-1176bfab2c1b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:2908457a-1d65-5d0b-b6d7-0ef86f5e017f",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 96",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 96 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:2b8fcffd-b122-589b-8658-07a04570bc2b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:f7f8a673-83af-5c03-94ca-576369b5b92f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 1 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:c9c5d9f7-5eb6-5e2f-ae0c-8c7f257f1098"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e32e5616-26e7-5154-89bc-97b806cf076d",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 2 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3495b0ca-458a-55dd-8d7c-d9a0359823a1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1b946873-5d12-5251-b93c-d38bf4f09da1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 3 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d43dceac-039f-552b-bf05-060d8d7e4c1d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:48ffe997-d17b-56b1-b425-e70362d2d466",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 4 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7823796c-90cd-540a-a079-f16695e64401"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e4b02694-1427-5783-9f89-92d7b6564972",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 5 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ec1bc56a-cd2c-5a22-b668-ebf775fed3aa"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:7bf49d6c-9e31-5d9f-bdd0-b49b9e714b7f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 6 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d1045c82-0800-5d26-bf54-17d7d99d1635"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4125d82c-bd04-513b-a540-74bd693c68ad",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 7 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:91b776ee-805b-52a9-9478-3aa07a03ae70"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b8477a25-e0a1-5450-a303-337cb09d1615",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 8 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9e938ad0-c78d-5c62-b120-a8f97edcc10d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e68fde71-0272-5e10-b63a-87e50ad88d27",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 9 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b1df5e95-6668-5265-a7d4-a2481671d13e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:2caf779f-5d44-5beb-9116-e9589060e072",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 10 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f65b5240-77ed-5777-9f83-85892b0da827"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:5cc21434-68d7-5ac7-b420-374d3e4b3815",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 11 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2f38d4c5-272a-53b4-9ea0-41e4542f6e39"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:5ae68751-2e83-5f23-a206-46ca9ef78489",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 12 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ea600b8c-6831-580a-99ce-82c78f9cab63"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a639bbb9-a061-5ef9-911e-cee5607ea700",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 13 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f3b36f61-6eb0-57eb-8a9d-05e7216bfc9e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d48e9a69-c5f3-572e-9641-fa5091af3f6c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 14 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3354c739-6f3b-57b5-8ac3-44943a3c26ee"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ce2e7428-69a3-5a57-a050-ad094da0a67f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 15 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3d130438-8373-5688-acca-4ab99d11fe11"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:bdedeaf1-3ab2-5150-bb40-ba7291464cb3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 16 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:11a1d841-e64a-5720-9c30-6c7415fad83e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:535b2386-f8f5-53d1-ac75-4ceab6f01a76",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 17 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b7e80595-2ef9-52a8-94f1-0456580fc041"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9c48aed5-6eed-5b79-8c8f-a8af1ad489dd",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 18 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e183db0e-b15b-5c92-9bf5-e5b83cdaab78"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:7e7f6972-0df6-5c1f-8000-c2d213e13e70",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 19 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7f37708b-d88d-5eda-9f77-f98ab970ed68"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:5f855a37-5d95-5253-afa7-3fb34fec6e6a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 20 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:09cd3193-191a-5d64-9af9-a9c5cd4ae24c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:280abf7e-3f2b-5a69-abc1-35f53b4718ad",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 21 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b7420bcb-9217-513c-8e85-3902d7a62b22"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ec0136fb-e51c-5c3c-96d1-fa8166142785",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 22 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:bc33933d-4775-5c13-86ad-852095f9d9d8"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4f01d6b5-5fa4-55bd-a8ca-a33e49c823ef",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 23 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:021b02fd-4caf-5f67-8a16-7f3fab9cf3ff"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:17c5f3c0-d783-526c-94e6-c628904e965c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 24 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9cc0b4b7-0b0d-54e4-824a-ab0ce93c904b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ea765cbe-f309-5a2c-a6ef-34b0dd620475",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 25 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e57096ea-9229-5c98-bbff-674702e0df85"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:45abff88-f022-59c7-94bc-e2bf496845f6",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 26 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:860805c9-0205-5c7d-bbbd-ad93b2a69d9a"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c701bcd6-75ca-5a18-b681-9027152bca90",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 27 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:fcc000db-4386-53f1-87f5-bb74e4cd72d5"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:0e6dacbf-dedd-5419-bedc-6217b35f717e",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 28 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8c2ae7f8-7990-56d5-b07c-6fc046caa0cb"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:90bee6b9-a02c-5263-b0e4-79f7cdf6af1a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 29 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:26dd9ae9-f5cb-5b93-a507-240e1fdb7664"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e776debf-5d14-50c7-9974-7a9e0a700c1d",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 30 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3daa6f9c-93e7-5377-afbc-b2bf881fc12c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:848815b7-a438-55ba-bc9b-818f6b08a82f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 31 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7643c584-a274-54a9-a3e8-46021bd2d530"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:71c1ba16-3454-5c4b-8d83-0a5f1d14d2de",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 32 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8570eb7f-a7c7-5a61-8358-c0b800a81a5c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:bd1c3211-d843-59ec-80bf-54ab29337306",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 33 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:4bfb52d5-fe28-56de-82fd-49e7f7435eca"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:7c43beb1-6b79-5fde-9653-f8f4716e42b8",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 34 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e417b03c-2548-5fdc-88cf-1fe12c2943f5"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d88facde-385f-56b4-b7a3-3688aa06e9fa",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 35 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:1147e27a-7079-5bf3-b503-7a6219e69a12"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9cd97a6a-30bf-50b4-bd74-5a39829abdab",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 36 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:19502cc6-a37d-59b3-949e-b5b028bc0a7f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:96908c61-e09d-57c8-b63c-883bcda54893",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 37 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:fe98b3e4-0d05-56f3-9b75-351692fce974"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1768b2c1-e038-5b0b-b5cc-753c5e06c6d3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 38 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:c9d54334-109e-5876-a0ed-00e8709dfce2"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:09b28a12-dd14-5b80-ab9e-035e71abb19f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 39 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2ebb741c-ef59-5aff-9a1c-d07ecd1bdcda"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9fc131f3-d9ae-577e-8889-9d8953b0d36e",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 40 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:a16861d2-f2e4-5847-89fc-6a12eae7e307"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8974d3b1-7422-5153-89fe-986d390ac07a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 41 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:cd61ea5c-451c-569d-8cda-a01feea88bfc"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8deeea1b-b527-5ccc-8745-c72068cf287c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 42 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:27e3c1f3-e1c5-51cf-a2ff-017986cfbd96"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:731cac8f-e377-5c99-af12-dab6186db239",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 43 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:28733e76-cbf2-519c-9323-f95dbf8f161d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:eb1232fb-9cc8-5288-bd79-42a9f3b33623",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 44 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:91076427-7f35-52b5-bb3d-ac7bc0c3d6cb"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a3a19d4b-ce8d-59f3-a4f3-ae995092f98c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 45 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:60f0a84a-d156-5dd1-9409-32dff74b21b9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:40340ee2-7375-57ea-8258-6d4fd85d6b66",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 46 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:eafee68d-282b-520a-bfcd-1176bfab2c1b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ed371a2e-d13e-5bda-a56c-fa0b090352cd",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 47 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2908457a-1d65-5d0b-b6d7-0ef86f5e017f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4e2a5df2-2a17-56d1-8639-c4446af54592",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 48 derived from pacer -- crypto -- Plea Agreement.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2b8fcffd-b122-589b-8658-07a04570bc2b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:5d4cf652-b74f-5f1f-929d-45c648cc0aa8"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

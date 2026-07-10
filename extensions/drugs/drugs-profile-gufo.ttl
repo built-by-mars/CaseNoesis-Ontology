@@ -1,0 +1,24 @@
+# Controlled Substances Extension — gUFO alignment profile (bridge)
+#
+# Grounds drug:ControlledSubstance in the (gentle) Unified Foundational
+# Ontology (gUFO, https://nemo-ufes.github.io/gufo/) for graphs using the
+# CDO gUFO profile (CDO-Shapes-gufo). A portion of a controlled substance
+# is a gufo:Quantity — a maximally-topologically-self-connected amount of
+# matter (the contents of the bag of methamphetamine) — NOT a
+# gufo:FunctionalComplex, which fits artifacts such as weapons and
+# vehicles. This corrects the earlier per-graph convention that dual-typed
+# every physical item as gufo:FunctionalComplex.
+
+@prefix drug: <http://example.org/ontology/drugs/> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/drugs/profile/gufo>
+	a owl:Ontology ;
+	rdfs:label "Controlled Substances Extension: gUFO alignment profile"@en ;
+	dcterms:source "https://nemo-ufes.github.io/gufo/"^^xsd:anyURI .
+
+drug:ControlledSubstance rdfs:subClassOf gufo:Quantity .

@@ -1,0 +1,2081 @@
+{
+  "@context": {
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Source file pacer -- export control -- indictment.pdf",
+      "uco-core:description": "Link-Look pdf upload",
+      "uco-core:tag": [
+        "link-look-file-kind:pdf"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:10d37460-c3bf-5c70-9c92-532dbeef4eec",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "pacer -- export control -- indictment.pdf",
+          "uco-observable:extension": "pdf",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "493031"
+          }
+        },
+        {
+          "@id": "urn:uuid:3671eb13-a0d5-57b6-8907-8591ba213dfd",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "493031"
+          },
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:d64e9868-d74c-5c4d-adf0-56f2c337aa5c",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "280F19CE34CE6D162CD163EA3E6D6BB96A310C0EB3BF4AE8C11DC29C7AA2AD40"
+              }
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:80a3c2a8-26b7-5297-be3d-18fdf7e1e1a3",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:58b42569-8154-5445-8216-031d3cffbc6c",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "Case 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 1 of 15\n\nFILED\nUNITED STATES DISTRICT COURT Dec 01 2020\n\nNORTHERN DISTRICT OF CALIFORNIA SUSANY. SOONG\nCLERK, U.S. DISTRICT COURT\nNORTHERN DISTRICT OF CALIFORNIA\nSAN FRANCISCO\n&5,0,1$/ &29(5 6+((7\nInstructions: Effective November 1, 2016, this Criminal Cover Sheet must be completed and submitted,\nalong with the Defendant Information Form, for each new criminal case.\n\n&$6( 1$0( &$6( 180%(5 3:20-cr-00446 WHA\n86$ 9 HAN LI, et al. &5\n\n,V 7KLV &DVH 8QGHU 6HDO\" <HV \u2714 1R\n\n7RWDO 1XPEHU RI 'HIHQGDQWV \u2714 RU PRUH\n\n'RHV WKLV FDVH LQYROYH 21/< FKDUJHV\n<HV 1R \u2714\nXQGHU 8 6 & DQG RU \"\n\n9HQXH 3HU &ULP / 5 6) \u2714 2$. 6-\n\n,V WKLV D SRWHQWLDO KLJK FRVW FDVH\" <HV 1R \u2714\n\n,V DQ\\ GHIHQGDQW FKDUJHG ZLWK\n<HV 1R \u2714\nD GHDWK SHQDOW\\ HOLJLEOH FULPH\"\n\n,V WKLV D 5,&2 $FW JDQJ FDVH\" <HV 1R \u2714\n\n$VVLJQHG $86$\n'DWH 6XEPLWWHG 12/1/2020\n/HDG $WWRUQH\\ COLIN SAMPSON, AUSA\n\n&RPPHQWV\n\nRESET FORM SAVE PDF\n)RUP &$1' &5,0 &29(5 5HY\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 2 of 15\n\nUnited States District Court FILED\nFOR THE Dec 01 2020\n\nNORTHERN DISTRICT OF CALIFORNIA SUSANY. SOONG\nCLERK, U.S. DISTRICT COURT\nNORTHERN DISTRICT OF CALIFORNIA\nVENUE: SAN FRANCISCO SAN FRANCISCO\n\nUNITED STATES OF AMERICA,\nV.\n\nHAN LI, also known as LI HAN ANSON; and\nLIN CHEN,\n\nDEFENDANT(S).\n\nINDICTMENT\n\n50 U.S.C. \u00a7 1705 and 15 C.F.R. \u00a7 764.2(d) \u2013 Conspiracy to Violate the International\nEmergency Economic Powers Act;\n13 U.S.C. \u00a7 305 and 18 U.S.C. \u00a7 2 \u2013 False Export Information;\n18 U.S.C. \u00a7\u00a7 554 and 2 \u2013 Smuggling;\n50 U.S.C. \u00a7 1705 and 15 C.F.R. \u00a7\u00a7 764.2(a), (b), (c), and (e) \u2013 International Emergency\nEconomic Powers Act Violations; and\n18 U.S.C. \u00a7\u00a7 981(a)(1)(C) and 28 U.S.C. \u00a7 2461 \u2013 Criminal Forfeiture\n\nA true bill.\nV )RUHSHUVRQ RI WKH *UDQG -XU\\\nForeman\n\nVW\nFiled in open court this __________ day of\n'HFHPE HU\n_________________________________.\n____ __\n\n____________________________________________\n_____________________\nClerk\n____________________________________________\nBail, $ $UUHVW :DUUDQW\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 3 of 15\n\nFILED\n\n'$9,' / $1'(5621 &$%1\n8QLWHG 6WDWHV $WWRUQH\\ Dec 01 2020\n\nSUSANY. SOONG\nCLERK, U.S. DISTRICT COURT\nNORTHERN DISTRICT OF CALIFORNIA\n\nSAN FRANCISCO\n\n81,7(' 67$7(6 ',675,&7 &2857\n\n1257+(51 ',675,&7 2) &$/,)251,$\n\n6$1 )5$1&,6&2 ',9,6,21\n\n81,7(' 67$7(6 2) $0(5,&$ &DVH 1R 3:20-cr-00446 WHA\n\n3ODLQWLII 9,2/$7,216 8 6 & DQG & ) 5\nY G \u00b1 &RQVSLUDF\\ WR 9LRODWH ,((3$\n8 6 & \u00b1 8QODZIXO ([SRUW ,QIRUPDWLRQ\n\n+$1 /, DOVR NQRZQ DV /, +$1 $1621 DQG 8 6 & DQG & ) 5 D E F\n/,1 &+(1 DQG H \u00b1 9LRODWLRQV RI ,((3$\n8 6 & \u00b1 6PXJJOLQJ RI *RRGV\n'HIHQGDQWV 8 6 & \u00b1 $LGLQJ DQG $EHWWLQJ DQG\n8 6 & D & 8 6 & F DQG\n8 6 & D \u00b1 &ULPLQDO )RUIHLWXUH\n\n6$1 )5$1&,6&2 9(18(\n\n81'(5 6($/\n\n, 1 ' , & 7 0 ( 1 7\n7KH *UDQG -XU\\ FKDUJHV\n\n$W DOO WLPHV UHOHYDQW WR WKLV LQGLFWPHQW XQOHVV RWKHUZLVH LQGLFDWHG DQG ZLWK DOO GDWHV EHLQJ\nDSSUR[LPDWH DQG DOO GDWH UDQJHV ERWK DSSUR[LPDWH DQG LQFOXVLYH\n\n,QWURGXFWRU\\ $OOHJDWLRQV\n&KHQJGX *D6WRQH 7HFKQRORJ\\ &R \u00b3*D6WRQH\u00b4 LV DQ HQWLW\\ ORFDWHG LQ &KHQJGX 35&\n&KLQD (OHFWURQLFV 7HFKQRORJ\\ &RUSRUDWLRQ WK 5HVHDUFK ,QVWLWXWH \u00b3&(7& \u00b4 LV DQ\nHQWLW\\ ORFDWHG LQ -LDQJVX 3HRSOH\u00b6V 5HSXEOLF RI &KLQD \u00b335&\u00b4\n\n,QGLFWPHQW\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 4 of 15\n\n-LDQJVX +DQWDQJ ,QWHUQDWLRQDO 7UDGH *URXS &RUS /WG DOVR NQRZQ DV 6DLQW\\ +DQWDQJ\n\n\u00b3-+,\u00b4 LV D FRPSDQ\\ KHDGTXDUWHUHG LQ 1DQMLQJ 35&\n\n+$1 /, DOVR NQRZQ DV /, +$1 $1621 \u00b3/,\u00b4 ZDV D FLWL]HQ RI 35&\n\n/,1 &+(1 \u00b3&+(1\u00b4 ZDV D FLWL]HQ RI 35&\n\n&RPSDQ\\ ZDV D FRPSDQ\\ EDVHG LQ 6DQWD 5RVD &DOLIRUQLD DQG LV D VXSSOLHU WR WKH\n\nVHPLFRQGXFWRU LQGXVWU\\ &RPSDQ\\ GHVLJQHG DQG VROG PDFKLQHV IRU SURFHVVLQJ VLOLFRQ ZDIHU\n\nPLFURFKLSV LQFOXGLQJ D PDFKLQH UHIHUUHG KHUHLQ DV D \u00b3'7; $XWRPDWLF 'LDPRQG 6FULEHU %UHDNHU \u00b4\n\nZLWK DSSOLFDWLRQV IRU UDGLR IUHTXHQF\\ LQWHJUDWHG FLUFXLWV RSWR HOHFWURQLFV GHYLFHV DQG OLJKW HPLWWLQJ\n\nGLRGHV \u00b3/('\u00b4\n\n8QLWHG 6WDWHV ([SRUW 6WDWXWHV DQG 5HJXODWLRQV\n\n8QGHU WKH ,QWHUQDWLRQDO (PHUJHQF\\ (FRQRPLF 3RZHUV $FW \u00b3,((3$\u00b4 8 6 &\n\nWKH 3UHVLGHQW RI WKH 8QLWHG 6WDWHV ZDV JUDQWHG DXWKRULW\\ WR GHDO ZLWK XQXVXDO DQG\n\nH[WUDRUGLQDU\\ WKUHDWV WR WKH QDWLRQDO VHFXULW\\ DQG IRUHLJQ SROLF\\ RI WKH 8QLWHG 6WDWHV 8QGHU ,((3$ WKH\n\n3UHVLGHQW FRXOG GHFODUH D QDWLRQDO HPHUJHQF\\ WKURXJK ([HFXWLYH 2UGHUV WKDW KDYH WKH IXOO IRUFH DQG\n\nHIIHFW RI ODZ\n\n,((3$ DOVR HPSRZHUHG WKH 8 6 'HSDUWPHQW RI &RPPHUFH \u00b3'2&\u00b4 WR LVVXH UHJXODWLRQV\n\nJRYHUQLQJ H[SRUWV ,QLWLDOO\\ WKH ([SRUW $GPLQLVWUDWLRQ $FW \u00b3($$\u00b4 $SS 8 6 &\n\nUHJXODWHG WKH H[SRUW RI JRRGV WHFKQRORJ\\ DQG VRIWZDUH IURP WKH 8QLWHG 6WDWHV 3XUVXDQW WR WKH\n\nSURYLVLRQV RI WKH ($$ WKH '2& SURPXOJDWHG WKH ([SRUW $GPLQLVWUDWLRQ 5HJXODWLRQV \u00b3($5\u00b4\n\n& ) 5 ZKLFK FRQWDLQ DGGLWLRQDO UHVWULFWLRQV RQ WKH H[SRUW RI JRRGV RXWVLGH RI WKH 8QLWHG\n\n6WDWHV FRQVLVWHQW ZLWK WKH SROLFLHV DQG SURYLVLRQV RI WKH ($$ See & ) 5 $OWKRXJK WKH\n\n($$ ODSVHG RQ $XJXVW SXUVXDQW WR WKH DXWKRULW\\ SURYLGHG WR WKH 3UHVLGHQW XQGHU ,((3$ WKH\n\n3UHVLGHQW LVVXHG ([HFXWLYH 2UGHU ZKLFK GHFODUHG D QDWLRQDO HPHUJHQF\\ ZLWK UHVSHFW WR WKH\n\nXQXVXDO DQG H[WUDRUGLQDU\\ WKUHDW WR WKH QDWLRQDO VHFXULW\\ IRUHLJQ SROLF\\ DQG HFRQRP\\ RI WKH 8QLWHG\n\n6WDWHV LQ OLJKW RI WKH H[SLUDWLRQ RI WKH ($$ $FFRUGLQJO\\ SXUVXDQW WR ,((3$ WKH 3UHVLGHQW RUGHUHG WKDW\n\nWKH ($5\u00b6V SURYLVLRQV UHPDLQ LQ IXOO IRUFH DQG HIIHFW GHVSLWH WKH H[SLUDWLRQ RI WKH ($$ 3UHVLGHQWV KDYH\n\nLVVXHG DQQXDO ([HFXWLYH 1RWLFHV H[WHQGLQJ WKH QDWLRQDO HPHUJHQF\\ GHFODUHG LQ ([HFXWLYH 2UGHU\n\n,QGLFWPHQW\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 5 of 15\n\nIURP WKH WLPH SHULRG FRYHUHG E\\ WKDW ([HFXWLYH 2UGHU 8QGHU ,((3$ LW LV D FULPH WR ZLOOIXOO\\ YLRODWH\n\nDQ\\ UHJXODWLRQ SURPXOJDWHG WKHUHXQGHU LQFOXGLQJ WKH ($5 See 8 6 &\n\n3XUVXDQW WR LWV DXWKRULW\\ GHULYHG IURP ,((3$ WKH '2& UHYLHZHG DQG FRQWUROOHG WKH\n\nH[SRUW RI FHUWDLQ LWHPV LQFOXGLQJ JRRGV VRIWZDUH DQG WHFKQRORJLHV IURP WKH 8QLWHG 6WDWHV WR IRUHLJQ\n\nFRXQWULHV WKURXJK WKH ($5 ,Q SDUWLFXODU WKH ($5 UHVWULFWHG WKH H[SRUW RI LWHPV WKDW FRXOG PDNH D\n\nVLJQLILFDQW FRQWULEXWLRQ WR WKH PLOLWDU\\ SRWHQWLDO RI RWKHU QDWLRQV RU WKDW FRXOG EH GHWULPHQWDO WR WKH\n\nIRUHLJQ SROLF\\ RU QDWLRQDO VHFXULW\\ RI WKH 8QLWHG 6WDWHV 7KH ($5 LPSRVHG OLFHQVLQJ DQG RWKHU\n\nUHTXLUHPHQWV IRU LWHPV VXEMHFW WR WKH ($5 WR EH ODZIXOO\\ H[SRUWHG IURP WKH 8QLWHG 6WDWHV RU ODZIXOO\\ UH\n\nH[SRUWHG IURP RQH IRUHLJQ GHVWLQDWLRQ WR DQRWKHU 7KH PRVW VHQVLWLYH LWHPV VXEMHFW WR ($5 FRQWUROV\n\nZHUH LGHQWLILHG RQ WKH &RPPHUFH &RQWURO /LVW RU \u00b3&&/ \u00b4 SXEOLVKHG DW & ) 5 3DUW 6XSS 1R O\n\n,WHPV RQ WKH &&/ ZHUH FDWHJRUL]HG E\\ ([SRUW &RQWURO &ODVVLILFDWLRQ 1XPEHU \u00b3(&&1\u00b4 HDFK RI ZKLFK\n\nKDV H[SRUW FRQWUROV UHTXLUHPHQWV GHSHQGLQJ RQ GHVWLQDWLRQ HQG XVH DQG HQG XVHU 7KRVH LWHPV VXEMHFW\n\nWR WKH ($5 EXW QRW VSHFLILHG RQ WKH &&/ DUH LGHQWLILHG E\\ DQ \u00b3($5 \u00b4 GHVLJQDWLRQ\n\n7KH ($5 IXUWKHU LPSRVHG SXUVXDQW WR WKH \u00b3(QWLW\\ /LVW\u00b4 SXEOLVKHG DW & ) 5\n\n6XSS 1R OLFHQVLQJ DQG RWKHU UHTXLUHPHQWV IRU VDOHV WR FHUWDLQ FRPSDQLHV EXVLQHVVHV UHVHDUFK\n\nLQVWLWXWLRQV JRYHUQPHQW DQG SULYDWH RUJDQL]DWLRQV LQGLYLGXDOV DQG RWKHU W\\SHV RI OHJDO SHUVRQV WKDW DUH\n\nVXEMHFW WR VSHFLILF OLFHQVH UHTXLUHPHQWV IRU WKH H[SRUW UH H[SRUW DQG RU WUDQVIHU LQ FRXQWU\\ RI VSHFLILHG\n\nLWHPV ,I D OLFHQVH LV UHTXLUHG IRU D WUDQVDFWLRQ D 8 6 SDUW\\ WR WKH WUDQVDFWLRQ PXVW VXEPLW DQ H[SRUW\n\nOLFHQVH DSSOLFDWLRQ SULRU WR H[SRUW\n\n2Q $XJXVW WKH 3UHVLGHQW VLJQHG LQWR ODZ WKH 1DWLRQDO 'HIHQVH $XWKRUL]DWLRQ\n\n$FW RI ZKLFK LQFOXGHV SURYLVLRQV RQ H[SRUW FRQWUROV HQWLWOHG WKH ([SRUW &RQWURO 5HIRUP $FW RI\n\n\u00b3(&5$\u00b4 8 6 & ,Q SDUW (&5$ SURYLGHV SHUPDQHQW VWDWXWRU\\ DXWKRULW\\ IRU WKH\n\n($5\n\n([SRUW DQG 6KLSSLQJ 5HFRUGV ((, 6(' DQG $(6\n\n3XUVXDQW WR 8QLWHG 6WDWHV ODZ DQG UHJXODWLRQ H[SRUWHUV DQG VKLSSHUV RU IUHLJKW IRUZDUGHUV\n\nDUH UHTXLUHG WR ILOH FHUWDLQ IRUPV DQG GHFODUDWLRQV FRQFHUQLQJ H[SRUWV RI JRRGV DQG WHFKQRORJ\\ IURP WKH\n\n8QLWHG 6WDWHV 2QH VXFK IRUP LV D 6KLSSHU\u00b6V ([SRUW 'HFODUDWLRQ \u00b36('\u00b4 ZKLFK LV DQ RIILFLDO GRFXPHQW\n\nUHTXLUHG WR EH ILOHG ZLWK WKH 8QLWHG 6WDWHV JRYHUQPHQW LQ FRQQHFWLRQ ZLWK H[SRUW VKLSPHQWV IURP WKH\n\n,QGLFWPHQW\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 6 of 15\n\n8QLWHG 6WDWHV 7KH 6(' UHTXLUHV WKH VKLSSHU WR OLVW LQIRUPDWLRQ FRQFHUQLQJ DPRQJ RWKHU WKLQJV WKH\n\nHQG XVHU RU XOWLPDWH GHVWLQDWLRQ RI WKH H[SRUW WKH FRQWHQWV RI WKH VKLSPHQW LQFOXGLQJ DQ\\ FRQWURO\n\nQXPEHUV DQG WKH YDOXH RI WKH FRQWHQWV 7KH ILOLQJ RI DQ 6(' LV FRPSOHWHG HLWKHU LQ SDSHU RU WKURXJK WKH\n\nVXEPLVVLRQ RI (OHFWURQLF ([SRUW ,QIRUPDWLRQ \u00b3((,\u00b4 YLD WKH $XWRPDWHG ([SRUW 6\\VWHP \u00b3$(6\u00b4 $(6\n\nLV DGPLQLVWHUHG E\\ WKH 8 6 'HSDUWPHQW RI +RPHODQG 6HFXULW\\ \u00b3'+6\u00b4 %XUHDX RI &XVWRPV DQG %RUGHU\n\n3URWHFWLRQ \u00b3&%3\u00b4 6('V DQG ((,V DUH RIILFLDO GRFXPHQWV VXEPLWWHG WR '+6 LQ FRQQHFWLRQ ZLWK H[SRUW\n\nVKLSPHQWV IURP WKH 8QLWHG 6WDWHV\n\n7KH '2& UHTXLUHG WKH ILOLQJ RI HOHFWURQLF ((,V WKURXJK WKH $(6 SXUVXDQW WR 7LWOH\n\n8QLWHG 6WDWHV &RGH 6HFWLRQ DQG )RUHLJQ 7UDGH 5HJXODWLRQV \u00b3)75\u00b4 7LWOH &RGH RI )HGHUDO\n\n5HJXODWLRQV 3DUW 7KH SXUSRVH RI WKHVH UHTXLUHPHQWV ZDV WR VWUHQJWKHQ WKH 8QLWHG 6WDWHV\n\nJRYHUQPHQW\u00b6V DELOLW\\ WR SUHYHQW WKH H[SRUW RI FHUWDLQ LWHPV WR XQDXWKRUL]HG GHVWLQDWLRQV DQG HQG XVHUV\n\nEHFDXVH WKH $(6 DLGV LQ WDUJHWLQJ LGHQWLI\\LQJ DQG ZKHQ QHFHVVDU\\ FRQILVFDWLQJ VXVSLFLRXV RU LOOHJDO\n\nVKLSPHQWV SULRU WR H[SRUWDWLRQ & ) 5 E\n\n7KH ((, FRQWDLQV VWDWHPHQWV WR WKH 8QLWHG 6WDWHV JRYHUQPHQW WKDW WKH WUDQVDFWLRQ\n\nRFFXUUHG DV GHVFULEHG 7KH FRQWHQWV RI WKH ((, DUH UHOLHG XSRQ E\\ WKH 'HSDUWPHQW RI 6WDWH WKH\n\n'HSDUWPHQW RI WKH 7UHDVXU\\ DQG WKH 'HSDUWPHQW RI &RPPHUFH IRU H[SRUW FRQWURO SXUSRVHV 7KH ($5 DW\n\n& ) 5 J VWDWHV WKDW \u00b31R SHUVRQ PD\\ PDNH DQ\\ IDOVH RU PLVOHDGLQJ UHSUHVHQWDWLRQ VWDWHPHQW\n\nRU FHUWLILFDWLRQ RU IDOVLI\\ RU FRQFHDO DQ\\ PDWHULDO IDFW HLWKHU GLUHFWO\\ WR WKH 'HSDUWPHQW RI &RPPHUFH\n\n%XUHDX RI ,QGXVWU\\ DQG 6HFXULW\\ \u00b3%,6\u00b4 WKH 8QLWHG 6WDWHV &XVWRPV 6HUYLFH RU DQ RIILFLDO RI DQ\\ RWKHU\n\n8QLWHG 6WDWHV DJHQF\\ RU LQGLUHFWO\\ WKURXJK DQ\\ RWKHU SHUVRQ LL ,Q FRQQHFWLRQ ZLWK WKH SUHSDUDWLRQ\n\nVXEPLVVLRQ LVVXDQFH XVH RU PDLQWHQDQFH RI DQ\\ H[SRUW FRQWURO GRFXPHQW DV GHILQHG LQ \u00b4\n\n7KH GHILQLWLRQ RI H[SRUW FRQWURO GRFXPHQW FRQWDLQHG LQ & ) 5 LQFOXGHV ((,V SUHVHQWHG LQ\n\nFRQQHFWLRQ ZLWK VKLSPHQWV WR DQ\\ FRXQWU\\\n\n:LWK H[FHSWLRQV QRW UHOHYDQW WR WKH H[SRUWV DW LVVXH LQ WKLV ,QGLFWPHQW ((, ZDV UHTXLUHG\n\nWR EH ILOHG IRU DPRQJ RWKHU WKLQJV WKH H[SRUW RI FRPPRGLWLHV YDOXHG RYHU RU UHTXLULQJ DQ H[SRUW\n\nOLFHQVH ((, ZDV UHTXLUHG WR FRQWDLQ DPRQJ RWKHU WKLQJV WKH QDPHV DQG DGGUHVVHV RI WKH SDUWLHV WR WKH\n\nWUDQVDFWLRQ WKH GHVFULSWLRQ TXDQWLW\\ DQG YDOXH RI WKH LWHPV H[SRUWHG WKH XOWLPDWH FRQVLJQHH WKH\n\nXOWLPDWH FRXQWU\\ RI GHVWLQDWLRQ DQG ZKHWKHU D OLFHQVH ZDV UHTXLUHG IRU WKH H[SRUW & ) 5 D\n\n,QGLFWPHQW\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 7 of 15\n\n35& &RPSDQLHV DQG ,QVWLWXWLRQV RQ WKH (QWLW\\ /LVW\n\n*D6WRQH ZDV GHVLJQDWHG RQ WKH '2& (QWLW\\ /LVW RQ $XJXVW DQG DOO LWHPV VXEMHFW\n\nWR WKH ($5 UHTXLUHG D OLFHQVH IRU H[SRUW WR *D6WRQH\n\n&(7& ZDV GHVLJQDWHG RQ WKH '2& (QWLW\\ /LVW RQ $XJXVW DQG DOO LWHPV\n\nVXEMHFW WR WKH ($5 UHTXLUHG D OLFHQVH IRU H[SRUW WR &(7&\n\n7KH '7; $XWRPDWLF 'LDPRQG 6FULEHU %UHDNHU PDQXIDFWXUHG DQG VROG E\\ &RPSDQ\\\n\nZDV VXEMHFW WR WKH ($5 DQG FRQWUROOHG IRU H[SRUW SXUVXDQW WR FODVVLILFDWLRQ ($5\n\n&2817 21( 8 6 & DQG & ) 5 3DUWV G \u00b1 &RQVSLUDF\\ WR 9LRODWH ,((3$\n\n3DUDJUDSKV WKURXJK DERYH DUH LQFRUSRUDWHG DQG UHDOOHJHG DV LI IXOO\\ VHW IRUWK KHUH\n\n%HJLQQLQJ DW D GDWH XQNQRZQ WR WKH *UDQG -XU\\ EXW QR ODWHU WKDQ 0D\\ DQG\n\nFRQWLQXLQJ WKURXJK D GDWH XQNQRZQ WR WKH *UDQG -XU\\ EXW WR DW OHDVW $XJXVW LQ WKH 1RUWKHUQ\n\n'LVWULFW RI &DOLIRUQLD DQG HOVHZKHUH WKH GHIHQGDQWV\n\n+$1 /, DQG\n/,1 &+(1\n\nDQG RWKHUV NQRZQ DQG XQNQRZQ WR WKH *UDQG -XU\\ GLG NQRZLQJO\\ DQG ZLOOIXOO\\ FRPELQH FRQVSLUH\n\nFRQIHGHUDWH DQG DJUHH WR H[SRUW UHH[SRUW DQG VXSSO\\ DQG FDXVH WR EH H[SRUWHG UHH[SRUWHG DQG\n\nVXSSOLHG GLUHFWO\\ DQG LQGLUHFWO\\ JRRGV DQG VHUYLFHV IURP WKH 8QLWHG 6WDWHV WR &KHQJGX *D6WRQH\n\n7HFKQRORJ\\ &R DQG RWKHU HQG XVHUV LQ WKH 3HRSOH\u00b6V 5HSXEOLF RI &KLQD ZLWKRXW D OLFHQVH DQG LQ\n\nYLRODWLRQ RI WKH 8QLWHG 6WDWHV 'HSDUWPHQW RI &RPPHUFH (QWLW\\ /LVW SXEOLVKHG DW & ) 5 6XSS\n\n1R\n\n2%-(&76 2) 7+( &2163,5$&<\n\n7KH REMHFWV RI WKH FRQVSLUDF\\ ZHUH WR SXUFKDVH LWHPV IURP WKH 8QLWHG 6WDWHV DQG FDXVH\n\nWKRVH LWHPV WR EH VKLSSHG WR HQWLWLHV DQG UHVHDUFK LQVWLWXWLRQV LQ WKH 35& OLVWHG RQ WKH '2& (QWLW\\ /LVW\n\nDQG SURKLELWHG IURP UHFHLYLQJ VXFK FRQWUROOHG LWHPV WKURXJK LQWHUPHGLDU\\ FRPSDQLHV VXFK DV -+, IRU\n\nSXUSRVHV RI FRQFHDOLQJ WKH QDWXUH RI WKH H[SRUWV DQG WUXH HQG XVHUV LQ YLRODWLRQ RI WKH SURKLELWLRQV DQG\n\nOLFHQVLQJ UHTXLUHPHQWV\n\n,QGLFWPHQW\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 8 of 15\n\n0$11(5 $1' 0($16 2) 7+( &2163,5$&<\n\n7KH PDQQHU DQG PHDQV E\\ ZKLFK WKH GHIHQGDQWV DQG WKHLU FRQVSLUDWRUV VRXJKW WR\n\nDFFRPSOLVK WKH REMHFWV RI WKH FRQVSLUDF\\ LQFOXGHG DPRQJ RWKHUV WKH IROORZLQJ\n\nD 'HIHQGDQWV /, DQG &+(1 DQG RWKHUV ZLOOIXOO\\ FDXVHG WKH H[SRUW DQG DWWHPSWHG H[SRUW RI\n\nD PDQXIDFWXULQJ GHYLFH QDPHO\\ D '7; $XWRPDWLF 'LDPRQG 6FULEHU %UHDNHU IURP WKH\n\n8QLWHG 6WDWHV WR *D6WRQH LQ WKH 35& ZLWKRXW ILUVW REWDLQLQJ WKH UHTXLUHG OLFHQVHV DQG\n\nDXWKRUL]DWLRQV IURP WKH %,6\n\nE 'HIHQGDQWV /, DQG &+(1 DQG RWKHUV LGHQWLILHG VSHFLILF GHYLFHV WKDW ZHUH QHHGHG E\\\n\nFOLHQW HQWLWLHV LQ WKH 35& ZKR ZHUH SURKLELWHG IURP SXUFKDVLQJ LWHPV FRQWUROOHG E\\ '2& ZLWKRXW\n\nD OLFHQVH /, DQG &+(1 WKHQ DUUDQJHG WR SXUFKDVH WKRVH LWHPV DQG DUUDQJHG VKLSPHQW DQG\n\nGHOLYHU\\ RI WKRVH LWHPV WR *D6WRQH DQG RWKHU SURKLELWHG HQG XVHUV LQ WKH 35&\n\nF 'HIHQGDQWV /, DQG &+(1 XVHG LQWHUPHGLDU\\ HQWLWLHV WKDW WKH\\ FRQWUROOHG LQFOXGLQJ -+,\n\nDV WKH GHVWLQDWLRQ HQWLWLHV RQ SDSHUZRUN LQ RUGHU WR FRQFHDO WKH WUXH HQG XVHU RI WKH FRQWUROOHG\n\nLWHPV IURP WKH 8QLWHG 6WDWHV JRYHUQPHQW NQRZLQJ WKDW WKH WUXH HQG XVHUV VXFK DV *D6WRQH\n\nZHUH SURKLELWHG IURP UHFHLYLQJ WKH FRQWUROOHG LWHPV ZLWKRXW D OLFHQVH\n\nG 'HIHQGDQWV /, DQG &+(1 DQG RWKHUV XVHG HPDLO DQG RWKHU IRUPV RI FRPPXQLFDWLRQ WR\n\nFRQWDFW 8QLWHG 6WDWHV FRPSDQLHV LQFOXGLQJ &RPSDQ\\ LQ DQ DWWHPSW WR SXUFKDVH FRPSRQHQWV\n\nDQG JRRGV DQG WR WUDQVPLW LQIRUPDWLRQ WR HDFK RWKHU UHJDUGLQJ WKH SXUFKDVH RI LWHPV DQG VHUYLFHV\n\nFRQWUROOHG E\\ WKH '2& IRU SXUFKDVH DQG VKLSPHQW HLWKHU GLUHFWO\\ RU LQGLUHFWO\\ WR *D6WRQH DQG\n\nRWKHU SURKLELWHG FXVWRPHUV LQ WKH 35& DQG WR DFW DV DQ LQWHUPHGLDU\\ UHFLSLHQWV IRU UH VKLSPHQW\n\nRI VXFK LWHPV WR HQWLWLHV SURKLELWHG IURP H[SRUW E\\ WKH (QWLW\\ /LVW DQG VWUDWHJLHV GHVLJQHG WR\n\nFRQFHDO YLRODWLRQV RI 8QLWHG 6WDWHV H[SRUW ODZV\n\nH 'HIHQGDQWV /, DQG &+(1 DQG RWKHUV XVHG ILQDQFLDO LQVWLWXWLRQV ORFDWHG RXWVLGH WKH\n\n8QLWHG 6WDWHV WR VHQG SD\\PHQWV WR ILQDQFLDO LQVWLWXWLRQV ORFDWHG ZLWKLQ WKH 8QLWHG 6WDWHV WR IXQG\n\nWKH SXUFKDVH DQG DWWHPSWHG SXUFKDVH RI JRRGV LQWHQGHG IRU H[SRUW DQG WUDQVVKLSPHQW WR *D6WRQH\n\nLQ WKH 35&\n\n$OO LQ YLRODWLRQ RI 7LWOH 8QLWHG 6WDWHV &RGH 6HFWLRQ DQG 7LWOH &RGH RI )HGHUDO 5HJXODWLRQV\n\n3DUW G\n\n,QGLFWPHQW\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 9 of 15\n\n&2817 7:2 8 6 & DQG 8 6 & \u00b1 8QODZIXO ([SRUW ,QIRUPDWLRQ $FWLYLWLHV\n\n3DUDJUDSKV WKURXJK DQG WKURXJK DERYH DUH LQFRUSRUDWHG DQG UHDOOHJHG DV LI\n\nIXOO\\ VHW IRUWK KHUH\n\n2Q RU DERXW 'HFHPEHU LQ WKH 1RUWKHUQ 'LVWULFW RI &DOLIRUQLD DQG HOVHZKHUH WKH\n\nGHIHQGDQWV\n\n+$1 /, DQG\n/,1 &+(1\n\nDQG RWKHUV NQRZQ DQG XQNQRZQ WR WKH *UDQG -XU\\ GLG NQRZLQJO\\ VXEPLW DQG FDXVH VXEPLVVLRQ RI IDOVH\n\nDQG PLVOHDGLQJ HOHFWURQLF H[SRUW LQIRUPDWLRQ \u00b3((,\u00b4 WKURXJK WKH $XWRPDWHG ([SRUW 6\\VWHP \u00b3$(6\u00b4\n\nE\\ VWDWLQJ QR OLFHQVH ZDV UHTXLUHG IRU WKH H[SRUW DQG WKDW WKH XOWLPDWH FRQVLJQHH IRU WKH H[SRUW RI D\n\n'7; $XWRPDWLF 'LDPRQG 6FULEHU %UHDNHU VROG E\\ &RPSDQ\\ ZDV -LDQJVX +DQWDQJ ,QWHUQDWLRQDO\n\n7UDGH *URXS &RUS /WG LQ 1DQMLQJ 35& ZKHQ LQ WUXWK DQG LQ IDFW DQG DV WKH GHIHQGDQWV WKHQ DQG WKHUH\n\nZHOO NQHZ WKH XOWLPDWH HQG XVHU DQG FRQVLJQHH RI WKH VKLSPHQW ZDV QRW -LDQJVX +DQWDQJ ,QWHUQDWLRQDO\n\n7UDGH *URXS &RUS /WG EXW ZDV &KHQJGX *D6WRQH 7HFKQRORJ\\ &R\n\n$OO LQ YLRODWLRQ RI 7LWOH O 8QLWHG 6WDWHV &RGH 6HFWLRQ DQG 7LWOH 8QLWHG 6WDWHV &RGH\n\n6HFWLRQ\n\n&2817 7+5(( 8 6 & DQG \u00b1 6PXJJOLQJ RI *RRGV\n\n3DUDJUDSKV WKURXJK DQG WKURXJK DERYH DUH LQFRUSRUDWHG DQG UHDOOHJHG DV LI\n\nIXOO\\ VHW IRUWK KHUH\n\n2Q RU DERXW 'HFHPEHU LQ WKH 1RUWKHUQ 'LVWULFW RI &DOLIRUQLD DQG HOVHZKHUH WKH\n\nGHIHQGDQWV\n\n+$1 /, DQG\n/,1 &+(1\n\nDQG RWKHUV NQRZQ DQG XQNQRZQ WR WKH *UDQG -XU\\ GLG NQRZLQJO\\ DQG IUDXGXOHQWO\\ H[SRUW DQG VHQG DQG\n\nDWWHPSW WR H[SRUW DQG VHQG IURP WKH 8QLWHG 6WDWHV LQGLUHFWO\\ WR &KHQJGX *D6WRQH 7HFKQRORJ\\ &R /WG\n\nLQ WKH 35& DQ DUWLFOH REMHFW DQG PHUFKDQGLVH WKDW LV D '7; $XWRPDWLF 'LDPRQG 6FULEHU %UHDNHU\n\nVROG E\\ &RPSDQ\\ FRQWUDU\\ WR ODZ DQG UHJXODWLRQV RI WKH 8QLWHG 6WDWHV VSHFLILFDOO\\ E\\ VXEPLWWLQJ\n\nIDOVH DQG PLVOHDGLQJ H[SRUW LQIRUPDWLRQ DQG ZLOOIXOO\\ FDXVLQJ DQRWKHU WR ILOH IDOVH DQG PLVOHDGLQJ\n\n,QGLFWPHQW\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 10 of 15\n\nH[SRUW LQIRUPDWLRQ LQ DQ 6(' DQG WKURXJK WKH $(6 LQ YLRODWLRQ RI 7LWOH 8QLWHG 6WDWHV &RGH\n\n6HFWLRQ D DQG 7LWOH &RGH RI )HGHUDO 5HJXODWLRQV 3DUWV D E F DQG H\n\n$OO LQ YLRODWLRQ RI 7LWOH 8QLWHG 6WDWHV &RGH 6HFWLRQV DQG\n\n&2817 )285 8 6 & DQG 8 6 & DQG & ) 5 3DUWV D E F DQG\nH \u00b1 :LOOIXO 9LRODWLRQV RI ,((3$\n\n3DUDJUDSKV WKURXJK DQG WKURXJK DERYH DUH LQFRUSRUDWHG DQG UHDOOHJHG DV LI\n\nIXOO\\ VHW IRUWK KHUH\n\n2Q RU DERXW 'HFHPEHU LQ WKH 1RUWKHUQ 'LVWULFW RI &DOLIRUQLD DQG HOVHZKHUH WKH\n\nGHIHQGDQWV\n\n+$1 /, DQG\n/,1 &+(1\n\nDQG RWKHUV NQRZQ DQG XQNQRZQ WR WKH *UDQG -XU\\ GLG ZLOOIXOO\\ H[SRUW UHH[SRUW DQG VXSSO\\ FDXVHG DQG\n\nDLGHG DQG DEHWWHG LQ WKH H[SRUW UHH[SRUW DQG VXSSO\\ DQG VROLFLWHG DQG DWWHPSWHG LQ WKH H[SRUW UHH[SRUW\n\nDQG VXSSO\\ RI JRRGV WHFKQRORJ\\ DQG VHUYLFHV WKDW LV D '7; $XWRPDWLF 'LDPRQG 6FULEHU %UHDNHU\n\nVROG E\\ &RPSDQ\\ IURP WKH 8QLWHG 6WDWHV WR &KHQJGX *D6WRQH 7HFKQRORJ\\ &R /WG LQ WKH 35&\n\nZLWKRXW KDYLQJ ILUVW REWDLQHG WKH UHTXLUHG OLFHQVHV IURP WKH 8 6 'HSDUWPHQW RI &RPPHUFH\n\n$OO LQ YLRODWLRQ RI 7LWOH 8QLWHG 6WDWHV &RGH 6HFWLRQV DQG DQG 7LWOH &RGH RI\n\n)HGHUDO 5HJXODWLRQV 3DUWV D E F DQG H\n\n)25)(,785( $//(*$7,21 8 6 & D & DQG 8 6 & F DQG\n8 6 & D \u00b1 &ULPLQDO )RUIHLWXUH\n\n7KH IDFWXDO DOOHJDWLRQV FRQWDLQHG LQ &RXQWV 2QH WKURXJK )RXU RI WKLV ,QGLFWPHQW DUH UH\n\nDOOHJHG DQG E\\ WKLV UHIHUHQFH IXOO\\ LQFRUSRUDWHG KHUHLQ IRU WKH SXUSRVH RI DOOHJLQJ WKH IRUIHLWXUH SXUVXDQW\n\nWR 8 6 & D O & DQG 8 6 & F DQG 8 6 & D\n\n8SRQ FRQYLFWLRQ RI RQH RU PRUH RI WKH RIIHQVHV DOOHJHG LQ &RXQWV 2QH 7KUHH RU )RXU RI\n\nWKH ,QGLFWPHQW WKH GHIHQGDQWV VKDOO IRUIHLW WR WKH 8QLWHG 6WDWHV SXUVXDQW WR 8 6 & D O & DQG\n\n8 6 & F DQ\\ SURSHUW\\ UHDO RU SHUVRQDO ZKLFK FRQVWLWXWHV RU LV GHULYHG IURP SURFHHGV\n\nWUDFHDEOH WR WKH FULPLQDO YLRODWLRQV GHVFULEHG WKHUHLQ\n\n8SRQ FRQYLFWLRQ RI WKH RIIHQVH DOOHJHG LQ &RXQW 7ZR WKH GHIHQGDQWV VKDOO IRUIHLW\n\n,QGLFWPHQW\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 11 of 15\n\nSXUVXDQW WR 7LWOH 8QLWHG 6WDWHV &RGH 6HFWLRQ D\n\nD DQ\\ RI WKHLU LQWHUHVW LQ VHFXULW\\ RI FODLP DJDLQVW RU SURSHUW\\ RU FRQWUDFWXDO ULJKWV RI DQ\\\n\nNLQG LQ WKH JRRGV RU WDQJLEOH LWHPV WKDW ZHUH WKH VXEMHFW RI WKH YLRODWLRQ\n\nE DQ\\ RI WKHLU LQWHUHVW LQ VHFXULW\\ RI FODLP DJDLQVW RU SURSHUW\\ RU FRQWUDFWXDO ULJKWV RI DQ\\\n\nNLQG LQ WDQJLEOH SURSHUW\\ WKDW ZDV XVHG LQ WKH H[SRUW RU DWWHPSW WR H[SRUW WKDW ZDV WKH\n\nVXEMHFW RI WKH YLRODWLRQ DQG\n\nF DQ\\ RI WKDW SHUVRQ\u00b6V SURSHUW\\ FRQVWLWXWLQJ RU GHULYHG IURP DQ\\ SURFHHGV REWDLQHG\n\nGLUHFWO\\ RU LQGLUHFWO\\ DV D UHVXOW RI WKH YLRODWLRQ\n\n,I DQ\\ RI WKH SURSHUW\\ GHVFULEHG DERYH DV D UHVXOW RI DQ\\ DFW RU RPLVVLRQ RI WKH GHIHQGDQW\n\nD FDQQRW EH ORFDWHG XSRQ WKH H[HUFLVH RI GXH GLOLJHQFH\n\nE KDV EHHQ WUDQVIHUUHG RU VROG WR RU GHSRVLWHG ZLWK D WKLUG SDUW\\\n\nF KDV EHHQ SODFHG EH\\RQG WKH MXULVGLFWLRQ RI WKH FRXUW\n\nG KDV EHHQ VXEVWDQWLDOO\\ GLPLQLVKHG LQ YDOXH RU\n\nH KDV EHHQ FRPPLQJOHG ZLWK RWKHU SURSHUW\\ ZKLFK FDQQRW EH GLYLGHG ZLWKRXW GLIILFXOW\\\n\nWKH 8QLWHG 6WDWHV VKDOO EH HQWLWOHG WR IRUIHLWXUH RI VXEVWLWXWH SURSHUW\\ SXUVXDQW WR 8 6 & S DV\n\nLQFRUSRUDWHG E\\ 8 6 & O F\n\n$OO SXUVXDQW WR 7LWOH 8QLWHG 6WDWHV &RGH 6HFWLRQ D O & 7LWOH 8QLWHG 6WDWHV &RGH\n\n6HFWLRQ O F 7LWOH 8QLWHG 6WDWHV &RGH 6HFWLRQ D DQG 5XOH RI WKH )HGHUDO 5XOHV RI\n\n&ULPLQDO 3URFHGXUH\n\n$ 7UXH %LOO\n'HFHPEHU\n'DWHG BBBBBBBBBBBB V )RUHSHUVRQ\nBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\n)25(3(5621\n\n'$9,' / $1'(5621\n8QLWHG 6WDWHV $WWRUQH\\\n\n&ROLQ 6DPSVRQ\nBBBBBBBBBBBBBBBBBBBBBBBB\n&2/,1 & 6$03621\n$VVLVWDQW 8QLWHG 6WDWHV $WWRUQH\\\n\n,QGLFWPHQW\nAO 257 (Rev. 6/78) Case 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 12 of 15\n\nDEFENDANT INFORMATION RELATIVE TO A CRIMINAL ACTION - IN U.S. DISTRICT COURT\nBY: COMPLAINT INFORMATION INDICTMENT Name of District Court, and/or Judge/Magistrate Location\nSUPERSEDING NORTHERN DISTRICT OF CALIFORNIA\nOFFENSE CHARGED\nSAN FRANCISCO DIVISION\n50 U.S.C. \u00a7 1705 and 15 C.F.R. \u00a7 764.2(d) \u2013 Conspiracy to Petty\nViolate IEEPA; 13 U.S.C. \u00a7 305 and 18 U.S.C. \u00a7 2 - False Export\nInformation Activities; 18 U.S.C. \u00a7\u00a7 554 and 2 \u2013 Smuggling; Minor DEFENDANT - U.S\n50 U.S.C. \u00a7 1705 and 15 U.S.C. \u00a7\u00a7 764.2(a), (b), (c), and (e) \u2013\nIEEPA Violations; and 18 U.S.C. \u00a7\u00a7 981(a)(1)(C) and 28 U.S.C. \u00a7 Misde- FILED\n2461(c) \u2013 Criminal Forfeiture meanor Lin Chen\nDec 01 2020\nFelony SUSANY. SOONG\nDISTRICT COURT NUMBER\nSee Attachment CLERK, U.S. DISTRICT COURT\nPENALTY: 3:20-cr-00446 WHA NORTHERN DISTRICT OF CALIFORNIA\nSAN FRANCISCO\n\nDEFENDANT\nPROCEEDING IS NOT IN CUSTODY\nHas not been arrested, pending outcome this proceeding.\nName of Complaintant Agency, or Person (& Title, if any) 1) If not detained give date any prior\nFederal Bureau of Investigation\nsummons was served on above charges\nperson is awaiting trial in another Federal or State Court, 2) Is a Fugitive\ngive name of court\n3) Is on Bail or Release from (show District)\n\nthis person/proceeding is transferred from another district\nper (circle one) FRCrp 20, 21, or 40. Show District\nIS IN CUSTODY\n4) On this charge\nthis is a reprosecution of\ncharges previously dismissed 5) On another conviction\nwhich were dismissed on motion\nof:\nSHOW\nDOCKET NO.\n} Federal State\n\nU.S. ATTORNEY DEFENSE\n} 6) Awaiting trial on other charges\nIf answer to (6) is \"Yes\", show name of institution\n\nthis prosecution relates to a\nYes If \"Yes\"\npending case involving this same\ndefendant MAGISTRATE\nHas detainer\nbeen filed? No\n} give date\nfiled\nCASE NO.\nprior proceedings or appearance(s)\nbefore U.S. Magistrate regarding this\ndefendant were recorded under\n} DATE OF\nARREST\nMonth/Day/Year\n\nOr... if Arresting Agency & Warrant were not\n\nName and Office of Person DATE TRANSFERRED Month/Day/Year\nFurnishing Information on this form DAVID L. ANDERSON TO U.S. CUSTODY\nU.S. Attorney Other U.S. Agency\n\nName of Assistant U.S. This report amends AO 257 previously submitted\nAttorney (if assigned) Colin Sampson, AUSA\nADDITIONAL INFORMATION OR COMMENTS\nPROCESS:\nSUMMONS NO PROCESS* WARRANT Bail Amount:\nIf Summons, complete following:\nArraignment Initial Appearance * Where defendant previously apprehended on complaint, no new summons or\nwarrant needed, since Magistrate has scheduled arraignment\nDefendant Address:\n\nDate/Time: Before Judge:\n\nComments:\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 13 of 15\n\nAttachment to Indictment Penalty Sheet\nLIN CHEN\n\n50 U.S.C. \u00a7 1705 and 15 C.F.R. \u00a7 764.2(d)\n\u2013 20 years prison, $1,000,000 fine, 3 years supervised release, $100 special assessment;\n\n13 U.S.C. \u00a7 305 and18 U.S.C. \u00a7 2\n\u2013 5 years prison, $250,000 fine, 3 years supervised release, $100 special assessment;\n\n18 U.S.C. \u00a7\u00a7 554 and 2\n\u2013 10 years prison, $250,000 fine, 3 years supervised release, $100 special assessment;\n\n50 U.S.C. \u00a7 1705 and 15 C.F.R. \u00a7 764.2(a), (b), (c), and (e)\n\u2013 20 years prison, $1,000,000 fine, 3 years supervised release, $100 special assessment\nAO 257 (Rev. 6/78) Case 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 14 of 15\n\nDEFENDANT INFORMATION RELATIVE TO A CRIMINAL ACTION - IN U.S. DISTRICT COURT\nBY: COMPLAINT INFORMATION INDICTMENT Name of District Court, and/or Judge/Magistrate Location\nSUPERSEDING NORTHERN DISTRICT OF CALIFORNIA\nOFFENSE CHARGED\nSAN FRANCISCO DIVISION\n50 U.S.C. \u00a7 1705 and 15 C.F.R. \u00a7 764.2(d) \u2013 Conspiracy to Petty\nViolate IEEPA; 13 U.S.C. \u00a7 305 and 18 U.S.C. \u00a7 2 - False Export\nInformation Activities; 18 U.S.C. \u00a7\u00a7 554 and 2 \u2013 Smuggling; Minor DEFENDANT - U.S\nFILED\n50 U.S.C. \u00a7 1705 and 15 U.S.C. \u00a7\u00a7 764.2(a), (b), (c), and (e) \u2013\nIEEPA Violations; and 18 U.S.C. \u00a7\u00a7 981(a)(1)(C) and 28 U.S.C. \u00a7 Misde-\n2461(c) \u2013 Criminal Forfeiture meanor Han Li, a/k/a Li Han Anson\nDec 01 2020\nFelony\nDISTRICT COURT NUMBER SUSANY. SOONG\nSee Attachment\nPENALTY: 3:20-cr-00446 WHA CLERK, U.S. DISTRICT COURT\nNORTHERN DISTRICT OF CALIFORNIA\nSAN FRANCISCO\n\nDEFENDANT\nPROCEEDING IS NOT IN CUSTODY\nHas not been arrested, pending outcome this proceeding.\nName of Complaintant Agency, or Person (& Title, if any) 1) If not detained give date any prior\nFederal Bureau of Investigation\nsummons was served on above charges\nperson is awaiting trial in another Federal or State Court, 2) Is a Fugitive\ngive name of court\n3) Is on Bail or Release from (show District)\n\nthis person/proceeding is transferred from another district\nper (circle one) FRCrp 20, 21, or 40. Show District\nIS IN CUSTODY\n4) On this charge\nthis is a reprosecution of\ncharges previously dismissed 5) On another conviction\nwhich were dismissed on motion\nof:\nSHOW\nDOCKET NO.\n} Federal State\n\nU.S. ATTORNEY DEFENSE\n} 6) Awaiting trial on other charges\nIf answer to (6) is \"Yes\", show name of institution\n\nthis prosecution relates to a\nYes If \"Yes\"\npending case involving this same\ndefendant MAGISTRATE\nHas detainer\nbeen filed? No\n} give date\nfiled\nCASE NO.\nprior proceedings or appearance(s)\nbefore U.S. Magistrate regarding this\ndefendant were recorded under\n} DATE OF\nARREST\nMonth/Day/Year\n\nOr... if Arresting Agency & Warrant were not\n\nName and Office of Person DATE TRANSFERRED Month/Day/Year\nFurnishing Information on this form DAVID L. ANDERSON TO U.S. CUSTODY\nU.S. Attorney Other U.S. Agency\n\nName of Assistant U.S. This report amends AO 257 previously submitted\nAttorney (if assigned) Colin Sampson, AUSA\nADDITIONAL INFORMATION OR COMMENTS\nPROCESS:\nSUMMONS NO PROCESS* WARRANT Bail Amount:\nIf Summons, complete following:\nArraignment Initial Appearance * Where defendant previously apprehended on complaint, no new summons or\nwarrant needed, since Magistrate has scheduled arraignment\nDefendant Address:\n\nDate/Time: Before Judge:\n\nComments:\nCase 3:20-cr-00446-WHA Document 1 Filed 12/01/20 Page 15 of 15\n\nAttachment to Indictment Penalty Sheet\nHAN LI, a/k/a LI HAN ANSON\n\n50 U.S.C. \u00a7 1705 and 15 C.F.R. \u00a7 764.2(d)\n\u2013 20 years prison, $1,000,000 fine, 3 years supervised release, $100 special assessment;\n\n13 U.S.C. \u00a7 305 and18 U.S.C. \u00a7 2\n\u2013 5 years prison, $250,000 fine, 3 years supervised release, $100 special assessment;\n\n18 U.S.C. \u00a7\u00a7 554 and 2\n\u2013 10 years prison, $250,000 fine, 3 years supervised release, $100 special assessment;\n\n50 U.S.C. \u00a7 1705 and 15 C.F.R. \u00a7 764.2(a), (b), (c), and (e)\n\u2013 20 years prison, $1,000,000 fine, 3 years supervised release, $100 special assessment"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f1d1286f-937d-5071-9ad0-f012e97e38c6",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "case-uco-document-normalize",
+      "uco-tool:version": "0.6.0"
+    },
+    {
+      "@id": "urn:uuid:4d518be0-da4f-57ac-b27e-09da8670e9c5",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Processed pdf through case-uco MCP",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-09T19:31:12.324658+00:00"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-09T19:31:12.324658+00:00"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-action:instrument": {
+        "@id": "urn:uuid:f1d1286f-937d-5071-9ad0-f012e97e38c6"
+      },
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:d103cbd2-16a2-5f43-87e0-69537abdef95"
+        },
+        {
+          "@id": "urn:uuid:f59a4e7d-8661-5531-816f-b0ad60285ca1"
+        },
+        {
+          "@id": "urn:uuid:88a7bc2b-eabe-5590-baaf-668099670d1b"
+        },
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:156939d0-fd51-5ca3-84a5-54592d01b1fd"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:55257564-b457-5f0b-8f3f-bc6b569b2094"
+        },
+        {
+          "@id": "urn:uuid:2c7b401d-e187-523b-a6e3-1b27720c87cb"
+        },
+        {
+          "@id": "urn:uuid:0654a1bb-11e0-5f18-ba14-28fb4e89cfcc"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:7cb62e6f-4326-5599-b967-9f28f92302c1"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        },
+        {
+          "@id": "urn:uuid:ce2a8e0d-71c5-51c0-ada6-2d308f7ec168"
+        },
+        {
+          "@id": "urn:uuid:1bc32fde-ab91-55a4-977b-fbb155c10e62"
+        },
+        {
+          "@id": "urn:uuid:6cffe657-5119-5edb-8797-5f93d46eedcd"
+        },
+        {
+          "@id": "urn:uuid:ccd85d16-a905-591b-b604-a846e2c37623"
+        },
+        {
+          "@id": "urn:uuid:978714c3-9039-54f0-983b-7d0e313b3d9e"
+        },
+        {
+          "@id": "urn:uuid:c692343e-5851-5495-b8e9-2be41cd8d427"
+        },
+        {
+          "@id": "urn:uuid:4ec42ae1-958d-53fb-9897-df02491ac43f"
+        },
+        {
+          "@id": "urn:uuid:9f50a8e7-ff32-515d-ab6a-68c259e7d236"
+        },
+        {
+          "@id": "urn:uuid:d89fe8b2-c9a2-59ca-b903-85a91945da80"
+        },
+        {
+          "@id": "urn:uuid:f193b7f7-5bb4-509e-aaed-5bef7dfe56e4"
+        },
+        {
+          "@id": "urn:uuid:4efb53eb-dd94-58f3-a9fe-f235f057fcd6"
+        },
+        {
+          "@id": "urn:uuid:57aee33e-f4fc-5550-9a2a-6eae46a46634"
+        },
+        {
+          "@id": "urn:uuid:d33e653e-6988-543e-bb7c-d7cfa4cebd6d"
+        },
+        {
+          "@id": "urn:uuid:d0074a55-0c10-5c92-ae4f-73d28e2cd7b1"
+        },
+        {
+          "@id": "urn:uuid:e82fcce0-8a48-54c2-9385-49a0c1baf897"
+        },
+        {
+          "@id": "urn:uuid:5ea0cda7-908e-596e-94ee-39f37a5e3051"
+        },
+        {
+          "@id": "urn:uuid:5149af07-ed5e-5170-880e-116542faac25"
+        },
+        {
+          "@id": "urn:uuid:6c6c7be7-0cb1-5532-9fd9-4acd4759c2a1"
+        },
+        {
+          "@id": "urn:uuid:76d55cb6-0c4c-52aa-b244-626dbc21022d"
+        },
+        {
+          "@id": "urn:uuid:0bcb0910-0d14-5d82-8316-86a1ff06de47"
+        },
+        {
+          "@id": "urn:uuid:46ef63af-eb4f-594c-b9db-5a9afa6e439e"
+        },
+        {
+          "@id": "urn:uuid:347797d4-3dca-5bab-b302-669635d0fc2a"
+        },
+        {
+          "@id": "urn:uuid:f94dc99f-ff58-5c60-b8b3-0fd59a7aaaae"
+        },
+        {
+          "@id": "urn:uuid:9006dba2-2596-576d-a95e-488b86767491"
+        },
+        {
+          "@id": "urn:uuid:f523a717-e854-5070-9864-8efd2e28d005"
+        },
+        {
+          "@id": "urn:uuid:1f8b8c0b-78a6-56c2-8e2b-8e7274aa3e08"
+        },
+        {
+          "@id": "urn:uuid:06e2b8fc-4ae1-557e-bda6-95ae2bacdab4"
+        },
+        {
+          "@id": "urn:uuid:fc3ca9a6-2cee-5452-b76c-17d4c186094b"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d103cbd2-16a2-5f43-87e0-69537abdef95",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 12/01/20",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 12/01/20",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f59a4e7d-8661-5531-816f-b0ad60285ca1",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date Dec 01 2020",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: Dec 01 2020",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:88a7bc2b-eabe-5590-baaf-668099670d1b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date November 1, 2016",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: November 1, 2016",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $6",
+      "uco-core:description": "$6",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:bf129918-feed-525f-8e18-1581b198242e",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:bd35f260-f831-56a0-a7e1-4c904a193bce",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $0",
+      "uco-core:description": "$0",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:40a007b9-631f-5345-835e-2d474df5bb68",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:6951b47a-0b83-580c-a42e-297f03aff3c4",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $6",
+      "uco-core:description": "$6",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:271acbce-72cf-5325-9f71-542767ae4632",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:fb19de70-ed27-5819-960e-ff310f55957f",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $9",
+      "uco-core:description": "$9",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:fc08dccc-7a8f-578c-b5d2-a0713798b869",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:79401eae-3244-5823-b37b-11d2bcfd62bf",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$9"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $86",
+      "uco-core:description": "$86",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:aef4577d-6b9e-5c71-974e-ec6e6014e672",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:04da8636-3ca8-5e11-8cb4-1c52480e4ab3",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$86"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:156939d0-fd51-5ca3-84a5-54592d01b1fd",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 12/1/2020",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 12/1/2020",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:8fb27922-acb2-5435-9d87-2d4c4b63bdc0",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:a1101676-70a5-5a57-b372-6cf80b8a85f7",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:55257564-b457-5f0b-8f3f-bc6b569b2094",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 12/01/20",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 12/01/20",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:2c7b401d-e187-523b-a6e3-1b27720c87cb",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date Dec 01 2020",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: Dec 01 2020",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0654a1bb-11e0-5f18-ba14-28fb4e89cfcc",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 12/01/20",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 12/01/20",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $9",
+      "uco-core:description": "$9",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:9935c315-4c48-5ffd-be5f-408b208089d4",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:219ba2ab-6cb8-569b-9573-d05db36ff4e6",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$9"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:19f518ad-6d17-50e9-b50c-21d9cf8a25ec",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:3ce9f1ed-9330-5188-8e89-c8ef76fccef0",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:7cb62e6f-4326-5599-b967-9f28f92302c1",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date Dec 01 2020",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: Dec 01 2020",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $7",
+      "uco-core:description": "$7",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:2c0331b7-afcb-5709-81a9-38418422da69",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:b669a326-1aed-5e76-ab5d-6d053682867b",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:ed6c8c55-2a52-51e4-9d5e-426eea2519d9",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:8bdb9743-2b1c-59d7-ac77-b9185c00dff2",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:4290fb18-8935-5aa3-a76a-2f50b12c4777",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:ce684c7e-fb18-5070-83bb-232ac8e42ddb",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $7",
+      "uco-core:description": "$7",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:3d5820ba-0e9f-5ff3-b90b-978d15deab7c",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:e71ef34b-1fcf-5f63-84df-ae3041bfa12a",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ce2a8e0d-71c5-51c0-ada6-2d308f7ec168",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $0",
+      "uco-core:description": "$0",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c5119ab1-f569-59c3-9f15-c32bd6128aaa",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:aa3d9052-d8b7-56d8-860e-7c504c8f7518",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:1bc32fde-ab91-55a4-977b-fbb155c10e62",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $7,216",
+      "uco-core:description": "$7,216",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:8803972b-503b-58fb-b1d5-bd745b2c72ec",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:91e751fb-4d2d-502a-9457-6a5922f6cb99",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$7,216"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6cffe657-5119-5edb-8797-5f93d46eedcd",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $\n8",
+      "uco-core:description": "$\n8",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b4964fff-5c35-5e42-9434-5cac241167cc",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:6c1560fa-483b-55aa-8727-84dd038baf76",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$\n8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ccd85d16-a905-591b-b604-a846e2c37623",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:cbf8dee6-e1b2-5a32-886f-2cb805c145e3",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:58b2e6df-1648-52aa-b9dd-c59f1134001d",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:978714c3-9039-54f0-983b-7d0e313b3d9e",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:5e0958e8-e427-5ff3-a375-e78517e82e06",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:bc3ef160-e653-52e7-bd07-1509042500e4",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c692343e-5851-5495-b8e9-2be41cd8d427",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1621",
+      "uco-core:description": "$1621",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:33c5fdc0-9934-5d57-80bc-73082fbc2e95",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:0365cb81-fe67-52c4-8018-00a332c3a487",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1621"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:4ec42ae1-958d-53fb-9897-df02491ac43f",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $\n8",
+      "uco-core:description": "$\n8",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:04ca92d2-9db7-56b5-828c-120b3c78facf",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:eb02e80a-6f12-5c2b-9384-b156e0f6195e",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$\n8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9f50a8e7-ff32-515d-ab6a-68c259e7d236",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:2accf4c3-ea1b-50ef-8957-b38ecf6e6b64",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:d20f937c-4dc9-5285-9118-807ef5863459",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d89fe8b2-c9a2-59ca-b903-85a91945da80",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:2cbb17e4-dfe7-5e17-9979-4f88ae5a252f",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:ce25bf2e-02f9-5f6b-9b24-fce2f61a8c0b",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f193b7f7-5bb4-509e-aaed-5bef7dfe56e4",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 12/01/20",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 12/01/20",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:4efb53eb-dd94-58f3-a9fe-f235f057fcd6",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:da1c6351-d920-5aba-8dee-bdb321d73869",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:be029746-7a12-58ea-8393-253e1dbaaddc",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:57aee33e-f4fc-5550-9a2a-6eae46a46634",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1",
+      "uco-core:description": "$1",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:a070e81a-ece4-5e7e-b686-d9c8f63d2502",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:3bec9727-8337-549e-a751-83c41834c996",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d33e653e-6988-543e-bb7c-d7cfa4cebd6d",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $1621",
+      "uco-core:description": "$1621",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c0a79fe3-b65e-59e2-ac88-c1128e139468",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:3db49035-0b55-5833-9363-be5500cc5038",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$1621"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d0074a55-0c10-5c92-ae4f-73d28e2cd7b1",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b7e36fab-6c68-5aa5-aa85-2a90a732861a",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:16b163d4-9527-5c90-a3d7-e97e3db714a7",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e82fcce0-8a48-54c2-9385-49a0c1baf897",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:408a5f48-183b-5f5f-b277-d8b663c696c6",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:18538d15-4bda-55a9-9323-cf4f1a364063",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:5ea0cda7-908e-596e-94ee-39f37a5e3051",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $3",
+      "uco-core:description": "$3",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c5b11197-f0bc-5373-873b-3919c8480208",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:5668abe0-bf74-532f-a998-82538d51fb6e",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:5149af07-ed5e-5170-880e-116542faac25",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 12/01/20",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 12/01/20",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6c6c7be7-0cb1-5532-9fd9-4acd4759c2a1",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:a7c7bd25-136a-50f9-8383-caf8c5d94ea5",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:1ee6d049-c829-559d-bbc2-60dd77ace11a",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:76d55cb6-0c4c-52aa-b244-626dbc21022d",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:e62654db-a42f-5ae5-943b-79e270ee42b5",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:03a81675-c0e5-55fd-ad84-cd835367cb2d",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0bcb0910-0d14-5d82-8316-86a1ff06de47",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:607f1fdc-2397-5c3d-b9e1-83ca3fda7ddb",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:1c81b37d-150f-5f17-b9f7-8597a5e9dc59",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:46ef63af-eb4f-594c-b9db-5a9afa6e439e",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:264dc392-1114-59b4-ab13-fdef7c5fb2d1",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:40c881bb-5dd6-5a75-b400-52341e3433a3",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:347797d4-3dca-5bab-b302-669635d0fc2a",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:202903ed-0ac4-5d3d-9c15-7a2d5aa384db",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:5d7bd211-7711-5709-9599-bb04101cb474",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f94dc99f-ff58-5c60-b8b3-0fd59a7aaaae",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f05c7dbc-7e37-5b77-bda6-11f42b07f2a2",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:6583ad30-83d5-543e-875c-c9fa56037bcc",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9006dba2-2596-576d-a95e-488b86767491",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b83a02c7-d51f-50c6-8573-b26e9b130393",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:e965adec-1d0d-5af1-9062-075a57884201",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f523a717-e854-5070-9864-8efd2e28d005",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:919225bf-5dd4-5b87-adee-3ba750cacf2a",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:b0fb2cd2-cda4-54ba-ab61-59ee2be3ad06",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:1f8b8c0b-78a6-56c2-8e2b-8e7274aa3e08",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:e8a4446f-ed76-570d-9dc1-64dcaf7f3407",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:11267913-9282-5f51-b208-e1fe16ef3526",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:06e2b8fc-4ae1-557e-bda6-95ae2bacdab4",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Amount $5",
+      "uco-core:description": "$5",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:31a5b0f2-6d76-5189-9803-7110ead5bfc3",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:84ca1a50-493a-5e43-8ecb-182f871142ad",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "$5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:fc3ca9a6-2cee-5452-b76c-17d4c186094b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 12/01/20",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 12/01/20",
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+        },
+        {
+          "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+        },
+        {
+          "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+        },
+        {
+          "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+        },
+        {
+          "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+        },
+        {
+          "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+        },
+        {
+          "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+        },
+        {
+          "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+        },
+        {
+          "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+        },
+        {
+          "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+        },
+        {
+          "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+        },
+        {
+          "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:cc1c5a49-1b7a-5997-a174-cf7457776855",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 1 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d103cbd2-16a2-5f43-87e0-69537abdef95"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:84d149e9-0ea9-59fd-a0f3-48bce17af1d6",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 2 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f59a4e7d-8661-5531-816f-b0ad60285ca1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d10cb40a-02a8-56bc-bf54-ab5c5abdf5f7",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 3 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:88a7bc2b-eabe-5590-baaf-668099670d1b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:24bbb7d2-7a73-5cab-a7bb-28f5df6a4cff",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 4 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f96982d2-b364-55e9-a8f3-4f05119c6429"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ea9f3b63-523c-55ed-93e0-28d7c4a2bbca",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 5 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7c91e399-9c7c-51ba-a711-b2b3f910e75d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e79a496d-c1a2-5129-aabd-a90426c455ff",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 6 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e1f6059d-d646-5033-80cb-a1cfed312ab8"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:124dcddc-5e58-5567-b20d-2ca576c52ae7",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 7 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b858890f-7776-5191-be22-49ed61360094"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:53a0e760-1531-5cee-a8c1-21d1ec8aa481",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 8 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3c7d18f3-6f58-5d3c-afc4-bc61dffabc62"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c6ed91b9-3540-512f-ba49-2c6475ffd51f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 9 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:156939d0-fd51-5ca3-84a5-54592d01b1fd"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:367030d5-bd18-5f4d-a304-aa2b7f40089d",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 10 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f341d83d-fb48-5e0a-939b-0ffe99968dfa"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:802c16ac-b2e3-5e10-aef2-a6340511e8cb",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 11 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:55257564-b457-5f0b-8f3f-bc6b569b2094"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8b3ed34c-8a34-511c-a3a0-723e58cc57da",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 12 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2c7b401d-e187-523b-a6e3-1b27720c87cb"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a4a35b64-702d-56d7-8374-5d8bd78ca101",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 13 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:0654a1bb-11e0-5f18-ba14-28fb4e89cfcc"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:20df218b-2700-5cca-aa26-1550758bbdd1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 14 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:416f39ad-cde1-54e9-9656-b2fee6a6db8f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:40212dde-eb12-56b9-852e-bd68249b7cd6",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 15 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6769638e-5dd3-5a52-9625-6d06d76c48f8"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:bbc5a171-b61f-57b7-84d4-81be50e904a5",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 16 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7cb62e6f-4326-5599-b967-9f28f92302c1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e158048c-c6ee-5b75-ae5e-f8f53e0efd56",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 17 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:dcff850e-38db-527c-817f-9f958e7de268"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ba859707-bf2c-5383-a3a9-1e646c242085",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 18 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:0c9a6953-bdd7-5fa0-9242-aa24493c429b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f4b28da0-341a-50bb-acde-34b87e201dbd",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 19 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e8df65b0-6f65-5236-82d6-10f77d2c256c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b78da546-b26d-5d4a-adc2-7e032fd97f59",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 20 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2c626c36-80ea-56d0-9f8f-343120dc2d02"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:2b487acc-aace-53b2-830d-cc63cca804f4",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 21 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ce2a8e0d-71c5-51c0-ada6-2d308f7ec168"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d599b145-08d3-5409-ba92-280b56efe2dc",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 22 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:1bc32fde-ab91-55a4-977b-fbb155c10e62"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4fdf5003-621e-5272-a5fc-4fa43519a85c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 23 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6cffe657-5119-5edb-8797-5f93d46eedcd"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:71ab8f79-76a4-56c2-a2aa-852b2a7f06f9",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 24 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ccd85d16-a905-591b-b604-a846e2c37623"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:20eecbd9-58ce-54fa-ad8a-a39a8be94c93",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 25 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:978714c3-9039-54f0-983b-7d0e313b3d9e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1b7acdd3-188c-58ef-83be-1f3f1992a1bb",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 26 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:c692343e-5851-5495-b8e9-2be41cd8d427"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d93b337e-d5fc-5d99-a302-e4155329c4a1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 27 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:4ec42ae1-958d-53fb-9897-df02491ac43f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e5e49db0-d34b-59d9-9284-e6dadccdf86f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 28 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9f50a8e7-ff32-515d-ab6a-68c259e7d236"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:78a4718a-02d1-535c-8fc0-367e2e5ddc26",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 29 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d89fe8b2-c9a2-59ca-b903-85a91945da80"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a4d577e7-43d3-5c71-859d-81474d9e36a7",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 30 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f193b7f7-5bb4-509e-aaed-5bef7dfe56e4"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ecb9bd26-b754-567c-af25-781b1005ad48",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 31 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:4efb53eb-dd94-58f3-a9fe-f235f057fcd6"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:15d70451-ca00-58db-a3ea-3234c88a9164",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 32 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:57aee33e-f4fc-5550-9a2a-6eae46a46634"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:0ce11fab-3831-56db-893d-2ad480f9262e",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 33 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d33e653e-6988-543e-bb7c-d7cfa4cebd6d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:68f8adaa-3af4-5be9-a6e4-4d47d03e8626",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 34 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d0074a55-0c10-5c92-ae4f-73d28e2cd7b1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a0606788-44a1-5b46-ae91-013ba70c7da8",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 35 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e82fcce0-8a48-54c2-9385-49a0c1baf897"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:0264204d-941a-5d6a-b929-8f6aaa5fd8d9",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 36 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:5ea0cda7-908e-596e-94ee-39f37a5e3051"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:aefd46d8-f21b-5f59-9dc2-01e696fd184c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 37 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:5149af07-ed5e-5170-880e-116542faac25"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:917d2bb1-8aae-5231-8da5-0e222efe7a7b",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 38 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6c6c7be7-0cb1-5532-9fd9-4acd4759c2a1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4ce02993-ee88-5cc7-a694-b2f130044076",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 39 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:76d55cb6-0c4c-52aa-b244-626dbc21022d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9ee1c1be-82ae-5f62-bc49-75484c29e124",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 40 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:0bcb0910-0d14-5d82-8316-86a1ff06de47"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:3f345fcb-2d67-5e8a-8618-1fe634348f6a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 41 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:46ef63af-eb4f-594c-b9db-5a9afa6e439e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:34b1a1ce-3c68-521d-a30b-6e5ce9a839e4",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 42 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:347797d4-3dca-5bab-b302-669635d0fc2a"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4f9ed04c-13d4-5e68-ac3f-5c39c9d3e125",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 43 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f94dc99f-ff58-5c60-b8b3-0fd59a7aaaae"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f7542f71-8899-5f94-803d-f4c94730d140",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 44 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9006dba2-2596-576d-a95e-488b86767491"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c31f3a72-2347-5588-bf84-6912b8cfe1b8",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 45 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f523a717-e854-5070-9864-8efd2e28d005"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:fc69f371-4bc9-5e55-b057-69e927e5c9a1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 46 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:1f8b8c0b-78a6-56c2-8e2b-8e7274aa3e08"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:16e6c595-3d9f-5c58-ae06-67c47d90b7cd",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 47 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:06e2b8fc-4ae1-557e-bda6-95ae2bacdab4"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:827b3aaf-650d-5522-b348-011588de4c3e",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 48 derived from pacer -- export control -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:fc3ca9a6-2cee-5452-b76c-17d4c186094b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:a6f44de0-ec91-5c77-b993-167711c01d5a"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

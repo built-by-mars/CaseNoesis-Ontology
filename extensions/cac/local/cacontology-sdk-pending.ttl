@@ -1,0 +1,177 @@
+# SDK-local pending declarations for CAC Ontology change proposals.
+#
+# Every term in this file is already used by validated CAC knowledge graphs
+# (upstream examples_knowledge_graphs and/or CASE/UCO SDK exemplars) but is
+# not yet declared upstream. Each declaration mirrors an open change proposal
+# on https://github.com/Project-VIC-International/CAC-Ontology/issues and
+# MUST be removed once the upstream ontology declares the term:
+#
+#   - Issue #40: legal-outcomes charging/sentencing properties
+#   - Issue #41: core case-identification properties
+#   - Issue #36: ConvictionRecord OWL class + shape-referenced properties
+#
+# This file exists so the SDK's strict concept-coverage validation can pass
+# for concepts that have an accepted local modeling convention and a filed
+# upstream proposal, per docs/recipes/extensions.md.
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-location: <https://ontology.unifiedcyberontology.org/uco/location/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix case-investigation: <https://ontology.caseontology.org/case/investigation/> .
+@prefix cacontology: <https://cacontology.projectvic.org#> .
+@prefix cacontology-grooming: <https://cacontology.projectvic.org/grooming#> .
+@prefix cacontology-legal-outcomes: <https://cacontology.projectvic.org/legal-outcomes#> .
+@prefix cacontology-usa-federal: <https://cacontology.projectvic.org/usa-federal-law#> .
+
+<https://cacontology.projectvic.org/sdk-pending> rdf:type owl:Ontology ;
+    rdfs:label "CAC SDK Pending Declarations"@en ;
+    rdfs:comment "SDK-local declarations backing open CAC-Ontology change proposals #36, #40, and #41. Retire each block when the upstream ontology declares the term."@en ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/40> ,
+        <https://github.com/Project-VIC-International/CAC-Ontology/issues/41> ,
+        <https://github.com/Project-VIC-International/CAC-Ontology/issues/36> .
+
+# ---------------------------------------------------------------------------
+# Issue #40 — legal-outcomes charging and sentencing properties
+# ---------------------------------------------------------------------------
+
+cacontology-legal-outcomes:chargedWith rdf:type owl:ObjectProperty ;
+    rdfs:label "charged with"@en ;
+    rdfs:comment "Links a person (or investigation subject role) to a criminal charge filed against them. See Fed. R. Crim. P. 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7). Pending upstream: CAC-Ontology issue #40."@en ;
+    rdfs:domain uco-identity:Person ;
+    rdfs:range cacontology-legal-outcomes:CriminalCharge ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/40> .
+
+cacontology-legal-outcomes:statuteCitation rdf:type owl:DatatypeProperty ;
+    rdfs:label "statute citation"@en ;
+    rdfs:comment "The statutory citation for a criminal charge, e.g. '18 U.S.C. §§ 2251(a), (e)' (https://uscode.house.gov/). Pending upstream: CAC-Ontology issue #40."@en ;
+    rdfs:domain cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:range xsd:string ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/40> .
+
+cacontology-legal-outcomes:chargeCount rdf:type owl:DatatypeProperty ;
+    rdfs:label "charge count"@en ;
+    rdfs:comment "Number of criminal charges, or the ordinal count number of a charge within its charging instrument. Upstream proposal #40 splits the ordinal sense into countNumber; migrate when it lands."@en ;
+    rdfs:range xsd:nonNegativeInteger ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/40> .
+
+cacontology-legal-outcomes:countNumber rdf:type owl:DatatypeProperty ;
+    rdfs:label "count number"@en ;
+    rdfs:comment "The ordinal count number a charge holds within its charging instrument (e.g. Count 3 of an indictment). See Fed. R. Crim. P. 7(c). Pending upstream: CAC-Ontology issue #40."@en ;
+    rdfs:domain cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:range xsd:nonNegativeInteger ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/40> .
+
+cacontology-legal-outcomes:sentenceDurationMonths rdf:type owl:DatatypeProperty ;
+    rdfs:label "sentence duration in months"@en ;
+    rdfs:comment "Duration of a criminal sentence as a whole number of months, as stated on the judgment (AO 245B, https://www.uscourts.gov/forms/criminal-judgment-forms/judgment-criminal-case-0). Pending upstream: CAC-Ontology issue #40."@en ;
+    rdfs:domain cacontology-legal-outcomes:CriminalSentence ;
+    rdfs:range xsd:integer ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/40> .
+
+cacontology-legal-outcomes:phaseStatus rdf:type owl:DatatypeProperty ;
+    rdfs:label "phase status"@en ;
+    rdfs:comment "Status of a legal phase (e.g. 'judgment_entered', 'scheduled', 'concluded'). Pending upstream: CAC-Ontology issue #40."@en ;
+    rdfs:range xsd:string ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/40> .
+
+cacontology-legal-outcomes:chargeLevel rdf:type owl:DatatypeProperty ;
+    rdfs:label "charge level"@en ;
+    rdfs:comment "Severity classification of a charge (e.g. felony class, misdemeanor). Pending upstream: CAC-Ontology issue #40."@en ;
+    rdfs:domain cacontology-legal-outcomes:CriminalCharge ;
+    rdfs:range xsd:string ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/40> .
+
+cacontology-legal-outcomes:FederalProsecution rdf:type owl:Class ;
+    owl:equivalentClass cacontology-usa-federal:FederalProsecution ;
+    rdfs:subClassOf uco-core:UcoObject ;
+    rdfs:label "Federal Prosecution"@en ;
+    rdfs:comment "Alias for cacontology-usa-federal:FederalProsecution, provided for continuity with existing graphs pending the namespace-alignment decision in CAC-Ontology issue #40."@en ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/40> .
+
+# ---------------------------------------------------------------------------
+# Issue #36 — ConvictionRecord class and shape-referenced properties
+# ---------------------------------------------------------------------------
+
+cacontology-legal-outcomes:ConvictionRecord rdf:type owl:Class ;
+    rdfs:subClassOf uco-core:UcoObject ;
+    rdfs:label "Conviction Record"@en ;
+    rdfs:comment "Record of a criminal conviction (verdict or plea) against a defendant. Already targeted by ConvictionRecordShape in cacontology-legal-outcomes-shapes.ttl; OWL class pending upstream per CAC-Ontology issue #36."@en ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/36> .
+
+cacontology-legal-outcomes:convictionDate rdf:type owl:DatatypeProperty ;
+    rdfs:label "conviction date"@en ;
+    rdfs:comment "Date of conviction. Referenced by ConvictionRecordShape; declaration pending upstream per CAC-Ontology issue #36."@en ;
+    rdfs:domain cacontology-legal-outcomes:ConvictionRecord ;
+    rdfs:range xsd:dateTime ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/36> .
+
+cacontology-legal-outcomes:convictionType rdf:type owl:DatatypeProperty ;
+    rdfs:label "conviction type"@en ;
+    rdfs:comment "How the conviction was obtained: jury_verdict, bench_trial, plea_agreement, default_judgment, or summary_conviction. Referenced by ConvictionRecordShape; declaration pending upstream per CAC-Ontology issue #36."@en ;
+    rdfs:domain cacontology-legal-outcomes:ConvictionRecord ;
+    rdfs:range xsd:string ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/36> .
+
+# ---------------------------------------------------------------------------
+# Issue #41 — core case-identification properties
+# ---------------------------------------------------------------------------
+
+cacontology:caseNumber rdf:type owl:DatatypeProperty ;
+    rdfs:subPropertyOf uco-core:externalIdentifier ;
+    rdfs:label "case number"@en ;
+    rdfs:comment "Docket or case number assigned by an external case-management authority, e.g. a federal ECF docket number (https://pacer.uscourts.gov/). Subproperty of uco-core:externalIdentifier. Pending upstream: CAC-Ontology issue #41."@en ;
+    rdfs:domain cacontology:CACInvestigation ;
+    rdfs:range xsd:string ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/41> .
+
+cacontology:jurisdiction rdf:type owl:DatatypeProperty ;
+    rdfs:label "jurisdiction"@en ;
+    rdfs:comment "Legal jurisdiction responsible for an investigation, prosecution, or legal outcome (for US federal courts see 28 U.S.C. ch. 5, https://www.law.cornell.edu/uscode/text/28/part-I/chapter-5). Pending upstream: CAC-Ontology issue #41."@en ;
+    rdfs:range xsd:string ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/41> .
+
+cacontology:located_at rdf:type owl:ObjectProperty ;
+    rdfs:label "located at"@en ;
+    rdfs:comment "Links an investigation, organization, or legal proceeding to the uco-location:Location where it is situated or seated. For evidence observables prefer a uco-core:Relationship with kindOfRelationship 'Located_At'. Pending upstream: CAC-Ontology issue #41."@en ;
+    rdfs:range uco-location:Location ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/41> .
+
+cacontology:Subject rdf:type owl:Class ;
+    owl:equivalentClass case-investigation:Subject ;
+    rdfs:subClassOf uco-role:Role ;
+    rdfs:label "Subject"@en ;
+    rdfs:comment "Role of a person whose conduct is within the scope of a CAC investigation. Equivalent to case-investigation:Subject (https://ontology.caseontology.org/case/investigation/Subject); alias pending the alignment decision in CAC-Ontology issue #41."@en ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/41> .
+
+cacontology:participatesInEvent rdf:type owl:ObjectProperty ;
+    rdfs:label "participates in event"@en ;
+    rdfs:comment "Links a person or role to a cacontology:ChildSexualAbuseEvent (or subclass) in which they participate. Already traversed by SPARQL constraints in cacontology-core-shapes.ttl; declaration pending upstream per CAC-Ontology issue #41."@en ;
+    rdfs:range cacontology:ChildSexualAbuseEvent ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/41> .
+
+cacontology:startDate rdf:type owl:DatatypeProperty ;
+    rdfs:label "start date"@en ;
+    rdfs:comment "Date an investigation or long-running activity began, when only date precision is known. Prefer uco-core:startTime when a full dateTime is available. Pending upstream: CAC-Ontology issue #41."@en ;
+    rdfs:range xsd:date ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/41> .
+
+cacontology:leadAgency rdf:type owl:ObjectProperty ;
+    rdfs:label "lead agency"@en ;
+    rdfs:comment "Links an investigation to the uco-identity:Organization acting as lead agency. Core-level counterpart of cacontology-coord:leadAgency. Pending upstream: CAC-Ontology issue #41."@en ;
+    rdfs:range uco-identity:Organization ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/41> .
+
+# ---------------------------------------------------------------------------
+# Grooming module gap observed in press-release exemplars
+# ---------------------------------------------------------------------------
+
+cacontology-grooming:evidencesPhase rdf:type owl:ObjectProperty ;
+    rdfs:label "evidences phase"@en ;
+    rdfs:comment "Links evidence (e.g. a message or post) to the grooming phase it evidences. Pending upstream: to be added to CAC-Ontology issue #41 follow-up."@en ;
+    dcterms:source <https://github.com/Project-VIC-International/CAC-Ontology/issues/41> .

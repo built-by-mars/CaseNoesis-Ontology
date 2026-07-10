@@ -1,0 +1,65 @@
+{
+  "@context": {
+    "kb": "http://example.org/kb/",
+    "proposed": "http://example.org/ontology/proposed/corporate/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "kb:investigation-1",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Insider data exfiltration investigation 2026-INV-007"
+    },
+    {
+      "@id": "kb:mandate-1",
+      "@type": "proposed:CorporateInvestigationMandate",
+      "uco-core:name": "General counsel mandate GC-2026-011",
+      "proposed:mandateSource": "general-counsel"
+    },
+    {
+      "@id": "kb:violation-1",
+      "@type": "proposed:PolicyViolation",
+      "uco-core:name": "Acceptable Use Policy § 4.2 (unauthorized data transfer)",
+      "proposed:policyCitation": "AUP-4.2"
+    },
+    {
+      "@id": "kb:outcome-1",
+      "@type": "proposed:DisciplinaryOutcome",
+      "uco-core:name": "Employment terminated",
+      "proposed:outcomeType": "termination",
+      "proposed:concernsViolation": { "@id": "kb:violation-1" }
+    },
+    {
+      "@id": "kb:referral-1",
+      "@type": "proposed:Referral",
+      "uco-core:name": "Referral to law enforcement",
+      "proposed:referralType": "law-enforcement",
+      "proposed:concernsViolation": { "@id": "kb:violation-1" }
+    },
+    {
+      "@id": "kb:remediation-1",
+      "@type": "proposed:RemediationAction",
+      "uco-core:name": "Access revocation and DLP rule tightening",
+      "proposed:concernsViolation": { "@id": "kb:violation-1" }
+    },
+    {
+      "@id": "kb:rel-mandate-authorizes-investigation",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": { "@id": "kb:mandate-1" },
+      "uco-core:target": { "@id": "kb:investigation-1" },
+      "uco-core:kindOfRelationship": "Mandates",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "kb:rel-violation-found-by-investigation",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": { "@id": "kb:violation-1" },
+      "uco-core:target": { "@id": "kb:investigation-1" },
+      "uco-core:kindOfRelationship": "Substantiated_By",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

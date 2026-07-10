@@ -110,3 +110,10 @@ call = graph.create(Call,
     )],
 )
 ```
+
+## Related
+
+- [sms-and-contacts.md](sms-and-contacts.md) — SMS/MMS and contact entries from the same handset
+- [cell-site.md](cell-site.md) — tower data locating the calls
+- [mobile-device.md](mobile-device.md) — the extraction the log came from
+- [starter-mobile-extraction.md](starter-mobile-extraction.md) — end-to-end mobile mapping starter kit

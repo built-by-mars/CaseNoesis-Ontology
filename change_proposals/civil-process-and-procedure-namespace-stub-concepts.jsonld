@@ -1,0 +1,78 @@
+{
+  "@context": {
+    "kb": "http://example.org/kb/",
+    "proposed": "http://example.org/ontology/proposed/civil/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "kb:investigation-1",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Example Corp. data breach investigation"
+    },
+    {
+      "@id": "kb:forensic-corpus-1",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Breach investigation forensic corpus"
+    },
+    {
+      "@id": "kb:civil-action-1",
+      "@type": "proposed:CivilAction",
+      "uco-core:name": "Doe v. Example Corp.",
+      "proposed:causeOfAction": "negligence"
+    },
+    {
+      "@id": "kb:legal-hold-1",
+      "@type": "proposed:LegalHold",
+      "uco-core:name": "Litigation hold 2026-LH-014",
+      "proposed:concernsCivilAction": { "@id": "kb:civil-action-1" }
+    },
+    {
+      "@id": "kb:discovery-request-1",
+      "@type": "proposed:DiscoveryRequest",
+      "uco-core:name": "Request for production No. 3",
+      "proposed:discoveryType": "request-for-production",
+      "proposed:concernsCivilAction": { "@id": "kb:civil-action-1" }
+    },
+    {
+      "@id": "kb:deposition-1",
+      "@type": "proposed:CivilProceeding",
+      "uco-core:name": "Deposition of incident response lead",
+      "proposed:proceedingType": "deposition",
+      "proposed:concernsCivilAction": { "@id": "kb:civil-action-1" }
+    },
+    {
+      "@id": "kb:settlement-1",
+      "@type": "proposed:Settlement",
+      "uco-core:name": "Court-approved class settlement",
+      "proposed:concernsCivilAction": { "@id": "kb:civil-action-1" }
+    },
+    {
+      "@id": "kb:rel-hold-preserves-corpus",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": { "@id": "kb:legal-hold-1" },
+      "uco-core:target": { "@id": "kb:forensic-corpus-1" },
+      "uco-core:kindOfRelationship": "Preserves",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "kb:rel-request-seeks-corpus",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": { "@id": "kb:discovery-request-1" },
+      "uco-core:target": { "@id": "kb:forensic-corpus-1" },
+      "uco-core:kindOfRelationship": "Seeks_Production_Of",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "kb:rel-action-arises-from-investigation",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": { "@id": "kb:civil-action-1" },
+      "uco-core:target": { "@id": "kb:investigation-1" },
+      "uco-core:kindOfRelationship": "Arises_From",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

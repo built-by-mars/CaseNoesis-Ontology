@@ -1,0 +1,38 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix proposed: <http://example.org/ontology/proposed/> .
+
+proposed:RacketeeringEnterprise
+    a owl:Class ;
+    rdfs:subClassOf uco-identity:Organization ;
+    rdfs:label "RacketeeringEnterprise"@en ;
+    rdfs:comment "A racketeering enterprise is an 'enterprise' as defined in 18 U.S.C. § 1961(4): any individual, partnership, corporation, association, or other legal entity, and any union or group of individuals associated in fact although not a legal entity, whose affairs are conducted or participated in through a pattern of racketeering activity (18 U.S.C. § 1962). An association-in-fact enterprise must have a purpose, relationships among those associated with the enterprise, and longevity sufficient to permit the associates to pursue the enterprise's purpose (Boyle v. United States, 556 U.S. 938 (2009))."@en .
+
+proposed:EnterpriseRole
+    a owl:Class ;
+    rdfs:subClassOf uco-role:Role ;
+    rdfs:label "EnterpriseRole"@en ;
+    rdfs:comment "An enterprise role is a functional position or division-of-labor responsibility that a member or associate serves within a racketeering enterprise, as alleged in a charging instrument — for example organizer, target identifier, caller (social engineer), money launderer, database hacker, or residential burglar."@en .
+
+proposed:enterpriseType
+    a owl:DatatypeProperty ;
+    rdfs:label "enterpriseType"@en ;
+    rdfs:comment "The statutory branch of the enterprise definition the charged enterprise falls under, as an open vocabulary. Recommended values: 'legal-entity' and 'association-in-fact'. See 18 U.S.C. § 1961(4)."@en ;
+    rdfs:domain proposed:RacketeeringEnterprise ;
+    rdfs:range xsd:string .
+
+proposed:roleFunction
+    a owl:DatatypeProperty ;
+    rdfs:label "roleFunction"@en ;
+    rdfs:comment "The function of the enterprise role, kept close to the charging language, as an open vocabulary (e.g. 'organizer', 'database-hacker', 'target-identifier', 'caller', 'money-launderer', 'residential-burglar')."@en ;
+    rdfs:domain proposed:EnterpriseRole ;
+    rdfs:range xsd:string .
+
+proposed:predicateStatute
+    a owl:DatatypeProperty ;
+    rdfs:label "predicateStatute"@en ;
+    rdfs:comment "A statutory category of racketeering activity (18 U.S.C. § 1961(1)) enumerated in a RICO count as a predicate of the charged pattern, e.g. '18 U.S.C. § 1343 (wire fraud)'. Repeat once per enumerated category. Deliberately domain-free so it can attach to any criminal-charge class (e.g. the CriminalCharge concept stubbed in CASE issue #192)."@en ;
+    rdfs:range xsd:string .

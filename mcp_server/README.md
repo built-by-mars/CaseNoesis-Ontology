@@ -40,6 +40,7 @@ fastmcp dev mcp_server/server.py
 | `list_all_facets` | (none) | All Facet classes for the ObservableObject pattern |
 | `get_recipe` | `scenario: str` | Find a code recipe for a forensic workflow |
 | `get_recipes` | `scenario: str, limit?: int, include_content?: bool` | Find multiple ranked recipes for multi-domain scenarios |
+| `route_investigation_content` | `content_text?, source_path?, max_families?` | Classify ANY submission by investigation family (CAC, violent crime, financial/crypto, court filings, intrusion, mobile, email, filesystem, civil, corporate) and return recipes, extensions, namespaces, CDO upper-ontology profiles — or the extension-gap workflow for unseen data types |
 | `route_cac_content` | `content_text?, source_path?, output_format?, include_recipe_content?, max_recipes?` | Detect CAC domains in submitted content and return multiple CAC recipes plus validation guidance |
 | `list_all_vocabs` | (none) | All vocabulary/enum types with members |
 | `process_document_file` | `source_path, output_path, file_kind?, upload_id?, progress_output?` | Process a supported local synthetic document (receipt image, PDF, Office, CSV/table) into bounded CASE/UCO-shaped JSON-LD |
@@ -57,23 +58,36 @@ fastmcp dev mcp_server/server.py
 
 When you describe a forensic scenario in natural language, the AI agent:
 
-1. Calls `find_classes_for_domain` or `search_classes` to identify relevant types
-2. Calls `get_class_details` on each type to see its properties
-3. For CAC content, calls `route_cac_content` to get multiple matching recipes and validation guidance
-4. Optionally calls `get_recipe` or `get_recipes` to find code examples
-5. Writes correct SDK code using the exact class names and property names
-6. Calls `validate_graph` with `extensions=['cac']` on the finished graph (subset validation by default)
+1. Calls `route_investigation_content` to classify the submission (investigation family → recipes, extensions, namespaces, upper-ontology profiles)
+2. Calls `find_classes_for_domain` or `search_classes` to identify relevant types
+3. Calls `get_class_details` on each type to see its properties
+4. For CAC content, calls `route_cac_content` to get multiple matching recipes and validation guidance
+5. Optionally calls `get_recipe` or `get_recipes` to find code examples
+6. Writes correct SDK code using the exact class names and property names
+7. Calls `validate_graph` with the matching `extensions=[...]` on the finished graph — strict concept coverage rejects undeclared terms and routes the agent to the change-proposal / extension workflow
 
 This is much faster and more accurate than the agent reading markdown documentation.
 
-## CAC workflow for Hermes and Link-Look
+## Workflow for Hermes and Link-Look (any investigation type)
 
-End-to-end pattern for press releases, ICAC bulletins, and investigator notes:
+End-to-end pattern for warrant returns, legal filings, case files, press
+releases, and investigator notes — including data types the server has
+never seen:
 
 1. **Extract** — `process_document_file(source_path="case.pdf", output_path="extract.jsonld")` for PDFs/images, or pass plain text directly.
-2. **Route** — `route_cac_content(content_text=<clean narrative excerpt>)` returns multiple matched recipes (e.g. task force + warrant arrest + grooming + legal charges + CSAM purchasing).
-3. **Build** — Agent reads returned recipe files and composes JSON-LD or TTL using CAC classes (`CASE_UCO_EXTENSIONS=cac`).
-4. **Validate** — `validate_graph("output.jsonld", extensions=["cac"])` uses `extensions/cac/validation-subset.json` (recommended for press-release KGs). Use `extensions=["cac:full"]` only when the full CAC manifest SHACL is repaired upstream.
+2. **Classify** — `route_investigation_content(content_text=<clean narrative excerpt>)` detects the investigation family (CAC, violent crime/terrorism, financial/crypto, court filings, network intrusion, mobile/device, email, filesystem, civil e-discovery, corporate/internal) and returns per-family recipes, the extension ontologies to enable, core namespaces, and applicable CDO upper-ontology profiles. If nothing matches, it returns `extension_gap_guidance` — the search → proposal → local-extension workflow for previously unseen data.
+3. **Compose, don't split** — when several families match (real cases are often CAC + violent crime + fraud at once), build ONE graph composing every matched family's recipes with the union of their extensions (`docs/recipes/cross-domain-extensions.md`).
+4. **Go deeper than the anchors** — family recipes cover the domain-interpretation layer; use `get_recipes(scenario)` for ranked matches across the full 60+ recipe catalog and `guide_mapping(evidence_source)` for each evidence type actually in hand (devices, files, messages, call logs, locations, EXIF, databases, ...).
+5. **Deep-route CAC** — for CAC content, `route_cac_content(...)` adds per-domain CAC recipes and modeling checklists (steps below).
+6. **Grow the catalog (self-improvement loop)** — when an agent has to work out a pattern no recipe covers, it writes one; when a live case proves an existing recipe wrong, incomplete, or invisible to routing, the agent improves that recipe (or its index keywords) in place. `docs/recipes/recipe-authoring.md` defines both paths: structure, grounding rules (validated exemplar, strict concept coverage, cyber vs. non-cyber typing), re-validation before publishing, and registration in `INDEX.md` + `RECIPE_INDEX` (+ a router family when warranted). Investigators are mostly non-technical — the recipe catalog is where the automation accumulates its modeling judgment — and because every recipe is grounded in public CASE/UCO/CAC releases, published extensions, and CDO-profiled upper ontologies, the knowledge models it produces can be shared with outside parties who can validate and reuse them independently.
+
+CAC-specific continuation:
+
+1. **Route** — `route_cac_content(content_text=<clean narrative excerpt>)` returns multiple matched recipes (e.g. task force + warrant arrest + grooming + legal charges + CSAM purchasing).
+2. **Build** — Agent reads returned recipe files and composes JSON-LD or TTL using CAC classes (`CASE_UCO_EXTENSIONS=cac`).
+3. **Validate** — `validate_graph("output.jsonld", extensions=["cac"])` uses `extensions/cac/validation-subset.json` (recommended for press-release KGs). Use `extensions=["cac:full"]` only when the full CAC manifest SHACL is repaired upstream.
+
+For non-CAC prosecutions (violent crime, terrorism, generic federal cases), build with the `legalproc` extension and validate with `extensions=["legalproc"]` — see `docs/recipes/legal-process-modeling.md` and the exemplar at `examples/pacer/wdmo_2022_cr_04065/`.
 
 Example Hermes tool sequence for the Maryland ICAC Annapolis arrest press article:
 
@@ -110,7 +124,7 @@ mcp_servers:
     args: ["/home/cory/CASE-UCO-Libraries/mcp_server/server.py"]
     env:
       PYTHONPATH: "python:mcp_server"
-      # CASE_UCO_EXTENSIONS: "cac,aeo"   # optional extension registries
+      # CASE_UCO_EXTENSIONS: "cac,aeo,cryptoinv,legalproc"   # optional extension registries
 ```
 
 Run `/reload-mcp` in Hermes after editing the config. All tools are then

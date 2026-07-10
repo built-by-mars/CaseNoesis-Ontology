@@ -1,0 +1,102 @@
+# Racketeering and Criminal Enterprise Extension (T-Box)
+#
+# Investigation-domain concepts for racketeering (RICO) prosecutions:
+# the charged "enterprise" (including association-in-fact enterprises
+# that are not legal entities), the functional roles members serve
+# within it, and the statutory categories of racketeering activity
+# charged as predicates of a pattern.
+#
+# Design:
+#   - rico:RacketeeringEnterprise subclasses uco-identity:Organization.
+#     18 U.S.C. § 1961(4) defines "enterprise" to include "any individual,
+#     partnership, corporation, association, or other legal entity, and
+#     any union or group of individuals associated in fact although not a
+#     legal entity." UCO's Organization ("a grouping of people organized
+#     for a purpose") accommodates both branches; enterpriseType records
+#     which branch is charged. Boyle v. United States, 556 U.S. 938 (2009)
+#     holds an association-in-fact enterprise needs only a purpose,
+#     relationships among associates, and longevity sufficient to pursue
+#     the purpose — structural features carried here as ordinary UCO
+#     descriptions, relationships, and existence intervals.
+#   - rico:EnterpriseRole subclasses uco-role:Role. RICO indictments
+#     allege a division of labor (organizers, callers, money launderers,
+#     residential burglars, ...); modeling each function as a role node
+#     lets multiple persons fulfill the same function and one person
+#     fulfill several, without burying the structure in prose.
+#   - rico:predicateStatute is a repeatable string on the RICO charge
+#     node (deliberately domain-free so it attaches to any CriminalCharge
+#     implementation, e.g. legalproc:CriminalCharge). It records each
+#     statutory category of "racketeering activity" (18 U.S.C. § 1961(1))
+#     enumerated in the count.
+#
+# Charges, pleas, verdicts, sentences, and forfeiture stay in the
+# legalproc extension (CASE issue #192 stubs); cryptocurrency observables
+# stay in the cryptoinv extension (UCO issue #675). This extension only
+# adds what racketeering prosecutions need beyond both.
+#
+# Validated against: U.S. v. Lam et al., No. 1:24-cr-00417-CKK (D.D.C.) —
+# the "SE Enterprise" RICO conspiracy: a social-engineering enterprise
+# that stole virtual currency (including approximately $245,093,239 from
+# a single victim), laundered it, and converted it to cash and luxury
+# goods; 17 defendants across three charging instruments.
+
+@prefix rico: <http://example.org/ontology/rico/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-role: <https://ontology.unifiedcyberontology.org/uco/role/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/rico>
+	a owl:Ontology ;
+	rdfs:label "Racketeering and Criminal Enterprise Extension"@en ;
+	rdfs:comment "Jurisdiction-neutral racketeering concepts for cyber-investigation graphs: the charged criminal enterprise (legal entity or association-in-fact, per 18 U.S.C. § 1961(4)), functional member roles within it, and the statutory categories of racketeering activity charged as predicates of a pattern (18 U.S.C. § 1961(1) and (5)). Complements the legalproc extension (charges, pleas, sentences) and the cryptoinv extension (virtual-asset observables)."@en ;
+	dcterms:source
+		"https://www.law.cornell.edu/uscode/text/18/1961"^^xsd:anyURI ,
+		"https://www.law.cornell.edu/uscode/text/18/1962"^^xsd:anyURI ,
+		"https://supreme.justia.com/cases/federal/us/556/938/"^^xsd:anyURI .
+
+#################################################################
+# Classes
+#################################################################
+
+rico:RacketeeringEnterprise
+	a owl:Class ;
+	rdfs:subClassOf uco-identity:Organization ;
+	rdfs:label "RacketeeringEnterprise"@en ;
+	rdfs:comment "A racketeering enterprise is an 'enterprise' as defined in 18 U.S.C. § 1961(4) (https://www.law.cornell.edu/uscode/text/18/1961): any individual, partnership, corporation, association, or other legal entity, and any union or group of individuals associated in fact although not a legal entity, whose affairs are conducted or participated in through a pattern of racketeering activity (18 U.S.C. § 1962, https://www.law.cornell.edu/uscode/text/18/1962). An association-in-fact enterprise must have a purpose, relationships among those associated with the enterprise, and longevity sufficient to permit the associates to pursue the enterprise's purpose (Boyle v. United States, 556 U.S. 938 (2009), https://supreme.justia.com/cases/federal/us/556/938/). Record the charged purposes and the interstate/foreign commerce nexus in uco-core:description; record membership with uco-core:Relationship nodes of kind 'Member_Of' from persons to the enterprise; record the charged operating span with existence-interval or description conventions."@en ;
+	dcterms:source "https://www.law.cornell.edu/uscode/text/18/1961"^^xsd:anyURI .
+
+rico:EnterpriseRole
+	a owl:Class ;
+	rdfs:subClassOf uco-role:Role ;
+	rdfs:label "EnterpriseRole"@en ;
+	rdfs:comment "An enterprise role is a functional position or division-of-labor responsibility that a member or associate serves within a racketeering enterprise, as alleged in a charging instrument — for example organizer, target identifier, caller (social engineer), money launderer, database hacker, or residential burglar (see the roles alleged in United States v. Lam et al., No. 1:24-cr-00417-CKK (D.D.C.), Second Superseding Indictment ¶¶ 25-32). Link a person to the role with a uco-core:Relationship of kind 'Has_Role' and the role to the enterprise with a uco-core:Relationship of kind 'Role_Within'; one person may fulfill several roles and one role may be fulfilled by several persons."@en ;
+	dcterms:source "https://www.law.cornell.edu/uscode/text/18/1962"^^xsd:anyURI .
+
+#################################################################
+# Datatype properties
+#################################################################
+
+rico:enterpriseType
+	a owl:DatatypeProperty ;
+	rdfs:label "enterpriseType"@en ;
+	rdfs:comment "The statutory branch of the enterprise definition the charged enterprise falls under, as an open vocabulary. Recommended values: 'legal-entity' (an individual, partnership, corporation, association, or other legal entity) and 'association-in-fact' (a union or group of individuals associated in fact although not a legal entity). See 18 U.S.C. § 1961(4) (https://www.law.cornell.edu/uscode/text/18/1961)."@en ;
+	rdfs:domain rico:RacketeeringEnterprise ;
+	rdfs:range xsd:string .
+
+rico:roleFunction
+	a owl:DatatypeProperty ;
+	rdfs:label "roleFunction"@en ;
+	rdfs:comment "The function of the enterprise role, kept close to the charging language, as an open vocabulary. Recommended values drawn from charged social-engineering and traditional racketeering enterprises: 'organizer', 'leader', 'database-hacker', 'target-identifier', 'caller', 'money-launderer', 'money-exchanger', 'residential-burglar', 'courier', 'enforcer', 'recruiter', 'straw-owner', 'promoter'. Producers may use other values verbatim from the record."@en ;
+	rdfs:domain rico:EnterpriseRole ;
+	rdfs:range xsd:string .
+
+rico:predicateStatute
+	a owl:DatatypeProperty ;
+	rdfs:label "predicateStatute"@en ;
+	rdfs:comment "A statutory category of racketeering activity (18 U.S.C. § 1961(1), https://www.law.cornell.edu/uscode/text/18/1961) enumerated in a RICO count as a predicate of the charged pattern, e.g. '18 U.S.C. § 1343 (wire fraud)' or '18 U.S.C. § 1956 (laundering of monetary instruments)'. Repeat the property once per enumerated category. Deliberately domain-free so it can attach to any criminal-charge class (e.g. legalproc:CriminalCharge). A 'pattern of racketeering activity' requires at least two acts of racketeering activity within ten years (18 U.S.C. § 1961(5))."@en ;
+	rdfs:range xsd:string .

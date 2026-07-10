@@ -1,0 +1,969 @@
+{
+  "extension": "legalproc",
+  "modules": [
+    "legalproc"
+  ],
+  "classes": {
+    "ChargingInstrument": {
+      "iri": "http://example.org/ontology/legalproc/ChargingInstrument",
+      "module": "legalproc",
+      "description": "A charging instrument is a formal document that initiates or amends criminal charges against one or more defendants, such as a criminal complaint, indictment, superseding indictment, or information. See Federal Rule of Criminal Procedure 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7).",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "instrumentType",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The type of charging instrument, as an open vocabulary. Recommended values: 'complaint', 'indictment', 'superseding-indictment', 'information'."
+        }
+      ],
+      "source": "legalproc"
+    },
+    "CriminalCharge": {
+      "iri": "http://example.org/ontology/legalproc/CriminalCharge",
+      "module": "legalproc",
+      "description": "A criminal charge is a formal accusation, stated as one or more counts within a charging instrument, that a person committed a specific statutory offense. Inchoate and derivative offenses (conspiracy, attempt, solicitation, aiding and abetting, and predicate-linked offenses such as 18 U.S.C. § 924(c) firearm counts) are criminal charges whose offenseForm and objectOffense properties record the form and the object or predicate offense. See Federal Rule of Criminal Procedure 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7).",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "assertedIn",
+          "type": "ChargingInstrument",
+          "type_iri": "http://example.org/ontology/legalproc/ChargingInstrument",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Links a criminal charge to the charging instrument (complaint, indictment, superseding indictment, information) in which it is asserted."
+        },
+        {
+          "name": "chargeClassification",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The offense classification in the governing jurisdiction, e.g. 'Class A Felony' per 18 U.S.C. § 3559 (https://www.law.cornell.edu/uscode/text/18/3559)."
+        },
+        {
+          "name": "chargeDisposition",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current disposition of the charge, as an open vocabulary. Recommended values: 'pending', 'dismissed', 'acquitted', 'convicted-by-verdict', 'convicted-by-plea', 'merged'."
+        },
+        {
+          "name": "countLabel",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The count designation as printed in the charging instrument, e.g. 'Count 1', 'Counts 4-10', 'Count 1sss' (PACER superseding-indictment notation)."
+        },
+        {
+          "name": "countNumber",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Ordinal count number of the charge within its charging instrument. A charge asserted in a range of counts (e.g. Counts 4-10) may carry multiple values."
+        },
+        {
+          "name": "objectOffense",
+          "type": "CriminalCharge",
+          "type_iri": "http://example.org/ontology/legalproc/CriminalCharge",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Links an inchoate or derivative criminal charge (conspiracy, attempt, solicitation, aiding-abetting, predicate-linked offense) to the charge representing its object or predicate offense, e.g. a conspiracy-to-murder count to the murder offense conspired at, or an 18 U.S.C. § 924(c) firearm count to the crime-of-violence count it is charged in furtherance of."
+        },
+        {
+          "name": "offenseForm",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The form of the charged offense, as an open vocabulary. Recommended values: 'substantive' (completed offense), 'conspiracy' (agreement to commit an object offense, e.g. 18 U.S.C. §§ 371, 1117), 'attempt' (e.g. 18 U.S.C. § 1113), 'solicitation', 'aiding-abetting' (e.g. 18 U.S.C. § 2), 'derivative' (offense defined by reference to a predicate offense, e.g. 18 U.S.C. § 924(c) use of a firearm in furtherance of a crime of violence). Use objectOffense to link a non-substantive charge to its object or predicate charge."
+        },
+        {
+          "name": "statuteCitation",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "Citation of the charged offense in the governing jurisdiction, e.g. '18 U.S.C. §§ 1117 & 1114'."
+        }
+      ],
+      "source": "legalproc"
+    },
+    "CriminalProceeding": {
+      "iri": "http://example.org/ontology/legalproc/CriminalProceeding",
+      "module": "legalproc",
+      "description": "A criminal proceeding is a formal event in a criminal case conducted before a tribunal, such as an arraignment, detention hearing, trial, plea hearing, sentencing hearing, or appeal.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "proceedingType",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The type of criminal proceeding, as an open vocabulary. Recommended values: 'arraignment', 'detention-hearing', 'preliminary-hearing', 'trial', 'plea-hearing', 'sentencing-hearing', 'appeal'."
+        }
+      ],
+      "source": "legalproc"
+    },
+    "ForfeitureOrder": {
+      "iri": "http://example.org/ontology/legalproc/ForfeitureOrder",
+      "module": "legalproc",
+      "description": "A forfeiture order is an order, or pre-conviction allegation, requiring surrender to the state of property involved in or traceable to an offense. See 18 U.S.C. §§ 981-982 (https://www.law.cornell.edu/uscode/text/18/981).",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "currencyCode",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "ISO 4217 currency code for a monetary amount, e.g. 'USD' (https://www.iso.org/iso-4217-currency-codes.html)."
+        },
+        {
+          "name": "monetaryAmount",
+          "type": "decimal",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#decimal",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The monetary amount of a restitution or forfeiture obligation, in the currency identified by currencyCode."
+        }
+      ],
+      "source": "legalproc"
+    },
+    "Plea": {
+      "iri": "http://example.org/ontology/legalproc/Plea",
+      "module": "legalproc",
+      "description": "A plea is a defendant's formal answer to a criminal charge. See Federal Rule of Criminal Procedure 11 (https://www.law.cornell.edu/rules/frcrmp/rule_11).",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "concernsCharge",
+          "type": "CriminalCharge",
+          "type_iri": "http://example.org/ontology/legalproc/CriminalCharge",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Links a plea, proceeding, verdict, sentence, forfeiture order, or restitution order to the criminal charge(s) it concerns."
+        },
+        {
+          "name": "pleaType",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The type of plea entered, as an open vocabulary. Recommended values: 'guilty', 'not-guilty', 'nolo-contendere'."
+        }
+      ],
+      "source": "legalproc"
+    },
+    "RestitutionOrder": {
+      "iri": "http://example.org/ontology/legalproc/RestitutionOrder",
+      "module": "legalproc",
+      "description": "A restitution order is an order or request that an offender compensate victims for losses caused by the offense, monetarily or in kind. See 18 U.S.C. § 3663A (https://www.law.cornell.edu/uscode/text/18/3663A).",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "currencyCode",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "ISO 4217 currency code for a monetary amount, e.g. 'USD' (https://www.iso.org/iso-4217-currency-codes.html)."
+        },
+        {
+          "name": "monetaryAmount",
+          "type": "decimal",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#decimal",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The monetary amount of a restitution or forfeiture obligation, in the currency identified by currencyCode."
+        }
+      ],
+      "source": "legalproc"
+    },
+    "Sentence": {
+      "iri": "http://example.org/ontology/legalproc/Sentence",
+      "module": "legalproc",
+      "description": "A sentence is a penalty recommended by a party or imposed by a tribunal upon conviction of a criminal charge, including custodial terms, supervised release, and special assessments. See 18 U.S.C. § 3553 (https://www.law.cornell.edu/uscode/text/18/3553).",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "sentenceStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "Whether the sentence is a party recommendation, an imposed judgment, or has been vacated, as an open vocabulary. Recommended values: 'recommended', 'imposed', 'vacated'."
+        },
+        {
+          "name": "sentenceTerm",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The custodial term as stated in the record, kept verbatim to avoid fabricating precision, e.g. 'Life', '165 years', '25 years concurrent + 140 years consecutive'."
+        }
+      ],
+      "source": "legalproc"
+    },
+    "Verdict": {
+      "iri": "http://example.org/ontology/legalproc/Verdict",
+      "module": "legalproc",
+      "description": "A verdict is a finder of fact's formal determination on a criminal charge, such as a jury's finding of guilty or not guilty on a count. See Federal Rule of Criminal Procedure 31 (https://www.law.cornell.edu/rules/frcrmp/rule_31).",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "concernsCharge",
+          "type": "CriminalCharge",
+          "type_iri": "http://example.org/ontology/legalproc/CriminalCharge",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Links a plea, proceeding, verdict, sentence, forfeiture order, or restitution order to the criminal charge(s) it concerns."
+        },
+        {
+          "name": "verdictType",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The determination recorded by the verdict, as an open vocabulary. Recommended values: 'guilty', 'not-guilty'."
+        }
+      ],
+      "source": "legalproc"
+    }
+  },
+  "vocabs": {}
+}

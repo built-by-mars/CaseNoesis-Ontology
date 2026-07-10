@@ -184,3 +184,11 @@ This produces:
 - `packages/case-uco-cac/java/` — Java project with `pom.xml`
 - `packages/case-uco-cac/rust/` — Rust crate with `Cargo.toml`
 - `packages/case-uco-cac/_registry.json` — Extension registry for MCP and runtime discovery
+
+## Related
+
+- [extensions.md](extensions.md) — enabling and validating extension ontologies
+- [legal-process-modeling.md](legal-process-modeling.md) — legalproc composition for any criminal case
+- [fraud-crypto-laundering.md](fraud-crypto-laundering.md) — cryptoinv + legalproc composition
+- [change-proposal.md](change-proposal.md) — filing gaps upstream when composition is not enough
+- [recipe-authoring.md](recipe-authoring.md) — writing a new recipe for a genuinely new pattern

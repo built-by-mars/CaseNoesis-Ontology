@@ -1,0 +1,28 @@
+# CQ 1.1 — What charges were filed, under which statutes, as which counts?
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/criminal/>
+
+SELECT ?chargeName ?statute ?count
+WHERE {
+    ?charge a proposed:CriminalCharge ;
+            uco-core:name ?chargeName ;
+            proposed:statuteCitation ?statute .
+    OPTIONAL { ?charge proposed:countNumber ?count }
+}
+
+# ---
+
+# CQ 1.2 — For each charge, what plea was entered and what sentence status applies?
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/criminal/>
+
+SELECT ?chargeName ?pleaType ?sentenceStatus
+WHERE {
+    ?plea a proposed:Plea ;
+          proposed:pleaType ?pleaType ;
+          proposed:concernsCharge ?charge .
+    ?charge uco-core:name ?chargeName .
+    ?sentence a proposed:Sentence ;
+              proposed:sentenceStatus ?sentenceStatus ;
+              proposed:concernsCharge ?charge .
+}

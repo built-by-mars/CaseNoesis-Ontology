@@ -235,3 +235,7 @@ case_validate --built-version case-1.4.0 \
   --inference rdfs --allow-infos \
   cybertip_workflow.jsonld
 ```
+
+## Related
+
+- [cac-hotline-intake-lifecycle.md](cac-hotline-intake-lifecycle.md) — hotline intake, triage, and referral before/alongside the CyberTip

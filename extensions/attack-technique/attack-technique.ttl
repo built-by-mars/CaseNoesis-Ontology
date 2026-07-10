@@ -1,0 +1,95 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+
+#
+# Local forward-implementation of the uco-action:Technique metaclass.
+#
+# This extension implements, ahead of release, the classes and properties
+# added on the UCO 1.5.0 track in ucoProject/UCO PR #676 ("Issue 666: Add
+# UcoType and Technique", author @ajnelson-nist), which resolves the
+# backwards-compatible requirements of ucoProject/UCO#666. It reproduces the
+# feature-branch (Feature-Issue-666) definitions verbatim so CTI/APT
+# exemplars can carry MITRE ATT&CK (and Engage / SOLVE-IT) technique mappings
+# and still validate today. When UCO 1.5.0 ships these terms, this extension
+# can be retired without changing any instance data, because it declares the
+# concepts in their released uco-core: / uco-action: IRIs.
+#
+# Design (per PR #676):
+#   * core:UcoType is a top-level metaclass anchor, disjoint from
+#     core:UcoThing. An instance of core:UcoType is also an owl:Class and is,
+#     or specializes, core:UcoThing.
+#   * uco-action:Technique is itself a metaclass (rdfs:subClassOf
+#     core:UcoType). "A technique is a class of actions joined by some common
+#     characteristics." A *Technique instance* is an owl:Class that is a
+#     subclass of uco-action:Action (i.e. a concrete technique such as MITRE
+#     ATT&CK T1543.003 is modeled as a punned class), and concrete actions
+#     that exhibit the technique are instances of that class.
+#   * uco-action:techniqueID is a Literal-valued identifier used only on
+#     Techniques.
+#
+# Source: https://github.com/ucoProject/UCO/pull/676 (Feature-Issue-666)
+# Issue:  https://github.com/ucoProject/UCO/issues/666
+#
+
+#
+# core namespace additions (PR #676, ontology/uco/core/core.ttl)
+#
+
+core:UcoType
+	a
+		owl:Class ,
+		sh:NodeShape
+		;
+	rdfs:subClassOf owl:Thing ;
+	rdfs:label "UcoType"@en ;
+	rdfs:comment "UcoThing is the top-level class for metaclasses within UCO.  An instance of core:UcoType is also an instance of owl:Class, and is or specializes core:UcoThing."@en ;
+	owl:disjointWith core:UcoThing ;
+	sh:class owl:Class ;
+	sh:property [
+		sh:hasValue core:UcoThing ;
+		sh:path [
+			sh:zeroOrMorePath rdfs:subClassOf ;
+		] ;
+	] ;
+	sh:targetClass core:UcoType ;
+	.
+
+#
+# action namespace additions (PR #676, ontology/uco/action/action.ttl)
+#
+
+action:Technique
+	a
+		owl:Class ,
+		sh:NodeShape
+		;
+	rdfs:subClassOf core:UcoType ;
+	rdfs:label "Technique"@en ;
+	rdfs:comment "A technique is a class of actions joined by some common characteristics.  uco-action:Technique itself is a metaclass.  A Technique instance is an owl:Class that is a subclass of uco-action:Action."@en ;
+	sh:property
+		[
+			rdfs:comment "This shape confirms a Technique is an eventual subclass of Action.  The Action class itself is not a Technique."@en ;
+			sh:hasValue action:Action ;
+			sh:path [
+				sh:oneOrMorePath rdfs:subClassOf ;
+			] ;
+		] ,
+		[
+			rdfs:comment "This shape will find violations after RDFS or OWL-RL inferencing, but might not find some violations without inferencing."@en ;
+			sh:nodeKind sh:Literal ;
+			sh:path action:techniqueID ;
+		]
+		;
+	sh:targetClass action:Technique ;
+	.
+
+action:techniqueID
+	a owl:DatatypeProperty ;
+	rdfs:label "techniqueID"@en ;
+	rdfs:comment "An identifier for a technique within some cataloguing system.  At the general level of UCO, techniqueID is left optional and minimally-described aside from needing to be Literal-valued.  Specializations of Technique should also consider specializing a corresponding subproperty of techniqueID to enable support of global review of technique identifiers."@en ;
+	rdfs:domain action:Technique ;
+	.

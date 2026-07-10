@@ -145,3 +145,9 @@ graph.write("filesystem-triage.jsonld")
 ```bash
 case_validate --built-version case-1.4.0 filesystem-triage.jsonld
 ```
+
+## Related
+
+- [file-system.md](file-system.md) — deeper filesystem patterns
+- [advanced-file-patterns.md](advanced-file-patterns.md) — archives, encryption, containment
+- [large-datasets.md](large-datasets.md) — scaling to big evidence sets

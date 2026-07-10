@@ -1,0 +1,26 @@
+# CQ 1.1 — Under what mandate was the investigation conducted, and what violations were substantiated?
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/corporate/>
+
+SELECT ?mandateName ?violationName ?policy
+WHERE {
+    ?mandate a proposed:CorporateInvestigationMandate ;
+             uco-core:name ?mandateName .
+    ?violation a proposed:PolicyViolation ;
+               uco-core:name ?violationName ;
+               proposed:policyCitation ?policy .
+}
+
+# ---
+
+# CQ 1.2 — What outcomes, referrals, and remediation followed from the violation?
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/corporate/>
+
+SELECT ?responseName ?responseType
+WHERE {
+    ?response proposed:concernsViolation ?violation ;
+              uco-core:name ?responseName ;
+              a ?responseType .
+    FILTER (?responseType IN (proposed:DisciplinaryOutcome, proposed:Referral, proposed:RemediationAction))
+}

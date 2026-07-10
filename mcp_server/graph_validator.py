@@ -44,6 +44,8 @@ class GraphValidationReport:
     exit_code: int
     validator_name: str
     safe_summary: str
+    undeclared_concepts: tuple[str, ...] = ()
+    concept_guidance: str = ""
 
 
 def validator_available() -> bool:
@@ -132,8 +134,15 @@ def validate_graph_file(
     timeout_seconds: int = DEFAULT_TIMEOUT_SECONDS,
     extensions: list[str] | None = None,
     project_root: Path = PROJECT_ROOT,
+    strict_concepts: bool = True,
 ) -> GraphValidationReport:
     """Validate a CASE/UCO graph file with the local case_validate tool.
+
+    When ``strict_concepts`` is True (the default), the SHACL pass is followed
+    by a closed-world concept coverage check: every class and property IRI in
+    the graph must be declared in CASE/UCO or a supported extension ontology.
+    Undeclared concepts force ``conforms=False`` with guidance to draft a
+    change proposal or add the concept to an extension ontology.
 
     Raises ValueError with a typed message for every honest-failure path:
     ``validator_unavailable``, ``graph_missing``, ``unsupported_graph_extension``,
@@ -203,6 +212,38 @@ def validate_graph_file(
             "the graph content may be malformed."
         )
 
+    undeclared: tuple[str, ...] = ()
+    concept_guidance = ""
+    if strict_concepts:
+        try:
+            from concept_coverage import check_graph_concepts
+
+            coverage = check_graph_concepts(
+                graph, project_root=project_root, extensions=extensions
+            )
+        except Exception as exc:  # honest failure: never fake coverage
+            conforms = None
+            summary = (
+                f"{summary} Additionally, the concept coverage check could "
+                f"not run ({type(exc).__name__}); treat the result as "
+                "unverified."
+            )
+        else:
+            if not coverage.ok:
+                undeclared = coverage.undeclared_classes + coverage.undeclared_properties
+                concept_guidance = coverage.guidance
+                shacl_passed = conforms is not False and violation_count == 0
+                conforms = False
+                shown = ", ".join(undeclared[:8])
+                more = f" (+{len(undeclared) - 8} more)" if len(undeclared) > 8 else ""
+                concept_summary = (
+                    f"Graph uses {len(undeclared)} class/property term(s) not declared "
+                    f"in CASE/UCO or supported extension ontologies: {shown}{more}. "
+                    "Draft a change proposal or add the concept(s) to an extension "
+                    "ontology, then re-validate."
+                )
+                summary = concept_summary if shacl_passed else f"{summary} {concept_summary}"
+
     return GraphValidationReport(
         conforms=conforms,
         warning_count=warning_count,
@@ -210,13 +251,15 @@ def validate_graph_file(
         exit_code=exit_code,
         validator_name=VALIDATOR_NAME,
         safe_summary=summary,
+        undeclared_concepts=undeclared,
+        concept_guidance=concept_guidance,
     )
 
 
 def report_to_dict(report: GraphValidationReport) -> dict[str, Any]:
     """Serialize a report into the MCP tool result shape."""
 
-    return {
+    payload = {
         "conforms": report.conforms,
         "warning_count": report.warning_count,
         "violation_count": report.violation_count,
@@ -224,6 +267,10 @@ def report_to_dict(report: GraphValidationReport) -> dict[str, Any]:
         "validator_name": report.validator_name,
         "safe_summary": report.safe_summary,
     }
+    if report.undeclared_concepts:
+        payload["undeclared_concepts"] = list(report.undeclared_concepts)
+        payload["concept_guidance"] = report.concept_guidance
+    return payload
 
 
 def _parse_conforms(output: str) -> bool | None:

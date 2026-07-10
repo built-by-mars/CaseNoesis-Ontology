@@ -158,3 +158,10 @@ graph.write("tool-run.jsonld")
 ```bash
 case_validate --built-version case-1.4.0 tool-run.jsonld
 ```
+
+## Related
+
+- [forensic-tool.md](forensic-tool.md) — the base tool + action pattern
+- [configured-tool.md](configured-tool.md) — tool configurations
+- [chain-of-custody.md](chain-of-custody.md) — custody and provenance records
+- [forensic-lifecycle.md](forensic-lifecycle.md) — placing runs into phases

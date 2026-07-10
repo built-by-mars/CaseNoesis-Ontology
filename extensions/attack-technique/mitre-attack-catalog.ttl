@@ -1,0 +1,157 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix attack: <https://attack.mitre.org/techniques/> .
+
+#
+# Partial MITRE ATT&CK technique catalog, expressed with the uco-action:
+# Technique metaclass added in ucoProject/UCO PR #676.
+#
+# Per that PR, "A Technique instance is an owl:Class that is a subclass of
+# uco-action:Action." Each ATT&CK technique below is therefore a *punned
+# class*: it is simultaneously an instance of the uco-action:Technique
+# metaclass and an owl:Class that rdfs:subClassOf uco-action:Action. A
+# concrete action in a data graph that exhibits the technique is typed with
+# the technique class (rdf:type), which places it under uco-action:Action.
+#
+# IRIs are the canonical MITRE ATT&CK technique pages so instance data is
+# interoperable with upstream ATT&CK (https://attack.mitre.org). This file
+# is a *partial* catalog covering the techniques used by CASE-UCO exemplars;
+# extend it as new exemplars cite additional techniques. The tactic/platform
+# context each technique serves is recorded in rdfs:comment (UCO #676 keeps
+# the general Technique class minimal — techniqueID is its only property).
+#
+# Source: https://github.com/ucoProject/UCO/pull/676
+#
+
+attack:T1543.003
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Create or Modify System Process: Windows Service"@en ;
+	rdfs:comment "Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries create or modify Windows services to repeatedly execute malicious payloads as part of persistence."@en ;
+	action:techniqueID "T1543.003" ;
+	.
+
+attack:T1112
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Modify Registry"@en ;
+	rdfs:comment "Tactic: Defense Evasion. Platforms: Windows. Adversaries interact with the Windows Registry to hide configuration information, remove information, or evade defenses."@en ;
+	action:techniqueID "T1112" ;
+	.
+
+attack:T1055.001
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Process Injection: Dynamic-link Library Injection"@en ;
+	rdfs:comment "Tactics: Defense Evasion, Privilege Escalation. Platforms: Windows. Adversaries inject dynamic-link libraries into processes to evade process-based defenses and elevate privileges."@en ;
+	action:techniqueID "T1055.001" ;
+	.
+
+attack:T1027.002
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Obfuscated Files or Information: Software Packing"@en ;
+	rdfs:comment "Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries perform software packing to compress or encrypt an executable and hinder analysis or signature detection."@en ;
+	action:techniqueID "T1027.002" ;
+	.
+
+attack:T1047
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Windows Management Instrumentation"@en ;
+	rdfs:comment "Tactic: Execution. Platforms: Windows. Adversaries abuse Windows Management Instrumentation (WMI) to execute malicious commands and payloads, including on remote hosts for lateral movement."@en ;
+	action:techniqueID "T1047" ;
+	.
+
+attack:T1090.001
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Proxy: Internal Proxy"@en ;
+	rdfs:comment "Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries use an internal proxy to direct command-and-control traffic between compromised systems and out to the internet."@en ;
+	action:techniqueID "T1090.001" ;
+	.
+
+attack:T1102.002
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Web Service: Bidirectional Communication"@en ;
+	rdfs:comment "Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries use an existing, legitimate external web service for bidirectional command-and-control communication to blend with normal traffic."@en ;
+	action:techniqueID "T1102.002" ;
+	.
+
+attack:T1071.001
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Application Layer Protocol: Web Protocols"@en ;
+	rdfs:comment "Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries communicate using application-layer web protocols (HTTP/HTTPS) to avoid detection by blending with existing traffic."@en ;
+	action:techniqueID "T1071.001" ;
+	.
+
+attack:T1560.001
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Archive Collected Data: Archive via Utility"@en ;
+	rdfs:comment "Tactic: Collection. Platforms: Windows, Linux, macOS. Adversaries use a utility to compress and/or encrypt collected data prior to exfiltration."@en ;
+	action:techniqueID "T1560.001" ;
+	.
+
+attack:T1041
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Exfiltration Over C2 Channel"@en ;
+	rdfs:comment "Tactic: Exfiltration. Platforms: Windows, Linux, macOS. Adversaries steal data by exfiltrating it over an existing command-and-control channel."@en ;
+	action:techniqueID "T1041" ;
+	.
+
+attack:T1016
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "System Network Configuration Discovery"@en ;
+	rdfs:comment "Tactic: Discovery. Platforms: Windows, Linux, macOS. Adversaries look for details about the network configuration and settings of compromised systems."@en ;
+	action:techniqueID "T1016" ;
+	.
+
+attack:T1539
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Steal Web Session Cookie"@en ;
+	rdfs:comment "Tactic: Credential Access. Platforms: Windows, Linux, macOS. Adversaries steal web application or service session cookies to authenticate to systems as the compromised user."@en ;
+	action:techniqueID "T1539" ;
+	.

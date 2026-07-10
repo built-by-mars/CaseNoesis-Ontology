@@ -69,3 +69,8 @@ println!("Loaded {} objects", graph2.len());
 ```
 
 </details>
+
+## Related
+
+- [large-datasets.md](large-datasets.md) — partitioning before serialization
+- [runtime-discovery.md](runtime-discovery.md) — typed class discovery for deserialized graphs

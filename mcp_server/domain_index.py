@@ -6,6 +6,8 @@ optimized for consumption by AI coding agents via MCP tools.
 
 from __future__ import annotations
 
+from typing import Any
+
 # ---------------------------------------------------------------------------
 # UCO vs. CASE triage
 # ---------------------------------------------------------------------------
@@ -206,6 +208,28 @@ TASK_TO_CLASSES: dict[str, list[tuple[str, str]]] = {
         ("ObservableObject", "Wallet addresses and exchange account IDs"),
         ("Location", "Registered addresses and meetup sites"),
         ("Relationship", "Links between people, wallets, and locations"),
+        ("CryptocurrencyAddressFacet", "Blockchain address details (cryptoinv extension)"),
+        ("CryptocurrencyTransactionFacet", "On-chain transaction details (cryptoinv extension)"),
+        ("CryptocurrencyWalletFacet", "Wallet / address-cluster details (cryptoinv extension)"),
+        ("VirtualAssetHoldingFacet", "Point-in-time asset holdings and fiat value (cryptoinv extension)"),
+        ("CriminalCharge", "Charged counts with statute citations (cryptoinv extension)"),
+        ("ForfeitureOrder", "Forfeited property and money judgments (cryptoinv extension)"),
+    ],
+    "model violent crime or criminal prosecution": [
+        ("Investigation", "The case container (legalproc:caseIdentifier holds the docket number)"),
+        ("Person", "Defendants and victims (initials only when charged that way)"),
+        ("Organization", "Investigating agencies, prosecuting offices, criminal organizations"),
+        ("InvestigativeAction", "Warrant executions, arrests, forensic actions"),
+        ("Action", "Criminal conduct (shootings, assaults) distinct from investigative actions"),
+        ("ObservableObject", "Digital overt acts: messages, social posts, internet searches"),
+        ("Relationship", "Charged_With, Victim_Of, Possessed_By, Member_Of edges"),
+        ("ChargingInstrument", "Complaints, indictments, superseding indictments (legalproc extension)"),
+        ("CriminalCharge", "Counts with statute, offenseForm (conspiracy/attempt/derivative), disposition (legalproc extension)"),
+        ("Verdict", "Guilty / not-guilty findings per charge (legalproc extension)"),
+        ("Plea", "Guilty / not-guilty / nolo pleas (legalproc extension)"),
+        ("Sentence", "Recommended and imposed sentences, verbatim terms (legalproc extension)"),
+        ("ForfeitureOrder", "Forfeited weapons and property (legalproc extension)"),
+        ("RestitutionOrder", "Victim compensation amounts (legalproc extension)"),
     ],
     "model cargo theft route staging investigation": [
         ("Investigation", "The case container"),
@@ -387,7 +411,7 @@ TASK_TO_CLASSES: dict[str, list[tuple[str, str]]] = {
     ],
 }
 
-DOMAIN_CATEGORIES: list[dict[str, str | list[str]]] = [
+DOMAIN_CATEGORIES: list[dict[str, Any]] = [
     {
         "name": "files_and_filesystem",
         "title": "Files and Filesystem",
@@ -560,7 +584,7 @@ DOMAIN_CATEGORIES: list[dict[str, str | list[str]]] = [
     },
 ]
 
-UCO_PROFILES: list[dict[str, str | list[str] | dict[str, str]]] = [
+UCO_PROFILES: list[dict[str, Any]] = [
     {
         "id": "bfo",
         "name": "CDO-Shapes-BFO",
@@ -1026,6 +1050,12 @@ RECIPE_INDEX: list[dict[str, str]] = [
         "file": "docs/recipes/cac-federal-trial-proceedings.md",
     },
     {
+        "title": "PACER Document Ingestion (MCP Agent Workflow)",
+        "description": "Submit PACER PDF bundles via process_document_file, route CAC recipes, build merged validated investigation graphs for agents and Link-Look.",
+        "keywords": "pacer pdf indictment judgment trial brief process_document_file validate_graph icac federal court ecf docket ao 245b agent workflow cac ontology crimes against children",
+        "file": "docs/recipes/cac-pacer-document-ingestion.md",
+    },
+    {
         "title": "Missing Child Investigations",
         "description": "Model missing-child reports, AMBER alerts, tracking, and recovery operations.",
         "keywords": "missing child amber alert abduction runaway recovery cac ontology crimes against children",
@@ -1054,6 +1084,54 @@ RECIPE_INDEX: list[dict[str, str]] = [
         "description": "Model pig-butchering scams, blockchain tracing, exchange returns, and location correlation.",
         "keywords": "fraud crypto cryptocurrency blockchain wallet exchange laundering pig butchering investment scam telegram geofence subpoena kyc trace",
         "file": "docs/recipes/fraud-crypto-laundering.md",
+    },
+    {
+        "title": "Elder Fraud and Government-Impersonation Schemes",
+        "description": "Model agent-impersonation call-center schemes: money couriers, prepaid-card and cash-handoff flows, spoofed calls, controlled-delivery stings, and records attribution.",
+        "keywords": "elder fraud impersonation false personation government agent scam treasury irs social security money mule courier runner green dot gift card prepaid card cash handoff controlled delivery tech support scam pop-up grandparent scam wire fraud conspiracy call center spoofed caller id",
+        "file": "docs/recipes/elder-fraud-impersonation.md",
+    },
+    {
+        "title": "Espionage Act and Classified-Information Disclosure",
+        "description": "Model Espionage Act prosecutions: classified national defense information with uco-marking classification banners, SCIF removal chains, transmission actions, obstruction, and 793/794 counts.",
+        "keywords": "espionage act 793 794 classified national defense information ndi top secret sci security clearance scif sensitive compartmented noforn fvey unauthorized disclosure marking classification banner jwics leak discord clearance holder executive order 13526 obstruction destroyed devices",
+        "file": "docs/recipes/espionage-classified-disclosure.md",
+    },
+    {
+        "title": "Export Control and Sanctions Evasion",
+        "description": "Model export-control and sanctions prosecutions: IEEPA/EAR counts, dated Entity List designations, gUFO-typed controlled goods, false EEI/AES filings, and the papered-consignee vs. true-end-user concealment chain.",
+        "keywords": "export control ieepa 1705 entity list ear eccn ear99 export license bis bureau of industry and security commerce sdn ofac sanctions embargo itar smuggling 554 false export information 305 shipper's export declaration electronic export information automated export system aes ultimate consignee end user transshipment freight forwarder dual use prc procurement intermediary",
+        "file": "docs/recipes/export-control-sanctions.md",
+    },
+    {
+        "title": "Cyber Threat Intelligence and APT Reporting",
+        "description": "Model an open-source CTI/APT threat report: the report and its graphics captured by hash, the threat actor as an Organization (no ThreatActor class), malware families/variants and toolkit, registry/service-DLL persistence (native UCO coverage), third-party cloud C2, victimology, IOCs, and MITRE ATT&CK techniques via the uco-action:Technique metaclass (UCO PR #676: a technique is an owl:Class subclassing uco-action:Action with techniqueID, punned onto the exhibiting Action; forward-implemented by the attack-technique extension for UCO 1.5.0).",
+        "keywords": "apt advanced persistent threat threat actor cyber espionage group nation-state sagerunex backdoor implant rat malware family variant loader dll injection vmprotect command and control c2 beacon exfiltration lateral movement impacket wmi persistence service dll servicedll registry reg add windows service cookie stealer venom proxy port relay htran mtrain victimology campaign threat spotlight ttp ttps mitre att&ck technique ioc yara clamav snort talos mandiant dropbox twitter zimbra cloud c2 windowsregistrykey registrydatatype",
+        "file": "docs/recipes/cyber-threat-intelligence.md",
+    },
+    {
+        "title": "Insider Threat, Trade Secret Theft, and Economic Espionage",
+        "description": "Model insider exfiltration of trade secrets: corporate telemetry, personal cloud accounts, per-category 1832/1831 counts, foreign-government-benefit evidence, and jury verdicts.",
+        "keywords": "insider threat trade secret economic espionage 1832 1831 exfiltration data loss prevention dlp badge access personal cloud account proprietary confidential employee resignation talent program foreign instrumentality startup competitor source code wechat jury verdict",
+        "file": "docs/recipes/insider-threat-trade-secrets.md",
+    },
+    {
+        "title": "Legal Process Modeling (Charges, Verdicts, Sentences)",
+        "description": "Model charging instruments, conspiracy/attempt/derivative charges, pleas, verdicts, sentences, forfeiture, and restitution for any investigation type via the legalproc extension.",
+        "keywords": "legal process charge criminal charge conspiracy attempt indictment superseding verdict plea sentence sentencing forfeiture restitution appeal docket count statute 924(c) violent crime prosecution legalproc",
+        "file": "docs/recipes/legal-process-modeling.md",
+    },
+    {
+        "title": "Racketeering (RICO) and Criminal Enterprise",
+        "description": "Model racketeering prosecutions via the rico extension: the charged enterprise (rico:RacketeeringEnterprise with enterpriseType 'association-in-fact' or 'legal-entity'), functional member roles as rico:EnterpriseRole nodes with roleFunction, statutory predicate categories as rico:predicateStatute on RICO counts, multi-instrument per-defendant count tracking (PACER 1/1s/1ss suffixes), and enterprise conduct as Actions.",
+        "keywords": "racketeering rico 1962 1961 1963 criminal enterprise association-in-fact organized crime pattern of racketeering predicate act enterprise role organizer caller money launderer database hacker residential burglar target identifier gang syndicate mob crew division of labor social engineering enterprise",
+        "file": "docs/recipes/racketeering-enterprise.md",
+    },
+    {
+        "title": "Weapons and Drug Evidence",
+        "description": "Model firearms, ammunition, and edged weapons with queryable make/model/caliber/serialNumber via the weapons extension (class tree mirrors the CCO Artifact Ontology weapon hierarchy, BFO 2020; gUFO FunctionalComplex bridge; NIEM-aligned properties), and seized/charged controlled-substance portions via the drugs extension (drug:ControlledSubstance with ChEBI IRI reference for chemical identity, CSA schedule, mass, purity basis 'mixture' vs 'actual', verbatim quantityDescription; grounded as gufo:Quantity).",
+        "keywords": "weapon firearm handgun pistol revolver rifle shotgun long gun ammunition magazine caliber serial number obliterated 922(g) 924(c) 922(k) felon in possession brandish drug controlled substance methamphetamine fentanyl cocaine heroin narcotics schedule ii 841 846 drug quantity mixture actual purity gram kilogram chebi cco common core ontologies gufo quantity seizure forfeiture",
+        "file": "docs/recipes/weapons-drug-evidence.md",
     },
     {
         "title": "Cargo Theft, Route Staging, and Warehouse Movement",
@@ -1088,6 +1166,24 @@ RECIPE_INDEX: list[dict[str, str]] = [
         "keywords": "starter kit tool run action autopsy encase mapping end-to-end",
         "file": "docs/recipes/starter-tool-run.md",
         "is_starter_kit": True,
+    },
+    {
+        "title": "Windows USN Journal",
+        "description": "Model NTFS change journal entries with structured reason flags, rename modeling, and provenance.",
+        "keywords": "usn journal ntfs change journal windows filesystem timeline rename reason flags",
+        "file": "docs/recipes/usn-journal.md",
+    },
+    {
+        "title": "Cross-Domain Extensions",
+        "description": "Compose CAC, AEO, and other extension packages in one graph for multi-domain investigations.",
+        "keywords": "cross-domain extension composition cac aeo multi-domain combine namespaces packages",
+        "file": "docs/recipes/cross-domain-extensions.md",
+    },
+    {
+        "title": "Authoring and Improving Recipes",
+        "description": "Write a new recipe when an investigation pattern has no existing recipe, or improve an existing recipe a live case proved wrong or incomplete: structure, grounding rules, re-validation, cross-references, and registration in the MCP indexes.",
+        "keywords": "recipe authoring improve update fix existing new recipe write recipe template pattern documentation contribute unseen novel workflow self-improving maintain catalog",
+        "file": "docs/recipes/recipe-authoring.md",
     },
 ]
 

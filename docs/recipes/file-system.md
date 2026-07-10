@@ -108,3 +108,11 @@ println!("{}", graph.serialize().unwrap());
 ```
 
 </details>
+
+## Related
+
+- [starter-filesystem-report.md](starter-filesystem-report.md) — end-to-end filesystem report starter kit
+- [advanced-file-patterns.md](advanced-file-patterns.md) — archives, encryption, containment chains
+- [file-recovery.md](file-recovery.md) — deleted and carved files
+- [exif-data.md](exif-data.md) — image metadata on the files
+- [usn-journal.md](usn-journal.md) — NTFS change journal timelines

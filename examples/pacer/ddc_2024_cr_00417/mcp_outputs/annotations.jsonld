@@ -1,0 +1,805 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld"
+  ],
+  "@graph": [
+    {
+      "id": "urn:link-look:anchor:30606808-cafe-5536-ba52-c4e31a402e71",
+      "type": "Annotation",
+      "body": "urn:uuid:3c9f1369-0c36-565b-8727-b258f5f7b21c",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 41,
+            "end": 49
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:096175c7-d863-5627-a667-51f0f0f9fad6",
+      "type": "Annotation",
+      "body": "urn:uuid:e54d6296-3a8e-54a6-b97a-50c0385c7dfd",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 104,
+            "end": 112
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:3131776b-6430-580c-b607-b47f1adf65ff",
+      "type": "Annotation",
+      "body": "urn:uuid:978d8385-84a0-52a7-8ea2-07d85c345220",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 167,
+            "end": 175
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:86349424-55c6-5dbe-8501-cc671f925ed2",
+      "type": "Annotation",
+      "body": "urn:uuid:159b34a1-7282-57e4-b0db-99d060adc877",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 230,
+            "end": 238
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:ff0bd0e7-6ec3-50e9-937f-f70667e3dcc2",
+      "type": "Annotation",
+      "body": "urn:uuid:225d3747-8781-5f8e-8763-d35ae44c3db0",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 293,
+            "end": 301
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:d124c9d9-f558-5385-a014-8e57a8fb8df4",
+      "type": "Annotation",
+      "body": "urn:uuid:70209d24-4255-52f1-a1a0-f0b6d78726d5",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 356,
+            "end": 364
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:e944dfd5-84fa-5a7c-a3f1-8dec98cd43de",
+      "type": "Annotation",
+      "body": "urn:uuid:47cc0d0a-46a9-52da-b023-02ff6d83e21b",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 419,
+            "end": 427
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:29dcd44e-2382-554a-8439-3b9e6b43e2d5",
+      "type": "Annotation",
+      "body": "urn:uuid:25d2ba05-1b5c-5f9e-a5ac-acc678372903",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 482,
+            "end": 490
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:4fe4df8c-aa8b-594c-9888-11af17d7a538",
+      "type": "Annotation",
+      "body": "urn:uuid:8c4983d1-2bc5-53bd-bc64-90faa60c65d1",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 545,
+            "end": 553
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:95b9c34b-7fff-50b1-99e8-a4beaf86af59",
+      "type": "Annotation",
+      "body": "urn:uuid:bca8a8d2-b5d7-5a7a-b5f0-706555199954",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 608,
+            "end": 616
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:fd989a4b-d562-5061-9647-591c123f3b80",
+      "type": "Annotation",
+      "body": "urn:uuid:e7af5379-7920-5355-a0e6-376253cea880",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 672,
+            "end": 680
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:bb23eb7d-29a4-5636-bbc0-e64dab3e20ad",
+      "type": "Annotation",
+      "body": "urn:uuid:92991497-dfde-59b9-9eb6-18729808a965",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 736,
+            "end": 744
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a25cfbfc-8fd3-5ae0-a2b9-bc965b645d1f",
+      "type": "Annotation",
+      "body": "urn:uuid:a36764e3-92e9-5437-85c4-f4032567fda2",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 800,
+            "end": 808
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:4deae675-38b7-59d3-b67c-cbf6d032c626",
+      "type": "Annotation",
+      "body": "urn:uuid:0c085d0d-ae97-5a3b-9d35-e87af2184f1f",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 864,
+            "end": 872
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:39654161-95ef-5c41-813c-e1432c82c587",
+      "type": "Annotation",
+      "body": "urn:uuid:2a6292c3-501f-566b-bad8-7cd4cf16fa05",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 928,
+            "end": 936
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:f101d812-8414-54c9-8407-637385c04e38",
+      "type": "Annotation",
+      "body": "urn:uuid:5aaf2c28-4482-54ea-9be5-0766a1710e20",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 992,
+            "end": 1000
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:85f0f8f6-9ad6-5ee6-a041-8ce9df5018ba",
+      "type": "Annotation",
+      "body": "urn:uuid:da4d5105-4e27-5b2e-91d8-013f533d6e99",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1056,
+            "end": 1064
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:72f96210-bdea-592c-8795-ef3e6e78774d",
+      "type": "Annotation",
+      "body": "urn:uuid:58ca53ac-6a61-5dee-a584-c91b6bc7c9a2",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1120,
+            "end": 1128
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:5315087a-2ff9-5894-ad87-c402c1171c80",
+      "type": "Annotation",
+      "body": "urn:uuid:b74d6c8c-5707-5685-bca7-492377f3d9b1",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1184,
+            "end": 1192
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:aace7100-d8db-5a9f-8247-73ab572a0e98",
+      "type": "Annotation",
+      "body": "urn:uuid:04425c22-076c-5969-8c45-0f8fda85a07f",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1248,
+            "end": 1256
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:015105f5-f9e1-58e8-b09c-aa644566f6d4",
+      "type": "Annotation",
+      "body": "urn:uuid:92f1be8f-8716-5cb5-a3df-9e630041e9df",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1312,
+            "end": 1320
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:e5f03d12-5ee5-5f54-8fc3-941a6e9d364d",
+      "type": "Annotation",
+      "body": "urn:uuid:3c93d46e-66ad-5f48-94ed-9ac0dae3408f",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1376,
+            "end": 1384
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:68a293c8-31e2-5243-bb68-8d75a6edfd33",
+      "type": "Annotation",
+      "body": "urn:uuid:fbe598f9-3c73-576c-8f30-c107681da2ea",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1440,
+            "end": 1448
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:017c194e-1e47-58e1-ba0b-7307df8aa61e",
+      "type": "Annotation",
+      "body": "urn:uuid:7902e6a6-622a-50b5-9007-fad65017acf6",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1504,
+            "end": 1512
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:ecca182e-1718-57d5-9f2c-bf81f76a269a",
+      "type": "Annotation",
+      "body": "urn:uuid:6641f771-799d-5962-a6f3-7f43016cb8e1",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1568,
+            "end": 1576
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:5c4c5f36-76e8-54a8-a485-dba55461d365",
+      "type": "Annotation",
+      "body": "urn:uuid:05d3f862-d51d-57a6-9e29-3ae2be24f2d7",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1632,
+            "end": 1640
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:f32e21e7-d2f3-5e20-910a-c2082bf11853",
+      "type": "Annotation",
+      "body": "urn:uuid:ed6cc69d-76d1-56e2-8f57-ae5eccb8ab51",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1696,
+            "end": 1704
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:2692a1f9-1736-5a12-ac31-c921584b1893",
+      "type": "Annotation",
+      "body": "urn:uuid:4a180fb5-44dc-58b8-bc2d-07e0a814fc11",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1760,
+            "end": 1768
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:738e10cc-c020-5708-987c-e143a9f0ac8b",
+      "type": "Annotation",
+      "body": "urn:uuid:9a63a687-9344-5e3f-9337-b6ec8c8949b9",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1824,
+            "end": 1832
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:920ad708-a539-5a9d-a331-b06c650bbcb7",
+      "type": "Annotation",
+      "body": "urn:uuid:2658c589-720c-5c70-89d6-75ed9c79d74c",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1888,
+            "end": 1896
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:816e59e6-b019-58f7-abeb-c4ed5c3e95c2",
+      "type": "Annotation",
+      "body": "urn:uuid:9cac59bb-6bd1-5fc3-ad32-3a9c01c4cf9a",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 1952,
+            "end": 1960
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:9f4b3583-a776-59e5-94ab-1aa90d8671d9",
+      "type": "Annotation",
+      "body": "urn:uuid:3c75fc5d-92cd-580e-ac7d-d0c9f9fbb132",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2016,
+            "end": 2024
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:7f236429-7f20-5b3e-9ac5-4561901e63dc",
+      "type": "Annotation",
+      "body": "urn:uuid:71890e16-b3f1-55f3-b098-1d8dc22dd4f3",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2080,
+            "end": 2088
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:205ec21f-eff9-5ebf-b214-06b99d738e71",
+      "type": "Annotation",
+      "body": "urn:uuid:ccffafef-ccd3-5ed4-ae59-ba356d528ec4",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2144,
+            "end": 2152
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:0561fea2-7029-5481-8bea-b92697397796",
+      "type": "Annotation",
+      "body": "urn:uuid:a52a9967-f028-56e9-85e8-c669aacc1d48",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2208,
+            "end": 2216
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a7767f89-9629-5a4f-b791-8d174172403e",
+      "type": "Annotation",
+      "body": "urn:uuid:7f9e01d7-0c19-5c26-b716-50d2578994e3",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2272,
+            "end": 2280
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:dd0e2dd1-9a3a-515f-910e-db84e7f30c29",
+      "type": "Annotation",
+      "body": "urn:uuid:2f1230ea-7790-5ca6-802c-6e2cd11ed2db",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2336,
+            "end": 2344
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:1b3943a6-c9b4-5e4c-af7a-2a3cdce1af8a",
+      "type": "Annotation",
+      "body": "urn:uuid:6a2e5924-0dca-584a-9ff2-2053262a7dab",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2400,
+            "end": 2408
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a8f355e3-0473-5191-8979-bdd6a02a5cb6",
+      "type": "Annotation",
+      "body": "urn:uuid:da6389bc-e41c-5323-9ba6-b2b9a6a3957f",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2464,
+            "end": 2472
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:be9a22e5-1dc5-51a8-8a26-ff2a9375ad3e",
+      "type": "Annotation",
+      "body": "urn:uuid:c8784fec-f32b-56ea-8f87-8dcae7f332bf",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2528,
+            "end": 2536
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:517d4444-1636-5dd5-884c-979974abf92d",
+      "type": "Annotation",
+      "body": "urn:uuid:9ae7a985-fb21-58e8-83ac-30fc2b3be779",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2592,
+            "end": 2600
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:4a892a57-ac19-5ca5-b51f-46ed614d066a",
+      "type": "Annotation",
+      "body": "urn:uuid:3ac58800-8237-59cf-8b79-497f715ce3e1",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 2656,
+            "end": 2664
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "04/30/25"
+          }
+        ]
+      }
+    }
+  ]
+}

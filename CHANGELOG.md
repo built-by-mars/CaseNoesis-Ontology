@@ -7,6 +7,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.15.0] - 2026-07-10
+
+### Added
+
+#### Extension ontologies (five new, all bundled with the SDK)
+
+- **`cryptoinv`** — cryptocurrency and financial-crime investigation (`extensions/cryptoinv/`): crypto address/transaction/wallet and point-in-time holding facets (tracking [UCO #675](https://github.com/ucoProject/UCO/issues/675)), financial-crime infrastructure (VASPs, darknet markets, mixing services, aligned with the INTERPOL DW-VA Taxonomy), and criminal legal process classes. Grounded in and validated against *U.S. v. Lichtenstein & Morgan* (D.D.C. `1:23-cr-00239-CKK`, Bitfinex hack laundering). Python package scaffold in `packages/case-uco-cryptoinv/`.
+- **`legalproc`** — jurisdiction-neutral criminal legal process (`extensions/legalproc/`): charging instruments, criminal charges with `offenseForm`/`objectOffense` (conspiracy, attempt, § 924(c)-style derivative counts), pleas, proceedings, verdicts, sentences, forfeiture, and restitution, usable by any investigation domain. Local implementation of the CASE stub-namespace proposals ([CASE #192](https://github.com/casework/CASE/issues/192), `caseIdentifier` from [#191](https://github.com/casework/CASE/issues/191)). Grounded in *U.S. v. Perry & O'Dell* (W.D. Mo. `2:22-cr-04065-BCW`, 45-count militia conspiracy). Multi-language package scaffolds in `packages/case-uco-legalproc/`.
+- **`rico`** — racketeering and criminal enterprise (`extensions/rico/`): `RacketeeringEnterprise` (subclass of `uco-identity:Organization` with § 1961(4) `enterpriseType`), `EnterpriseRole` (subclass of `uco-role:Role` with `roleFunction`), and repeatable `predicateStatute` for § 1961(1) categories. Grounded in *U.S. v. Lam et al.* (D.D.C. `1:24-cr-00417-CKK`, the "SE Enterprise" $245M crypto-theft RICO conspiracy). Package scaffolds in `packages/case-uco-rico/`.
+- **`weapons`** — weapons and firearms evidence (`extensions/weapons/`): `Weapon`/`Firearm`/`Handgun`/`LongGun`/`Rifle`/`Shotgun`/`CuttingWeapon`/`Ammunition` class tree mirroring the Common Core Ontologies Artifact Ontology, NIEM-aligned properties (make, model, caliber, serial number, obliterated-serial flag), with CCO and gUFO bridge profiles. Grounded in *U.S. v. Lindell et al.* (D.N.D. `3:25-cr-00005`).
+- **`drugs`** — controlled substances (`extensions/drugs/`): `ControlledSubstance` portions with ChEBI chemical identity by IRI reference, CSA schedule, mass, purity, mixture-vs-actual basis (USSG § 2D1.1), and verbatim charged quantity; gUFO bridge grounds portions as `gufo:Quantity`. Same grounding case as `weapons`.
+- **`attack-technique`** — forward-implementation of the `uco-action:Technique` metaclass (`extensions/attack-technique/`), reproducing [UCO PR #676](https://github.com/ucoProject/UCO/pull/676) feature-branch definitions verbatim in released `uco-core:`/`uco-action:` IRIs so CTI graphs can carry MITRE ATT&CK technique mappings today; includes a MITRE ATT&CK technique catalog (`mitre-attack-catalog.ttl`). Retires automatically when UCO 1.5.0 lands.
+- All five prosecution-grounded extensions pass the CDO Community Playground test suite; each ships OWL, SHACL shapes, validated exemplar, `_registry.json`, and manifest.
+- CAC local pending declarations (`extensions/cac/local/cacontology-sdk-pending.ttl`), mirroring filed CAC-Ontology proposals #36/#40/#41 so strict concept coverage passes while upstream adoption is pending; registered in the CAC manifest and validation subset.
+
+#### MCP server
+
+- `route_investigation_content` tool (`mcp_server/investigation_router.py`) — general entry point that classifies **any** investigation submission (warrant returns, legal filings, case files, extraction reports, free text) into investigation families and returns per-family recipes, extension ontologies to enable, core namespaces, and applicable CDO profiles; falls back to extension-gap guidance (search → profiles → proposals → local extension → recipe authoring) for previously unseen data types. Tests in `mcp_server/tests/test_investigation_router.py`.
+- Strict closed-world concept coverage in `validate_graph` (`mcp_server/concept_coverage.py`, `strict_concepts=True` by default): every class/property IRI in a graph must be declared in CASE/UCO, a supported extension, or a profiled upper ontology (BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, FOAF, ORG); undeclared concepts force `conforms=False` with `undeclared_concepts` and `concept_guidance` in the report. Tests in `mcp_server/tests/test_concept_coverage.py`.
+- `validate_graph` extension manifests: `extensions=['cryptoinv']` and `extensions=['legalproc']` join the existing `cac`/`cac:full` options.
+- PACER semantic mapping in `document_semantic_mapping.py`: ECF case numbers, docket filing events, and indictment count references are mapped to typed graph nodes with anchors; regression tests extended.
+- `pacer-document-ingestion` CAC routing family with layer-3 modeling checklists (one investigation per docket, etc.) in `cac_content_router.py`; router tests extended.
+- Recipe catalog integrity tests (`mcp_server/tests/test_recipe_catalog.py`) and shared pytest fixtures (`mcp_server/tests/conftest.py`).
+
+#### Recipes (10 new; `docs/recipes/INDEX.md` catalogs 68)
+
+- PACER Document Ingestion agent workflow (`cac-pacer-document-ingestion.md`): `process_document_file` → `route_investigation_content`/`route_cac_content` → build script → `validate_graph`.
+- Legal Process Modeling (`legal-process-modeling.md`), Racketeering / RICO (`racketeering-enterprise.md`), Weapons and Drug Evidence (`weapons-drug-evidence.md`), Elder Fraud and Government-Impersonation (`elder-fraud-impersonation.md`), Espionage Act and Classified-Information Disclosure (`espionage-classified-disclosure.md`), Export Control and Sanctions Evasion (`export-control-sanctions.md`), Insider Threat and Trade Secret Theft (`insider-threat-trade-secrets.md`), Cyber Threat Intelligence and APT Reporting (`cyber-threat-intelligence.md`).
+- Recipe authoring guide (`recipe-authoring.md`): how agents write, ground, re-validate, and register new recipes — the router's self-improvement surface.
+
+#### Examples
+
+- Ten new PACER federal-case exemplars under `examples/pacer/` (see `examples/pacer/README.md` catalog), each with agent build script, validated merged graph, and MCP extraction bundles: Anchorage PD ICAC (`anchorage_pd_2022_004`), SE Enterprise RICO (`ddc_2024_cr_00417`), Teixeira Espionage Act (`dma_2023_cr_10159` — first exemplar using `uco-marking` classification banners), Bitfinex crypto laundering (`doj_crypto_2023_239`), elder fraud couriers (`edla_2022_cr_00115`), export control (`ndca_2020_cr_00446`), Google AI insider threat (`ndca_2024_cr_00141`), kidnapping-for-ransom (`ndnd_2025_cr_00005` — first `weapons`/`drugs` exemplars), militia conspiracy (`wdmo_2022_cr_04065`), and murder-for-hire (`wdtn_2023_cr_20121`).
+- CTI exemplar `examples/cti/lotus_blossom_2025/`: 278-node validated graph of the Cisco Talos Lotus Blossom / Sagerunex APT report with 24 hashed report graphics, backing the CTI recipe and `attack-technique` extension.
+
+#### Change proposals
+
+- Capability namespace proposal (`change_proposals/capability-namespace.md`) finalized — attribution section (joint effort between Vulnmaster and sbarnum), passing SPARQL competency tests and graph validation recorded — and **submitted upstream as [UCO #682](https://github.com/ucoProject/UCO/issues/682)**.
+- Filed upstream: CASE stub-namespace proposals for criminal ([CASE #192](https://github.com/casework/CASE/issues/192)), civil ([CASE #193](https://github.com/casework/CASE/issues/193)), and corporate ([CASE #194](https://github.com/casework/CASE/issues/194)) process and procedure; case-number/related-investigation representation (comment on [CASE #191](https://github.com/casework/CASE/issues/191)); CAC legal-outcomes charging properties ([CAC-Ontology #40](https://github.com/Project-VIC-International/CAC-Ontology/issues/40)) and core case-identification properties ([CAC-Ontology #41](https://github.com/Project-VIC-International/CAC-Ontology/issues/41)); conspiracy-as-property recommendation (comment on CASE #192). Each ships with tested `.jsonld`/`.ttl`/`.sparql` companions passing `make test-proposal`.
+- Drafted, not yet filed: racketeering enterprise and enterprise roles (`racketeering-enterprise-and-enterprise-roles.md`, CASE 1.5.0 target).
+- `change_proposals/README.md` now tracks filed UCO/CASE/CAC proposals with issue links and local pending-declaration files.
+
+### Changed
+
+- All language package versions synchronized to **1.15.0** (`python/pyproject.toml`, `python/case_uco/__init__.py`, `csharp/CaseUco/CaseUco.csproj`, `java/pom.xml`, `rust/Cargo.toml`, README header and version matrix).
+- `uploads/` (local document staging / OCR intermediates) and PACER source PDFs under `examples/pacer/` are excluded from the repository via `.gitignore`; extracted text, extraction bundles, and validated graphs remain tracked. The C# `packages/` ignore rule was scoped to `csharp/**/packages/` so the new extension package scaffolds under `packages/case-uco-*` are tracked.
+- MCP server module docstring and FastMCP instructions rewritten to describe the server's full capability surface (ontology discovery, recipes/mapping guidance, content routing, document processing, validation, change proposals, MCP resources, and the full loadable-extension list) instead of only ontology discovery (`mcp_server/server.py`).
+- `UCO #675` proposal (`cryptocurrency-address-and-sanctions-designation.md`) retitled to *Cryptocurrency Address and Transaction Representation*; sanctions coverage removed per ontology committee feedback, to be re-proposed against CASE.
+- `ontology/UCO` submodule updated `8335d32` → `748aea0` (upstream master, PR #661 merge).
+- ~30 existing recipes gained "Related" cross-link sections connecting starter kits, device, messaging, and CAC recipes into a navigable graph.
+- `docs/ECOSYSTEM.md` documents the five new bundled extensions with grounding cases; `mcp_server/README.md` tool tables updated.
+- `domain_index.py`: new task templates for cryptocurrency/financial-crime and violent-crime/criminal-prosecution modeling; recipe index entries for all ten new recipes.
+- Dependency updates: rust `uuid` 1.23.3 → 1.23.4 (#46), `Microsoft.NET.Test.Sdk` 18.6.0 → 18.7.0 (#45), `actions/checkout` 6 → 7 (#44).
+
+### Fixed
+
+- `check_existing_proposals` now uses `urllib.parse.quote` instead of `urllib.request.quote` (the latter only works via an incidental re-export) and `urllib.parse` is imported explicitly (`mcp_server/server.py`).
+- Seven static type errors in `mcp_server/server.py` and `mcp_server/domain_index.py`: `validate_graph` result dict annotated `dict[str, Any]`, and `DOMAIN_CATEGORIES`/`UCO_PROFILES` annotations widened to match their heterogeneous entries (keywords lists, nested compatibility dicts).
+
 ## [1.14.0] - 2026-06-23
 
 ### Added

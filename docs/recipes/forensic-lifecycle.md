@@ -105,3 +105,10 @@ graph.write("forensic_lifecycle.jsonld")
 - Phase names are not fixed by the ontology. Common forensic lifecycle phases include Survey, Preservation, Examination, Analysis, and Reporting, but adapt to the source.
 - Use `Relationship` with `kind_of_relationship="Mapped_Into"` to link specific `InvestigativeAction`s to their lifecycle phase.
 - `Annotation.object` is `list[UcoObject]` (required) — it points to the objects being annotated. `statement` is `list[str]`.
+
+## Related
+
+- [chain-of-custody.md](chain-of-custody.md) — custody events within the phases
+- [forensic-tool.md](forensic-tool.md) — the tool runs each phase contains
+- [event.md](event.md) — structured events inside phases
+- [starter-tool-run.md](starter-tool-run.md) — tool-run provenance starter kit

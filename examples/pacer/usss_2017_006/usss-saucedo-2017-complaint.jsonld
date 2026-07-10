@@ -100,7 +100,7 @@
     {
       "@id": "urn:uuid:7c47b92f-e15c-5105-bda4-f357897991ac",
       "@type": [
-        "uco-role:OffenderRole",
+        "case-investigation:Subject",
         "uco-core:UcoObject"
       ],
       "uco-core:name": "Principal Offender \u2014 Saucedo",
@@ -138,7 +138,7 @@
         {
           "@id": "urn:uuid:46dd9559-0ad6-5951-bdaf-5316fa39cb5d",
           "@type": "uco-core:ExternalReference",
-          "uco-core:referenceType": "Magistrate Criminal Complaint",
+          "uco-core:definingContext": "Magistrate Criminal Complaint",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://ecf.cacd.uscourts.gov/cgi-bin/show_public_doc?3:17-cr-00095-JLS-1"
@@ -781,7 +781,7 @@
         "@type": "xsd:dateTime",
         "@value": "2016-11-21T00:00:00Z"
       },
-      "uco-action:authorization": {
+      "case-investigation:relevantAuthorization": {
         "@id": "urn:uuid:fc0842d9-0be8-569f-82e0-2f0c3c9ebfbe"
       },
       "uco-action:performer": {
@@ -889,10 +889,10 @@
         "case-investigation:ProvenanceRecord"
       ],
       "uco-core:description": "Investigative graph derived from PACER criminal complaint PDF and MCP semantic extraction bundle; counts and conduct described as ALLEGED in complaint.",
-      "case-investigation:createdBy": {
+      "uco-core:createdBy": {
         "@id": "urn:uuid:b81081b3-302c-5ef5-8b43-edf202608cc8"
       },
-      "case-investigation:derivedFrom": {
+      "case-investigation:wasDerivedFrom": {
         "@id": "urn:uuid:47a7ac36-1aab-52c9-9f05-2052b742724c"
       }
     },

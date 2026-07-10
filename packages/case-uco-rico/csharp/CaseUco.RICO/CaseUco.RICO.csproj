@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <PackageId>CaseUco.RICO</PackageId>
+    <Version>0.1.0</Version>
+    <Description>Racketeering and Criminal Enterprise Extension bindings for CASE/UCO SDK</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CaseUco" Version="1.4.0"/>
+  </ItemGroup>
+</Project>

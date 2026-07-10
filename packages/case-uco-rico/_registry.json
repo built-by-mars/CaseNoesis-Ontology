@@ -1,0 +1,225 @@
+{
+  "extension": "rico",
+  "modules": [
+    "rico"
+  ],
+  "classes": {
+    "EnterpriseRole": {
+      "iri": "http://example.org/ontology/rico/EnterpriseRole",
+      "module": "rico",
+      "description": "An enterprise role is a functional position or division-of-labor responsibility that a member or associate serves within a racketeering enterprise, as alleged in a charging instrument — for example organizer, target identifier, caller (social engineer), money launderer, database hacker, or residential burglar (see the roles alleged in United States v. Lam et al., No. 1:24-cr-00417-CKK (D.D.C.), Second Superseding Indictment ¶¶ 25-32). Link a person to the role with a uco-core:Relationship of kind 'Has_Role' and the role to the enterprise with a uco-core:Relationship of kind 'Role_Within'; one person may fulfill several roles and one role may be fulfilled by several persons.",
+      "parents": [
+        "Role"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "roleFunction",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The function of the enterprise role, kept close to the charging language, as an open vocabulary. Recommended values drawn from charged social-engineering and traditional racketeering enterprises: 'organizer', 'leader', 'database-hacker', 'target-identifier', 'caller', 'money-launderer', 'money-exchanger', 'residential-burglar', 'courier', 'enforcer', 'recruiter', 'straw-owner', 'promoter'. Producers may use other values verbatim from the record."
+        }
+      ],
+      "source": "rico"
+    },
+    "RacketeeringEnterprise": {
+      "iri": "http://example.org/ontology/rico/RacketeeringEnterprise",
+      "module": "rico",
+      "description": "A racketeering enterprise is an 'enterprise' as defined in 18 U.S.C. § 1961(4) (https://www.law.cornell.edu/uscode/text/18/1961): any individual, partnership, corporation, association, or other legal entity, and any union or group of individuals associated in fact although not a legal entity, whose affairs are conducted or participated in through a pattern of racketeering activity (18 U.S.C. § 1962, https://www.law.cornell.edu/uscode/text/18/1962). An association-in-fact enterprise must have a purpose, relationships among those associated with the enterprise, and longevity sufficient to permit the associates to pursue the enterprise's purpose (Boyle v. United States, 556 U.S. 938 (2009), https://supreme.justia.com/cases/federal/us/556/938/). Record the charged purposes and the interstate/foreign commerce nexus in uco-core:description; record membership with uco-core:Relationship nodes of kind 'Member_Of' from persons to the enterprise; record the charged operating span with existence-interval or description conventions.",
+      "parents": [
+        "Organization"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "enterpriseType",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The statutory branch of the enterprise definition the charged enterprise falls under, as an open vocabulary. Recommended values: 'legal-entity' (an individual, partnership, corporation, association, or other legal entity) and 'association-in-fact' (a union or group of individuals associated in fact although not a legal entity). See 18 U.S.C. § 1961(4) (https://www.law.cornell.edu/uscode/text/18/1961)."
+        }
+      ],
+      "source": "rico"
+    }
+  },
+  "vocabs": {}
+}

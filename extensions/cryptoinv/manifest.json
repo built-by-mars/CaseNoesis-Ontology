@@ -1,0 +1,31 @@
+{
+  "name": "cryptoinv",
+  "display_name": "Cryptocurrency and Financial Crime Investigation Extension",
+  "version": "0.1.0",
+  "upstream_repo": "https://github.com/vulnmaster/CASE-UCO-SDK",
+  "upstream_ref": "main",
+  "license": "Apache-2.0",
+  "namespaces": {
+    "cryptoinv": "http://example.org/ontology/cryptoinv/"
+  },
+  "owl_files": [
+    "cryptoinv.ttl"
+  ],
+  "shacl_files": [
+    "cryptoinv-shapes.ttl"
+  ],
+  "bridge_files": [],
+  "exemplar_files": [
+    "cryptoinv-exemplar.ttl"
+  ],
+  "uco_compat": ["1.4.0"],
+  "upper_ontology": "none",
+  "cdo_shapes_compatibility": {
+    "CDO-Shapes-gufo": "compatible",
+    "CDO-Shapes-BFO": "compatible",
+    "CDO-Shapes-PROV-O": "compatible",
+    "CDO-Shapes-Time": "compatible",
+    "CDO-Shapes-GeoSPARQL": "compatible",
+    "CDO-Shapes-FOAF": "compatible"
+  }
+}

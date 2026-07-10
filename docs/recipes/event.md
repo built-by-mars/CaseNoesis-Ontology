@@ -98,3 +98,9 @@ graph.write("event.jsonld")
 - `event_type` is `list[str]` — use descriptive types from the source (e.g., "Authentication", "Login", "Logout").
 - `event_context` links to `Action` objects that represent the sub-steps of the event.
 - `event_attribute` uses `Dictionary` with `DictionaryEntry` key-value pairs for structured metadata (MFA status, credential type, session ID, etc.).
+
+## Related
+
+- [forensic-lifecycle.md](forensic-lifecycle.md) — ordering events into investigation phases
+- [existence-intervals.md](existence-intervals.md) — temporal precision with OWL-Time/gUFO/BFO
+- [network-artifacts.md](network-artifacts.md) — network evidence behind authentication events

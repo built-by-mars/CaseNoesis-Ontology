@@ -5,6 +5,7 @@
     "cacontology": "https://cacontology.projectvic.org#",
     "cac-core": "https://cacontology.projectvic.org/core#",
     "cacontology-trafficking": "https://cacontology.projectvic.org/trafficking#",
+    "cacontology-street": "https://cacontology.projectvic.org/street#",
     "cacontology-legal-outcomes": "https://cacontology.projectvic.org/legal-outcomes#",
     "cacontology-usa-federal-law": "https://cacontology.projectvic.org/usa-federal-law#",
     "cacontology-asset-forfeiture": "https://cacontology.projectvic.org/asset-forfeiture#",
@@ -529,7 +530,7 @@
     {
       "@id": "kb:bridge-mv2-grindr",
       "@type": [
-        "cacontology-trafficking:DigitalToPhysicalBridge",
+        "cacontology-street:DigitalToPhysicalBridge",
         "uco-core:UcoObject"
       ],
       "uco-core:name": "Grindr to in-person — MV2",

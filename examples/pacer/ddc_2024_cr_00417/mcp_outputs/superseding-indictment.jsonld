@@ -1,0 +1,1143 @@
+{
+  "@context": {
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Source file pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:description": "Link-Look pdf upload",
+      "uco-core:tag": [
+        "link-look-file-kind:pdf"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c0b7f4c0-3dcf-5b63-9922-54bcdc9dd49c",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "pacer -- racketeering -- superseding indictment.pdf",
+          "uco-observable:extension": "pdf",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "1768366"
+          }
+        },
+        {
+          "@id": "urn:uuid:d504481c-671d-519b-8ded-110ab805b2f6",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "1768366"
+          },
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:48f296be-f5d6-5c1e-8060-391d71224419",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "6524FAB71C8E01C7CFE0E76757B750BEE5312DA3E1BBAD24DEBEFCE1B2158CA4"
+              }
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:e396788d-121c-518a-944b-7e76d106520a",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:76ca33fd-1334-5920-b51d-a0be2bcbf92a",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "Case 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 1 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 2 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 3 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 4 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 5 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 6 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 7 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 8 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 9 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 10 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 11 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 12 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 13 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 14 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 15 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 16 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 17 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 18 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 19 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 20 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 21 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 22 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 23 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 24 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 25 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 26 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 27 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 28 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 29 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 30 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 31 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 32 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 33 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 34 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 35 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 36 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 37 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 38 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 39 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 40 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 41 of 42\nCase 1:24-cr-00417-CKK Document 50 Filed 04/30/25 Page 42 of 42"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:fe18de8d-365a-56bb-a19d-706a55335bc2",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "case-uco-document-normalize",
+      "uco-tool:version": "0.6.0"
+    },
+    {
+      "@id": "urn:uuid:20b17211-3015-520e-8b09-36cd74f0f300",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Processed pdf through case-uco MCP",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-10T03:41:53.921994+00:00"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-10T03:41:53.921994+00:00"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-action:instrument": {
+        "@id": "urn:uuid:fe18de8d-365a-56bb-a19d-706a55335bc2"
+      },
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:3c9f1369-0c36-565b-8727-b258f5f7b21c"
+        },
+        {
+          "@id": "urn:uuid:e54d6296-3a8e-54a6-b97a-50c0385c7dfd"
+        },
+        {
+          "@id": "urn:uuid:978d8385-84a0-52a7-8ea2-07d85c345220"
+        },
+        {
+          "@id": "urn:uuid:159b34a1-7282-57e4-b0db-99d060adc877"
+        },
+        {
+          "@id": "urn:uuid:225d3747-8781-5f8e-8763-d35ae44c3db0"
+        },
+        {
+          "@id": "urn:uuid:70209d24-4255-52f1-a1a0-f0b6d78726d5"
+        },
+        {
+          "@id": "urn:uuid:47cc0d0a-46a9-52da-b023-02ff6d83e21b"
+        },
+        {
+          "@id": "urn:uuid:25d2ba05-1b5c-5f9e-a5ac-acc678372903"
+        },
+        {
+          "@id": "urn:uuid:8c4983d1-2bc5-53bd-bc64-90faa60c65d1"
+        },
+        {
+          "@id": "urn:uuid:bca8a8d2-b5d7-5a7a-b5f0-706555199954"
+        },
+        {
+          "@id": "urn:uuid:e7af5379-7920-5355-a0e6-376253cea880"
+        },
+        {
+          "@id": "urn:uuid:92991497-dfde-59b9-9eb6-18729808a965"
+        },
+        {
+          "@id": "urn:uuid:a36764e3-92e9-5437-85c4-f4032567fda2"
+        },
+        {
+          "@id": "urn:uuid:0c085d0d-ae97-5a3b-9d35-e87af2184f1f"
+        },
+        {
+          "@id": "urn:uuid:2a6292c3-501f-566b-bad8-7cd4cf16fa05"
+        },
+        {
+          "@id": "urn:uuid:5aaf2c28-4482-54ea-9be5-0766a1710e20"
+        },
+        {
+          "@id": "urn:uuid:da4d5105-4e27-5b2e-91d8-013f533d6e99"
+        },
+        {
+          "@id": "urn:uuid:58ca53ac-6a61-5dee-a584-c91b6bc7c9a2"
+        },
+        {
+          "@id": "urn:uuid:b74d6c8c-5707-5685-bca7-492377f3d9b1"
+        },
+        {
+          "@id": "urn:uuid:04425c22-076c-5969-8c45-0f8fda85a07f"
+        },
+        {
+          "@id": "urn:uuid:92f1be8f-8716-5cb5-a3df-9e630041e9df"
+        },
+        {
+          "@id": "urn:uuid:3c93d46e-66ad-5f48-94ed-9ac0dae3408f"
+        },
+        {
+          "@id": "urn:uuid:fbe598f9-3c73-576c-8f30-c107681da2ea"
+        },
+        {
+          "@id": "urn:uuid:7902e6a6-622a-50b5-9007-fad65017acf6"
+        },
+        {
+          "@id": "urn:uuid:6641f771-799d-5962-a6f3-7f43016cb8e1"
+        },
+        {
+          "@id": "urn:uuid:05d3f862-d51d-57a6-9e29-3ae2be24f2d7"
+        },
+        {
+          "@id": "urn:uuid:ed6cc69d-76d1-56e2-8f57-ae5eccb8ab51"
+        },
+        {
+          "@id": "urn:uuid:4a180fb5-44dc-58b8-bc2d-07e0a814fc11"
+        },
+        {
+          "@id": "urn:uuid:9a63a687-9344-5e3f-9337-b6ec8c8949b9"
+        },
+        {
+          "@id": "urn:uuid:2658c589-720c-5c70-89d6-75ed9c79d74c"
+        },
+        {
+          "@id": "urn:uuid:9cac59bb-6bd1-5fc3-ad32-3a9c01c4cf9a"
+        },
+        {
+          "@id": "urn:uuid:3c75fc5d-92cd-580e-ac7d-d0c9f9fbb132"
+        },
+        {
+          "@id": "urn:uuid:71890e16-b3f1-55f3-b098-1d8dc22dd4f3"
+        },
+        {
+          "@id": "urn:uuid:ccffafef-ccd3-5ed4-ae59-ba356d528ec4"
+        },
+        {
+          "@id": "urn:uuid:a52a9967-f028-56e9-85e8-c669aacc1d48"
+        },
+        {
+          "@id": "urn:uuid:7f9e01d7-0c19-5c26-b716-50d2578994e3"
+        },
+        {
+          "@id": "urn:uuid:2f1230ea-7790-5ca6-802c-6e2cd11ed2db"
+        },
+        {
+          "@id": "urn:uuid:6a2e5924-0dca-584a-9ff2-2053262a7dab"
+        },
+        {
+          "@id": "urn:uuid:da6389bc-e41c-5323-9ba6-b2b9a6a3957f"
+        },
+        {
+          "@id": "urn:uuid:c8784fec-f32b-56ea-8f87-8dcae7f332bf"
+        },
+        {
+          "@id": "urn:uuid:9ae7a985-fb21-58e8-83ac-30fc2b3be779"
+        },
+        {
+          "@id": "urn:uuid:3ac58800-8237-59cf-8b79-497f715ce3e1"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3c9f1369-0c36-565b-8727-b258f5f7b21c",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:e54d6296-3a8e-54a6-b97a-50c0385c7dfd",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:978d8385-84a0-52a7-8ea2-07d85c345220",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:159b34a1-7282-57e4-b0db-99d060adc877",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:225d3747-8781-5f8e-8763-d35ae44c3db0",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:70209d24-4255-52f1-a1a0-f0b6d78726d5",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:47cc0d0a-46a9-52da-b023-02ff6d83e21b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:25d2ba05-1b5c-5f9e-a5ac-acc678372903",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:8c4983d1-2bc5-53bd-bc64-90faa60c65d1",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:bca8a8d2-b5d7-5a7a-b5f0-706555199954",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:e7af5379-7920-5355-a0e6-376253cea880",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:92991497-dfde-59b9-9eb6-18729808a965",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:a36764e3-92e9-5437-85c4-f4032567fda2",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:0c085d0d-ae97-5a3b-9d35-e87af2184f1f",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:2a6292c3-501f-566b-bad8-7cd4cf16fa05",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:5aaf2c28-4482-54ea-9be5-0766a1710e20",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:da4d5105-4e27-5b2e-91d8-013f533d6e99",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:58ca53ac-6a61-5dee-a584-c91b6bc7c9a2",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:b74d6c8c-5707-5685-bca7-492377f3d9b1",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:04425c22-076c-5969-8c45-0f8fda85a07f",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:92f1be8f-8716-5cb5-a3df-9e630041e9df",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:3c93d46e-66ad-5f48-94ed-9ac0dae3408f",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:fbe598f9-3c73-576c-8f30-c107681da2ea",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:7902e6a6-622a-50b5-9007-fad65017acf6",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:6641f771-799d-5962-a6f3-7f43016cb8e1",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:05d3f862-d51d-57a6-9e29-3ae2be24f2d7",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:ed6cc69d-76d1-56e2-8f57-ae5eccb8ab51",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:4a180fb5-44dc-58b8-bc2d-07e0a814fc11",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:9a63a687-9344-5e3f-9337-b6ec8c8949b9",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:2658c589-720c-5c70-89d6-75ed9c79d74c",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:9cac59bb-6bd1-5fc3-ad32-3a9c01c4cf9a",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:3c75fc5d-92cd-580e-ac7d-d0c9f9fbb132",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:71890e16-b3f1-55f3-b098-1d8dc22dd4f3",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:ccffafef-ccd3-5ed4-ae59-ba356d528ec4",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:a52a9967-f028-56e9-85e8-c669aacc1d48",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:7f9e01d7-0c19-5c26-b716-50d2578994e3",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:2f1230ea-7790-5ca6-802c-6e2cd11ed2db",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:6a2e5924-0dca-584a-9ff2-2053262a7dab",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:da6389bc-e41c-5323-9ba6-b2b9a6a3957f",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:c8784fec-f32b-56ea-8f87-8dcae7f332bf",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:9ae7a985-fb21-58e8-83ac-30fc2b3be779",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:3ac58800-8237-59cf-8b79-497f715ce3e1",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 04/30/25",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 04/30/25"
+    },
+    {
+      "@id": "urn:uuid:e56f5ca2-33eb-51d6-8888-f4b8824ae1b7",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 1 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3c9f1369-0c36-565b-8727-b258f5f7b21c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e12922c7-1597-5d7a-af64-c4499cb38f7e",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 2 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e54d6296-3a8e-54a6-b97a-50c0385c7dfd"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:beffaef8-1239-5aaf-801b-381d5516e145",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 3 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:978d8385-84a0-52a7-8ea2-07d85c345220"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:6db21cc1-dbd2-5d2e-9f3b-d092bb95273b",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 4 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:159b34a1-7282-57e4-b0db-99d060adc877"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:7eb46111-9aba-597b-b817-113186ea7926",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 5 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:225d3747-8781-5f8e-8763-d35ae44c3db0"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:0cbf6bdb-71bc-5018-b9f2-7d97bf0a6f37",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 6 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:70209d24-4255-52f1-a1a0-f0b6d78726d5"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:dc4325b7-c0f8-5963-acc7-88c62f61ed1b",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 7 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:47cc0d0a-46a9-52da-b023-02ff6d83e21b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:605d22a4-dc54-5b9d-9974-fda8a0c2de62",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 8 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:25d2ba05-1b5c-5f9e-a5ac-acc678372903"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:dfabbe50-a1d1-5993-a426-642bea727bf3",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 9 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8c4983d1-2bc5-53bd-bc64-90faa60c65d1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:2d9c5207-2676-5c35-a9bd-5ccc2c71fa19",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 10 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:bca8a8d2-b5d7-5a7a-b5f0-706555199954"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1b8d9ef8-50b8-533b-ba8c-38d8d606c9ec",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 11 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e7af5379-7920-5355-a0e6-376253cea880"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:846dd6aa-f778-51dc-ae07-09d45b9a6f60",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 12 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:92991497-dfde-59b9-9eb6-18729808a965"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:86bf33f6-11ab-5b3f-97dc-c5ecc9e56afb",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 13 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:a36764e3-92e9-5437-85c4-f4032567fda2"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c2d2ffc8-b24e-57f4-ad3d-08af76652e1a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 14 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:0c085d0d-ae97-5a3b-9d35-e87af2184f1f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:05cd94af-f7e9-5557-8d67-a66e24bde1ed",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 15 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2a6292c3-501f-566b-bad8-7cd4cf16fa05"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:2f609036-30d6-568b-a9af-03cade171d96",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 16 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:5aaf2c28-4482-54ea-9be5-0766a1710e20"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f5e65b19-913f-5fd5-8b1f-bbe60b4bc6ce",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 17 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:da4d5105-4e27-5b2e-91d8-013f533d6e99"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:157a813a-d244-5188-b635-1663237b4c8a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 18 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:58ca53ac-6a61-5dee-a584-c91b6bc7c9a2"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e48da614-b019-5b3f-9dc9-198e650ac498",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 19 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b74d6c8c-5707-5685-bca7-492377f3d9b1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:613fcd1a-0f78-5ab9-863c-3860059c5eec",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 20 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:04425c22-076c-5969-8c45-0f8fda85a07f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:315b0c4a-a812-5ab0-ae30-f42abba0731c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 21 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:92f1be8f-8716-5cb5-a3df-9e630041e9df"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:cc8df0d5-114d-5a00-bacc-3c77242232a1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 22 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3c93d46e-66ad-5f48-94ed-9ac0dae3408f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f8a3ad55-cb19-5c5d-8b8c-4cad3902b19a",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 23 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:fbe598f9-3c73-576c-8f30-c107681da2ea"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:0290b669-f674-56be-9e94-2100c186f767",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 24 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7902e6a6-622a-50b5-9007-fad65017acf6"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:2ed62299-14bf-5b19-b934-484865578f3c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 25 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6641f771-799d-5962-a6f3-7f43016cb8e1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:bd8b6284-8481-5a33-b325-dca679a32915",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 26 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:05d3f862-d51d-57a6-9e29-3ae2be24f2d7"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:bf563e33-30b5-5d3a-ac9f-cca736be813c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 27 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ed6cc69d-76d1-56e2-8f57-ae5eccb8ab51"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:37ca9696-a0e1-5184-9184-951188ff1751",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 28 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:4a180fb5-44dc-58b8-bc2d-07e0a814fc11"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c2d96a53-719b-5fba-a1b2-b7cbf81c6e4c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 29 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9a63a687-9344-5e3f-9337-b6ec8c8949b9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:302bb87e-5566-54e4-81e6-c62b96bbf0df",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 30 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2658c589-720c-5c70-89d6-75ed9c79d74c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1863bb70-9743-5bce-9d9c-16665e353dc7",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 31 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9cac59bb-6bd1-5fc3-ad32-3a9c01c4cf9a"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a67b1004-865c-5a14-b372-a107bb2e0d8b",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 32 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3c75fc5d-92cd-580e-ac7d-d0c9f9fbb132"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8c8a6a67-ff70-5d98-998e-2599d2354c60",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 33 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:71890e16-b3f1-55f3-b098-1d8dc22dd4f3"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8feb190e-a9ff-5fd6-aef2-4b0bcc9c6b86",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 34 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:ccffafef-ccd3-5ed4-ae59-ba356d528ec4"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a711967d-85a9-5889-9625-b0b25c0021a2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 35 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:a52a9967-f028-56e9-85e8-c669aacc1d48"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8f85d4c4-9f97-52c6-875f-0245d30bf6d5",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 36 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7f9e01d7-0c19-5c26-b716-50d2578994e3"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:3f0b38f7-0119-5dba-badb-17957afd3f35",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 37 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2f1230ea-7790-5ca6-802c-6e2cd11ed2db"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c61700fb-7410-56bc-be95-b4a19eef3519",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 38 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6a2e5924-0dca-584a-9ff2-2053262a7dab"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c920b5bd-0d5b-53a5-9a5d-a8cbc1ce88c2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 39 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:da6389bc-e41c-5323-9ba6-b2b9a6a3957f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4a0bf447-5a45-5df5-91e6-7a60a4668bf2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 40 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:c8784fec-f32b-56ea-8f87-8dcae7f332bf"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:3c236a97-9fcf-5b68-8665-f25cc26a1ed2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 41 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9ae7a985-fb21-58e8-83ac-30fc2b3be779"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9de97da0-7c39-52b6-9616-a92c3dbf3b96",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 42 derived from pacer -- racketeering -- superseding indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3ac58800-8237-59cf-8b79-497f715ce3e1"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:30a5f14b-75b7-58e0-ae65-38e66feb5a32"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

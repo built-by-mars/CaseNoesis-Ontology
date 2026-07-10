@@ -132,3 +132,10 @@ graph.write("accounts.jsonld")
 - `Person` is a subclass of `Identity`. Use `SimpleNameFacet` for structured name parts (`given_name`, `family_name` are `list[str]`).
 - `AccountAuthenticationFacet` stores credentials. Only include if the source data contains extracted passwords.
 - For multiple accounts, repeat the account creation + `Has_Account` relationship pattern for each platform.
+
+## Related
+
+- [email-messaging.md](email-messaging.md) — email account evidence behind the identities
+- [sms-and-contacts.md](sms-and-contacts.md) — phone-number identities and contact entries
+- [threaded-messaging.md](threaded-messaging.md) — conversations between the linked accounts
+- [device.md](device.md) — the devices the accounts were used from

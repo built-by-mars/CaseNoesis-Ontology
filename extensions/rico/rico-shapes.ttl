@@ -1,0 +1,37 @@
+# Racketeering and Criminal Enterprise Extension — SHACL shapes
+# Permissive stubs: open vocabularies stay strings; only the
+# identity-bearing property of each class is required.
+
+@prefix rico: <http://example.org/ontology/rico/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+rico:RacketeeringEnterprise-shape
+	a sh:NodeShape ;
+	sh:targetClass rico:RacketeeringEnterprise ;
+	sh:property
+		[
+			sh:path rico:enterpriseType ;
+			sh:datatype xsd:string ;
+			sh:minCount 1 ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] .
+
+rico:EnterpriseRole-shape
+	a sh:NodeShape ;
+	sh:targetClass rico:EnterpriseRole ;
+	sh:property
+		[
+			sh:path rico:roleFunction ;
+			sh:datatype xsd:string ;
+			sh:minCount 1 ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] .
+
+rico:predicateStatute-shape
+	a sh:PropertyShape ;
+	sh:path rico:predicateStatute ;
+	sh:datatype xsd:string ;
+	sh:nodeKind sh:Literal .

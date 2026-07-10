@@ -174,3 +174,11 @@ graph.write("spear_phishing.jsonld")
 - The attack chain is modeled as directional `Relationship` objects with descriptive `kind_of_relationship` values.
 - The CASE-Examples version uses an `ep:` (Endpoint Protection) extended ontology for `ObservableAction` and `Event` types. For standard CASE/UCO, model each attack step as a `Relationship` or `Action` instead.
 - For incident response workflows, add `InvestigativeAction` nodes for detection, containment, eradication, and recovery steps.
+
+## Related
+
+- [network-investigation.md](network-investigation.md) — the full network investigation wrapper
+- [network-artifacts.md](network-artifacts.md) — IPs, DNS, URLs in the attack chain
+- [email-messaging.md](email-messaging.md) — the phishing emails themselves
+- [analysis.md](analysis.md) — malware analysis of the payload
+- [cyber-threat-intelligence.md](cyber-threat-intelligence.md) — APT/CTI threat reports (contrast: intelligence about an adversary across many intrusions, not a single delivery chain)

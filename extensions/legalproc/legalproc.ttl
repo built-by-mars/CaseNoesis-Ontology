@@ -1,0 +1,227 @@
+# Legal Process and Procedure Extension (T-Box)
+#
+# Local implementation of the criminal legal process stub concepts proposed
+# upstream to CASE, so SDK graphs can model charges, pleas, proceedings,
+# verdicts, sentences, forfeiture, and restitution for ANY investigation
+# type (violent crime, financial crime, CAC, terrorism, ...) while the
+# proposals are pending. When CASE adopts the namespaces, these terms
+# re-parent (rdfs:subPropertyOf / rdfs:subClassOf) to the CASE terms and
+# this extension shrinks to a bridge file.
+#
+# Upstream proposals tracked:
+#   - https://github.com/casework/CASE/issues/192  (criminal process stubs)
+#   - https://github.com/casework/CASE/issues/193  (civil process stubs)
+#   - https://github.com/casework/CASE/issues/194  (corporate process stubs)
+#   - https://github.com/casework/CASE/issues/191  (caseIdentifier + InvestigationRelationship)
+#
+# Validated against: U.S. v. Perry & O'Dell, No. 2:22-cr-04065-BCW (W.D. Mo.)
+# — a 45-count conspiracy / attempted murder / firearms prosecution.
+
+@prefix legalproc: <https://ontology.caseontology.org/case/criminal/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://ontology.caseontology.org/case/criminal>
+	a owl:Ontology ;
+	rdfs:label "Legal Process and Procedure Extension"@en ;
+	rdfs:comment "Jurisdiction-neutral criminal legal process concepts (charges, charging instruments, pleas, proceedings, verdicts, sentences, forfeiture, restitution) implementing the stub namespaces proposed to CASE in issues 192-194, usable by any investigation domain until CASE adopts them upstream."@en ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+#################################################################
+# Classes
+#################################################################
+
+legalproc:CriminalCharge
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "CriminalCharge"@en ;
+	rdfs:comment "A criminal charge is a formal accusation, stated as one or more counts within a charging instrument, that a person committed a specific statutory offense. Inchoate and derivative offenses (conspiracy, attempt, solicitation, aiding and abetting, and predicate-linked offenses such as 18 U.S.C. § 924(c) firearm counts) are criminal charges whose offenseForm and objectOffense properties record the form and the object or predicate offense. See Federal Rule of Criminal Procedure 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7)."@en ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+legalproc:ChargingInstrument
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "ChargingInstrument"@en ;
+	rdfs:comment "A charging instrument is a formal document that initiates or amends criminal charges against one or more defendants, such as a criminal complaint, indictment, superseding indictment, or information. See Federal Rule of Criminal Procedure 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7)."@en ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+legalproc:Plea
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "Plea"@en ;
+	rdfs:comment "A plea is a defendant's formal answer to a criminal charge. See Federal Rule of Criminal Procedure 11 (https://www.law.cornell.edu/rules/frcrmp/rule_11)."@en ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+legalproc:CriminalProceeding
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "CriminalProceeding"@en ;
+	rdfs:comment "A criminal proceeding is a formal event in a criminal case conducted before a tribunal, such as an arraignment, detention hearing, trial, plea hearing, sentencing hearing, or appeal."@en ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+legalproc:Verdict
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "Verdict"@en ;
+	rdfs:comment "A verdict is a finder of fact's formal determination on a criminal charge, such as a jury's finding of guilty or not guilty on a count. See Federal Rule of Criminal Procedure 31 (https://www.law.cornell.edu/rules/frcrmp/rule_31)."@en ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+legalproc:Sentence
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "Sentence"@en ;
+	rdfs:comment "A sentence is a penalty recommended by a party or imposed by a tribunal upon conviction of a criminal charge, including custodial terms, supervised release, and special assessments. See 18 U.S.C. § 3553 (https://www.law.cornell.edu/uscode/text/18/3553)."@en ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+legalproc:ForfeitureOrder
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "ForfeitureOrder"@en ;
+	rdfs:comment "A forfeiture order is an order, or pre-conviction allegation, requiring surrender to the state of property involved in or traceable to an offense. See 18 U.S.C. §§ 981-982 (https://www.law.cornell.edu/uscode/text/18/981)."@en ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+legalproc:RestitutionOrder
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "RestitutionOrder"@en ;
+	rdfs:comment "A restitution order is an order or request that an offender compensate victims for losses caused by the offense, monetarily or in kind. See 18 U.S.C. § 3663A (https://www.law.cornell.edu/uscode/text/18/3663A)."@en ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+#################################################################
+# Datatype properties
+#################################################################
+
+legalproc:caseIdentifier
+	a owl:DatatypeProperty ;
+	rdfs:subPropertyOf uco-core:externalIdentifier ;
+	rdfs:label "caseIdentifier"@en ;
+	skos:altLabel "case number"@en ;
+	rdfs:comment "An identifier assigned to an investigation or prosecution by the organization or case-management authority conducting or tracking it, e.g. a court docket number such as '2:22-cr-04065-BCW' (see PACER, https://pacer.uscourts.gov/). Tracks the investigation:caseIdentifier property proposed in CASE issue 191."@en ;
+	dcterms:source "https://github.com/casework/CASE/issues/191"^^xsd:anyURI ;
+	rdfs:range xsd:string .
+
+legalproc:statuteCitation
+	a owl:DatatypeProperty ;
+	rdfs:label "statuteCitation"@en ;
+	rdfs:comment "Citation of the charged offense in the governing jurisdiction, e.g. '18 U.S.C. §§ 1117 & 1114'."@en ;
+	rdfs:domain legalproc:CriminalCharge ;
+	rdfs:range xsd:string .
+
+legalproc:countNumber
+	a owl:DatatypeProperty ;
+	rdfs:label "countNumber"@en ;
+	rdfs:comment "Ordinal count number of the charge within its charging instrument. A charge asserted in a range of counts (e.g. Counts 4-10) may carry multiple values."@en ;
+	rdfs:domain legalproc:CriminalCharge ;
+	rdfs:range xsd:nonNegativeInteger .
+
+legalproc:countLabel
+	a owl:DatatypeProperty ;
+	rdfs:label "countLabel"@en ;
+	rdfs:comment "The count designation as printed in the charging instrument, e.g. 'Count 1', 'Counts 4-10', 'Count 1sss' (PACER superseding-indictment notation)."@en ;
+	rdfs:domain legalproc:CriminalCharge ;
+	rdfs:range xsd:string .
+
+legalproc:offenseForm
+	a owl:DatatypeProperty ;
+	rdfs:label "offenseForm"@en ;
+	rdfs:comment "The form of the charged offense, as an open vocabulary. Recommended values: 'substantive' (completed offense), 'conspiracy' (agreement to commit an object offense, e.g. 18 U.S.C. §§ 371, 1117), 'attempt' (e.g. 18 U.S.C. § 1113), 'solicitation', 'aiding-abetting' (e.g. 18 U.S.C. § 2), 'derivative' (offense defined by reference to a predicate offense, e.g. 18 U.S.C. § 924(c) use of a firearm in furtherance of a crime of violence). Use objectOffense to link a non-substantive charge to its object or predicate charge."@en ;
+	rdfs:domain legalproc:CriminalCharge ;
+	rdfs:range xsd:string .
+
+legalproc:chargeClassification
+	a owl:DatatypeProperty ;
+	rdfs:label "chargeClassification"@en ;
+	rdfs:comment "The offense classification in the governing jurisdiction, e.g. 'Class A Felony' per 18 U.S.C. § 3559 (https://www.law.cornell.edu/uscode/text/18/3559)."@en ;
+	rdfs:domain legalproc:CriminalCharge ;
+	rdfs:range xsd:string .
+
+legalproc:chargeDisposition
+	a owl:DatatypeProperty ;
+	rdfs:label "chargeDisposition"@en ;
+	rdfs:comment "The current disposition of the charge, as an open vocabulary. Recommended values: 'pending', 'dismissed', 'acquitted', 'convicted-by-verdict', 'convicted-by-plea', 'merged'."@en ;
+	rdfs:domain legalproc:CriminalCharge ;
+	rdfs:range xsd:string .
+
+legalproc:instrumentType
+	a owl:DatatypeProperty ;
+	rdfs:label "instrumentType"@en ;
+	rdfs:comment "The type of charging instrument, as an open vocabulary. Recommended values: 'complaint', 'indictment', 'superseding-indictment', 'information'."@en ;
+	rdfs:domain legalproc:ChargingInstrument ;
+	rdfs:range xsd:string .
+
+legalproc:pleaType
+	a owl:DatatypeProperty ;
+	rdfs:label "pleaType"@en ;
+	rdfs:comment "The type of plea entered, as an open vocabulary. Recommended values: 'guilty', 'not-guilty', 'nolo-contendere'."@en ;
+	rdfs:domain legalproc:Plea ;
+	rdfs:range xsd:string .
+
+legalproc:proceedingType
+	a owl:DatatypeProperty ;
+	rdfs:label "proceedingType"@en ;
+	rdfs:comment "The type of criminal proceeding, as an open vocabulary. Recommended values: 'arraignment', 'detention-hearing', 'preliminary-hearing', 'trial', 'plea-hearing', 'sentencing-hearing', 'appeal'."@en ;
+	rdfs:domain legalproc:CriminalProceeding ;
+	rdfs:range xsd:string .
+
+legalproc:verdictType
+	a owl:DatatypeProperty ;
+	rdfs:label "verdictType"@en ;
+	rdfs:comment "The determination recorded by the verdict, as an open vocabulary. Recommended values: 'guilty', 'not-guilty'."@en ;
+	rdfs:domain legalproc:Verdict ;
+	rdfs:range xsd:string .
+
+legalproc:sentenceStatus
+	a owl:DatatypeProperty ;
+	rdfs:label "sentenceStatus"@en ;
+	rdfs:comment "Whether the sentence is a party recommendation, an imposed judgment, or has been vacated, as an open vocabulary. Recommended values: 'recommended', 'imposed', 'vacated'."@en ;
+	rdfs:domain legalproc:Sentence ;
+	rdfs:range xsd:string .
+
+legalproc:sentenceTerm
+	a owl:DatatypeProperty ;
+	rdfs:label "sentenceTerm"@en ;
+	rdfs:comment "The custodial term as stated in the record, kept verbatim to avoid fabricating precision, e.g. 'Life', '165 years', '25 years concurrent + 140 years consecutive'."@en ;
+	rdfs:domain legalproc:Sentence ;
+	rdfs:range xsd:string .
+
+legalproc:monetaryAmount
+	a owl:DatatypeProperty ;
+	rdfs:label "monetaryAmount"@en ;
+	rdfs:comment "The monetary amount of a restitution or forfeiture obligation, in the currency identified by currencyCode."@en ;
+	rdfs:range xsd:decimal .
+
+legalproc:currencyCode
+	a owl:DatatypeProperty ;
+	rdfs:label "currencyCode"@en ;
+	rdfs:comment "ISO 4217 currency code for a monetary amount, e.g. 'USD' (https://www.iso.org/iso-4217-currency-codes.html)."@en ;
+	rdfs:range xsd:string .
+
+#################################################################
+# Object properties
+#################################################################
+
+legalproc:concernsCharge
+	a owl:ObjectProperty ;
+	rdfs:label "concernsCharge"@en ;
+	rdfs:comment "Links a plea, proceeding, verdict, sentence, forfeiture order, or restitution order to the criminal charge(s) it concerns."@en ;
+	rdfs:range legalproc:CriminalCharge ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+legalproc:objectOffense
+	a owl:ObjectProperty ;
+	rdfs:label "objectOffense"@en ;
+	rdfs:comment "Links an inchoate or derivative criminal charge (conspiracy, attempt, solicitation, aiding-abetting, predicate-linked offense) to the charge representing its object or predicate offense, e.g. a conspiracy-to-murder count to the murder offense conspired at, or an 18 U.S.C. § 924(c) firearm count to the crime-of-violence count it is charged in furtherance of."@en ;
+	rdfs:domain legalproc:CriminalCharge ;
+	rdfs:range legalproc:CriminalCharge ;
+	dcterms:source "https://github.com/casework/CASE/issues/192"^^xsd:anyURI .
+
+legalproc:assertedIn
+	a owl:ObjectProperty ;
+	rdfs:label "assertedIn"@en ;
+	rdfs:comment "Links a criminal charge to the charging instrument (complaint, indictment, superseding indictment, information) in which it is asserted."@en ;
+	rdfs:domain legalproc:CriminalCharge ;
+	rdfs:range legalproc:ChargingInstrument .

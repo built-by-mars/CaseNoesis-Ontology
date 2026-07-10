@@ -1,0 +1,73 @@
+{
+  "@context": {
+    "kb": "http://example.org/kb/",
+    "proposed": "http://example.org/ontology/proposed/investigation/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "kb:investigation-platform-ts",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Platform trust & safety internal investigation",
+      "proposed:caseIdentifier": "TS-2026-88041"
+    },
+    {
+      "@id": "kb:investigation-ncmec-cybertip",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "NCMEC CyberTipline report handling",
+      "proposed:caseIdentifier": "CT-2026-1234567"
+    },
+    {
+      "@id": "kb:investigation-state-icac",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "State ICAC task force case",
+      "proposed:caseIdentifier": "ICAC-AK-2026-0113"
+    },
+    {
+      "@id": "kb:investigation-local-pd",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Local police department case",
+      "proposed:caseIdentifier": "2026-004567"
+    },
+    {
+      "@id": "kb:investigation-state-lab",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "State crime laboratory examination (encrypted smartphone)",
+      "proposed:caseIdentifier": "SCDL-26-0892"
+    },
+    {
+      "@id": "kb:rel-ts-to-ncmec",
+      "@type": "proposed:InvestigationRelationship",
+      "uco-core:source": { "@id": "kb:investigation-platform-ts" },
+      "uco-core:target": { "@id": "kb:investigation-ncmec-cybertip" },
+      "uco-core:kindOfRelationship": "Referred_To",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "kb:rel-ncmec-to-icac",
+      "@type": "proposed:InvestigationRelationship",
+      "uco-core:source": { "@id": "kb:investigation-ncmec-cybertip" },
+      "uco-core:target": { "@id": "kb:investigation-state-icac" },
+      "uco-core:kindOfRelationship": "Referred_To",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "kb:rel-icac-to-local",
+      "@type": "proposed:InvestigationRelationship",
+      "uco-core:source": { "@id": "kb:investigation-state-icac" },
+      "uco-core:target": { "@id": "kb:investigation-local-pd" },
+      "uco-core:kindOfRelationship": "Referred_To",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "kb:rel-local-to-lab",
+      "@type": "proposed:InvestigationRelationship",
+      "uco-core:source": { "@id": "kb:investigation-local-pd" },
+      "uco-core:target": { "@id": "kb:investigation-state-lab" },
+      "uco-core:kindOfRelationship": "Evidence_Submitted_To",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

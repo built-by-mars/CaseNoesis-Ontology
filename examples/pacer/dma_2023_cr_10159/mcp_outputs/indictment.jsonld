@@ -1,0 +1,343 @@
+{
+  "@context": {
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Source file pacer -- espionage -- indictment.pdf",
+      "uco-core:description": "Link-Look pdf upload",
+      "uco-core:tag": [
+        "link-look-file-kind:pdf"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:7268053c-ad65-52c3-b188-c8220405a974",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "pacer -- espionage -- indictment.pdf",
+          "uco-observable:extension": "pdf",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "2489948"
+          }
+        },
+        {
+          "@id": "urn:uuid:3dec7cab-6b82-5450-869f-9af908612ff4",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "2489948"
+          },
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:bb4edddb-0a3c-5db8-8c18-2a8edb36a741",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "5AADB9B9F7CD13AA433E308ED956FB586560861FAB66EB3EFE5409C30F824ACF"
+              }
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:2b9495ab-a622-53c1-9510-f23acbc227d4",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:5e636778-7d40-54ff-b845-e71fa743d81d",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 1 of 10\n\n23cr10159\nCase 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 2 of 10\nCase 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 3 of 10\nCase 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 4 of 10\nCase 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 5 of 10\nCase 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 6 of 10\nCase 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 7 of 10\nCase 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 8 of 10\nCase 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 9 of 10\nCase 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 10 of 10"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e561ff73-99ba-52d0-bc41-b3f209951d91",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "case-uco-document-normalize",
+      "uco-tool:version": "0.6.0"
+    },
+    {
+      "@id": "urn:uuid:64472b67-cca1-5071-8d4f-b2a118f33925",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Processed pdf through case-uco MCP",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-09T18:58:57.023198+00:00"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-09T18:58:57.023198+00:00"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-action:instrument": {
+        "@id": "urn:uuid:e561ff73-99ba-52d0-bc41-b3f209951d91"
+      },
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:324b2ec6-5a1f-5ac0-9ddb-4fd225f604e9"
+        },
+        {
+          "@id": "urn:uuid:65c4b3b2-2e79-5021-befb-1e97bc57baee"
+        },
+        {
+          "@id": "urn:uuid:7bd05d61-7959-5897-9af1-2aca80b1a6c2"
+        },
+        {
+          "@id": "urn:uuid:234d373d-b99e-5db1-b531-cb7ca52dcbfa"
+        },
+        {
+          "@id": "urn:uuid:e69a56f2-6661-54e2-b6b5-6b3bfece56ab"
+        },
+        {
+          "@id": "urn:uuid:1ffe3173-e284-51fb-a75b-91fbb837eaee"
+        },
+        {
+          "@id": "urn:uuid:841bdb68-0d88-595c-a0a3-eab6607e4818"
+        },
+        {
+          "@id": "urn:uuid:df9eb5c4-736c-5e1f-90ea-3687b625e3f5"
+        },
+        {
+          "@id": "urn:uuid:b910b5ec-42d8-513e-ad48-8cb6b75adb1e"
+        },
+        {
+          "@id": "urn:uuid:78a1daa1-77f4-5bcc-9df0-e502c79c3d44"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:324b2ec6-5a1f-5ac0-9ddb-4fd225f604e9",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 06/15/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 06/15/23"
+    },
+    {
+      "@id": "urn:uuid:65c4b3b2-2e79-5021-befb-1e97bc57baee",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 06/15/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 06/15/23"
+    },
+    {
+      "@id": "urn:uuid:7bd05d61-7959-5897-9af1-2aca80b1a6c2",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 06/15/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 06/15/23"
+    },
+    {
+      "@id": "urn:uuid:234d373d-b99e-5db1-b531-cb7ca52dcbfa",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 06/15/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 06/15/23"
+    },
+    {
+      "@id": "urn:uuid:e69a56f2-6661-54e2-b6b5-6b3bfece56ab",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 06/15/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 06/15/23"
+    },
+    {
+      "@id": "urn:uuid:1ffe3173-e284-51fb-a75b-91fbb837eaee",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 06/15/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 06/15/23"
+    },
+    {
+      "@id": "urn:uuid:841bdb68-0d88-595c-a0a3-eab6607e4818",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 06/15/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 06/15/23"
+    },
+    {
+      "@id": "urn:uuid:df9eb5c4-736c-5e1f-90ea-3687b625e3f5",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 06/15/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 06/15/23"
+    },
+    {
+      "@id": "urn:uuid:b910b5ec-42d8-513e-ad48-8cb6b75adb1e",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 06/15/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 06/15/23"
+    },
+    {
+      "@id": "urn:uuid:78a1daa1-77f4-5bcc-9df0-e502c79c3d44",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 06/15/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 06/15/23"
+    },
+    {
+      "@id": "urn:uuid:642cc8bd-fd33-5b92-b6a4-98b1cca02111",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 1 derived from pacer -- espionage -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:324b2ec6-5a1f-5ac0-9ddb-4fd225f604e9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:36f6b981-52ff-5d17-816f-de490b040679",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 2 derived from pacer -- espionage -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:65c4b3b2-2e79-5021-befb-1e97bc57baee"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:140a73f8-5dea-512c-b0d2-e768a7ab4f6d",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 3 derived from pacer -- espionage -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7bd05d61-7959-5897-9af1-2aca80b1a6c2"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e30e9d81-e9ab-543e-906c-b11e5a47db99",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 4 derived from pacer -- espionage -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:234d373d-b99e-5db1-b531-cb7ca52dcbfa"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:f99de4fb-f93e-5772-bd4f-8354c5e66c04",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 5 derived from pacer -- espionage -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e69a56f2-6661-54e2-b6b5-6b3bfece56ab"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ff556804-b79b-5b5e-9429-b0ae1ededf50",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 6 derived from pacer -- espionage -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:1ffe3173-e284-51fb-a75b-91fbb837eaee"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:5cb006ff-54cd-5f20-a7cd-794ebd0cfcc5",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 7 derived from pacer -- espionage -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:841bdb68-0d88-595c-a0a3-eab6607e4818"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:267a8de9-b633-5ac5-a724-131265056d88",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 8 derived from pacer -- espionage -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:df9eb5c4-736c-5e1f-90ea-3687b625e3f5"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9e41fa6c-6898-5e6a-a748-45020fa86ff9",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 9 derived from pacer -- espionage -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b910b5ec-42d8-513e-ad48-8cb6b75adb1e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:01529411-ac08-5c31-bfd9-643d7d416155",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 10 derived from pacer -- espionage -- indictment.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:78a1daa1-77f4-5bcc-9df0-e502c79c3d44"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:d0be2e53-d46c-5db4-a2ff-dffeaac3e3b6"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

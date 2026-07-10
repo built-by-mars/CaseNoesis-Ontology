@@ -1,0 +1,2013 @@
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 1 of 43
+
+Exhibit 1
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 2 of 43
+
+WECHAT MESSAGES
+
+CHAT PARTICIPANTS
+Number of participants 13
+
+Display names 48483066127@chatroom
+dingyong 198608
+wxid_Skrbi3nq7dpd11
+wxid_6f8f4bqanpfm12
+wxid_993hoxyoSItk12
+xiongzi87
+yuanye89 1692
+Kunjie Jiao
+Zi Xiong
+Zhisuan - Internal Cooperation Group of I&R Capital
+Linfei Cai
+Ye Yuan
+Xiaoyi Zheng@I&R Capital
+
+Local user dingyong198608
+
+CONVERSATION
+DETAILS
+
+Number of messages 242
+
+Rirst message Sent 54/2923 9:40:51 AM
+date/time
+Last message sent
+
+. 5/11/2023 1:39:09 AM
+date/time
+
+Case time zone UTC
+
+\ Received
+
+Zhisuan - Internal Cooperation Group of I&R Capital
+
+3/20/2023 9:40:51 AM
+
+<sysmsg type="sysmsgtemplate">
+
+<sysmsgtemplate>
+
+<content_template type="tmpl_type_profile">
+
+<plain><! [CDATA[]]></plain>
+
+<template><! [CDATA[$username$ invited you to a group chat with Sothers$]]></template>
+<link_list>
+
+<link name="username" type="link_profile">
+
+<memberlist>
+
+AML-0002859
+
+Case 3:24-cr-00141-VC Document 191-1
+
+<member>
+
+<username><! [CDATA[yuanye891692]]></username>
+<nickname><! [CDATA[Ye Yuan]]></nickname>
+</member>
+
+</memberlist>
+
+</link>
+
+<link name="others" type="link_plain">
+
+<plain><! [CDATA[Zi Xiong, Kunjie Jiao]]></plain>
+</link>
+
+</link_list>
+
+</content_template>
+
+</sysmsgtemplate>
+
+</sysmsg>
+
+Zi Xiong
+
+[ThumbsUp][ThumbsUp]
+
+Zi Xiong
+
+[Minsheng Computer] AI360 Hongyi Zhou exchange minutes 20230319
+
+Ye Yuan
+
+What is Zhou trying to say?
+
+Zi Xiong
+
+Selling his own shares, haha.
+
+Ye Yuan
+
+Filed 09/21/25 Page 3 of 43
+
+\ Received
+
+3/20/2023 9:43:11 AM
+
+\ Received
+
+3/20/2023 12:37:01 PM
+
+\ Received
+
+3/20/2023 12:46:39 PM
+
+\ Received
+
+3/20/2023 12:46:52 PM
+
+\ Received
+
+AML-0002860
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25
+
+3/20/2023 12:51:19 PM
+
+[Chuckle]
+
+\ Received
+Zi Xiong
+3/21/2023 9:36:27 AM
+
+Exclusive response | Alibaba VP Yanggqing Jia will leave and start up, and target AI
+
+architecture pitfall-avoidance direction
+
+\ Received
+Kunjie Jiao
+3/22/2023 12:42:31 PM
+
+@Ye Yuan @Linwei Mr. Yuan, Mr. Ding, here’s the framework for our teaser; you can use
+this as a reference to draft some content. Try to write as many ideas and thoughts as possible
+
+for now; later we can refine, simplify, and optimize the UI ~
+
+\ Received
+Kunjie Jiao
+3/22/2023 12:42:39 PM.
+
+CMS Project Teaser_0322.pptx
+
+3/22/2023 1:07:19 PM
+
+\ Received
+Ye Yuan
+3/22/2023 12:47:41 PM
+OK
+dingyong198608
+\ Received
+Ye Yuan
+
+3/23/2023 1:00:26 PM
+
+Page 4 of 43
+
+AML-0002861
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 5 of 43
+
+Ten-thousand-word article: Want to train large models? Here’s a pitfall-avoidance guide.
+
+\ Received
+
+Ye Yuan
+3/24/2023 3:22:02 AM
+
+CMS Project Teaser_0324.pptx
+
+N Received
+
+Ye Yuan
+3/24/2023 3:23:13 AM
+
+I filled it in @Kunjie Jiao — let’s discuss after you’ve read it.
+
+\ Received
+
+Kunjie Jiao
+
+3/24/2023 3:23:56 AM
+
+Got it, I will take a look first.
+
+\ Received
+Kunjie Jiao
+3/24/2023 10:14:00 AM
+
+CMS Project Teaser_0324 (annotations).pptx
+
+\ Received
+Kunjie Jiao
+3/24/2023 10:15:58 AM
+
+@Ye Yuan Mr. Luo, the direction is still a bit off; I made some annotations and logical notes.
+Can you revise the overall direction according to this logic? If there are questions we can find a
+
+time to meet and go over it together.
+
+\ Received
+
+Ye Yuan
+
+3/24/2023 1:21:50 PM
+
+Got it
+
+AML-0002862
+
+Case 3:24-cr-00141-VC Document 191-1
+
+Ye Yuan
+
+CMS Project Teaser_0325 (annotations).pptx
+
+Ye Yuan
+
+Linwei Ding.doc
+
+dingyong198608
+
+1 will make revi
+
+dingyong198608
+
+I updated the resume. Thanks.
+
+Kunjie Jiao
+
+Got it
+
+Zi Xiong
+
+Filed 09/21/25
+
+\ Received
+
+3/25/2023 5:22:11 AM
+
+\ Received
+
+3/25/2023 8:22:01 AM.
+
+\ Received
+
+3/25/2023 8:55:39 AM
+
+\ Received
+
+3/27/2023 3:52:46 AM.
+
+Page 6 of 43
+
+AML-0002863
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 7 of 43
+
+https://36kr.com/p/2170682713551362
+
+\ Received
+Zi Xiong
+3/27/2023 3:53:15 AM
+
+Can we reference Microsoft’s Al supercomputer concept?
+
+dingyong198608
+
+Let me check
+
+dingyong198608
+
+Okay [ThumbsUp]
+
+\ Received
+Kunjie Jiao
+3/27/2023 4:20:38 AM
+
+We can find a time for a call to figure out how to tell the story ~ but I’m out today and might
+be a bit late.
+
+dingyong198608
+
+I’m available anytime. Anytime before 2pm is fine, preferab
+
+\ Received
+
+Ye Yuan
+
+3/27/2023 4:24:14 AM
+
+Pretty good. The concept “build the next-generation supercomputer” is perfect.
+
+\ Received
+
+AML-0002864
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 8 of 43
+
+Ye Yuan
+
+3/27/2023 5:41:39 AM.
+
+Linwei is on West Coast Bay Area time. His Beijing-time window from morning until 2pm is
+
+more suitable, @Kunjie Jiao.
+
+\ Received
+
+Kunjie Jiao
+
+3/27/2023 6:14:23 AM
+
+How about tomorrow morning? I’m still out. I’ve been on a business trip these past two days.
+
+dingyong198608
+
+Sure, thanks
+
+\ Received
+Kunjie Jiao
+3/27/2023 6:15:57 AM
+
+Then 10am tomorrow morning?
+
+\ Received
+Ye Yuan
+3/27/2023 6:18:35 AM
+
+Okay
+
+dingyong198608
+
+3 6:39:32 AM
+
+age content to display.
+
+\ Received
+Kunjie Jiao
+3/27/2023 9:28:57 AM
+
+Can we move it to 11am tomorrow? I’m afraid I can’t finish the prior thing by 10.
+
+AML-0002865
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25
+
+\ Received
+Ye Yuan
+3/27/2023 9:50:16 AM
+Sure
+\ Received
+Zi Xiong
+3/27/2023 2:56:24 PM
+
+Zi Xiong invited you to join a Tencent Meeting
+Meeting topic: Meeting scheduled by Zi Xiong
+Meeting time: 2023/03/28 11:00—12:30 (GMT+08:00) China Standard Time - Beijing
+
+Click the link to join, or add to your meeting list:
+https://meeting.tencent.com/dm/Py36x2pROOt8
+
+#Tencent Meeting: 168-464-730
+
+Copy this info and open Tencent Meeting on your phone to participate
+
+\ Received
+Zi Xiong
+3/27/2023 2:56:36 PM
+
+Tomorrow’s meeting link
+
+dingyong198608
+
+sage content to display.
+
+\ Received
+Ye Yuan
+3/28/2023 3:01:02 AM
+
+@Linwei It’s started.
+
+Page 9 of 43
+
+AML-0002866
+
+Case 3:24-cr-00141-VC Document 191-1
+
+dingyong198608
+
+Filed 09/21/25 Page 10 of 43
+
+3/28/2023 3:01:14 AM
+
+Zi Xiong
+
+https://mp.weixin.qg.com/s/IOeZ-2-CnHiTDbhHDZgEHw
+
+Zi Xiong
+
+hittps://www.hpe-ai.tech/platform
+
+Zi Xiong
+
+https://36kr.com/p/1744757301735299
+
+Zi Xiong
+
+https://www.luchentech.com/#product
+
+Zi Xiong
+
+hittps://github.com/hpcaitech/ColossalAT
+
+Zi Xiong
+
+https://github.com/hpcaitech
+
+\ Received
+
+3/28/2023 3:01:25 AM
+
+\ Received
+
+3/28/2023 3:01:43 AM.
+
+\ Received
+
+3/28/2023 3:07:16 AM
+
+\ Received
+
+3/28/2023 3:11:34 AM.
+
+\ Received
+
+3/28/2023 3:12:04 AM.
+
+\ Received
+
+3/28/2023 3:12:31 AM
+
+AML-0002867
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 11 of 43
+
+\ Received
+Zi Xiong
+3/28/2023 3:15:29 AM
+
+Luchen Technology is committed to liberating AI productivity by building Colossal-Al, a
+general deep-learning system for the large-model era, through in-house technologies such as
+efficient multidimensional parallelism, heterogeneous memory management, large-scale
+optimizer libraries, and adaptive task scheduling, efficiently promoting deployment of large AI
+
+models and helping enterprises achieve AI-driven upgrades at low cost.
+
+\ Received
+Zi Xiong
+3/28/2023 3:15:51 AM
+
+Luchen Technology’s core product Colossal-AI is a general deep-learning system for the
+large-model era; via multidimensional parallelism, large-scale optimizers, adaptive task
+scheduling, and heterogeneous memory management, it enables efficient and rapid deployment
+of large-model training and inference; relevant solutions have already been applied by
+well-known companies in biopharma, autonomous driving, cloud computing, and chips.
+Recently, during cooperation with BioMap, Luchen Technology open-sourced the world’s
+
+fastest complex-structure prediction model, increasing inference speed by up to 11x.
+
+\ Received
+
+Kunjie Jiao
+
+3/28/2023 1:58:41 PM
+
+CMS project storyline_0328.docx
+
+\ Received
+
+Ye Yuan
+
+3/28/2023 2:13:05 PM
+
+@Kunjie Jiao Kunjie, all the “xxx” in there are placeholders for @Linwei to fill in, right?
+
+\ Received
+
+Kunjie Jiao
+
+3/28/2023 2:37:52 PM
+
+Right. But don’t let what I wrote lock you in; feel free to adjust and add. Write as much as
+
+possible.
+
+AML-0002868
+
+\ Received
+Kunjie Jiao
+3/29/2023 7:52:28 AM
+
+Okay, no problem. Rest up first.
+
+AML-0002869
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 13 of 43
+
+4/4/2023 1:31:39 AM
+
+No message content to display.
+
+\ Received
+
+Ye Yuan
+
+4/4/2023 1:55:49 AM
+
+Dr. Jun Wu’s 10k-word article: China’s compute — risks and opportunities - Today's
+
+Headlines
+
+\ Received
+
+Ye Yuan
+
+4/5/2023 2:56:04 AM.
+
+Google announces next-generation AI supercomputer, claiming it’s faster and more
+
+energy-efficient than Nvidia’s A100.
+
+Currently, Google’s TPU has been updated to fourth generation On Tuesday Google published
+a scientific paper detailing how it used its custom optical switches to connect over 4,000 chips
+into a supercomputer. For companies building AI supercomputers, improving these
+interconnects has become a key competitive point, because so-called large-scale language
+models keep growing and can’t be stored on a single chip, and these models power
+technologies like Google’s Bard or OpenAI’s ChatGPT. These models must be distributed.
+across thousands and tens of thousands of chips, which then need to coordinate over weeks or
+longer to train the models. Google’s PaLM model, the largest publicly disclosed language
+model so far, was trained for 50 days by two supercomputers with 4,000 chips each. Google
+said its supercomputer can easily and dynamically reconfigure connections between chips,
+which helps avoid faults and optimize performance. “Circuit switching lets us easily route
+around faulty components,” Google senior researcher Norm Jouppi and Google distinguished
+engineer David Patterson wrote in a blog post about the system. “This flexibility even allows
+us to change the topology of the supercomputer internetwork to accelerate ML model
+performance.” Although Google only now disclosed details of its supercomputer, it has been
+operating since 2020 in a data center in Mayes County, Oklahoma. Google said the startup
+Midjourney uses the system to train its model, which can generate new images from a few
+input words. In the paper Google stated that, compared with systems of the same scale, its
+supercomputer is 1.7 faster and 1.9 more energy-efficient than systems based on Nvidia
+A100 chips. Reportedly, the A100 chip hit the market earlier than the fourth-generation TPU.
+Google said it did not compare the fourth-generation TPU with Nvidia’s current flagship H100
+chip because the H100 was released after Google’s chip was put into use and uses newer
+technologies. Google hinted it’s developing a new TPU to compete with Nvidia’s H100, but
+
+provided no details. Jouppi told the media that Google has “ample reserves of future chips.”
+
+AML-0002870
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 14 of 43
+
+\ Received
+
+Ye Yuan
+
+4/5/2023 2:56:05 AM.
+
+Interconnect issues between chips are a bigger problem than the chips themselves.
+
+\ Received
+Zi Xiong
+4/5/2023 2:56:27 AM
+
+Okay. Let’s study this.
+
+\ Received
+Zi Xiong
+4/5/2023 5:06:50 AM
+
+Breaking! ChatGPT Plus suspended.
+
+\ Received
+Kunjie Jiao
+4/6/2023 3:57:04 AM
+
+@Linwei @Ye Yuan Mr. Ding and Mr. Yuan, how’s our storyline?
+
+\ Received
+
+Ye Yuan
+
+4/6/2023 4:20:37 AM.
+
+Almost done @Linwei Post it here when you finish.
+
+dingyong198608
+
+dingyong198608
+
+AML-0002871
+
+Case 3:24-cr-00141-VC Document 191-1
+
+dingyong198608
+
+Filed 09/21/25 Page 15 of 43
+
+4/6/2023
+
+I filled in all the content but didn’t mo the format. Thanks for handling it.
+
+dingyong198608
+
+« the past couple of da nd we have some urgent matte:
+
+Kunjie Jiao
+
+Okay, got it, I will take a look first.
+
+Zhisuan - Internal Cooperation Group of I&R Capital
+
+<sysmsg type="sysmsgtemplate">
+<sysmsgtemplate>
+
+<content_template type="tmpl_type_profile">
+<plain><! [CDATA[]]></plain>
+
+4/6/202:
+
+\ Received
+
+4/6/2023 8:01:35 AM
+
+\ Received
+
+4/6/2023 9:19:33 AM.
+
+<template><! [CDATA[$username$ invited $names$ to the group chat]]></template>
+
+<link_list>
+
+<link name="username" type="link_profile">
+
+<memberlist>
+
+<member>
+
+<username><! [CDATA[wxid_6f8f4bqanpfm12]]></username>
+<nickname><! [CDATA[Kunjie Jiao]]></nickname>
+</member>
+
+</memberlist>
+
+</link>
+
+<link name="names" type="link_profile">
+
+<memberlist>
+
+at the company
+
+AML-0002872
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25
+
+<member>
+
+<username><! [CDATA[wxid_Skrbi3nq7dpd1 1]]></username>
+<nickname><! [CDATA[Feeling Cai]]></nickname>
+</member>
+
+</memberlist>
+
+<separator><! [CDATAJ, ]]></separator>
+
+</link>
+
+</link_list>
+
+</content_template>
+
+</sysmsgtemplate>
+
+</sysmsg>
+
+\ Received
+
+Zhisuan - Internal Cooperation Group of I&R Capital
+
+4/6/2023 9:20:23 AM
+
+<sysmsg type="sysmsgtemplate">
+
+<sysmsgtemplate>
+
+<content_template type="tmpl_type_profile">
+
+<plain><! [CDATA[]]></plain>
+
+<template><! [CDATA[$username$ invited $names$ to the group chat]]></template>
+<link_list>
+
+<link name="username" type="link_profile">
+
+<memberlist>
+
+<member>
+
+<username><! [CDATA[wxid_6f8f4bqanpfm12]]></username>
+<nickname><! [CDATA[Kunjie Jiao]]></nickname>
+</member>
+
+</memberlist>
+
+</link>
+
+<link name="names" type="link_profile">
+
+<memberlist>
+
+<member>
+
+<username><! [CDATA[wxid_993hoxyoSltk12]]></username>
+<nickname><! [CDATA[Xiaoyi Zheng@I&R Capital]]></nickname>
+</member>
+
+</memberlist>
+
+<separator><! [CDATAJ, ]]></separator>
+
+</link>
+
+</link_list>
+
+</content_template>
+
+</sysmsgtemplate>
+
+</sysmsg>
+
+Page 16 of 43
+
+AML-0002873
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25
+
+\ Received
+Kunjie Jiao
+4/6/2023 9:21:27 AM
+
+@Lingfei Cai @Xiaoyi Zheng @I&R Capital I’ve added two colleagues to the group; they will
+help with fundraising later ~
+In the group are the two founders: @Ye Yuan (Mr. Yuan) and @Linwei (Mr. Ding).
+
+\ Received
+
+Linfei Cai
+
+4/6/2023 9:21:53 AM
+
+Nice to meet you, Mr. Yuan and Mr. Ding! I’m Lingfei Cai from I&R Capital ~
+
+\ Received
+Ye Yuan
+4/6/2023 9:23:43 AM
+Nice to meet you [Grin][Shake]
+\ Received
+
+Xiaoyi Zheng@I&R Capital
+
+4/6/2023 9:25:02 AM
+
+Nice to meet you all — I’m Xiaoyi Zheng from I&R Capital ~
+
+dingyong198608
+
+Nice to meet you [Trick]. — Linwei Ding
+
+\ Received
+Kunjie Jiao
+4/9/2023 9:48:36 AM
+
+CMS Project Teaser_0407.pptx
+
+\ Received
+
+Page 17 of 43
+
+AML-0002874
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25
+
+Kunjie Jiao
+4/9/2023 9:49:09 AM
+
+Take a look and see what needs editing or adding ~
+
+\ Received
+Ye Yuan
+4/9/2023 10:44:14 AM
+Got it
+dingyong198608
+\ Received
+Zi Xiong
+
+4/10/2023 10:43:36 AM
+
+A Huawei insider said that training a lowest-level Huawei Pangu large model requires about
+1,000 A100 GPUs, and on average one card fails every three days of running (because the
+
+compute load is so intense), so they also prepare 20% extra GPUs as backups.
+
+\ Received
+Kunjie Jiao
+4/10/2023 1:37:30 PM
+
+CMS Project Teaser_0410.pptx
+
+\ Received
+
+Ye Yuan
+
+4/10/2023 1:59:56 PM
+
+Chinese: Fine-grained supercomputing (maximizing supercomputing resources down to the
+smallest granularity)
+Smart supercompute utilization (smart utilization of supercomputing resources)
+
+Emergent supercomputing (extreme resource utilization that unlocks emergent capabilities)
+
+Page 18 of 43
+
+AML-0002875
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 19 of 43
+
+Profit-oriented supercomputing
+
+English: Xcompower (X Computation Power)
+
+\ Received
+
+Ye Yuan
+
+4/10/2023 1:59:56 PM
+
+I thought of a few names, please give suggestions, and you can propose new ones too [Grin].
+
+\ Received
+
+Ye Yuan
+
+4/10/2023 1:59:56 PM
+
+CMS Project Teaser_0410.pptx
+
+\ Received
+Zi Xiong
+4/10/2023 2:07:33 PM
+
+{"msgLocalID":1 12,"clientGroupID":"48483066127@chatroom"," groupID":"48483066127@c
+hatroom","lastMsgID":112,"msgContent":"I&R Capital - Zi Xiong has started a voice call"}
+
+\ Received
+
+4/10/2023 2:07:34 PM
+
+{"msgLocalID":113,"clientGroupID":"48483066127@chatroom","groupID":"48483066127@c
+hatroom","lastMsgID":113,"msgContent":"Voice call ended"}
+
+\ Received
+
+Ye Yuan
+
+4/10/2023 2:07:35 PM.
+
+Filled in the content.
+
+\ Received
+Zi Xiong
+4/10/2023 2:11:29 PM
+
+I vote for option 1.
+
+AML-0002876
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 20 of 43
+
+\ Received
+Kunjie Jiao
+4/10/2023 2:14:54 PM.
+
+I think both 1 and 2 are fine.
+
+\ Received
+Ye Yuan
+4/10/2023 2:24:08 PM
+
+@Linwei When you wake up, take a look at the teaser. If it’s okay we will start sending it to
+
+the investment firms.
+
+dingyong198608
+
+4/10/202.
+
+ry. I will check it today. I was a bit busy
+
+dingyong198608
+4/11/2023 2:26:00 AM
+
+I checked it. No problems, but the “X ill needs to be filled in, thanks. @Kunjie
+
+\ Received
+
+Ye Yuan
+
+4/11/2023 2:32:03 AM.
+
+How about we name our project “Fine-grained supercomputing”? @Linwei
+
+dingyong198608
+4/11/2023 2:
+
+Sounds good, I think it’s great.
+
+dingyong198608
+
+AML-0002877
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 21 of 43
+
+4/11/2023 2:35:34 AM
+
+If you want two characters, you can call it “Zhisuan”, but I think there might be homophone
+
+conflicts.
+
+\ Received
+Ye Yuan
+4/11/2023 2:38:42 AM
+Zhisuan is good.
+\ Received
+
+Ye Yuan
+
+4/11/2023 2:39:02 AM.
+
+Use “Zhisuan” — @Kunjie Jiao, put it into the teaser.
+
+\ Received
+Kunjie Jiao
+4/11/2023 2:39:25 AM
+Zhisuan Technology? Or just “Zhisuan”?
+\ Received
+Ye Yuan
+4/11/2023 2:39:44 AM
+Zhisuan
+\ Received
+Ye Yuan
+
+4/11/2023 2:40:01 AM.
+
+Simple and clear.
+
+dingyong198608
+
+4/11/2023 2:4:
+
+Our product name could be MPMS, Model Parallelism Management System, or
+
+Computer Management
+
+AML-0002878
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 22 of 43
+
+dingyong198608
+
+The first leans technical; the second is easier to understand and more busi oriented.
+
+dingyong198608
+
+4/11/2023 2:45:01 AM
+
+CMS works too, more generic.
+
+\ Received
+Ye Yuan
+4/11/2023 3:11:08 AM
+
+We can finalize and send to institutions today @Kunjie Jiao.
+
+\ Received
+Kunjie Jiao
+4/11/2023 3:16:54 AM
+
+Yep, I will send out the final version in a bit, then push it to a few investors we know to see the
+
+reaction ~
+\ Received
+Ye Yuan
+4/11/2023 3:18:50 AM
+OK
+\ Received
+Ye Yuan
+
+4/11/2023 3:19:05 AM.
+
+Please provide a PDF version of the file.
+
+\ Received
+
+Kunjie Jiao
+
+AML-0002879
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25
+
+4/11/2023 4:22:01 AM
+
+Zhisuan Teaser.pdf
+
+\ Received
+Zi Xiong
+4/11/2023 4:23:45 AM
+
+Can you align the left-right spacing of those three “investment highlight” boxes?
+
+\ Received
+Kunjie Jiao
+4/11/2023 4:52:00 AM.
+
+Zhisuan Teaser.pdf
+
+\ Received
+Kunjie Jiao
+4/11/2023 4:54:55 AM
+
+@Ye Yuan @Linwei I’ve scheduled a chat with Sinovation Ventures this Thursday morning; is
+
+10:30am Thursday okay? Are all the meetings arranged to be at Rongshu’s place?
+
+\ Received
+Ye Yuan
+4/11/2023 4:57:45 AM
+
+Okay
+
+dingyong198608
+
+\ Received
+Kunjie Jiao
+
+4/12/2023 1:38:28 AM.
+
+Page 23 of 43
+
+AML-0002880
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 24 of 43
+
+@Ye Yuan @Linwei Can we schedule the investor from Baidu Ventures to visit our company
+next Wednesday at 10am? They just invested in Scietrain.
+
+Also a Sequoia Capital investor wants to meet at Yiti Harbor on the weekend. Is weekend OK?
+
+\ Received
+Ye Yuan
+4/12/2023 1:42:27 AM
+Okay.
+\ Received
+Ye Yuan
+
+4/12/2023 1:42:37 AM.
+
+Send me the exact time for the weekend.
+
+dingyong198608
+
+\ Received
+Kunjie Jiao
+4/12/2023 1:43:41 AM.
+
+OK — Mr. Ding prefers before 2pm, right?
+
+dingyong198608
+
+4/12/2023 1:44:14 AM
+
+Yes. Thank you. 2pm is fine too.
+
+\ Received
+Kunjie Jiao
+4/12/2023 1:44:29 AM
+
+Yup, I will confirm the time.
+
+AML-0002881
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 25 of 43
+
+\ Received
+
+Zhisuan - Internal Cooperation Group of 1&R Capital
+
+4/12/2023 1:45:42 AM
+
+<sysmsg type="sysmsgtemplate">
+
+<sysmsgtemplate>
+
+<content_template type="tmpl_type_profile">
+
+<plain><! [CDATA[]]></plain>
+
+<template><! [CDATA["$username$" changed the group name to "$remark$"]]></template>
+<link_list>
+
+<link name="username" type="link_profile">
+
+<memberlist>
+
+<member>
+
+<username><! [CDATA[wxid_6f8f4bqanpfm12]]></username>
+
+<nickname><! [CDATA[Kunjie Jiao]]></nickname>
+
+</member>
+
+</memberlist>
+
+</link>
+
+<link name="remark" type="link_plain">
+
+<plain><! [CDATA[Zhisuan - Internal Cooperation Group of I&R Capital]]></plain>
+</link>
+
+</link_list>
+
+</content_template>
+
+</sysmsgtemplate>
+
+</sysmsg>
+
+\ Received
+
+Kunjie Jiao
+
+4/12/2023 2:27:49 AM
+
+Also scheduled IDG for Friday at 1:30pm to visit their company. Is that OK? It’s at COFCO
+
+Plaza.
+
+\ Received
+
+Ye Yuan
+
+4/12/2023 2:28:24 AM
+
+Friday afternoon is fully booked starting from 1pm.
+
+\ Received
+Kunjie Jiao
+
+4/12/2023 2:31:02 AM
+
+AML-0002882
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25
+
+Then change it to Monday at 12? Still go to their company.
+
+\ Received
+
+Ye Yuan
+
+4/12/2023 2:32:28 AM.
+
+Next Monday the 17th at 12, no problem.
+
+\ Received
+Kunjie Jiao
+4/12/2023 2:34:35 AM
+
+Good. Schedule these first ~ these investors are familiar to us; let’s see their feedback.
+
+\ Received
+Ye Yuan
+4/12/2023 2:36:38 AM
+OK
+\ Received
+Kunjie Jiao
+
+4/12/2023 4:30:33 AM.
+
+https://shimo.im/file-invite/RSf4dra7P WRjxf3c6KJqb7xjSDGR6/ Kunjie Jiao invites you to
+collaborate on “[Zhisuan] Meeting Schedule”; click the link to start editing.
+
+You can view our roadshow schedule.
+
+dingyong198608
+
+4/12/2023 4:3
+
+\ Received
+Ye Yuan
+4/12/2023 4:32:46 AM
+
+Got it
+
+Page 26 of 43
+
+AML-0002883
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 27 of 43
+
+\ Received
+Zi Xiong
+4/12/2023 11:08:12 AM
+
+Meet Sequoia Capital’s VP Xiaoyang at Yiti Harbor Sunday at Ipm. I will create a group ~
+
+\ Received
+Ye Yuan
+4/12/2023 11:09:37 AM
+Got it
+\ Received
+Zi Xiong
+
+4/12/2023 11:20:45 AM
+
+Sequoia Capital initially thinks the team is good but the market is small.
+
+\ Received
+Ye Yuan
+4/12/2023 11:28:12 AM
+
+OK. Let’s talk first.
+
+\ Received
+Zi Xiong
+4/13/2023 6:49:36 AM
+
+https://www.breezeml.ai/
+
+\ Received
+Zi Xiong
+4/13/2023 6:50:56 AM
+
+Does anyone know breezeml?
+
+\ Received
+Kunjie Jiao
+
+4/13/2023 7:10:55 AM
+
+AML-0002884
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 28 of 43
+
+Today Sinovation Ventures’ investor feedback was that many technical points still weren’t
+covered. They recognize market demand, but the implementation details need to be explained
+
+in more depth so they can judge feasibility.
+
+\ Received
+
+Ye Yuan
+
+4/13/2023 7:11:51 AM
+
+Yes. For specific details it might be better to discuss together with companies Sinovation
+
+Ventures has invested in.
+
+\ Received
+
+Ye Yuan
+4/13/2023 7:12:10 AM
+
+I haven’t met them. Linwei, take a look @Linwei.
+
+\ Received
+Kunjie Jiao
+4/13/2023 7:13:38 AM
+
+I suggested this, but he may want to assess the reality himself before introducing it to portfolio
+companies, so he needs us to produce technical and product materials — very detailed or even
+
+long-form is fine — so they can evaluate.
+
+\ Received
+Ye Yuan
+4/13/2023 7:14:48 AM
+Zhisuan Teaser.pdf
+\ Received
+Ye Yuan
+
+4/13/2023 7:15:12 AM
+
+Then first send him the relevant parts separately for review.
+
+\ Received
+
+Ye Yuan
+
+4/13/2023 7:15:36 AM
+
+AML-0002885
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 29 of 43
+
+No message content to display.
+
+\ Received
+Ye Yuan
+4/13/2023 7:15:37 AM
+
+No message content to display.
+
+\ Received
+Kunjie Jiao
+4/13/2023 7:16:44 AM
+
+Okay. I’m organizing and will send it, but I expect it still might be insufficient; he feels the
+
+implementation approach hasn’t been explained.
+
+\ Received
+Zi Xiong
+4/13/2023 7:16:47 AM
+
+I think investors might not have an intuitive sense of what the product actually looks like?
+
+Wouldn’t it be best to include a technical architecture diagram or something?
+
+\ Received
+Kunjie Jiao
+4/13/2023 7:17:20 AM
+
+Sinovation Ventures tends to dig into technical research very thoroughly.
+
+\ Received
+Kunjie Jiao
+4/13/2023 7:17:36 AM.
+
+These are the companies they mentioned today.
+
+\ Received
+Kunjie Jiao
+4/13/2023 7:17:41 AM
+
+No message content to display.
+
+AML-0002886
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 30 of 43
+
+\ Received
+Kunjie Jiao
+4/13/2023 7:17:43 AM
+
+No message content to display.
+
+\ Received
+Kunjie Jiao
+4/13/2023 7:17:44 AM
+
+No message content to display.
+
+\ Received
+
+Ye Yuan
+
+4/13/2023 7:37:20 AM
+
+Yes. This isn’t very intuitive or visual. Sinovation Ventures already understands it better than
+
+other investors; the others will probably find it harder to grasp.
+
+\ Received
+Ye Yuan
+4/13/2023 7:38:42 AM
+Got it
+\ Received
+Zi Xiong
+
+4/13/2023 12:28:20 PM
+
+I chatted with my classmate today. He’s at Hugging Face now and was at Google a few years
+ago; he and some tech friends want to meet our team. Can | establish a group tomorrow? If
+
+their backgrounds fit, maybe someone could join us [Doge].
+
+\ Received
+Zi Xiong
+4/13/2023 12:30:41 PM
+
+No message content to display.
+
+\ Received
+
+AML-0002887
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 31 of 43
+
+Zi Xiong
+4/13/2023 12:30:47 PM.
+This guy
+\ Received
+Ye Yuan
+4/13/2023 12:48:50 PM.
+Okay
+\ Received
+Ye Yuan
+4/13/2023 12:48:54 PM.
+[ThumbsUp]
+dingyong198608
+em. Thanks for the intro.
+\ Received
+Ye Yuan
+
+4/14/2023 2:48:09 PM
+
+Tsinghua-affiliated teams “take over” the large-model startup market
+
+\ Received
+
+Ye Yuan
+
+4/15/2023 1:32:17 AM.
+
+“Competition of applications across hundreds of models” is coming.
+
+\ Received
+
+Ye Yuan
+
+4/16/2023 12:52:46 AM
+
+Will there be a video conference link at 1pm this afternoon? @Kunjie Jiao
+
+AML-0002888
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25
+
+\ Received
+Zi Xiong
+4/16/2023 1:05:21 AM
+
+Zi Xiong invited you to join a Tencent Meeting
+Meeting topic: Zhisuan — Sequoia Capital
+Meeting time: 2023/04/16 13:00—14:00 (GMT+08:00) China Standard Time - Beijing.
+
+Click the link to join, or add to your meeting list:
+https://meeting.tencent.com/dm/iSawgZdrz8pG
+
+#Tencent Meeting: 424-223-399
+
+Copy this info and open Tencent Meeting on your phone to participate
+
+Page 32 of 43
+
+4/16/2023 1:18:04 AM
+
+\ Received
+Ye Yuan
+4/16/2023 1:12:08 AM
+@Linwei
+dingyong198608
+\ Received
+Ye Yuan
+
+4/17/2023 1:07:56 AM.
+
+Domestic AI server experts exchange minutes 20230412.pdf
+
+\ Received
+
+Ye Yuan
+
+4/17/2023 6:16:42 AM.
+
+Which line are we using for IDG’s call later? @Kunjie Jiao
+
+\ Received
+
+AML-0002889
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 33 of 43
+
+Kunjie Jiao
+4/17/2023 6:17:37 AM
+
+Zhisuan — IDG Capital
+
+\ Received
+Ye Yuan
+4/17/2023 6:21:43 AM
+@Linwei
+dingyong198608
+3 6:22:09 AM
+Thank you. Got it
+\ Received
+Ye Yuan
+
+4/17/2023 7:04:10 AM.
+
+@Linwei Get online.
+
+dingyong198608
+
+\ Received
+Ye Yuan
+4/17/2023 8:29:30 AM
+Chat.
+\ Received
+Zi Xiong
+
+4/17/2023 8:31:29 AM
+
+@Kunjie Jiao @Lingfei Cai Log on tomorrow and listen; friends from Hugging Face want to
+
+have some technical exchanges with Mr. Yuan and Mr. Ding.
+
+AML-0002890
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 34 of 43
+
+\ Received
+Kunjie Jiao
+4/17/2023 8:37:33 AM
+
+Got it
+
+\ Received
+
+Linfei Cai
+4/17/2023 9:54:20 AM
+
+Got it!
+
+\ Received
+
+Ye Yuan
+
+4/18/2023 12:29:42 AM
+
+The current WeChat version does not support displaying this content, please upgrade to the
+
+latest version.
+
+\ Received
+
+Ye Yuan
+4/18/2023 12:30:26 AM
+
+The National Supercomputing Internet Consortium has been established! What significance
+
+does this have for compute-capacity construction?
+
+\ Received
+Zi Xiong
+4/18/2023 12:32:03 AM
+[ThumbsUp]
+\ Received
+Ye Yuan
+
+4/18/2023 5:29:07 AM
+
+OpenAI’s large-scale Kubernetes cluster practice
+
+\ Received
+
+AML-0002891
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25
+
+Zi Xiong
+4/18/2023 5:49:56 AM
+
+Unveiling ChatGPT’s tech stack: how OpenAI scaled Kubernetes to 7,500 nodes.
+
+\ Received
+
+Zi Xiong
+
+4/18/2023 5:50:17 AM
+
+The article they mentioned is good, it’s very detailed.
+
+\ Received
+Zi Xiong
+4/18/2023 6:27:04 AM
+
+https://news.microsoft.com/source/features/ai/how-microsofts-bet-on-azure-unlocked-an-ai-rev
+
+olution/
+
+dingyong198608
+
+[ThumbsUp]
+
+\ Received
+Zi Xiong
+4/18/2023 7:00:34 AM
+
+https://onnxruntime.ai/index.html#getStartedTable
+
+\ Received
+Zi Xiong
+4/18/2023 7:01:27 AM
+
+Do you know this? Microsoft’s open-source large-model compute framework that integrates a
+
+bunch of optimizations across different software and hardware environments
+
+\ Received
+Zi Xiong
+
+4/18/2023 7:03:54 AM.
+
+Page 35 of 43
+
+AML-0002892
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 36 of 43
+
+Is this considered an industry standard? Can we build something like this?
+
+\ Received
+Zi Xiong
+4/18/2023 7:04:21 AM
+
+Inference engine.
+
+\ Received
+Ye Yuan
+4/18/2023 8:03:20 AM
+Will take a look later.
+\ Received
+Zi Xiong
+
+4/18/2023 8:03:33 AM.
+
+Probably not, I already passed on it; ignore it -_-
+
+dingyong198608
+4/19/2023
+
+Today the investor from Baidu Ventures mentioned a company they invested in, another called
+
+yer Quant, and I also heard of one called ModelBest.
+
+dingyong198608
+
+Can you send related information?
+
+\ Received
+Ye Yuan
+4/19/2023 3:37:03 AM
+
+Dingdang Oral English helps you improve English listening and speaking every day.
+Brief introduction:
+
+1. Every day, English teachers accompany your speaking practice, with authentic pronunciation
+
+AML-0002893
+
+Case 3:24-cr-00141-VC Document 191-1
+
+and standard grammar.
+2. Help you get perfect scores in listening and speaking.
+3. 1000+ English topics to chat about freely.
+
+Linfei Cai
+
+hittps://www.high-flyer.cn/
+
+Linfei Cai
+
+https://modelbest.cn/
+
+Linfei Cai
+
+No message content to display.
+
+Linfei Cai
+
+It should be those two.
+
+dingyong198608
+
+dingyong198608
+
+He said the company they invested in.
+
+Filed 09/21/25 Page 37 of 43
+
+\ Received
+
+4/19/2023 3:41:13 AM
+
+\ Received
+
+4/19/2023 3:41:13 AM.
+
+\ Received
+
+4/19/2023 3:41:13 AM
+
+\ Received
+
+4/19/2023 3:41:26 AM.
+
+4/19/202.
+
+AML-0002894
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 38 of 43
+
+dingyong198608
+
+4/19/2023 3:44:35 AM
+
+Is it High-Flyer Quant?
+
+dingyong198608
+
+4/19/2023 3:47:25 AM
+
+Baidu Ventures said they invested in that company.
+
+\ Received
+Kunjie Jiao
+4/19/2023 3:48:35 AM
+
+Wasn’t Scietrain? The other two were only discussed in UK, not invested in.
+
+dingyong198608
+4/19/2023 4:08:21 AM
+
+Okay. Thank you
+
+dingyong198608
+
+4/20/2023 1:18:51 AM
+
+Is there a meeting link for today?
+
+\ Received
+Ye Yuan
+4/20/2023 1:20:41 AM
+
+No investor meetings today.
+
+\ Received
+Ye Yuan
+
+4/20/2023 1:22:01 AM.
+
+AML-0002895
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 39 of 43
+
+Tomorrow at 11am we will have an internal conference call to discuss the companies we’ve
+
+communicated with recently and the subsequent work plan @Linwei
+
+\ Received
+
+Ye Yuan
+
+4/20/2023 1:22:45 AM.
+
+Internal update
+
+dingyong198608
+
+4/20/202.
+
+content to display.
+
+\ Received
+Kunjie Jiao
+
+4/20/2023 1:23:55 AM
+
+Got it
+\ Received
+Ye Yuan
+4/20/2023 7:59:58 AM
+Yuanzhi Era business plan - Serverless cloud OS v1.3.pdf
+\ Received
+
+Ye Yuan
+
+4/20/2023 8:00:16 AM
+
+There’s a former Alibaba P9 who’s doing an AI compute-allocation project, mainly focused on
+building native elastic storage services & elastic network services to solve low GPU utilization;
+it’s quite early-stage, at Alibaba he built a similar product with RMB 100-million orders, and
+now he’s left to start this venture. This is very bottom-level infrastructure work.
+
+\ Received
+
+Ye Yuan
+
+4/20/2023 8:01:48 AM
+
+AML-0002896
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 40 of 43
+
+He is building very bottom-level AI infrastructure; he already had product and customer
+validation at Alibaba, and now many guys are resigning from their current jobs to start their
+
+own businesses.
+
+\ Received
+Kunjie Jiao
+4/20/2023 9:33:58 AM
+
+It seems like they only solve the GPU problem?
+
+\ Received
+Kunjie Jiao
+4/20/2023 12:28:21 PM
+
+[Zhisuan - IDG Capital] meeting minutes 0317.xlsx
+
+\ Received
+
+Kunjie Jiao
+
+4/20/2023 12:28:54 PM.
+
+I compiled the minutes from that DIG meeting and flagged some representative questions and
+
+points where our answers weren’t great.
+\ Received
+Ye Yuan
+
+4/20/2023 12:44:07 PM.
+
+Got it
+
+dingyong198608
+
+Thank you
+
+dingyong198608
+
+AML-0002897
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 41 of 43
+
+\ Received
+
+Ye Yuan
+
+4/21/2023 3:02:17 AM
+
+@Linwei Check this
+
+\ Received
+Kunjie Jiao
+4/21/2023 3:22:36 AM
+
+Key questions for Zhisuan.docx
+
+\ Received
+
+Ye Yuan
+
+4/23/2023 1:42:10 PM
+
+You can take a look.
+
+\ Received
+
+Ye Yuan
+4/23/2023 1:42:18 PM
+
+Zhisuan: entrepreneurial dreams, source of motivation, historical accumulation.docx
+
+\ Received
+
+Ye Yuan
+
+4/23/2023 1:42:41 PM
+
+If you need to add anything, you can directly edit in review mode.
+
+\ Received
+Zi Xiong
+4/23/2023 1:45:17 PM
+
+OK
+
+\ Received
+
+Kunjie Jiao
+
+AML-0002898
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25
+
+4/23/2023 1:57:33 PM
+
+Got it
+
+\ Received
+Ye Yuan
+4/24/2023 7:19:22 AM
+
+[Xingye Computer] Exceeded expectations! iFLYTEK Spark large-model in-depth evaluation -
+20230420
+
+\ Received
+Kunjie Jiao
+4/24/2023 9:44:06 AM
+
+[Zhisuan] Related project map_0424.xIsx
+
+\ Received
+Kunjie Jiao
+4/24/2023 9:45:44 AM
+
+I found some companies and materials that are useful references; the ones in blue are more
+
+relevant and can be prioritized.
+
+\ Received
+Ye Yuan
+4/24/2023 9:49:29 AM
+
+OK, thanks gh
+
+\ Received
+Zi Xiong
+4/24/2023 9:50:56 AM
+
+Are there files linked in here?
+
+\ Received
+
+Kunjie Jiao
+
+4/24/2023 9:55:36 AM
+
+You can click the links directly.
+
+Page 42 of 43
+
+AML-0002899
+
+Case 3:24-cr-00141-VC Document191-1 Filed 09/21/25 Page 43 of 43
+
+\ Received
+Linfei Cai
+4/26/2023 4:57:53 AM
+
+Large-model companies | Company briefs
+
+\ Received
+Kunjie Jiao
+5/6/2023 3:38:09 AM
+
+@Linwei Mr. Ding, how’s the technical part going?
+
+dingyong198608
+
+5/6/2023 11:43:39 PM
+
+I’m in a transition period right now and pretty bu:
+
+\ Received
+Ye Yuan
+5/8/2023 12:27:59 AM
+
+From the development of compute networks, analyze the macro compute system for the next
+
+decade.
+
+\ Received
+Ye Yuan
+5/11/2023 1:39:09 AM
+
+Google launches a supercomputer with 26,000 H100 chips, accelerating the AI race
+
+AML-0002900
+

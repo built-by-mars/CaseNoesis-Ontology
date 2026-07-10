@@ -1,0 +1,128 @@
+# Controlled Substances Extension (T-Box)
+#
+# Investigation-domain concepts for seized or charged quantities of
+# controlled substances, giving drug evidence queryable classes and
+# properties instead of burying substance, schedule, mass, and purity in
+# uco-core:description strings.
+#
+# Design:
+#   - drug:ControlledSubstance subclasses uco-core:UcoObject and represents
+#     a concrete PORTION of a substance (the bag of methamphetamine seized,
+#     the quantity charged in a count) — not the chemical kind. In gUFO
+#     terms it is an amount of matter; drugs-profile-gufo.ttl grounds it as
+#     gufo:Quantity (not gufo:FunctionalComplex, which fits artifacts like
+#     weapons and vehicles).
+#   - Chemical identity is delegated to ChEBI (Chemical Entities of
+#     Biological Interest, https://obofoundry.org/ontology/chebi.html), the
+#     OBO Foundry / BFO-compatible open chemical ontology, via the
+#     drug:substance IRI reference property — e.g.
+#     http://purl.obolibrary.org/obo/CHEBI_6809 (methamphetamine). This
+#     follows the realist analysis behind the OBO Drug Ontology (DrOn): the
+#     seized portion is not a subclass or instance of the ChEBI molecule
+#     class, so the link is a reference, not a typing. For diverted
+#     pharmaceutical products (tablets with NDC codes), reference DrOn
+#     (http://purl.obolibrary.org/obo/dron.owl) classes the same way.
+#   - Regulatory scheduling (21 U.S.C. § 812 Schedules I-V) and the U.S.
+#     Sentencing Guidelines mixture-vs-actual distinction (USSG § 2D1.1)
+#     have no open-ontology home, so they are carried as properties here.
+#
+# Validated against: U.S. v. Lindell et al., No. 3:25-cr-00005 (D.N.D.) —
+# kidnapping over a methamphetamine drug debt, with a conspiracy count for
+# 500 grams or more of a methamphetamine mixture.
+
+@prefix drug: <http://example.org/ontology/drugs/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/drugs>
+	a owl:Ontology ;
+	rdfs:label "Controlled Substances Extension"@en ;
+	rdfs:comment "Jurisdiction-neutral drug evidence concepts for cyber-investigation graphs: a seized or charged portion of a controlled substance, with chemical identity delegated by IRI reference to ChEBI (OBO Foundry) and regulatory scheduling carried per 21 U.S.C. § 812."@en ;
+	dcterms:source
+		"https://obofoundry.org/ontology/chebi.html"^^xsd:anyURI ,
+		"https://www.law.cornell.edu/uscode/text/21/812"^^xsd:anyURI .
+
+#################################################################
+# Classes
+#################################################################
+
+drug:ControlledSubstance
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "ControlledSubstance"@en ;
+	rdfs:comment "A controlled substance is a concrete portion (lot, package, or charged quantity) of a drug or other substance included in a schedule of a controlled-substances regime, such as Schedules I-V of the U.S. Controlled Substances Act, 21 U.S.C. § 802(6) (https://www.law.cornell.edu/uscode/text/21/802). The instance represents the seized or charged quantity of matter, not the chemical kind; identify the chemical kind with the substance property referencing a ChEBI class IRI."@en ;
+	dcterms:source "https://www.law.cornell.edu/uscode/text/21/802"^^xsd:anyURI .
+
+#################################################################
+# Object properties
+#################################################################
+
+drug:substance
+	a owl:ObjectProperty ;
+	rdfs:label "substance"@en ;
+	rdfs:comment "The chemical identity of the controlled substance, as an IRI reference to a class in an open chemical ontology — preferably ChEBI (e.g. http://purl.obolibrary.org/obo/CHEBI_6809 for methamphetamine, CHEBI_119915 for fentanyl, CHEBI_27958 for cocaine, CHEBI_27808 for heroin), or the OBO Drug Ontology (DrOn) for pharmaceutical products. The portion is linked to, not typed by, the chemical class, per the realist analysis in DrOn (https://pmc.ncbi.nlm.nih.gov/articles/PMC5111807/)."@en ;
+	rdfs:domain drug:ControlledSubstance .
+
+#################################################################
+# Datatype properties
+#################################################################
+
+drug:substanceName
+	a owl:DatatypeProperty ;
+	rdfs:label "substanceName"@en ;
+	rdfs:comment "The substance name as recorded in the source record, kept verbatim, e.g. 'methamphetamine', 'a mixture and substance containing a detectable amount of methamphetamine'."@en ;
+	rdfs:domain drug:ControlledSubstance ;
+	rdfs:range xsd:string .
+
+drug:csaSchedule
+	a owl:DatatypeProperty ;
+	rdfs:label "csaSchedule"@en ;
+	rdfs:comment "The controlled-substance schedule assigned in the governing jurisdiction, as an open vocabulary. Recommended values for the U.S. Controlled Substances Act: 'I', 'II', 'III', 'IV', 'V' (21 U.S.C. § 812, https://www.law.cornell.edu/uscode/text/21/812). Non-U.S. regimes may record their own designations, e.g. 'UK Class A'."@en ;
+	rdfs:domain drug:ControlledSubstance ;
+	rdfs:range xsd:string .
+
+drug:substanceForm
+	a owl:DatatypeProperty ;
+	rdfs:label "substanceForm"@en ;
+	rdfs:comment "The physical form of the portion, as an open vocabulary. Recommended values: 'powder', 'crystal', 'tablet', 'capsule', 'liquid', 'plant-material', 'blotter', 'residue'."@en ;
+	rdfs:domain drug:ControlledSubstance ;
+	rdfs:range xsd:string .
+
+drug:mass
+	a owl:DatatypeProperty ;
+	rdfs:label "mass"@en ;
+	rdfs:comment "The measured or charged mass of the portion, in the unit given by massUnit. For threshold quantities charged in the alternative ('500 grams or more'), record the threshold and keep the verbatim charging language in quantityDescription."@en ;
+	rdfs:domain drug:ControlledSubstance ;
+	rdfs:range xsd:decimal .
+
+drug:massUnit
+	a owl:DatatypeProperty ;
+	rdfs:label "massUnit"@en ;
+	rdfs:comment "The unit of the mass value, as a UCUM code (https://ucum.org/ucum), e.g. 'g', 'kg', 'mg'."@en ;
+	rdfs:domain drug:ControlledSubstance ;
+	rdfs:range xsd:string .
+
+drug:purity
+	a owl:DatatypeProperty ;
+	rdfs:label "purity"@en ;
+	rdfs:comment "Laboratory-determined purity of the portion as a percentage (0-100) of the controlled substance in the mixture."@en ;
+	rdfs:domain drug:ControlledSubstance ;
+	rdfs:range xsd:decimal .
+
+drug:purityBasis
+	a owl:DatatypeProperty ;
+	rdfs:label "purityBasis"@en ;
+	rdfs:comment "Whether recorded quantities describe the whole mixture or the actual controlled substance it contains, as an open vocabulary. Recommended values: 'mixture' (a mixture or substance containing a detectable amount), 'actual' (the weight of the controlled substance itself). This distinction drives U.S. statutory thresholds (21 U.S.C. § 841(b)) and USSG § 2D1.1 offense levels (https://www.ussc.gov/guidelines)."@en ;
+	rdfs:domain drug:ControlledSubstance ;
+	rdfs:range xsd:string .
+
+drug:quantityDescription
+	a owl:DatatypeProperty ;
+	rdfs:label "quantityDescription"@en ;
+	rdfs:comment "The quantity as stated verbatim in the source record, to avoid fabricating precision, e.g. '500 grams or more of a mixture and substance containing a detectable amount of methamphetamine'."@en ;
+	rdfs:domain drug:ControlledSubstance ;
+	rdfs:range xsd:string .

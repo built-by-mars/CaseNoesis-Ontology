@@ -416,7 +416,7 @@
         {
           "@id": "urn:uuid:6b6d9fa1-31fa-5ce2-85cb-8e5019ca38eb",
           "@type": "uco-core:ExternalReference",
-          "uco-core:referenceType": "Government Trial Brief",
+          "uco-core:definingContext": "Government Trial Brief",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://ecf.cacd.uscourts.gov/cgi-bin/show_public_doc?1:20-cr-00252-JLT-BAM-107"
@@ -642,7 +642,7 @@
         "case-investigation:ProvenanceRecord"
       ],
       "uco-core:description": "Trial-brief graph derived from PACER PDF and MCP extraction; anticipated trial facts described as ALLEGED pending jury verdict.",
-      "case-investigation:derivedFrom": {
+      "case-investigation:wasDerivedFrom": {
         "@id": "urn:uuid:fa30b5f2-893f-5142-b44f-4fc9ea8a913e"
       }
     },

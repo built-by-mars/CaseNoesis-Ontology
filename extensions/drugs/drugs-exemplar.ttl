@@ -1,0 +1,37 @@
+# Controlled Substances Extension — exemplar A-Box
+# Condensed, synthetic-IRI rendering of public facts from
+# U.S. v. Lindell et al., No. 3:25-cr-00005 (D.N.D.): conspiracy to
+# distribute 500 grams or more of a methamphetamine mixture, the drug debt
+# behind the charged kidnapping. Demonstrates every drug: property once
+# (substanceForm and purity values are illustrative, not from the record).
+
+@prefix drug: <http://example.org/ontology/drugs/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:1a2b3c4d-5e6f-5a7b-8c9d-0e1f2a3b4c5d>
+	a drug:ControlledSubstance ;
+	uco-core:name "Methamphetamine mixture charged in the distribution conspiracy (Count 2)" ;
+	uco-core:description "Quantity charged in the alternative: 500 grams or more of a mixture and substance containing a detectable amount of methamphetamine." ;
+	drug:substance obo:CHEBI_6809 ;
+	drug:substanceName "a mixture and substance containing a detectable amount of methamphetamine" ;
+	drug:csaSchedule "II" ;
+	drug:substanceForm "crystal" ;
+	drug:mass "500"^^xsd:decimal ;
+	drug:massUnit "g" ;
+	drug:purity "80"^^xsd:decimal ;
+	drug:purityBasis "mixture" ;
+	drug:quantityDescription "500 grams or more of a mixture and substance containing a detectable amount of methamphetamine" .
+
+<urn:uuid:2b3c4d5e-6f7a-5b8c-9d0e-1f2a3b4c5d6e>
+	a uco-identity:Person ;
+	uco-core:name "Defendant One" .
+
+<urn:uuid:3c4d5e6f-7a8b-5c9d-8e1f-2a3b4c5d6e7f>
+	a uco-core:Relationship ;
+	uco-core:source <urn:uuid:2b3c4d5e-6f7a-5b8c-9d0e-1f2a3b4c5d6e> ;
+	uco-core:target <urn:uuid:1a2b3c4d-5e6f-5a7b-8c9d-0e1f2a3b4c5d> ;
+	uco-core:kindOfRelationship "Distributed" ;
+	uco-core:isDirectional true .

@@ -1,0 +1,468 @@
+{
+  "@context": {
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Source file pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:description": "Link-Look pdf upload",
+      "uco-core:tag": [
+        "link-look-file-kind:pdf"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:ec58a67c-319a-5764-bdba-c52730f0189d",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "pacer -- insider threat -- Jury Verdict.pdf",
+          "uco-observable:extension": "pdf",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "4266137"
+          }
+        },
+        {
+          "@id": "urn:uuid:bd178d9c-704e-5500-85b4-2d2779400405",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "4266137"
+          },
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:787d36dd-86c1-503b-8760-b1fd22f7ad4b",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "2584CD4AFFDF7A598EF8B6C067851E27E87496A19A88AB95C3D504EF665E638E"
+              }
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:f8d60497-95e7-58b9-a4fe-a3777c68ae5e",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:8412c5cd-9525-5ff0-8e3b-ac753011ec0a",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "Case 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 1 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 2 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 3 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 4 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 5 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 6 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 7 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 8 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 9 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 10 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 11 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 12 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 13 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 14 of 15\nCase 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 15 of 15"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:57f0519d-c8e4-5aed-97eb-739483065c0a",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "case-uco-document-normalize",
+      "uco-tool:version": "0.6.0"
+    },
+    {
+      "@id": "urn:uuid:ed0f3b63-26aa-5a1a-815e-84c1ed3d0c1a",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Processed pdf through case-uco MCP",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-09T18:26:04.048379+00:00"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-09T18:26:04.048379+00:00"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-action:instrument": {
+        "@id": "urn:uuid:57f0519d-c8e4-5aed-97eb-739483065c0a"
+      },
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:0f0418a2-63b5-59f9-be91-72119ee563ba"
+        },
+        {
+          "@id": "urn:uuid:5c7eff84-cb8e-50f0-b5b0-77ca1482687d"
+        },
+        {
+          "@id": "urn:uuid:e1b050db-359f-56cf-aaf4-fc639741bf8c"
+        },
+        {
+          "@id": "urn:uuid:aea8f631-9e24-5275-8846-2146c678f6d9"
+        },
+        {
+          "@id": "urn:uuid:4cec4f16-82c6-5ce4-bc96-b7f71040ab8a"
+        },
+        {
+          "@id": "urn:uuid:89c9b799-7d16-5bcc-b49a-3a55908bc7bb"
+        },
+        {
+          "@id": "urn:uuid:35af1f90-ad24-590c-9936-bf41553f7ab9"
+        },
+        {
+          "@id": "urn:uuid:9b2671b9-fd5c-5e27-99a7-8210f0cbd6da"
+        },
+        {
+          "@id": "urn:uuid:a06bf588-cb36-5878-9cb4-85ba0a20750e"
+        },
+        {
+          "@id": "urn:uuid:9fab9524-1c93-5b52-8cfa-9e432d0fa36d"
+        },
+        {
+          "@id": "urn:uuid:68b168ca-8fb1-5be2-a983-4a90eab623ee"
+        },
+        {
+          "@id": "urn:uuid:8d3ecc80-5e8c-528b-a84d-aaff9c92270c"
+        },
+        {
+          "@id": "urn:uuid:8adc8959-3314-5f9c-a6dc-408b90b0d791"
+        },
+        {
+          "@id": "urn:uuid:3274710b-e1bc-5279-b21e-07975ca9fb4e"
+        },
+        {
+          "@id": "urn:uuid:8390e203-433b-5390-814c-e2a8737a4b37"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0f0418a2-63b5-59f9-be91-72119ee563ba",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:5c7eff84-cb8e-50f0-b5b0-77ca1482687d",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:e1b050db-359f-56cf-aaf4-fc639741bf8c",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:aea8f631-9e24-5275-8846-2146c678f6d9",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:4cec4f16-82c6-5ce4-bc96-b7f71040ab8a",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:89c9b799-7d16-5bcc-b49a-3a55908bc7bb",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:35af1f90-ad24-590c-9936-bf41553f7ab9",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:9b2671b9-fd5c-5e27-99a7-8210f0cbd6da",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:a06bf588-cb36-5878-9cb4-85ba0a20750e",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:9fab9524-1c93-5b52-8cfa-9e432d0fa36d",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:68b168ca-8fb1-5be2-a983-4a90eab623ee",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:8d3ecc80-5e8c-528b-a84d-aaff9c92270c",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:8adc8959-3314-5f9c-a6dc-408b90b0d791",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:3274710b-e1bc-5279-b21e-07975ca9fb4e",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:8390e203-433b-5390-814c-e2a8737a4b37",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 01/29/26",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 01/29/26"
+    },
+    {
+      "@id": "urn:uuid:266c3160-d96f-5f5f-b9a8-a2492d965761",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 1 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:0f0418a2-63b5-59f9-be91-72119ee563ba"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:bca48b9d-5b1e-50e4-8aff-c609d8eb7099",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 2 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:5c7eff84-cb8e-50f0-b5b0-77ca1482687d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4e8f8adc-d55d-5e74-9dc7-a00ef5b06184",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 3 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e1b050db-359f-56cf-aaf4-fc639741bf8c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:336e1d45-3836-5a5f-8db5-319e048e91dd",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 4 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:aea8f631-9e24-5275-8846-2146c678f6d9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:53523fab-fcda-5717-8f13-7bd9cb2ba66f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 5 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:4cec4f16-82c6-5ce4-bc96-b7f71040ab8a"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:97c05ed7-c582-5c75-9c28-6995ad9fd723",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 6 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:89c9b799-7d16-5bcc-b49a-3a55908bc7bb"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:3ad2693b-b245-57ec-9a73-419b2caabd42",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 7 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:35af1f90-ad24-590c-9936-bf41553f7ab9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9a3f666f-0870-5d6c-9477-d24f9cd2db61",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 8 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9b2671b9-fd5c-5e27-99a7-8210f0cbd6da"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:832a584a-67b5-5ac7-9cfe-70c627d4f43f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 9 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:a06bf588-cb36-5878-9cb4-85ba0a20750e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:6bd96218-1000-524f-b2f9-b70471ad6fec",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 10 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:9fab9524-1c93-5b52-8cfa-9e432d0fa36d"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:2152a3e3-c834-5252-a7ea-c930d9841ecd",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 11 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:68b168ca-8fb1-5be2-a983-4a90eab623ee"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:986bcd23-6416-556e-a019-bb609f5bfe83",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 12 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8d3ecc80-5e8c-528b-a84d-aaff9c92270c"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:521816d3-4cfa-5f54-9855-edcc50c49437",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 13 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8adc8959-3314-5f9c-a6dc-408b90b0d791"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:55de41f5-8baf-5da5-a5a8-92fb84c135e5",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 14 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3274710b-e1bc-5279-b21e-07975ca9fb4e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:e5309789-bef4-5d44-a36a-8dfaa2c7707f",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 15 derived from pacer -- insider threat -- Jury Verdict.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8390e203-433b-5390-814c-e2a8737a4b37"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:54780cde-b06e-5787-a31b-b5f9b681c3bc"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

@@ -121,3 +121,9 @@ graph.load(raw_doc)
 - Add the appropriate context prefixes via `CASEGraph(extra_context={...})`.
 - For simple temporal bounds on CASE/UCO objects, use the built-in `start_time`/`end_time` fields on `Action`, `Event`, and `Relationship` — no external ontology needed.
 - External ontology patterns are most useful when modeling temporal roles, existence states, or interoperating with systems that already use OWL-Time/gUFO/BFO.
+
+## Related
+
+- [event.md](event.md) — events the intervals bound
+- [forensic-lifecycle.md](forensic-lifecycle.md) — phase ordering over time
+- [extensions.md](extensions.md) — upper-ontology profiles accepted by strict concept coverage

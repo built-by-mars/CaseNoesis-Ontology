@@ -100,3 +100,9 @@ graph.write("configured_tool.jsonld")
 - `ConfiguredTool` inherits from `Tool` and adds `is_configuration_of` (points to the base `Tool`) and `uses_configuration` (points to a `Configuration`).
 - `ConfigurationEntry` has `item_name` (str), `item_value` (list[str]), and `item_object` (list[UcoObject]) for referencing files or other objects.
 - Create multiple `ConfiguredTool` instances for different configurations of the same base tool.
+
+## Related
+
+- [forensic-tool.md](forensic-tool.md) — the base tool + action pattern
+- [starter-tool-run.md](starter-tool-run.md) — end-to-end tool-run starter kit
+- [ai-analysis-pipeline.md](ai-analysis-pipeline.md) — configured AI/ML tools with per-result scoring

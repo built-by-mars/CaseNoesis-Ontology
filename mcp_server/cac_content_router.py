@@ -277,6 +277,28 @@ CAC_DOMAIN_FAMILIES: tuple[CACDomainFamily, ...] = (
         ),
     ),
     CACDomainFamily(
+        domain_id="pacer-document-ingestion",
+        title="PACER Document Ingestion (MCP Agent Workflow)",
+        keywords=(
+            "pacer", "ecf", "ao 245b", "usm number",
+            "judgment in a criminal case", "-cr-0", "grand jury charges",
+            "criminal forfeiture allegation", "special assessment",
+            "schedule of payments", "supervised release for a term",
+            "date of imposition of judgment", "sheet 3d", "special conditions",
+            "process_document_file", "indictment.pdf", "judgment.pdf",
+            "trial brief.pdf",
+        ),
+        recipe_file="docs/recipes/cac-pacer-document-ingestion.md",
+        mapping_source="pacer pdf bundle (indictment, trial brief, judgment)",
+        layer=3,
+        related_core_recipes=(
+            "docs/recipes/cac-federal-prosecution-relationships.md",
+            "docs/recipes/cac-federal-trial-proceedings.md",
+            "docs/recipes/cac-legal-sentencing-outcomes.md",
+            "docs/recipes/cac-trafficking-recruitment-network.md",
+        ),
+    ),
+    CACDomainFamily(
         domain_id="missing-child-investigation",
         title="Missing Child Investigations",
         keywords=(
@@ -872,6 +894,56 @@ def build_modeling_checklist(matched_domains: list[dict[str, Any]]) -> list[dict
                 "recipes": ["docs/recipes/cac-federal-trial-proceedings.md"],
             },
         ])
+    if "pacer-document-ingestion" in domain_ids:
+        checks.extend([
+            {
+                "id": "pacer-single-investigation-per-docket",
+                "priority": "critical",
+                "check": (
+                    "Build one CACInvestigation per federal docket number, not one graph per "
+                    "PDF. Link each source PDF as uco-core:object on the investigation and "
+                    "attach a ProvenanceRecord with case-investigation:wasInformedBy."
+                ),
+                "recipes": ["docs/recipes/cac-pacer-document-ingestion.md"],
+            },
+            {
+                "id": "pacer-no-fabricated-timestamps",
+                "priority": "critical",
+                "check": (
+                    "Only assert startTime/dateTime values the source document actually "
+                    "states. When a filing gives month precision only ('June 2019', "
+                    "'January and February 2020'), record the period in the description or "
+                    "an approximatePeriod facet string — never invent a day or clock time. "
+                    "Use uco-action:startTime only on Action subclasses; use "
+                    "uco-core:startTime on Events, phases, and observables."
+                ),
+                "recipes": ["docs/recipes/cac-pacer-document-ingestion.md"],
+            },
+            {
+                "id": "pacer-judgment-supervision-conditions",
+                "priority": "high",
+                "check": (
+                    "From AO 245B judgments, model SupervisedRelease plus each Sheet 3D "
+                    "special condition as its own node linked via Requires, and model "
+                    "restitution, special assessment, and the Sheet 6 payment schedule as "
+                    "separate MonetaryPenalty / schedule nodes."
+                ),
+                "recipes": [
+                    "docs/recipes/cac-pacer-document-ingestion.md",
+                    "docs/recipes/cac-legal-sentencing-outcomes.md",
+                ],
+            },
+            {
+                "id": "pacer-assertion-status-tags",
+                "priority": "high",
+                "check": (
+                    "Tag pre-adjudication conduct assertion:ALLEGED and post-verdict "
+                    "outcomes assertion:ADJUDICATED. Keep page-anchored source references "
+                    "(Source: PACER Doc N, page X) in every description."
+                ),
+                "recipes": ["docs/recipes/cac-pacer-document-ingestion.md"],
+            },
+        ])
     if "production-case" in domain_ids and "federal-prosecution-relationships" not in domain_ids:
         checks.append({
             "id": "production-equipment-conduct",
@@ -1011,9 +1083,12 @@ def route_cac_content(
             "output_format": "json-ld" if normalized_format in {"jsonld", "json-ld", "json"} else "ttl",
             "matched_domains": [],
             "message": (
-                "No CAC Ontology domain patterns detected. Use find_classes_for_domain "
-                "or guide_mapping for core CASE/UCO workflows, or provide more "
-                "child-exploitation context."
+                "No CAC Ontology domain patterns detected. Call "
+                "route_investigation_content for general investigation-type "
+                "routing (violent crime, financial crime, court filings, "
+                "network intrusion, device forensics, ...), or use "
+                "find_classes_for_domain / guide_mapping for core CASE/UCO "
+                "workflows."
             ),
             **input_metadata,
         }

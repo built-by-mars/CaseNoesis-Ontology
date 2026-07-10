@@ -157,3 +157,10 @@ graph.write("mobile-extraction.jsonld")
 ```bash
 case_validate --built-version case-1.4.0 mobile-extraction.jsonld
 ```
+
+## Related
+
+- [mobile-device.md](mobile-device.md) — deeper mobile device patterns
+- [mobile-device-sim.md](mobile-device-sim.md) — handset + SIM detail
+- [sms-and-contacts.md](sms-and-contacts.md) — messages and contacts
+- [call-log.md](call-log.md) — call records

@@ -274,3 +274,9 @@ graph.write("chain_of_custody.jsonld")
 ```
 
 </details>
+
+## Related
+
+- [forensic-lifecycle.md](forensic-lifecycle.md) — the phases custody events happen in
+- [forensic-tool.md](forensic-tool.md) — tools and investigative actions
+- [starter-tool-run.md](starter-tool-run.md) — tool runs with input/output provenance

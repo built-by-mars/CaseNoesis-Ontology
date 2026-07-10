@@ -107,3 +107,10 @@ graph.write("sms_and_contacts.jsonld")
 - `ContactFacet` has many optional fields: `first_name`, `last_name`, `middle_name`, `display_name`, `nickname`, `birthdate`, `contact_phone`, `contact_email`, etc. Populate only what the source provides.
 - Use `Relationship` with `kind_of_relationship="Has_Account"` to link a `Contact` to its `PhoneAccount` or `EmailAccount` entries.
 - For MMS with attachments, add a `ContentDataFacet` to the message or create a separate `ObservableObject` for the attachment linked via a `Relationship`.
+
+## Related
+
+- [call-log.md](call-log.md) — call records from the same handset
+- [threaded-messaging.md](threaded-messaging.md) — ordered chat threads
+- [accounts.md](accounts.md) — linking numbers to platform identities
+- [starter-mobile-extraction.md](starter-mobile-extraction.md) — end-to-end mobile mapping starter kit

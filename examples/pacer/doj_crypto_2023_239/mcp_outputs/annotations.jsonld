@@ -1,0 +1,805 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld"
+  ],
+  "@graph": [
+    {
+      "id": "urn:link-look:anchor:d03d687c-9945-53ae-8e75-15f2d1a461f3",
+      "type": "Annotation",
+      "body": "urn:uuid:8f95b7b9-5593-5a1b-91a1-5cafb95826e2",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 0,
+            "end": 22
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:d5052491-be9a-5366-9906-d62746d2081e",
+      "type": "Annotation",
+      "body": "urn:uuid:acb4c875-9d79-560a-9e33-46ca04f8fc55",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 0,
+            "end": 49
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:01a64d14-d550-5421-888c-5a68d607cf15",
+      "type": "Annotation",
+      "body": "urn:uuid:d049c5e8-734a-5308-a99d-ba619677f0e6",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 41,
+            "end": 49
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:cc183674-5004-597f-86eb-2326818702dd",
+      "type": "Annotation",
+      "body": "urn:uuid:60f403cc-91f4-5e41-a433-6ea1faaf9c38",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 63,
+            "end": 85
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:acf4f7c4-98ba-5814-a1ea-94b1374eef61",
+      "type": "Annotation",
+      "body": "urn:uuid:20e33aae-cefc-5649-a88e-f7e8c431e05b",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 63,
+            "end": 112
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:f2ad18c0-8d78-5643-8a89-5a4c8fe24a18",
+      "type": "Annotation",
+      "body": "urn:uuid:6819b2ab-4b73-5e24-83e1-5b68ce5deba2",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 104,
+            "end": 112
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:62518273-d550-5271-9fc1-b55b102efe74",
+      "type": "Annotation",
+      "body": "urn:uuid:fd9db0d1-d65c-5dd6-8fda-7706654ea4cb",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 126,
+            "end": 148
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a3eabfa8-33a9-5cf2-8251-11ff6a79fd58",
+      "type": "Annotation",
+      "body": "urn:uuid:a9fb5eea-5236-54fd-9bb2-b3ddb3d764a4",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 126,
+            "end": 175
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:99fc7a98-fa1a-5dbb-9d43-fd2fe23b0a30",
+      "type": "Annotation",
+      "body": "urn:uuid:49454853-7cfc-5fed-835f-d296503c88d8",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 167,
+            "end": 175
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:e9c5bb1f-feab-5551-bc50-da344a0628ff",
+      "type": "Annotation",
+      "body": "urn:uuid:6c923ff6-ad7e-5763-b273-f47132be4ce2",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 189,
+            "end": 211
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:2ab30439-884d-5c60-8235-ef245e91d130",
+      "type": "Annotation",
+      "body": "urn:uuid:cddb2bba-5d39-53da-948b-0fb83c72e9ab",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 189,
+            "end": 238
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:7abe005f-b17f-5d6c-81a6-f61b2d62409f",
+      "type": "Annotation",
+      "body": "urn:uuid:8b373d1e-fe2e-5153-9992-946e629ce296",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 230,
+            "end": 238
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a9adba74-9844-5cfc-8aef-06cfd5c3141f",
+      "type": "Annotation",
+      "body": "urn:uuid:02b85d3e-fe4a-5f85-b2fe-89c3d53b4b43",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 252,
+            "end": 274
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:3e6c5957-db10-565d-946c-bb3919652221",
+      "type": "Annotation",
+      "body": "urn:uuid:6df7b1ce-334c-5c63-b08e-776cb39c3a2e",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 252,
+            "end": 301
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:1ec4c15f-4d3b-5b4a-a5ad-d4a193b9c40e",
+      "type": "Annotation",
+      "body": "urn:uuid:565bea69-73ac-5aae-9a97-d850bd8a3206",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 293,
+            "end": 301
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:23f06404-1ae7-5c1a-83d5-e40abb672abe",
+      "type": "Annotation",
+      "body": "urn:uuid:bdb8178e-5d5e-5b3a-b116-907346f55815",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 315,
+            "end": 337
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:83063870-d87d-5f14-9e02-5977da0d9f3e",
+      "type": "Annotation",
+      "body": "urn:uuid:d6b35c05-0dde-57ad-96ec-d40e4925cc15",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 315,
+            "end": 364
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:eebce403-7743-5f27-a7f4-f47b6fba851a",
+      "type": "Annotation",
+      "body": "urn:uuid:61bb548e-80fd-576b-b6d5-7b22bad28d7a",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 356,
+            "end": 364
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:c00ae96f-9017-5262-ad09-8b05082b2751",
+      "type": "Annotation",
+      "body": "urn:uuid:8432b4f6-592d-58e5-a29a-e7a194a58d29",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 378,
+            "end": 400
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:4f56b934-b69f-5eb0-a05f-3f6aa4a34bb7",
+      "type": "Annotation",
+      "body": "urn:uuid:c432a470-dd97-516a-acbe-a6f54a5a748f",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 378,
+            "end": 427
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a0eab0eb-d087-51d5-a1b6-c4820a2ed271",
+      "type": "Annotation",
+      "body": "urn:uuid:715b8369-2d78-56a1-b8a5-07a063b78787",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 419,
+            "end": 427
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:41e5dd2d-36d1-51b4-be58-8428da648831",
+      "type": "Annotation",
+      "body": "urn:uuid:35070719-3df3-5371-9c04-74a22519dbfc",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 441,
+            "end": 463
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:308205b6-01c2-58bb-b8f4-9df9a2c8e4af",
+      "type": "Annotation",
+      "body": "urn:uuid:638caa17-4749-5a57-ad30-3b6ba56ca363",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 441,
+            "end": 490
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a6792784-e895-5511-89f2-91889158c847",
+      "type": "Annotation",
+      "body": "urn:uuid:e19dc8da-1f66-56b0-9cb9-0d73decd2f4b",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 482,
+            "end": 490
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:2db2420b-de35-53c3-857a-2ff296252dee",
+      "type": "Annotation",
+      "body": "urn:uuid:bb5ca759-903a-5ce4-8969-6b7e649fbb98",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 504,
+            "end": 526
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:2dbe5980-f7e8-590a-8d1c-3fb1b2709302",
+      "type": "Annotation",
+      "body": "urn:uuid:0d64392e-6de1-514a-848e-89293adb7cb9",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 504,
+            "end": 553
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:b785e7b2-124f-5091-9ac5-c361602efb25",
+      "type": "Annotation",
+      "body": "urn:uuid:fa1126a5-a82b-58c5-81fc-5c4a7116f25b",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 545,
+            "end": 553
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:44baf6e4-9f89-50dd-901b-623f8909c7dc",
+      "type": "Annotation",
+      "body": "urn:uuid:e0ba0c72-0ec8-518a-a5da-322cb0674f30",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 567,
+            "end": 589
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:2aeb0b77-6c66-5030-96cf-24d71a332b7c",
+      "type": "Annotation",
+      "body": "urn:uuid:3b89cd2b-034b-5c29-a26d-076e16afbdbf",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 567,
+            "end": 616
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:ac4d8587-bae9-52f3-8c97-b32108c8481b",
+      "type": "Annotation",
+      "body": "urn:uuid:affac7af-8a3b-5187-ab9d-05c854886b87",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 608,
+            "end": 616
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:7e048dd1-17a6-5180-b3cb-3e614e0c504b",
+      "type": "Annotation",
+      "body": "urn:uuid:411bbd64-35f5-54e9-be09-c50d2bbd8495",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 631,
+            "end": 653
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:a32b5bd9-80eb-569f-8248-bef64a31f0b4",
+      "type": "Annotation",
+      "body": "urn:uuid:f7cc6619-3632-5031-85a1-7f5a65ddab7b",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 631,
+            "end": 680
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:b7797677-19b0-5141-b1fe-cab3f674d6eb",
+      "type": "Annotation",
+      "body": "urn:uuid:166b5385-9da0-5617-8d32-824590a19c4a",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 672,
+            "end": 680
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:5f29e49f-792f-5f81-b0dd-ac11ba9585de",
+      "type": "Annotation",
+      "body": "urn:uuid:7e974558-57ad-50e5-bdde-f9016d66a4cf",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 695,
+            "end": 717
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:61f7cc4b-f4ca-58fd-a116-0cfc0fac8497",
+      "type": "Annotation",
+      "body": "urn:uuid:c3d57bf2-492d-5829-bb42-2c3874560439",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 695,
+            "end": 744
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:0c9ac923-57fd-5c71-bb57-3710faa0e034",
+      "type": "Annotation",
+      "body": "urn:uuid:a775ee8d-13bb-55cd-a339-28c6a643b201",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 736,
+            "end": 744
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:8c1d445e-8520-5643-af21-d44977db5b76",
+      "type": "Annotation",
+      "body": "urn:uuid:2e7f0269-55cd-56e4-a481-57a9ab01da42",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 759,
+            "end": 781
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:ef22fc71-3a7f-5c77-8b4d-a8a7f1ccc87e",
+      "type": "Annotation",
+      "body": "urn:uuid:cf63bf43-0911-5c96-89be-a6191d74dbec",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 759,
+            "end": 808
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:c092191a-f554-5b7c-a8d1-76dff397c1b3",
+      "type": "Annotation",
+      "body": "urn:uuid:2335697e-6ff5-5a00-bbce-47a8b47299cf",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 800,
+            "end": 808
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:c538bee5-7ae3-55cb-b093-c60414304131",
+      "type": "Annotation",
+      "body": "urn:uuid:27c4b185-4a95-5ec9-bc7a-8954bf6ae29b",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 823,
+            "end": 845
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:71d52a8f-a2f7-5408-9e09-edb2d14ef42a",
+      "type": "Annotation",
+      "body": "urn:uuid:b0a961f5-6ccb-513b-be3e-81a71fdf6c09",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 823,
+            "end": 872
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23"
+          }
+        ]
+      }
+    },
+    {
+      "id": "urn:link-look:anchor:1e6da508-e641-5b34-820d-5dc83e6bae40",
+      "type": "Annotation",
+      "body": "urn:uuid:1faae2f5-eb7b-5318-8b35-ab79b80a7e51",
+      "target": {
+        "source": "extracted-content.json#s1",
+        "selector": [
+          {
+            "type": "TextPositionSelector",
+            "start": 864,
+            "end": 872
+          },
+          {
+            "type": "TextQuoteSelector",
+            "exact": "08/03/23"
+          }
+        ]
+      }
+    }
+  ]
+}

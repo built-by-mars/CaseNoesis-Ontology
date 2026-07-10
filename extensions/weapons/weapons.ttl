@@ -1,0 +1,145 @@
+# Weapons and Firearms Extension (T-Box)
+#
+# Investigation-domain concepts for weapons recovered, used, or charged in
+# criminal cases (firearms, ammunition, edged weapons), giving physical
+# weapon evidence queryable classes and properties instead of burying make,
+# model, caliber, and serial data in uco-core:description strings.
+#
+# Design:
+#   - Every class subclasses uco-core:UcoObject so instances participate in
+#     CASE/UCO graphs (Relationships, Actions, provenance) natively.
+#   - The class tree deliberately parallels the Common Core Ontologies (CCO)
+#     Artifact Ontology weapon hierarchy (Weapon > Projectile Launcher >
+#     Firearm > Hand Gun / Long Gun > Rifle / Shotgun), the BFO-based
+#     mid-level suite endorsed as a DoD/IC ontology baseline and under IEEE
+#     P3195.1 standardization. The alignment axioms live in the separate
+#     bridge file weapons-profile-cco.ttl so adopters are not forced to
+#     import CCO/BFO.
+#   - weapons-profile-gufo.ttl grounds weap:Weapon as gufo:FunctionalComplex
+#     for graphs using the CDO gUFO profile (CDO-Shapes-gufo).
+#   - Property names follow the NIEM justice-domain firearm representation
+#     (nc:FirearmType / j:FirearmType: category, caliber, serial
+#     identification) so graphs translate cleanly to/from NIEM exchanges.
+#
+# Validated against: U.S. v. Lindell et al., No. 3:25-cr-00005 (D.N.D.) —
+# kidnapping / meth-conspiracy / Hobbs Act robbery prosecution (SIG Sauer
+# P365 pistol), and retrofit-compatible with U.S. v. Perry & O'Dell,
+# No. 2:22-cr-04065-BCW (W.D. Mo.) (rifle, pistol, shotgun counts).
+
+@prefix weap: <http://example.org/ontology/weapons/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/weapons>
+	a owl:Ontology ;
+	rdfs:label "Weapons and Firearms Extension"@en ;
+	rdfs:comment "Jurisdiction-neutral weapon evidence concepts (weapons, firearms, handguns, long guns, ammunition) for cyber-investigation graphs, class-tree-aligned with the Common Core Ontologies Artifact Ontology weapon hierarchy and property-aligned with the NIEM justice-domain firearm representation."@en ;
+	dcterms:source
+		"https://github.com/CommonCoreOntology/CommonCoreOntologies"^^xsd:anyURI ,
+		"http://www.datypic.com/sc/niem31/t-nc_FirearmType.html"^^xsd:anyURI .
+
+#################################################################
+# Classes
+#################################################################
+
+weap:Weapon
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "Weapon"@en ;
+	rdfs:comment "A weapon is a material item designed or used to kill, wound, or inflict damage on persons, structures, or systems. Definition follows the Common Core Ontologies Artifact Ontology 'Weapon' (https://github.com/CommonCoreOntology/CommonCoreOntologies) and the NIEM nc:WeaponType 'property item used as an instrument of attack or defense' (http://www.datypic.com/sc/niem31/t-nc_WeaponType.html)."@en ;
+	dcterms:source "https://github.com/CommonCoreOntology/CommonCoreOntologies"^^xsd:anyURI .
+
+weap:Firearm
+	a owl:Class ;
+	rdfs:subClassOf weap:Weapon ;
+	rdfs:label "Firearm"@en ;
+	rdfs:comment "A firearm is a weapon that will, is designed to, or may readily be converted to expel a projectile by the action of an explosive, including the frame or receiver of such a weapon. Definition follows 18 U.S.C. § 921(a)(3) (https://www.law.cornell.edu/uscode/text/18/921) and the Common Core Ontologies 'Firearm' (a Projectile Launcher designed to launch Bullets or Cartridges)."@en ;
+	dcterms:source "https://www.law.cornell.edu/uscode/text/18/921"^^xsd:anyURI .
+
+weap:Handgun
+	a owl:Class ;
+	rdfs:subClassOf weap:Firearm ;
+	rdfs:label "Handgun"@en ;
+	skos:altLabel "pistol"@en, "revolver"@en ;
+	rdfs:comment "A handgun is a firearm designed to have a relatively short barrel and to be held and fired in one or two hands without being braced against the shoulder, such as a pistol or revolver. Definition follows 18 U.S.C. § 921(a)(30) and the Common Core Ontologies 'Hand Gun'."@en ;
+	dcterms:source "https://www.law.cornell.edu/uscode/text/18/921"^^xsd:anyURI .
+
+weap:LongGun
+	a owl:Class ;
+	rdfs:subClassOf weap:Firearm ;
+	rdfs:label "LongGun"@en ;
+	rdfs:comment "A long gun is a firearm designed to have a longer barrel than a handgun and to be fired while braced against the shoulder. Definition follows the Common Core Ontologies 'Long Gun' (https://en.wikipedia.org/wiki/Long_gun)."@en ;
+	dcterms:source "https://github.com/CommonCoreOntology/CommonCoreOntologies"^^xsd:anyURI .
+
+weap:Rifle
+	a owl:Class ;
+	rdfs:subClassOf weap:LongGun ;
+	rdfs:label "Rifle"@en ;
+	rdfs:comment "A rifle is a long gun designed to have a rifled barrel and to fire single bullets over long ranges with high accuracy. Definition follows 18 U.S.C. § 921(a)(7) and the Common Core Ontologies 'Rifle'."@en ;
+	dcterms:source "https://www.law.cornell.edu/uscode/text/18/921"^^xsd:anyURI .
+
+weap:Shotgun
+	a owl:Class ;
+	rdfs:subClassOf weap:LongGun ;
+	rdfs:label "Shotgun"@en ;
+	rdfs:comment "A shotgun is a long gun designed to fire packets of shot, a single slug, or a specialty round through a typically smooth bore. Definition follows 18 U.S.C. § 921(a)(5) and the Common Core Ontologies 'Shotgun'."@en ;
+	dcterms:source "https://www.law.cornell.edu/uscode/text/18/921"^^xsd:anyURI .
+
+weap:CuttingWeapon
+	a owl:Class ;
+	rdfs:subClassOf weap:Weapon ;
+	rdfs:label "CuttingWeapon"@en ;
+	skos:altLabel "knife"@en, "edged weapon"@en ;
+	rdfs:comment "A cutting weapon is a weapon designed to inflict harm by separating some portion of its target through acutely directed force, such as a knife, sword, or machete. Definition follows the Common Core Ontologies 'Cutting Weapon'."@en ;
+	dcterms:source "https://github.com/CommonCoreOntology/CommonCoreOntologies"^^xsd:anyURI .
+
+weap:Ammunition
+	a owl:Class ;
+	rdfs:subClassOf weap:Weapon ;
+	rdfs:label "Ammunition"@en ;
+	rdfs:comment "Ammunition is ammunition or cartridge cases, primers, bullets, or propellent powder designed for use in any firearm. Definition follows 18 U.S.C. § 921(a)(17)(A) (https://www.law.cornell.edu/uscode/text/18/921); classed as a weapon consistent with the Common Core Ontologies 'Portion of Ammunition' (a Weapon designed to inflict harm by being projected toward its target)."@en ;
+	dcterms:source "https://www.law.cornell.edu/uscode/text/18/921"^^xsd:anyURI .
+
+#################################################################
+# Datatype properties
+#################################################################
+
+weap:make
+	a owl:DatatypeProperty ;
+	rdfs:label "make"@en ;
+	rdfs:comment "The manufacturer or maker name of the weapon as recorded in the source record, e.g. 'SIG Sauer', 'Ruger'. Parallels NIEM nc:ItemMakeName on nc:FirearmType (http://www.datypic.com/sc/niem31/t-nc_FirearmType.html)."@en ;
+	rdfs:domain weap:Weapon ;
+	rdfs:range xsd:string .
+
+weap:model
+	a owl:DatatypeProperty ;
+	rdfs:label "model"@en ;
+	rdfs:comment "The model name or number of the weapon as recorded in the source record, e.g. 'P365', 'Security-9'. Parallels NIEM nc:ItemModelName on nc:FirearmType."@en ;
+	rdfs:domain weap:Weapon ;
+	rdfs:range xsd:string .
+
+weap:caliber
+	a owl:DatatypeProperty ;
+	rdfs:label "caliber"@en ;
+	rdfs:comment "The caliber or gauge designation of a firearm or ammunition as recorded in the source record, e.g. '9mm', '.223', '12-gauge'. Parallels NIEM nc:FirearmCaliberText (https://www.datypic.com/sc/lexs40/t-nc_FirearmType.html)."@en ;
+	rdfs:domain weap:Weapon ;
+	rdfs:range xsd:string .
+
+weap:serialNumber
+	a owl:DatatypeProperty ;
+	rdfs:subPropertyOf uco-core:externalIdentifier ;
+	rdfs:label "serialNumber"@en ;
+	rdfs:comment "The manufacturer serial number identifying the individual weapon, e.g. '21221464'. Importation and marking requirements per 26 U.S.C. § 5842 and 18 U.S.C. § 923(i). Parallels NIEM nc:ItemSerialIdentification."@en ;
+	rdfs:domain weap:Weapon ;
+	rdfs:range xsd:string .
+
+weap:serialNumberObliterated
+	a owl:DatatypeProperty ;
+	rdfs:label "serialNumberObliterated"@en ;
+	rdfs:comment "True when the weapon's manufacturer serial number has been removed, obliterated, or altered; possession or transport of such a firearm is separately criminalized by 18 U.S.C. § 922(k) (https://www.law.cornell.edu/uscode/text/18/922)."@en ;
+	rdfs:domain weap:Weapon ;
+	rdfs:range xsd:boolean .

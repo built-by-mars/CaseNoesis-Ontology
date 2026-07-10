@@ -1,0 +1,78 @@
+{
+  "@context": {
+    "kb": "http://example.org/kb/",
+    "proposed": "http://example.org/ontology/proposed/criminal/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "kb:investigation-1",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "U.S. v. Example Defendant (money laundering prosecution)"
+    },
+    {
+      "@id": "kb:defendant-1",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Example Defendant"
+    },
+    {
+      "@id": "kb:charge-count1",
+      "@type": "proposed:CriminalCharge",
+      "uco-core:name": "Count One: Money Laundering Conspiracy",
+      "proposed:statuteCitation": "18 U.S.C. § 1956(h)",
+      "proposed:countNumber": { "@type": "xsd:nonNegativeInteger", "@value": "1" }
+    },
+    {
+      "@id": "kb:plea-1",
+      "@type": "proposed:Plea",
+      "uco-core:name": "Guilty plea to Count One",
+      "proposed:pleaType": "guilty",
+      "proposed:concernsCharge": { "@id": "kb:charge-count1" }
+    },
+    {
+      "@id": "kb:proceeding-plea-hearing",
+      "@type": "proposed:CriminalProceeding",
+      "uco-core:name": "Plea hearing",
+      "proposed:proceedingType": "plea-hearing",
+      "proposed:concernsCharge": { "@id": "kb:charge-count1" }
+    },
+    {
+      "@id": "kb:sentence-1",
+      "@type": "proposed:Sentence",
+      "uco-core:name": "Government sentencing recommendation: 60 months",
+      "proposed:sentenceStatus": "recommended",
+      "proposed:concernsCharge": { "@id": "kb:charge-count1" }
+    },
+    {
+      "@id": "kb:forfeiture-1",
+      "@type": "proposed:ForfeitureOrder",
+      "uco-core:name": "Consent order of forfeiture with money judgment",
+      "proposed:concernsCharge": { "@id": "kb:charge-count1" }
+    },
+    {
+      "@id": "kb:restitution-1",
+      "@type": "proposed:RestitutionOrder",
+      "uco-core:name": "In-kind restitution of forfeited assets to victim",
+      "proposed:concernsCharge": { "@id": "kb:charge-count1" }
+    },
+    {
+      "@id": "kb:rel-charged-with",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": { "@id": "kb:defendant-1" },
+      "uco-core:target": { "@id": "kb:charge-count1" },
+      "uco-core:kindOfRelationship": "Charged_With",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "kb:rel-charge-part-of-investigation",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": { "@id": "kb:charge-count1" },
+      "uco-core:target": { "@id": "kb:investigation-1" },
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

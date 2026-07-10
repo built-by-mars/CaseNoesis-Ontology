@@ -1,0 +1,1010 @@
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 1 of 20
+
+U.S. Department of Justice
+
+Matthew M. Graves
+United States Attorney
+
+District of Columbia
+
+Patrick Henry Building
+601 D Street, N.W.
+Washington DC, 20530
+
+July 13, 2023
+
+BY E-MAIL
+
+Samson Enzer
+
+Anirudh Bansal
+
+Connor O’Shea
+
+Angela F. Collins
+
+Cahill Gordon & Reindel LLP
+32 Old Slip
+
+New York, NY 10005
+Counsel for Defendant Ilya Lichtenstein
+
+Re: United States v. Ilya Lichtenstein & Heather Morgan
+
+Criminal Case No.22-mf-22 23-239- | (CKI<)
+
+Dear Counsel:
+
+This letter sets forth the full and complete plea offer to your client, Ilya Lichtenstein
+(hereinafter referred to as “your client” or “defendant”), from the U.S. Department of Justice,
+Computer Crime & Intellectual Property Section and the Office of the United States Attorney for
+the District of Columbia (hereinafter also referred to as “the Government” or “this Office”). This
+plea offer expires on July 14, 2023. If your client accepts the terms and conditions of this offer,
+please have your client execute this document in the space provided below. Upon receipt of the
+executed document, this letter will become the Plea Agreement (“this Agreement”). The terms
+of the offer are as follows:
+
+1. Charges and Statutory Penalties
+
+Your client agrees to plead guilty to a criminal Information, a copy of which is attached,
+charging your client with one count of Money Laundering Conspiracy, in violation of 18 U.S.C.
+§ 1956(h).
+
+Your client understands that a violation of 18 U.S.C. § 1956(h) predicated on conspiracy
+to violate 18 U.S.C. § 1956(a)(1)(B)(i) carries a maximum sentence of 20 years of imprisonment,
+
+Page 1 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 2 of 20
+
+a fine of $500,000 or twice the value of the property involved in the transaction, pursuant to 18
+US.C. § 1956(a)(1); a term of supervised release of not more than 3 years, pursuant to 18 U.S.C.
+§ 3583(b)(2); mandatory restitution under 18 U.S.C. § 3663A; and an obligation to pay any
+applicable interest or penalties on fines and restitution not timely made.
+
+In addition, your client agrees to pay a special assessment of $100 per felony conviction
+to the Clerk of the United States District Court for the District of Columbia. Your client also
+understands that, pursuant to 18 U.S.C. § 3572 and § SE1.2 of the United States Sentencing
+Commission, Guidelines Manual (2021) (hereinafter “Sentencing Guidelines,” “Guidelines,” or
+“U.S.S.G.”), the Court may also impose a fine that is sufficient to pay the federal government the
+costs of any imprisonment, term of supervised release, and period of probation. Further, your
+client understands that, if your client has two or more convictions for a crime of violence or
+felony drug offense, your client may be subject to the substantially higher penalties provided for
+in the career-offender statutes and provisions of the Sentencing Guidelines.
+
+2. Wiring
+
+Your client understands and acknowledges that this Agreement and any plea of guilty
+which your client may enter pursuant to this Agreement are contingent upon the entry of a guilty
+plea by Heather Rhiannon Morgan in this case. If Ms. Morgan fails to enter a guilty plea, this
+Agreement and any proceedings pursuant to this Agreement may be withdrawn or voided at the
+option of this Office.
+
+3. Factual Stipulations
+
+Your client agrees that the attached “Statement of Offense” fairly and accurately
+describes your client’s actions and involvement in the offense(s) to which your client is pleading
+guilty. Please have your client sign and return the Statement of Offense as a written proffer of
+evidence, along with this Agreement.
+
+4. Additional Charges
+
+In consideration of your client’s guilty plea to the above offense(s), your client will not
+be further prosecuted criminally by the U.S. Department of Justice, Computer Crime &
+Intellectual Property Section or the Office of the United States Attorney for the District of
+Columbia for the conduct set forth in the attached Statement of Offense.
+
+After the entry of your client’s plea of guilty to the offense(s) identified in paragraph 1
+above, your client will not be charged with any non-violent criminal offense in violation of
+Federal or District of Columbia law which was committed within the District of Columbia by
+your client prior to the execution of this Agreement and about which this Office was made aware
+by your client prior to the execution of this Agreement. However, the United States expressly
+reserves its right to prosecute your client for any crime of violence, as defined in 18 U.S.C. § 16
+and/or 22 D.C. Code § 4501, if in fact your client committed or commits such a crime of
+violence prior to or after the execution of this Agreement.
+
+Page 2 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 3 of 20
+
+5. Sentencing Guidelines Analysis
+
+Your client understands that the sentence in this case will be determined by the Court,
+pursuant to the factors set forth in 18 U.S.C. § 3553(a), including a consideration of the
+applicable guidelines and policies promulgated by the Sentencing Guidelines. Pursuant to
+Federal Rule of Criminal Procedure 11(c)(1)(B), and to assist the Court in determining the
+appropriate sentence, the parties agree to the following:
+
+A. Estimated Offense Level Under the Guidelines
+
+Your client agrees and will acknowledge at the time of the plea of guilty to the offense
+stated above that, pursuant to U.S.S.G. § 1B1.3, your client is accountable for conspiring to
+launder approximately 119,754 BTC in wire fraud proceeds, worth approximately $71 million at
+the time of the wire fraud, which quantity represents the total amount involved in your client’s
+relevant criminal conduct.
+
+The parties agree that the following Sentencing Guidelines sections apply:
+
+Count One: Money Laundering Conspiracy, 18 U.S.C. § 1956(h)
+
+§§ 2X1.1(a) & 2S1.1(a)(1) Base offense level: see § 2B1.1(a)(2) (wire fraud) 6
+§ 2B1.1(b)(1)(M) = More than $65 million +24
+
+§ 2B1.1(b)(2)(A) Substantial financial hardship to 1 victim +2
+
+§ 2B1.1(b)(10) Sophisticated means +2
+
+§ 2S1.1(b)(2)(B) Convicted of § 1956 +2
+§ 2S1.1(b)(3) Sophisticated laundering +2
+§ 2X1.1(b)@) Incomplete conspiracy 3
+Total 35
+
+Acceptance of Responsibility:
+
+The Government agrees that a 2-level reduction will be appropriate, pursuant to US.S.G.
+§ 3E1.1, provided that your client clearly demonstrates acceptance of responsibility, to the
+satisfaction of the Government, through your client’s allocution, adherence to every provision of
+this Agreement, and conduct between entry of the plea and imposition of sentence. Furthermore,
+assuming your client has accepted responsibility as described in the previous sentence, the
+Government agrees that an additional 1-level reduction will be appropriate, pursuant to U.S.S.G.
+§ 3E1.1(b), because your client has assisted authorities by providing timely notice of your
+client’s intention to enter a plea of guilty, thereby permitting the Government to avoid preparing
+for trial and permitting the Court to allocate its resources efficiently.
+
+Nothing in this Agreement limits the right of the Government to seek denial of the
+adjustment for acceptance of responsibility, pursuant to U.S.S.G. § 3E1.1, and/or imposition of
+an adjustment for obstruction of justice, pursuant to U.S.S.G. § 3C1.1, regardless of any
+agreement set forth above, should your client move to withdraw your client’s guilty plea after it
+is entered, or should it be determined by the Government that your client has either (a) engaged
+in conduct, unknown to the Government at the time of the signing of this Agreement, that
+
+Page 3 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 4 of 20
+
+constitutes obstruction of justice, or (b) engaged in additional criminal conduct after signing this
+Agreement.
+
+In accordance with the above, the Estimated Offense Level will be 32.
+B. Estimated Criminal History Category
+
+Based upon the information now available to this Office (including representations by the
+defense), your client has no criminal convictions.
+
+Accordingly, your client is estimated to have 0 criminal history points and your client’s
+Criminal History Category is estimated to be I (the “Estimated Criminal History Category”).
+Your client acknowledges that after the pre-sentence investigation by the United States Probation
+Office, a different conclusion regarding your client’s criminal convictions and/or criminal history
+points may be reached and your client’s criminal history points may increase or decrease.
+
+Cc. Estimated Guidelines Range
+
+Based upon the Estimated Offense Level and the Estimated Criminal History Category
+set forth above, your client’s estimated Sentencing Guidelines range is 121 months to 151
+months (the “Estimated Guidelines Range”). In addition, the parties agree that, pursuant to
+US.S.G. § SE1.2, should the Court impose a fine, at Guidelines level 32, the estimated
+applicable fine range is $35,000 to $350,000. Your client reserves the right to ask the Court not
+to impose any applicable fine.
+
+The parties agree that, solely for the purposes of calculating the applicable range under
+the Sentencing Guidelines, neither a downward nor upward departure from the Estimated
+Guidelines Range set forth above is warranted. Except as provided for in the “Reservation of
+Allocution” section below, the parties also agrce that neither party will seek any offense-level
+calculation different from the Estimated Offense Level calculated above in subsection A.
+However, the parties are free to argue for a Criminal History Category different from that
+estimated above in subsection B. ;
+
+Your client understands and acknowledges that the Estimated Guidelines Range
+calculated above is not binding on the Probation Office or the Court. Should the Court or
+Probation Office determine that a guidelines range different from the Estimated Guidelines
+Range is applicable, that will not be a basis for withdrawal or recission of this Agreement by
+
+either party.
+
+. Your client understands and acknowledges that the terms of this section apply only to
+conduct that occurred before the execution of this Agreement. Should your client commit any
+conduct after the execution of this Agreement that would form the basis for an increase in your
+client’s base offense level or justify an upward departure (examples of which include, but are not
+limited to, obstruction of justice, failure to appear for a court proceeding, criminal conduct while
+pending sentencing, and false statements to law enforcement agents, the probation officer, or the
+
+Page 4 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 5 of 20
+
+Court), the Government is free under this Agreement to seek an increase in the base offense level
+based on that post-agreement conduct.
+
+6. Agreement as to Sentencing Allocution
+
+The parties agree that a sentence within the Estimated Guidelines Range would constitute
+a reasonable sentence in light of all of the factors set forth in 18 U.S.C. § 3553(a), should such a
+sentence be subject to appellate review notwithstanding the appeal waiver provided below.
+Nevertheless, your client reserves the right to seek a sentence below the Estimated Guidelines
+Range based upon factors to be considered in imposing a sentence pursuant to 18 U.S.C.
+§ 3553(a).
+
+7. Reservation of Allocution
+
+The Government and your client reserve the right to describe fully, both orally and in
+writing, to the sentencing judge, the nature and seriousness of your client’s misconduct,
+including any misconduct not described in the charges to which your client is pleading guilty, to
+inform the presentence report writer and the Court of any relevant facts, to dispute any factual
+inaccuracies in the presentence report, and to contest any matters not provided for in this
+Agreement. The parties also reserve the right to address the correctness of any Sentencing
+Guidelines calculations determined by the presentence report writer or the court, even if those
+calculations differ from the Estimated Guidelines Range calculated herein. In the event that the
+Court or the presentence report writer considers any Sentencing Guidelines adjustments,
+departures, or calculations different from those agreed to and/or estimated in this Agreement, or
+contemplates a sentence outside the Guidelines range based upon the general sentencing factors
+listed in 18 U.S.C. § 3553(a), the parties reserve the right to answer any related inquiries from
+the Court or the presentence report writer and to allocute for a sentence within the Guidelines
+range, as ultimately determined by the Court, even if the Guidelines range ultimately determined
+by the Court is different from the Estimated Guidelines Range calculated herein.
+
+In addition, if in this Agreement the Government has agreed to recommend or refrain
+from recommending to the Court a particular resolution of any sentencing issue, the Government
+and your client reserve the right to full allocution in any post-sentence litigation. The parties
+retain the full right of allocution in connection with any post-sentence motion which may be filed
+in this matter and/or any proceeding(s) before the Bureau of Prisons. In addition, your client
+acknowledges that the Government is not obligated and does not intend to file any post-sentence
+downward departure motion in this case pursuant to Rule 35(b) of the Federal Rules of Criminal
+Procedure.
+
+8. Court Not Bound by this Agreement or the Sentencing Guidelines
+
+Your client understands that the sentence in this case will be imposed in accordance with
+18 U.S.C. § 3553(a), upon consideration of the Sentencing Guidelines. Your client further
+understands that the sentence to be imposed is a matter solely within the discretion of the Court.
+Your client acknowledges that the Court is not obligated to follow any recommendation of the
+Government at the time of sentencing or to grant a downward departure based on your client’s
+
+Page 5 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 6 of 20
+
+substantial assistance to the Government, even if the Government files a motion pursuant to 18
+U.S.C. § 3553(e) and/or § 5K1.1 of the Sentencing Guidelines. Your client understands that
+neither the Government’s recommendation nor the Sentencing Guidelines are binding on the
+Court.
+
+Your client acknowledges that your client’s entry of a guilty plea to the charged
+offense(s) authorizes the Court to impose any sentence, up to and including the statutory
+maximum sentence, which may be greater than the applicable Guidelines range. The
+Government cannot, and does not, make any promise or representation as to what sentence your
+client will receive. Moreover, it is understood that your client will have no right to withdraw
+your client’s plea of guilty should the Court impose a sentence that is outside the Guidelines
+range or if the Court does not follow the Government’s sentencing recommendation. The
+Government and your client will be bound by this Agreement, regardless of the sentence
+imposed by the Court. Any effort by your client to withdraw the guilty plea because of the
+length of the sentence shall constitute a breach of this Agreement.
+
+9. Conditions of Release
+
+Your client agrees not to object to the Government’s recommendation to the Court at the
+time of the plea of guilty in this case that your client be detained without bond pending your
+client’s sentencing in this case, pursuant to 18 U.S.C. § 3143.
+
+10. Cooperation
+
+Your client agrees to cooperate with the Office of the United States Attorney for the
+District of Columbia on the following terms and conditions:
+
+(a) Your client shall cooperate fully, truthfully, completely and forthrightly with this
+Office and other Federal, state and local law enforcement authorities identified by this Office in
+any and all matters as to which the Government deems the cooperation relevant. Your client
+acknowledges that your client’s cooperation may include, but will not necessarily be limited to:
+answering questions; providing sworm written statements; taking government-administered
+polygraph examination(s); and participating in covert law enforcement activities. Any refusal by
+your client to cooperate fully, truthfully, completely and forthrightly as directed by this Office
+and other Federal, state and local law enforcement authorities identified by this Office in any and
+all matters in which the Government deems your client’s assistance relevant will constitute a
+breach of this Agreement by your client, and will relieve the Government of its obligations under
+this Agreement, including, but not limited to, its obligation to inform this Court and the
+Departure Guidelines Committee of the United States Attorney’s Office for the District of
+Columbia of any assistance your client has provided. Your client agrees, however, that such
+breach by your client will not constitute a basis for withdrawal of your client’s plea of guilty or
+otherwise relieve your client of your client’s obligations under this Agreement.
+
+(b) Your client shall promptly tum over to the Government, or other law enforcement
+
+authorities, or direct such law enforcement authorities to, any and all evidence of crimes about
+which your client is aware; all contraband and proceeds of such crimes; and all assets traceable
+
+Page 6 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 7 of 20
+
+to the proceeds of such crimes. Your client agrees to the forfeiture of all assets which are
+proceeds of crimes or traceable to such proceeds of crimes.
+
+(c) Your client shall submit a full and complete accounting of all your chient’s
+financial assets, whether such assets are in your client’s name or in the name of a third party.
+
+(d) Your client acknowledges and understands that, during the course of the
+cooperation outlined in this Agreement, your client will be interviewed by law enforcement
+agents and/or Government attorneys. Your client waives any right to have counsel present
+during these interviews and agrees to meet with law enforcement agents and Government
+attorneys outside of the presence of counsel. If, at some future point, you or your client desire to
+have counsel present during interviews by law enforcement agents and/or Government attorneys,
+and you communicate this decision in writing to this Office, the Government will honor this
+request, and this change will have no effect on any other terms and conditions of this Agreement.
+
+(e) Your client shall testify fully, completely and truthfully before any and all Grand
+Juries in the District of Columbia and elsewhere, and at any and all trials of cases or other court
+proceedings in the District of Columbia and elsewhere, at which your client’s testimony may be
+deemed relevant by the Government.
+
+63) Your client understands and acknowledges that nothing in this Agreement allows
+your client to commit any criminal violation of local, state or federal law during the period of
+your client’s cooperation with law enforcement authorities or at any time prior to the sentencing
+in this case. The commission of a criminal offense during the period of your client’s cooperation
+or at any time prior to sentencing will constitute a breach of this Agreement and will relieve the
+Government of all of its obligations under this Agreement, including, but not limited to, its
+obligation to inform this Court and the Departure Guidelines Committee of the United States
+Attorney’s Office for the District of Columbia of any assistance your client has provided.
+However, your client acknowledges and agrees that such a breach of this Agreement will not
+entitle your client to withdraw your client’s plea of guilty or relieve your client of the obligations
+under this Agreement.
+
+11. Waivers
+A. Venue
+Your client waives any challenge to venue in the District of Columbia.
+B. Statute of Limitations
+Your client agrees that, should the conviction following your client’s plea of guilty
+pursuant to this Agreement be vacated for any reason, any prosecution, based on the conduct set
+forth in the attached Statement of Offense, that is not time-barred by the applicable statute of
+limitations on the date of the signing of this Agreement (including any counts that the
+
+Government has agreed not to prosecute or to dismiss at sentencing pursuant to this Agreement)
+may be commenced or reinstated against your client, notwithstanding the expiration of the statute
+
+Page 7 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 8 of 20
+
+of limitations between the signing of this Agreement and the commencement or reinstatement of
+such prosecution. It is the intent of this Agreement to waive all defenses based on the statute of
+limitations with respect to any prosecution of conduct set forth in the attached Statement of
+Offense that is not time-barred on the date that this Agreement is signed.
+
+Cc. Trial Rights
+
+Your client understands that by pleading guilty in this case your client agrees to waive
+certain rights afforded by the Constitution of the United States and/or by statute or rule. Your
+client agrees to forego the right to any further discovery or disclosures of information not already
+provided at the time of the entry of your client’s guilty plea. Your client also agrees to waive,
+among other rights, the right to be indicted by a Grand Jury, the right to plead not guilty, and the
+right to a jury trial. If there were a jury trial, your client would have the right to be represented
+by counsel, to confront and cross-examine witnesses against your client, to challenge the
+admissibility of evidence offered against your client, to compel witnesses to appear for the
+purpose of testifying and presenting other evidence on your client’s behalf, and to choose
+whether to testify. If there were a jury trial and your client chose not to testify at that trial, your
+client would have the right to have the jury instructed that your client’s failure to testify could
+not be held against your client. Your client would further have the right to have the jury
+instructed that your client is presumed innocent until proven guilty, and that the burden would be
+on the United States to prove your client’s guilt beyond a reasonable doubt. If your client were
+found guilty after a trial, your client would have the right to appeal your client’s conviction.
+Your client understands that the Fifth Amendment to the Constitution of the United States
+protects your client from the use of self-incriminating statements in a criminal prosecution. By
+entering a plea of guilty, your client knowingly and voluntarily waives or gives up your client’s
+right against self-incrimination.
+
+Your client acknowledges discussing with you Rule 11(f) of the Federal Rules of
+Criminal Procedure and Rule 410 of the Federal Rules of Evidence, which ordinarily limit the
+admissibility of statements made by a defendant in the course of plea discussions or plea
+proceedings if a guilty plea is later withdrawn. Your client knowingly and voluntarily waives the
+rights that arise under these rules in the event your client withdraws your client’s guilty plea or
+withdraws from this Agreement after signing it.
+
+Your client also agrees to waive all constitutional and statutory rights to a speedy
+sentence and agrees that the plea of guilty pursuant to this Agreement will be entered at a time
+decided upon by the Government with the concurrence of the Court. Your client also agrees that
+the sentencing in this case may be delayed until your client’s cooperation has been completed, as
+determined by the Government, so that the Court will have the benefit of all relevant information
+before a sentence is imposed. Your client understands that the date for sentencing will be set by
+the Court.
+
+D. Appeal Rights
+
+Your client agrees to waive, insofar as such waiver is permitted by law, the right to
+appeal the conviction in this case on any basis, including but not limited to claim(s) that (1) the
+
+Page 8 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 9 of 20
+
+statute(s) to which your client is pleading guilty is unconstitutional, and (2) the admitted conduct
+does not fall within the scope of the statute(s). Your client understands that federal law,
+specifically 18 U.S.C. § 3742, affords defendants the right to appeal their sentences in certain
+circumstances. Your client also agrees to waive the right to appeal the sentence in this case,
+including but not limited to any term of imprisonment, fine, forfeiture, award of restitution, term
+or condition of supervised release, authority of the Court to set conditions of release, and the
+manner in which the sentence was determined, except to the extent the Court sentences your
+client above the statutory maximum or guidelines range determined by the Court. In agreeing to
+this waiver, your client is aware that your client’s sentence has yet to be determined by the
+Court. Realizing the uncertainty in estimating what sentence the Court ultimately will impose,
+your client knowingly and willingly waives your client’s right to appeal the sentence, to the
+extent noted above, in exchange for the concessions made by the Government in this Agreement.
+Notwithstanding the above agreement to waive the right to appeal the conviction and sentence,
+your client retains the right to appeal on the basis of ineffective assistance of counsel, but not to
+raise on appeal other issues regarding the conviction or sentence.
+
+E. Collateral Attack
+
+Your client also waives any right to challenge the conviction entered or sentence imposed
+under this Agreement or otherwise attempt to modify or change the sentence or the manner in
+which it was determined in any collateral attack, including, but not limited to, a motion brought
+under 28 U.S.C. § 2255 or Federal Rule of Civil Procedure 60(b), except to the extent such a
+motion is based on newly discovered evidence or on a claim that your client received ineffective
+assistance of counsel. Your client reserves the right to file a motion brought under 18 U.S.C.
+
+§ 3582(c).
+
+F. Witness Fees
+Your client further agrees to waive all rights, claims, or interest in any witness fee that
+your client may be eligible to receive pursuant to 28 U.S.C. § 1821 for your client’s appearance
+at any grand jury, witness conference, or court proceeding, during the course of your client’s
+
+cooperation pursuant to this Agreement or any term of your client’s incarceration.
+
+12. Use of Self-Incriminating Information
+
+The Government and your client agree, in accordance with U.S.S.G. § 1B1.8, that the
+Government will be free to use against your client for any purpose at the sentencing in this case
+or in any related criminal or civil proceedings, any self-incriminating information provided by
+your client pursuant to this Agreement or during the course of debriefings conducted in
+anticipation of this Agreement, regardless of whether those debriefings were previously covered
+by an “off the record” agreement by the parties.
+
+13. Restitution
+
+Your client understands that the Court has an obligation to determine whether, and in
+what amount, mandatory restitution applies in this case under 18 U.S.C. § 3663A at the time of
+
+Page 9 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 10 of 20
+
+sentencing. Apart from that determination of mandatory restitution, your client agrees to pay
+restitution to Bitfinex in an amount to be determined at sentencing.
+
+Payments of restitution shall be made to the Clerk of the Court. In order to facilitate the
+collection of financial obligations to be imposed in connection with this prosecution, your client
+agrees to disclose fully all assets in which your client has any interest or over which your client
+exercises control, directly or indirectly, including those held by a spouse, nominee or other third
+party. Your client agrees to submit a completed financial statement on a standard financial
+disclosure form which has been provided to you with this Agreement to the Financial Litigation
+Unit of the United States Attorney’s Office, as it directs. If you do not receive the disclosure
+form, your client agrees to request one from usadc.ecfflu@usa.doj.gov. Your client will
+complete and electronically provide the standard financial disclosure form to
+usadc.ecfflu@usa.doj.gov 30 days prior to your client’s sentencing. Your client agrees to be
+contacted by the Financial Litigation Unit of the United States Attorney’s Office, through
+defense counsel, to complete a financial statement. Upon review, if there are any follow-up
+questions, your client agrees to cooperate with the Financial Litigation Unit. Your client
+promises that the financial statement and disclosures will be complete, accurate and truthful, and
+understands that any willful falsehood on the financial statement could be prosecuted as a
+separate crime punishable under 18 U.S.C. § 1001, which carries an additional five years’
+incarceration and a fine.
+
+Your client expressly authorizes the United States Attorney’s Office to obtain a credit
+report on your client in order to evaluate your client’s ability to satisfy any financial obligations
+imposed by the Court or agreed to herein.
+
+Your client understands and agrees that the restitution or fines imposed by the Court will
+be due and payable immediately and subject to immediate enforcement by the United States. If
+the Court imposes a schedule of payments, your client understands that the schedule of payments
+is merely a minimum schedule of payments and will not be the only method, nor a limitation on
+the methods, available to the United States to enforce the criminal judgment. If your client is
+sentenced to a term of imprisonment by the Court, your client agrees to participate in the Bureau
+of Prisons’ Inmate Financial Responsibility Program, regardless of whether the Court
+specifically imposes a schedule of payments.
+
+Your client certifies that your client has made no transfer of assets in contemplation of
+this prosecution for the purpose of evading or defeating financial obligations that are created by
+this Agreement and/or that may be imposed by the Court. In addition, your client promises to
+make no such transfers in the future until your client has fulfilled the financial obligations under
+this Agreement.
+
+14. ‘Forfeiture
+(a) Your client agrees to the forfeiture set forth in the Forfeiture Allegation in the
+Criminal Information to which he is pleading guilty. Your client agrees to the forfeiture of the
+
+specific properties listed in Attachment A hereto, the value of which shall be credited toward the
+forfeiture money judgment in this case upon final order of forfeiture for the specific property,
+
+Page 10 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 11 of 20
+
+which represents property, real or personal, involved in the offense alleged in Count One of the
+Criminal Information, or is property traceable to such property. In addition, your client agrees to
+the entry of a forfeiture money judgment in the amount of $72,618825.60, which is equal to the
+value of any property, real or personal, involved in the violation alleged in Count One, and any
+property traceable to such property. The amount owed by your client on the forfeiture money
+judgment in this case shall be credited by the net proceeds realized by the United States collected
+from the defendant Heather Rhiannon Morgan pursuant to any forfeiture order issued in United
+States v. Heather Rhiannon Morgan, D.D.C. No. 22-mj-22-2.
+
+(b) Your client agrees that in or around January 2022, he and/or his co-defendant,
+Heather Rhiannon Morgan (the “Defendants”), sent approximately 6.6 million USD Coin
+(USDC), which was derived from the 2016 Bitfinex hack, to Aave’s virtual currency
+liquidity/lending pool on the Ethereum network. That position is associated with the
+Defendants’ virtual currency wallet 0x331865e142ACA526B9f7 5464A2B597ECdaCAF557 (the
+“Defendants’ Aave Token Holder Address”). After depositing those stolen assets into Aave’s
+liquidity/lending pool, the Defendants borrowed approximately 500 Ether (ETH) using the
+deposited USDC as collateral for the loan. The withdrawal of any remaining USDC contained in
+the Defendants’ Aave Token Holder Address will require repayment of the approximately 500
+ETH loan. Your client agrees that his financial interest in the Defendants’ Aave Token Holder
+Address represents property, real or personal, involved in the violation alleged in Count One, and
+any property traceable to such property, and that it is subject to forfeiture pursuant to 18 U.S.C.
+
+§ 982(a)(1). At this juncture, the government is not moving to forfeit your client’s financial
+interest in the Defendants’ Aave Token Holder Address because your client agrees to cooperate
+in liquidating his financial interest in the Defendants’ Aave Token Holder Address in a
+commercially reasonable manner and remit the net proceeds to the United States as specific
+property subject to forfeiture, the value of which shall be credited toward the forfeiture money
+judgment in this case. In the event your client’s financial interest in the Defendants’ Aave Token
+Holder Address is not liquidated within 6 months of entry of this plea agreement, your client
+consents to the government moving for an Amended Final Order of Forfeiture forfeiting your
+client’s financial interest in the Defendants’ Aave Token Holder Address.
+
+(c) Your client agrees that the proffer of evidence supporting your client’s guilty plea
+is sufficient evidence to support this forfeiture. Your client agrees that the Court may enter a
+preliminary Consent Order of Forfeiture for this property at the time of his guilty plea or at any
+time before sentencing. Your client agrees that this Order will become final as to your client
+when it is issued and will be a part of his sentence pursuant to Federal Rule of Criminal
+Procedure 32.2(b)(4)(A).
+
+(d) Your client agrees that this plea agreement permits the government to seek to
+forfeit any of his assets, real or personal, that are subject to forfeiture under any federal statute,
+whether or not this agreement specifically identifies the asset. Regarding any asset or property,
+your client agrees to forfeiture of all interest in: (1) any property, real or personal, involved in the
+offense alleged in Count One of the Information to which your client is pleading guilty, and any
+property traceable to such property; and (2) any substitute assets for property otherwise subject
+to forfeiture. See 18 U.S.C. § 982(a)(1); and 21 U.S.C. § 853(p).
+
+Page 11 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 12 of 20
+
+(e) By this plea agreement, your client agrees that he has waived any and all interest
+he has in the specific assets or property identified above and consented to their forfeiture by
+whatever process the government chooses. Your client agrees that the government may use this
+waiver and consent in any administrative or judicial forfeiture proceeding, whether criminal or
+civil, state, local or federal. If your client already has filed a claim to any of these assets or
+property in any forfeiture process, he hereby agrees to withdraw it. He also agrees that he will
+not file a claim to any of these assets or property in any future forfeiture proceeding of whatever
+type. In the event that the law enforcement agency having custody of the property decides not to
+pursue forfeiture of the property, the defendant hereby abandons any interest he has in such
+property and consents to its destruction by the law enforcement agency.
+
+(63) Your client agrees that the government may choose in its sole discretion how it
+wishes to accomplish forfeiture of the property whose forfeiture your client has consented to in
+this plea agreement, whether by criminal or civil forfeiture, using judicial or non-judicial
+forfeiture processes. If the government chooses to effect the forfeiture provisions of this plea
+agreement through the criminal forfeiture process, your client agrees to the entry of orders of
+forfeiture for such property and waives the requirements of Federal Rule of Criminal Procedure
+32.2 regarding notice of the forfeiture in the charging instrument, announcement of the forfeiture
+at sentencing, and incorporation of the forfeiture in the judgment. Your client understands that
+the forfeiture of assets is part of the sentence that will be imposed in this case.
+
+(g) Your client agrees to take all necessary actions to identify all assets over which
+
+your client exercises or exercised control, directly or indirectly, at any time since August 2016,
+or in which your client has or had during that time any financial interest. Your client agrees to
+take all steps as requested by the Government to obtain from any other parties by any lawful
+means any records of assets owned at any time by your client. Your client agrees to provide
+and/or consent to the release of your client’s tax returns for the previous five years. Your client
+agrees to take all steps as requested by the Government to pass clear title to forfeitable interests
+or to property to the United States and to testify truthfully in any judicial forfeiture proceeding.
+
+(bh) Your client agrees to waive all constitutional and statutory challenges in any
+manner (including, but not limited to, direct appeal) to any forfeiture carried out in accordance
+with this plea agreement on any grounds, including that the forfeiture constitutes an excessive
+fine or punishment.
+
+@) This Office agrees to make a non-binding referral to the Money Laundering and
+Asset Recovery Section at the Department of Justice that any monies obtained from the
+defendant through forfeiture be distributed to the victims of the offense in accordance with any
+restitution order entered in this case. Your client understands that if this request is denied, your
+client will be liable to pay both the restitution and forfeiture judgments. Your client understands
+that forfeiture and restitution are separate obligations and that that the Court does not have the
+authority to offset them against each other.
+
+Page 12 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 13 of 20
+
+15. Breach of Agreement
+
+Your client understands and agrees that, if after entering this Agreement, your client fails
+specifically to perform or to fulfill completely each and every one of your client’s obligations
+under this Agreement, or engages in any criminal activity prior to sentencing, your client will
+have breached this Agreement. In the event of such a breach: (a) the Government will be free
+from its obligations under this Agreement; (b) your client will not have the right to withdraw the
+guilty plea; (c) your client will be fully subject to criminal prosecution for any other crimes,
+including perjury and obstruction of justice; (d) no motion pursuant to Section SK1.1 of the
+Sentencing Guidelines or 18 U.S.C. § 3553(c) will be filed or sought; and (e) the Government
+will be free to use against your client, directly and indirectly, in any criminal or civil proceeding,
+all statements made by your client and any of the information or materials provided by your
+client, including such statements, information and materials provided pursuant to this Agreement
+or during the course of any debriefings conducted in anticipation of, or after entry of, this
+Agreement, whether or not the debriefings were previously characterized as “off-the-record”
+debriefings, and including your client’s statements made during proceedings before the Court
+pursuant to Rule 11 of the Federal Rules of Criminal Procedure.
+
+Your client understands and agrees that the Government shall be required to prove a
+breach of this Agreement only by a preponderance of the evidence, except where such breach is
+based on a violation of federal, state, or local criminal law, which the Government need prove
+only by probable cause in order to establish a breach of this Agreement.
+
+Nothing in this Agreement shall be construed to permit your client to commit perjury, to
+make false statements or declarations, to obstruct justice, or to protect your client from
+prosecution for any crimes not included within this Agreement or committed by your client after
+the execution of this Agreement. Your client understands and agrees that the Government
+reserves the right to prosecute your client for any such offenses. Your client further understands
+that any perjury, false statements or declarations, or obstruction of justice relating to your client’s
+obligations under this Agreement shall constitute a breach of this Agreement. In the event of
+such a breach, your client will not be allowed to withdraw your client’s guilty plea.
+
+16. Government’s Obligations
+
+The Government will bring to the Court’s attention at the time of sentencing the nature
+and extent of your client’s cooperation or lack of cooperation.
+
+The Departure Guideline Committee of the United States Attorney’s Office for the
+District of Columbia will evaluate the full nature and extent of your client’s cooperation to
+determine whether your client has provided substantial assistance in the investigation or
+prosecution of another person who has committed an offense. If the Departure Guideline
+Committee determines that your client has provided such substantial assistance, this Office shall
+file a departure motion pursuant to Section 5K1.1 of the Sentencing Guidelines or pursuant to
+both Section SK1.1 of the Sentencing Guidelines and 18 U.S.C. § 3553(e). A motion pursuant to
+Section 5K1.1 would afford your client an opportunity to persuade the Court that your client
+should be sentenced to a lesser period of incarceration and/or fine than indicated by the
+
+Page 13 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 14 of 20
+
+Sentencing Guidelines. A motion pursuant to both Section SK1.1 of the Sentencing Guidelines
+and 18 U.S.C. § 3553(e) would afford your client the opportunity to persuade the Court that your
+client should be sentenced to both a lesser period of incarceration and/or fine than indicated by
+the Sentencing Guidelines and to a lesser period of incarceration than any otherwise-applicable
+statutory mandatory-minimum sentence. The determination of whether your client has provided
+substantial assistance warranting the filing of a motion pursuant to either Section 5K1.1 of the
+Sentencing Guidelines or to both Section 5K1.1 of the Sentencing Guidelines and 18 U.S.C. §
+3553(e) is within the sole discretion of the United States Attorney’s Office for the District of
+Columbia and is not reviewable by the Court. In the event your client should fail to perform
+specifically and fulfill completely each and every one of your client’s obligations under this
+Agreement, the Government will be free from its obligations under this Agreement, and will
+have no obligation to file a departure motion pursuant to Section 5K1.1 of the Sentencing
+Guidelines and/or 18 U.S.C. § 3553(e).
+
+17. Witness Protection
+
+The Government agrees that, if requested by your client, and if appropriate in the sole
+discretion of this Office in order to provide for the protection and security of your client, the
+United States Attorney’s Office for the District of Columbia will sponsor your client for
+acceptance into the Witness Security Program of the United States Department of Justice. It is
+understood, however, that the decision to accept your client into the Witness Security Program is
+at the sole discretion of the United States Department of Justice and not this Office. It is further
+understood that, once accepted into the Witness Security Program, the continued participation of
+your client will be governed exclusively by the standard rules and regulations which have been
+promulgated by the United States Department of Justice to administer the Witness Security
+Program.
+
+18. Complete Agreement
+
+No agreements, promises, understandings, or representations have been made by the
+parties or their counsel other than those contained in writing herein, nor will any such
+agreements, promises, understandings, or representations be made unless committed to writing
+and signed by your client, defense counsel, and an Assistant United States Attorney for the
+District of Columbia.
+
+Your client further understands that this Agreement is binding only upon the Criminal
+and Superior Court Divisions of the United States Attorney’s Office for the District of Columbia.
+This Agreement does not bind the Civil Division of this Office or any other United States
+Attorney’s Office, nor does it bind any other state, local, or federal prosecutor. It also does not
+bar or compromise any civil, tax, or administrative claim pending or that may be made against
+your client.
+
+Page 14 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 15 of 20
+
+If the foregoing terms and conditions are satisfactory, your client may so indicate by
+signing this Agreement and the Statement of Offense, and returning both to me no later than July
+14, 2023.
+
+Sincerely yours,
+
+Malay Mc frowey/ph
+
+Matthew M. Graves
+United States Attorney
+
+By: LAL ia,
+
+Christoffier B. Brown
+Assistant United States Attorney
+
+[lb Be
+
+C. Alden Pelker
+
+Jessica Peck
+
+Trial Attorneys, U.S. Department of Justice,
+Computer Crime & Intellectual Property Section
+
+Page 15 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 16 of 20
+
+DEFENDANT’S ACCEPTANCE
+
+Thave read every page of this Agreement and have discussed it with my attorneys,
+Samson Enzer, Anirudh Bansal, Connor O’Shea, and Angela F. Collins. I fully understand this
+Agreement and agree to it without reservation. I do this voluntarily and of my own free will,
+intending to be legally bound. No threats have been made to me nor am I under the influence of
+anything that could impede my ability to understand this Agreement fully. I am pleading guilty
+because I am in fact guilty of the offense(s) identified in this Agreement.
+
+I reaffirm that absolutely no promises, agreements, understandings, or conditions have
+been made or entered into in connection with my decision to plead guilty except those set forth
+in this Agreement. I am satisfied with the legal services provided by my attorney in connection
+with this Agreement and matters related to it.
+
+Date: A / L/225 tO
+Ilya Lichtenstein
+
+Defendant
+
+ATTORNEY’S ACKNOWLEDGMENT
+
+Thave read every page of this Agreement, reviewed this Agreement with my client, Ilya
+Lichtenstein, and fully discussed the provisions of this Agreement with my client. These pages
+accurately and completely set forth the entire Agreement. I concur in my client’s desire to plead
+guilty as set forth in this Agreement.
+
+vie, 8/L-/23
+
+“Afirudh Bansal
+
+Connor O’Shea
+
+Angela F. Collins
+Attomeys for Defendant
+
+Page 16 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 17 of 20
+
+ATTACHMENT A
+
+a. Approximately 94,643.29837084 in Bitcoin (BTC) (after required fees) seized
+from wallets recovered from Defendants’ online storage account and contained in
+the recipient virtual currency addresses of the following transactions:
+
+6e0d701ac2ea3ad87fc8bcaa786b994aa943f5eb9a67al e345769bb090bi5b9e
+
+afdfecadb9f0a469 lcbb8ace33a7c24c052b3608c4c8cc2e25afe053926b6389
+
+77ad70fadfbbad5 19 1¢47c95 1469095ca845006f25fe98 1 4f302853af367459
+
+c49ff6bd054£b3 86cd02fc94ca34b8773229ed8a5538e023ef/bea772d70c17a
+
+9d06994238d0de958033f42.db39a6d2cc0de35e84beVed080e4 1/017 f02dftb3
+
+ed1812e83 10bb25fbd138aael 7be738ad3 fa20e0783a8598c8deaS6d3be5dad7
+
+€¢56a9957F1 £6 166440bea0 1 d0c0c29e4cec6230bb823 leced6ba844bb095d2a
+
+€250725cfc967 1d3849a3e85343ec5f3d045£805d002056725c8ea2aebb9 13 1a
+
+b0aa2d76fd9463da6a7aft59e37d7ebf7b6aa 1b660de2b2e9ab7755cf6f60ac3
+
+b18e40d96906b7b1 7133 7ad6250f0c5aa9db93498832 125374 102dd2f5e0ed47
+
+8e5102edd876f7 1e3482b7602dd91 41 foce3ac869fba55a757b4354c70536134
+
+1 1lbae40ae43 15a le8f7d9a8df676db6bdb497b 15371 1d1bf£7952c5S40ed 125966
+
+€6088723889de70fa985e7b8c0 12c77ea693a6cf9379fb26a95 La2bb5c722525
+
+3£e79 8be890c7db8beaca9d005cd650e787b 1b 1 6bcSe47eef26bfa87 124b6a95
+
+d006075£40136ca7733aec2d6f32c3 1abc09£779de0 1a33e7e07804907d339¢7
+
+8e53ca8952fbf2d1a272ab376555alcceel ff0bcab0747a8c9 1 bOccfc77cc3fb
+
+97e4eb7ca5d0b2b6d501a53478486d5ed75ce58d1204c6036f25b33439d48627
+
+658a550600e8 1 4£7b£7d032b79849 1285743 7c96a68e4dd3ebldce4fc774e26f
+
+9828 1£388a444 1d7bb00537e65b1a458 ldcaddd3 606fc09f6cf19598343be34d
+
+dldbc472abe47902aa7 1e639ba2feb2098b474ab20b853 1 68ecdb0d87ce02955
+
+61594a56cd2ef50 1 cdb55b9037cd5785dlad2eedfb la4fab7ded50b1052a0650
+
+b7bf853fd6eb27166963d2 19d29b85e13796e315473b7c08484335a0b0da7669
+
+9af41957244e97e70378a7afd2d41b73d0a64d94c9b2df9049e29dd1919741cb
+
+b. Approximately 117,376.52651940 in Bitcoin Cash (BCH) (after required fees)
+seized from wallets recovered from Defendants’ online storage account and
+contained in the recipient virtual currency addresses of the following transactions:
+
+€29b28633a9bee7720f7ec02 16244 1dc6a2289c92e887ac5214¢35d493 14379
+
+0b9013£8 1 8de45ddfa9068f54f85 1 3f15ac35bd7 1 1054d119b483a791c750684
+
+Oae0e3c0db61a2542015164bdcead 1636061 4bddSbf51b9537c5b83 12db2b84a
+
+16e1 ba9b30fd5c86c9dd4ef3967 105c2fbfe7ed9£5 1 0900b8acd7£7a0a9cdbd8
+
+254455 1e0536882 | 7ecech544bdc065d502db4£f4 1227053 fa2Scc4 1be907541
+
+4£24389c09897d50239d0be3ec39044160165985cfb3fdfl 1d117a8fa3 9aaa24
+
+6ad laSef2ed573b010e7ab32b395bed32 142c07bf8bb67534880bbb03591215d
+
+7278247 fce3c7bfa8 1732ba63c628fe30cb 1 60ec9b7 fa357aSdcff8a2f6738e3
+
+739b58b49039856f8db 1 da64c7 13372e0404e0919ca3243 7b639b4d37aad920b
+
+Page 17 of 20
+
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 18 of 20
+
+7570b746ecd24£66eb754¢ 1 00£79c5259e9eecb0c7a01 88e6cf5ee84£76d9b2 |
+
+Tcbd6e7 16 Lbbcb80865ef855 128bbel cdeb1 e6b87788a99¢2559046294bc898F
+
+e308fc1199a044 £6 13578e3653 13008762b8b779b3d92 191 ebe6ba9a6f5e2182
+
+f8efc3 60fcd7d6£27b9f7e5 19 11£361b94cb1 ££2734be5e301 b3cacedda9481e
+
+c. Approximately 117,376.58178024 in Bitcoin Satoshi Version (BSV) (after
+required fees) seized from wallets recovered from Defendants’ online storage
+account and contained in the recipient virtual currency addresses of the following
+transactions:
+
+2cf808c73bda45a6ee1c266c60da50£01250d9452f7b5 lelcaaf3ecec605b416
+
+aQede2c3759797 6de79a67db2096b3d8f7a4 £60135 7c09953a7342ad 1948b4b5
+
+6b46c0067£786acf4f5al925f12b9860ad61817829f3 0fefd898ad0c3bbaeatd
+
+d. Approximately 118,102.03258447 in Bitcoin Gold (BTG) (after required fees)
+seized from wallets recovered from Defendants’ online storage account and
+contained in the recipient virtual currency addresses of the following transactions:
+
+a4ba827e99c6cef43£f59045767 1b63c0d52b2¢215797e67c8 1 fc 1 68£499932¢
+
+97263227¢a621461f3d22132c3e7562b0e401853fd4aced1db1b34abala6Sab4
+
+4lad49ad96dfd64eb0293484d4953ccbft7d7083 9e4c7b75db472c5553db1532
+
+d6e8f7d9aac687cac9af80 1 b4b38cbc8e7 1 db2£21d41f0a6c0d8052d8087456b
+
+c2d69e0a0090f201a29d6afb3655b7 1 18b2282146abf64b04448 1 ed99eb2fa27
+
+ec3e2b93e7f7beS50bb827 ebfd3 66e2e] £462 7dd8ed4550427ec793a3ea20187¢
+
+2aa7dbb29d707fb 1 150c13dlee6a0al 7eeef7326 11625 1cb5d13081fed297ad8
+
+70ed72a2c 1 e2d828f3 14£5bb327b0e0342 1 bf854c4aba3ea9393258af6fba044
+
+c656cd61 fce6c3 aebeb0£208 18d5d092c04c379d3 fc72e3ec7e4f0 1 9f7 1a40ec
+
+2238af7a93£797a320a20492 fffaSe27b4d425c46ee7cb0e4 fa262e2cddf3 142
+
+ec2f4d2e7c13£19657ad4559a9b£d25443 7989 f0f45e8993al 7d84c374 ecb02f
+
+5e26b7706b1c53b49d99ac 1£501971b3d62c6d7e0ba6a0 16979 1e0d675cfb6e7
+
+e. Approximately 29,016.98 in Monero (XMR) contained within wallets accessible
+via private keys contained within the Defendants’ online storage account;
+
+f. Stolen virtual currency contained within the following wallets:
+0x8CE693CB062692458393 1F25f50AF8fC1C6517F0, which holds
+approximately 8.56 Ether (ETH) and approximately 4,507.99 USD Coin (USDC),
+as well as various other ERC-20 tokens;
+0x33 1865e142ACA526B9f75464A2B597ECdaCAF557, which holds
+approximately 13.88 ETH, approximately 6,656,048 Aave USDC (aUSDC), and
+approximately 120 Wrapped Ether (WETH), as well as various other tokens; and
+0x3b2Cd27cE5a8633 160bC7875B35009f010a51B21, which holds approximately
+80 WETH, and approximately .39 ETH.
+
+Page 18 of 20
+
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 19 of 20
+
+g. Approximately .879544 Curve DAO tokens contained within the following
+address:
+0x612e5774af0 Scef06261429d876a3 | Sbbdb794fac8 fe36 1 bald4a01cb3db86a4;
+
+h. Approximately 1,999,723.976 in Tether (U SDT) contained within Yearn Finance
+Liquidity Pool address 0xaC848276B 1 0B2364£A 06C206EE 1D059acCD 17412,
+approximately 3,689,545.195 USDT contained within Yearn Finance Liquidity
+Pool address 0xE2F699A B099e97Db 1 CF0b13993¢3 1C7ee42FB2ac, and
+approximately 1,700,000 USDT contained within Yearn Finance Liquidity Pool
+address 0x68 1 1c26b566e9582B68255B2225917AF96dd8Ec2;
+
+i. Assorted U.S. and Canadian gold coins excavated and recovered by law
+enforcement from LOCATION 1, a premises in California known to the Defendants
+and the Government;
+
+j. Approximately 2,818.199 BTC (after required fees) seized from wallets recovered
+from Defendants’ online storage account;
+
+k. Approximately 12,267.025 BTC (after required fees) seized from wallets recovered
+from an extemal hard drive recovered from the Defendants’ residence at 75 Wall
+Street, Apartment 33M, New York, NY 10005;
+
+1. Approximately 1,155.901 BTC (after required fees) seized from wallets recovered
+from Defendants’ online storage account and an external hard drive recovered from
+the Defendants’ residence at 75 Wall Street, Apartment 33M, New York, NY
+10005;
+
+m. Approximately 901,014 in USDC (after required fees) seized from wallets
+recovered from Defendants’ online storage account and an external hard drive
+recovered from the Defendants’ residence at 75 Wall Street, Apartment 33M,
+New York, NY 10005;
+
+n. Approximately 290,729 USDT (after required fees) seized from wallets recovered
+from Defendants’ online storage account and an external hard drive recovered from
+the Defendants’ residence at 75 Wall Street, Apartment 33M, New York, NY
+10005;
+
+o. Approximately 5,990 USDT (after required fees) seized from wallets recovered
+from an external hard drive recovered from the Defendants’ residence at 75 Wall
+Street, Apartment 33M, New York, NY 10005;
+
+p. Approximately 1000.06 in Ether (ETH) (after required fees) seized from wallets
+recovered from Defendants’ online storage account;
+
+gq. Approximately 1,030,436.50 in aUSDT cryptocurrency (after required fees)
+seized from wallets recovered from Defendants’ online storage account and an
+external hard drive recovered from the Defendants’ residence at 75 Wall Street,
+Apartment 33M, New York, NY 10005;
+
+Page 19 of 20
+Case 1:23-cr-00239-CKK Document 96 Filed 08/03/23 Page 20 of 20
+
+t. Approximately 17,572,068.53 in aUSDC cryptocurrency (after required fees)
+seized from wallets recovered from Defendants’ online storage account and an
+external hard drive recovered from the Defendants’ residence at 75 Wall Street,
+Apartment 33M, New York, NY 10005;
+
+s. Approximately 3,542,129.56 in Yearn Vault USDT (yvUSDT) cryptocurrency
+(after required fees) seized from wallets recovered from Defendants’ online
+
+storage account and an external hard drive recovered from the Defendants’
+residence at 75 Wall Street, Apartment 33M, New York, NY 10005;
+
+t. Approximately $228,266.02 seized from JPMorgan Chase bank account number
+877916952;
+
+u. Approximately 7.998 BTC (after required fees) seized from wallets recovered
+from an external hard drive recovered from the Defendants’ residence at 75 Wall
+Street, Apartment 33M, New York, NY 10005;
+
+v. Approximately 1,770.049 ETH (after required fees) seized from wallets recovered
+from an external hard drive recovered from the Defendants’ residence at 75 Wall
+Street, Apartment 33M, New York, NY 10005;
+
+w. Approximately 264.863 BTC (after required fees) seized from wallets recovered
+from an external hard drive recovered from the Defendants’ residence at 75 Wall
+Street, Apartment 33M, New York, NY 10005;
+
+x. Approximately $352,381.55 seized from Wells Fargo bank account number
+5361262370;
+
+y. Approximately 0.196 BTC (after required fees) seized from wallets recovered from
+an external hard drive recovered from the Defendants’ residence at 75 Wall Street,
+Apartment 33M, New York, NY 10005;
+
+z. Approximately 1,401.567 ETH (after required fees) seized from wallets recovered
+from Defendants’ online storage account;
+
+aa. Approximately 1,866.624 ETH (after required fees) seized from wallets recovered
+from an external hard drive recovered from the Defendants’ residence at 75 Wall
+Street, Apartment 33M, New York, NY 10005;
+
+bb. Approximately $2,460,375 seized from the Flagstar bank account corresponding
+to Signature Bank account number 1503814168; and
+
+cc. Approximately 1,066 in WETH (after required fees) seized from wallets recovered
+from Defendants’ online storage account and an external hard drive recovered from
+the Defendants’ residence at 75 Wall Street, Apartment 33M, New York, NY
+10005.
+
+Page 20 of 20

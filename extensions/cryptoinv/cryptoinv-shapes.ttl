@@ -1,0 +1,302 @@
+# Cryptocurrency and Financial Crime Investigation Extension — SHACL Shapes
+#
+# Validation shapes for the cryptoinv extension ontology (v0.1.0).
+# OWL definitions are in cryptoinv.ttl; exemplar instances are in
+# cryptoinv-exemplar.ttl. Shapes are kept separate from OWL definitions
+# per CDO Community Playground guidance.
+
+@prefix cryptoinv: <http://example.org/ontology/cryptoinv/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Cryptocurrency observable facets
+# =============================================================================
+
+cryptoinv:CryptocurrencyAddressFacet-shape
+	a sh:NodeShape ;
+	sh:targetClass cryptoinv:CryptocurrencyAddressFacet ;
+	sh:property
+		[
+			sh:path cryptoinv:addressValue ;
+			sh:datatype xsd:string ;
+			sh:minCount "1"^^xsd:integer ;
+			sh:maxCount "1"^^xsd:integer ;
+			sh:name "addressValue" ;
+			sh:description "The cryptocurrency address string (exactly one required)." ;
+		] ,
+		[
+			sh:path cryptoinv:cryptocurrencyType ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+			sh:name "cryptocurrencyType" ;
+		] ,
+		[
+			sh:path cryptoinv:blockchainNetwork ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+			sh:name "blockchainNetwork" ;
+		] ,
+		[
+			sh:path cryptoinv:addressFormat ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+			sh:name "addressFormat" ;
+		] .
+
+cryptoinv:CryptocurrencyTransactionFacet-shape
+	a sh:NodeShape ;
+	sh:targetClass cryptoinv:CryptocurrencyTransactionFacet ;
+	sh:property
+		[
+			sh:path cryptoinv:transactionHash ;
+			sh:datatype xsd:string ;
+			sh:minCount "1"^^xsd:integer ;
+			sh:maxCount "1"^^xsd:integer ;
+			sh:name "transactionHash" ;
+			sh:description "The unique blockchain transaction hash (exactly one required)." ;
+		] ,
+		[
+			sh:path cryptoinv:blockHash ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:blockNumber ;
+			sh:datatype xsd:integer ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:transactionFee ;
+			sh:datatype xsd:decimal ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:confirmationCount ;
+			sh:datatype xsd:integer ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:transactionStatus ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:transactionType ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+		] .
+
+cryptoinv:CryptocurrencyWalletFacet-shape
+	a sh:NodeShape ;
+	sh:targetClass cryptoinv:CryptocurrencyWalletFacet ;
+	sh:property
+		[
+			sh:path cryptoinv:walletType ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:walletIdentifier ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:addressCount ;
+			sh:datatype xsd:nonNegativeInteger ;
+			sh:maxCount "1"^^xsd:integer ;
+		] .
+
+cryptoinv:VirtualAssetHoldingFacet-shape
+	a sh:NodeShape ;
+	sh:targetClass cryptoinv:VirtualAssetHoldingFacet ;
+	sh:property
+		[
+			sh:path cryptoinv:assetSymbol ;
+			sh:datatype xsd:string ;
+			sh:minCount "1"^^xsd:integer ;
+			sh:maxCount "1"^^xsd:integer ;
+			sh:name "assetSymbol" ;
+			sh:description "The ticker symbol of the held virtual asset (exactly one required)." ;
+		] ,
+		[
+			sh:path cryptoinv:assetQuantity ;
+			sh:datatype xsd:decimal ;
+			sh:minCount "1"^^xsd:integer ;
+			sh:maxCount "1"^^xsd:integer ;
+			sh:name "assetQuantity" ;
+			sh:description "The quantity held in the asset's native unit (exactly one required)." ;
+		] ,
+		[
+			sh:path cryptoinv:fiatValue ;
+			sh:datatype xsd:decimal ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:fiatCurrencyCode ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:valuationDate ;
+			sh:datatype xsd:dateTime ;
+			sh:maxCount "1"^^xsd:integer ;
+		] .
+
+# =============================================================================
+# Criminal legal process
+# =============================================================================
+
+cryptoinv:CriminalCharge-shape
+	a sh:NodeShape ;
+	sh:targetClass cryptoinv:CriminalCharge ;
+	sh:property
+		[
+			sh:path cryptoinv:statuteCitation ;
+			sh:datatype xsd:string ;
+			sh:minCount "1"^^xsd:integer ;
+			sh:name "statuteCitation" ;
+			sh:description "The statutory citation for the charged offense (at least one required)." ;
+		] ,
+		[
+			sh:path cryptoinv:countNumber ;
+			sh:datatype xsd:nonNegativeInteger ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:chargeDescription ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+		] .
+
+cryptoinv:PleaAgreement-shape
+	a sh:NodeShape ;
+	sh:targetClass cryptoinv:PleaAgreement ;
+	sh:property
+		[
+			sh:path cryptoinv:pleadsGuiltyTo ;
+			sh:class cryptoinv:CriminalCharge ;
+			sh:nodeKind sh:IRI ;
+			sh:minCount "1"^^xsd:integer ;
+			sh:name "pleadsGuiltyTo" ;
+			sh:description "The charge(s) the defendant pleads guilty to (at least one required)." ;
+		] ,
+		[
+			sh:path cryptoinv:pleaDate ;
+			sh:datatype xsd:dateTime ;
+			sh:maxCount "1"^^xsd:integer ;
+		] .
+
+cryptoinv:SentencingOutcome-shape
+	a sh:NodeShape ;
+	sh:targetClass cryptoinv:SentencingOutcome ;
+	sh:property
+		[
+			sh:path cryptoinv:sentenceStatus ;
+			sh:datatype xsd:string ;
+			sh:minCount "1"^^xsd:integer ;
+			sh:maxCount "1"^^xsd:integer ;
+			sh:name "sentenceStatus" ;
+			sh:description "Whether the outcome is a recommendation or an imposed judgment (exactly one required)." ;
+		] ,
+		[
+			sh:path cryptoinv:sentenceDurationMonths ;
+			sh:datatype xsd:nonNegativeInteger ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:supervisedReleaseMonths ;
+			sh:datatype xsd:nonNegativeInteger ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:offenseLevel ;
+			sh:datatype xsd:integer ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:guidelineRangeLowMonths ;
+			sh:datatype xsd:nonNegativeInteger ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:guidelineRangeHighMonths ;
+			sh:datatype xsd:nonNegativeInteger ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:sentencingDate ;
+			sh:datatype xsd:dateTime ;
+			sh:maxCount "1"^^xsd:integer ;
+		] .
+
+cryptoinv:ForfeitureOrder-shape
+	a sh:NodeShape ;
+	sh:targetClass cryptoinv:ForfeitureOrder ;
+	sh:property
+		[
+			sh:path cryptoinv:forfeits ;
+			sh:nodeKind sh:IRI ;
+			sh:name "forfeits" ;
+			sh:description "Specific property forfeited under the order." ;
+		] ,
+		[
+			sh:path cryptoinv:moneyJudgmentAmount ;
+			sh:datatype xsd:decimal ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:moneyJudgmentCurrencyCode ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+		] .
+
+cryptoinv:RestitutionOrder-shape
+	a sh:NodeShape ;
+	sh:targetClass cryptoinv:RestitutionOrder ;
+	sh:property
+		[
+			sh:path cryptoinv:restitutionInKind ;
+			sh:datatype xsd:boolean ;
+			sh:maxCount "1"^^xsd:integer ;
+		] ,
+		[
+			sh:path cryptoinv:restitutionDescription ;
+			sh:datatype xsd:string ;
+			sh:maxCount "1"^^xsd:integer ;
+		] .
+
+# =============================================================================
+# Property-scoped shapes (properties usable on multiple node kinds)
+# =============================================================================
+
+cryptoinv:transferAmount-shape
+	a sh:NodeShape ;
+	sh:targetSubjectsOf cryptoinv:transferAmount ;
+	sh:property [
+		sh:path cryptoinv:transferAmount ;
+		sh:datatype xsd:decimal ;
+		sh:maxCount "1"^^xsd:integer ;
+		sh:name "transferAmount" ;
+	] .
+
+cryptoinv:launderingTechnique-shape
+	a sh:NodeShape ;
+	sh:targetSubjectsOf cryptoinv:launderingTechnique ;
+	sh:property [
+		sh:path cryptoinv:launderingTechnique ;
+		sh:datatype xsd:string ;
+		sh:name "launderingTechnique" ;
+	] .
+
+cryptoinv:chargedWith-shape
+	a sh:NodeShape ;
+	sh:targetSubjectsOf cryptoinv:chargedWith ;
+	sh:property [
+		sh:path cryptoinv:chargedWith ;
+		sh:class cryptoinv:CriminalCharge ;
+		sh:nodeKind sh:IRI ;
+		sh:name "chargedWith" ;
+	] .

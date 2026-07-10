@@ -1,0 +1,30 @@
+# Proposed CASE case-identification and related-investigation terms (T-Box)
+# Companion to change_proposals/case-number-and-related-investigation-representation.md
+# Namespace placeholder: the committee decides the final home
+# (suggested: the existing https://ontology.caseontology.org/case/investigation/ namespace).
+
+@prefix proposed: <http://example.org/ontology/proposed/investigation/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/proposed/investigation>
+	a owl:Ontology ;
+	rdfs:label "Proposed CASE case-identification and related-investigation terms"@en ;
+	rdfs:comment "A caseIdentifier property answering the ubiquitous 'Case number' tool field, and an InvestigationRelationship for relating investigations conducted by different organizations under different case identifiers."@en .
+
+proposed:caseIdentifier
+	a owl:DatatypeProperty ;
+	rdfs:subPropertyOf uco-core:externalIdentifier ;
+	rdfs:label "caseIdentifier"@en ;
+	skos:altLabel "case number"@en ;
+	rdfs:comment "An identifier assigned to an investigation by the organization or case-management authority conducting or tracking it, e.g. a police case number, NCMEC CyberTipline report ID (https://www.missingkids.org/gethelpnow/cybertipline), laboratory submission number, or court docket number (see PACER, https://pacer.uscourts.gov/). An investigation may carry multiple case identifiers. Distinct organizations investigating related matters each assign their own case identifiers; relate such investigations with an InvestigationRelationship."@en ;
+	rdfs:range xsd:string .
+
+proposed:InvestigationRelationship
+	a owl:Class ;
+	rdfs:subClassOf uco-core:Relationship ;
+	rdfs:label "InvestigationRelationship"@en ;
+	rdfs:comment "An investigation relationship is a grouping of characteristics unique to an assertion of an association between two investigations, typically conducted by different organizations under different case identifiers (e.g. a platform trust-and-safety case referred through the NCMEC CyberTipline to law enforcement, or a police case whose seized device is submitted to a crime laboratory case). Recommended kindOfRelationship values (open vocabulary): 'Referred_To', 'Escalated_To', 'Spawned', 'Merged_Into', 'Parallel_To', 'Evidence_Submitted_To', 'Successor_Of'."@en .

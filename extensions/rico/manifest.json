@@ -1,0 +1,31 @@
+{
+  "name": "rico",
+  "display_name": "Racketeering and Criminal Enterprise Extension",
+  "version": "0.1.0",
+  "upstream_repo": "https://github.com/vulnmaster/CASE-UCO-SDK",
+  "upstream_ref": "main",
+  "license": "Apache-2.0",
+  "namespaces": {
+    "rico": "http://example.org/ontology/rico/"
+  },
+  "owl_files": [
+    "rico.ttl"
+  ],
+  "shacl_files": [
+    "rico-shapes.ttl"
+  ],
+  "bridge_files": [],
+  "exemplar_files": [
+    "rico-exemplar.ttl"
+  ],
+  "uco_compat": ["1.4.0"],
+  "upper_ontology": "none (RacketeeringEnterprise subClassOf uco-identity:Organization; EnterpriseRole subClassOf uco-role:Role)",
+  "cdo_shapes_compatibility": {
+    "CDO-Shapes-gufo": "compatible",
+    "CDO-Shapes-BFO": "compatible",
+    "CDO-Shapes-PROV-O": "compatible",
+    "CDO-Shapes-Time": "compatible",
+    "CDO-Shapes-GeoSPARQL": "compatible",
+    "CDO-Shapes-FOAF": "compatible"
+  }
+}

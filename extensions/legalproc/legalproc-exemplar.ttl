@@ -1,0 +1,103 @@
+# Legal Process and Procedure Extension — exemplar A-Box
+# Condensed, synthetic-IRI rendering of public facts from
+# U.S. v. Perry & O'Dell, No. 2:22-cr-04065-BCW (W.D. Mo.):
+# a 45-count conspiracy / attempted murder / firearms prosecution.
+# Demonstrates every legalproc class once.
+
+@prefix kb: <urn:uuid:> .
+@prefix legalproc: <https://ontology.caseontology.org/case/criminal/> .
+@prefix case-investigation: <https://ontology.caseontology.org/case/investigation/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:0d4a7c1e-9b2f-5a3c-8e6d-1f5b9c3a7e21>
+	a case-investigation:Investigation ;
+	uco-core:name "U.S. v. Perry & O'Dell (W.D. Mo. militia prosecution)" ;
+	legalproc:caseIdentifier "2:22-cr-04065-BCW" .
+
+<urn:uuid:1e5b8d2f-0c3a-5b4d-9f7e-2a6c0d4b8f32>
+	a uco-identity:Person ;
+	uco-core:name "Defendant One" .
+
+<urn:uuid:2f6c9e3a-1d4b-5c5e-0a8f-3b7d1e5c9a43>
+	a legalproc:ChargingInstrument ;
+	uco-core:name "Third Superseding Indictment (Doc 48, filed 2023-10-24)" ;
+	legalproc:instrumentType "superseding-indictment" .
+
+<urn:uuid:3a7d0f4b-2e5c-5d6f-1b9a-4c8e2f6d0b54>
+	a legalproc:CriminalCharge ;
+	uco-core:name "Count 1: Conspiracy to Murder a Federal Officer and Employee" ;
+	legalproc:statuteCitation "18 U.S.C. §§ 1117 & 1114" ;
+	legalproc:countNumber "1"^^xsd:nonNegativeInteger ;
+	legalproc:countLabel "Count 1" ;
+	legalproc:offenseForm "conspiracy" ;
+	legalproc:chargeClassification "Class A Felony" ;
+	legalproc:chargeDisposition "convicted-by-verdict" ;
+	legalproc:assertedIn <urn:uuid:2f6c9e3a-1d4b-5c5e-0a8f-3b7d1e5c9a43> .
+
+<urn:uuid:4b8e1a5c-3f6d-5e7a-2c0b-5d9f3a7e1c65>
+	a legalproc:CriminalCharge ;
+	uco-core:name "Count 4: Attempted Murder of a Federal Officer and Employee (victim J.R.)" ;
+	legalproc:statuteCitation "18 U.S.C. §§ 1114(a)(3), 1113 & 2" ;
+	legalproc:countNumber "4"^^xsd:nonNegativeInteger ;
+	legalproc:countLabel "Count 4" ;
+	legalproc:offenseForm "attempt" ;
+	legalproc:chargeClassification "Class C Felony" ;
+	legalproc:chargeDisposition "convicted-by-verdict" ;
+	legalproc:assertedIn <urn:uuid:2f6c9e3a-1d4b-5c5e-0a8f-3b7d1e5c9a43> .
+
+<urn:uuid:5c9f2b6d-4a7e-5f8b-3d1c-6e0a4b8f2d76>
+	a legalproc:CriminalCharge ;
+	uco-core:name "Count 21: Use of Firearm in Furtherance of Crime of Violence (predicate: Count 4)" ;
+	legalproc:statuteCitation "18 U.S.C. §§ 924(c)(1)(A)(iii) & 2" ;
+	legalproc:countNumber "21"^^xsd:nonNegativeInteger ;
+	legalproc:countLabel "Count 21" ;
+	legalproc:offenseForm "derivative" ;
+	legalproc:chargeClassification "Class A Felony" ;
+	legalproc:chargeDisposition "convicted-by-verdict" ;
+	legalproc:objectOffense <urn:uuid:4b8e1a5c-3f6d-5e7a-2c0b-5d9f3a7e1c65> ;
+	legalproc:assertedIn <urn:uuid:2f6c9e3a-1d4b-5c5e-0a8f-3b7d1e5c9a43> .
+
+<urn:uuid:6d0a3c7e-5b8f-5a9c-4e2d-7f1b5c9a3e87>
+	a legalproc:Plea ;
+	uco-core:name "Not-guilty plea at arraignment on the Third Superseding Indictment" ;
+	legalproc:pleaType "not-guilty" ;
+	legalproc:concernsCharge <urn:uuid:3a7d0f4b-2e5c-5d6f-1b9a-4c8e2f6d0b54> .
+
+<urn:uuid:7e1b4d8f-6c9a-5b0d-5f3e-8a2c6d0b4f98>
+	a legalproc:CriminalProceeding ;
+	uco-core:name "Nine-day jury trial (2024-10-28 to 2024-11-07)" ;
+	legalproc:proceedingType "trial" .
+
+<urn:uuid:8f2c5e9a-7d0b-5c1e-6a4f-9b3d7e1c5a09>
+	a legalproc:Verdict ;
+	uco-core:name "Jury verdict of guilty on Count 1 (2024-11-07)" ;
+	legalproc:verdictType "guilty" ;
+	legalproc:concernsCharge <urn:uuid:3a7d0f4b-2e5c-5d6f-1b9a-4c8e2f6d0b54> .
+
+<urn:uuid:9a3d6f0b-8e1c-5d2f-7b5a-0c4e8f2d6b10>
+	a legalproc:Sentence ;
+	uco-core:name "Sentence imposed 2025-08-27: Life on Count 1, consecutive Life on Counts 21-34" ;
+	legalproc:sentenceStatus "imposed" ;
+	legalproc:sentenceTerm "Life" ;
+	legalproc:concernsCharge <urn:uuid:3a7d0f4b-2e5c-5d6f-1b9a-4c8e2f6d0b54> .
+
+<urn:uuid:0b4e7a1c-9f2d-5e3a-8c6b-1d5f9a3e7c21>
+	a legalproc:ForfeitureOrder ;
+	uco-core:name "Forfeiture allegation: firearms, ammunition, and body armor (18 U.S.C. §§ 981(a)(1)(G), 924(d))" ;
+	legalproc:concernsCharge <urn:uuid:3a7d0f4b-2e5c-5d6f-1b9a-4c8e2f6d0b54> .
+
+<urn:uuid:1c5f8b2d-0a3e-5f4b-9d7c-2e6a0b4f8d32>
+	a legalproc:RestitutionOrder ;
+	uco-core:name "Restitution to the FBI for damage to armored vehicle, joint and several" ;
+	legalproc:monetaryAmount "3717.98"^^xsd:decimal ;
+	legalproc:currencyCode "USD" ;
+	legalproc:concernsCharge <urn:uuid:3a7d0f4b-2e5c-5d6f-1b9a-4c8e2f6d0b54> .
+
+<urn:uuid:2d6a9c3e-1b4f-5a5c-0e8d-3f7b1c5a9e43>
+	a uco-core:Relationship ;
+	uco-core:source <urn:uuid:1e5b8d2f-0c3a-5b4d-9f7e-2a6c0d4b8f32> ;
+	uco-core:target <urn:uuid:3a7d0f4b-2e5c-5d6f-1b9a-4c8e2f6d0b54> ;
+	uco-core:kindOfRelationship "Charged_With" ;
+	uco-core:isDirectional true .

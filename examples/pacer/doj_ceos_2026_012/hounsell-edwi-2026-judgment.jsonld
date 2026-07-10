@@ -106,7 +106,7 @@
         {
           "@id": "urn:uuid:c0d03d64-a422-53e6-a474-d3dbfb9f1657",
           "@type": "uco-core:ExternalReference",
-          "uco-core:referenceType": "PACER Judgment in a Criminal Case (AO 245B)",
+          "uco-core:definingContext": "PACER Judgment in a Criminal Case (AO 245B)",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://ecf.wied.wi.gov/cgi-bin/show_public_doc?1:25-cr-00069-WCG-34"
@@ -499,7 +499,7 @@
         "case-investigation:ProvenanceRecord"
       ],
       "uco-core:description": "Sentencing judgment graph derived from PACER PDF and CASE/UCO MCP extraction; imposed under Sentencing Reform Act of 1984.",
-      "case-investigation:derivedFrom": {
+      "case-investigation:wasDerivedFrom": {
         "@id": "urn:uuid:6c1b3552-b6d7-5e99-9c4e-ee3f2a32d951"
       }
     },

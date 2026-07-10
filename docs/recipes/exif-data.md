@@ -125,3 +125,9 @@ graph.write("exif_data.jsonld")
 - `EXIFFacet.exif_data` takes a `list[ControlledDictionary]`. Each dictionary contains `ControlledDictionaryEntry` objects with `key`/`value` string pairs — one per EXIF tag.
 - Link the image to its source partition/volume using a `Relationship` with `kind_of_relationship="Contained_Within"`.
 - GPS coordinates from EXIF can also be modeled as a `Location` with `LatLongCoordinatesFacet`, linked via `Relationship`.
+
+## Related
+
+- [file-system.md](file-system.md) — the image files carrying the metadata
+- [location.md](location.md) — modeling embedded GPS coordinates
+- [cac-csam-forensic-provenance.md](cac-csam-forensic-provenance.md) — camera identification in CAC provenance chains

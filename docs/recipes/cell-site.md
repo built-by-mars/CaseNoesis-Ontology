@@ -144,3 +144,9 @@ graph.write("cell_site.jsonld")
 - `AntennaFacet` fields are all `Optional[float]`: `azimuth`, `antenna_height`, `elevation`, `horizontal_beam_width`, `signal_strength`, `skew`.
 - For CDR (Call Detail Records), model each connection as a time-bounded `Relationship` between the device and the cell site. Create one relationship per connection event in the source data.
 - For multiple towers over time, create multiple `CellSite` objects and multiple `Relationship` objects with different time ranges.
+
+## Related
+
+- [call-log.md](call-log.md) — the call records the towers locate
+- [location.md](location.md) — modeling the tower and sector positions
+- [mobile-device-sim.md](mobile-device-sim.md) — handset + SIM identifiers (IMEI/IMSI)

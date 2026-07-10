@@ -268,7 +268,7 @@ def build_graph() -> dict:
                 "executed a search warrant at the suspect's Annapolis residence."
             ),
             "uco-action:startTime": lit("xsd:dateTime", "2025-12-11T00:00:00Z"),
-            "uco-action:authorization": {"@id": warrant_auth},
+            "case-investigation:relevantAuthorization": {"@id": warrant_auth},
             "uco-action:performer": {"@id": ceu},
             "uco-action:location": {"@id": residence},
             "uco-action:object": {"@id": suspect},
@@ -367,7 +367,7 @@ def build_graph() -> dict:
         {
             "@id": source_ref,
             "@type": ["uco-core:ExternalReference"],
-            "uco-core:url": SOURCE_URL,
+            "uco-core:referenceURL": lit("xsd:anyURI", SOURCE_URL),
         },
         {
             "@id": source_doc,
@@ -410,7 +410,7 @@ def build_graph() -> dict:
                 "Knowledge graph produced from Eye On Annapolis article via CASE-UCO MCP "
                 "document extraction and CAC recipe-guided mapping."
             ),
-            "case-investigation:createdTime": "2026-06-15T00:00:00Z",
+            "uco-core:objectCreatedTime": lit("xsd:dateTime", "2026-06-15T00:00:00Z"),
             "case-investigation:wasInformedBy": [
                 {"@id": source_doc},
                 {"@id": tool},

@@ -1,0 +1,138 @@
+{
+  "extension": "weapons",
+  "modules": [
+    "weapons"
+  ],
+  "classes": {
+    "Weapon": {
+      "iri": "http://example.org/ontology/weapons/Weapon",
+      "module": "weapons",
+      "description": "A material item designed or used to kill, wound, or inflict damage on persons, structures, or systems. Class tree parallels the CCO Artifact Ontology weapon hierarchy (bridge: weapons-profile-cco.ttl); grounded as gufo:FunctionalComplex via weapons-profile-gufo.ttl.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "make",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "Manufacturer or maker name as recorded in the source record, e.g. 'SIG Sauer'. Parallels NIEM nc:ItemMakeName."
+        },
+        {
+          "name": "model",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "Model name or number as recorded in the source record, e.g. 'P365'. Parallels NIEM nc:ItemModelName."
+        },
+        {
+          "name": "caliber",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "Caliber or gauge designation, e.g. '9mm', '12-gauge'. Parallels NIEM nc:FirearmCaliberText."
+        },
+        {
+          "name": "serialNumber",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Manufacturer serial number identifying the individual weapon (subPropertyOf uco-core:externalIdentifier)."
+        },
+        {
+          "name": "serialNumberObliterated",
+          "type": "boolean",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#boolean",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "True when the serial number has been removed, obliterated, or altered (18 U.S.C. § 922(k))."
+        }
+      ],
+      "source": "weapons"
+    },
+    "Firearm": {
+      "iri": "http://example.org/ontology/weapons/Firearm",
+      "module": "weapons",
+      "description": "A weapon that will, is designed to, or may readily be converted to expel a projectile by the action of an explosive, including its frame or receiver (18 U.S.C. § 921(a)(3); CCO 'Firearm'). Inherits weap:Weapon properties (make, model, caliber, serialNumber, serialNumberObliterated).",
+      "parents": [
+        "Weapon"
+      ],
+      "is_facet": false,
+      "properties": [],
+      "source": "weapons"
+    },
+    "Handgun": {
+      "iri": "http://example.org/ontology/weapons/Handgun",
+      "module": "weapons",
+      "description": "A firearm designed to be held and fired in one or two hands without shoulder bracing (pistol, revolver). 18 U.S.C. § 921(a)(30); CCO 'Hand Gun'.",
+      "parents": [
+        "Firearm"
+      ],
+      "is_facet": false,
+      "properties": [],
+      "source": "weapons"
+    },
+    "LongGun": {
+      "iri": "http://example.org/ontology/weapons/LongGun",
+      "module": "weapons",
+      "description": "A firearm with a longer barrel than a handgun, fired while braced against the shoulder. CCO 'Long Gun'.",
+      "parents": [
+        "Firearm"
+      ],
+      "is_facet": false,
+      "properties": [],
+      "source": "weapons"
+    },
+    "Rifle": {
+      "iri": "http://example.org/ontology/weapons/Rifle",
+      "module": "weapons",
+      "description": "A long gun with a rifled barrel firing single bullets over long ranges with high accuracy. 18 U.S.C. § 921(a)(7); CCO 'Rifle'.",
+      "parents": [
+        "LongGun"
+      ],
+      "is_facet": false,
+      "properties": [],
+      "source": "weapons"
+    },
+    "Shotgun": {
+      "iri": "http://example.org/ontology/weapons/Shotgun",
+      "module": "weapons",
+      "description": "A long gun designed to fire packets of shot, a single slug, or a specialty round. 18 U.S.C. § 921(a)(5); CCO 'Shotgun'.",
+      "parents": [
+        "LongGun"
+      ],
+      "is_facet": false,
+      "properties": [],
+      "source": "weapons"
+    },
+    "CuttingWeapon": {
+      "iri": "http://example.org/ontology/weapons/CuttingWeapon",
+      "module": "weapons",
+      "description": "A weapon designed to inflict harm by cutting (knife, sword, machete). CCO 'Cutting Weapon'.",
+      "parents": [
+        "Weapon"
+      ],
+      "is_facet": false,
+      "properties": [],
+      "source": "weapons"
+    },
+    "Ammunition": {
+      "iri": "http://example.org/ontology/weapons/Ammunition",
+      "module": "weapons",
+      "description": "Ammunition, cartridge cases, primers, bullets, or propellent powder designed for use in any firearm (18 U.S.C. § 921(a)(17)(A); CCO 'Portion of Ammunition'). Use weap:caliber for the cartridge designation.",
+      "parents": [
+        "Weapon"
+      ],
+      "is_facet": false,
+      "properties": [],
+      "source": "weapons"
+    }
+  },
+  "vocabs": {}
+}

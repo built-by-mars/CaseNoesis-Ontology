@@ -113,3 +113,9 @@ graph.write("database_records.jsonld")
 - Use `Relationship` with `kind_of_relationship` values: `"Contained_Within"` (record inside DB file), `"Derived_From"` (message derived from record), `"Related_To"` (WAL/journal related to main DB).
 - For bulk extraction, create multiple `TableField` objects in a loop — one per row or per significant field.
 - The database file itself should be linked to its source device/partition via another `Contained_Within` relationship if that context is available.
+
+## Related
+
+- [file-system.md](file-system.md) — the database file itself
+- [advanced-file-patterns.md](advanced-file-patterns.md) — SQLite blobs and nested containment
+- [sms-and-contacts.md](sms-and-contacts.md) — message stores commonly carved from app databases

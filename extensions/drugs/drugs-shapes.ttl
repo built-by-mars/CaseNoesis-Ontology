@@ -1,0 +1,67 @@
+# Controlled Substances Extension — SHACL shapes
+# Permissive stubs: seized substances are often only partially quantified,
+# so no property is required; shapes constrain datatypes, node kinds, and
+# cardinality only.
+
+@prefix drug: <http://example.org/ontology/drugs/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+drug:ControlledSubstance-shape
+	a sh:NodeShape ;
+	sh:targetClass drug:ControlledSubstance ;
+	sh:property
+		[
+			sh:path drug:substance ;
+			sh:nodeKind sh:IRI ;
+		] ,
+		[
+			sh:path drug:substanceName ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path drug:csaSchedule ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path drug:substanceForm ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path drug:mass ;
+			sh:datatype xsd:decimal ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path drug:massUnit ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path drug:purity ;
+			sh:datatype xsd:decimal ;
+			sh:maxCount 1 ;
+			sh:minInclusive 0 ;
+			sh:maxInclusive 100 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path drug:purityBasis ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] ,
+		[
+			sh:path drug:quantityDescription ;
+			sh:datatype xsd:string ;
+			sh:maxCount 1 ;
+			sh:nodeKind sh:Literal ;
+		] .

@@ -1,0 +1,4959 @@
+{
+  "@context": {
+    "kb": "https://example.org/cti/lotus-blossom-sagerunex-talos-2025/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "uco-victim": "https://ontology.unifiedcyberontology.org/uco/victim/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Cisco Talos threat spotlight: Lotus Blossom / Sagerunex",
+      "uco-core:description": "Open-source cyber threat intelligence report by Cisco Talos (Joey Chen, 2025-02-27) analyzing cyber-espionage campaigns by the Lotus Blossom group (a.k.a. Spring Dragon, Billbug, Thrip), active since at least 2012, against government, manufacturing, telecommunications, and media targets in the Philippines, Vietnam, Hong Kong, and Taiwan. The group deploys the Sagerunex backdoor family (Beta/original, Dropbox/Twitter, and Zimbra variants) with persistence installed as service DLLs in the Windows registry, and a post-compromise toolkit (Chrome cookie stealer, Venom proxy, adjust-privilege tool, customized archiver, mtrain/HTran port relay, RAR, Impacket).",
+      "case-investigation:focus": [
+        "APT attribution",
+        "Malware family analysis",
+        "C2 infrastructure",
+        "Registry persistence"
+      ]
+    },
+    {
+      "@id": "urn:uuid:6b2e9ffb-c7e3-5ada-babc-7f430b7b429f",
+      "@type": "uco-identity:Organization",
+      "uco-core:name": "Cisco Talos",
+      "uco-core:description": "Cisco Talos Intelligence Group; publisher of the report and author of the detection coverage."
+    },
+    {
+      "@id": "urn:uuid:74eb2a93-2e1c-5215-8d51-aee70300789f",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Joey Chen",
+      "uco-core:description": "Cisco Talos researcher credited as author of the Lotus Blossom / Sagerunex report."
+    },
+    {
+      "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Lotus Blossom espionage group targets multiple industries with different versions of Sagerunex and hacking tools",
+      "uco-core:description": "Cisco Talos blog post (threat spotlight, APT) authored by Joey Chen and published by Cisco Talos on 2025-02-27.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:25d9a83d-3966-532f-86e7-bd866b4b533f",
+          "@type": "uco-observable:URLFacet",
+          "uco-observable:fullValue": "https://blog.talosintelligence.com/lotus-blossom-espionage-group/"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f0692552-a0d8-5319-8bae-30f67f5db2dd",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:16b3ba54-acae-5a04-9a94-ff41c40e1835",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:74eb2a93-2e1c-5215-8d51-aee70300789f"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Authored_By",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Report author"
+    },
+    {
+      "@id": "urn:uuid:45c64249-2900-5aa5-b0f8-7aae1afd6234",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:6b2e9ffb-c7e3-5ada-babc-7f430b7b429f"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Published_By",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Report publisher"
+    },
+    {
+      "@id": "urn:uuid:5a86a9b9-8ae0-5874-8b9b-36f823630de3",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "01-targeted-countries-map.jpeg",
+      "uco-core:description": "Talos 'Targeted countries' map highlighting Vietnam, Hong Kong, Taiwan, and the Philippines as Lotus Blossom targets.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:8dd62ee6-c1ba-5f3e-8fb4-b593c3f889b7",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "01-targeted-countries-map.jpeg",
+          "uco-observable:extension": "jpeg",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "48041"
+          }
+        },
+        {
+          "@id": "urn:uuid:13b59966-f364-5b3f-83f8-17c064c93413",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1600"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "1322"
+          },
+          "uco-observable:imageCompressionMethod": "JPEG"
+        },
+        {
+          "@id": "urn:uuid:8f5ce1e6-5f87-51f8-ac7c-a2be515d71bf",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:463991cd-e074-5b77-a935-67cd3a3f9315",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "6aeef2ece92e93391dea6e577ceef8c67ddd8ab1020d454ecbe7772df81a5d3c"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3cadd593-f8c6-5ce5-85ac-5e1caef0480f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:5a86a9b9-8ae0-5874-8b9b-36f823630de3"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:e75c8a37-1f96-5bd4-9ea8-8abaef9c8fed",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "02-sagerunex-timeline.jpeg",
+      "uco-core:description": "'Timeline of Sagerunex' Gantt chart: Beta/original ~2016-2021, Dropbox and Twitter version ~2018-2022, Zimbra version ~2019-2024.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:1efd8853-c1e9-59d5-a053-a7451e71d2c4",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "02-sagerunex-timeline.jpeg",
+          "uco-observable:extension": "jpeg",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "49740"
+          }
+        },
+        {
+          "@id": "urn:uuid:fe60e668-3ac8-5244-b673-03578dda2eea",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1600"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "1322"
+          },
+          "uco-observable:imageCompressionMethod": "JPEG"
+        },
+        {
+          "@id": "urn:uuid:d9128ad5-f7cf-53aa-ad04-5a05474275fb",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:5f42e1b7-ebb0-5e2f-b802-7ebde7a5154f",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "89823a97fe956ba0af419de853f966817ff1b7dfffd0e3073867776a4729fe51"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c5c85203-7a55-5663-9a16-5630832a319a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:e75c8a37-1f96-5bd4-9ea8-8abaef9c8fed"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:d79c525a-fa8f-5b1c-bc14-c74ee057dbcd",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "03-cookie-stealer-code.png",
+      "uco-core:description": "Decompiled get_cookies_from_chrome() of the Chrome cookie stealer; reads the Chrome 'Cookies' SQLite DB, decrypts values, and writes them to the temp file tmcok43.tmp.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:956078ba-41d4-524e-bf3c-30944dfe09ef",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "03-cookie-stealer-code.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "82515"
+          }
+        },
+        {
+          "@id": "urn:uuid:44ca8320-96e8-501c-8357-e18cc18a87ca",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "865"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "734"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:0812bab6-f278-50ae-90f2-203fa78e3b12",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:ab4ff3af-ce9f-53e2-bb0c-d35b960a70fa",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "f66a952572b09e4841d63a789d32297b1d5e0eb28e5ad572c042b04134541eda"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a448b3f2-6eda-5b18-b681-fb04c06748c4",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:d79c525a-fa8f-5b1c-bc14-c74ee057dbcd"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:296a8b64-92f6-5082-9df1-cd2e54859fd9",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "04-venom-proxy-functions.png",
+      "uco-core:description": "IDA function list of the Venom proxy agent (github_com_Dliv3_Venom_agent_dispatcher_* handlers: SyncCmd, ConnectCmd, DownloadCmd, UploadCmd, ShellCmd, Socks5Cmd, forwarding).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:7eafd65b-fdfc-58f5-b7df-c0a55794d08e",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "04-venom-proxy-functions.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "15047"
+          }
+        },
+        {
+          "@id": "urn:uuid:6b57c0d2-7229-5d42-b5ef-34bedcfcc83f",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "339"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "410"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:3020cf39-97c9-5869-9101-71d4a5781c7f",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:367b0b1d-396b-5176-8fd0-bf159b123ebb",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "6aa85b693f83a555592909cad457e88a9ec9b43e0ff1ea778c1943d769fcb326"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:62183ce8-a6d9-54f7-af40-d3d7e292d236",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:296a8b64-92f6-5082-9df1-cd2e54859fd9"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:87c9c7a4-7dd4-5f58-86aa-5d67451f9ef1",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "05-adjust-privilege-code.png",
+      "uco-core:description": "Decompiled adjust-privilege tool: usage 'pid image parameters', retrieves another process token to adjust privilege for a launch process.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:832bb8a5-ac96-5d75-92c0-7de40a17c0be",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "05-adjust-privilege-code.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "13899"
+          }
+        },
+        {
+          "@id": "urn:uuid:4fef11f0-e776-57e2-8da9-6528d9894f67",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "436"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "508"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:c976ec99-29b5-5181-b5f9-78a86e80c462",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:f053ad95-0342-53fb-8569-3287e674b77e",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "dc3e5ca2ef9a9c96660b8d36970d0e04f5e85f466b2359daa48a731fb3ae48fb"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0e19b115-355d-5546-b858-39ec1dcd931e",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:87c9c7a4-7dd4-5f58-86aa-5d67451f9ef1"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:d8764ee7-ecd0-5d00-b04a-6b07ad5f480f",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "06-archiving-tool-code.png",
+      "uco-core:description": "Decompiled customized archiving tool with '[!] Compressed file not supported yet', '[!] Encrypted file not supported yet', and file-attribute parsing; compresses/encrypts stolen files and folders.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:28f2216f-cc68-5e15-94b8-b281ce08dbe4",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "06-archiving-tool-code.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "23431"
+          }
+        },
+        {
+          "@id": "urn:uuid:6e7d27b5-320c-581e-b7a1-21970b716687",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "804"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "559"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:8bee61f2-4ffb-5c7e-acec-7c2a3b2919da",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:ec327085-ebbf-582f-82fc-77e18642fba8",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "13fda3fce7855bb25a617fdd10944026a6c9a19ec0279b14e98d6c1b8f9b9f97"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a049afaf-faaf-5296-8b3a-712c190c4540",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:d8764ee7-ecd0-5d00-b04a-6b07ad5f480f"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:193d2f1f-e48e-567f-ae38-133956f0a865",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "07-mtrain-portrelay-usage.png",
+      "uco-core:description": "Cmder session showing 'mtrain.exe_f2370de517a032a27fcf3ba175e611a1b1a2b0ba -debug' printing 'MTrain V1.01' usage (-l/-t/-s ConnectPort/TransmissionHost/TransmissionPort); run from C:\\Users\\yyds\\Desktop.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:44ef28ab-6ff6-5808-92ec-09866cb713cc",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "07-mtrain-portrelay-usage.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "44504"
+          }
+        },
+        {
+          "@id": "urn:uuid:727ea6b8-3682-527f-b17c-eb11072c01b5",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "813"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "256"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:7cf8a244-71a2-5ec7-a49c-3b302fe51261",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:176c754e-e196-5c95-8c37-7fe32ae5a46d",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "b2f5815956648eab6b5ea897f6a5d5d0cf0356f93df48955c7a865a5eb9d51dd"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:7fe9532b-b7f4-5b19-a36a-d6d36c1a43e0",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:193d2f1f-e48e-567f-ae38-133956f0a865"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:4dbed78a-1203-5074-9c57-d9757e9c8b3d",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "08-attack-chain-diagram.jpeg",
+      "uco-core:description": "Talos 'Attack chain' diagram: unknown vector -> initial compromised machine -> WMI lateral movement across the internal network -> tool sets (RAR, port relay, archiving, adjust-privilege, Venom, cookie stealer) -> Sagerunex data-exfiltrating machine -> C2 over VPS, Zimbra, Dropbox, and X (Twitter).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:16eadb76-3cdb-5bd6-aac5-e984bbf39060",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "08-attack-chain-diagram.jpeg",
+          "uco-observable:extension": "jpeg",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "97640"
+          }
+        },
+        {
+          "@id": "urn:uuid:aee492a9-d888-50c0-af1b-30750cb18287",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1600"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "1322"
+          },
+          "uco-observable:imageCompressionMethod": "JPEG"
+        },
+        {
+          "@id": "urn:uuid:4fec22b5-379e-5e8c-99c4-95be99f4f4ed",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:8598d92d-eda9-5b3a-99d7-439be406e4b1",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "cbd4aa8c0c67e864a86efecdc0837e803adfb42626519482e4b416934827b6fc"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6b2ba3c4-91e8-514a-801d-57d69f9d0c89",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:4dbed78a-1203-5074-9c57-d9757e9c8b3d"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:ad355e33-e745-5c5b-a0fd-ca98487d0e45",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "09-sagerunex-debug-logfile-names.png",
+      "uco-core:description": "Decompiled debug-log routines for the four Sagerunex variants showing the temp debug-log filenames each variant writes (e.g. TS_968T.tmp, TS_F856.tmp, DBGECD20.tmp, VDM_LOMT.tmp \u2014 OCR approximate).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f07dcbed-26dc-5bdb-bd98-2cb20b72353b",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "09-sagerunex-debug-logfile-names.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "343846"
+          }
+        },
+        {
+          "@id": "urn:uuid:771a148f-3aa6-5305-b0ab-7321071e827c",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1600"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "587"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:33a0cc0e-9567-5a19-b28b-080dd3f42370",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:2e45e69b-4d61-51cf-87bf-a847b3bcde30",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "6f0c75568269bd5768ee5ab540abbaefdd316dee76718d4bbb15b4517f422aed"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:1c4e7d2b-bc93-5ad9-a19d-b1e162d11db4",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:ad355e33-e745-5c5b-a0fd-ca98487d0e45"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:079aa572-5daf-579c-82af-06d0388def70",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "10-sagerunex-config-file-paths.png",
+      "uco-core:description": "Decompiled config-path builders for the Sagerunex variants using SHGetSpecialFolderPath and CreateDirectory under Microsoft / Internet Explorer / Windows / Network folders, writing config filenames such as DMIX.DAT, GE_%X.dat, GED%X.CAB, DEP%X.CAB (OCR approximate).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:ee342cea-1370-586e-8baf-bf9bf63d4e3b",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "10-sagerunex-config-file-paths.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "185552"
+          }
+        },
+        {
+          "@id": "urn:uuid:ded6dea5-362b-5b51-822f-90692ecf1a49",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1600"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "330"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:218fb951-f954-547d-a544-f175f4536a48",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:b388ee19-ae17-5753-b041-456ca9d12ad4",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "a597c12a14729aecd30e39f25aca86d3ede1453edc90787ddc05ef40c6c76d18"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:840261de-9976-5408-bad3-a75f74a845c4",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:079aa572-5daf-579c-82af-06d0388def70"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:6546363c-9116-5f3a-be4d-ba7222d0fe7b",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "11-beta-config-hexdump.png",
+      "uco-core:description": "Annotated hexdump of a Beta/original Sagerunex config: campaign code 'WS1x321014'; C&C servers 103.234.97.19, 43.252.161.22, 118.193.240.214, 103.232.223.117, 103.243.131.205; victim HTTP proxy 192.168.240.18:8080 with proxy username/password.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:9dc2ac07-7f84-5eb7-8a4a-79ef28cc4e81",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "11-beta-config-hexdump.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "440924"
+          }
+        },
+        {
+          "@id": "urn:uuid:e378c455-d16e-5877-aa1c-d752bc2b353c",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "868"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "791"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:8922886b-10e6-5cae-a236-1d0c56801b6a",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:206a23aa-84bd-5ffb-b3b8-28eea7ed159c",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "5599af51bfee70c37604b0915d4e810b3cadd894bedf733ccb7426ceb343e62d"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b0cc5039-9ace-558c-bb07-6ab58a24431f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:6546363c-9116-5f3a-be4d-ba7222d0fe7b"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:75c5be1c-d8d6-588c-ab35-88700402ff88",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "12-beta-online-checkin-code.png",
+      "uco-core:description": "Decompiled Beta online/beacon loop with debug strings 'Online fail - %d', 'Missing server config.', 'Online Fail! Wait for %d mins', 'Sleep - %d mins', and WaitForSingleObject waits.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c9801072-b130-5d28-b5c0-320d5609955c",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "12-beta-online-checkin-code.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "45478"
+          }
+        },
+        {
+          "@id": "urn:uuid:5805814c-dec5-5e2e-ac54-5bded61105b7",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "937"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "660"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:79a672de-205e-5ecb-a486-6a022571c861",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:9f293d59-f13a-536d-a04a-6d61f18ce6f2",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "fdcfc675076633e3729a87aa4bd827aee2beeb18a95d30cfe9ad0635d767d76a"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:48440263-1245-5694-972a-82cf87fb2d86",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:75c5be1c-d8d6-588c-ab35-88700402ff88"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:eef466bc-dbc5-53a8-8d49-2c7e9fb5ebad",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "13-beta-command-functions.png",
+      "uco-core:description": "Decompiled Beta command dispatcher: Heart/Online check-ins then a command switch \u2014 host_Status, update_config, cmd_shell, Execute_Script, Read_file, create_file.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:48a3494c-bff1-5097-a1e1-0ce211a51979",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "13-beta-command-functions.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "97122"
+          }
+        },
+        {
+          "@id": "urn:uuid:73e7e22a-7c60-5d77-82eb-8c3206663ad0",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "777"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "502"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:f26c8509-3fa4-5e0c-adb3-8fc0d498255a",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:04b168de-c1e2-5f68-bc24-926a0261370c",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "94395c7763e2c1da831e64fd9ccac1fbbe2641c05fc69199266c53d687e67f42"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:4f7423d8-a3c4-5fd6-9447-92a6f4226ae2",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:eef466bc-dbc5-53a8-8d49-2c7e9fb5ebad"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:46294edb-27ca-5104-8fa4-131672e02203",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "14-beta-infection-chain.jpeg",
+      "uco-core:description": "Talos 'Beta version of Sagerunex' infection-chain diagram: shell runs the loader as a service, loader injects Sagerunex into memory; checks config file/system time/proxy/internet, drops/reads config, writes logs, connects to C2; commands host status, update config, cmd shell, read file, create file.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:d2f5d1bd-d089-53fa-919b-9403c3cd3fe5",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "14-beta-infection-chain.jpeg",
+          "uco-observable:extension": "jpeg",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "105377"
+          }
+        },
+        {
+          "@id": "urn:uuid:0e5ca18f-6fc2-5975-bc19-aa407ef75ddd",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1361"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "1600"
+          },
+          "uco-observable:imageCompressionMethod": "JPEG"
+        },
+        {
+          "@id": "urn:uuid:e786eca1-e64d-5310-8c7b-084a0424a734",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:3ee2276a-0689-5786-9178-c66c3b963587",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "b5e203829b272f846095af10ddfeaad091f0cbb1f6872796880e56d422c77468"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9bdfcff9-f05b-5a18-baab-b685c637890e",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:46294edb-27ca-5104-8fa4-131672e02203"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:2d475fc0-146d-5f8d-90c0-5b87663ff86d",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "15-dropbox-twitter-command-code.png",
+      "uco-core:description": "Decompiled Dropbox/Twitter variant: Twitter Tdle-from-id and Dropbox get-list/create-folder token handling, MAC-match and length checks, then command switch uploadFile / Set_config_info / test_token / cmd / read_file / create_file.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:245529fa-d739-5a57-906f-194022cbe023",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "15-dropbox-twitter-command-code.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "162747"
+          }
+        },
+        {
+          "@id": "urn:uuid:98db29b7-e227-5c42-ba70-4cec414bb5d7",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1211"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "622"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:c3ebf1d1-f241-5a66-99bb-d3b7b7a8eaed",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:a2c6ca2a-37c2-5674-a49b-6204114b4c2e",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "833123ec13522b2403eee84582f50c86bb63061f955d733735b7d844d1dfdb53"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:fd407689-815d-538c-bc53-8886b57ea71f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:2d475fc0-146d-5f8d-90c0-5b87663ff86d"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:329a7984-98cb-549e-b0e2-cfc4b1ed6b71",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "16-dropbox-twitter-config-hexdump.png",
+      "uco-core:description": "Annotated hexdump of the Dropbox/Twitter config: Dropbox tokens, Twitter [ConsumerKey]/[ConsumerSecret]/[AccessToken]/[AccessTokenSecret]/[ScreenName] fields, and a possible attacker file path C:\\Users\\USER\\Documents\\dtj32\\dj32.dll.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:3f04b4e0-cedd-54c0-be1e-2e37dc157a7e",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "16-dropbox-twitter-config-hexdump.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "559058"
+          }
+        },
+        {
+          "@id": "urn:uuid:2d92d57b-0bb6-5848-9000-9378106c36f5",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1012"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "791"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:628cd506-ded9-5354-a7c9-e5bffcee95b4",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:1491fd15-ed44-5d12-9c90-0b73b5dc115a",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "2d8ffa654be8412abdfe36fb5b32735850041141b8d5fd9e5f470e7e9a1617b7"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:987c40ed-44de-5371-befd-9566511b8a9e",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:329a7984-98cb-549e-b0e2-cfc4b1ed6b71"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:8b88015b-7554-5be8-a921-52b00d9b9096",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "17-dropbox-file-listing.png",
+      "uco-core:description": "Dropbox API file listing extracted from one C2 account: JSON entries with client_modified/server_modified timestamps spanning 2018-07 through 2022-06, confirming the 2018-2022 activity window.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:584b5228-5835-5cca-926c-5fb3d460d2c7",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "17-dropbox-file-listing.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "468047"
+          }
+        },
+        {
+          "@id": "urn:uuid:432ec5d3-0e68-5648-bec8-87c998a93513",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1446"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "937"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:887e6238-f720-53ad-834c-15c645f42092",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:322d5074-7c53-51ae-96e6-caaca560b563",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "2849cc0844d5f14e46d8a7134f1c509c20c8cc90416c7fd4201be9f981e92a5c"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:94ae436f-4aef-5ac0-a79a-0938e6d8d220",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:8b88015b-7554-5be8-a921-52b00d9b9096"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:0b4e88fd-f90a-5970-b3f5-c1cf40991ef4",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "18-dropbox-twitter-infection-chain.jpeg",
+      "uco-core:description": "Talos 'Dropbox & Twitter version of Sagerunex' infection-chain diagram, including the beacon response-ID logic (id<16 re-beacon, 16-32 collect+execute, ==39 status check) and archive-and-send to Dropbox/Twitter.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f881cd6a-05fc-53c2-9cb1-587e8ce87f4b",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "18-dropbox-twitter-infection-chain.jpeg",
+          "uco-observable:extension": "jpeg",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "96176"
+          }
+        },
+        {
+          "@id": "urn:uuid:63b34ba0-30b4-52e4-8eda-b12d2223d5a9",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "852"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "1600"
+          },
+          "uco-observable:imageCompressionMethod": "JPEG"
+        },
+        {
+          "@id": "urn:uuid:3a3e3271-adfc-574f-a9f7-7d80e2b994ec",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:2fa2a3b7-946f-509d-95fc-c10c9679c863",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "4232875542b5b9545eef397902143e71ef45cae1f4c573d48220090e860e2302"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:94278ca4-21de-59b5-8ab6-3a137b93c824",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:0b4e88fd-f90a-5970-b3f5-c1cf40991ef4"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:f1cb41c4-7ebe-51ef-b98c-618287835f0f",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "19-zimbra-draft-request-code.png",
+      "uco-core:description": "Decompiled Zimbra variant SaveDraftRequest building a Zimbra SOAP request with 'Cookie: ZM_TEST=true; ZM_AUTH_TOKEN=%s; JSESSIONID=%s', an X-Zimbra-Csrf-Token, and a draft mail carrying the encoded attachment.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:fe46d23e-9b5f-55c1-b0a0-166918ac22d2",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "19-zimbra-draft-request-code.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "39679"
+          }
+        },
+        {
+          "@id": "urn:uuid:483447a8-29e5-5b10-b0ca-7676d5851159",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "898"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "546"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:b3981fb8-93da-567e-b1bd-9f48d673e9ba",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:9cc90f30-dccf-533b-b8d7-619c1e4149b8",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "d0623392b2f4a4a36d82c5656de7f1de1cc8f06a0d0cf08eab4da1fdd7018a4d"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9e66a5a2-d137-544b-b7ed-f73613142049",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:f1cb41c4-7ebe-51ef-b98c-618287835f0f"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:7f678244-47d4-5c25-ab51-48c6a2344bb2",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "20-zimbra-connection-command-code.png",
+      "uco-core:description": "Decompiled Zimbra connection/command routine: builds the /service/home mailbox URL with ZM_AUTH_TOKEN, sends via a 'Jakarta Commons-HttpClient/3.1' user agent, then a command switch \u2014 Send_back_log, Copy_Files, CmdShell, Read_Files, Create_Files.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:e7f73299-f225-55ed-a03c-4c52dff17f09",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "20-zimbra-connection-command-code.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "111095"
+          }
+        },
+        {
+          "@id": "urn:uuid:0a79cc2d-38cf-5f1c-b718-1d4c5c2bf1be",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1358"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "652"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:15fcbf55-2fdd-5b22-a4dd-ddd6763457c3",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:b15ef7ff-a891-5479-a866-bda5f0974576",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "59cfa874fa1a79fd40fda4e9215a762f5da01a3a52b37004266be73071c15003"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:32c9cc67-c992-5d6d-bc80-11f4a17355ef",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7f678244-47d4-5c25-ab51-48c6a2344bb2"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:b0b07132-1735-55bf-868a-c43cadedbfc7",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "21-zimbra-draft-mailbox.png",
+      "uco-core:description": "Screenshot of a Zimbra (netvigator.com) 'Daily mail report' Drafts folder full of base64 draft bodies, each with a mail_report.rar attachment \u2014 the beacon/exfil channel.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:e4c7bdc3-72ba-5fbf-92ab-f2940b3d34cf",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "21-zimbra-draft-mailbox.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "235483"
+          }
+        },
+        {
+          "@id": "urn:uuid:49d43a04-af9d-5e05-8386-d8d0272ece81",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1600"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "906"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:0e9abfa9-f97d-5098-ad46-ca2103543cc7",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:58e2cd37-cd03-5aa3-9fa5-1492053222f1",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "b9e35edbc0dff5aab48e50cdbd3404bb55a5489bd13f486955e9cbc874013db4"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:decf3347-8f0b-5f7d-a613-c66da2107564",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:b0b07132-1735-55bf-868a-c43cadedbfc7"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:a06d3932-35f5-5134-9205-f041c94cd29e",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "22-zimbra-trash-mailbox.png",
+      "uco-core:description": "Screenshot of the same Zimbra account's Trash folder with 'Daily mail report' drafts and mail_report.rar attachments \u2014 the command-result channel.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:a618f1ed-81ed-5b5b-85c1-c6c2b2295606",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "22-zimbra-trash-mailbox.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "164299"
+          }
+        },
+        {
+          "@id": "urn:uuid:5abc3687-d80e-5e2c-9d06-945e3bd89f31",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1600"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "572"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:27e1e5e0-eb5d-5fbe-acad-f185a667bce2",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:b3b98b27-cbd1-5f3c-af86-14e7bc5c5573",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "8d073b23078e02bc5472df6664f2aefec0538cb29b6417490d09b6e9d6a8bde3"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3e82e0e2-6054-504c-95d0-a34c16818114",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:a06d3932-35f5-5134-9205-f041c94cd29e"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:1a96b3ff-257a-5120-a309-708dd0f5d6d5",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "23-zimbra-infection-chain.jpeg",
+      "uco-core:description": "Talos 'Zimbra webmail version of Sagerunex' infection-chain diagram: login for authToken, sync folders, save host info as mail_report.rar into the draft folder; commands host status, copy file, cmd shell, read file, create file, results saved to the trash folder.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f101e53a-f0e8-5632-ab08-e0308e667901",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "23-zimbra-infection-chain.jpeg",
+          "uco-observable:extension": "jpeg",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "105198"
+          }
+        },
+        {
+          "@id": "urn:uuid:412ec019-0dfd-5428-a2b7-56a32829c9a1",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1041"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "1600"
+          },
+          "uco-observable:imageCompressionMethod": "JPEG"
+        },
+        {
+          "@id": "urn:uuid:90b6b46e-ab57-585a-8a1c-74a55731cebf",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:78ce2f17-13c4-52bd-b2da-d54e70bd7487",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "eb0865b1b631a164cdb4740a68d9986961f6739dbef56396159841016cd46b0a"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e570676d-f370-5329-81e2-2a7389cd167a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:1a96b3ff-257a-5120-a309-708dd0f5d6d5"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:d771faea-3202-55ac-b8de-79baf962d58c",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "24-cisco-coverage-matrix.png",
+      "uco-core:description": "Cisco product coverage matrix (Secure Endpoint, Secure Email, Secure Firewall/IPS, Secure Malware Analytics, Umbrella DNS/SIG, Secure Web Appliance) for this threat.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:d653281b-c3c0-55bc-8811-e225520c6499",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "24-cisco-coverage-matrix.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "120663"
+          }
+        },
+        {
+          "@id": "urn:uuid:fdd07d90-8047-5d2f-8c6a-0e9da4bc18fe",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1431"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "289"
+          },
+          "uco-observable:imageCompressionMethod": "PNG"
+        },
+        {
+          "@id": "urn:uuid:eb4cd9db-3ea6-5628-837f-f71a0370f426",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:08af70d5-1d94-54f0-8bc7-aee1d105668d",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "b37fee3c054bb110b72b2a01045b4b1efb6e5234c58575de1f7f3e41cc56d121"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9172e9c5-2a9d-5cde-90cc-617e9006b5c0",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:d771faea-3202-55ac-b8de-79baf962d58c"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ba42556b-e5eb-5a81-b40f-876a588e3aeb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic",
+      "uco-core:description": "Figure published in the Talos report"
+    },
+    {
+      "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017",
+      "@type": "uco-identity:Organization",
+      "uco-core:name": "Lotus Blossom",
+      "uco-core:description": "Cyber-espionage threat actor active since at least 2012; attributed by Talos with high confidence via exclusive use of the Sagerunex backdoor, consistent victimology, and TTPs. UCO has no dedicated ThreatActor class, so the group is modeled as an Organization.",
+      "uco-core:tag": [
+        "Spring Dragon",
+        "Billbug",
+        "Thrip"
+      ]
+    },
+    {
+      "@id": "urn:uuid:a467f41c-5f94-5619-ba15-51fb14f239f0",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Subject_Of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:b7fc1ed9-b935-50ae-b924-34ae8f00b2ff",
+      "@type": "uco-tool:MaliciousTool",
+      "uco-core:name": "Evora",
+      "uco-tool:toolType": "backdoor",
+      "uco-core:description": "Older Billbug RAT; Sagerunex is assessed to be an evolution of Evora."
+    },
+    {
+      "@id": "urn:uuid:b0b81c05-0b41-509c-a1b4-904ae4e4df00",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "HTran",
+      "uco-tool:toolType": "port relay / proxy",
+      "uco-core:description": "Public TCP connection-bouncing tool; the actor's 'mtrain V1.01' is a modified HTran."
+    },
+    {
+      "@id": "urn:uuid:f145bbdf-ac0c-50a9-b38a-1f5f851155fd",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Philippines",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:916bc210-7cd3-5865-af9f-efb3bf840341",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:country": "Philippines"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:776f55aa-6b2a-591c-9778-1df9d3bbcb69",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:f145bbdf-ac0c-50a9-b38a-1f5f851155fd"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "targeting",
+      "uco-core:description": "Targeted region (Talos 'Targeted countries' map)"
+    },
+    {
+      "@id": "urn:uuid:116cf6fc-e852-52ac-b9f3-2e4950ac21ec",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Vietnam",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:4342f4a1-013b-5e4e-90d0-8bb75828d21c",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:country": "Vietnam"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:748757a6-0175-5809-b0c9-e2ef84631380",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:116cf6fc-e852-52ac-b9f3-2e4950ac21ec"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "targeting",
+      "uco-core:description": "Targeted region (Talos 'Targeted countries' map)"
+    },
+    {
+      "@id": "urn:uuid:187b4aed-a33e-57b2-bce1-3cb046ed6449",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Hong Kong",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:57e04393-53f0-5f8c-9246-feb2d8510b4a",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:country": "Hong Kong"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0949aca4-0f91-5c44-a828-72fd9bfed98a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:187b4aed-a33e-57b2-bce1-3cb046ed6449"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "targeting",
+      "uco-core:description": "Targeted region (Talos 'Targeted countries' map)"
+    },
+    {
+      "@id": "urn:uuid:8a70c983-de10-516b-9eb9-d9785d817a02",
+      "@type": "uco-location:Location",
+      "uco-core:name": "Taiwan",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:af5513a3-ea6d-5503-9bf4-af35707b7a8c",
+          "@type": "uco-location:SimpleAddressFacet",
+          "uco-location:country": "Taiwan"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:826cceee-c0b7-5f34-b2d4-93c8e9442f2f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:8a70c983-de10-516b-9eb9-d9785d817a02"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "targeting",
+      "uco-core:description": "Targeted region (Talos 'Targeted countries' map)"
+    },
+    {
+      "@id": "urn:uuid:a5656a35-ad05-560d-98bc-977b836f269d",
+      "@type": "uco-victim:VictimTargeting",
+      "uco-core:name": "Targeted sectors",
+      "uco-core:description": "Lotus Blossom targeted organizations in the following sectors: government, manufacturing, telecommunications, media.",
+      "uco-core:tag": [
+        "government",
+        "manufacturing",
+        "telecommunications",
+        "media"
+      ]
+    },
+    {
+      "@id": "urn:uuid:7ddb20b8-01f9-537f-92d4-f040fac695a2",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:a5656a35-ad05-560d-98bc-977b836f269d"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "targeting"
+    },
+    {
+      "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd",
+      "@type": "uco-tool:MaliciousTool",
+      "uco-core:name": "Sagerunex",
+      "uco-tool:toolType": "backdoor / RAT",
+      "uco-core:description": "Backdoor family used exclusively by Lotus Blossom since at least 2016; a DLL-injected, in-memory RAT assessed to be an evolution of Evora. Loader has two patterns (embedded-and-encrypted payload with custom decryption; and a 'servicemain' variant that only runs as a service). Code obfuscated with VMProtect. All variants: search a temp debug-log file, verify a config file, run time-check logic, pause via WaitForSingleObject (300000 ms), and support web-proxy autodiscovery plus hardcoded proxy credentials before beaconing."
+    },
+    {
+      "@id": "urn:uuid:31bdced0-accf-5e39-b1b3-cf33b2c7f39b",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used_By",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Exclusive-use backdoor"
+    },
+    {
+      "@id": "urn:uuid:b57a07c6-8859-574b-bad0-31eb737446ef",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:b7fc1ed9-b935-50ae-b924-34ae8f00b2ff"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Assessed evolution of Evora"
+    },
+    {
+      "@id": "urn:uuid:1ee3a75e-f4ba-5815-9c3b-de93cbcfc33a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:b7fc1ed9-b935-50ae-b924-34ae8f00b2ff"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:ffbab65f-2fce-5439-bed6-a23b6d66ec93",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:b0b81c05-0b41-509c-a1b4-904ae4e4df00"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Sagerunex Beta version",
+      "uco-core:description": "Beta variant with verbose debug strings (e.g. 'Online Fail! Wait for %d mins'); gathers hostname, MAC, and IP, queries public IP via api.ipaddress[.]com, encrypts and sends to a traditional VPS C2. Commands: host status, update config, cmd shell, read file, create file. Active ~2016-2021 (Talos timeline).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:6b9bf93f-2900-5e5b-bff0-d4c401ea14f0",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "Sagerunex Beta version (Sagerunex variant)",
+          "uco-observable:extension": "dll",
+          "uco-observable:observableCreatedTime": {
+            "@type": "xsd:dateTime",
+            "@value": "2016-01-01T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a14d7ed9-658b-5277-800c-40a8ece59850",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Member of the Sagerunex family"
+    },
+    {
+      "@id": "urn:uuid:155458a6-4f97-5cef-b199-e2ee427a37c6",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:16927d5d-fd72-5b5a-ab37-302a7084bab5",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Sagerunex original version",
+      "uco-core:description": "Original variant previously documented by other vendors; same code flow as the Beta version but with terse '0x00'-prefixed debug strings. Uses traditional VPS C2. Active ~2016-2021.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:ee9d2094-06ba-575b-94f0-51aa6979c4d5",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "Sagerunex original version (Sagerunex variant)",
+          "uco-observable:extension": "dll",
+          "uco-observable:observableCreatedTime": {
+            "@type": "xsd:dateTime",
+            "@value": "2016-01-01T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:213d088b-297e-516f-9961-c02799e9a58c",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:16927d5d-fd72-5b5a-ab37-302a7084bab5"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Member of the Sagerunex family"
+    },
+    {
+      "@id": "urn:uuid:5b6ca457-46d8-576c-a07d-96524333321d",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:16927d5d-fd72-5b5a-ab37-302a7084bab5"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Sagerunex Dropbox/Twitter version",
+      "uco-core:description": "Variant that tunnels C2 through the Dropbox and Twitter (X) APIs. Beacon response-ID logic: id<16 re-beacon; 16-32 collect host info and run paired commands; ==39 fetch queued data. Config embeds Dropbox tokens and Twitter ConsumerKey/ConsumerSecret/AccessToken/AccessTokenSecret/ScreenName. Predominantly active 2018-2022 and possibly still active.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:11ec4947-55d9-544e-8690-a924f9a774b8",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "Sagerunex Dropbox/Twitter version (Sagerunex variant)",
+          "uco-observable:extension": "dll",
+          "uco-observable:observableCreatedTime": {
+            "@type": "xsd:dateTime",
+            "@value": "2018-01-01T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:90035c21-6728-5d07-8e18-5738d5532e3f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Member of the Sagerunex family"
+    },
+    {
+      "@id": "urn:uuid:fe43d3fa-212e-598f-b98c-caab0707bc1f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:8d4cb3ec-7a79-5ec5-a26e-4492a8f10532",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Sagerunex Zimbra version",
+      "uco-core:description": "Variant that uses the Zimbra open-source webmail API as its C2 channel: logs in for an auth token, saves encrypted host info as mail_report.rar attached to a Drafts-folder message (beacon/exfil), reads operator commands from mailbox content, and writes command results as mail_report.rar into the Trash folder. Active since 2019.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:96cc9671-185b-514c-8e3a-9a019bc94029",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "Sagerunex Zimbra version (Sagerunex variant)",
+          "uco-observable:extension": "dll",
+          "uco-observable:observableCreatedTime": {
+            "@type": "xsd:dateTime",
+            "@value": "2019-01-01T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:404a869d-3a3e-54c0-8080-939bd09e9514",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:8d4cb3ec-7a79-5ec5-a26e-4492a8f10532"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Member of the Sagerunex family"
+    },
+    {
+      "@id": "urn:uuid:073e66fd-f801-5cf2-a66f-f4a84e38a477",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:8d4cb3ec-7a79-5ec5-a26e-4492a8f10532"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:e3d75fd5-7ce8-5fe2-ac9d-9356c4cdc54f",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "VMProtect",
+      "uco-tool:toolType": "software protection / packer",
+      "uco-core:description": "Commercial software-protection tool the actor used to obfuscate Sagerunex against AV."
+    },
+    {
+      "@id": "urn:uuid:e6b1f4c7-af2a-554f-8410-a4b2cfbbbc56",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:e3d75fd5-7ce8-5fe2-ac9d-9356c4cdc54f"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Packed_By",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:ac0ad3c2-d904-556e-9fc8-6086e7a5e7a9",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "TS_968T.tmp",
+      "uco-core:description": "Sagerunex debug-log temp file written in the temp folder (OCR approximate).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:42d7d260-925b-566a-b5f4-6ecd4b72b52b",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "TS_968T.tmp",
+          "uco-observable:extension": "tmp"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a3f6c71b-5a54-572d-a49e-e3048277b04b",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ac0ad3c2-d904-556e-9fc8-6086e7a5e7a9"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Created",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "artifact"
+    },
+    {
+      "@id": "urn:uuid:f3cb8cab-9556-541d-acaa-04951762d4aa",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "TS_F856.tmp",
+      "uco-core:description": "Sagerunex debug-log temp file written in the temp folder (OCR approximate).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:155cef23-790d-5b5c-a7a7-1bc3a2ed8a77",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "TS_F856.tmp",
+          "uco-observable:extension": "tmp"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:1d16ff5e-61dd-5bca-b067-e21d4b3eadcb",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:f3cb8cab-9556-541d-acaa-04951762d4aa"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Created",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "artifact"
+    },
+    {
+      "@id": "urn:uuid:69a6596f-fa69-5476-9368-e82c85530dac",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "DBGECD20.tmp",
+      "uco-core:description": "Sagerunex debug-log temp file written in the temp folder (OCR approximate).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:d4b44d6d-3016-5877-948e-b75d70ffcfbf",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "DBGECD20.tmp",
+          "uco-observable:extension": "tmp"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:496ef618-6c88-5ffc-ad1a-0bc3d573b206",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:69a6596f-fa69-5476-9368-e82c85530dac"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Created",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "artifact"
+    },
+    {
+      "@id": "urn:uuid:44cef083-ef5f-587f-a5bf-93ebab359222",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "VDM_LOMT.tmp",
+      "uco-core:description": "Sagerunex debug-log temp file written in the temp folder (OCR approximate).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:493adfe3-7975-525a-b32d-6aef17ace5f4",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "VDM_LOMT.tmp",
+          "uco-observable:extension": "tmp"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c5fe549c-6dcf-5149-ae02-873f6b9e0931",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:44cef083-ef5f-587f-a5bf-93ebab359222"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Created",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "artifact"
+    },
+    {
+      "@id": "urn:uuid:08c3dcf4-d1b1-5353-8b01-7f43510876f2",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "C:\\Users\\aa\\Desktop\\dpst.dll",
+      "uco-core:description": "Original build path revealed in the Dropbox/Twitter Sagerunex config; likely from the actor's machine.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:d3b5cf8d-7eeb-56e9-9462-3b95a7b31d2e",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:filePath": "C:\\Users\\aa\\Desktop\\dpst.dll"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:86abd565-2dbe-5890-b28f-2876c0f45d01",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:08c3dcf4-d1b1-5353-8b01-7f43510876f2"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "attacker-artifact"
+    },
+    {
+      "@id": "urn:uuid:14889456-b097-5746-bf33-eec57213165e",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "C:\\Users\\3\\Desktop\\DT-1-64-G\\msiscsii.dll",
+      "uco-core:description": "Original build path revealed in the Dropbox/Twitter Sagerunex config; likely from the actor's machine.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:8b53b1bb-e8b5-5225-8e2f-88602b61f6da",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:filePath": "C:\\Users\\3\\Desktop\\DT-1-64-G\\msiscsii.dll"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d2acde44-954b-5e57-b187-535cbe74311a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:14889456-b097-5746-bf33-eec57213165e"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "attacker-artifact"
+    },
+    {
+      "@id": "urn:uuid:877c9aed-48c3-5b24-acef-53d855592b97",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "C:\\Users\\balabala\\Desktop\\swprve64.dll",
+      "uco-core:description": "Original build path revealed in the Dropbox/Twitter Sagerunex config; likely from the actor's machine.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:2fda98bb-3a82-5327-bfdd-eac48e17e45b",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:filePath": "C:\\Users\\balabala\\Desktop\\swprve64.dll"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:38dd5b6f-1e56-5f9d-9b82-4269c29f69db",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:877c9aed-48c3-5b24-acef-53d855592b97"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "attacker-artifact"
+    },
+    {
+      "@id": "urn:uuid:19fac49b-c94b-505d-96ed-1e16c528339b",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "C:\\Users\\test04\\Desktop\\a\\dtsvc32.dll",
+      "uco-core:description": "Original build path revealed in the Dropbox/Twitter Sagerunex config; likely from the actor's machine.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:493e67c0-34d4-54d8-a3fa-af8e5d58dda9",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:filePath": "C:\\Users\\test04\\Desktop\\a\\dtsvc32.dll"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:2eb85c14-1e6c-5bc9-822c-10645ec0f14d",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:19fac49b-c94b-505d-96ed-1e16c528339b"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "attacker-artifact"
+    },
+    {
+      "@id": "urn:uuid:52ba8a62-4daf-5596-a44f-da4bdde444bc",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "C:\\Users\\USER\\Documents\\dtj32\\dj32.dll",
+      "uco-core:description": "Original build path revealed in the Dropbox/Twitter Sagerunex config; likely from the actor's machine.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:e2b8a4be-a2ae-5b06-a8b8-6beb8afb41be",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:filePath": "C:\\Users\\USER\\Documents\\dtj32\\dj32.dll"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d79fcce3-3dd5-53f7-8a2c-2715c23723a2",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:52ba8a62-4daf-5596-a44f-da4bdde444bc"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "attacker-artifact"
+    },
+    {
+      "@id": "urn:uuid:a4e72a5c-c7ee-5a34-aa7a-f2d94cbef7bb",
+      "@type": "uco-tool:MaliciousTool",
+      "uco-core:name": "Chrome cookie stealer",
+      "uco-tool:toolType": "credential theft",
+      "uco-core:description": "PyInstaller bundle of an open-source Chrome cookie stealer (get_cookies_from_chrome); reads the Chrome 'Cookies' SQLite DB, decrypts values, and writes them to the temp file tmcok43.tmp."
+    },
+    {
+      "@id": "urn:uuid:59031505-06da-5f32-9059-00c67dba7c58",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:a4e72a5c-c7ee-5a34-aa7a-f2d94cbef7bb"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:b0b62e66-c688-539f-b632-e862be9ce3a2",
+      "@type": "uco-tool:MaliciousTool",
+      "uco-core:name": "Venom proxy tool",
+      "uco-tool:toolType": "proxy / tunneling",
+      "uco-core:description": "Go-based proxy tool for penetration testers (github.com/Dliv3/Venom), customized by the actor with a hardcoded destination IP per activity; used to bridge isolated machines to internet-accessible systems."
+    },
+    {
+      "@id": "urn:uuid:0795dfef-5fe0-5a0b-abb5-8d91b1c8288a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:b0b62e66-c688-539f-b632-e862be9ce3a2"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:618da980-c057-5661-9aa2-f039ac1a9798",
+      "@type": "uco-tool:MaliciousTool",
+      "uco-core:name": "Adjust privilege tool",
+      "uco-tool:toolType": "privilege escalation",
+      "uco-core:description": "Retrieves another process's token to adjust privileges for a launch process (usage: 'pid image parameters')."
+    },
+    {
+      "@id": "urn:uuid:0311f98d-c64e-5d26-bb2a-e42dd507fe33",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:618da980-c057-5661-9aa2-f039ac1a9798"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:7fb36d43-a60b-5904-b8e8-e59241b758fe",
+      "@type": "uco-tool:MaliciousTool",
+      "uco-core:name": "Customized archiving tool",
+      "uco-tool:toolType": "collection / staging",
+      "uco-core:description": "Customized compress-and-encrypt tool that steals files or entire folders to a specific path with protection (e.g. Chrome and Firefox cookie folders)."
+    },
+    {
+      "@id": "urn:uuid:1b0ee41c-fd90-5e60-bd53-a5c83b17c3bd",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:7fb36d43-a60b-5904-b8e8-e59241b758fe"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:feeb11ad-38b7-5319-a956-54505d0c59b1",
+      "@type": "uco-tool:MaliciousTool",
+      "uco-core:name": "mtrain V1.01",
+      "uco-tool:toolType": "port relay",
+      "uco-core:description": "Modified HTran port-relay tool ('MTrain V1.01') that relays the victim connection out to the internet (modes -l/-t/-s). Sample filename in the Talos screenshot embeds a SHA-1: mtrain.exe_f2370de517a032a27fcf3ba175e611a1b1a2b0ba."
+    },
+    {
+      "@id": "urn:uuid:116dedd5-d287-563b-b7ca-18acac66cb6a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:feeb11ad-38b7-5319-a956-54505d0c59b1"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:79f99452-83c9-50c5-9e08-6c06727421fd",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "mtrain V1.01",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:3002aff0-3f26-5591-9228-f79b1d8a07cc",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:0159f0ba-3953-5cd8-8d74-3328ce42253c",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA1",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "f2370de517a032a27fcf3ba175e611a1b1a2b0ba"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:2e188548-f70a-5435-a854-536a15cbdccd",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:feeb11ad-38b7-5319-a956-54505d0c59b1"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:79f99452-83c9-50c5-9e08-6c06727421fd"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Characterized_By",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:4ef76ac1-0fa9-5b6f-8d97-9d768b15e584",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "RAR",
+      "uco-tool:toolType": "archiving",
+      "uco-core:description": "Archive manager used to archive/zip files for exfiltration."
+    },
+    {
+      "@id": "urn:uuid:b76fea71-521f-5970-bbf6-473d0cdd5c3a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:4ef76ac1-0fa9-5b6f-8d97-9d768b15e584"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:a3b7e495-ccaf-5859-a2fd-accd284971e6",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "Impacket",
+      "uco-tool:toolType": "remote execution / lateral movement",
+      "uco-core:description": "Used to execute remote processes and commands in the victim environment (lateral movement)."
+    },
+    {
+      "@id": "urn:uuid:375f0287-5ef7-565d-9820-eda4fc80e771",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:a3b7e495-ccaf-5859-a2fd-accd284971e6"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Used",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:bf6307a0-b311-5f5b-be20-2ad53a55b407",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:feeb11ad-38b7-5319-a956-54505d0c59b1"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:b0b81c05-0b41-509c-a1b4-904ae4e4df00"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Modified from HTran"
+    },
+    {
+      "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "tapisrv (hijacked service)",
+      "uco-core:description": "Windows service 'tapisrv' abused for Sagerunex persistence; Start=2 configures automatic start (svchost service DLL loading).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:5c38afc5-ce80-55cd-bb88-0f8ea4406dcf",
+          "@type": "uco-observable:WindowsServiceFacet",
+          "uco-observable:serviceName": "tapisrv",
+          "uco-observable:startType": "service_auto_start",
+          "uco-observable:serviceType": "service_win32_share_process"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0c5d846f-03a3-591e-a107-ba03370a945f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:42a36a61-786b-52c4-bedc-78491db140ca",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "swprv (hijacked service)",
+      "uco-core:description": "Windows service 'swprv' abused for Sagerunex persistence; Start=2 configures automatic start (svchost service DLL loading).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c3f668eb-0a2b-5a98-bfd0-0d158318171f",
+          "@type": "uco-observable:WindowsServiceFacet",
+          "uco-observable:serviceName": "swprv",
+          "uco-observable:startType": "service_auto_start",
+          "uco-observable:serviceType": "service_win32_share_process"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d475faec-8787-54f4-9b3b-960cef4e55a1",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:42a36a61-786b-52c4-bedc-78491db140ca"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "appmgmt (hijacked service)",
+      "uco-core:description": "Windows service 'appmgmt' abused for Sagerunex persistence; Start=2 configures automatic start (svchost service DLL loading).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:311b9b7b-c880-5c89-8bef-bcdc47bbc9a2",
+          "@type": "uco-observable:WindowsServiceFacet",
+          "uco-observable:serviceName": "appmgmt",
+          "uco-observable:startType": "service_auto_start",
+          "uco-observable:serviceType": "service_win32_share_process"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a82fceac-3763-52d6-959a-7c8c05abbc73",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:c6431401-e304-591e-a38b-07815b2b29d6",
+      "@type": "uco-observable:WindowsRegistryKey",
+      "uco-core:name": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\tapisrv\\Parameters",
+      "uco-core:description": "Registry key written via 'reg add' to install/verify the Sagerunex backdoor as a service DLL.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:6a68f356-3f4e-5681-b18d-9d0fc9b22be9",
+          "@type": "uco-observable:WindowsRegistryKeyFacet",
+          "uco-observable:key": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\tapisrv\\Parameters",
+          "uco-observable:registryValues": [
+            {
+              "@id": "urn:uuid:9c36d1a6-66ff-55cc-be98-97ee1600e988",
+              "@type": "uco-observable:WindowsRegistryValue",
+              "uco-core:name": "ServiceDll",
+              "uco-observable:data": "c:\\windows\\tapisrv.dll",
+              "uco-observable:dataType": "reg_expand_sz"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:eb823817-5377-558a-b993-02d1c6590c80",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c6431401-e304-591e-a38b-07815b2b29d6"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "persistence",
+      "uco-core:description": "Registry key configuring this service"
+    },
+    {
+      "@id": "urn:uuid:49678e83-15a1-5f4d-b817-cd2d31f49d11",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "c:\\windows\\tapisrv.dll",
+      "uco-core:description": "Sagerunex service DLL dropped on the victim and registered as a service DLL.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b9affd20-35db-5619-8123-1793674b7ead",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:filePath": "c:\\windows\\tapisrv.dll",
+          "uco-observable:fileName": "tapisrv.dll",
+          "uco-observable:extension": "dll"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:5d4d07a9-c5aa-51b1-b22c-8837682b0d1d",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c6431401-e304-591e-a38b-07815b2b29d6"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:49678e83-15a1-5f4d-b817-cd2d31f49d11"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "persistence",
+      "uco-core:description": "ServiceDll value points to this DLL"
+    },
+    {
+      "@id": "urn:uuid:4b017406-1d4f-5b58-903a-35b6231028c1",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:49678e83-15a1-5f4d-b817-cd2d31f49d11"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Service DLL is a Sagerunex payload"
+    },
+    {
+      "@id": "urn:uuid:fec22c61-4665-5440-a4e4-53bb43011ef9",
+      "@type": "uco-observable:WindowsRegistryKey",
+      "uco-core:name": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\tapisrv",
+      "uco-core:description": "Registry key written via 'reg add' to install/verify the Sagerunex backdoor as a service DLL.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:66575dea-6135-5f92-80c3-a65df1256c47",
+          "@type": "uco-observable:WindowsRegistryKeyFacet",
+          "uco-observable:key": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\tapisrv",
+          "uco-observable:registryValues": [
+            {
+              "@id": "urn:uuid:b065fe06-b640-50cf-8153-c28b5cc61d5b",
+              "@type": "uco-observable:WindowsRegistryValue",
+              "uco-core:name": "Start",
+              "uco-observable:data": "2",
+              "uco-observable:dataType": "reg_dword"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:43651643-94b9-57bf-9cbc-9fcdfa6465b1",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fec22c61-4665-5440-a4e4-53bb43011ef9"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "persistence",
+      "uco-core:description": "Registry key configuring this service"
+    },
+    {
+      "@id": "urn:uuid:fa0ed496-9b65-57c8-bbd7-3e282d998a22",
+      "@type": "uco-observable:WindowsRegistryKey",
+      "uco-core:name": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\swprv\\Parameters",
+      "uco-core:description": "Registry key written via 'reg add' to install/verify the Sagerunex backdoor as a service DLL.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:398e59a5-b15c-59a5-99d8-6487ed2b336b",
+          "@type": "uco-observable:WindowsRegistryKeyFacet",
+          "uco-observable:key": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\swprv\\Parameters",
+          "uco-observable:registryValues": [
+            {
+              "@id": "urn:uuid:a57052f2-f77c-5ed5-ad0a-08eb30f72f0a",
+              "@type": "uco-observable:WindowsRegistryValue",
+              "uco-core:name": "ServiceDll",
+              "uco-observable:data": "c:\\windows\\swprv.dll",
+              "uco-observable:dataType": "reg_expand_sz"
+            },
+            {
+              "@id": "urn:uuid:0e891e20-c181-50bf-8aea-373359edc3f6",
+              "@type": "uco-observable:WindowsRegistryValue",
+              "uco-core:name": "ServiceDll",
+              "uco-observable:data": "c:\\windows\\system32\\swprv.dll",
+              "uco-observable:dataType": "reg_expand_sz"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f9eab9f2-9c71-5ff3-a79e-96b1e6537fe5",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fa0ed496-9b65-57c8-bbd7-3e282d998a22"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:42a36a61-786b-52c4-bedc-78491db140ca"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "persistence",
+      "uco-core:description": "Registry key configuring this service"
+    },
+    {
+      "@id": "urn:uuid:23f20e41-a465-50f3-a97c-1ec9d548751f",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "c:\\windows\\swprv.dll",
+      "uco-core:description": "Sagerunex service DLL dropped on the victim and registered as a service DLL.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:b46a13a2-a064-55c0-a6eb-d76a41567273",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:filePath": "c:\\windows\\swprv.dll",
+          "uco-observable:fileName": "swprv.dll",
+          "uco-observable:extension": "dll"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3826e4a9-a26f-5924-8928-295a8a14d08e",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fa0ed496-9b65-57c8-bbd7-3e282d998a22"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:23f20e41-a465-50f3-a97c-1ec9d548751f"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "persistence",
+      "uco-core:description": "ServiceDll value points to this DLL"
+    },
+    {
+      "@id": "urn:uuid:b2b8c990-1c0a-5f63-86a3-e04be6b60160",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:23f20e41-a465-50f3-a97c-1ec9d548751f"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Service DLL is a Sagerunex payload"
+    },
+    {
+      "@id": "urn:uuid:c6edf55f-88c4-523c-8ff6-995d2d9983ed",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "c:\\windows\\system32\\swprv.dll",
+      "uco-core:description": "Sagerunex service DLL dropped on the victim and registered as a service DLL.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:320eacea-cf90-568c-8ab2-9216f8829d32",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:filePath": "c:\\windows\\system32\\swprv.dll",
+          "uco-observable:fileName": "swprv.dll",
+          "uco-observable:extension": "dll"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3cc3c788-16a5-5cf5-8e30-058c94173c56",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fa0ed496-9b65-57c8-bbd7-3e282d998a22"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:c6edf55f-88c4-523c-8ff6-995d2d9983ed"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "persistence",
+      "uco-core:description": "ServiceDll value points to this DLL"
+    },
+    {
+      "@id": "urn:uuid:111afdd9-fb09-574a-9809-c5a5ad56299e",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c6edf55f-88c4-523c-8ff6-995d2d9983ed"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Service DLL is a Sagerunex payload"
+    },
+    {
+      "@id": "urn:uuid:20df9955-16be-540d-a691-5bd0f833882a",
+      "@type": "uco-observable:WindowsRegistryKey",
+      "uco-core:name": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\appmgmt\\Parameters",
+      "uco-core:description": "Registry key written via 'reg add' to install/verify the Sagerunex backdoor as a service DLL.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f6a253a3-e7df-5b82-89f1-32ce41c82a8e",
+          "@type": "uco-observable:WindowsRegistryKeyFacet",
+          "uco-observable:key": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\appmgmt\\Parameters",
+          "uco-observable:registryValues": [
+            {
+              "@id": "urn:uuid:4b9faf48-636e-5beb-a3ed-667e2b88b150",
+              "@type": "uco-observable:WindowsRegistryValue",
+              "uco-core:name": "ServiceDll",
+              "uco-observable:data": "c:\\windows\\swprv.dll",
+              "uco-observable:dataType": "reg_expand_sz"
+            },
+            {
+              "@id": "urn:uuid:1ee7e779-4bce-5fc6-8fc3-556258536d23",
+              "@type": "uco-observable:WindowsRegistryValue",
+              "uco-core:name": "ServiceDll",
+              "uco-observable:data": "c:\\windows\\system32\\appmgmts.dll",
+              "uco-observable:dataType": "reg_expand_sz"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:02574617-2838-5f18-a8ac-1248a3b7531f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:20df9955-16be-540d-a691-5bd0f833882a"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "persistence",
+      "uco-core:description": "Registry key configuring this service"
+    },
+    {
+      "@id": "urn:uuid:9945a581-1b90-5abe-ab26-7d5e3a451f6a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:20df9955-16be-540d-a691-5bd0f833882a"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:23f20e41-a465-50f3-a97c-1ec9d548751f"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "persistence",
+      "uco-core:description": "ServiceDll value points to this DLL"
+    },
+    {
+      "@id": "urn:uuid:487e7be1-7275-5172-ad4f-f99a14659f11",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "c:\\windows\\system32\\appmgmts.dll",
+      "uco-core:description": "Sagerunex service DLL dropped on the victim and registered as a service DLL.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:93a7b6c1-6ab3-5995-a685-e8219c2466d4",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:filePath": "c:\\windows\\system32\\appmgmts.dll",
+          "uco-observable:fileName": "appmgmts.dll",
+          "uco-observable:extension": "dll"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6e86eaf3-5356-5768-85c7-72eb12b370a6",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:20df9955-16be-540d-a691-5bd0f833882a"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:487e7be1-7275-5172-ad4f-f99a14659f11"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "persistence",
+      "uco-core:description": "ServiceDll value points to this DLL"
+    },
+    {
+      "@id": "urn:uuid:dd4d9672-be9a-5f76-a41a-3d181011f7ac",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:487e7be1-7275-5172-ad4f-f99a14659f11"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Service DLL is a Sagerunex payload"
+    },
+    {
+      "@id": "urn:uuid:3f08b2a8-e8a4-5a1c-b229-a1b807fbe461",
+      "@type": "uco-observable:WindowsRegistryKey",
+      "uco-core:name": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\appmgmt",
+      "uco-core:description": "Registry key written via 'reg add' to install/verify the Sagerunex backdoor as a service DLL.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:12e96d28-d59a-5e99-90c2-9ce794811dc9",
+          "@type": "uco-observable:WindowsRegistryKeyFacet",
+          "uco-observable:key": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\appmgmt",
+          "uco-observable:registryValues": [
+            {
+              "@id": "urn:uuid:8585d412-1129-536d-b1e8-c27a6e6f5ee6",
+              "@type": "uco-observable:WindowsRegistryValue",
+              "uco-core:name": "Start",
+              "uco-observable:data": "2",
+              "uco-observable:dataType": "reg_dword"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:1020f831-9e92-5289-b039-36a29136ce73",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:3f08b2a8-e8a4-5a1c-b229-a1b807fbe461"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "persistence",
+      "uco-core:description": "Registry key configuring this service"
+    },
+    {
+      "@id": "urn:uuid:b67f80df-9cb5-5d51-8fbf-fe86aa9fd388",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1543.003",
+        "https://attack.mitre.org/techniques/T1112"
+      ],
+      "uco-core:name": "Install Sagerunex as a service via the registry",
+      "uco-core:description": "Lotus Blossom ran 'reg add' commands to create ServiceDll and Start values under HKLM\\SYSTEM\\CurrentControlSet\\Services for tapisrv, swprv, and appmgmt, then 'reg query' to verify the backdoor runs as a service. This Action is additionally typed with the MITRE ATT&CK technique classes T1543.003 (Windows Service) and T1112 (Modify Registry) via the uco-action:Technique metaclass (ucoProject/UCO#676).",
+      "uco-action:performer": {
+        "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+      },
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:c6431401-e304-591e-a38b-07815b2b29d6"
+        },
+        {
+          "@id": "urn:uuid:fec22c61-4665-5440-a4e4-53bb43011ef9"
+        },
+        {
+          "@id": "urn:uuid:fa0ed496-9b65-57c8-bbd7-3e282d998a22"
+        },
+        {
+          "@id": "urn:uuid:20df9955-16be-540d-a691-5bd0f833882a"
+        },
+        {
+          "@id": "urn:uuid:3f08b2a8-e8a4-5a1c-b229-a1b807fbe461"
+        }
+      ],
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269"
+        },
+        {
+          "@id": "urn:uuid:42a36a61-786b-52c4-bedc-78491db140ca"
+        },
+        {
+          "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3722b6c4-963d-55c5-acc1-1e3a9818c262",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:b67f80df-9cb5-5d51-8fbf-fe86aa9fd388"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:bd0541f5-1a14-5c91-bc8f-e8bf0a5e7c72",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1016"
+      ],
+      "uco-core:name": "Host and network discovery",
+      "uco-core:description": "Actor ran net, tasklist, quser, ipconfig, netstat, and dir to enumerate user accounts, directories, processes, and network configuration; assessed internet reachability and, when restricted, used the target proxy or the Venom tool. Tools were frequently staged in the world-readable public\\pictures folder.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+      },
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:b0b62e66-c688-539f-b632-e862be9ce3a2"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:7c3ea610-1b07-5858-9e74-976caf2b2cd6",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1047"
+      ],
+      "uco-core:name": "Lateral movement via WMI/Impacket",
+      "uco-core:description": "Actor used Impacket (and WMI, per the attack-chain diagram) to execute remote processes and commands and move laterally across the internal network toward a data-exfiltrating host.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+      },
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:a3b7e495-ccaf-5859-a2fd-accd284971e6"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:dc3480c6-0a32-5344-bb12-968d1bbd3df9",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:bd0541f5-1a14-5c91-bc8f-e8bf0a5e7c72"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:6b1c2fe8-a480-5834-ba6f-935b049e52ac",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7c3ea610-1b07-5858-9e74-976caf2b2cd6"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:ebb6f67f-ed7d-5f87-8c0b-8109b818bc9d",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "103.234.97.19",
+      "uco-core:description": "Legacy VPS command-and-control server from the Beta/original Sagerunex config (graphic 11).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:9e3dd8ae-8a5d-5722-934f-64da1d25f6fe",
+          "@type": "uco-observable:IPv4AddressFacet",
+          "uco-observable:addressValue": "103.234.97.19"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f3d8e341-0293-5b13-b312-a5d1ae467690",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ebb6f67f-ed7d-5f87-8c0b-8109b818bc9d"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2",
+      "uco-core:description": "Traditional VPS C2 (Beta variant)"
+    },
+    {
+      "@id": "urn:uuid:f8006b64-5ad8-58b5-9dc4-2fd768bfbf69",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:16927d5d-fd72-5b5a-ab37-302a7084bab5"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ebb6f67f-ed7d-5f87-8c0b-8109b818bc9d"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2",
+      "uco-core:description": "Traditional VPS C2 (original variant)"
+    },
+    {
+      "@id": "urn:uuid:dfff1cc3-6cb9-5e74-b8f4-8dc1a38c4988",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "43.252.161.22",
+      "uco-core:description": "Legacy VPS command-and-control server from the Beta/original Sagerunex config (graphic 11).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:43b22779-3f0d-5239-a095-1753354946d8",
+          "@type": "uco-observable:IPv4AddressFacet",
+          "uco-observable:addressValue": "43.252.161.22"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a6a75435-b9dc-5942-b9b4-150eee82212d",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:dfff1cc3-6cb9-5e74-b8f4-8dc1a38c4988"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2",
+      "uco-core:description": "Traditional VPS C2 (Beta variant)"
+    },
+    {
+      "@id": "urn:uuid:ca8ab618-d570-571d-afba-79d70dfc553c",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:16927d5d-fd72-5b5a-ab37-302a7084bab5"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:dfff1cc3-6cb9-5e74-b8f4-8dc1a38c4988"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2",
+      "uco-core:description": "Traditional VPS C2 (original variant)"
+    },
+    {
+      "@id": "urn:uuid:8d1a598e-2a15-5781-baf9-f729eaac3983",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "118.193.240.214",
+      "uco-core:description": "Legacy VPS command-and-control server from the Beta/original Sagerunex config (graphic 11).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c32a6f56-518e-5bab-b7aa-1ec31231cab5",
+          "@type": "uco-observable:IPv4AddressFacet",
+          "uco-observable:addressValue": "118.193.240.214"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:af51fe7f-54d8-5383-94b0-70b736b65c8f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:8d1a598e-2a15-5781-baf9-f729eaac3983"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2",
+      "uco-core:description": "Traditional VPS C2 (Beta variant)"
+    },
+    {
+      "@id": "urn:uuid:66f5608e-fa85-5022-8d6e-af9d6327e498",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:16927d5d-fd72-5b5a-ab37-302a7084bab5"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:8d1a598e-2a15-5781-baf9-f729eaac3983"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2",
+      "uco-core:description": "Traditional VPS C2 (original variant)"
+    },
+    {
+      "@id": "urn:uuid:e145b307-a9d6-5867-9004-4f83405fe0e2",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "103.232.223.117",
+      "uco-core:description": "Legacy VPS command-and-control server from the Beta/original Sagerunex config (graphic 11).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:8de14a8d-af2d-5aa8-8b9c-e1716a8ad3fe",
+          "@type": "uco-observable:IPv4AddressFacet",
+          "uco-observable:addressValue": "103.232.223.117"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b282bfa8-2d4d-5916-8132-af112b8e49d8",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:e145b307-a9d6-5867-9004-4f83405fe0e2"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2",
+      "uco-core:description": "Traditional VPS C2 (Beta variant)"
+    },
+    {
+      "@id": "urn:uuid:0ac1871d-0c0b-5316-8766-c6b41d4da91e",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:16927d5d-fd72-5b5a-ab37-302a7084bab5"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:e145b307-a9d6-5867-9004-4f83405fe0e2"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2",
+      "uco-core:description": "Traditional VPS C2 (original variant)"
+    },
+    {
+      "@id": "urn:uuid:72fc0bdb-6937-5b1d-b81d-57715473296e",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "103.243.131.205",
+      "uco-core:description": "Legacy VPS command-and-control server from the Beta/original Sagerunex config (graphic 11).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:d3a5de16-3a4e-51c1-b61c-34e364ed6292",
+          "@type": "uco-observable:IPv4AddressFacet",
+          "uco-observable:addressValue": "103.243.131.205"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d8d48378-a98b-538c-98af-a79e644535b3",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:72fc0bdb-6937-5b1d-b81d-57715473296e"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2",
+      "uco-core:description": "Traditional VPS C2 (Beta variant)"
+    },
+    {
+      "@id": "urn:uuid:c02d38f2-18f8-589e-bfb3-49bb0fec3edd",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:16927d5d-fd72-5b5a-ab37-302a7084bab5"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:72fc0bdb-6937-5b1d-b81d-57715473296e"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2",
+      "uco-core:description": "Traditional VPS C2 (original variant)"
+    },
+    {
+      "@id": "urn:uuid:1578c273-bdef-59e2-aa99-7d1d07a8d4ce",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "192.168.240.18",
+      "uco-core:description": "Hardcoded victim HTTP proxy (192.168.240.18:8080) with proxy username/password embedded in the Sagerunex config (graphic 11).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:0f410719-80c9-535c-96e6-175eb57522a5",
+          "@type": "uco-observable:IPv4AddressFacet",
+          "uco-observable:addressValue": "192.168.240.18"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:82735879-fd27-53de-afe2-b43182bc07bb",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:1578c273-bdef-59e2-aa99-7d1d07a8d4ce"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "proxy"
+    },
+    {
+      "@id": "urn:uuid:3e322a3b-715b-5ff3-ac3d-45decb580b97",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "api.ipaddress[.]com",
+      "uco-core:description": "Public-IP lookup service queried by the Beta variant to learn the victim's external IP.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:319110d7-f51f-5cc4-a4cb-273dadd516d6",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "api.ipaddress.com"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0ebbbeb4-4f17-5dba-ab25-a8478c50af4f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:3e322a3b-715b-5ff3-ac3d-45decb580b97"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "recon"
+    },
+    {
+      "@id": "urn:uuid:bfc476dd-67e2-5916-b6b5-d321bae48db7",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Dropbox",
+      "uco-core:description": "Dropbox API used as a C2 tunnel; config embeds Dropbox tokens. File listing spans 2018-07..2022-06 (graphic 17).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:83c75beb-00c8-55ba-81f2-58a03496954b",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "dropbox.com"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c38771d5-97cc-596a-9f11-5de8eb83b292",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Twitter / X",
+      "uco-core:description": "Twitter (X) API used as a C2 tunnel; config embeds ConsumerKey/ConsumerSecret/AccessToken/AccessTokenSecret/ScreenName.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:3e680ced-968f-592c-8e2f-27651767ec17",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "twitter.com"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:5b8b207f-9b9b-5949-ab7b-0d160c3370d3",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Zimbra webmail",
+      "uco-core:description": "Zimbra webmail (observed netvigator.com mailboxes) used as a C2 channel; host info and command results saved as mail_report.rar in Drafts and Trash folders.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:8d216226-492c-5bbe-a5ba-9039a3d183af",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "netvigator.com"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:7130fef6-7ad6-59e7-9ce3-37cfd1353020",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:bfc476dd-67e2-5916-b6b5-d321bae48db7"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2"
+    },
+    {
+      "@id": "urn:uuid:08eeec1b-a6ea-557a-bb6a-d70dfd5167ea",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:c38771d5-97cc-596a-9f11-5de8eb83b292"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2"
+    },
+    {
+      "@id": "urn:uuid:77907c72-146f-501e-9db9-a79d0276434c",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:8d4cb3ec-7a79-5ec5-a26e-4492a8f10532"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:5b8b207f-9b9b-5949-ab7b-0d160c3370d3"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "c2"
+    },
+    {
+      "@id": "urn:uuid:6535b11c-2692-5d59-afb5-232b9d0a90a9",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "mail_report.rar",
+      "uco-core:description": "Encrypted RAR of collected host information attached to Zimbra draft (beacon/exfil) and trash (command result) messages.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f80704c2-c0d5-5a3d-8614-70741eb7b0f6",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "mail_report.rar",
+          "uco-observable:extension": "rar"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9b140010-6cb0-5ac9-ae95-f35fcbeacd2c",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:8d4cb3ec-7a79-5ec5-a26e-4492a8f10532"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:6535b11c-2692-5d59-afb5-232b9d0a90a9"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Created",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "exfil"
+    },
+    {
+      "@id": "urn:uuid:1113d9a7-d383-5013-b42e-9fd4043289a2",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:6535b11c-2692-5d59-afb5-232b9d0a90a9"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:5b8b207f-9b9b-5949-ab7b-0d160c3370d3"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Uploaded_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "exfil"
+    },
+    {
+      "@id": "urn:uuid:4dbadead-2989-5b47-88d5-9388adc50242",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1560.001",
+        "https://attack.mitre.org/techniques/T1041",
+        "https://attack.mitre.org/techniques/T1102.002"
+      ],
+      "uco-core:name": "Collection and exfiltration over third-party cloud",
+      "uco-core:description": "Sagerunex collects host information, encrypts/archives it, and exfiltrates over Dropbox, Twitter/X, or Zimbra webmail to evade detection by blending with legitimate cloud traffic.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+      },
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:7fb36d43-a60b-5904-b8e8-e59241b758fe"
+        },
+        {
+          "@id": "urn:uuid:4ef76ac1-0fa9-5b6f-8d97-9d768b15e584"
+        }
+      ],
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:8d4cb3ec-7a79-5ec5-a26e-4492a8f10532"
+        },
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:6535b11c-2692-5d59-afb5-232b9d0a90a9"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:4be106fc-8ba0-5d8a-9b2d-f32a45d6efb4",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:4dbadead-2989-5b47-88d5-9388adc50242"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:e43cc848-3c20-56b3-88d7-8e8b0d0bfe0e",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1055.001"
+      ],
+      "uco-core:name": "DLL injection of the Sagerunex backdoor",
+      "uco-core:description": "The Sagerunex loader injects the backdoor DLL into memory instead of running it from disk.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+      },
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:2b46798c-eb66-57cc-8cb0-5ccc387362a7",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:e43cc848-3c20-56b3-88d7-8e8b0d0bfe0e"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:1616dccb-2782-50ea-a24e-8b8557a7e851",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1027.002"
+      ],
+      "uco-core:name": "Obfuscate Sagerunex with VMProtect",
+      "uco-core:description": "The actor packs/obfuscates Sagerunex with VMProtect to hinder analysis and evade antivirus.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+      },
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:e3d75fd5-7ce8-5fe2-ac9d-9356c4cdc54f"
+        }
+      ],
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:5b54e47c-fb69-5004-a86f-9e1c648bbcc0",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:1616dccb-2782-50ea-a24e-8b8557a7e851"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:2a94fb51-4ea4-5b57-b6b2-c9f0eea71d2f",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1090.001"
+      ],
+      "uco-core:name": "Internal proxying to reach the internet",
+      "uco-core:description": "The Venom proxy tool and the 'mtrain V1.01' HTran-derived port relay bridge isolated victim machines out to internet-accessible systems.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+      },
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:b0b62e66-c688-539f-b632-e862be9ce3a2"
+        },
+        {
+          "@id": "urn:uuid:feeb11ad-38b7-5319-a956-54505d0c59b1"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6e20f1c4-99c0-5ea7-b819-970ede87091a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:2a94fb51-4ea4-5b57-b6b2-c9f0eea71d2f"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:7fbe092b-74c7-5e4e-b71e-6774909a2626",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1071.001"
+      ],
+      "uco-core:name": "Command and control over web protocols",
+      "uco-core:description": "Sagerunex communicates with its C2 over HTTP/HTTPS web protocols.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+      },
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:8f0f98b6-aabc-5b3b-bf51-6fcc7d817a79",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7fbe092b-74c7-5e4e-b71e-6774909a2626"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:3af0f31f-f80d-501a-9d27-967c4dd5c572",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1539"
+      ],
+      "uco-core:name": "Steal Chrome session cookies",
+      "uco-core:description": "A Chrome cookie stealer reads and decrypts the Chrome 'Cookies' SQLite database to steal web session cookies.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+      },
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:a4e72a5c-c7ee-5a34-aa7a-f2d94cbef7bb"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:43f4383e-d057-571c-8219-ed3a69d41532",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:3af0f31f-f80d-501a-9d27-967c4dd5c572"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:8c25fd9c-8b9b-5b8b-9821-36b1a7bbe1cc",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "st",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:821db825-b217-5787-81f6-c5b8786787c1",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:8c25fd9c-8b9b-5b8b-9821-36b1a7bbe1cc"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:9841b0bc-9425-54da-bff9-e6a41ae3d3ec",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "qaz",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:382777b7-9bdd-548a-bcf7-ff007be4b32b",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:9841b0bc-9425-54da-bff9-e6a41ae3d3ec"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:6d297b38-4413-5d72-9806-42a088b3b3b2",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "test",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:7adc0003-4b27-5aff-a755-721fe9319f4f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:6d297b38-4413-5d72-9806-42a088b3b3b2"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:db343068-3c52-56cb-869b-9beb4ced15ca",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "cmhk",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:a5f080cc-b386-5030-aed5-a67f37b7e7aa",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:db343068-3c52-56cb-869b-9beb4ced15ca"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:bf468a5d-4068-5246-aa46-6975becde70c",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "dtemp",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:c6441d1f-ff05-54c4-b45a-24ae1bf15624",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:bf468a5d-4068-5246-aa46-6975becde70c"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:017e3105-0eb0-59b9-b7ba-fbfefd924859",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "0305",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:da13a816-92b9-5ffe-a439-c014d7119f28",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:017e3105-0eb0-59b9-b7ba-fbfefd924859"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:33f7d4aa-5b8e-5109-8de0-e12eb6ae6bd1",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "4007",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:f9fc5187-7be7-59c7-ab94-e08629da8a52",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:33f7d4aa-5b8e-5109-8de0-e12eb6ae6bd1"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:b1ab351e-2ee6-5b55-a98f-2eca1e56a453",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "4007_new",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:bcba598d-6aa5-5043-9438-cb8bbe557e1f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:b1ab351e-2ee6-5b55-a98f-2eca1e56a453"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:1c459aa2-a090-5a74-aff4-9c7832a50f13",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Jf_b64_t1",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:27854831-e167-5a1f-a5d5-ed8394beb893",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:1c459aa2-a090-5a74-aff4-9c7832a50f13"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:ad9d8df4-0a71-53a9-ad8c-da45c4790a44",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Ber_64",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:b013b9a7-a197-5e0f-95b3-5a83aaa5bc37",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:ad9d8df4-0a71-53a9-ad8c-da45c4790a44"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:b5663699-9e68-5e84-b039-ba7dbe6197c6",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "0817-svc64",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:cfae5e95-0770-5977-99cc-f9aef91c382b",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:b5663699-9e68-5e84-b039-ba7dbe6197c6"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:14f0e05b-11da-5637-9487-caf6c68f52cc",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "NSX32-0710",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:7d9cea2f-4f44-5794-8eb1-901e6d27ea98",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:14f0e05b-11da-5637-9487-caf6c68f52cc"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:1353ff25-f76f-566a-a069-3288c0629444",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Nsx32-0419",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:8ec349d3-9c08-5a3c-9cfa-76b42e9d61fe",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:1353ff25-f76f-566a-a069-3288c0629444"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:336e3bda-2c2c-51ec-8907-9e4c7571001a",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "NJX32-0710",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:ac4ce1de-b40a-5c71-baff-e0bb39cbd7e7",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:336e3bda-2c2c-51ec-8907-9e4c7571001a"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:65116125-412f-5f1f-bb45-498fd4b568d4",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "WS1x321014",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:3d3e10d1-6e85-5c8f-8609-c50ef56c2ca6",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:65116125-412f-5f1f-bb45-498fd4b568d4"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:b6485f50-87b0-5389-8a6b-267c29b42cab",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "pccw-svc32",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:68cd72c2-e998-50a9-be38-b0476de23c26",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:b6485f50-87b0-5389-8a6b-267c29b42cab"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:bea4b9dc-aa6a-5802-a6aa-5683733b970e",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "CTMsx32-0712",
+      "uco-core:description": "Lotus Blossom campaign code (Talos IOCs)."
+    },
+    {
+      "@id": "urn:uuid:0d0f273a-65c1-536e-9120-097a5c837016",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:bea4b9dc-aa6a-5802-a6aa-5683733b970e"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:302f9be5-f6d7-57c4-ad18-22d120790017"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "ioc"
+    },
+    {
+      "@id": "urn:uuid:79ce3e37-130f-5bef-9f4f-0bd985061402",
+      "@type": "uco-action:Action",
+      "uco-core:name": "Cisco detection coverage",
+      "uco-core:description": "Talos-published detection: Snort SIDs 64511, 64510, 64509; ClamAV signatures Win.Backdoor.Sagerunex-10041845-0, Win.Tool.Mtrain-10041846-0, Win.Tool.Ntfsdump-10041854-0, Win.Backdoor.Sagerunex-10041857-0. Cisco Secure Endpoint/Email/Firewall/Malware Analytics, Umbrella, and Secure Web Appliance provide coverage.",
+      "uco-action:performer": {
+        "@id": "urn:uuid:6b2e9ffb-c7e3-5ada-babc-7f430b7b429f"
+      },
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:be080556-f35d-58a4-87ee-100886da72bf",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:79ce3e37-130f-5bef-9f4f-0bd985061402"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:55108660-9554-5291-bafc-8066f27d4138",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fb55bc27-4ff5-52a6-bd82-ce47fd1900fd"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:da605c9e-9218-5c56-b9e2-9ff0ab15514a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c7e5c292-40a2-5c20-b0fc-922097b452af"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:2b78c824-bab9-5db7-b76b-bd3b1a7f51dd",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:16927d5d-fd72-5b5a-ab37-302a7084bab5"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:bff5d658-f169-533f-8037-890badbe01b5",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7820eab6-34c5-5d92-9311-745353319ac8"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:1da43818-ebb2-59e4-8c12-3eb1f58cc9da",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:8d4cb3ec-7a79-5ec5-a26e-4492a8f10532"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:c37d1677-71fb-5eee-86d0-643d31bf119a",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:a4e72a5c-c7ee-5a34-aa7a-f2d94cbef7bb"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:4e61093a-85c1-5806-afe9-f230ae0f9757",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:b0b62e66-c688-539f-b632-e862be9ce3a2"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:4d8e769c-4961-57dd-8560-fde8663de3c1",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:618da980-c057-5661-9aa2-f039ac1a9798"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:17e90ed0-5482-5d83-aa52-f62641dd54e4",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7fb36d43-a60b-5904-b8e8-e59241b758fe"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:240c237d-42b2-531b-b316-9893683b11c2",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:feeb11ad-38b7-5319-a956-54505d0c59b1"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:86fd33a0-d318-576a-8c2b-d89cea780970",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:4ef76ac1-0fa9-5b6f-8d97-9d768b15e584"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:8cb951d6-ae30-5fa5-84ab-e9b94a15ddbe",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:a3b7e495-ccaf-5859-a2fd-accd284971e6"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:05454465-4da0-5196-924e-c3a7e92a8f27"
+        }
+      ],
+      "uco-core:kindOfRelationship": "part_of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    }
+  ]
+}

@@ -210,6 +210,7 @@ validate_graph("federal-trial-proceedings.jsonld", extensions=["cac"])
 
 ## Related recipes
 
+- [cac-pacer-document-ingestion.md](cac-pacer-document-ingestion.md) — MCP agent workflow for PACER PDF bundles
 - [cac-federal-prosecution-relationships.md](cac-federal-prosecution-relationships.md) — charge and defendant wiring
 - [cac-trafficking-recruitment-network.md](cac-trafficking-recruitment-network.md) — § 1591 conduct structure
 - [cac-csam-forensic-provenance.md](cac-csam-forensic-provenance.md) — multi-device CSAM exhibits

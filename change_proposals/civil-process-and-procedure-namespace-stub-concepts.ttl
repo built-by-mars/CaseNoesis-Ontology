@@ -1,0 +1,85 @@
+# Proposed CASE civil process and procedure stub namespace (T-Box)
+# Companion to change_proposals/civil-process-and-procedure-namespace-stub-concepts.md
+# Namespace placeholder: the committee decides the final IRI
+# (suggested: https://ontology.caseontology.org/case/civil/).
+
+@prefix proposed: <http://example.org/ontology/proposed/civil/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/proposed/civil>
+	a owl:Ontology ;
+	rdfs:label "Proposed CASE civil process and procedure stubs"@en ;
+	rdfs:comment "Jurisdiction-neutral stub concepts for civil legal process: civil actions, proceedings, legal holds, discovery requests, judgments, and settlements. Application-domain ontologies (e.g. e-discovery, regulatory enforcement) inherit and specialize these."@en .
+
+proposed:CivilAction
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "CivilAction"@en ;
+	rdfs:comment "A civil action is a legal proceeding in which a party seeks a civil remedy such as damages, an injunction, or declaratory relief, rather than criminal punishment. Includes in rem proceedings such as civil asset forfeiture."@en .
+
+proposed:CivilProceeding
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "CivilProceeding"@en ;
+	rdfs:comment "A civil proceeding is a formal event in a civil matter conducted before or under the supervision of a tribunal, such as a hearing, deposition, trial, or appeal."@en .
+
+proposed:LegalHold
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "LegalHold"@en ;
+	rdfs:comment "A legal hold is a preservation obligation requiring a party to retain information relevant to reasonably anticipated or pending litigation or regulatory action. See e.g. Zubulake v. UBS Warburg and Federal Rule of Civil Procedure 37(e) (https://www.law.cornell.edu/rules/frcp/rule_37)."@en .
+
+proposed:DiscoveryRequest
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "DiscoveryRequest"@en ;
+	rdfs:comment "A discovery request is a formal demand in a civil matter for information, documents, or testimony, such as an interrogatory, request for production, or subpoena duces tecum. See e.g. Federal Rules of Civil Procedure 26-37 (https://www.law.cornell.edu/rules/frcp)."@en .
+
+proposed:CivilJudgment
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "CivilJudgment"@en ;
+	rdfs:comment "A civil judgment is a tribunal's final determination of the parties' rights and obligations in a civil matter, including money judgments, injunctions, consent decrees, and dismissals."@en .
+
+proposed:Settlement
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "Settlement"@en ;
+	rdfs:comment "A settlement is a voluntary resolution of a civil dispute between parties, with or without tribunal approval."@en .
+
+proposed:causeOfAction
+	a owl:DatatypeProperty ;
+	rdfs:label "causeOfAction"@en ;
+	rdfs:comment "The legal basis of the civil claim, as an open vocabulary. Recommended values: 'negligence', 'breach-of-contract', 'statutory-violation', 'in-rem-forfeiture'."@en ;
+	rdfs:domain proposed:CivilAction ;
+	rdfs:range xsd:string .
+
+proposed:proceedingType
+	a owl:DatatypeProperty ;
+	rdfs:label "proceedingType"@en ;
+	rdfs:comment "The type of civil proceeding, as an open vocabulary. Recommended values: 'hearing', 'deposition', 'trial', 'appeal'."@en ;
+	rdfs:domain proposed:CivilProceeding ;
+	rdfs:range xsd:string .
+
+proposed:discoveryType
+	a owl:DatatypeProperty ;
+	rdfs:label "discoveryType"@en ;
+	rdfs:comment "The type of discovery demand, as an open vocabulary. Recommended values: 'interrogatory', 'request-for-production', 'request-for-admission', 'subpoena-duces-tecum'."@en ;
+	rdfs:domain proposed:DiscoveryRequest ;
+	rdfs:range xsd:string .
+
+proposed:judgmentType
+	a owl:DatatypeProperty ;
+	rdfs:label "judgmentType"@en ;
+	rdfs:comment "The type of civil judgment, as an open vocabulary. Recommended values: 'money-judgment', 'injunction', 'consent-decree', 'declaratory', 'dismissal'."@en ;
+	rdfs:domain proposed:CivilJudgment ;
+	rdfs:range xsd:string .
+
+proposed:concernsCivilAction
+	a owl:ObjectProperty ;
+	rdfs:label "concernsCivilAction"@en ;
+	rdfs:comment "Links a legal hold, discovery request, proceeding, judgment, or settlement to the civil action it concerns."@en ;
+	rdfs:range proposed:CivilAction .

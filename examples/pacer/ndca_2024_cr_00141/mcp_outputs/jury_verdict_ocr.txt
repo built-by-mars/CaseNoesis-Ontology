@@ -1,0 +1,707 @@
+*)
+
+Case 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page1of15
+
+UNITED STATES DISTRICT COURT
+NORTHERN DISTRICT OF CALIFORNIA
+
+USA, Case No. 24-cr-00141-VC-1
+Plaintiff,
+y VERDICT FORM
+LINWEI DING,
+Defendant.
+
+Case 3:24-cr-00141-VC Document 367 _ Filed 01/29/26 Page 2 of 15
+
+WE, THE JURY, in the above-entitled case, make the following unanimous findings as to Defendant
+
+Linwei Ding as to each count below:
+
+COUNT ONE
+THEFT OF TRADE SECRETS
+CATEGORY ONE
+
+K Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count One, you must indicate with an “X” which one or more
+
+of the following you agree unanimously constitute a trade secret:
+
+CATEGORY ONE
+
+“Trade © | Exhibit Seay ip
+Secret. No. File Title ;
+
+371 PFC - BarnaCore Instruction Set Architecture-at-2023-04-16T06_09 02Z-pinned.pdf
+
+358 PFC - Host Communication-at-2023-04-16T06_07_40Z-pinned.pdf
+
+359 PFC - ICI Initialization-at-2023-04-16T06_09 16Z-pinned.pdf
+
+360 PFC - ICI Link Enable and Resets-at-2023-04-16T06_09_07Z-pinned.pdf
+
+361 PFC - Interconnect-at-2023-04-16T06_09_20Z-pinned.pdf
+
+362 PFC - Memory System-at-2023-04-16T06_09_12Z-pinned.pdf
+
+363 PFC - TensorCore Instruction Set Architecture 1-at-2023-04-16T06_08 56Z-pinned.pdf
+
+364 PFC - TensorCore Instruction Set Architecture 2-at-2023-04-16T06_07_52Z-pinned.pdf
+
+365 PFC - TensorCore Instruction Set Architecture 3-at-2023-04-16T06_07_55Z-pinned.pdf
+
+366 PFC - TensorCore Instruction Set Architecture 4-at-2023-04-16T06_07_59Z-pinned.pdf
+
+367 PFC - TensorCore Instruction Set Architecture 5-at-2023-04-16T06_ 08 03Z-pinned.pdf
+
+368 PFC - TensorCore Instruction Set Architecture 6-at-2023-04-16T06_08 07Z-pinned.pdf
+
+369 PFC - TensorCore Instruction Set Architecture 7-at-2023-04-16T06_08 10Z-pinned.pdf
+
+370 PFC - TensorCore Instruction Set Architecture 8-at-2023-04-16T06 08 14Z-pinned.pdf
+
+373 TPU ICI-at-2022-06-01T18_10_22Z-pinned.pdf
+
+372 TensorCore Instruction Set Architecture - JFC _ DFC-at-2023-04-16T06_06 49Z-
+pinned.pdf
+
+x N/A Combination of all documents in Category One
+
+Case 3:24-cr-00141-VC Document 367 _ Filed 01/29/26 Page 3of15
+
+COUNT TWO
+THEFT OF TRADE SECRETS
+CATEGORY TWO
+
+/ ‘ Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Two, you must indicate with an “X” which one or more
+
+of the following you agree unanimously constitute a trade secret:
+
+ea ea _ CATEGORY TWO
+‘Trade | Exhibit GA aN fea anes
+Secret - - No. File aS
+
+374 Accelerators-at-2023-04-16T05_59 44Z-pinned.pdf
+
+376 Ghostlite-at-2022-06-01T17_27_39Z-pinned.pdf
+
+379 ViperLitePod System Introduction-at-2023-04-16T05_59 52Z-pinned.pdf
+
+377 Ghostlite-at-2022-06-01T17_33_18Z-pinned.pdf
+
+378 ViperLite-at-2022-06-01T17_33_06Z-pinned.pdf
+
+380 ViperLitePod-at-2022-06-01T17_33_23Z-pinned.pdf
+
+375 Ghostlite Multi-host Software Enablement Program Kickoff.pdf
+
+x N/A Combination of all documents in Category Two
+
+Case 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 4of15
+
+COUNT THREE
+THEFT OF TRADE SECRETS
+CATEGORY THREE
+
+/ Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Three, you must indicate with an “X” which one or
+
+more of the following you agree unanimously constitute a trade secret:
+
+» CATEGORY THREE |
+
+Trade | Exhibit RNS '
+Secret No. File Title
+
+382 Ghostfish Software Review For Planning Entry-at-2023-04-16T06_09_24Z-pinned.pdf.pdf
+
+384 | PFC - Pufferfish GRM-at-2023-04-16T06_07_44Z-pinned.pdf
+
+381 Cloud TPU-at-2022-06-01T17_32_53Z-pinned.pdf
+
+383 ICI Resilient Slice-at-2022-06-01T17_33_32Z-pinned.pdf.pdf
+
+385 | XLA_ TPU-at-2023-04-16T06_00_25Z-pinned.pdf.pdf
+
+393 Slice Builder-at-2023-04-16T06_07_00Z-pinned.pdf.pdf
+
+394 Slice Creation Algorithms-at-2023-04-16T06_06_57Z-pinned.pdf.pdf
+
+388 Flume with Accelerators-at-2023-04-16T07_12_15Z-pinned.pdf
+
+390 Megascale Networking-at-2022-05-21T03_50_23Z-pinned.pdf
+
+397 XOR Core ML Review (Dev Entry)-at-2023-04-16T05_25 59Z-pinned.pdf
+
+398 | XOR PRD-at-2023-04-16T07_12_44Z-pinned.pdf.pdf
+
+389 JAX+Pathways-at-2023-04-16T07_13_07Z-pinned.pdf.pdf
+
+396 Training multipod models on Ghostlite-at-2023-04-16T05_25 42Z-pinned.pdf.pdf
+
+399 XOR _ Horizontal Scaling-at-2023-04-16T05_24 26Z-pinned.pdf.pdf
+
+387 Cloud TPU V5 PF_VF Initialization-at-2022-06-01T17_33_59Z-pinned.pdf
+
+386 AdAstra-Network-at-2022-06-01T18_21_40Z-pinned.pdf
+
+395 | TPU Fungibility ACU Roadmap-at-2023-04-16T05_30_21Z-pinned.pdf
+
+392 MegaScale XLA-at-2022-05-21T03_50_38Z-pinned.pdf
+
+391 MegaScale XLA - Doc-at-2022-05-21T03_50_09Z-pinned.pdf
+
+4 N/A Combination of all documents in Category Three
+
+Case 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page5of15
+
+COUNT FOUR
+THEFT OF TRADE SECRETS
+CATEGORY FOUR
+
+xX Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Four, you must indicate with an “X” which one or more
+
+of the following you agree unanimously constitute a trade secret:
+
+CATEGORY FOUR
+
+Trade | Exhibit aes :
+Secret. No. File Title
+
+400 AdAstra-Board-at-2022-06-01T18_16_04Z-pinned.pdf
+
+401 AdAstra-Hardware-at-2022-06-01T18_15_04Z-pinned.pdf
+
+ye 402 AdAstra-Mechanical-at-2022-06-01T18 15 24Z-pinned.pdf
+
+. 403 AdAstra-NetworkTopology-at-2022-06-01T18 20 _24Z-pinned.pdf
+
+405 BigRig-at-2022-06-01T17_21 30Z-pinned.pdf
+
+407 Endurance-B Hardware Design Doc (go_endurance-hw-spec)-at-2023-04-16T05_59 31Z-
+pa pimedindt
+
+404 AdAstra-Storage-at-2022-06-01T18_ 16 _25Z-pinned.pdf
+
+406 Endurance GPU tray fans-at-2023-04-16T05_30_44Z-pinned.pdf
+
+409 Rack - Jolt, Zoid2-at-2022-06-01T17_37_55Z-pinned.pdf
+
+410 Tech Overview-at-2022-05-21T03_25_32Z-pinned.pdf
+
+408 H100 Competitive Analysis-at-2023-04-16T05_31_38Z-pinned.pdf
+
+KPS
+
+N/A Combination of all documents in Category Four
+
+Case 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 6of15
+
+COUNT FIVE
+THEFT OF TRADE SECRETS
+CATEGORY FIVE
+
+Ms Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Five, you must indicate with an “X” which one or more
+
+of the following you agree unanimously constitute a trade secret:
+
+gree v CATEGORY FIVE
+Trade | Exhibit Sapa
+
+eSecret 2.71 cu No. File Title.
+
+411 AdAstra - ML Sync Engineering Review-at-2023-04-16T05_29 42Z-pinned.pdf
+
+418 | AdAstra~GPUDirect-at-2022-06-01T18_17_29Z-pinned.pdf
+
+412 Adastra Diorite-GPU Direct P2P-at-2023-04-16T05_ 54 55Z-pinned.pdf
+
+419 AdAstra-LinkD-at-2022-06-01T18_21 02Z-pinned.pdf
+
+420 AdAstra-MachineManager-at-2022-06-01T18 19 30Z-pinned.pdf
+
+423 AdAstra-SuperpodS W-at-2022-06-01T18_ 18 20Z-pinned.pdf
+
+428 Borg Traffic Matrix API for Astrophel-at-2023-04-16T05_31_27Z-pinned.pdf
+
+res,
+
+429 Fabric Topology for Astrophel-at-2023-04-16T05_31_48Z-pinned.pdf
+
+413 AdAstra-Cloud Control Plane-at-2022-06-01T18_ 14 35Z-pinned.pdf
+
+414 AdAstra-CloudNetworking-at-2022-06-01T18_18_05Z-pinned.pdf
+
+415 AdAstra-ControlPlane-at-2022-06-01T18_15_54Z-pinned.pdf
+
+416 AdAstra-EnduranceDiagnosticsAndTools-at-2022-06-01T18_18 42Z-pinned.pdf
+
+417 AdAstra-EnduranceSS W-at-2022-06-01T18_18_13Z-pinned.pdf
+
+42] AdAstra-Networking-at-2022-06-01T18_13_24Z-pinned.pdf
+
+422 AdAstra-StableF leet-at-2022-06-01T18_ 19 _03Z-pinned.pdf
+
+424 AdAstra-XManager-at-2022-06-01T18_19 20Z-pinned.pdf
+
+425 Astrophel on GKE - User Journey-at-2023-04-16T05_31_31Z-pinned.pdf
+
+426 Astrophel Requirements on GKE-at-2023-04-16T05_31_23Z-pinned.pdf
+
+427 Astrophel User Journeys-at-2023-04-16T05_32_06Z-pinned.pdf
+
+43] Maintenance of GPU Pods and TPU Pod Slices in GKE-at-2023-04-16T05_31_52Z-
+X pinned.pdf
+
+UCF_ A Unified Communication Framework for ML and HPC in Google Cloud-at-2023-04-
+
+10 16T05 54 58Z-pinned.pdf
+
+Y 434 TCPDirect for AdAstra System Architecture-at-2023-04-16T05S_55_01Z-pinned.pdf
+
+435 TCPDirect_ GPU-GPU interconnect improvements.pdf
+
+433 TCPDirect - Optimized Bulk Data Transfer to_from Devices-at-2023-04-16T05_55_ 04Z-
+pinned.pdf
+
+432 TCP Direct on Promethium-at-2023-04-16T05_54 40Z-pinned.pdf
+
+430 GPU sharing in Borg-at-2023-04-16T05_30_13Z-pinned.pdf
+
+N/A Combination of all documents in Category Five
+
+5
+Case 3:24-cr-00141-VC Document 367 _ Filed 01/29/26 Page 7 of 15
+
+COUNT SIX
+THEFT OF TRADE SECRETS
+CATEGORY SIX
+
+x Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Six, you must indicate with an “X” which one or more
+
+of the following you agree unanimously constitute a trade secret:
+
+ee eee Aaa: CATEGORY SIX
+Trade | Exhibit ae ; :
+Secret — No. File Title
+
+438 Dorite-uArch-at-2022-06-01T18_30_23Z-pinned.pdf
+
+437 Diorite Architecture Overview-at-2022-06-01T18 28 57Z-pinned.pdf
+
+439 | RDMA-at-2022-06-01T18 29 11Z-pinned.pdf
+
+440 Terrazzo V2_ concept phase CFR-at-2023-04-16T05_59_40Z-pinned.pdf
+
+~ N/A _ | Combination of all documents in Category Six
+
+Case 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 8of15
+
+COUNT SEVEN
+THEFT OF TRADE SECRETS
+CATEGORY SEVEN
+
+x Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Seven, you must indicate with an ““X” which one or
+
+more of the following you agree unanimously constitute a trade secret:
+
+ia ae CATEGORY SEVEN —
+Trade Exhibit Gach caaate Ue es
+“Secret | _No. 3 File Title
+4 461 Raptor Multi-NIC-at-2022-06-01T17_21_52Z-pinned.pdf
+x 462 _| RDMA on-NIC SW architecture.pdf
+
+443 Andromeda3.0-at-2022-06-01T17_52_43Z-pinned.pdf
+
+446 | CloudRDMA Top.pdf
+
+452 CloudRDMA_Arch-at-2022-06-01T18 24 35Z-pinned.pdf
+
+\ 448 CloudRDMA-DeepDive-Datapath-at-2022-06-01T18_25 37Z-pinned.pdf
+
+456 Diorite-gHMA-at-2022-06-01T18_29_18Z-pinned.pdf
+
+457 | Diorite-OCM-at-2022-06-01T18 28 06Z-pinned.pdf
+
+458 Diorite-Routing-at-2022-06-01T18_30_09Z-pinned.pdf
+
+441 | Andromeda Routing IP in Diorite-at-2022-06-01T18 06 32Z-pinned.pdf
+
+442 Andromeda, USPS _ Promethium. Network Virtualization_-at-2022-06-01T17_26 57Z-
+pinned.pdf
+
+444 BaMM2, Pony Express _ Use Cases-at-2022-06-01T18 09 40Z-pinned.pdf
+
+445 CloudRDMA Overview-at-2022-06-01T18_ 24 44Z-pinned.pdf
+
+453 CloudRDMA_DeepDive-Cloud-at-2022-06-01T18_25 45Z-pinned.pdf
+
+449 CloudRDMA-DeepDive-IntegrationTest-at-2022-06-01T18 25 _23Z-pinned.pdf
+
+450 CloudRDMA-DeepDive-onNIC SW-at-2022-06-01T18_25_54Z-pinned.pdf
+
+4 45] CloudRDMA-DeepDive-Telemetry_Debugging.pdf
+
+Y 454 Diorite ATE Use Cases-at-2023-04-16T05_55_48Z-pinned.pdf
+
+459 Diorite-Topology-at-2022-06-01T18_ 29 _55Z-pinned.pdf
+
+460 HMA RDMA Support-at-2022-06-01T18_29 46Z-pinned.pdf
+
+447 CloudRDMA-Arcus-at-2022-06-01T18_26 30Z-pinned.pdf
+
+455 Diorite Peer-To-Peer PCle-at-2023-04-16T05_54 52Z-pinned.pdf
+
+N/A Combination of all documents in Category Seven
+
+Case 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 9of15
+
+COUNT EIGHT
+ECONOMIC ESPIONAGE
+CATEGORY ONE
+
+/ ‘ Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Eight, you must indicate with an “X” which one or
+
+more of the following you agree unanimously constitute a trade secret:
+
+Bt CATEGORY ONE
+371 PFC - BarnaCore Instruction Set Architecture-at-2023-04-16T06_09_02Z-pinned.pdf
+358 PFC - Host Communication-at-2023-04-16T06_07_40Z-pinned.pdf
+359 PFC - ICI Initialization-at-2023-04-16T06_09_16Z-pinned.pdf
+360 PFC - ICI Link Enable and Resets-at-2023-04-16T06_09_07Z-pinned.pdf
+361 PFC - Interconnect-at-2023-04-16T06_09_20Z-pinned.pdf
+362 PFC - Memory System-at-2023-04-16T06_09_12Z-pinned.pdf
+363 PFC - TensorCore Instruction Set Architecture 1-at-2023-04-16T06_08_56Z-pinned.pdf
+364 PFC - TensorCore Instruction Set Architecture 2-at-2023-04-16T06_07_52Z-pinned.pdf
+365 PFC - TensorCore Instruction Set Architecture 3-at-2023-04-16T06_07_55Z-pinned.pdf
+366 PFC - TensorCore Instruction Set Architecture 4-at-2023-04-16T06_07_59Z-pinned.pdf
+367 PFC - TensorCore Instruction Set Architecture 5-at-2023-04-16T06_08 03Z-pinned.pdf
+368 PFC - TensorCore Instruction Set Architecture 6-at-2023-04-16T06_08_07Z-pinned.pdf
+369 PFC - TensorCore Instruction Set Architecture 7-at-2023-04-16T06_08_10Z-pinned.pdf
+370 PFC - TensorCore Instruction Set Architecture 8-at-2023-04-16T06_08 14Z-pinned.pdf
+373 TPU ICI-at-2022-06-01T18 10 _22Z-pinned.pdf
+372 TensorCore Instruction Set Architecture - JFC _ DFC-at-2023-04-16T06_06_49Z-
+pinned.pdf
+< | N/A _ | Combination of all documents in Category One
+tv
+
+Case 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page 10 of 15
+
+COUNT NINE
+ECONOMIC ESPIONAGE
+CATEGORY TWO
+
+XK Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Nine, you must indicate with an “X” which one or more
+
+of the following you agree unanimously constitute a trade secret:
+
+(ease ahee _. CATEGORY TWO -
+
+374 Accelerators-at-2023-04-16T05_59 44Z-pinned.pdf
+
+376 Ghostlite-at-2022-06-01T17_27_39Z-pinned.pdf
+
+379 ViperLitePod System Introduction-at-2023-04-16T05_59 52Z-pinned.pdf
+377 Ghostlite-at-2022-06-01T17_33_18Z-pinned.pdf
+
+378 ViperLite-at-2022-06-01T17_33_06Z-pinned.pdf
+
+380 ViperLitePod-at-2022-06-01T17_33_23Z-pinned.pdf
+
+375 Ghostlite Multi-host Software Enablement Program Kickoff.pdf
+
+Xx N/A — | Combination of all documents in Category Two
+
+Case 3:24-cr-00141-VC Document 367 _ Filed 01/29/26 Page 11of15
+
+COUNT TEN
+ECONOMIC ESPIONAGE
+CATEGORY THREE
+
+X Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Ten, you must indicate with an “X” which one or more
+
+of the following you agree unanimously constitute a trade secret:
+
+seam ig et ; CATEGORY THREE —
+382 Ghostfish Software Review For Planning Entry-at-2023-04-16T06_09_24Z-pinned.pdf.pdf
+384 PFC - Pufferfish GRM-at-2023-04-16T06_07_44Z-pinned.pdf
+381 Cloud TPU-at-2022-06-01T17_32_53Z-pinned.pdf
+383 ICI Resilient Slice-at-2022-06-01T17_33_32Z-pinned.pdf.pdf
+385 XLA_ TPU-at-2023-04-16T06 00_25Z-pinned.pdf.pdf
+393 Slice Builder-at-2023-04-16T06_07_00Z-pinned.pdf.pdf
+394 Slice Creation Algorithms-at-2023-04-16T06_06_57Z-pinned.pdf.pdf
+388 Flume with Accelerators-at-2023-04-16T07_12_15Z-pinned.pdf
+390 Megascale Networking-at-2022-05-21T03_50_23Z-pinned.pdf
+397 XOR Core ML Review (Dev Entry)-at-2023-04-16T05_25_59Z-pinned.pdf
+398 XOR PRD-at-2023-04-16T07_12_44Z-pinned.pdf.pdf
+389 JAX+Pathways-at-2023-04-16T07_13_07Z-pinned.pdf.pdf
+396 Training multipod models on Ghostlite-at-2023-04-16T05_25_42Z-pinned.pdf.pdf
+399 XOR _ Horizontal Scaling-at-2023-04-16T05_24 26Z-pinned.pdf.pdf
+387 Cloud TPU V5 PF_VF Initialization-at-2022-06-01T17_33_59Z-pinned.pdf
+386 AdAstra-Network-at-2022-06-01T18_21_40Z-pinned.pdf
+395 TPU Fungibility _ ACU Roadmap-at-2023-04-16T05_30_21Z-pinned.pdf
+392 MegaScale XLA-at-2022-05-21T03_50_38Z-pinned.pdf
+391 MegaScale XLA - Doc-at-2022-05-21T03_50_09Z-pinned.pdf
+
+xX N/A Combination of all documents in Category Three
+
+10
+
+Case 3:24-cr-00141-VC Document 367 _ Filed 01/29/26 Page12of15
+
+COUNT ELEVEN
+ECONOMIC ESPIONAGE
+CATEGORY FOUR
+
+xX Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Eleven, you must indicate with an “X” which one or
+
+more of the following you agree unanimously constitute a trade secret:
+
+Eee a RO CATEGORY FOUR
+- Trade — | Exhibit Bre gee a
+‘Secret - No. File Title
+
+400 AdAstra-Board-at-2022-06-01T18_16_04Z-pinned.pdf
+
+401 AdAstra-Hardware-at-2022-06-01T18_15_04Z-pinned.pdf
+
+4 402 AdAstra-Mechanical-at-2022-06-01T18_15_24Z-pinned.pdf
+
+fo 403 | AdAstra-NetworkTopology-at-2022-06-01T18 20 24Z-pinned.pdf
+
+405 BigRig-at-2022-06-01T17_21_30Z-pinned.pdf
+
+407 Endurance-B Hardware Design Doc (go_endurance-hw-spec)-at-2023-04-16T05_59_31Z-
+x pinned.pdf
+
+404 AdAstra-Storage-at-2022-06-01T18_ 16 _25Z-pinned.pdf
+
+406 Endurance GPU tray fans-at-2023-04-16T05_30_44Z-pinned.pdf
+
+409 Rack - Jolt, Zoid2-at-2022-06-01T17_37_55Z-pinned.pdf
+
+410 Tech Overview-at-2022-05-21T03_25_32Z-pinned.pdf
+
+408 H100 Competitive Analysis-at-2023-04-16T05_31_38Z-pinned.pdf
+
+Rex
+
+N/A Combination of all documents in Category Four
+
+11
+Case 3:24-cr-00141-VC Document 367 ‘Filed 01/29/26 Page 13 of 15
+
+COUNT TWELVE
+ECONOMIC ESPIONAGE
+CATEGORY FIVE
+
+X Guilty
+Not Guilty
+
+If you have found the defendant guilty of Count Twelve, you must indicate with an “X” which one or
+
+more of the following you agree unanimously constitute a trade secret:
+
+Seed RRS: CATEGORY FIVE
+Trade Exhibit eae
+Secret. | No. File Title
+
+411 AdAstra - ML Sync Engineering Review-at-2023-04-16T05_29 42Z-pinned.pdf
+
+418 AdAstra-GPUDirect-at-2022-06-01T18_17_29Z-pinned.pdf
+
+412 Adastra Diorite-GPU Direct P2P-at-2023-04-16T05_54 55Z-pinned.pdf
+
+419 | AdAstra-LinkD-at-2022-06-01T18_21_02Z-pinned.pdf
+
+420 AdAstra-MachineManager-at-2022-06-01T18_19_30Z-pinned.pdf
+
+423 AdAstra-SuperpodS W-at-2022-06-01T18 18 20Z-pinned.pdf
+
+428 Borg Traffic Matrix API for Astrophel-at-2023-04-16T05_31_27Z-pinned.pdf
+
+4 429 Fabric Topology for Astrophel-at-2023-04-16T05_31_48Z-pinned.pdf
+
+413 AdAstra-Cloud Control Plane-at-2022-06-01T18_14 35Z-pinned.pdf
+
+414 AdAstra-CloudNetworking-at-2022-06-01T18_18 _05Z-pinned.pdf
+
+415 AdAstra-ControlPlane-at-2022-06-01T18 15 _54Z-pinned.pdf
+
+416 AdAstra-EnduranceDiagnosticsAndTools-at-2022-06-01T18_18_42Z-pinned.pdf
+
+417 AdAstra-EnduranceSS W-at-2022-06-01T18_18_13Z-pinned.pdf
+
+421 AdAstra-Networking-at-2022-06-01T18_13_24Z-pinned.pdf
+
+422 AdAstra-StableFleet-at-2022-06-01T18_19 03Z-pinned.pdf
+
+424 | AdAstra-XManager-at-2022-06-01T18_19_20Z-pinned.pdf
+
+425 Astrophel on GKE - User Journey-at-2023-04-16T05_31_31Z-pinned.pdf
+
+426 Astrophel Requirements on GKE-at-2023-04-16T05_31_23Z-pinned.pdf
+
+427 Astrophel User Journeys-at-2023-04-16T05_32_06Z-pinned.pdf
+
+43] Maintenance of GPU Pods and TPU Pod Slices in GKE-at-2023-04-16T05_31_52Z-
+Pa pinned.pdf
+
+436 UCF_A Unified Communication Framework for ML and HPC in Google Cloud-at-2023-04-
+16T05 54 58Z-pinned.pdf
+
+434 TCPDirect for AdAstra System Architecture-at-2023-04-16T05_55_01Z-pinned.pdf
+
+vi
+/ 435 TCPDirect_ GPU-GPU interconnect improvements.pdf
+433 TCPDirect - Optimized Bulk Data Transfer to_from Devices-at-2023-04-16T05S_55_04Z-
+pinned.pdf
+
+432 TCP Direct on Promethium-at-2023-04-16T05_54 40Z-pinned.pdf
+
+430 GPU sharing in Borg-at-2023-04-16T05_30_13Z-pinned.pdf
+
+N/A Combination of all documents in Category Five
+
+12
+Case 3:24-cr-00141-VC Document 367 Filed 01/29/26 Page14of15
+|
+
+xIg AlOSa}e_ Ul sjudUNdOp []e JO UORUIqUIOD VIN a
+
+Jpd'pouurd-70p 6S SOL9I-PO-EZOT-7AP-UAO aseyd ydaou0s ZA OZZeUeL | = Obp
+
+jpd-pauurd-Z[1 67 SIL10-90-ZZ07AP-VINGN | = 6EF
+
+pd pouurd-Z/ ¢ 87 81L10-90-CZOTIE-MAIAIOAQ oanjooqtyory soi | LEP
+
+jpd-pouurd-7¢Z7 O€ SILIO-90-7ZOTAP-YoIyN-aIog | ger
+
+ON |) 0199
+uqIyxy |  apeay,
+
+OPAL OA
+
+XIS AMODALVO
+
+:JO199S oped] B OININsSUOD A[sNouMTULUN se1de NOA SUIMOTIOFJ 9Y} JO o10W
+
+IO 9U0 YOTYM ..X,, UB YIM 9]VdIpUl JsnuT NOA ‘UddLIIY, JUNOD Jo AyIMs yURpusjop oy} puNoj savy NOA JI
+
+AYMD JON
+
+AVIND \ Z
+
+XIS AYODALVO
+HDVNOIdSH OINONOOA
+NGA LYIAL LNIOD
+Case 3:24-cr-00141-VC Document 367 _ Filed 01/29/26 Page 15of15
+
+COUNT FOURTEEN
+ECONOMIC ESPIONAGE
+CATEGORY SEVEN
+
+A. Guilty
+
+Not Guilty
+
+If you have found the defendant guilty of Count Fourteen, you must indicate with an “X” which one or
+
+more of the following you agree unanimously constitute a trade secret:
+
+ees | _ CATEGORY SEVEN
+Trade | Exhibit He Sar a
+Secret | No. Mle mide
+4 461 _ | Raptor Multi-NIC-at-2022-06-01T17_21_52Z-pinned.pdf
+Y 462 | RDMA on-NIC SW architecture.pdf
+
+f
+
+443 Andromeda3.0-at-2022-06-01T17_52_43Z-pinned.pdf
+
+446 CloudRDMA Top.pdf
+
+452 | CloudRDMA Arch-at-2022-06-01T18 24 35Z-pinned.pdf
+
+x 448 CloudRDMA-DeepDive-Datapath-at-2022-06-01T18_ 25 37Z-pinned.pdf
+
+i 456 | Diorite-gHMA-at-2022-06-01T18 29 18Z-pinned.pdf
+
+457 | Diorite-OCM-at-2022-06-01T18_28 06Z-pinned.pdf
+
+458 Diorite-Routing-at-2022-06-01T18_30_09Z-pinned.pdf
+
+44] Andromeda Routing IP in Diorite-at-2022-06-01T18_06_32Z-pinned.pdf
+
+442 Andromeda, USPS _ Promethium. Network Virtualization_-at-2022-06-01T17_26 57Z-
+pinned.pdf
+
+444 BaMM2, Pony Express _ Use Cases-at-2022-06-01T18_ 09 40Z-pinned.pdf
+
+445 CloudRDMA Overview-at-2022-06-01T18 24 44Z-pinned.pdf
+
+453 CloudRDMA_DeepDive-Cloud-at-2022-06-01T18 25 45Z-pinned.pdf
+
+449 CloudRDMA-DeepDive-IntegrationTest-at-2022-06-01T18 25 23Z-pinned.pdf
+
+450 CloudRDMA-DeepDive-onNIC SW-at-2022-06-01T18_25 54Z-pinned.pdf
+
+p 4 45] CloudRDMA-DeepDive-Telemetry_Debugging.pdf
+
+454 Diorite ATE Use Cases-at-2023-04-16T05_55_48Z-pinned.pdf
+
+459 | Diorite-Topology-at-2022-06-01T18_29 55Z-pinned.pdf
+
+460 HMA RDMA Support-at-2022-06-01T18_29 46Z-pinned.pdf
+
+447 CloudRDMA-Arcus-at-2022-06-01T18_26 30Z-pinned.pdf
+
+455 Diorite Peer-To-Peer PClIe-at-2023-04-16T05_54 52Z-pinned.pdf
+
+N/A _ | Combination of all documents in Category Seven
+
+DATED: 74 Jan Zd02G ’ aes
+
+PRESIDING JUROR SIGNATURE
+14

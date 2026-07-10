@@ -1,13 +1,41 @@
-"""CASE/UCO SDK MCP Server — ontology discovery tools for AI coding agents.
+"""CASE/UCO SDK MCP Server — ontology discovery, document processing, graph
+validation, content routing, and change-proposal drafting for AI agents.
 
-Exposes the SDK's registry API as MCP tools so AI agents in Cursor,
-Claude Code, and similar tools can query the ontology programmatically
-instead of parsing markdown documentation.
+Exposes the SDK's capabilities as MCP tools so AI agents in Cursor, Claude
+Code, Hermes/Link-Look, and similar tools can build validated CASE/UCO graphs
+programmatically instead of parsing markdown documentation. Tool groups:
+
+- Ontology discovery: search_classes, get_class_details, list_all_facets,
+  list_all_vocabs, find_classes_for_domain, suggest_classes_for_input, and
+  get_uco_profiles (UCO alignments with BFO, gUFO, PROV-O, OWL-Time,
+  GeoSPARQL, FOAF, ORG).
+- Recipes and mapping guidance: get_recipe (single best match), get_recipes
+  (ranked multi-match), and guide_mapping (per-evidence-source patterns,
+  anti-patterns, and code skeletons).
+- Content routing: route_investigation_content (general entry point —
+  classifies any submission into investigation families and returns recipes,
+  extensions, namespaces, and profiles per family) and route_cac_content
+  (deep Crimes Against Children domain routing with modeling checklists).
+- Document processing: process_document_file (images/OCR, PDFs, DOCX/XLSX,
+  CSV/TSV, and PACER court filings → bounded CASE/UCO JSON-LD with a
+  Spec026 extraction bundle; fails honestly with typed errors).
+- Validation: validate_graph (local case_validate SHACL run plus a
+  closed-world concept coverage check against core, loaded extensions, and
+  profiled upper ontologies).
+- Change proposals: check_existing_proposals (UCO/CASE/CAC issue trackers)
+  and draft_change_proposal (writes proposal markdown, example JSON-LD, and
+  SPARQL query files to change_proposals/).
+
+MCP resources: case-uco://domains, case-uco://profiles, case-uco://modules,
+and case-uco://patterns.
 
 Run: python mcp_server/server.py
 Or:  fastmcp dev mcp_server/server.py
 
-Set CASE_UCO_EXTENSIONS=cac,aeo to load extension registries.
+Set CASE_UCO_EXTENSIONS to a comma-separated list of extension names (e.g.
+cac,aeo,cryptoinv,legalproc,rico,weapons,drugs,attack-technique) to load
+extension registries; the scope parameter on discovery tools then filters
+by "core", an extension name, or "all".
 """
 
 from __future__ import annotations
@@ -18,6 +46,7 @@ import os
 import re
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any
@@ -58,6 +87,7 @@ from graph_validator import (
     validate_graph_file as _validate_graph_file,
 )
 from cac_content_router import route_cac_content as _route_cac_content, search_recipes as _search_recipes
+from investigation_router import route_investigation_content as _route_investigation_content
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -161,16 +191,25 @@ mcp = FastMCP(
         "specific evidence source (e.g., filesystem report, mobile "
         "extraction, email export, pcap). Use get_recipe or get_recipes "
         "to retrieve recipe content including code examples and JSON-LD "
-        "output. Use route_cac_content to detect CAC Ontology domains in "
-        "submitted text, documents, or partial graphs and return multiple "
-        "matching CAC recipes plus validation guidance. "
-        "Use process_document_file to process approved local synthetic "
-        "receipt image, PDF, Office, and CSV/table files into bounded "
-        "CASE/UCO-shaped JSON-LD for downstream human review. "
-        "Extension ontologies (CAC, AEO) are loaded when CASE_UCO_EXTENSIONS "
-        "is set. Use the scope parameter on search_classes, get_class_details, "
-        "find_classes_for_domain, and list_all_facets to filter by 'core', "
-        "a specific extension name, or 'all' (default)."
+        "output. Use route_investigation_content as the general entry point "
+        "for any investigation submission — it classifies content into "
+        "investigation families and returns recipes, extension ontologies, "
+        "core namespaces, and CDO profiles per family. Use route_cac_content "
+        "to detect CAC Ontology domains in submitted text, documents, or "
+        "partial graphs and return multiple matching CAC recipes plus "
+        "validation guidance. "
+        "Use process_document_file to process approved local document files "
+        "(receipt/scan images, PDFs including PACER court filings, Office "
+        "documents, and CSV/table files) into bounded CASE/UCO-shaped "
+        "JSON-LD for downstream human review, and validate_graph to run the "
+        "local case_validate SHACL validator plus strict concept coverage "
+        "on any produced graph before presenting it. "
+        "Extension ontologies (e.g. CAC, AEO, cryptoinv, legalproc, rico, "
+        "weapons, drugs, attack-technique) are loaded when "
+        "CASE_UCO_EXTENSIONS is set. Use the scope parameter on "
+        "search_classes, get_class_details, find_classes_for_domain, and "
+        "list_all_facets to filter by 'core', a specific extension name, "
+        "or 'all' (default)."
     ),
 )
 
@@ -188,10 +227,15 @@ def process_document_file(
     Supported inputs are receipt/document images (embedded PNG text or OCR
     via the optional tesseract CLI), PDFs (raw and Flate-compressed text
     streams), Office documents (DOCX/XLSX), and CSV/TSV tables (per-row
-    record nodes, bounded). Output uses verified canonical CASE/UCO terms
-    (uco-action provenance, FileFacet/ContentDataFacet/Hash, extracted-string
-    facets, Derived_From relationships). Fails honestly with typed errors
-    (e.g. "ocr_unavailable", "pdf_text_missing", "empty_csv") instead of
+    record nodes, bounded). Federal PACER PDFs (indictments, trial briefs,
+    AO 245B judgments) map case numbers, defendants (a/k/a), indictment
+    counts, statute citations, minor victims, and platform accounts to core
+    UCO types before agents add CAC legal nodes — see
+    docs/recipes/cac-pacer-document-ingestion.md. Output uses verified
+    canonical CASE/UCO terms (uco-action provenance, FileFacet/
+    ContentDataFacet/Hash, extracted-string facets, Derived_From
+    relationships). Fails honestly with typed errors (e.g.
+    "ocr_unavailable", "pdf_text_missing", "empty_csv") instead of
     fabricating content. This tool writes the graph to output_path and
     returns safe metadata only; callers must validate the graph (see
     validate_graph) before creating investigative assertions.
@@ -234,6 +278,7 @@ def validate_graph(
     graph_path: str,
     allow_warning: bool = True,
     extensions: list[str] | None = None,
+    strict_concepts: bool = True,
 ) -> dict:
     """Validate a CASE/UCO graph file with the local case_validate SHACL tool.
 
@@ -243,10 +288,35 @@ def validate_graph(
     to validate against the CAC press-release subset
     (extensions/cac/validation-subset.json). Pass extensions=['cac:full']
     for the complete CAC manifest when upstream SHACL SPARQL constraints
-    are repaired. Use this before submitting a produced graph for human
-    review. Fails honestly when case_validate is not installed
-    (error "validator_unavailable") or the graph file is missing, oversized,
-    or an unsupported format — it never fabricates a passing result.
+    are repaired. Pass extensions=['cryptoinv'] for cryptocurrency /
+    financial-crime graphs (crypto address/transaction/wallet facets,
+    VASPs, darknet markets, mixers, charges, pleas, sentencing,
+    forfeiture — extensions/cryptoinv/). Pass extensions=['legalproc'] for
+    general criminal legal process graphs (charging instruments, charges
+    with conspiracy/attempt/derivative offense forms, pleas, verdicts,
+    sentences, forfeiture, restitution — extensions/legalproc/, usable by
+    any investigation type).
+
+    After the SHACL pass, a closed-world concept coverage check runs by
+    default (strict_concepts=True): every class and property IRI in the
+    graph must be declared in CASE/UCO, a supported extension ontology, or
+    an external/upper ontology that UCO maintains a profile for (BFO, gUFO,
+    PROV-O, OWL-Time, GeoSPARQL, FOAF, ORG — see get_uco_profiles(); those
+    namespaces are accepted directly). Undeclared concepts force
+    conforms=False and the result lists them in "undeclared_concepts" with
+    "concept_guidance". When that happens, do NOT invent terms or silence
+    the check — either (1) use the equivalent term from a profiled upper
+    ontology if one exists, (2) draft an upstream change proposal
+    (check_existing_proposals then draft_change_proposal, per
+    docs/recipes/change-proposal.md), or (3) create/update an extension
+    ontology declaring the concept (docs/recipes/extensions.md) and register
+    it in the extension manifest / validation subset. Re-run validate_graph
+    afterwards; it passes as soon as the concept is declared.
+
+    Use this before submitting a produced graph for human review. Fails
+    honestly when case_validate is not installed (error
+    "validator_unavailable") or the graph file is missing, oversized, or an
+    unsupported format — it never fabricates a passing result.
     """
     try:
         report = _validate_graph_file(
@@ -254,6 +324,7 @@ def validate_graph(
             allow_warning=allow_warning,
             extensions=extensions,
             project_root=PROJECT_ROOT,
+            strict_concepts=strict_concepts,
         )
     except ValueError as exc:
         return {
@@ -261,7 +332,7 @@ def validate_graph(
             "error": str(exc),
             "validator_name": GRAPH_VALIDATOR_NAME,
         }
-    result = {"ok": True}
+    result: dict[str, Any] = {"ok": True}
     if extensions:
         result["extensions"] = extensions
     result.update(_validation_report_to_dict(report))
@@ -813,6 +884,76 @@ def route_cac_content(
 
 
 @mcp.tool
+def route_investigation_content(
+    content_text: str | None = None,
+    source_path: str | None = None,
+    max_families: int = 4,
+) -> dict:
+    """Classify ANY investigation submission and route it to the right resources.
+
+    This is the general entry point for Hermes/Link-Look and other agents
+    submitting warrant returns, legal filings, case files, extraction
+    reports, or free text — of any investigation type, including types the
+    SDK has never seen before. It detects investigation families (CAC,
+    violent crime/terrorism, financial crime/crypto, court filings, network
+    intrusion, mobile/device forensics, email/messaging, filesystem/media,
+    civil e-discovery, corporate/internal) and returns per-family:
+
+      - recipes to follow (docs/recipes/...)
+      - extension ontologies to enable (with manifests found on disk)
+      - core CASE/UCO namespaces involved
+      - CDO upper-ontology profiles that apply (BFO, gUFO, PROV-O, OWL-Time,
+        GeoSPARQL, FOAF, ORG) — terms from profiled ontologies pass strict
+        concept coverage directly
+
+    When CAC content is detected it also points to route_cac_content for the
+    deep CAC domain routing and modeling checklists. When SEVERAL families
+    match — real investigations are often CAC + violent crime + fraud at
+    once — the workflow says to build ONE graph composing every matched
+    family's recipes (docs/recipes/cross-domain-extensions.md), never one
+    graph per family. Family recipes are anchors, not the whole catalog:
+    follow up with get_recipes(scenario) for ranked matches across all 60+
+    recipes and guide_mapping(evidence_source) per evidence type.
+
+    When NOTHING matches — a previously unseen data type — it returns
+    extension_gap_guidance: the search_classes → get_uco_profiles →
+    check_existing_proposals → draft_change_proposal → local-extension
+    workflow that keeps strict concept coverage green instead of inventing
+    terms, ending with docs/recipes/recipe-authoring.md so the solved
+    pattern is written up and registered as a new recipe — or folded into
+    an existing recipe that a live case proved wrong or incomplete — and
+    the router can serve it next time. The recipe catalog is the server's
+    self-improvement surface: agents maintain it like code, and every
+    published pattern stays independently verifiable against public
+    CASE/UCO/CAC releases, published extensions, and CDO profiles.
+
+    For binary documents (PDF, Office, images), call process_document_file
+    first and pass extracted text via content_text.
+
+    Examples:
+      route_investigation_content(content_text="conspiracy to murder federal officers, attempted murder of FBI agents, 924(c) firearm counts")
+      route_investigation_content(source_path="case-notes.txt")
+      route_investigation_content(content_text=..., source_path="examples/pacer/wdmo_2022_cr_04065/perry-odell-wdmo-2022-militia.jsonld")
+    """
+    try:
+        return _route_investigation_content(
+            project_root=PROJECT_ROOT,
+            content_text=content_text,
+            source_path=source_path,
+            max_families=max_families,
+        )
+    except ValueError as exc:
+        return {
+            "ok": False,
+            "error": str(exc),
+            "tip": (
+                "Provide content_text and/or source_path. For PDF/Office/images, "
+                "use process_document_file first, then pass extracted text here."
+            ),
+        }
+
+
+@mcp.tool
 def guide_mapping(evidence_source: str) -> dict:
     """Get step-by-step mapping guidance for a specific evidence source type.
 
@@ -901,23 +1042,28 @@ def check_existing_proposals(
     concept: str,
     repos: list[str] | None = None,
 ) -> dict:
-    """Search open CASE and UCO GitHub issues for existing change proposals.
+    """Search open CASE, UCO, and CAC GitHub issues for existing change proposals.
 
     Checks whether someone has already proposed a concept similar to yours.
-    Searches issue titles in both repositories by default.
+    Searches issue titles in all three repositories by default. Use this
+    before drafting a proposal for any concept flagged as undeclared by
+    validate_graph's concept coverage check — cacontology terms belong in
+    the CAC tracker (Project-VIC-International/CAC-Ontology).
 
     Falls back gracefully when GitHub is unreachable — returns a message
     asking the developer to search manually.
 
     Examples: check_existing_proposals("drone telemetry"),
-              check_existing_proposals("smart device", repos=["UCO"])
+              check_existing_proposals("smart device", repos=["UCO"]),
+              check_existing_proposals("chargedWith", repos=["CAC"])
     """
     if repos is None:
-        repos = ["UCO", "CASE"]
+        repos = ["UCO", "CASE", "CAC"]
 
     repo_map = {
         "UCO": "ucoProject/UCO",
         "CASE": "casework/CASE",
+        "CAC": "Project-VIC-International/CAC-Ontology",
     }
 
     results: list[dict] = []
@@ -925,7 +1071,7 @@ def check_existing_proposals(
 
     for repo_key in repos:
         full_repo = repo_map.get(repo_key.upper(), repo_key)
-        query = urllib.request.quote(f"{concept} repo:{full_repo} state:open")
+        query = urllib.parse.quote(f"{concept} repo:{full_repo} state:open")
         url = f"https://api.github.com/search/issues?q={query}&per_page=10"
         req = urllib.request.Request(
             url,
@@ -958,7 +1104,8 @@ def check_existing_proposals(
                 "GitHub issue trackers are not reachable. Please search manually "
                 "before submitting your proposal:\n"
                 "  UCO: https://github.com/ucoProject/UCO/issues\n"
-                "  CASE: https://github.com/casework/CASE/issues"
+                "  CASE: https://github.com/casework/CASE/issues\n"
+                "  CAC: https://github.com/Project-VIC-International/CAC-Ontology/issues"
             ),
             "errors": errors,
         }

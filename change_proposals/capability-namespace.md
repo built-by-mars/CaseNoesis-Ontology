@@ -7,6 +7,10 @@
 
 **Target**: UCO 1.6.0
 
+# Attribution and status
+
+This proposal is a joint effort between **Vulnmaster** (Cory Hall) and **sbarnum** (Sean Barnum). The decomposed Tool → Module → Parser → Capability model is informed by Sean Barnum's data model work. The proposal is **ready for community review**.
+
 # Background
 
 UCO currently lacks a **Capability** class to formally describe what an entity — a tool, software module, person, organization, or threat actor — is able to do. The concept of capability is fundamental across multiple UCO use cases:
@@ -300,9 +304,23 @@ Run `make test-proposal PROPOSAL=capability-namespace` to execute all tests.
 
 | Query | Tested | Expected results match | Notes |
 |-------|--------|----------------------|-------|
-| CQ 1 — Tools with Snapchat parsing capability | Pending | — | Graph validated; SPARQL testing against loaded graph pending |
-| CQ 2 — Full tool→module→capability chain | Pending | — | Graph validated; SPARQL testing against loaded graph pending |
-| CQ 3 — Modules by analytic focus | Pending | — | Graph validated; SPARQL testing against loaded graph pending |
+| CQ 1 — Tools with Snapchat parsing capability | Yes | Yes | 2 results: Autopsy, Cellebrite UFED |
+| CQ 2 — Full tool→module→capability chain | Yes | Yes | 2 chains, both reaching the shared Capability and ActionPattern |
+| CQ 3 — Modules by analytic focus | Yes | Yes | 2 results: Snapchat iOS Module, Snapchat Parser Module |
+
+```
+$ make test-proposal PROPOSAL=capability-namespace
+=== Validating proposal graph: change_proposals/capability-namespace.jsonld ===
+Validation Report
+Conforms: True
+=== Testing SPARQL queries for proposal: capability-namespace ===
+Loaded 60 triples from change_proposals/capability-namespace.jsonld
+  Query 1: 2 result(s) — OK
+  Query 2: 2 result(s) — OK
+  Query 3: 2 result(s) — OK
+
+SPARQL test summary: 3 passed, 0 failed
+```
 
 ## Graph validation
 
@@ -332,7 +350,6 @@ Conforms: True
 
 ## Unresolved issues
 
-- SPARQL competency question testing against a loaded graph store is pending.
 - Committee should decide whether Parser should be a subclass of Module or directly of Software.
 - Committee should decide on the namespace placement for Module and Parser (uco-observable vs. new namespace).
 - The recommended `kindOfRelationship` vocabulary terms (hasCapability, mayUse, uses, runs-on, variation-of, isVersionOf) should be discussed for potential standardization.

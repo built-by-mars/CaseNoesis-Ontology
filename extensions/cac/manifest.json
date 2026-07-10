@@ -105,7 +105,8 @@
     "ontology/ontology/cacontology-platform-infrastructure.ttl",
     "ontology/ontology/cacontology-recruitment-networks.ttl",
     "ontology/ontology/cacontology-sadistic-online-exploitation.ttl",
-    "ontology/ontology/cacontology-integration-patterns.ttl"
+    "ontology/ontology/cacontology-integration-patterns.ttl",
+    "local/cacontology-sdk-pending.ttl"
   ],
   "shacl_files": [
     "ontology/ontology/cacontology-core-spine-shapes.ttl",
@@ -162,7 +163,9 @@
     "ontology/ontology/cacontology-bridge-gufo.ttl"
   ],
   "exemplar_files": [],
-  "uco_compat": ["1.4.0"],
+  "uco_compat": [
+    "1.4.0"
+  ],
   "upper_ontology": "gufo",
   "cdo_shapes_compatibility": {
     "CDO-Shapes-gufo": "included",

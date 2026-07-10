@@ -1,0 +1,28 @@
+# CQ 1.1 — Case chain: which investigations are related, with what identifiers and relation kinds?
+PREFIX investigation: <https://ontology.caseontology.org/case/investigation/>
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/investigation/>
+
+SELECT ?sourceCase ?kind ?targetCase
+WHERE {
+    ?rel a proposed:InvestigationRelationship ;
+         uco-core:source ?src ;
+         uco-core:target ?tgt ;
+         uco-core:kindOfRelationship ?kind .
+    ?src proposed:caseIdentifier ?sourceCase .
+    ?tgt proposed:caseIdentifier ?targetCase .
+}
+
+# ---
+
+# CQ 1.2 — Which investigations carry which case identifiers?
+PREFIX investigation: <https://ontology.caseontology.org/case/investigation/>
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/investigation/>
+
+SELECT ?investigationName ?caseId
+WHERE {
+    ?inv a investigation:Investigation ;
+         uco-core:name ?investigationName ;
+         proposed:caseIdentifier ?caseId .
+}

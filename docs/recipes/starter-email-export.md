@@ -148,3 +148,9 @@ graph.write("email-export.jsonld")
 ```bash
 case_validate --built-version case-1.4.0 email-export.jsonld
 ```
+
+## Related
+
+- [email-messaging.md](email-messaging.md) — deeper email and messaging patterns
+- [threaded-messaging.md](threaded-messaging.md) — conversation threads
+- [accounts.md](accounts.md) — account linking across platforms

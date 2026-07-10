@@ -1,0 +1,25 @@
+# CQ 1.1 — Which preservation and discovery obligations attach to the civil action?
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/civil/>
+
+SELECT ?instrument ?instrumentName ?actionName
+WHERE {
+    ?instrument proposed:concernsCivilAction ?action ;
+                uco-core:name ?instrumentName .
+    ?action uco-core:name ?actionName .
+    { ?instrument a proposed:LegalHold } UNION { ?instrument a proposed:DiscoveryRequest }
+}
+
+# ---
+
+# CQ 1.2 — How was the civil action resolved?
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/civil/>
+
+SELECT ?actionName ?resolutionName
+WHERE {
+    ?resolution proposed:concernsCivilAction ?action ;
+                uco-core:name ?resolutionName .
+    ?action uco-core:name ?actionName .
+    { ?resolution a proposed:Settlement } UNION { ?resolution a proposed:CivilJudgment }
+}

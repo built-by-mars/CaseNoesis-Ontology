@@ -115,3 +115,10 @@ graph.write("file_recovery.jsonld")
 - `RecoveredObjectFacet` status fields are all `list[str]`. Common values: `"Complete"`, `"Partial"`, `"None"`, `"Unknown"`.
 - For multiple recovered files, create one `ObservableObject` + `RecoveredObjectFacet` per file.
 - When a recovered file was repaired (e.g., header reconstruction), model the repair as a separate `InvestigativeAction` with the original as `object` and the repaired version as `result`.
+
+## Related
+
+- [file-fragments.md](file-fragments.md) — multipart and embedded data
+- [partitions.md](partitions.md) — deleted partition recovery
+- [file-system.md](file-system.md) — the recovered files' metadata
+- [usn-journal.md](usn-journal.md) — NTFS change history for deleted files

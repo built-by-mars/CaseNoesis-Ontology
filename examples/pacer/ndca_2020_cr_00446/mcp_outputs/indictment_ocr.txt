@@ -1,0 +1,514 @@
+Case 3:20-cr-00446-WHA Document1 Filed 12/01/20 Page 3of15
+
+FILED
+
+1 |} DAVID L. ANDERSON (CABN 149604)
+
+5 United States Attorney Dec 01 2020
+3 SUSAN Y. SOONG
+CLERK, U.S. DISTRICT COURT
+4 NORTHERN DISTRICT OF CALIFORNIA
+5 SAN FRANCISCO
+6
+7
+8 UNITED STATES DISTRICT COURT
+9 NORTHERN DISTRICT OF CALIFORNIA
+10 SAN FRANCISCO DIVISION
+11
+UNITED STATES OF AMERICA, ) Case No. 3:20-cr-00446 WHA
+12 )
+Plaintiff, ) VIOLATIONS: 50 U.S.C. § 1705 and 15 C.F.R.
+13 V. ) § 764.2(d) — Conspiracy to Violate IEEPA;
+14 ) 13 U.S.C. § 305 — Unlawful Export Information;
+HAN LI, also known as LIHAN ANSON; and ) 50 U.S.C. § 1705 and 15 C.F.R. §§ 764.2(a), (b), (c),
+15 || LIN CHEN, ) and (e) — Violations of IEEPA;
+) 18 U.S.C. § 554 — Smuggling of Goods;
+16 Defendants. ) 18 U.S.C. § 2 — Aiding and Abetting; and
+) 18 U.S.C. § § 981(a)(1)(C), 28 U.S.C. § 2461(c), and
+17 ) 13 U.S.C. § 305(a)(3) — Criminal Forfeiture
+)
+18 ) SAN FRANCISCO VENUE
+19 )
+) UNDER SEAL
+20
+21 INDICTMENT
+
+22 || The Grand Jury charges:
+23 At all times relevant to this indictment, unless otherwise indicated, and with all dates being
+
+24 || approximate and all date ranges both approximate and inclusive:
+
+25 Introductory Allegations
+26 1. Chengdu GaStone Technology Co. (“GaStone’”’) is an entity located in Chengdu, PRC.
+27 2. China Electronics Technology Corporation 55th Research Institute (““CETC 55”) is an
+
+28 || entity located in Jiangsu, People’s Republic of China (“PRC”).
+
+Indictment 1
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+
+Case 3:20-cr-00446-WHA Document1 Filed 12/01/20 Page4of15
+
+3. Jiangsu Hantang International Trade Group Corp., Ltd., also known as Sainty Hantang
+(“JHT’”’) is a company headquartered in Nanjing, PRC.
+
+4. HAN LI, also known as LIHAN ANSON (“LI”) was a citizen of PRC.
+
+5. LIN CHEN (“CHEN”) was a citizen of PRC.
+
+6. Company-1 was a company based in Santa Rosa, California, and is a supplier to the
+semiconductor industry. Company-1! designed and sold machines for processing silicon wafer
+microchips, including a machine referred herein as a “DTX-150 Automatic Diamond Scriber Breaker,”
+with applications for radio-frequency integrated circuits, opto-electronics devices, and light-emitting
+diodes (“LED”).
+
+United States Export Statutes and Regulations
+
+7. Under the International Emergency Economic Powers Act (“IEEPA”), 50 U.S.C.
+
+§§ 1701-07, the President of the United States was granted authority to deal with unusual and
+extraordinary threats to the national security and foreign policy of the United States. Under IEEPA, the
+President could declare a national emergency through Executive Orders that have the full force and
+effect of law.
+
+8. IEEPA also empowered the U.S. Department of Commerce (“DOC’’) to issue regulations
+governing exports. Initially, the Export Administration Act (“EAA”), 50 App. U.S.C. §§ 2401-2420,
+regulated the export of goods, technology, and software from the United States. Pursuant to the
+provisions of the EAA, the DOC promulgated the Export Administration Regulations (“EAR”), 15
+C.F.R. §§ 730-774, which contain additional restrictions on the export of goods outside of the United
+States, consistent with the policies and provisions of the EAA. See 15 C.F.R. § 730.02. Although the
+EAA lapsed on August 17, 2001, pursuant to the authority provided to the President under IEEPA, the
+President issued Executive Order 13222, which declared a national emergency with respect to the
+unusual and extraordinary threat to the national security, foreign policy, and economy of the United
+States in light of the expiration of the EAA. Accordingly, pursuant to IEEPA, the President ordered that
+the EAR’s provisions remain in full force and effect despite the expiration of the EAA. Presidents have
+
+issued annual Executive Notices extending the national emergency declared in Executive Order 13222
+
+Indictment 2
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+
+Case 3:20-cr-00446-WHA Document1 Filed 12/01/20 Page5of15
+
+from the time period covered by that Executive Order. Under IEEPA, it is a crime to willfully violate
+any regulation promulgated thereunder, including the EAR. See 50 U.S.C. § 1705.
+
+9. Pursuant to its authority derived from IEEPA, the DOC reviewed and controlled the
+export of certain items, including goods, software, and technologies, from the United States to foreign
+countries through the EAR. In particular, the EAR restricted the export of items that could make a
+significant contribution to the military potential of other nations or that could be detrimental to the
+foreign policy or national security of the United States. The EAR imposed licensing and other
+requirements for items subject to the EAR to be lawfully exported from the United States or lawfully re-
+exported from one foreign destination to another. The most sensitive items subject to EAR controls
+were identified on the Commerce Control List, or “CCL,” published at 15 C.F.R. Part 774, Supp. No. 1.
+Items on the CCL were categorized by Export Control Classification Number (“ECCN”), each of which
+has export controls requirements depending on destination, end use, and end user. Those items subject
+to the EAR but not specified on the CCL are identified by an “EAR99” designation.
+
+10. The EAR further imposed, pursuant to the “Entity List” published at 15 C.F.R. § 774,
+Supp. No. 4, licensing and other requirements for sales to certain companies, businesses, research
+institutions, government and private organizations, individuals, and other types of legal persons that are
+subject to specific license requirements for the export, re-export and/or transfer (in-country) of specified
+items. Ifa license is required for a transaction, a U.S. party to the transaction must submit an export
+license application prior to export.
+
+11. On August 13, 2018, the President signed into law the National Defense Authorization
+Act of 2019, which includes provisions on export controls, entitled the Export Control Reform Act of
+2018 (““ECRA”), 50 U.S.C. §§ 4801-4852. In part, ECRA provides permanent statutory authority for the
+EAR.
+
+Export and Shipping Records (EEI, SED and AES)
+
+12. Pursuant to United States law and regulation, exporters and shippers or freight forwarders
+are required to file certain forms and declarations concerning exports of goods and technology from the
+United States. One such form is a Shipper’s Export Declaration (“SED”), which is an official document
+
+required to be filed with the United States government in connection with export shipments from the
+
+Indictment 3
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+
+Case 3:20-cr-00446-WHA Document1 Filed 12/01/20 Page 6of15
+
+United States. The SED requires the shipper to list information concerning, among other things, the
+end-user or ultimate destination of the export, the contents of the shipment including any control
+numbers, and the value of the contents. The filing of an SED is completed either in paper or through the
+submission of Electronic Export Information (“EEI’’) via the Automated Export System (“AES”). AES
+is administered by the U.S. Department of Homeland Security (“DHS”), Bureau of Customs and Border
+Protection (“CBP”). SEDs and EEIs are official documents submitted to DHS in connection with export
+shipments from the United States.
+
+13. The DOC required the filing of electronic EEIs through the AES pursuant to Title 13,
+United States Code, Section 305 and Foreign Trade Regulations (“FTR”’), Title 15, Code of Federal
+Regulations, Part 30. The purpose of these requirements was to strengthen the United States
+government’s ability to prevent the export of certain items to unauthorized destinations and end users
+because the AES aids in targeting, identifying, and, when necessary, confiscating suspicious or illegal
+shipments prior to exportation. 15 C.F.R. § 30.1(b).
+
+14. The EEI contains statements to the United States government that the transaction
+occurred as described. The contents of the EEI are relied upon by the Department of State, the
+Department of the Treasury, and the Department of Commerce for export control purposes. The EAR at
+15 C.F.R. § 764.2(g) states that “No person may make any false or misleading representation, statement,
+or certification, or falsify or conceal any material fact, either directly to the Department of Commerce,
+Bureau of Industry and Security (“BIS”), the United States Customs Service, or an official of any other
+
+United States agency, or indirectly through any other person: (ii) In connection with the preparation,
+
+9
+
+submission, issuance, use, or maintenance of any export control document as defined in § 772.1
+The definition of export control document contained in 15 C.F.R. § 772.1 includes EEIs presented in
+connection with shipments to any country.
+
+15. | With exceptions not relevant to the exports at issue in this Indictment, EEI was required
+to be filed for, among other things, the export of commodities valued over $2,500 or requiring an export
+license. EEI was required to contain, among other things, the names and addresses of the parties to the
+transaction, the description, quantity, and value of the items exported; the ultimate consignee; the
+
+ultimate country of destination; and whether a license was required for the export. 15 C.F.R. § 30.6(a).
+
+Indictment 4
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+
+Case 3:20-cr-00446-WHA Document1 Filed 12/01/20 Page 7of15
+
+PRC Companies and Institutions on the Entity List
+
+16. GaStone was designated on the DOC Entity List on August 1, 2014, and all items subject
+to the EAR required a license for export to GaStone.
+
+17. | CETC 55 was designated on the DOC Entity List on August 1, 2018, and all items
+subject to the EAR required a license for export to CETC 55.
+
+18. The DTX-150 Automatic Diamond Scriber Breaker manufactured and sold by Company-
+1 was subject to the EAR and controlled for export pursuant to classification EAR99.
+COUNT ONE: (50 U.S.C. § 1705 and 15 C.F.R. Parts 764.2(d) — Conspiracy to Violate IEEPA)
+
+19. Paragraphs | through 18 above are incorporated and realleged as if fully set forth here.
+
+20. Beginning at a date unknown to the Grand Jury, but no later than May 13, 2015, and
+continuing through a date unknown to the Grand Jury, but to at least August 13, 2018, in the Northern
+District of California and elsewhere, the defendants,
+
+HAN LI, and
+LIN CHEN,
+and others known and unknown to the Grand Jury, did knowingly and willfully combine, conspire,
+confederate, and agree to export, reexport, and supply, and cause to be exported, reexported, and
+supplied, directly and indirectly, goods and services from the United States to Chengdu GaStone
+Technology Co. and other end users in the People’s Republic of China, without a license and in
+violation of the United States Department of Commerce Entity List published at 15 C.F.R. § 774, Supp.
+No. 4.
+OBJECTS OF THE CONSPIRACY
+
+21. The objects of the conspiracy were: to purchase items from the United States, and cause
+those items to be shipped to entities and research institutions in the PRC listed on the DOC Entity List
+and prohibited from receiving such controlled items, through intermediary companies such as JHI for
+purposes of concealing the nature of the exports and true end users, in violation of the prohibitions and
+licensing requirements.
+
+//
+//
+
+Indictment 5
+Case 3:20-cr-00446-WHA Document1 Filed 12/01/20 Page 8of15
+
+1 MANNER AND MEANS OF THE CONSPIRACY
+
+2 22. The manner and means by which the defendants and their conspirators sought to
+
+3 || accomplish the objects of the conspiracy included, among others, the following:
+
+4 a. Defendants LI and CHEN and others willfully caused the export and attempted export of
+
+5 a manufacturing device, namely a DTX-150 Automatic Diamond Scriber Breaker, from the
+
+6 United States to GaStone in the PRC, without first obtaining the required licenses and
+
+7 authorizations from the BIS.
+
+8 b. Defendants LI and CHEN and others identified specific devices that were needed by
+
+9 client entities in the PRC who were prohibited from purchasing items controlled by DOC without
+10 a license. LI and CHEN then arranged to purchase those items, and arranged shipment and
+11 delivery of those items to GaStone and other prohibited end-users in the PRC.
+12 c. Defendants LI and CHEN used intermediary entities that they controlled, including JHI,
+13 as the destination entities on paperwork, in order to conceal the true end-user of the controlled
+14 items from the United States government, knowing that the true end-users, such as GaStone,
+15 were prohibited from receiving the controlled items without a license.
+16 d. Defendants LI and CHEN and others used email and other forms of communication to
+17 contact United States companies, including Company-1, in an attempt to purchase components
+18 and goods, and to transmit information to each other regarding the purchase of items and services
+19 controlled by the DOC for purchase and shipment either directly or indirectly to GaStone, and
+20 other prohibited customers in the PRC, and to act as an intermediary recipients for re-shipment
+21 of such items to entities prohibited from export by the Entity List, and strategies designed to
+22 conceal violations of United States export laws.
+23 e. Defendants LI and CHEN and others used financial institutions located outside the
+24 United States to send payments to financial institutions located within the United States to fund
+25 the purchase and attempted purchase of goods intended for export and transshipment to GaStone
+26 in the PRC.
+
+27 || All in violation of Title 50, United States Code, Section 1705 and Title 15, Code of Federal Regulations,
+
+28 || Part 764.2(d).
+
+Indictment 6
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+
+Case 3:20-cr-00446-WHA Document1 Filed 12/01/20 Page9of15
+
+COUNT TWO: (13 U.S.C. § 305 and 18 U.S.C. § 2 — Unlawful Export Information Activities)
+
+23. Paragraphs | through 18 and 20 through 22 above are incorporated and realleged as if
+fully set forth here.
+24. On or about December 4, 2015, in the Northern District of California and elsewhere, the
+
+defendants,
+
+HAN LI, and
+LIN CHEN,
+
+and others known and unknown to the Grand Jury, did knowingly submit and cause submission of false
+and misleading electronic export information (“EET”) through the Automated Export System (“AES”),
+by stating no license was required for the export and that the ultimate consignee for the export of a
+DTX-150 Automatic Diamond Scriber Breaker sold by Company-1 was Jiangsu Hantang International
+Trade Group Corp., Ltd. in Nanjing, PRC, when in truth and in fact, and as the defendants then and there
+well knew, the ultimate end user and consignee of the shipment was not Jiangsu Hantang International
+Trade Group Corp., Ltd., but was Chengdu GaStone Technology Co.
+
+All in violation of Title 13, United States Code, Section 305 and Title 18, United States Code,
+Section 2.
+
+COUNT THREE: (18 U.S.C. §§ 554 and 2 — Smuggling of Goods)
+
+25. Paragraphs | through 18 and 20 through 22 above are incorporated and realleged as if
+fully set forth here.
+26. On or about December 10, 2015, in the Northern District of California and elsewhere, the
+
+defendants,
+
+HAN LI, and
+LIN CHEN,
+
+and others known and unknown to the Grand Jury, did knowingly and fraudulently export and send, and
+attempt to export and send, from the United States indirectly to Chengdu GaStone Technology Co., Ltd
+in the PRC an article, object, and merchandise, that is, a DTX-150 Automatic Diamond Scriber Breaker
+sold by Company-1, contrary to law and regulations of the United States, specifically by submitting
+
+false and misleading export information, and willfully causing another to file false and misleading
+
+Indictment 7
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+
+Case 3:20-cr-00446-WHA Document1 = Filed 12/01/20 Page 10 of 15
+
+export information, in an SED and through the AES, in violation of Title 13, United States Code,
+Section 305(a)(1), and Title 15, Code of Federal Regulations, Parts 764.2(a), (b), (c), and (e).
+All in violation of Title 18, United States Code, Sections 554 and 2.
+
+COUNT FOUR: (50 U.S.C. § 1705 and 18 U.S.C. § 2, and 15 C.F.R. Parts 764.2(a), (b), (c), and
+(e) — Willful Violations of IEEPA)
+
+27. Paragraphs | through 18 and 20 through 22 above are incorporated and realleged as if
+fully set forth here.
+28. On or about December 10, 2015, in the Northern District of California and elsewhere, the
+
+defendants,
+
+HAN LI, and
+LIN CHEN,
+
+and others known and unknown to the Grand Jury, did willfully export, reexport, and supply, caused and
+aided and abetted in the export, reexport, and supply, and solicited and attempted in the export, reexport,
+and supply of goods, technology, and services, that is, a DTX-150 Automatic Diamond Scriber Breaker
+sold by Company-1, from the United States to Chengdu GaStone Technology Co., Ltd. in the PRC,
+without having first obtained the required licenses from the U.S. Department of Commerce..
+
+All in violation of Title 50, United States Code, Sections 1705 and 2 and Title 15, Code of
+Federal Regulations, Parts 764.2(a), (b), (c), and (e).
+
+FORFEITURE ALLEGATION: (18 U.S.C. §§ 981(a)(1)(C) and 28 U.S.C. § 2461(c), and
+13 U.S.C. § 305(a)(3) — Criminal Forfeiture)
+
+24. The factual allegations contained in Counts One through Four of this Indictment are re-
+alleged and by this reference fully incorporated herein for the purpose of alleging the forfeiture pursuant
+to 18 U.S.C § 981(a)(1)(C) and 28 U.S.C. § 2461(c); and 13 U.S.C. § 305(a)(3).
+
+25. Upon conviction of one or more of the offenses alleged in Counts One, Three, or Four of
+the Indictment, the defendants shall forfeit to the United States, pursuant to 18 U.S.C. § 981(a)(1)(C) and
+28 U.S.C. § 2461(c), any property, real or personal, which constitutes or is derived from proceeds
+traceable to the criminal violations described therein.
+
+26. | Uponconviction of the offense alleged in Count Two, the defendants shall forfeit,
+
+Indictment 8
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+
+Case 3:20-cr-00446-WHA Document1 = Filed 12/01/20 Page 11 of 15
+
+pursuant to Title 13, United States Code, Section 305(a)(3):
+
+a. any of their interest in, security of, claim against, or property or contractual rights of any
+kind in the goods or tangible items that were the subject of the violation;
+
+b. any of their interest in, security of, claim against, or property or contractual rights of any
+kind in tangible property that was used in the export or attempt to export that was the
+subject of the violation; and
+
+c. any of that person’s property constituting, or derived from, any proceeds obtained
+directly or indirectly as a result of the violation.
+
+27. If any of the property described above, as a result of any act or omission of the defendant:
+
+(a) cannot be located upon the exercise of due diligence;
+
+(b) has been transferred or sold to, or deposited with, a third party;
+
+(c) has been placed beyond the jurisdiction of the court;
+
+(d) has been substantially diminished in value; or
+
+(e) has been commingled with other property which cannot be divided without difficulty;
+the United States shall be entitled to forfeiture of substitute property pursuant to 21 U.S.C. § 853(p), as
+incorporated by 28 U.S.C. § 246l(c).
+
+All pursuant to Title 18, United States Code, Section 981(a)(1)(C), Title 28, United States Code,
+Section 246l(c), Title 13, United States Code, Section 305(a)(3), and Rule 32.2 of the Federal Rules of
+Criminal Procedure
+
+A True Bill
+Dated: December 1, 2020 /s/ Foreperson
+FOREPERSON
+DAVID L. ANDERSON
+United States Attorney
+Cla Sampson
+
+COLIN C. SAMPSON
+Assistant United States Attorney
+
+Indictment 9

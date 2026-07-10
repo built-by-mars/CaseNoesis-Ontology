@@ -120,3 +120,9 @@ let with_tool = registry::find_by_property_type("Tool");
 ```
 
 </details>
+
+## Related
+
+- [extensions.md](extensions.md) — discovering extension classes at runtime
+- [cross-domain-extensions.md](cross-domain-extensions.md) — composing multiple extension packages
+- [recipe-authoring.md](recipe-authoring.md) — turning a discovered pattern into a recipe

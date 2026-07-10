@@ -1,0 +1,156 @@
+# Cryptocurrency and Financial Crime Investigation Extension — Exemplar (A-Box)
+#
+# A minimal validated exemplar exercising every cryptoinv class. The
+# scenario is a condensed, synthetic rendering of the fact pattern in
+# United States v. Lichtenstein & Morgan, No. 1:23-cr-00239-CKK (D.D.C.):
+# a hacked virtual currency exchange, a self-hosted wallet holding stolen
+# BTC, a laundering transaction through a darknet market, a law-enforcement
+# wallet seizure, a criminal charge, a plea agreement, a sentencing
+# recommendation, and forfeiture/restitution instruments.
+#
+# Validation command (run from the SDK root):
+#   case_validate --built-version case-1.4.0 \
+#     --ontology-graph extensions/cryptoinv/cryptoinv.ttl \
+#     --ontology-graph extensions/cryptoinv/cryptoinv-shapes.ttl \
+#     --inference rdfs --allow-info \
+#     extensions/cryptoinv/cryptoinv-exemplar.ttl
+
+@prefix kb: <http://example.org/kb/> .
+@prefix cryptoinv: <http://example.org/ontology/cryptoinv/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-observable: <https://ontology.unifiedcyberontology.org/uco/observable/> .
+@prefix uco-tool: <https://ontology.unifiedcyberontology.org/uco/tool/> .
+@prefix case-investigation: <https://ontology.caseontology.org/case/investigation/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+kb:investigation-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a001
+	a case-investigation:Investigation ;
+	uco-core:name "Virtual currency exchange hack laundering investigation (synthetic exemplar)" .
+
+kb:victim-vce-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a002
+	a cryptoinv:VirtualAssetServiceProvider ;
+	uco-core:name "Victim VCE (synthetic)" .
+
+kb:darknet-market-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a003
+	a cryptoinv:DarknetMarket ;
+	uco-core:name "AlphaBay (as referenced in prosecution record)" .
+
+kb:mixer-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a004
+	a cryptoinv:CryptocurrencyMixingService ;
+	uco-core:name "ChipMixer (as referenced in prosecution record)" .
+
+kb:defendant-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a005
+	a uco-identity:Person ;
+	uco-core:name "Defendant (synthetic)" ;
+	cryptoinv:chargedWith kb:charge-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a00d .
+
+kb:hack-wallet-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a006
+	a uco-observable:ObservableObject ;
+	uco-core:name "Self-hosted wallet receiving stolen BTC" ;
+	uco-core:hasFacet
+		kb:hack-wallet-facet-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a006 ,
+		kb:hack-wallet-holding-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a006 .
+
+kb:hack-wallet-facet-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a006
+	a cryptoinv:CryptocurrencyWalletFacet ;
+	cryptoinv:walletType "unhosted" ;
+	cryptoinv:walletIdentifier "Wallet 1CGA4s" ;
+	cryptoinv:addressCount "2000"^^xsd:nonNegativeInteger .
+
+kb:hack-wallet-holding-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a006
+	a cryptoinv:VirtualAssetHoldingFacet ;
+	cryptoinv:assetSymbol "BTC" ;
+	cryptoinv:assetQuantity "94636"^^xsd:decimal ;
+	cryptoinv:fiatValue "3629000000"^^xsd:decimal ;
+	cryptoinv:fiatCurrencyCode "USD" ;
+	cryptoinv:valuationDate "2022-02-01T00:00:00Z"^^xsd:dateTime .
+
+kb:address-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a007
+	a uco-observable:ObservableObject ;
+	uco-core:hasFacet kb:address-facet-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a007 .
+
+kb:address-facet-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a007
+	a cryptoinv:CryptocurrencyAddressFacet ;
+	cryptoinv:addressValue "bc1qsyntheticexampleaddressxxxxxxxxxxxxxx" ;
+	cryptoinv:cryptocurrencyType "BTC" ;
+	cryptoinv:blockchainNetwork "Bitcoin Mainnet" ;
+	cryptoinv:addressFormat "Bech32" .
+
+kb:tx-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a008
+	a uco-observable:ObservableObject ;
+	uco-core:hasFacet kb:tx-facet-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a008 .
+
+kb:tx-facet-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a008
+	a cryptoinv:CryptocurrencyTransactionFacet ;
+	cryptoinv:transactionHash "6e0d701ac2ea3ad87fc8bcaa786b994aa943f5eb9a67a1e345769bb090bf5b9e" ;
+	cryptoinv:blockNumber "451000"^^xsd:integer ;
+	cryptoinv:transactionFee "0.0002"^^xsd:decimal ;
+	cryptoinv:confirmationCount "144"^^xsd:integer ;
+	cryptoinv:transactionStatus "Confirmed" ;
+	cryptoinv:transactionType "Mixing" .
+
+kb:tx-input-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a009
+	a uco-observable:ObservableRelationship ;
+	uco-core:source kb:hack-wallet-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a006 ;
+	uco-core:target kb:tx-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a008 ;
+	uco-core:kindOfRelationship "Transaction_Input" ;
+	uco-core:isDirectional true ;
+	cryptoinv:transferAmount "25.0"^^xsd:decimal .
+
+kb:tx-output-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a00a
+	a uco-observable:ObservableRelationship ;
+	uco-core:source kb:tx-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a008 ;
+	uco-core:target kb:address-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a007 ;
+	uco-core:kindOfRelationship "Transaction_Output" ;
+	uco-core:isDirectional true ;
+	cryptoinv:transferAmount "24.9998"^^xsd:decimal .
+
+kb:laundering-action-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a00b
+	a uco-action:Action ;
+	uco-core:name "Layering of stolen BTC through darknet market accounts" ;
+	cryptoinv:launderingTechnique "peel-chain" , "layering" , "chain-hopping" .
+
+kb:seizure-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a00c
+	a cryptoinv:AssetSeizureAction ;
+	uco-core:name "Seizure of wallet contents using recovered private keys" ;
+	uco-action:startTime "2022-01-31T00:00:00Z"^^xsd:dateTime ;
+	uco-action:endTime "2022-02-01T00:00:00Z"^^xsd:dateTime ;
+	uco-action:object kb:hack-wallet-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a006 .
+
+kb:charge-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a00d
+	a cryptoinv:CriminalCharge ;
+	uco-core:name "Count One: Money Laundering Conspiracy" ;
+	cryptoinv:statuteCitation "18 U.S.C. § 1956(h)" ;
+	cryptoinv:countNumber "1"^^xsd:nonNegativeInteger ;
+	cryptoinv:chargeDescription "Money Laundering Conspiracy" .
+
+kb:plea-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a00e
+	a cryptoinv:PleaAgreement ;
+	uco-core:name "Plea agreement (synthetic)" ;
+	cryptoinv:pleadsGuiltyTo kb:charge-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a00d ;
+	cryptoinv:pleaDate "2023-08-03T00:00:00Z"^^xsd:dateTime .
+
+kb:sentencing-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a00f
+	a cryptoinv:SentencingOutcome ;
+	uco-core:name "Government sentencing recommendation" ;
+	cryptoinv:sentenceStatus "recommended-government" ;
+	cryptoinv:sentenceDurationMonths "60"^^xsd:nonNegativeInteger ;
+	cryptoinv:offenseLevel "25"^^xsd:integer ;
+	cryptoinv:guidelineRangeLowMonths "121"^^xsd:nonNegativeInteger ;
+	cryptoinv:guidelineRangeHighMonths "151"^^xsd:nonNegativeInteger ;
+	cryptoinv:sentencingDate "2024-10-15T00:00:00Z"^^xsd:dateTime .
+
+kb:forfeiture-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a010
+	a cryptoinv:ForfeitureOrder ;
+	uco-core:name "Consent order of forfeiture (synthetic)" ;
+	cryptoinv:forfeits kb:hack-wallet-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a006 ;
+	cryptoinv:moneyJudgmentAmount "72618825.60"^^xsd:decimal ;
+	cryptoinv:moneyJudgmentCurrencyCode "USD" .
+
+kb:restitution-8f9d81f0-4c60-5ff2-9be2-3a9a1c07a011
+	a cryptoinv:RestitutionOrder ;
+	uco-core:name "In-kind restitution proposal (synthetic)" ;
+	cryptoinv:restitutionInKind true ;
+	cryptoinv:restitutionDescription "Return of forfeited virtual assets to the victim virtual currency exchange as in-kind restitution." .

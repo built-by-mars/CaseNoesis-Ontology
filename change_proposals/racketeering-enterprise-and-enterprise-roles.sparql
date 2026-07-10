@@ -1,0 +1,42 @@
+# CQ 1.1: Which charged enterprises are association-in-fact enterprises?
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/>
+
+SELECT ?enterprise ?name ?enterpriseType
+WHERE {
+    ?enterprise a proposed:RacketeeringEnterprise ;
+                uco-core:name ?name ;
+                proposed:enterpriseType ?enterpriseType .
+    FILTER (?enterpriseType = "association-in-fact")
+}
+
+# ---
+
+# CQ 1.2: Which persons serve which functions in which enterprise?
+PREFIX uco-core: <https://ontology.unifiedcyberontology.org/uco/core/>
+PREFIX proposed: <http://example.org/ontology/proposed/>
+
+SELECT ?person ?roleFunction ?enterprise
+WHERE {
+    ?hasRole a uco-core:Relationship ;
+             uco-core:source ?person ;
+             uco-core:target ?role ;
+             uco-core:kindOfRelationship "Has_Role" .
+    ?role a proposed:EnterpriseRole ;
+          proposed:roleFunction ?roleFunction .
+    ?roleWithin a uco-core:Relationship ;
+                uco-core:source ?role ;
+                uco-core:target ?enterprise ;
+                uco-core:kindOfRelationship "Role_Within" .
+}
+
+# ---
+
+# CQ 1.3: Which RICO counts enumerate wire fraud among their predicate categories?
+PREFIX proposed: <http://example.org/ontology/proposed/>
+
+SELECT ?charge ?predicate
+WHERE {
+    ?charge proposed:predicateStatute ?predicate .
+    FILTER (CONTAINS(?predicate, "1343"))
+}

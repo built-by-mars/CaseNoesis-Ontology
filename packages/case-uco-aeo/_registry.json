@@ -1,0 +1,4260 @@
+{
+  "extension": "aeo",
+  "modules": [
+    "ext.aeo.attack",
+    "ext.aeo.engagement",
+    "ext.aeo.identity",
+    "ext.aeo.objective"
+  ],
+  "classes": {
+    "Access": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Access",
+      "module": "ext.aeo.engagement",
+      "description": "An Access action refers to an observed or deduced interaction between an entity and an object.",
+      "parents": [
+        "Action"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Alert": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Alert",
+      "module": "ext.aeo.engagement",
+      "description": "An Alert action involves notification to some entity that some condition or event of particular interest has occurred.",
+      "parents": [
+        "Action"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        }
+      ],
+      "source": "aeo"
+    },
+    "AttackPattern": {
+      "iri": "https://ontology.adversaryengagement.org/ae/attack/AttackPattern",
+      "module": "ext.aeo.attack",
+      "description": "An attack pattern is a common approach (set of actions) utilized by a person or organization to carry out malicious activity intended to achieve some particular objective (within a particular context) against a targeted victim.",
+      "parents": [
+        "ActionPattern"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        },
+        {
+          "name": "hasObjective",
+          "type": "Objective",
+          "type_iri": "https://ontology.adversaryengagement.org/ae/engagement/Objective",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": ""
+        }
+      ],
+      "source": "aeo"
+    },
+    "Beacon": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Beacon",
+      "module": "ext.aeo.engagement",
+      "description": "An Beacon action is refer to communication between two objects where the performer is an object and the object property is an object or dataTarqet. Beacon is designed to differentiate between actions performed by and onto objects and actions performed by and onto identities. ",
+      "parents": [
+        "Action"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Breadcrumb": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Breadcrumb",
+      "module": "ext.aeo.engagement",
+      "description": "A Breadcrumb is a set of objects placed to be at least partially, sequentially interacted by an adversary to ellicit an explicit response, often in the context of lateral movement.",
+      "parents": [
+        "DeceptionObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "hasAttackSurface",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasAttackSurface is an object property which describes the UcoObjects which compose the attack surface which is expected to interacted with by an adversary."
+        },
+        {
+          "name": "hasCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "hasCharacterization is an object property which describes the UcoObjects which compose a deception object or adversary engagement concept."
+        },
+        {
+          "name": "hasPerceptionCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasPerceptionCharacterization is an object property which describes the UcoObjects which compose the perception object which an adversary perceives."
+        },
+        {
+          "name": "breadcrumbTargetObject",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "breadcrumbTargetObject specifies the target object or resource which the breadcrumb is luring an adversary to."
+        }
+      ],
+      "source": "aeo"
+    },
+    "BreadcrumbTrail": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/BreadcrumbTrail",
+      "module": "ext.aeo.engagement",
+      "description": "A breadcrumb trail is a sequence of observed breadcrumbs where partial order of observation of breadcrumbs matter.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "breadcrumbTargetObject",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "breadcrumbTargetObject specifies the target object or resource which the breadcrumb is luring an adversary to."
+        },
+        {
+          "name": "hasBreadcrumb",
+          "type": "Thread",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/types/Thread",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasBreadcrumb specifies an ordered list of associated Breadcrumbs."
+        },
+        {
+          "name": "hasObjective",
+          "type": "Objective",
+          "type_iri": "https://ontology.adversaryengagement.org/ae/objective/Objective",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": ""
+        }
+      ],
+      "source": "aeo"
+    },
+    "CyberKillChain": {
+      "iri": "https://ontology.adversaryengagement.org/ae/attack/CyberKillChain",
+      "module": "ext.aeo.attack",
+      "description": "An cyber kill chain is an ordered sequence of actions or events describing a lifecycle from some framework.",
+      "parents": [
+        "ActionLifecycle"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        },
+        {
+          "name": "phase",
+          "type": "ArrayOfAction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/ArrayOfAction",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The ordered set of actions or sub action-lifecycles that represent the action lifecycle."
+        }
+      ],
+      "source": "aeo"
+    },
+    "DataSource": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/DataSource",
+      "module": "ext.aeo.engagement",
+      "description": "A datasource is a grouping of characteristics unique to a specific source of data (e.g. a tool that generates event logs).",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        }
+      ],
+      "source": "aeo"
+    },
+    "DataTarget": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/DataTarget",
+      "module": "ext.aeo.engagement",
+      "description": "A datatarget is a grouping of characteristics unique to a specific target/listener that receives data (e.g. a listening port).",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        }
+      ],
+      "source": "aeo"
+    },
+    "DeceptionAction": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/DeceptionAction",
+      "module": "ext.aeo.engagement",
+      "description": "A deception action is an action used for and during a deception campaign which is performed to manipulate an adversary's perception in a specific way.",
+      "parents": [
+        "Action"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        }
+      ],
+      "source": "aeo"
+    },
+    "DeceptionObject": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/DeceptionObject",
+      "module": "ext.aeo.engagement",
+      "description": " A deception concept object used during a deception compaign.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "hasAttackSurface",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasAttackSurface is an object property which describes the UcoObjects which compose the attack surface which is expected to interacted with by an adversary."
+        },
+        {
+          "name": "hasCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasCharacterization is an object property which describes the UcoObjects which compose a deception object or adversary engagement concept."
+        },
+        {
+          "name": "hasPerceptionCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasPerceptionCharacterization is an object property which describes the UcoObjects which compose the perception object which an adversary perceives."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Decoy": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Decoy",
+      "module": "ext.aeo.engagement",
+      "description": " A decoy is a placed object that has the perception of enough value to an adversary to pursue but contains no real value.",
+      "parents": [
+        "DeceptionObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "hasAttackSurface",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasAttackSurface is an object property which describes the UcoObjects which compose the attack surface which is expected to interacted with by an adversary."
+        },
+        {
+          "name": "hasCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasCharacterization is an object property which describes the UcoObjects which compose a deception object or adversary engagement concept."
+        },
+        {
+          "name": "hasPerceptionCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasPerceptionCharacterization is an object property which describes the UcoObjects which compose the perception object which an adversary perceives."
+        }
+      ],
+      "source": "aeo"
+    },
+    "DefensePattern": {
+      "iri": "https://ontology.adversaryengagement.org/ae/attack/DefensePattern",
+      "module": "ext.aeo.attack",
+      "description": "A defense pattern is a common approach (set of actions) utilized by a person or organization to carry out defensive activity intended to achieve some particular objective (within a particular context) against malicious activity.",
+      "parents": [
+        "ActionPattern"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        },
+        {
+          "name": "hasObjective",
+          "type": "Objective",
+          "type_iri": "https://ontology.adversaryengagement.org/ae/engagement/Objective",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": ""
+        }
+      ],
+      "source": "aeo"
+    },
+    "DenialAction": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/DenialAction",
+      "module": "ext.aeo.engagement",
+      "description": "A denial action is an action used for and during a deception campaign which restricts or denies an adversary access to some resource.",
+      "parents": [
+        "Action"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Deploy": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Deploy",
+      "module": "ext.aeo.engagement",
+      "description": "A Deploy action involves instantiating some deception objects prior or during an operation.",
+      "parents": [
+        "Action"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Event": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Event",
+      "module": "ext.aeo.engagement",
+      "description": "An Event characterizes some occurence.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "eventAttribute",
+          "type": "Dictionary",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/types/Dictionary",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "An event attribute specifies an ad-hoc attribute/value for an event."
+        },
+        {
+          "name": "eventContext",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "An event context describes the association of actions and objects relating to an event."
+        },
+        {
+          "name": "eventType",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "An event type specifies a classification type for the event."
+        },
+        {
+          "name": "endTime",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The ending time of a time range."
+        },
+        {
+          "name": "startTime",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The initial time of a time range."
+        }
+      ],
+      "source": "aeo"
+    },
+    "HoneyObject": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/HoneyObject",
+      "module": "ext.aeo.engagement",
+      "description": " An domain object that is created to be percieved by an adversary to have high value to pursue in an adversary engagement operation that has no value out of scope of the operation's intended perception.",
+      "parents": [
+        "DeceptionObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "hasAttackSurface",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasAttackSurface is an object property which describes the UcoObjects which compose the attack surface which is expected to interacted with by an adversary."
+        },
+        {
+          "name": "hasCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasCharacterization is an object property which describes the UcoObjects which compose a deception object or adversary engagement concept."
+        },
+        {
+          "name": "hasPerceptionCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasPerceptionCharacterization is an object property which describes the UcoObjects which compose the perception object which an adversary perceives."
+        }
+      ],
+      "source": "aeo"
+    },
+    "HoneyToken": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/HoneyToken",
+      "module": "ext.aeo.engagement",
+      "description": "A honey token gives an adversary direct access to a honeypot.",
+      "parents": [
+        "HoneyObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "hasAttackSurface",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasAttackSurface is an object property which describes the UcoObjects which compose the attack surface which is expected to interacted with by an adversary."
+        },
+        {
+          "name": "hasCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasCharacterization is an object property which describes the UcoObjects which compose a deception object or adversary engagement concept."
+        },
+        {
+          "name": "hasPerceptionCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasPerceptionCharacterization is an object property which describes the UcoObjects which compose the perception object which an adversary perceives."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Honeypot": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Honeypot",
+      "module": "ext.aeo.engagement",
+      "description": " A controlled environment intended to be probed, compromised or attacked by adversaries or malware.",
+      "parents": [
+        "HoneyObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "hasAttackSurface",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasAttackSurface is an object property which describes the UcoObjects which compose the attack surface which is expected to interacted with by an adversary."
+        },
+        {
+          "name": "hasCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasCharacterization is an object property which describes the UcoObjects which compose a deception object or adversary engagement concept."
+        },
+        {
+          "name": "hasPerceptionCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasPerceptionCharacterization is an object property which describes the UcoObjects which compose the perception object which an adversary perceives."
+        },
+        {
+          "name": "honeypotInteractionType",
+          "type": "HoneypotInteractionTypeVocab",
+          "type_iri": "https://ontology.adversaryengagement.org/ae/vocabulary/HoneypotInteractionTypeVocab",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The interaction class intended for a honeypot."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Narrative": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Narrative",
+      "module": "ext.aeo.engagement",
+      "description": "A narrative is a script of all expected sequence of actions, events, entities and their interactions.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "hasObjective",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": ""
+        },
+        {
+          "name": "hasStoryline",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasStoryline identifies a Storyline that is part of a Narrative."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Obfuscate": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Obfuscate",
+      "module": "ext.aeo.engagement",
+      "description": "An Obfuscate action is a transformative action an entity or tool performs to some object to reduce available information associated with that object.",
+      "parents": [
+        "Action"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Objective": {
+      "iri": "https://ontology.adversaryengagement.org/ae/objective/Objective",
+      "module": "ext.aeo.objective",
+      "description": "An objective is some particular condition or state that is desired to be achieved and toward which effort is directed: an aim, goal, or end of action.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Persona": {
+      "iri": "https://ontology.adversaryengagement.org/ae/identity/Persona",
+      "module": "ext.aeo.identity",
+      "description": " An persona is a facticious entity created to serve a purpose in a deception operation.",
+      "parents": [
+        "Identity"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        }
+      ],
+      "source": "aeo"
+    },
+    "PlannedEvent": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/PlannedEvent",
+      "module": "ext.aeo.engagement",
+      "description": "A PlannedEvent is a collection of actions, entities, interactions designated to be performed at some sequentially indexed time in a Storyline or Narrative",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "eventContext",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "An event context describes the association of actions and objects relating to an event."
+        },
+        {
+          "name": "hasObjective",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": ""
+        }
+      ],
+      "source": "aeo"
+    },
+    "PocketLitter": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/PocketLitter",
+      "module": "ext.aeo.engagement",
+      "description": "Pocket litter describes objects placed prior or during an adversary engagement operation for the purpose of realism.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "hasCharacterization",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasCharacterization is an object property which describes the UcoObjects which compose a deception object or adversary engagement concept."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Respond": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Respond",
+      "module": "ext.aeo.engagement",
+      "description": "A Respond action is a reactive, defensive action to some adversarial detection or alert.",
+      "parents": [
+        "Action"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "actionCount",
+          "type": "nonNegativeInteger",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#nonNegativeInteger",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The number of times that the action was performed."
+        },
+        {
+          "name": "actionStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The current state of the action."
+        },
+        {
+          "name": "endTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which performance of the action ended."
+        },
+        {
+          "name": "environment",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The environment wherein an action occurs."
+        },
+        {
+          "name": "error",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A characterization of the differences between the expected and the actual performance of the action."
+        },
+        {
+          "name": "instrument",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things used to perform an action."
+        },
+        {
+          "name": "location",
+          "type": "Location",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/location/Location",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The locations where an action occurs."
+        },
+        {
+          "name": "object",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things that the action is performed on/against."
+        },
+        {
+          "name": "participant",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The supporting (non-primary) performers of an action."
+        },
+        {
+          "name": "performer",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The primary performer of an action."
+        },
+        {
+          "name": "result",
+          "type": "UcoObject",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/UcoObject",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "The things resulting from performing an action."
+        },
+        {
+          "name": "startTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "exactly_one",
+          "required": true,
+          "description": "The time at which performance of the action began."
+        },
+        {
+          "name": "subaction",
+          "type": "Action",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/action/Action",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "References to other actions that make up part of a larger more complex action."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Storyline": {
+      "iri": "https://ontology.adversaryengagement.org/ae/engagement/Storyline",
+      "module": "ext.aeo.engagement",
+      "description": "A Storyline is a sequence of semi-ordered planned events as an expected trajectory for a narrative.",
+      "parents": [
+        "UcoObject"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "hasEvent",
+          "type": "Thread",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/types/Thread",
+          "cardinality": "one_or_more",
+          "required": true,
+          "description": "hasEvent specifies an ordered list of associated Events."
+        }
+      ],
+      "source": "aeo"
+    },
+    "Team": {
+      "iri": "https://ontology.adversaryengagement.org/ae/identity/Team",
+      "module": "ext.aeo.identity",
+      "description": "The conventional reference to group of identities that are associated with some unified identity with a team objective",
+      "parents": [
+        "Organization"
+      ],
+      "is_facet": false,
+      "properties": [
+        {
+          "name": "createdBy",
+          "type": "IdentityAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/IdentityAbstraction",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The identity that created a characterization of a concept."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A description of a particular concept characterization."
+        },
+        {
+          "name": "externalReference",
+          "type": "ExternalReference",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/ExternalReference",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies a reference to a resource outside of the UCO."
+        },
+        {
+          "name": "hasFacet",
+          "type": "Facet",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/Facet",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Further sets of properties characterizing a concept based on the particular context of the class and of the particular instance of the concept being characterized."
+        },
+        {
+          "name": "modifiedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Specifies the time that this particular version of the object was modified. The object creator can use the time it deems most appropriate as the time this version of the object was modified. The value of the modified property for a given object version MUST be later than or equal to the value of the created property. Object creators MUST update the modified property when creating a new version of an object. The modified timestamp MUST be precise to the nearest millisecond (exactly three digits after the decimal place in seconds)."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The name of a particular concept characterization."
+        },
+        {
+          "name": "objectCreatedTime",
+          "type": "dateTime",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The time at which a characterization of a concept is created. This time pertains to the time of creating the record object, and is not an intrinsic characteristic of the concept."
+        },
+        {
+          "name": "objectMarking",
+          "type": "MarkingDefinitionAbstraction",
+          "type_iri": "https://ontology.unifiedcyberontology.org/uco/core/MarkingDefinitionAbstraction",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "Marking definitions to be applied to a particular concept characterization in its entirety."
+        },
+        {
+          "name": "objectStatus",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The current state of formality and acceptance for a UCO object."
+        },
+        {
+          "name": "specVersion",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_one",
+          "required": false,
+          "description": "The version of UCO ontology or subontology specification used to characterize a concept."
+        },
+        {
+          "name": "tag",
+          "type": "string",
+          "type_iri": "http://www.w3.org/2001/XMLSchema#string",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": "A generic tag/label."
+        },
+        {
+          "name": "hasObjective",
+          "type": "Objective",
+          "type_iri": "https://ontology.adversaryengagement.org/ae/objective/Objective",
+          "cardinality": "zero_or_more",
+          "required": false,
+          "description": ""
+        }
+      ],
+      "source": "aeo"
+    }
+  },
+  "vocabs": {}
+}

@@ -81,3 +81,11 @@ System.out.println(graph.serialize());
 ```
 
 </details>
+
+## Related
+
+- [starter-email-export.md](starter-email-export.md) — end-to-end email export starter kit
+- [threaded-messaging.md](threaded-messaging.md) — ordered conversation threads
+- [spear-phishing.md](spear-phishing.md) — malicious email attack chains
+- [accounts.md](accounts.md) — linking addresses to platform identities
+- [insider-threat-trade-secrets.md](insider-threat-trade-secrets.md) — messaging exhibits (WeChat exports) as evidence in insider-threat prosecutions

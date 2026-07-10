@@ -1,0 +1,78 @@
+{
+  "@context": {
+    "kb": "http://example.org/kb/",
+    "proposed": "http://example.org/ontology/proposed/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-role": "https://ontology.unifiedcyberontology.org/uco/role/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "kb:enterprise-1",
+      "@type": ["proposed:RacketeeringEnterprise", "uco-identity:Organization"],
+      "uco-core:name": "The Social Engineering Enterprise (SE Enterprise)",
+      "uco-core:description": "Group of individuals associated in fact although not a legal entity (18 U.S.C. § 1961(4)), engaged in and affecting interstate and foreign commerce; operated from no later than October 2023 through at least May 2025. Purposes: stealing virtual currency through fraudulent pretenses; disguising the stolen funds through virtual-currency laundering; converting laundered funds to fiat and luxury goods.",
+      "proposed:enterpriseType": "association-in-fact"
+    },
+    {
+      "@id": "kb:person-1",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Defendant One"
+    },
+    {
+      "@id": "kb:role-money-launderer",
+      "@type": ["proposed:EnterpriseRole", "uco-role:Role"],
+      "uco-core:name": "Money launderer for the SE Enterprise",
+      "proposed:roleFunction": "money-launderer"
+    },
+    {
+      "@id": "kb:charge-count1",
+      "@type": "uco-core:UcoObject",
+      "uco-core:name": "Count 1: RICO Conspiracy (18 U.S.C. § 1962(d))",
+      "uco-core:description": "Conspiring to conduct and participate in the conduct of the affairs of the SE Enterprise through a pattern of racketeering activity (18 U.S.C. §§ 1961(1), (5)). Typed as a plain UcoObject here because the CriminalCharge concept is itself a pending stub (CASE issue #192); predicateStatute is domain-free so it attaches to whichever charge class the committee adopts.",
+      "proposed:predicateStatute": [
+        "18 U.S.C. § 1028 (fraud and related activity in connection with identification documents)",
+        "18 U.S.C. § 1029 (fraud and related activity in connection with access devices)",
+        "18 U.S.C. § 1343 (wire fraud)",
+        "18 U.S.C. § 1512 (tampering with a witness, victim, or an informant)",
+        "18 U.S.C. § 1956 (laundering of monetary instruments)",
+        "18 U.S.C. § 1957 (engaging in monetary transactions in property derived from specified unlawful activity)",
+        "18 U.S.C. § 1960 (illegal money transmitters)",
+        "18 U.S.C. § 2314 (interstate transportation of stolen property)"
+      ]
+    },
+    {
+      "@id": "kb:rel-member-of-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [{"@id": "kb:person-1"}],
+      "uco-core:target": [{"@id": "kb:enterprise-1"}],
+      "uco-core:kindOfRelationship": "Member_Of",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-has-role-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [{"@id": "kb:person-1"}],
+      "uco-core:target": [{"@id": "kb:role-money-launderer"}],
+      "uco-core:kindOfRelationship": "Has_Role",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-role-within-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [{"@id": "kb:role-money-launderer"}],
+      "uco-core:target": [{"@id": "kb:enterprise-1"}],
+      "uco-core:kindOfRelationship": "Role_Within",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    },
+    {
+      "@id": "kb:rel-charged-with-1",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [{"@id": "kb:person-1"}],
+      "uco-core:target": [{"@id": "kb:charge-count1"}],
+      "uco-core:kindOfRelationship": "Charged_With",
+      "uco-core:isDirectional": {"@type": "xsd:boolean", "@value": "true"}
+    }
+  ]
+}

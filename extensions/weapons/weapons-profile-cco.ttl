@@ -1,0 +1,50 @@
+# Weapons and Firearms Extension — CCO alignment profile (bridge)
+#
+# Subclass axioms aligning weap: classes to the Common Core Ontologies (CCO)
+# Artifact Ontology weapon hierarchy (https://github.com/CommonCoreOntology/
+# CommonCoreOntologies, BSD-3). CCO is the BFO 2020 mid-level suite endorsed
+# in 2024 as a baseline standard for formal ontology development across the
+# U.S. DoD and Intelligence Community and under IEEE P3195.1 review; UCO
+# maintains an exploratory BFO profile (UCO-Profile-BFO / CDO-Shapes-BFO),
+# so this bridge keeps the weap: hierarchy BFO-consistent end to end.
+#
+# Kept separate from weapons.ttl (per the CDO profile pattern,
+# https://cyberdomainontology.org/ontology/development/#profiles) so
+# adopters are not forced to import CCO/BFO. CCO uses opaque numeric IRIs;
+# each axiom is annotated with the CCO class label.
+
+@prefix weap: <http://example.org/ontology/weapons/> .
+@prefix cco: <https://www.commoncoreontologies.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/weapons/profile/cco>
+	a owl:Ontology ;
+	rdfs:label "Weapons Extension: CCO Artifact Ontology alignment profile"@en ;
+	dcterms:source "https://github.com/CommonCoreOntology/CommonCoreOntologies"^^xsd:anyURI .
+
+# cco:ont00000445 = "Weapon"
+weap:Weapon rdfs:subClassOf cco:ont00000445 .
+
+# cco:ont00000088 = "Firearm" (subclass of ont00001051 "Projectile Launcher")
+weap:Firearm rdfs:subClassOf cco:ont00000088 .
+
+# cco:ont00000156 = "Hand Gun"
+weap:Handgun rdfs:subClassOf cco:ont00000156 .
+
+# cco:ont00001104 = "Long Gun"
+weap:LongGun rdfs:subClassOf cco:ont00001104 .
+
+# cco:ont00000204 = "Rifle"
+weap:Rifle rdfs:subClassOf cco:ont00000204 .
+
+# cco:ont00000015 = "Shotgun"
+weap:Shotgun rdfs:subClassOf cco:ont00000015 .
+
+# cco:ont00000081 = "Cutting Weapon"
+weap:CuttingWeapon rdfs:subClassOf cco:ont00000081 .
+
+# cco:ont00001150 = "Portion of Ammunition" (a Weapon in CCO)
+weap:Ammunition rdfs:subClassOf cco:ont00001150 .

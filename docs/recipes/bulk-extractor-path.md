@@ -113,3 +113,10 @@ graph.write("bulk_extractor_path.jsonld")
 - Common `kind_of_relationship` values: `"Contained_Within"`, `"Decompressed_From"`, `"Decoded_From"`, `"Decrypted_From"`.
 - This pattern applies to any bulk extraction tool (bulk_extractor, binwalk, foremost) that reports forensic paths.
 - For additional nesting levels, add more intermediate `ContentData` objects in the chain.
+
+## Related
+
+- [file-fragments.md](file-fragments.md) — fragment reassembly and embedded data
+- [file-recovery.md](file-recovery.md) — carved and recovered files
+- [advanced-file-patterns.md](advanced-file-patterns.md) — archives, encryption, nested containment
+- [starter-filesystem-report.md](starter-filesystem-report.md) — the basic file + hash mapping

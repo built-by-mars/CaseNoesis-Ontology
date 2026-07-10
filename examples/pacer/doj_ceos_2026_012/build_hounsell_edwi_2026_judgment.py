@@ -175,7 +175,7 @@ def build_graph() -> dict:
                 {
                     "@id": uid("judgment-external-ref"),
                     "@type": "uco-core:ExternalReference",
-                    "uco-core:referenceType": "PACER Judgment in a Criminal Case (AO 245B)",
+                    "uco-core:definingContext": "PACER Judgment in a Criminal Case (AO 245B)",
                     "uco-core:referenceURL": {
                         "@type": "xsd:anyURI",
                         "@value": (
@@ -465,7 +465,7 @@ def build_graph() -> dict:
                 "Sentencing judgment graph derived from PACER PDF and CASE/UCO MCP extraction; "
                 "imposed under Sentencing Reform Act of 1984."
             ),
-            "case-investigation:derivedFrom": {"@id": source_doc},
+            "case-investigation:wasDerivedFrom": {"@id": source_doc},
         },
     ]
 

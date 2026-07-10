@@ -1,0 +1,80 @@
+# Proposed CASE corporate process and procedure stub namespace (T-Box)
+# Companion to change_proposals/corporate-process-and-procedure-namespace-stub-concepts.md
+# Namespace placeholder: the committee decides the final IRI
+# (suggested: https://ontology.caseontology.org/case/corporate/).
+
+@prefix proposed: <http://example.org/ontology/proposed/corporate/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/proposed/corporate>
+	a owl:Ontology ;
+	rdfs:label "Proposed CASE corporate process and procedure stubs"@en ;
+	rdfs:comment "Policy-neutral stub concepts for corporate investigation process: mandates, policy violations, disciplinary outcomes, referrals to external authorities, and remediation actions. Application-domain ontologies (e.g. insider threat, e-discovery, compliance) inherit and specialize these."@en .
+
+proposed:CorporateInvestigationMandate
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "CorporateInvestigationMandate"@en ;
+	rdfs:comment "A corporate investigation mandate is the internal authority under which a corporate or private-sector investigation is opened, such as a general counsel direction, board resolution, or compliance-program trigger. See DOJ Justice Manual 9-28.000 (https://www.justice.gov/jm/jm-9-28000-principles-federal-prosecution-business-organizations) for the prosecutorial context in which corporate investigation records are evaluated."@en .
+
+proposed:PolicyViolation
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "PolicyViolation"@en ;
+	rdfs:comment "A policy violation is an asserted breach of an internal policy, code of conduct, or contractual obligation identified by an investigation — the corporate analogue of a criminal charge, asserted against internal policy rather than statute."@en .
+
+proposed:DisciplinaryOutcome
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "DisciplinaryOutcome"@en ;
+	rdfs:comment "A disciplinary outcome is an employment or membership consequence resulting from a corporate investigation, such as termination, suspension, a written warning, mandated training, or a determination of no action."@en .
+
+proposed:Referral
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "Referral"@en ;
+	rdfs:comment "A referral is the formal handoff of an investigated matter to an external authority such as law enforcement, a regulator, or a prosecutor. A referral bridges corporate process into criminal or civil legal process."@en .
+
+proposed:RemediationAction
+	a owl:Class ;
+	rdfs:subClassOf uco-action:Action ;
+	rdfs:label "RemediationAction"@en ;
+	rdfs:comment "A remediation action is an action taken to correct or mitigate the condition identified by an investigation, such as access revocation, patching, control changes, or retraining."@en .
+
+proposed:mandateSource
+	a owl:DatatypeProperty ;
+	rdfs:label "mandateSource"@en ;
+	rdfs:comment "The internal source of the investigation mandate, as an open vocabulary. Recommended values: 'general-counsel', 'board', 'compliance-program', 'hr'."@en ;
+	rdfs:domain proposed:CorporateInvestigationMandate ;
+	rdfs:range xsd:string .
+
+proposed:policyCitation
+	a owl:DatatypeProperty ;
+	rdfs:label "policyCitation"@en ;
+	rdfs:comment "Identifier of the internal policy provision violated, e.g. 'AUP-4.2'."@en ;
+	rdfs:domain proposed:PolicyViolation ;
+	rdfs:range xsd:string .
+
+proposed:outcomeType
+	a owl:DatatypeProperty ;
+	rdfs:label "outcomeType"@en ;
+	rdfs:comment "The type of disciplinary outcome, as an open vocabulary. Recommended values: 'termination', 'suspension', 'written-warning', 'training', 'no-action'."@en ;
+	rdfs:domain proposed:DisciplinaryOutcome ;
+	rdfs:range xsd:string .
+
+proposed:referralType
+	a owl:DatatypeProperty ;
+	rdfs:label "referralType"@en ;
+	rdfs:comment "The type of external authority receiving the referral, as an open vocabulary. Recommended values: 'law-enforcement', 'regulator', 'prosecutor'."@en ;
+	rdfs:domain proposed:Referral ;
+	rdfs:range xsd:string .
+
+proposed:concernsViolation
+	a owl:ObjectProperty ;
+	rdfs:label "concernsViolation"@en ;
+	rdfs:comment "Links a disciplinary outcome, referral, or remediation action to the policy violation it responds to."@en ;
+	rdfs:range proposed:PolicyViolation .

@@ -1,0 +1,9 @@
+[package]
+name = "case-uco-aeo"
+version = "0.2.1"
+edition = "2021"
+description = "Adversary Engagement Ontology bindings for CASE/UCO SDK"
+
+[dependencies]
+case-uco = "1.2.0"
+serde = {{ version = "1", features = ["derive"] }}

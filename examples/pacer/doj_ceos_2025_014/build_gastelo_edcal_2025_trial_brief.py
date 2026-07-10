@@ -414,7 +414,7 @@ def build_graph() -> dict:
                 {
                     "@id": uid("trial-brief-ref"),
                     "@type": "uco-core:ExternalReference",
-                    "uco-core:referenceType": "Government Trial Brief",
+                    "uco-core:definingContext": "Government Trial Brief",
                     "uco-core:referenceURL": {
                         "@type": "xsd:anyURI",
                         "@value": (
@@ -595,7 +595,7 @@ def build_graph() -> dict:
                 "Trial-brief graph derived from PACER PDF and MCP extraction; anticipated trial "
                 "facts described as ALLEGED pending jury verdict."
             ),
-            "case-investigation:derivedFrom": {"@id": source_doc},
+            "case-investigation:wasDerivedFrom": {"@id": source_doc},
         },
     ]
 

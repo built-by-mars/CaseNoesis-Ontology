@@ -4,6 +4,45 @@
 
 Use extension ontologies to model domain-specific concepts that aren't covered by the core CASE/UCO specification. Extensions define new OWL classes and SHACL shapes that build on UCO/CASE, and can be submitted to the [CDO Community Playground](https://docs.google.com/document/d/1EiXQiAeUGk-629xdKx7HZHVn927k891LGkPcQzNLLr8/edit?usp=sharing) for others to explore and re-use.
 
+## Strict concept coverage
+
+`validate_graph` enforces a closed world: every class and property IRI in a submitted graph must be declared in CASE/UCO, a supported extension ontology, or an external ontology that UCO maintains a profile for (see [UCO profiles to upper ontologies](#uco-profiles-to-upper-ontologies) below), or validation fails with `undeclared_concepts` and guidance. To unblock modeling for a missing concept:
+
+1. Check whether the concept already exists in an upper/external ontology with a UCO profile — if so, use that ontology's term directly (no extension needed).
+2. File an upstream change proposal ([change-proposal recipe](change-proposal.md)).
+3. Declare the term in an extension ontology (this recipe) — for CAC pending-proposal terms, add to `extensions/cac/local/cacontology-sdk-pending.ttl` with a `dcterms:source` pointing at the proposal issue.
+4. Register the file in the extension's `manifest.json` (`owl_files`) and, if it should participate in subset validation, `validation-subset.json` (`ontology_files`).
+5. Re-run `validate_graph` — it passes as soon as the concept is declared. Remove the local declaration when the upstream ontology adopts the term.
+
+A complete worked example of this loop is the [`legalproc` extension](../../extensions/legalproc/): the criminal-process stubs proposed in [CASE #192](https://github.com/casework/CASE/issues/192) were implemented as a local extension (with `dcterms:source` on every term), exercised against a real 45-count prosecution (`examples/pacer/wdmo_2022_cr_04065/`), and will re-parent to the CASE namespaces when adopted.
+
+## UCO Profiles to Upper Ontologies
+
+Before minting a new extension class, check whether the concept already exists in an upper or external ontology that UCO is aligned with. The [Cyber Domain Ontology project](https://github.com/Cyber-Domain-Ontology) publishes **CDO-Shapes profiles** — OWL alignment files that ground UCO classes in each external ontology — so graphs can use those ontologies' terms alongside CASE/UCO and still validate and reason coherently.
+
+Discover the profiles programmatically with the `get_uco_profiles()` MCP tool. Current profiles:
+
+| Profile | External ontology | Type | Typical use |
+|---|---|---|---|
+| [CDO-Shapes-BFO](https://github.com/Cyber-Domain-Ontology/CDO-Shapes-BFO) | [Basic Formal Ontology 2020](https://github.com/BFO-ontology/BFO-2020) | top-level | Formal reasoning; biomedical/scientific ontology interop |
+| [CDO-Shapes-gufo](https://github.com/Cyber-Domain-Ontology/CDO-Shapes-gufo) | [gUFO](https://github.com/nemo-ufes/gufo) | top-level | OntoUML-based typing; the CAC Ontology extends both UCO/CASE and gUFO |
+| [CDO-Shapes-PROV-O](https://github.com/Cyber-Domain-Ontology/CDO-Shapes-PROV-O) | [W3C PROV-O](https://www.w3.org/TR/prov-o/) | adopting | W3C provenance tooling interop (see [chain-of-custody recipe](chain-of-custody.md)) |
+| [CDO-Shapes-Time](https://github.com/Cyber-Domain-Ontology/CDO-Shapes-Time) | [W3C OWL-Time](https://www.w3.org/TR/owl-time/) | adopting | Temporal instants/intervals (see [existence-intervals recipe](existence-intervals.md)) |
+| [CDO-Shapes-GeoSPARQL](https://github.com/Cyber-Domain-Ontology/CDO-Shapes-GeoSPARQL) | [OGC GeoSPARQL 1.1](https://github.com/opengeospatial/ogc-geosparql) | adopting | Geospatial features/geometries (see [location](location.md) and [cell-site](cell-site.md) recipes) |
+| [CDO-Shapes-FOAF](https://github.com/Cyber-Domain-Ontology/CDO-Shapes-FOAF) | [FOAF](http://xmlns.com/foaf/0.1/) | adopting | Social network / Linked Data identities (see [accounts recipe](accounts.md)) |
+| [CDO-Shapes-ORG](https://github.com/Cyber-Domain-Ontology/CDO-Shapes-ORG) | [W3C Organization Ontology](https://www.w3.org/TR/vocab-org/) | adopting | Organizational structures, memberships, posts |
+| [CDO-Shapes-PROF](https://github.com/Cyber-Domain-Ontology/CDO-Shapes-PROF) | [W3C Profiles Vocabulary](https://www.w3.org/TR/dx-prof/) | adopting | Describing the profiles themselves |
+| [CDO-Shapes-SKOS](https://github.com/Cyber-Domain-Ontology/CDO-Shapes-SKOS) / [CDO-Shapes-OWL](https://github.com/Cyber-Domain-Ontology/CDO-Shapes-OWL) | SKOS / OWL | adopting | Vocabulary and schema-level alignment |
+
+How this interacts with the SDK:
+
+- **Strict concept coverage accepts profiled namespaces.** Terms from BFO (`obo:BFO_*`), gUFO, PROV-O, OWL-Time, GeoSPARQL (`geo:`/`sf:`), FOAF, ORG, and PROF are never reported as `undeclared_concepts` — you can annotate a `uco-action:Action` with `prov:used`, type a location geometry as `sf:Point`, or add `foaf:knows` edges without creating an extension.
+- **Extensions can build on profiles.** An extension class may subclass an upper-ontology class *in addition to* its required UCO/CASE parent (multiple superclasses are allowed — see the rules above). Declare the grounding in `manifest.json` via `upper_ontology` (`"gufo"`, `"bfo"`, or `"none"`) and record per-profile status in `cdo_shapes_compatibility`.
+- **Reasoning across ontologies needs the profile file.** For cross-ontology inference (e.g. treating UCO actions as `prov:Activity`), include the profile's alignment TTL (e.g. `uco-prov-o.ttl` from the CDO-Shapes repo) alongside your graph via `--ontology-graph`, the same way extension TTLs are passed.
+- **Compatibility testing.** `make test-extension-compat` accepts profile TTLs as additional `EXT_TTL` inputs, and the CDO-Shapes repositories each carry their own test suites (`make -j check`) mirroring the [CASE-Profile-Example](https://github.com/casework/CASE-Profile-Example) pattern.
+
+See the rationale for profiles at [cyberdomainontology.org](https://cyberdomainontology.org/ontology/development/#profiles) and the integration patterns in [ECOSYSTEM.md](../ECOSYSTEM.md).
+
 ## Extension File Structure
 
 Every extension should have three separate files:

@@ -20,6 +20,10 @@ Currently, the UCO ontology has no class or facet for modeling cryptocurrency ad
 
 **Ontology gap confirmed via `search_classes` on**: "cryptocurrency" (0 results), "blockchain" (0 results), "wallet" (0 results), "transaction" (0 results), "financial" (0 results), "currency" (0 results — `Mutex`/`MutexFacet` returned as false positives). `find_classes_for_domain("cryptocurrency investigation")` and `find_classes_for_domain("financial crime investigation")` returned no task templates.
 
+**Terminology alignment**: Per reviewer suggestion (plbt5), definitions in this proposal align with the [INTERPOL Darkweb and Virtual Assets (DW-VA) Taxonomy](https://github.com/INTERPOL-Innovation-Centre/DW-VA-Taxonomy), which provides SKOS definitions for wallet, hosted/unhosted wallet, VASP, coinjoin, privacy coins, and related entities. See also the CDO Jira ticket [OCCASE-478](https://cyberontology.atlassian.net/browse/OCCASE-478).
+
+**Real-world validation**: The proposed classes have been exercised against the prosecution record of *United States v. Lichtenstein & Morgan*, No. 1:23-cr-00239-CKK (D.D.C.) — the 2016 Bitfinex hack money-laundering case (theft of ~119,754 BTC; seizure of ~94,636 BTC valued at $3.629 billion). A validated CASE/UCO knowledge graph built from the Information, Statement of Facts, Statement of the Offense, Plea Agreement, and Sentencing Memorandum models the hack wallet (Wallet 1CGA4s, 2,000 addresses), forfeiture-listed Ethereum addresses, and a forfeiture-listed seizure transaction using exactly the facets and `ObservableRelationship` input/output pattern proposed here, and passes `case_validate` (`Conforms: True`). The exemplar and a packaged extension ontology mirroring this proposal are published in the [CASE-UCO SDK](https://github.com/vulnmaster/CASE-UCO-SDK) (`extensions/cryptoinv/`, `examples/pacer/doj_crypto_2023_239/`).
+
 **What do we achieve for whom and why does that matter?** We enable forensic examiners, financial investigators, and compliance analysts to model cryptocurrency addresses and blockchain transactions in CASE/UCO-compliant graphs, allowing structured querying across cases involving cryptocurrency activity — including tracing flows through exchanges, mixing services, and between suspects. This is a prerequisite for the financial data modeling working group being formed by community members for warrant returns and cloud returns from financial institutions.
 
 
@@ -923,6 +927,9 @@ The separate CASE proposal for sanctions classification will be drafted and subm
 | [UCO Issue #535](https://github.com/ucoProject/UCO/issues/535) — Add Qualities to UCO | Blocking issue for time-varying properties (wallet balances, confirmation counts at observation time). This proposal avoids the blocker by treating `confirmationCount` as a snapshot value. |
 | [UCO Issue #675](https://github.com/ucoProject/UCO/issues/675) — Original submission of this proposal | The original version that combined crypto addresses and sanctions. This revision supersedes it. |
 | [UCO Issue #404](https://github.com/ucoProject/UCO/issues/404) — Represent sensor outputs | Related discussion of QUDT/SSN/SOSA adoption that informed the decision to avoid QUDT in this proposal. |
+| [INTERPOL DW-VA Taxonomy](https://github.com/INTERPOL-Innovation-Centre/DW-VA-Taxonomy) | SKOS taxonomy of darkweb and virtual-asset entities (wallet, hosted/unhosted wallet, VASP, coinjoin, privacy coins) suggested by reviewer plbt5; definitions in this proposal cite it. |
+| [OCCASE-478](https://cyberontology.atlassian.net/browse/OCCASE-478) | CDO Jira ticket tracking this proposal. |
+| [CASE-UCO SDK `cryptoinv` extension](https://github.com/vulnmaster/CASE-UCO-SDK) | Working extension ontology + validated real-case exemplar (U.S. v. Lichtenstein & Morgan, D.D.C. 1:23-cr-00239-CKK) implementing this proposal's facets and transaction pattern. |
 
 
 # Pre-submission testing

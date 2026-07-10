@@ -53,12 +53,52 @@ ORGANIZATION_RE = re.compile(
     r"\b(?:"
     r"Maryland State Police(?:\s+[A-Za-z\s]+(?:Unit|Force|Task Force))?|"
     r"Anne Arundel County Police Department|"
+    r"Anchorage Police Department|"
     r"FBI(?:\s+Portland(?:\s+Resident Agency)?)|"
     r"Internet Crimes Against Children(?:\s+Task Force)?|"
     r"ICAC(?:\s+Task Force)?|"
+    r"United States Attorney(?:'s Office)?|"
+    r"United States District Court|"
+    r"United States Bureau of Prisons|"
     r"Coinbase|Pacific Rim OTC"
     r")\b",
     re.IGNORECASE,
+)
+PACER_CASE_NUMBER_RE = re.compile(
+    r"\b(?:Case\s+)?(\d:\d{2}-cr-\d{5}-[A-Z]{3}(?:-[A-Z]{3})?)\b",
+    re.IGNORECASE,
+)
+PACER_ECF_DOCUMENT_RE = re.compile(
+    r"\bCase\s+\d:\d{2}-cr-\d{5}-[A-Z]{3}(?:-[A-Z]{3})?\s+"
+    r"Document\s+(\d+)\s+Filed\s+(\d{1,2}/\d{1,2}/\d{2,4})\b",
+    re.IGNORECASE,
+)
+FEDERAL_STATUTE_RE = re.compile(
+    r"\b18\s+U\.S\.C\.?\s+§§?\s*(\d+[A-Z]?(?:\([a-z0-9,\s]+\))*(?:\s*and\s*\([a-z0-9,\s]+\))*)",
+    re.IGNORECASE,
+)
+INDICTMENT_COUNT_RE = re.compile(
+    r"\bCOUNT\s+(\d{1,2})\b",
+    re.IGNORECASE,
+)
+FEDERAL_DEFENDANT_AKA_RE = re.compile(
+    r"\b([A-Z][A-Z]+(?: [A-Z][A-Z]+)+)\s*,\s*a/?k/?a\s+"
+    r"[\u201c\"']([^\u201d\"']+?)[\"\u201d'],?",
+)
+MINOR_VICTIM_RE = re.compile(
+    r"\bMinor\s+Victim\s+(\d{1,2})\b",
+    re.IGNORECASE,
+)
+SNAPCHAT_ACCOUNT_RE = re.compile(
+    r"Snapchat account\s+[\u201c\"']([A-Za-z0-9_]+)[\"\u201d']",
+    re.IGNORECASE,
+)
+SNAPCHAT_USERNAME_RE = re.compile(
+    r"Snapchat\s+(?:account,?\s+)?([a-z][a-z0-9_]{2,64})\b",
+    re.IGNORECASE,
+)
+FEDERAL_DISTRICT_RE = re.compile(
+    r"\b(?:FOR THE )?DISTRICT OF ([A-Z][A-Za-z .]+?)(?:\n|\)|,|\.)",
 )
 # Warrant/legal prose uses many "in the …" phrases that are not locations.
 LOCATION_RE = re.compile(
@@ -201,6 +241,15 @@ PERSON_NAME_STOPWORDS = frozenset(
         "analyst",
         "matter",
         "seizure",
+        "criminal",
+        "procedure",
+        "rules",
+        "federal",
+        "grand",
+        "jury",
+        "foreperson",
+        "plaintiff",
+        "defendant",
     }
 )
 
@@ -862,6 +911,187 @@ def extract_semantic_entities(
             run_seed=run_seed,
             extra_properties={
                 "uco-core:description": f"Domain referenced in document text: {value}",
+            },
+        )
+
+    for match in PACER_CASE_NUMBER_RE.finditer(full_text):
+        value = match.group(1)
+        _add_match(
+            matches,
+            seen_spans,
+            ontology_class="uco-core:Event",
+            label=f"Federal case {value}",
+            matched_text=match.group(0),
+            start=match.start(),
+            end=match.end(),
+            section_id=section_id,
+            run_seed=run_seed,
+            extra_properties={
+                "uco-core:eventType": ["federal court case reference"],
+                "uco-core:description": f"PACER/ECF case number: {value}",
+            },
+        )
+
+    for match in PACER_ECF_DOCUMENT_RE.finditer(full_text):
+        doc_num, filed = match.group(1), match.group(2)
+        value = match.group(0)
+        _add_match(
+            matches,
+            seen_spans,
+            ontology_class="uco-core:Event",
+            label=f"PACER filing Document {doc_num}",
+            matched_text=value,
+            start=match.start(),
+            end=match.end(),
+            section_id=section_id,
+            run_seed=run_seed,
+            extra_properties={
+                "uco-core:eventType": ["pacer docket filing"],
+                "uco-core:description": (
+                    f"PACER document {doc_num} filed {filed}."
+                ),
+            },
+        )
+
+    for match in FEDERAL_STATUTE_RE.finditer(full_text):
+        value = match.group(0)
+        section = match.group(1)
+        _add_match(
+            matches,
+            seen_spans,
+            ontology_class="uco-observable:ObservableObject",
+            label=f"Statute 18 U.S.C. § {section[:40]}",
+            matched_text=value,
+            start=match.start(),
+            end=match.end(),
+            section_id=section_id,
+            run_seed=run_seed,
+            extra_properties={
+                "uco-core:description": f"Federal statute citation in document text: {value}",
+            },
+        )
+
+    seen_counts: set[str] = set()
+    for match in INDICTMENT_COUNT_RE.finditer(full_text):
+        count_num = match.group(1)
+        if count_num in seen_counts:
+            continue
+        seen_counts.add(count_num)
+        value = match.group(0)
+        _add_match(
+            matches,
+            seen_spans,
+            ontology_class="uco-core:Event",
+            label=f"Indictment count {count_num}",
+            matched_text=value,
+            start=match.start(),
+            end=match.end(),
+            section_id=section_id,
+            run_seed=run_seed,
+            extra_properties={
+                "uco-core:eventType": ["indictment count reference"],
+                "uco-core:description": f"Numbered count in charging instrument: {value}",
+            },
+        )
+
+    for match in FEDERAL_DEFENDANT_AKA_RE.finditer(full_text):
+        raw_name, alias = match.group(1), match.group(2).strip().rstrip(",")
+        parts = raw_name.split()
+        if len(parts) < 2:
+            continue
+        first = parts[0].title()
+        last = parts[-1].title()
+        _add_person_match(
+            matches,
+            seen_spans,
+            seen_people,
+            first=first,
+            last=last,
+            alias=alias,
+            matched_text=match.group(0),
+            start=match.start(),
+            end=match.end(),
+            section_id=section_id,
+            run_seed=run_seed,
+        )
+
+    for match in MINOR_VICTIM_RE.finditer(full_text):
+        victim_num = match.group(1)
+        value = match.group(0)
+        _add_match(
+            matches,
+            seen_spans,
+            ontology_class="uco-identity:Person",
+            label=f"Minor Victim {victim_num}",
+            matched_text=value,
+            start=match.start(),
+            end=match.end(),
+            section_id=section_id,
+            run_seed=run_seed,
+            extra_properties={
+                "uco-core:description": (
+                    f"Minor victim identifier in charging or trial document: {value}."
+                ),
+            },
+        )
+
+    seen_snapchat: set[str] = set()
+    for pattern in (SNAPCHAT_ACCOUNT_RE, SNAPCHAT_USERNAME_RE):
+        for match in pattern.finditer(full_text):
+            handle = match.group(1)
+            if handle.lower() in seen_snapchat:
+                continue
+            seen_snapchat.add(handle.lower())
+            account_id = handle if handle.startswith("@") else handle
+            _add_match(
+                matches,
+                seen_spans,
+                ontology_class="uco-observable:ApplicationAccount",
+                label=f"Snapchat {account_id}",
+                matched_text=match.group(0),
+                start=match.start(),
+                end=match.end(),
+                section_id=section_id,
+                run_seed=run_seed,
+                facets=(
+                    {
+                        "@id": _facet_id(run_seed, f"snap-{match.start()}"),
+                        "@type": "uco-observable:AccountFacet",
+                        "uco-observable:accountIdentifier": account_id,
+                    },
+                ),
+                extra_properties={
+                    "uco-core:description": (
+                        f"Snapchat account referenced in document text: {account_id}."
+                    ),
+                },
+            )
+
+    for match in FEDERAL_DISTRICT_RE.finditer(full_text):
+        district = match.group(1).strip().title()
+        if not district or district.lower() in LOCATION_STOPWORDS:
+            continue
+        _add_match(
+            matches,
+            seen_spans,
+            ontology_class="uco-location:Location",
+            label=f"District of {district}",
+            matched_text=match.group(0).strip(),
+            start=match.start(),
+            end=match.end(),
+            section_id=section_id,
+            run_seed=run_seed,
+            facets=(
+                {
+                    "@id": _facet_id(run_seed, f"district-{match.start()}"),
+                    "@type": "uco-location:SimpleAddressFacet",
+                    "uco-location:region": f"District of {district}",
+                },
+            ),
+            extra_properties={
+                "uco-core:description": (
+                    f"Federal judicial district referenced in document text: District of {district}."
+                ),
             },
         )
 

@@ -1,0 +1,324 @@
+Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 1 of 10
+
+IN THE UNITED STATES DISTRICT COURT
+FOR THE DISTRICT OF MASSACHUSETTS
+
+UNITED STATES OF AMERICA Criminal No. 23¢r10159
+
+Vv. Violations:
+
+JACK DOUGLAS TEIXEIRA, Counts One - Six: Willful Retention and
+Transmission of National Defense
+Information
+
+(18 U.S.C. § 793(e))
+
+Defendant.
+
+Forfeiture Allegation:
+(18 U.S.C. §§ 981(a)(1)(C), 793(h), and
+28 U.S.C. § 2461(c))
+
+Nee Nee ee a Ss
+
+INDICTMENT
+
+At all times relevant to this Indictment:
+General Allegations
+The Defendant
+l. Defendant Jack Douglas TEIXEIRA (“TEIXEIRA”) was a resident of Dighton,
+
+Massachusetts.
+
+es Beginning in or about September 2019, TELXEIRA began serving in the U.S. Air
+National Guard (“USANG”). As of April 2023, he was stationed at Otis USANG Base in the
+District of Massachusetts as a Cyber Defense Operations Journeyman. In connection with his
+employment, TEIXEIRA held a TOP SECRET//Sensitive Compartmented Information security
+clearance and had access to classified information and information relating to the national
+defense (“National Defense Information”).
+
+Classified Information
+
+3: National security information was information owned by, produced by, produced
+for, and under the control of the United States government. Pursuant to Executive Order 12958
+
+signed on April 17, 1995, as amended by Executive Order 13292 on March 25, 2003, and
+Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 2 of 10
+
+Executive Order 13526 on December 29, 2009, national security information was classified as
+“TOP SECRET,” “SECRET,” or “CONFIDENTIAL,” as follows:
+a. Information was classified as TOP SECRET if the unauthorized disclosure of that
+information reasonably could be expected to cause exceptionally grave damage to
+
+the national security that the original classification authority was able to identify or
+describe.
+
+b. Information was classified as SECRET if the unauthorized disclosure of that
+information reasonably could be expected to cause serious damage to the national
+security that the original classification authority was able to identify or describe.
+
+c. Information was classified as CONFIDENTIAL if the unauthorized disclosure of
+that information reasonably could be expected to cause damage to the national
+security that the original classification authority was able to identify or describe.
+
+4. Classified information related to intelligence sources, methods, and analytical
+processes was designated as Sensitive Compartmented Information (“SCI”). SCI was to be
+processed, stored, used, or discussed in an accredited Sensitive Compartmented Information
+Facility (“SCIF”), and only individuals with the appropriate security clearance and additional
+SCI permissions could have authorized access to such classified national security information.
+
+5. Classified information, including SCI, was marked according to its classification
+and applicable SCI compartments, following standard formats for different types of media,
+including headers and footers stating the highest classification level.
+
+6. Pursuant to Executive Order 13526, information classified at any level could be
+lawfully accessed only by persons determined by an appropriate United States government
+official to be eligible for access to classified information, who had signed an approved non-
+disclosure agreement, who received a security clearance, and who had a “need to know” the
+classified information. Classified information could only be stored or discussed in an approved
+
+facility.
+Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 3 of 10
+
+TEIXEIRA’s Access to National Defense Information
+
+re Since in or around July 2021, TELXEIRA held a TOP SECRET//SCI security
+clearance, as required for his position in the USANG.
+
+8. TEILXEIRA received training regarding classified information, including the
+definition of classified information, the levels of classification—including SCI—and the proper
+handling, marking, transportation, and storage of classified materials. Specifically, TEIXEIRA
+received training on his duty to protect classified materials, including classified National Defense
+Information, from unauthorized disclosure, which included complying with handling,
+transportation, and storage requirements. TEIXEIRA knew that unauthorized removal of
+classified materials and transportation and storage of those materials in unauthorized locations
+risked disclosure and transmission of those materials, and therefore could endanger the national
+security of the United States and the safety of its citizens. In particular, TELXEIRA was advised
+that: the unauthorized disclosure of TOP SECRET information reasonably could be expected to
+cause exceptionally grave damage to the national security of the United States; the unauthorized
+disclosure of SECRET information reasonably could be expected to cause serious damage to the
+national security of the United States; and violation of the rules governing the handling of
+classified information, including classified National Defense Information, could result in
+
+criminal prosecution.
+Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 4 of 10
+
+TEIXEIRA’s Removal and Transmission of National Defense Information
+
+9, Because TEIXEIRA held a security clearance as part of his assignment at Otis
+USANG Base, the United States government entrusted TELXEIRA with access to classified
+documents and information, including classified National Defense Information.
+
+10. Beginning no earlier than January 2022 and continuing through in or about April
+2023, in the District of Massachusetts and elsewhere, TEIXEIRA improperly retained and
+transmitted classified National Defense Information on a particular social media platform (“the
+Social Media Platform”).
+
+11. | TEITXEIRA transmitted the National Defense Information on the social media
+platform in two ways. First, TELXEIRA accessed classified documents containing National
+Defense Information from a classified workstation at Otis USANG Base. Thereafter, including
+by utilizing the messaging function on the Social Media Platform, TELXEIRA transcribed text in
+those classified documents, input such text into the Social Media Platform, and transmitted the
+National Defense Information therein to other Social Media Platform users who were not entitled
+to receive it.
+
+12. | Second, TEIXEIRA photographed and/or removed classified documents
+containing National Defense Information from Otis USANG Base and posted images of the
+documents to the Social Media Platform where they were visible to other users. Certain of the
+documents TEIXEIRA photographed and posted to the Social Media Platform bore standard and
+conspicuous markings indicating that they contained highly classified United States government
+information. These markings included SECRET, TOP SECRET, and SCI designations. At least
+one of the documents containing classified National Defense Information was found in digital
+
+form in a particular account associated with TEIXEIRA.
+Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 5 of 10
+
+La. TEIXEIRA knew that the documents and information he improperly retained and
+transmitted contained classified National Defense Information.
+
+14. TELXEIRA knew that he was not authorized to take, retain, or transmit the
+classified documents or classified National Defense Information to individuals not entitled to
+
+receive such documents or information.
+Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 6 of 10
+
+COUNTS ONE AND TWO
+Willful Retention and Transmission of National Defense Information
+(18 U.S.C. § 793(e))
+
+The Grand Jury charges:
+
+15. The Grand Jury re-alleges and incorporates by references paragraphs 1-14 of this
+Indictment.
+
+16. On or about the dates below, in the District of Massachusetts and elsewhere, the
+defendant,
+
+JACK DOUGLAS TEIXEIRA,
+
+having unauthorized possession of, access to, and control over information relating to the
+national defense, which information TEIXEIRA had reason to believe could be used to the injury
+of the United States or to the advantage of a foreign nation, willfully communicated, delivered,
+and transmitted such information to a person or persons not entitled to receive it and willfully
+retained the same and failed to deliver it to the officer or employee of the United States entitled
+to receive it, to wit: as indicated in the below chart, TELXEIRA retained and transmitted the
+
+following classified National Defense Information:
+
+Count Date Classification Description of Information
+Level
+Information regarding the compromise by a
+1 Nov. 2022 foreign adversary of certain accounts
+to TS//SCI belonging to a U.S. company.
+April 2023
+Information regarding the provision of
+5 Jan. 2023 equipment to Ukraine, how the equipment
+to SECRET would be transferred, and how the equipment
+April 2023 would be used upon receipt
+
+All in violation of Title 18, United States Code, Section 793(e).
+
+Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 7 of 10
+
+COUNTS THREE THROUGH SIX
+
+Willful Retention and Transmission of National Defense Information
+(18 U.S.C. § 793(e))
+
+The Grand Jury further charges:
+
+Li The Grand Jury re-alleges and incorporates by references paragraphs 1-14 of this
+
+Indictment
+
+18. On or about the dates below, in the District of Massachusetts and elsewhere, the
+
+defendant,
+
+JACK DOUGLAS TEIXEIRA,
+
+having unauthorized possession of, access to, and control over documents relating to the national
+
+defense, willfully communicated, delivered, and transmitted such documents to a person or
+
+persons not entitled to receive them and willfully retained the same and failed to deliver them to
+
+the officer or employee of the United States entitled to receive them, to wit: as indicated in the
+
+below chart, TELXEIRA retained and transmitted the following classified National Defense
+
+Information:
+Count Date Classification Level Document Description
+A Government Document that describes the
+status of the Russia-Ukraine conflict to
+
+Feb. 2023 include troop movements on a particular
+
+3 ‘ TS//SCI date, which Government Document is based
+to 4,3 : ;
+
+April 2023 on sensitive US. intelligence, gathered
+through classified sources and methods and
+reveals United States national defense
+information
+A Government Document discussing a plot
+
+4 March 2023 by a foreign adversary to target United States
+to TS//SCI forces abroad and which discusses, in part,
+
+April 2023 where and how the attack on United States
+forces would occur
+
+March 2023 A Government Document that describes
+5 to Western deliveries of supplies to the
+. TS//SCI Ukrainian battlefield, including foreign
+
+April 2023 . eal
+
+perceptions of the deliveries
+
+Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 8 of 10
+
+Jan. 2023
+to
+April 2023
+
+TS//SCI
+
+A Government Document that describes a
+shift in foreign and economic policy of a
+particular foreign government and actions
+that country took in an effort to repair its
+relationship with the United States, to the
+perceived detriment of a separate foreign
+country
+
+All in violation of Title 18, United States Code, Section 793(e).
+
+Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 9 of 10
+
+FORFEITURE ALLEGATION
+(18 U.S.C. §§ 981(a)(1)(C), 793(h), and 28 U.S.C. § 2461(c))
+
+1. Upon conviction of one or more of the offenses in violation of Title 18, United
+
+States Code, Section 793(e), set forth in Counts One through Six, the defendant,
+
+JACK DOUGLAS TEIXEIRA,
+shall forfeit to the United States of America, pursuant to Title 18, United States Code, Section
+981(a)(1)(C) and Title 28, United States Code, Section 2461(c), any property, real or personal,
+which constitutes or is derived from proceeds traceable to the offenses, and, pursuant to Title 18
+United States Code, Section 793(h), any property which constitutes or is derived from any
+proceeds obtained, directly or indirectly, from any foreign government, or any faction or party or
+military or naval force within a foreign country, whether recognized or unrecognized by the
+United States, as the result of such offenses.
+
+‘s If any of the property described in the paragraph above, as being forfeitable
+pursuant to Title 18, United States Code, Sections 981(a)(1)(C) and 793(h), and Title 28, United
+States Code, Section 2461(c) as a result of any act or omission of the defendant:
+
+a. cannot be located upon the exercise of due diligence;
+
+b. has been transferred or sold to, or deposited with a third party;
+
+c. has been placed beyond the jurisdiction of the Court;
+
+d. has been substantially diminished in value; or
+
+e. has been commingled with other property which cannot be divided without
+
+difficulty;
+
+it is the intention of the United States, pursuant to Title 21, United States Code, Section 853(p),
+as incorporated by both Title 28, United States Code, Section 2461(c), and Title 18, United
+
+States Code, Section 793(h)(3), to seek forfeiture of any other property of the defendant up to the
+Case 1:23-cr-10159-IT Document 48 Filed 06/15/23 Page 10 of 10
+
+value of the property described in the paragraph above.
+All pursuant to Title 18, United States Code, Sections 981(a)(1)(C) and 793(h), and Title
+
+28, United States Code, Section 2461(c).
+
+A TRUE BILL
+
+a
+
+DINE Sou
+. DOLAN
+auces A. CASEY
+Assistant United States Attorneys
+District of Massachusetts
+
+CHRISTINA A. CLARK
+
+Trial Attorney
+
+National Security Division
+
+United States Department of Justice
+
+District of Massachusetts: June |S _, 2023
+Returned into the District Court by the Grand Jurors and filed.
+
+DEPUTY CLERK

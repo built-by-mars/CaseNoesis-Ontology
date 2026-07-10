@@ -51,7 +51,15 @@ End-to-end mapping recipes that walk through source input, modeling choices, ant
 | Forensic Investigation Lifecycle | [forensic-lifecycle.md](forensic-lifecycle.md) | Ordered phases (survey, preservation, examination, analysis, reporting) | [forensic_lifecycle](https://github.com/casework/CASE-Examples/tree/master/examples/illustrations/forensic_lifecycle) |
 | Network Investigation with Bundle | [network-investigation.md](network-investigation.md) | Full investigation with warrant, PCAP extraction, provenance | [network_connection](https://github.com/casework/CASE-Examples/tree/master/examples/illustrations/network_connection) |
 | Spear Phishing and Attack Narratives | [spear-phishing.md](spear-phishing.md) | Attack chain modeling with extended ontology patterns | [spear_phishing](https://github.com/casework/CASE-Examples/tree/master/examples/illustrations/spear_phishing) |
-| Fraud, Cryptocurrency, and Money Laundering | [fraud-crypto-laundering.md](fraud-crypto-laundering.md) | Pig-butchering scams, blockchain trace, exchange returns, geofence correlation | — |
+| Fraud, Cryptocurrency, and Money Laundering | [fraud-crypto-laundering.md](fraud-crypto-laundering.md) | Pig-butchering scams, blockchain trace, exchange returns, geofence correlation; typed crypto facets + legal process via the `cryptoinv` extension | — |
+| Elder Fraud and Government-Impersonation Schemes | [elder-fraud-impersonation.md](elder-fraud-impersonation.md) | Agent-impersonation call centers, money couriers, prepaid-card and cash-handoff schemes, controlled-delivery stings, records attribution | — |
+| Espionage Act and Classified-Information Disclosure | [espionage-classified-disclosure.md](espionage-classified-disclosure.md) | Classified NDI with `uco-marking` classification banners, SCIF removal chains, § 793/§ 794 counts, obstruction, clearance-holder knowledge timeline | — |
+| Export Control and Sanctions Evasion | [export-control-sanctions.md](export-control-sanctions.md) | IEEPA/EAR counts, dated Entity List designations, gUFO-typed controlled goods, false EEI/AES filings, papered-consignee vs. true-end-user chains | — |
+| Cyber Threat Intelligence and APT Reporting | [cyber-threat-intelligence.md](cyber-threat-intelligence.md) | APT report + graphics captured by hash, threat actor as Organization, malware family/variants, native registry/service-DLL persistence, cloud C2, victimology, ATT&CK via the `uco-action:Technique` metaclass (UCO PR #676) | `attack-technique` |
+| Insider Threat, Trade Secret Theft, and Economic Espionage | [insider-threat-trade-secrets.md](insider-threat-trade-secrets.md) | Insider exfiltration, corporate detection telemetry, per-category § 1832/§ 1831 counts, foreign-government-benefit evidence, jury verdicts | — |
+| Legal Process Modeling (Charges, Verdicts, Sentences) | [legal-process-modeling.md](legal-process-modeling.md) | Conspiracy/attempt/derivative charges, verdicts, pleas, sentences, forfeiture, restitution for any investigation type via the `legalproc` extension | — |
+| Racketeering (RICO) and Criminal Enterprise | [racketeering-enterprise.md](racketeering-enterprise.md) | Association-in-fact enterprises, enterprise-role division of labor, predicate statute categories on RICO counts, multi-instrument count suffixes (`rico` extension + `legalproc`/`cryptoinv`) | `rico` |
+| Weapons and Drug Evidence | [weapons-drug-evidence.md](weapons-drug-evidence.md) | Firearms/ammunition with make, model, caliber, serial (`weapons` extension, CCO Artifact Ontology + gUFO bridges) and controlled-substance portions with ChEBI identity, CSA schedule, mass, purity basis (`drugs` extension, `gufo:Quantity` bridge) | `weapons`, `drugs` |
 | Cargo Theft and Route Staging | [cargo-theft-route-staging.md](cargo-theft-route-staging.md) | Freight theft, geofence deviation, warehouse staging, manifest anomalies | — |
 | NCMEC CyberTip Reporting Workflow | [cybertip-ncmec-workflow.md](cybertip-ncmec-workflow.md) | Platform detection, ESP reporting, CyberTip lifecycle, and CAC investigation | — |
 
@@ -66,6 +74,7 @@ Requires `CASE_UCO_EXTENSIONS=cac`. Use `route_cac_content` via the MCP server t
 | CSAM Production Cases | [cac-production-case.md](cac-production-case.md) | Hands-on abuse, offender-produced media, production environments |
 | Federal Prosecution Relationships | [cac-federal-prosecution-relationships.md](cac-federal-prosecution-relationships.md) | Federal indictment relationship wiring: defendant–counts, multi-district, forfeiture, enterprise |
 | Federal Trial Proceedings | [cac-federal-trial-proceedings.md](cac-federal-trial-proceedings.md) | Superseding indictments, PACER docket lifecycle, trial briefs, anticipated evidence |
+| PACER Document Ingestion (MCP) | [cac-pacer-document-ingestion.md](cac-pacer-document-ingestion.md) | Agent workflow: process_document_file → route_cac_content → validated CAC graph |
 | Hotline Intake and Referral Lifecycle | [cac-hotline-intake-lifecycle.md](cac-hotline-intake-lifecycle.md) | Hotline intake, triage, referral, investigation escalation |
 | ICAC Search Warrant Arrest | [cac-icac-search-warrant-arrest.md](cac-icac-search-warrant-arrest.md) | Routine warrant execution, custody without incident, booking (Maryland/ICAC press releases) |
 | International Coordination | [cac-international-coordination.md](cac-international-coordination.md) | Cross-border operations, Europol/Interpol, evidence sharing |
@@ -124,8 +133,9 @@ Requires `CASE_UCO_EXTENSIONS=cac`. Use `route_cac_content` via the MCP server t
 | Managing Large Datasets | [large-datasets.md](large-datasets.md) | Partition large evidence sets by forensic boundary | — |
 | Existence Intervals and Temporal Modeling | [existence-intervals.md](existence-intervals.md) | OWL-Time, gUFO, and BFO temporal patterns | [existence_intervals](https://github.com/casework/CASE-Examples/tree/master/examples/illustrations/existence_intervals) |
 
-### Contributing to the ontology
+### Contributing to the ontology and the catalog
 
 | Recipe | File | Description | CASE-Example |
 |---|---|---|---|
 | Proposing Changes to CASE/UCO | [change-proposal.md](change-proposal.md) | Identify gaps, check existing proposals, and draft change proposals | — |
+| Authoring and Improving Recipes | [recipe-authoring.md](recipe-authoring.md) | Write and register a new recipe, or improve an existing one a live case proved wrong or incomplete (structure, grounding rules, re-validation, MCP index registration) | — |

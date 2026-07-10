@@ -1,0 +1,419 @@
+# Cryptocurrency and Financial Crime Investigation Extension (OWL T-Box)
+#
+# Extends CASE/UCO into the cryptocurrency / fraud investigation and
+# criminal legal process domain. Grounded in the prosecution record of
+# United States v. Lichtenstein & Morgan, No. 1:23-cr-00239-CKK (D.D.C.)
+# (the 2016 Bitfinex hack money-laundering case), the pending UCO change
+# proposal https://github.com/ucoProject/UCO/issues/675 (revised to drop
+# sanctions coverage per ontology committee feedback), the prior proposal
+# https://github.com/casework/CASE/issues/87 (CryptoWalletFacet /
+# CryptoAddressFacet), and the INTERPOL Darkweb and Virtual Assets
+# Taxonomy (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/).
+#
+# Scope notes:
+#   - No sanctions-designation concepts (deferred to a separate proposal
+#     per the UCO ontology committee comment on issue #675).
+#   - No time-varying wallet balances (blocked upstream by
+#     https://github.com/ucoProject/UCO/issues/535 "Add Qualities to UCO").
+#     VirtualAssetHoldingFacet records point-in-time snapshots instead.
+#   - Open vocabularies are plain xsd:string properties with recommended
+#     values documented in comments; producers may use other values.
+#
+# Companion files:
+#   cryptoinv-shapes.ttl   — SHACL property shapes for validation
+#   cryptoinv-exemplar.ttl — Validated exemplar instances (A-Box)
+
+@prefix cryptoinv: <http://example.org/ontology/cryptoinv/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-observable: <https://ontology.unifiedcyberontology.org/uco/observable/> .
+@prefix case-investigation: <https://ontology.caseontology.org/case/investigation/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<http://example.org/ontology/cryptoinv>
+	a owl:Ontology ;
+	rdfs:label "Cryptocurrency and Financial Crime Investigation Extension"@en ;
+	rdfs:comment "An extension ontology for the Cyber Domain Ontology (CDO) that provides classes and properties for modeling cryptocurrency observables (addresses, transactions, wallets, asset holdings), virtual-asset financial-crime infrastructure (virtual asset service providers, darknet markets, mixing services), and the criminal legal process that resolves such investigations (charges, plea agreements, sentencing outcomes, forfeiture and restitution orders, asset seizures). Definitions cite the FATF Guidance for a Risk-Based Approach to Virtual Assets and Virtual Asset Service Providers (https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Guidance-rba-virtual-assets-2021.html), the INTERPOL Darkweb and Virtual Assets Taxonomy (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/), and United States federal criminal statutes (https://uscode.house.gov/). The cryptocurrency observable facets track the revised UCO change proposal https://github.com/ucoProject/UCO/issues/675; the local declarations exist so SDK strict concept-coverage validation passes while the upstream proposal is pending, and MUST be retired if UCO adopts the terms."@en ;
+	owl:versionIRI cryptoinv:0.1.0 ;
+	dcterms:source
+		<https://github.com/ucoProject/UCO/issues/675> ,
+		<https://github.com/casework/CASE/issues/87> ,
+		<https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/> ;
+	owl:imports
+		<https://ontology.unifiedcyberontology.org/uco/core> ,
+		<https://ontology.unifiedcyberontology.org/uco/action> ,
+		<https://ontology.unifiedcyberontology.org/uco/identity> ,
+		<https://ontology.unifiedcyberontology.org/uco/observable> ,
+		<https://ontology.caseontology.org/case/investigation> ;
+	.
+
+# =============================================================================
+# Cryptocurrency observable facets (tracks UCO issue #675, revised)
+# =============================================================================
+
+cryptoinv:CryptocurrencyAddressFacet
+	a owl:Class ;
+	rdfs:subClassOf uco-core:Facet ;
+	rdfs:label "CryptocurrencyAddressFacet"@en ;
+	rdfs:comment "A cryptocurrency address facet is a grouping of characteristics unique to a blockchain address used to send and receive virtual assets on a distributed ledger network. A virtual currency address is roughly equivalent to an anonymous account number and has a corresponding private key needed to spend value held at the address (see the affidavit in United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts nn.4-9, and the INTERPOL DW-VA Taxonomy entity 'wallet': https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#wallet). Attach to a uco-observable:ObservableObject via uco-core:hasFacet."@en ;
+	dcterms:source <https://github.com/ucoProject/UCO/issues/675> .
+
+cryptoinv:addressValue
+	a owl:DatatypeProperty ;
+	rdfs:label "addressValue"@en ;
+	rdfs:comment "The cryptocurrency address string, e.g. '1CGA4s...' (Base58Check), 'bc1q...' (Bech32), or '0x8CE693CB0626924583931F25f50AF8fC1C6517F0' (Ethereum hex). See Bitcoin address encodings in BIP-173 (https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki)."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyAddressFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:cryptocurrencyType
+	a owl:DatatypeProperty ;
+	rdfs:label "cryptocurrencyType"@en ;
+	rdfs:comment "The type of cryptocurrency, as an open vocabulary of ticker symbols. Recommended values: BTC, ETH, LTC, XMR, ZEC, DASH, ETC, BCH, BSV, BTG, XRP, DOGE, SOL, ADA, DOT, AVAX, MATIC, USDT, USDC, WETH. Producers may use identifiers not in this list to accommodate new virtual assets (ticker symbols as listed by major data providers, e.g. https://coinmarketcap.com/)."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyAddressFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:blockchainNetwork
+	a owl:DatatypeProperty ;
+	rdfs:label "blockchainNetwork"@en ;
+	rdfs:comment "The distributed ledger network the address or transaction belongs to, e.g. 'Bitcoin Mainnet', 'Ethereum', 'Litecoin'. A blockchain is a public transaction ledger that includes a record of every transaction that has ever occurred on the network (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#blockchain)."@en ;
+	rdfs:range xsd:string .
+
+cryptoinv:addressFormat
+	a owl:DatatypeProperty ;
+	rdfs:label "addressFormat"@en ;
+	rdfs:comment "The encoding format of the address as an open vocabulary. Recommended values: 'Base58Check', 'Bech32', 'Hex'. See BIP-173 (https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) for Bech32 and https://en.bitcoin.it/wiki/Base58Check_encoding for Base58Check."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyAddressFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:CryptocurrencyTransactionFacet
+	a owl:Class ;
+	rdfs:subClassOf uco-core:Facet ;
+	rdfs:label "CryptocurrencyTransactionFacet"@en ;
+	rdfs:comment "A cryptocurrency transaction facet is a grouping of characteristics unique to a transfer of value recorded on a blockchain distributed ledger. Attach to a uco-observable:ObservableObject representing the transaction; model the source and destination addresses as uco-observable:ObservableRelationship instances with uco-core:kindOfRelationship values 'Transaction_Input' and 'Transaction_Output' and a cryptoinv:transferAmount. This pattern natively supports UTXO-chain transactions (Bitcoin) with multiple inputs and outputs (see https://developer.bitcoin.org/devguide/transactions.html) as well as account-based chains (Ethereum)."@en ;
+	dcterms:source <https://github.com/ucoProject/UCO/issues/675> .
+
+cryptoinv:transactionHash
+	a owl:DatatypeProperty ;
+	rdfs:label "transactionHash"@en ;
+	rdfs:comment "The unique hash identifier of the blockchain transaction, e.g. '6e0d701ac2ea3ad87fc8bcaa786b994aa943f5eb9a67a1e345769bb090bf5b9e' (a Bitcoin transaction identifier / txid; see https://developer.bitcoin.org/reference/transactions.html)."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyTransactionFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:blockHash
+	a owl:DatatypeProperty ;
+	rdfs:label "blockHash"@en ;
+	rdfs:comment "The hash of the block containing this transaction (https://developer.bitcoin.org/reference/block_chain.html)."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyTransactionFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:blockNumber
+	a owl:DatatypeProperty ;
+	rdfs:label "blockNumber"@en ;
+	rdfs:comment "The block number (block height) in the blockchain at which the transaction was confirmed (https://developer.bitcoin.org/reference/block_chain.html)."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyTransactionFacet ;
+	rdfs:range xsd:integer .
+
+cryptoinv:transactionFee
+	a owl:DatatypeProperty ;
+	rdfs:label "transactionFee"@en ;
+	rdfs:comment "The transaction fee in the native cryptocurrency unit of the network (https://developer.bitcoin.org/devguide/transactions.html#transaction-fees-and-change)."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyTransactionFacet ;
+	rdfs:range xsd:decimal .
+
+cryptoinv:confirmationCount
+	a owl:DatatypeProperty ;
+	rdfs:label "confirmationCount"@en ;
+	rdfs:comment "The number of blockchain confirmations at the time of observation. This is a point-in-time snapshot, not a time-varying quality (time-varying properties are deferred to https://github.com/ucoProject/UCO/issues/535)."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyTransactionFacet ;
+	rdfs:range xsd:integer .
+
+cryptoinv:transactionStatus
+	a owl:DatatypeProperty ;
+	rdfs:label "transactionStatus"@en ;
+	rdfs:comment "The status of the transaction at the time of observation, as an open vocabulary. Recommended values: 'Confirmed', 'Pending', 'Failed'."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyTransactionFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:transactionType
+	a owl:DatatypeProperty ;
+	rdfs:label "transactionType"@en ;
+	rdfs:comment "The investigative characterization of the transaction, as an open vocabulary. Recommended values: 'Transfer', 'Exchange', 'Purchase', 'Mixing', 'Withdrawal', 'Deposit', 'ContractExecution', 'Staking', 'Unstaking'. Mixing and chain-hopping transaction types are defined in the INTERPOL DW-VA Taxonomy (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#coinjoin)."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyTransactionFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:transferAmount
+	a owl:DatatypeProperty ;
+	rdfs:label "transferAmount"@en ;
+	rdfs:comment "The amount of virtual asset transferred by a specific transaction input or output, in the native unit of the asset. Intended for use on uco-observable:ObservableRelationship instances of kind 'Transaction_Input' or 'Transaction_Output' linking address observables to transaction observables (see https://github.com/ucoProject/UCO/issues/675)."@en ;
+	rdfs:range xsd:decimal .
+
+cryptoinv:CryptocurrencyWalletFacet
+	a owl:Class ;
+	rdfs:subClassOf uco-core:Facet ;
+	rdfs:label "CryptocurrencyWalletFacet"@en ;
+	rdfs:comment "A cryptocurrency wallet facet is a grouping of characteristics unique to a wallet: software, a device, or a hosted service that keeps track of the private keys used to sign virtual-asset transactions, and which may contain many virtual currency addresses (INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#wallet). First proposed as CryptoWalletFacet in https://github.com/casework/CASE/issues/87; this revision omits time-varying balance properties, which remain blocked by https://github.com/ucoProject/UCO/issues/535 — use cryptoinv:VirtualAssetHoldingFacet for point-in-time holdings snapshots."@en ;
+	dcterms:source <https://github.com/casework/CASE/issues/87> .
+
+cryptoinv:walletType
+	a owl:DatatypeProperty ;
+	rdfs:label "walletType"@en ;
+	rdfs:comment "The custody model and form factor of the wallet, as an open vocabulary. Recommended values: 'hosted' (a third party retains the customer's funds: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#hosted-wallet), 'unhosted' (the user exercises total, independent control over funds: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#unhosted-wallet), 'hardware' (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#hardware_wallet), 'software' (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#software_wallet), 'paper'."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyWalletFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:walletIdentifier
+	a owl:DatatypeProperty ;
+	rdfs:label "walletIdentifier"@en ;
+	rdfs:comment "An investigative identifier for the wallet or address cluster, e.g. the first characters of a representative address ('Wallet 1CGA4s') or a chain-analysis cluster label ('Cluster 36B6mu'). A cluster is a grouping of addresses believed to be contained within a single wallet (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts n.28)."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyWalletFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:addressCount
+	a owl:DatatypeProperty ;
+	rdfs:label "addressCount"@en ;
+	rdfs:comment "The number of virtual currency addresses contained in the wallet at the time of observation (a wallet may include many addresses, each with a corresponding private key)."@en ;
+	rdfs:domain cryptoinv:CryptocurrencyWalletFacet ;
+	rdfs:range xsd:nonNegativeInteger .
+
+cryptoinv:VirtualAssetHoldingFacet
+	a owl:Class ;
+	rdfs:subClassOf uco-core:Facet ;
+	rdfs:label "VirtualAssetHoldingFacet"@en ;
+	rdfs:comment "A virtual asset holding facet is a grouping of characteristics describing a point-in-time quantity of a specific virtual asset held at, contained in, or seized from a wallet, address, or account — for example 'approximately 94,636 BTC seized on 2022-02-01, valued at $3.629 billion' (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts para. 6). Each holding is an observation snapshot with an optional fiat valuation, deliberately avoiding the time-varying balance problem deferred to https://github.com/ucoProject/UCO/issues/535."@en .
+
+cryptoinv:assetSymbol
+	a owl:DatatypeProperty ;
+	rdfs:label "assetSymbol"@en ;
+	rdfs:comment "The ticker symbol of the held virtual asset, as an open vocabulary (same recommended values as cryptoinv:cryptocurrencyType, plus platform tokens such as aUSDC, aUSDT, yvUSDT)."@en ;
+	rdfs:domain cryptoinv:VirtualAssetHoldingFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:assetQuantity
+	a owl:DatatypeProperty ;
+	rdfs:label "assetQuantity"@en ;
+	rdfs:comment "The quantity of the virtual asset in its native unit at the observation time, e.g. 94643.29837084."@en ;
+	rdfs:domain cryptoinv:VirtualAssetHoldingFacet ;
+	rdfs:range xsd:decimal .
+
+cryptoinv:fiatValue
+	a owl:DatatypeProperty ;
+	rdfs:label "fiatValue"@en ;
+	rdfs:comment "The fiat-currency valuation of the holding at the valuation date. Fiat money is a currency established as money by government regulation (https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#fiat-money)."@en ;
+	rdfs:domain cryptoinv:VirtualAssetHoldingFacet ;
+	rdfs:range xsd:decimal .
+
+cryptoinv:fiatCurrencyCode
+	a owl:DatatypeProperty ;
+	rdfs:label "fiatCurrencyCode"@en ;
+	rdfs:comment "The ISO 4217 alphabetic currency code of the fiat valuation, e.g. 'USD' (https://www.iso.org/iso-4217-currency-codes.html)."@en ;
+	rdfs:domain cryptoinv:VirtualAssetHoldingFacet ;
+	rdfs:range xsd:string .
+
+cryptoinv:valuationDate
+	a owl:DatatypeProperty ;
+	rdfs:label "valuationDate"@en ;
+	rdfs:comment "The date and time at which the fiat valuation of the holding was made. The trading value of virtual assets fluctuates over time depending on market demand."@en ;
+	rdfs:domain cryptoinv:VirtualAssetHoldingFacet ;
+	rdfs:range xsd:dateTime .
+
+# =============================================================================
+# Financial-crime infrastructure organizations
+# =============================================================================
+
+cryptoinv:VirtualAssetServiceProvider
+	a owl:Class ;
+	rdfs:subClassOf uco-identity:Organization ;
+	rdfs:label "VirtualAssetServiceProvider"@en ;
+	rdfs:comment "A virtual asset service provider (VASP) is any natural or legal person who as a business conducts one or more of the following activities for or on behalf of another natural or legal person: exchange between virtual assets and fiat currencies; exchange between one or more forms of virtual assets; transfer of virtual assets; safekeeping and/or administration of virtual assets or instruments enabling control over virtual assets; and participation in and provision of financial services related to an issuer's offer and/or sale of a virtual asset (FATF definition, as recorded in the INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#VASP). Virtual currency exchanges (VCEs) doing business in the United States are regulated by the U.S. Department of the Treasury and must establish anti-money-laundering programs under the Bank Secrecy Act (31 U.S.C. § 5311 et seq., https://www.fincen.gov/resources/statutes-and-regulations/bank-secrecy-act)."@en .
+
+cryptoinv:DarknetMarket
+	a owl:Class ;
+	rdfs:subClassOf uco-identity:Organization ;
+	rdfs:label "DarknetMarket"@en ;
+	rdfs:comment "A darknet market is an e-commerce platform, typically reachable only via anonymizing networks such as Tor, through which vendors can sell illegal goods and services such as narcotics, stolen financial information, and hacking tools. Darknet markets typically allow users to create accounts and deposit, store, and withdraw virtual currency, which makes them usable as money-laundering pass-throughs that break up fund-flow trails on public blockchains (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts n.12 and paras. 11-12; INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/)."@en .
+
+cryptoinv:CryptocurrencyMixingService
+	a owl:Class ;
+	rdfs:subClassOf uco-identity:Organization ;
+	rdfs:label "CryptocurrencyMixingService"@en ;
+	rdfs:comment "A cryptocurrency mixing service (mixer or tumbler) obscures the link between transaction inputs and outputs by combining or shuffling the virtual assets of multiple users — for example via coinjoin, a method where two or more user transactions are combined into a single blockchain transaction with multiple inputs and outputs (INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#coinjoin). Examples cited in federal prosecutions include Bitcoin Fog, Helix, and ChipMixer (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of the Offense para. 19; see also FinCEN guidance FIN-2019-G001, https://www.fincen.gov/resources/statutes-and-regulations/guidance)."@en .
+
+# =============================================================================
+# Laundering technique annotation
+# =============================================================================
+
+cryptoinv:launderingTechnique
+	a owl:DatatypeProperty ;
+	rdfs:label "launderingTechnique"@en ;
+	rdfs:comment "A money-laundering technique employed by an action, as an open vocabulary. Recommended values, drawn from techniques documented in United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts para. 8 and Statement of the Offense paras. 19-23: 'peel-chain' (a large amount at one address is sent through a series of transactions, each peeling a small amount to a new address), 'chain-hopping' (converting one form of virtual currency to another to make transaction paths harder to track), 'mixing', 'coinjoin', 'layering', 'structuring', 'fictitious-identity-accounts', 'automated-transactions', 'business-account-legitimization', 'money-mule-accounts', 'fiat-conversion', 'gift-card-purchase', 'nft-purchase', 'precious-metals-purchase'. Attach to uco-action:Action or case-investigation:InvestigativeAction nodes describing the laundering conduct."@en ;
+	rdfs:range xsd:string .
+
+# =============================================================================
+# Criminal legal process
+# =============================================================================
+
+cryptoinv:CriminalCharge
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "CriminalCharge"@en ;
+	rdfs:comment "A criminal charge is a formal accusation, stated as a count within a charging instrument (indictment or information), that a person committed a specific statutory offense — e.g. Count One, Money Laundering Conspiracy in violation of 18 U.S.C. § 1956(h). Charging instruments and their required contents are governed by Federal Rule of Criminal Procedure 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7)."@en .
+
+cryptoinv:statuteCitation
+	a owl:DatatypeProperty ;
+	rdfs:label "statuteCitation"@en ;
+	rdfs:comment "The statutory citation for the charged offense, e.g. '18 U.S.C. § 1956(h)' (https://uscode.house.gov/)."@en ;
+	rdfs:domain cryptoinv:CriminalCharge ;
+	rdfs:range xsd:string .
+
+cryptoinv:countNumber
+	a owl:DatatypeProperty ;
+	rdfs:label "countNumber"@en ;
+	rdfs:comment "The ordinal number of this charge (count) within its charging instrument, per Federal Rule of Criminal Procedure 7(c) (https://www.law.cornell.edu/rules/frcrmp/rule_7)."@en ;
+	rdfs:domain cryptoinv:CriminalCharge ;
+	rdfs:range xsd:nonNegativeInteger .
+
+cryptoinv:chargeDescription
+	a owl:DatatypeProperty ;
+	rdfs:label "chargeDescription"@en ;
+	rdfs:comment "The plain-language name of the charged offense as stated in the charging instrument, e.g. 'Money Laundering Conspiracy' or 'Conspiracy To Defraud the United States'."@en ;
+	rdfs:domain cryptoinv:CriminalCharge ;
+	rdfs:range xsd:string .
+
+cryptoinv:chargedWith
+	a owl:ObjectProperty ;
+	rdfs:label "chargedWith"@en ;
+	rdfs:comment "Links a person to a criminal charge filed against them in a charging instrument (Federal Rule of Criminal Procedure 7, https://www.law.cornell.edu/rules/frcrmp/rule_7)."@en ;
+	rdfs:domain uco-identity:Person ;
+	rdfs:range cryptoinv:CriminalCharge .
+
+cryptoinv:PleaAgreement
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "PleaAgreement"@en ;
+	rdfs:comment "A plea agreement is a negotiated agreement under Federal Rule of Criminal Procedure 11(c) (https://www.law.cornell.edu/rules/frcrmp/rule_11) in which a defendant agrees to plead guilty to one or more charges, typically in exchange for concessions such as dismissal of other charges, a sentencing recommendation, or non-prosecution commitments. This class models the legal instrument and its terms; model the underlying court-filed document separately as a uco-observable:ObservableObject with a uco-observable:FileFacet and link the two with a uco-core:Relationship."@en .
+
+cryptoinv:pleadsGuiltyTo
+	a owl:ObjectProperty ;
+	rdfs:label "pleadsGuiltyTo"@en ;
+	rdfs:comment "Links a plea agreement to the criminal charge(s) the defendant agrees to plead guilty to under Federal Rule of Criminal Procedure 11 (https://www.law.cornell.edu/rules/frcrmp/rule_11)."@en ;
+	rdfs:domain cryptoinv:PleaAgreement ;
+	rdfs:range cryptoinv:CriminalCharge .
+
+cryptoinv:pleaDate
+	a owl:DatatypeProperty ;
+	rdfs:label "pleaDate"@en ;
+	rdfs:comment "The date the plea agreement was executed or the guilty plea was entered before the court (Federal Rule of Criminal Procedure 11, https://www.law.cornell.edu/rules/frcrmp/rule_11)."@en ;
+	rdfs:domain cryptoinv:PleaAgreement ;
+	rdfs:range xsd:dateTime .
+
+cryptoinv:SentencingOutcome
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "SentencingOutcome"@en ;
+	rdfs:comment "A sentencing outcome records a sentence recommended by a party or imposed by the court under 18 U.S.C. § 3553(a) (https://www.law.cornell.edu/uscode/text/18/3553) and the United States Sentencing Guidelines (https://www.ussc.gov/guidelines), including the term of imprisonment, supervised release, offense level, and advisory Guidelines range. Use cryptoinv:sentenceStatus to distinguish a party recommendation from an imposed judgment."@en .
+
+cryptoinv:sentenceStatus
+	a owl:DatatypeProperty ;
+	rdfs:label "sentenceStatus"@en ;
+	rdfs:comment "Whether the sentencing outcome is a recommendation or an imposed judgment, as an open vocabulary. Recommended values: 'recommended-government', 'recommended-defense', 'recommended-probation', 'imposed'."@en ;
+	rdfs:domain cryptoinv:SentencingOutcome ;
+	rdfs:range xsd:string .
+
+cryptoinv:sentenceDurationMonths
+	a owl:DatatypeProperty ;
+	rdfs:label "sentenceDurationMonths"@en ;
+	rdfs:comment "The term of imprisonment in months (recommended or imposed) under 18 U.S.C. § 3553 (https://www.law.cornell.edu/uscode/text/18/3553)."@en ;
+	rdfs:domain cryptoinv:SentencingOutcome ;
+	rdfs:range xsd:nonNegativeInteger .
+
+cryptoinv:supervisedReleaseMonths
+	a owl:DatatypeProperty ;
+	rdfs:label "supervisedReleaseMonths"@en ;
+	rdfs:comment "The term of supervised release in months under 18 U.S.C. § 3583 (https://www.law.cornell.edu/uscode/text/18/3583)."@en ;
+	rdfs:domain cryptoinv:SentencingOutcome ;
+	rdfs:range xsd:nonNegativeInteger .
+
+cryptoinv:offenseLevel
+	a owl:DatatypeProperty ;
+	rdfs:label "offenseLevel"@en ;
+	rdfs:comment "The total offense level under the United States Sentencing Guidelines used to derive the advisory range (U.S.S.G. Ch. 5 Pt. A Sentencing Table, https://www.ussc.gov/guidelines)."@en ;
+	rdfs:domain cryptoinv:SentencingOutcome ;
+	rdfs:range xsd:integer .
+
+cryptoinv:guidelineRangeLowMonths
+	a owl:DatatypeProperty ;
+	rdfs:label "guidelineRangeLowMonths"@en ;
+	rdfs:comment "The low end of the advisory Sentencing Guidelines range in months (U.S.S.G. Ch. 5 Pt. A Sentencing Table, https://www.ussc.gov/guidelines)."@en ;
+	rdfs:domain cryptoinv:SentencingOutcome ;
+	rdfs:range xsd:nonNegativeInteger .
+
+cryptoinv:guidelineRangeHighMonths
+	a owl:DatatypeProperty ;
+	rdfs:label "guidelineRangeHighMonths"@en ;
+	rdfs:comment "The high end of the advisory Sentencing Guidelines range in months (U.S.S.G. Ch. 5 Pt. A Sentencing Table, https://www.ussc.gov/guidelines)."@en ;
+	rdfs:domain cryptoinv:SentencingOutcome ;
+	rdfs:range xsd:nonNegativeInteger .
+
+cryptoinv:sentencingDate
+	a owl:DatatypeProperty ;
+	rdfs:label "sentencingDate"@en ;
+	rdfs:comment "The date the sentencing outcome was recommended (date of the sentencing memorandum) or imposed (date of the judgment)."@en ;
+	rdfs:domain cryptoinv:SentencingOutcome ;
+	rdfs:range xsd:dateTime .
+
+cryptoinv:ForfeitureOrder
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "ForfeitureOrder"@en ;
+	rdfs:comment "A forfeiture order (or forfeiture allegation, prior to conviction) requires a defendant to forfeit to the government property involved in or traceable to the offense, under statutes such as 18 U.S.C. § 981(a)(1)(C) (https://www.law.cornell.edu/uscode/text/18/981), 18 U.S.C. § 982(a)(1) (https://www.law.cornell.edu/uscode/text/18/982), 28 U.S.C. § 2461(c), and the substitute-assets provision 21 U.S.C. § 853(p) (https://www.law.cornell.edu/uscode/text/21/853). A forfeiture money judgment for a sum equal to the value of the property involved may accompany the forfeiture of specific property."@en .
+
+cryptoinv:forfeits
+	a owl:ObjectProperty ;
+	rdfs:label "forfeits"@en ;
+	rdfs:comment "Links a forfeiture order to a specific item of property to be forfeited — typically a uco-observable:ObservableObject such as a seized wallet, virtual asset holding, bank account, or physical asset."@en ;
+	rdfs:domain cryptoinv:ForfeitureOrder ;
+	rdfs:range uco-core:UcoObject .
+
+cryptoinv:moneyJudgmentAmount
+	a owl:DatatypeProperty ;
+	rdfs:label "moneyJudgmentAmount"@en ;
+	rdfs:comment "The amount of the forfeiture money judgment, equal to the value of property involved in the offense (see 18 U.S.C. §§ 981-982, https://www.law.cornell.edu/uscode/text/18/981)."@en ;
+	rdfs:domain cryptoinv:ForfeitureOrder ;
+	rdfs:range xsd:decimal .
+
+cryptoinv:moneyJudgmentCurrencyCode
+	a owl:DatatypeProperty ;
+	rdfs:label "moneyJudgmentCurrencyCode"@en ;
+	rdfs:comment "The ISO 4217 alphabetic currency code of the forfeiture money judgment, e.g. 'USD' (https://www.iso.org/iso-4217-currency-codes.html)."@en ;
+	rdfs:domain cryptoinv:ForfeitureOrder ;
+	rdfs:range xsd:string .
+
+cryptoinv:RestitutionOrder
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "RestitutionOrder"@en ;
+	rdfs:comment "A restitution order (or restitution request) compensates victims for losses caused by the offense. For most federal property crimes restitution is mandatory under the Mandatory Victims Restitution Act, 18 U.S.C. § 3663A (https://www.law.cornell.edu/uscode/text/18/3663A). Restitution may be in-kind, e.g. return of forfeited virtual assets to the victim exchange."@en .
+
+cryptoinv:restitutionInKind
+	a owl:DatatypeProperty ;
+	rdfs:label "restitutionInKind"@en ;
+	rdfs:comment "True when restitution is proposed or ordered in-kind (return of specific property, such as seized virtual assets) rather than as a monetary payment (18 U.S.C. § 3663A, https://www.law.cornell.edu/uscode/text/18/3663A)."@en ;
+	rdfs:domain cryptoinv:RestitutionOrder ;
+	rdfs:range xsd:boolean .
+
+cryptoinv:restitutionDescription
+	a owl:DatatypeProperty ;
+	rdfs:label "restitutionDescription"@en ;
+	rdfs:comment "A description of the restitution proposed or ordered, e.g. 'in-kind restitution of forfeited cryptocurrency to the victim virtual currency exchange'."@en ;
+	rdfs:domain cryptoinv:RestitutionOrder ;
+	rdfs:range xsd:string .
+
+cryptoinv:AssetSeizureAction
+	a owl:Class ;
+	rdfs:subClassOf case-investigation:InvestigativeAction ;
+	rdfs:label "AssetSeizureAction"@en ;
+	rdfs:comment "An investigative action in which law enforcement takes custody of assets — including virtual assets seized by using recovered private keys to transfer wallet contents to government-controlled addresses — pursuant to a seizure warrant under Federal Rule of Criminal Procedure 41 (https://www.law.cornell.edu/rules/frcrmp/rule_41) and 21 U.S.C. § 853(f), or under exigent circumstances with subsequent judicial approval (see United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts para. 6)."@en .

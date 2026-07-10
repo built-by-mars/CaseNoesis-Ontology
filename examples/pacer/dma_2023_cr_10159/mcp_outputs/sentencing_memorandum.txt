@@ -1,0 +1,1016 @@
+         Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 1 of 20
+
+
+
+
+                       UNITED STATES DISTRICT COURT
+                        DISTRICT OF MASSACHUSETTS
+
+
+UNITED STATES OF AMERICA
+
+    v.                                     CRIMINAL No.23-10159-IT
+
+JACK DOUGLAS TEIXEIRA,
+
+     Defendant
+
+
+
+
+                 GOVERNMENT’S SENTENCING MEMORANDUM
+                Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 2 of 20
+
+
+
+
+                                                   TABLE OF CONTENTS
+
+TABLE OF AUTHORITIES .......................................................................................................... ii
+
+PROCEDURAL BACKGROUND................................................................................................. 2
+
+Offense Conduct ............................................................................................................................. 2
+
+The Pre-Sentence Report ................................................................................................................ 6
+
+RECOMMENDATION .................................................................................................................. 6
+
+           A.         The Nature and Circumstances of the Offense ....................................................... 7
+
+           B.         The History and Characteristics of the Defendant ................................................. 9
+
+           C.         The Need for the Sentence Imposed to Reflect the Seriousness of the Offense, to
+                      Promote Respect for the Law, and to Provide Just Punishment for the Offense .. 11
+
+           D.         The Need to Avoid Unwarranted Sentencing Disparities Among Defendants ..... 13
+
+           E.         The Need to Afford Adequate Deterrence to Criminal Conduct and to Protect the
+                      Public from Further Crimes of the Defendant ...................................................... 16
+
+CONCLUSION ............................................................................................................................. 17
+
+
+
+
+                                                                       i
+              Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 3 of 20
+
+
+
+
+                                                 TABLE OF AUTHORITIES
+
+                                                                   CASES
+
+Haig v. Agee,
+  453 U.S. 280 (1981) .................................................................................................................. 12
+
+United States v. Ford,
+  288 F. App’x 54 (4th Cir. 2008) ................................................................................................. 7
+
+United States v. Lucarell,
+  2023 WL 3756191 (6th Cir. 2023) ........................................................................................... 11
+
+United States v. Zuk,
+  874 F.3d 398 (4th Cir. 2017) .................................................................................................... 10
+
+                                           STATUTES, RULES AND REGULATIONS
+
+18 U.S.C. § 793 ......................................................................................................................... 2, 15
+
+18 U.S.C. § 793(e) .................................................................................................................... 7, 14
+
+18 U.S.C. § 794 ............................................................................................................................. 15
+
+Fed. R. Crim. P. 11(c)(1)(C) ........................................................................................................ 1-2
+
+Fed. R. Crim. P. 11(c)(3)(A) ........................................................................................................... 2
+
+                                                     SENTECING GUIDELINES
+
+USSG § 5K2.14 ............................................................................................................................ 13
+
+USSG § 2M3.2 ................................................................................................................................ 6
+
+USSG § 2M3.2(a) ........................................................................................................................... 6
+
+USSG § 3B1.3................................................................................................................................. 6
+
+USSG § 3C1.1................................................................................................................................. 6
+
+USSG § 3E1.1 ................................................................................................................................. 6
+
+                                                       OTHER AUTHORITIES
+
+Executive Order 13526 ................................................................................................................... 5
+
+
+
+
+                                                                       ii
+          Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 4 of 20
+
+
+
+
+                    GOVERNMENT’S SENTENCING MEMORANDUM
+
+       Defendant Jack Douglas Teixeira perpetrated one of the most significant and consequential
+
+violations of the Espionage Act in American history. The harm the defendant caused to the
+
+national security from his disclosures of national defense information is extraordinary. When the
+
+defendant was granted a Top Secret security clearance in the course of his enlistment with the
+
+United States Air National Guard (“USANG”), he acknowledged the harm that the unauthorized
+
+disclosure of classified information could cause to the national security of the United States. More
+
+broadly, as both a member of the United States Armed Forces and a clearance holder, the defendant
+
+took an oath to defend the United States and to protect its secrets—secrets that are vital to U.S.
+
+national security and the physical safety of Americans serving overseas.
+
+       Teixeira violated his oath, almost every day, for over a year. The defendant’s repeated
+
+criminal conduct—in complete disregard of his oath, trainings, signed agreements, and
+
+admonitions to cease and desist reviewing classified information unrelated to his duties—was a
+
+profound breach of trust that had enormous consequences.
+
+       As more fully described in the Government’s classified sentencing submission, the
+
+documents and information Teixeira posted to social media are highly classified and contain vital
+
+national defense information. By posting intelligence products on the social media platform
+
+Discord to feed his own ego and impress his anonymous friends, Teixeira caused exceptionally
+
+grave damage to the national security of the United States.         The scope of his betrayal is
+
+breathtaking. The amount of damage he caused is immeasurable.
+
+       For the reasons discussed herein, and in the Government’s classified submission, the Court
+
+should accept the plea agreement pursuant to Rule 11(c)(1)(C) and sentence Teixeira to 200
+
+months imprisonment.
+
+
+
+                                                 1
+          Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 5 of 20
+
+
+
+
+                                PROCEDURAL BACKGROUND
+
+       Teixeira was arrested by the Federal Bureau of Investigation on April 13, 2023, and, the
+
+next day, was charged by complaint with violating 18 U.S.C. § 793. In May 2023, a grand jury
+
+returned an indictment charging Teixeira with six counts of willfully retaining and transmitting
+
+national defense information (“NDI”), in violation of 18 U.S.C. § 793. (Doc. No. 48). On
+
+February 28, 2024, the parties executed a plea agreement pursuant to Rule 11(c)(1)(C) (“the Plea
+
+Agreement”) in which the parties agreed that the appropriate sentence for the defendant’s crimes
+
+was between 132-200 months imprisonment and three years of supervised release. (Doc. No. 130).
+
+On March 4, 2024, Teixeira entered a guilty plea to each of the six counts charged in the
+
+indictment. (Doc. No. 131). Pursuant to Federal Rule of Criminal Procedure 11(c)(3)(A), the
+
+Court deferred acceptance of the plea agreement pending preparation of a written Presentence
+
+Report (“PSR”).
+
+                                          Offense Conduct
+
+       Teixeira enlisted with the United States Air National Guard in September 2019. Until his
+
+arrest in 2023, he served with the 102d Intelligence Wing as a Cyber Defense Operations
+
+Journeyman. His primary duty was to troubleshoot the classified workstations that his fellow
+
+airmen used to complete the intelligence mission of the 102d. Because this duty would necessitate
+
+exposure to classified information, Teixeira was granted a Top Secret security clearance with
+
+Sensitive Compartmented Information access. Information may be classified as Top Secret (“TS”)
+
+if the unauthorized disclosure of the information reasonably could be expected to cause
+
+exceptionally grave damage to the national security. Sensitive Compartmented Information
+
+(“SCI”) is even further restricted classified information related to intelligence sources, methods,
+
+and analytical processes that is subject to specific access controls.
+
+
+
+                                                  2
+          Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 6 of 20
+
+
+
+
+       Teixeira received extensive training on the handling of classified information, the damage
+
+disclosure of the information could cause, and the criminal penalties he could face for willfully
+
+transmitting national defense information. In his SCI indoctrination memoranda, which Teixeira
+
+signed in July 2021, Teixeira acknowledged the following: “I have been advised that the
+
+unauthorized disclosure, unauthorized retention, or negligent handling of SCI by me could cause
+
+irreparable injury to the U.S. or be used to advantage by a foreign nation. I hereby agree that I
+
+will never divulge anything marked as SCI or that I know to be SCI to anyone who is not authorized
+
+to receive it.” In March 2022, just after he began disclosing classified information on Discord,
+
+Teixeira completed a refresher course on the “Unauthorized Disclosure of Classified Information
+
+and Controlled Unclassified Information.” Certificate of Completion – Unauthorized Disclosure
+
+of Classified Information and Controlled Unclassified Information (Exhibit 3), Doc. No. 143-3.
+
+During that course, he was again advised that divulging classified information “places our troops,
+
+our intelligence operations, and our technological advantages over our foes at risk.” Student Guide
+
+– Unauthorized Disclosure of Classified Information and Controlled Unclassified Information
+
+(Exhibit 4), Doc. No. 143-4 at 1. In other words, Teixeira was trained, and retrained, about the
+
+danger of disclosing TS//SCI information. But Teixeira placed his own interests over those of the
+
+troops and the intelligence operations he was supposed to support.
+
+       Despite his training and in violation of the many non-disclosure agreements he had signed,
+
+in January 2022 Teixeira began removing classified information from the Sensitive
+
+Compartmented Information Facility (“SCIF”) at Otis Air National Guard Base and posting it on
+
+Discord. Teixeira accomplished this in one of two ways. First, Teixeira manually transcribed
+
+portions of classified documents and removed those transcriptions from the SCIF without
+
+authorization. Teixeira then posted the classified text in a Discord chat room. Second, Teixeira
+
+
+
+                                                3
+           Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 7 of 20
+
+
+
+
+printed hundreds of documents containing classified information using an isolated and seldom-
+
+used printer inside the SCIF, removed the documents from the SCIF without authorization, and
+
+posted images of the documents on Discord.
+
+       Teixeira fully understood that his actions were unlawful. As set forth in the PSR—and as
+
+he learned over the course of multiple trainings—Teixeira knew he was violating federal law when
+
+he posted classified national defense information on Discord. PSR ¶ 27. Teixeira’s own
+
+contemporaneous statements also clearly establish that he understood the significant consequences
+
+he would—and should—face if caught. On March 15, 2022, an associate of Teixeira asked if he
+
+could post information regarding troop losses. Teixeira responded, “If I want to go to jail for the
+
+rest of my life yeah.” Teixeira noted that the documents would be “TS//NOFORN//FVEY.”1
+
+Someone else in the chat noted that even though he/she knew someone in the intelligence
+
+community he/she would not ask that person for information because “they sworn [sic] an oath to
+
+keep top secret stuff secret lol.” Teixeira responded, “Not an oath, an NDA . . . The oath is just
+
+the defense of America against all threats and the following of orders.” (emphasis added). Teixeira
+
+clarified, “Look I feed info almost verbatim from where I read stuff, so to me that gives me
+
+ambiguity. Leaking docs tho? That’s just me asking to be caught. Again Chelsea Manning2 is
+
+the perfect example.” Declaration of FBI Special Agent Luke Church (Exhibit 2), Doc. No. 143-
+
+2 at 2. Almost a year later, while still disclosing classified information, Teixeira continued to brag
+
+
+
+       1
+          “TS” stands for Top Secret. “NOFORN” stands for not releasable in any form to foreign
+governments, foreign nationals, foreign organizations, or non-U.S. citizens. “FVEY” means that
+the information would be releasable to one of the U.S. Government’s “Five Eyes” partners, which
+includes the United Kingdom, Canada, Australia, and New Zealand.
+        2
+          Chelsea Manning served as an intelligence analyst in the U.S. Army. In 2010, she
+unlawfully disclosed thousands of classified documents which were later publicly released.
+Manning was ultimately court-martialed and convicted of multiple charges, including multiple
+violations of the Espionage Act.
+                                                  4
+          Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 8 of 20
+
+
+
+
+about his access to sensitive national defense information. In one such conversation on January 4,
+
+2023, another Discord user told Teixeira, “Maybe you should start a blog, that way you have an
+
+organized place to post it all.” Teixeira responded, “shooting myself in the back of the head twice
+
+isn’t something im fond of. None of this is public information and making a blog would be the
+
+equivalent of what Chelsea manning did.” The user responded, “Better be careful then.” Teixeira
+
+responded, “I am.” Declaration of FBI Special Agent Luke Church, Doc. No. 34-1 at 4.
+
+       When Teixeira’s conduct was discovered and became a national news story, he blatantly
+
+obstructed justice in multiple ways in an attempt to avoid apprehension. Teixeira instructed
+
+associates on Discord to delete electronic evidence and not cooperate with law enforcement.
+
+Teixeira changed his Discord username and deleted the entire contents of at least one of the
+
+Discord servers where he had posted classified documents and information.             Teixeira also
+
+destroyed his iPad and other electronic devices, and subsequently discarded some of these
+
+electronic devices in a dumpster outside his home.
+
+       Because of the sensitivities of the specific harms to national security, the full scope and
+
+impacts of Teixeira’s criminal conduct are more fully described and quantified in the
+
+Government’s classified sentencing memorandum.           However, some of the harm caused by
+
+Teixeira’s conduct that can be discussed publicly is described in the attached declaration of Frank
+
+Kendall III. Mr. Kendall is the current Secretary of the United States Air Force. With respect to
+
+the scope of the information, according to Secretary Kendall, Teixeira’s disclosures related to
+
+multiple categories of classified information described in Executive Order 13526, which describes
+
+classified information, “including military plans, foreign government information, intelligence
+
+activities, sources and methods, foreign relations, and vulnerabilities and capabilities of systems.”
+
+Declaration of Hon. Frank Kendall, 26th Secretary of the Air Force (Exhibit 1), Doc. No. 143-1 at
+
+
+
+                                                 5
+          Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 9 of 20
+
+
+
+
+2. He also discussed—to the extent possible in an unclassified document—the impact of the
+
+defendant’s crime. Secretary Kendall stated that the damage caused by Teixeira’s leaks was
+
+“immediate and enduring.” Id. Indeed, according to Secretary Kendall, the harms from the
+
+defendant’s disclosures “will continue to impact the U.S. national security not just for weeks and
+
+years, but for decades to come.” Id. at 3.
+
+                                     The Pre-Sentence Report
+
+       The probation office has prepared a PSR which tracks the calculation of the sentencing
+
+guidelines set forth in the Plea Agreement. The applicable guideline is USSG § 2M3.2. The base
+
+offense level is 35, because the information and documents that Teixeira disclosed were Top
+
+Secret. USSG § 2M3.2(a). Teixeira received a two-level role enhancement because he abused a
+
+position of public trust to facilitate the offense—that is, he committed the offenses by abusing his
+
+Top Secret clearance and unlawfully leveraging his ability to access classified computer systems.
+
+USSG § 3B1.3. Teixeira also received an additional two-level enhancement for obstruction of
+
+justice because he instructed others to delete their online conversations with him and he, himself,
+
+destroyed evidence. USSG § 3C1.1. Teixeira has no criminal record and, thus, received a two-
+
+level reduction as a “zero-point” offender. Teixeira is also entitled to a three-level reduction for
+
+acceptance of responsibility. USSG § 3E1.1. With a total offense level of 34 and a criminal history
+
+category of I, the applicable guideline sentencing range is 151-188 months imprisonment.
+
+                                     RECOMMENDATION
+
+       Teixeira is responsible for engaging in one of the most significant leaks of classified
+
+documents and information in United States history, which resulted in “exceptionally grave and
+
+long-lasting damage to the national security of the United States.” Doc. No. 143-1 at 1. The
+
+parties and probation agree that the advisory guidelines sentencing range is 151-188 months
+
+
+
+                                                 6
+         Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 10 of 20
+
+
+
+
+imprisonment. And yet, that range does not capture the significance and severity of Teixeira’s
+
+criminal conduct. Indeed, if the offense conduct was limited to Count One of the Indictment, that
+
+is, a single instance of transmitting Top Secret National Defense Information, there would be no
+
+change to the guidelines sentencing range because the applicable guideline does not account for
+
+the quantity of Top Secret information unlawfully disclosed. But Teixeira’s criminal conduct goes
+
+far beyond the six unlawful disclosures charged in the Indictment.
+
+       After United States v. Booker, the sentencing guidelines are advisory; they provide the
+
+starting point for the Court’s reference. Ultimately, the Court must determine a sentence that is
+
+sufficient but not greater than necessary to satisfy the statutory purposes of sentencing. Here, a
+
+guideline sentence is insufficient to meet those purposes. The guidelines do not adequately capture
+
+the seriousness of Teixeira’s conduct or the harm he caused to national security.
+
+                          The Nature and Circumstances of the Offense
+
+       The nature of the offense is extraordinarily serious. Teixeira’s violations of the Espionage
+
+Act consisted of not only removing and retaining classified information but also purposefully and
+
+profligately transmitting that classified national defense information to others, including foreign
+
+nationals. This conduct is far more significant than retention alone. While unauthorized retention
+
+results in an unacceptable risk that national defense information will be released to strangers and
+
+adversaries, transmission offenses like the defendant’s ensure that it will. See United States v.
+
+Ford, 288 F. App’x 54, 61 (4th Cir. 2008) (affirming sentencing where court recognized that the
+
+active transmission of classified national defense information should be punished more harshly
+
+than retention).
+
+       Further, considering the nature of the information and where he posted it (to the Internet),
+
+Teixeira acted “with reason to believe [such information] could be used to the injury of the United
+
+
+
+                                                7
+         Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 11 of 20
+
+
+
+
+States or to the advantage of any foreign nation.” 18 U.S.C. § 793(e). Understanding the risks
+
+associated with posting classified information to the Internet hardly requires any training. But as
+
+discussed above, the defendant’s trainings and signed agreements reflect his express awareness
+
+that he was not permitted to disclose classified information and that such information could harm
+
+the United States. One such agreement specifically addressed social media use. That agreement,
+
+which the defendant signed just six months before he started posting classified information to
+
+Discord, stated, “I will not post sensitive systems, intelligence, or other non-public information
+
+from JWICS to ANY social media site which would allow unauthorized entities to obtain
+
+information that I am not authorized to disseminate that can possibly be exploited.” Doc. No. 86-
+
+4 at 4. Yet, time and again, the defendant “repeatedly and egregiously” violated his signed
+
+agreements and disregarded the potential harm that could result from his actions. Doc. No. 143-1
+
+at 2.
+
+        The specific nature of that harm—as discussed in greater detail in the Government’s
+
+classified submission—is also significant and warrants a substantial sentence. As just one
+
+example, in January 2023, Teixeira posted information concerning “the provision of equipment to
+
+Ukraine, how the equipment would be transferred, and how it would be used upon receipt.”
+
+Indictment ¶ 16. Teixeira posted that information in the midst of Russia’s war against Ukraine.
+
+According to Secretary Kendall, in so doing, Teixeira exposed intelligence that “put the lives of
+
+allies and partners at risk to potential adversary attack.” Doc. No. 143-1 at 4. That risk of harm
+
+resulted from the disclosure of the national defense information charged in Count Two alone. In
+
+the aggregate, the defendant’s criminal conduct over the course of more than a year “critically and
+
+negatively impacted” the Department of Defense’s mission, endangered his fellow soldiers, other
+
+citizens, and allied governments throughout the world. Id.
+
+
+
+                                                8
+         Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 12 of 20
+
+
+
+
+       The circumstances of the offense also support the Government’s recommendation.
+
+Teixeira systematically and methodically stole classified national defense information and posted
+
+it on Discord to satisfy his own ego—even after multiple warnings that could and should have
+
+caused him to stop. Teixeira was admonished on three separate occasions by his superiors to cease
+
+and desist viewing classified information unrelated to his duties. Teixeira was undeterred.
+
+Members of Teixeira’s own online community repeatedly warned him of the dangers associated
+
+with leaking the information. Yet Teixeira was again undeterred. His criminal conduct was not
+
+the result of a momentary lapse of judgment. It was not a crime of opportunity. Rather, for nearly
+
+fourteen months the defendant spent his time at work meticulously collecting and preparing to
+
+disseminate Top Secret information and documents. He lived a life of deception that was designed
+
+to obfuscate his daily betrayal of the oath he took and the promises he made to the United States.
+
+The defendant did all this knowing full well that it was illegal, that it was harmful to the United
+
+States, and that the information could and would likely be used to benefit foreign adversaries.
+
+       But the defendant’s deception did not stop there. Once the defendant knew he would be
+
+caught, he took steps to conceal his disclosures by deleting evidence and encouraging others to do
+
+the same. For example, Teixeira told another user that “[i]f anyone comes looking, don’t tell them
+
+shit,” told him to “delete all messages,” and to pass the message on to other users. Doc. No. 19-8
+
+at 6. Meanwhile, the defendant destroyed his electronics, including his desktop computer and
+
+iPad, the latter of which was found smashed in a dumpster outside of his home. Notwithstanding
+
+his efforts, Teixeira could not delete all evidence of his unlawful disclosures of classified
+
+information, especially as images of classified information foreseeably became widely distributed
+
+around the globe.
+
+
+
+
+                                                9
+         Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 13 of 20
+
+
+
+
+                         The History and Characteristics of the Defendant
+
+       The defendant’s personal history and characteristics support the Government’s
+
+recommendation. The defendant is a high-school graduate with no criminal history and no history
+
+of substance abuse. Unlike many defendants who appear before this Court, he comes from a
+
+supportive family. At the time of his arrest, he was enrolled in college, and he held a full-time job
+
+in a complex field that required him to maintain a Top Secret security clearance. Simply put, prior
+
+to this case, the defendant was on his way to a successful career and life.
+
+       In an attempt give “context” to Teixeira’s conduct, he hired a specialist in Autism Spectrum
+
+Disorder (“ASD”) for the purpose of assessing whether the defendant has ASD. Dr. Elizabeth
+
+Roberts prepared and submitted a report of her findings, some of which were incorporated into the
+
+PSR. Given her specialty and the timing of her assessment it is unsurprising that Dr. Roberts
+
+reached the conclusion she was hired to reach. But for reasons that are perhaps obvious, a post-
+
+arrest diagnosis of mild, high-functioning ASD is of questionable relevance in these proceedings,
+
+and the Court should review Dr. Roberts’s report and conclusions with a critical eye. See United
+
+States v. Zuk, 874 F.3d 398, 410 (4th Cir. 2017) (reversing sentence as substantively unreasonable
+
+where district court based substantial downward variance on post-arrest ASD diagnosis). The
+
+reliability and utility of Dr. Roberts’s findings are even more suspect considering Teixeira has had
+
+multiple psychological assessments throughout his life prior to this case, none of which resulted
+
+in a diagnosis of ASD.
+
+       But even taken at face value, Dr. Roberts’s report provides little insight regarding the
+
+factors that are material to sentencing. A diagnosis of autism plainly does not change the nature
+
+of the offense, absolve Teixeira of responsibility for his criminal conduct, or even mitigate his
+
+conduct in any meaningful way. Whatever developmental or social difficulties Teixeira may have
+
+
+
+                                                 10
+         Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 14 of 20
+
+
+
+
+experienced, his decision to illegally disclose national defense information and put the lives of
+
+other people at risk was a volitional choice that he made knowingly, willfully, and with full
+
+awareness of the consequences time and time again. Indeed, in December 2022, Teixeira
+
+acknowledged, “I’m breaking a ton of UD [unauthorized disclosure] regs. IDGAF [I don’t give a
+
+fuck] what they say I can or can’t share. All of the shit I’ve told you guys I’m not supposed to.”
+
+Doc. No. 34-1 at 4.
+
+       Moreover, the defendant does not suffer from an intellectual disability that prevents him
+
+from knowing right from wrong. Indeed, Dr. Roberts conceded the defendant had the ability to
+
+easily “think in abstract terms,” and had a “clear understanding of both the wrongfulness and
+
+illegality of his behavior.” In other words, the defendant had the ability to understand and indeed,
+
+understood, the wrongfulness of his behavior. A post hoc diagnosis of autism neither excuses nor
+
+mitigates the defendant’s actions. And without more, the bare diagnosis of ASD is simply not
+
+relevant and should be disregarded. See United States v. Lucarell, 2023 WL 3756191 (6th Cir.
+
+2023) (affirming thirty-year sentence despite autism diagnosis because “based on the evidence
+
+before the district court, there was nothing specific about autism that causes people to commit
+
+crimes and the vast majority of individuals with [autism] do not commit crimes.”) (cleaned up).
+
+       Dr. Roberts’s report is also notable for what it does not say. While Dr. Roberts recognizes
+
+Teixeira’s “strict moral code,” she ignores completely his unsettling attraction to violence and his
+
+history of racist and antisemitic remarks. Virtually every day, Teixeira discussed committing
+
+horrific acts of violence with his friends: bombing schools, conducting assassinations, supporting
+
+ISIS, and “culling the weak minded.” Doc. No. 19-8. This history—which is laid out in the
+
+Government’s exhibits submitted in support of pretrial detention, Judge Hennessey’s detention
+
+
+
+
+                                                11
+         Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 15 of 20
+
+
+
+
+order, and this Court’s opinion affirming that order—says far more about who the defendant is
+
+than Dr. Roberts’ eleventh-hour diagnosis.
+
+The Need for the Sentence Imposed to Reflect the Seriousness of the Offense, to Promote Respect
+                  for the Law, and to Provide Just Punishment for the Offense
+
+       An above-guidelines sentence is necessary to provide just punishment and appropriately
+
+reflect the seriousness of the offense. As the Supreme Court has noted, “[i]t is ‘obvious and
+
+unarguable’ that no governmental interest is more compelling than the security of the Nation.”
+
+Haig v. Agee, 453 U.S. 280, 307 (1981) (citations omitted). The Government is limited in what it
+
+can say in an unclassified setting regarding the seriousness of the defendant’s offense. However,
+
+the Government’s classified submission and the multiple classified declarations from other U.S.
+
+Government agencies set out in detail the harms that have already occurred and the harm that the
+
+United States will continue to endure as a consequence of the defendant’s actions. But at an
+
+unclassified level, the Government can confirm that the defendant caused enduring and
+
+exceptionally grave damage to the U.S. national security.
+
+       When he was granted a security clearance, Teixeira was entrusted to protect intelligence
+
+that contributed to the safety and security of the nation. As explained by Secretary Kendall, when
+
+the defendant joined the USANG, he took an oath to defend the Constitution against “all enemies,
+
+foreign and domestic.” Doc. No. 143-1 at 4. However, through his actions, the defendant did not
+
+defend the Constitution or the country. He instead allowed the United States’s most significant
+
+adversaries to have access to a trove of the country’s most closely guarded intelligence, the
+
+disclosure of which “critically and negatively impacted the Department’s mission success and the
+
+U.S. national security.” Id.
+
+       Although other examples are provided in the Government’s classified submission, with
+
+respect to the documents charged in the Indictment, the seriousness of the offense is abundantly
+
+                                               12
+           Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 16 of 20
+
+
+
+
+clear in Count Four. The document that was charged in Count Four was a Top Secret document
+
+containing Sensitive Compartmented Information that “discussed a plot by a foreign adversary to
+
+target United States forces abroad and discussed, in part, where and how to the attack on United
+
+States forces would occur.” PSR ¶ 25. Even at an unclassified level, the harm from disclosing
+
+that the U.S. had intelligence on an adversary’s plans to harm U.S. servicemembers should be
+
+apparent. Indeed, according to Secretary Kendall, Teixeira’s disclosure of that document alone
+
+negatively “impacts [the DoD’s] ability to protect other military forces by providing our
+
+adversaries insight into the sources and methods we use to inform our protection of those forces.”
+
+Doc. No. 143-1 at 2. When combined with the full scope of the defendant’s conduct, that negative
+
+impact multiplies exponentially.
+
+          The sentencing guidelines recognize that an accurately calculated advisory guidelines
+
+range may be insufficient in a case such as this. Specifically, U.S.S.G. § 5K2.14 provides that an
+
+upward departure is appropriate if national security was significantly endangered. As discussed
+
+in Secretary Kendall’s declaration, and the multiple classified declarations appended to the
+
+Government’s classified submission, that is exactly what Teixeira did—he significantly
+
+endangered national security. The sentence imposed should accurately reflect the damage he
+
+caused.
+
+             The Need to Avoid Unwarranted Sentencing Disparities Among Defendants
+               with Similar Records Who Have Been Found Guilty of Similar Conduct
+
+          Teixeira is one of the most prolific leakers of classified national defense information in the
+
+history of this country. Indeed, Teixeira’s conduct is so rare that comparison to other criminal
+
+defendants using Judicial Sentencing Information (“JSIN”) data is impossible. PSR ¶ 104.
+
+          Looking at cases under the Espionage Act more generally, the Government’s
+
+recommended sentence appropriately measures Teixeira’s culpability. The defendant’s case is
+
+                                                   13
+          Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 17 of 20
+
+
+
+
+most closely analogous to that of former Central Intelligence Agency (“CIA”) employee Joshua
+
+Schulte, who was recently sentenced to 480 months’ imprisonment, 400 of which concerned
+
+violations of the Espionage Act and related offenses. Schulte was charged in connection with his
+
+theft of an arsenal of intelligence-gathering cyber tools from the CIA and dissemination of that
+
+information to WikiLeaks. As was the case here, once transmitted to WikiLeaks, the information
+
+was made available across the Internet, including to each of America’s adversaries. Like the
+
+defendant, Schulte was a young man at the time of his crimes. Like the defendant, Schulte had
+
+signed multiple non-disclosure agreements, had taken multiple trainings, and knew that his
+
+conduct was unlawful. And like the defendant, Schulte’s own hubris and ego led him to disregard
+
+those trainings and unlawfully transmit a trove of classified information to be published on the
+
+Internet. Like Schulte’s sentence, the defendant’s sentence should reflect the seriousness of his
+
+crime.
+
+         The nature of Teixeira’s conduct is also more serious than many cases that are prosecuted
+
+under 18 U.S.C. §793(e) where individuals retain, but do not transmit, national defense
+
+information. For example, in United States v. Edward McLean, 3:22-cr-00115-TJC (M.D. Fl.),
+
+authorities found a flash drive in McLean’s residence that contained approximately 150 documents
+
+containing national defense information classified at the Secret level, and 50 documents containing
+
+national defense information classified as Confidential. McLean received the statutory maximum
+
+sentence under 18 U.S.C. § 793(e)—120 months—for his retention of documents classified at the
+
+Secret and Confidential levels.3 See also United States v. Christopher Glenn, 9:14-cr-80031-KAM
+
+(S.D. Fla.) (imposing statutory maximum sentence of 120 months pursuant to 18 U.S.C. § 793(e)
+
+
+
+3
+  McLean was also sentenced to 160 months for distributing child sexual abuse material. His
+sentences are running concurrently.
+                                                14
+         Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 18 of 20
+
+
+
+
+where defendant pleaded guilty to removing national defense information classified at the Secret
+
+level from a Department of Defense network and storing those documents on removable media in
+
+his home).4 Similarly, in United States v. Harold Martin, 17-cr-00069-MJG (D. Md) a former
+
+contractor with the NSA was charged with unlawfully retaining a large amount of Top Secret
+
+information. Martin was sentenced to 108 months imprisonment.
+
+       The scope of Teixeira’s conduct distinguishes him from other individuals prosecuted under
+
+18 U.S.C. § 793 that both retained and transmitted national defense information. For example, in
+
+United States v. Reality Winner, 17-cr-034 (JRH) (S.D. Ga.) the defendant printed and mailed to a
+
+media outlet a single intelligence report. Winner was sentenced to 63 months imprisonment. Here,
+
+as discussed above and in the Government’s classified submission, the defendant’s conduct far
+
+exceeds a single intelligence report.
+
+       Functionally, the consequences of Teixeira’s actions are much more akin to 18 U.S.C. §
+
+794, which prohibits the delivery of national defense information to a foreign government with the
+
+specific intent to harm the United States or aid a foreign power or reason to believe it would do
+
+so. For example, in United States v. Jareh Dalke, 22-cr-313 (D. Co.), a former NSA employee
+
+attempted to provide Top Secret information to an individual he believed was a Russian agent.
+
+Dalke was sentenced to 262 months’ imprisonment.
+
+       Teixeira may not have had the specific intent to harm the United States—although, as
+
+discussed above, he knew his unlawful disclosure of the classified information would likely harm
+
+the United States—but in light of the scope of his conduct, the harm he caused is comparable to
+
+the harms caused by those who violate 18 U.S.C. § 794. When Teixeira sent national defense
+
+
+
+4
+  Glenn was subsequently sentenced to life in prison after a federal jury convicted him of
+sexually exploiting and trafficking in minors, while working overseas.
+                                                15
+         Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 19 of 20
+
+
+
+
+information to hundreds of individuals on Discord, including foreign nationals, the defendant
+
+knowingly exposed U.S. secrets in a manner that he knew could—and did—proliferate. And
+
+through his actions, the defendant ultimately provided national defense information to our allies
+
+and adversaries across the world. This is not speculation; Teixeira discovered that his disclosures
+
+were circulating when a friend saw them on pro-Russian telegram. Doc. No. 19-8 at 5. Seen
+
+against the backdrop of other prosecutions under the Espionage Act, the Government’s
+
+recommendation is balanced in light of Teixeira’s conduct and does not create unwarranted
+
+sentencing disparity.
+
+  The Need to Afford Adequate Deterrence to Criminal Conduct and to Protect the Public from
+                              Further Crimes of the Defendant
+
+       A 200-month sentence, as set forth in the plea agreement will provide adequate deterrence
+
+as to Teixeira and provide a reasonable amount of protection from future criminal activity. But
+
+the Court is also obligated to consider the issue of general deterrence, which is particularly
+
+important as applied to convictions under the Espionage Act. Here again, a sentence within the
+
+guidelines is insufficient in light of the magnitude of Teixeira’s actions. Trust is essential to the
+
+effective functioning of the Intelligence Community. There must be significant consequences
+
+when that trust is breached. Especially in an era of social media where the Government’s secrets
+
+can be shared around the world with the click of a mouse, the Court’s sentence must send a
+
+message that reinforces the importance of faithfully honoring promises to safeguard the secrets of
+
+our nation.
+
+
+
+
+                                                 16
+         Case 1:23-cr-10159-IT Document 144 Filed 10/29/24 Page 20 of 20
+
+
+
+
+                                         CONCLUSION
+
+       The government recommends that the Court sentence Teixeira to 200 months of
+
+incarceration.
+
+                                              Respectfully submitted,
+
+                                              JOSHUA S. LEVY
+                                              Acting United States Attorney
+
+                                      By:     /s/ Jared C. Dolan
+                                              NADINE PELLEGRINI
+                                              JARED C. DOLAN
+                                              JASON CASEY
+                                              Assistant United States Attorneys
+
+                                              MATTHEW G. OLSEN
+                                              Assistant Attorney General
+
+                                              /s/ Christina A. Clark
+                                              CHRISTINA A. CLARK
+                                              Trial Attorney
+                                              National Security Division
+
+
+
+
+                                CERTIFICATE OF SERVICE
+
+        I hereby certify that this document filed through the ECF system will be sent electronically
+to the registered participants as identified on the Notice of Electronic Filing (NEF) and paper
+copies will be sent to those indicated as non-registered participants .
+
+                                              /s/ Jared C. Dolan
+                                              JARED C. DOLAN
+                                              Assistant United States Attorney
+
+
+
+
+Date: October 29, 2024
+
+
+
+
+                                                17
+

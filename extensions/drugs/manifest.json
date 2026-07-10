@@ -1,0 +1,33 @@
+{
+  "name": "drugs",
+  "display_name": "Controlled Substances Extension",
+  "version": "0.1.0",
+  "upstream_repo": "https://github.com/vulnmaster/CASE-UCO-SDK",
+  "upstream_ref": "main",
+  "license": "Apache-2.0",
+  "namespaces": {
+    "drug": "http://example.org/ontology/drugs/"
+  },
+  "owl_files": [
+    "drugs.ttl"
+  ],
+  "shacl_files": [
+    "drugs-shapes.ttl"
+  ],
+  "bridge_files": [
+    "drugs-profile-gufo.ttl"
+  ],
+  "exemplar_files": [
+    "drugs-exemplar.ttl"
+  ],
+  "uco_compat": ["1.4.0"],
+  "upper_ontology": "gUFO (drug:ControlledSubstance subClassOf gufo:Quantity) via drugs-profile-gufo.ttl; chemical identity by IRI reference to ChEBI (OBO Foundry, BFO-compatible)",
+  "cdo_shapes_compatibility": {
+    "CDO-Shapes-gufo": "compatible (drug:ControlledSubstance subClassOf gufo:Quantity via bridge)",
+    "CDO-Shapes-BFO": "compatible (ChEBI/DrOn references are BFO-family)",
+    "CDO-Shapes-PROV-O": "compatible",
+    "CDO-Shapes-Time": "compatible",
+    "CDO-Shapes-GeoSPARQL": "compatible",
+    "CDO-Shapes-FOAF": "compatible"
+  }
+}

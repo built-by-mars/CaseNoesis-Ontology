@@ -111,3 +111,9 @@ graph.write("file_fragments.jsonld")
 - `FragmentFacet.fragment_index` and `total_fragments` are both `list[int]`.
 - For fragments stored on a disk image, add a second `Contained_Within` relationship from each fragment `File` to the disk `Image`.
 - `DataRangeFacet` goes on the `Relationship` (via `has_facet`), not on the contained object.
+
+## Related
+
+- [file-recovery.md](file-recovery.md) — carving and reconstruction workflows
+- [bulk-extractor-path.md](bulk-extractor-path.md) — byte-offset forensic paths
+- [partitions.md](partitions.md) — volume structures the fragments sit in

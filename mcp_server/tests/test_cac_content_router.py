@@ -298,6 +298,41 @@ HAWAII_TRAFFICKING_NARRATIVE = (
 )
 
 
+PACER_BUNDLE_NARRATIVE = (
+    "PACER PDF bundle for Case 3:20-cr-00029-SLG-MMS. Document 2 Filed 02/21/20: "
+    "INDICTMENT — the Grand Jury charges production of child pornography (18 U.S.C. 2251), "
+    "possession, sex trafficking of a minor, and Criminal Forfeiture Allegation 1. "
+    "Document 251: AO 245B Judgment in a Criminal Case, USM Number 15966-006, "
+    "240 months imprisonment, supervised release for a term of 20 years with Sheet 3D "
+    "special conditions, restitution, special assessment, and a schedule of payments."
+)
+
+
+def test_detect_pacer_document_ingestion_domain() -> None:
+    matches = detect_cac_domains(PACER_BUNDLE_NARRATIVE)
+    domain_ids = {item["domain_id"] for item in matches}
+    assert "pacer-document-ingestion" in domain_ids
+
+
+def test_route_pacer_bundle_includes_ingestion_checklist() -> None:
+    result = route_cac_content(
+        project_root=PROJECT_ROOT,
+        content_text=PACER_BUNDLE_NARRATIVE,
+        include_recipe_content=False,
+        max_recipes=10,
+    )
+    assert result["ok"] is True
+    domain_ids = {item["domain_id"] for item in result["matched_domains"]}
+    assert "pacer-document-ingestion" in domain_ids
+    checklist_ids = {item["id"] for item in result["modeling_checklist"]}
+    assert "pacer-single-investigation-per-docket" in checklist_ids
+    assert "pacer-no-fabricated-timestamps" in checklist_ids
+    assert "pacer-judgment-supervision-conditions" in checklist_ids
+    assert "pacer-assertion-status-tags" in checklist_ids
+    recipe_files = {item["recipe_file"] for item in result["matched_domains"]}
+    assert "docs/recipes/cac-pacer-document-ingestion.md" in recipe_files
+
+
 def test_route_hawaii_trafficking_includes_victim_bundle_checklist() -> None:
     result = route_cac_content(
         project_root=PROJECT_ROOT,

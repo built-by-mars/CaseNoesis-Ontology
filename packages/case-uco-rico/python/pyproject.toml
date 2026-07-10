@@ -1,0 +1,15 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "case-uco-rico"
+version = "0.1.0"
+description = "Racketeering and Criminal Enterprise Extension bindings for CASE/UCO SDK"
+requires-python = ">=3.10"
+dependencies = [
+    "case-uco>=1.4.0",
+]
+
+[project.entry-points."case_uco.extensions"]
+rico = "case_uco_rico:_REGISTRY_PATH"

@@ -16,7 +16,7 @@ bin/
 obj/
 *.suo
 *.user
-packages/
+csharp/**/packages/
 
 # Java
 target/
@@ -35,5 +35,11 @@ rust/target/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local document staging (OCR intermediates, working copies)
+uploads/
+
+# Source court PDFs are not redistributed; extracted text and graphs are tracked instead
+examples/pacer/**/*.pdf
 
 opencode.json

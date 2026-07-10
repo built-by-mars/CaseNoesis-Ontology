@@ -129,3 +129,53 @@ def test_semantic_mapping_extracts_exchange_account_holders() -> None:
     person_labels = [entity.label for entity in entities if entity.ontology_class == "uco-identity:Person"]
     assert any("Dylan Reyes" in label for label in person_labels)
     assert any("Eleanor Vance" in label for label in person_labels)
+
+
+SYNTHETIC_PACER_INDICTMENT = """
+IN THE UNITED STATES DISTRICT COURT
+FOR THE DISTRICT OF ALASKA
+
+UNITED STATES OF AMERICA,
+Plaintiff,
+vs. No. 3:20-cr-00029-SLG-MMS
+JAYSHON MOORE, a/k/a "China,"
+Defendant.
+
+COUNT 1:
+PRODUCTION OF CHILD PORNOGRAPHY
+Vio. of 18 U.S.C. § 2251(a),(e)
+
+COUNT 3:
+SEX TRAFFICKING OF A MINOR
+Vio. of 18 U.S.C. § 1591(a)(1)
+Minor Victim 1
+
+The Snapchat account "jayinglez80" contained child pornography.
+
+Case 3:20-cr-00029-SLG-MMS Document 2 Filed 02/21/20 Page 1 of 4
+
+All pursuant to Rule 32.2(a) of the Federal Rules of Criminal Procedure.
+"""
+
+
+def test_semantic_mapping_extracts_pacer_federal_court_entities() -> None:
+    entities = extract_semantic_entities(
+        SYNTHETIC_PACER_INDICTMENT,
+        run_seed="pacer-indictment-t0",
+    )
+    classes = {entity.ontology_class for entity in entities}
+    labels = {entity.label for entity in entities}
+    assert "uco-identity:Person" in classes
+    assert "uco-location:Location" in classes
+    assert "uco-identity:Organization" in classes
+    assert "uco-observable:ApplicationAccount" in classes
+    assert "uco-core:Event" in classes
+    assert "uco-observable:ObservableObject" in classes
+    assert any("Jayshon Moore" in label and "China" in label for label in labels)
+    assert any("Minor Victim 1" in label for label in labels)
+    assert any("Snapchat jayinglez80" in label for label in labels)
+    assert any("Federal case 3:20-cr-00029-SLG-MMS" in label for label in labels)
+    assert any("Indictment count 1" in label for label in labels)
+    assert any("PACER filing Document 2" in label for label in labels)
+    assert any("District of Alaska" in label for label in labels)
+    assert not any(label.startswith("Criminal Procedure") for label in labels)

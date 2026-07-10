@@ -1,0 +1,1143 @@
+{
+  "@context": {
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Source file pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:description": "Link-Look pdf upload",
+      "uco-core:tag": [
+        "link-look-file-kind:pdf"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:19432a9e-a201-567d-8def-c2a9345e8be9",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "pacer -- crypto -- Statement of Offense.pdf",
+          "uco-observable:extension": "pdf",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "595398"
+          }
+        },
+        {
+          "@id": "urn:uuid:afc1ce4f-8f51-5736-bad4-1cd1adbb69ff",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "595398"
+          },
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:e693f5c3-a8ec-5caa-aa7a-c69babb61440",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "45E104B86F2E72E9ED374E04DCB247D4F5F1438F1DCE4A30F2D13657078BC744"
+              }
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:9e0bb1de-94a3-5e93-9aef-1c1b4ab92ca4",
+          "@type": "uco-observable:ExtractedStringsFacet",
+          "uco-observable:strings": [
+            {
+              "@id": "urn:uuid:3e27c9ea-e401-57a9-84bf-cc6e5bdf426f",
+              "@type": "uco-observable:ExtractedString",
+              "uco-observable:stringValue": "Case 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 1 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 2 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 3 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 4 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 5 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 6 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 7 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 8 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 9 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 10 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 11 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 12 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 13 of 14\nCase 1:23-cr-00239-CKK Document 95 Filed 08/03/23 Page 14 of 14"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c9dc847c-95a8-5934-8f6a-4548a07bd7af",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "case-uco-document-normalize",
+      "uco-tool:version": "0.6.0"
+    },
+    {
+      "@id": "urn:uuid:50ca1681-bedb-538a-8498-47e020ef6de7",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Processed pdf through case-uco MCP",
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-08T19:00:17.438111+00:00"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-07-08T19:00:17.438111+00:00"
+      },
+      "uco-action:object": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-action:instrument": {
+        "@id": "urn:uuid:c9dc847c-95a8-5934-8f6a-4548a07bd7af"
+      },
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:8f95b7b9-5593-5a1b-91a1-5cafb95826e2"
+        },
+        {
+          "@id": "urn:uuid:acb4c875-9d79-560a-9e33-46ca04f8fc55"
+        },
+        {
+          "@id": "urn:uuid:d049c5e8-734a-5308-a99d-ba619677f0e6"
+        },
+        {
+          "@id": "urn:uuid:60f403cc-91f4-5e41-a433-6ea1faaf9c38"
+        },
+        {
+          "@id": "urn:uuid:20e33aae-cefc-5649-a88e-f7e8c431e05b"
+        },
+        {
+          "@id": "urn:uuid:6819b2ab-4b73-5e24-83e1-5b68ce5deba2"
+        },
+        {
+          "@id": "urn:uuid:fd9db0d1-d65c-5dd6-8fda-7706654ea4cb"
+        },
+        {
+          "@id": "urn:uuid:a9fb5eea-5236-54fd-9bb2-b3ddb3d764a4"
+        },
+        {
+          "@id": "urn:uuid:49454853-7cfc-5fed-835f-d296503c88d8"
+        },
+        {
+          "@id": "urn:uuid:6c923ff6-ad7e-5763-b273-f47132be4ce2"
+        },
+        {
+          "@id": "urn:uuid:cddb2bba-5d39-53da-948b-0fb83c72e9ab"
+        },
+        {
+          "@id": "urn:uuid:8b373d1e-fe2e-5153-9992-946e629ce296"
+        },
+        {
+          "@id": "urn:uuid:02b85d3e-fe4a-5f85-b2fe-89c3d53b4b43"
+        },
+        {
+          "@id": "urn:uuid:6df7b1ce-334c-5c63-b08e-776cb39c3a2e"
+        },
+        {
+          "@id": "urn:uuid:565bea69-73ac-5aae-9a97-d850bd8a3206"
+        },
+        {
+          "@id": "urn:uuid:bdb8178e-5d5e-5b3a-b116-907346f55815"
+        },
+        {
+          "@id": "urn:uuid:d6b35c05-0dde-57ad-96ec-d40e4925cc15"
+        },
+        {
+          "@id": "urn:uuid:61bb548e-80fd-576b-b6d5-7b22bad28d7a"
+        },
+        {
+          "@id": "urn:uuid:8432b4f6-592d-58e5-a29a-e7a194a58d29"
+        },
+        {
+          "@id": "urn:uuid:c432a470-dd97-516a-acbe-a6f54a5a748f"
+        },
+        {
+          "@id": "urn:uuid:715b8369-2d78-56a1-b8a5-07a063b78787"
+        },
+        {
+          "@id": "urn:uuid:35070719-3df3-5371-9c04-74a22519dbfc"
+        },
+        {
+          "@id": "urn:uuid:638caa17-4749-5a57-ad30-3b6ba56ca363"
+        },
+        {
+          "@id": "urn:uuid:e19dc8da-1f66-56b0-9cb9-0d73decd2f4b"
+        },
+        {
+          "@id": "urn:uuid:bb5ca759-903a-5ce4-8969-6b7e649fbb98"
+        },
+        {
+          "@id": "urn:uuid:0d64392e-6de1-514a-848e-89293adb7cb9"
+        },
+        {
+          "@id": "urn:uuid:fa1126a5-a82b-58c5-81fc-5c4a7116f25b"
+        },
+        {
+          "@id": "urn:uuid:e0ba0c72-0ec8-518a-a5da-322cb0674f30"
+        },
+        {
+          "@id": "urn:uuid:3b89cd2b-034b-5c29-a26d-076e16afbdbf"
+        },
+        {
+          "@id": "urn:uuid:affac7af-8a3b-5187-ab9d-05c854886b87"
+        },
+        {
+          "@id": "urn:uuid:411bbd64-35f5-54e9-be09-c50d2bbd8495"
+        },
+        {
+          "@id": "urn:uuid:f7cc6619-3632-5031-85a1-7f5a65ddab7b"
+        },
+        {
+          "@id": "urn:uuid:166b5385-9da0-5617-8d32-824590a19c4a"
+        },
+        {
+          "@id": "urn:uuid:7e974558-57ad-50e5-bdde-f9016d66a4cf"
+        },
+        {
+          "@id": "urn:uuid:c3d57bf2-492d-5829-bb42-2c3874560439"
+        },
+        {
+          "@id": "urn:uuid:a775ee8d-13bb-55cd-a339-28c6a643b201"
+        },
+        {
+          "@id": "urn:uuid:2e7f0269-55cd-56e4-a481-57a9ab01da42"
+        },
+        {
+          "@id": "urn:uuid:cf63bf43-0911-5c96-89be-a6191d74dbec"
+        },
+        {
+          "@id": "urn:uuid:2335697e-6ff5-5a00-bbce-47a8b47299cf"
+        },
+        {
+          "@id": "urn:uuid:27c4b185-4a95-5ec9-bc7a-8954bf6ae29b"
+        },
+        {
+          "@id": "urn:uuid:b0a961f5-6ccb-513b-be3e-81a71fdf6c09"
+        },
+        {
+          "@id": "urn:uuid:1faae2f5-eb7b-5318-8b35-ab79b80a7e51"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:8f95b7b9-5593-5a1b-91a1-5cafb95826e2",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:acb4c875-9d79-560a-9e33-46ca04f8fc55",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:d049c5e8-734a-5308-a99d-ba619677f0e6",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:60f403cc-91f4-5e41-a433-6ea1faaf9c38",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:20e33aae-cefc-5649-a88e-f7e8c431e05b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:6819b2ab-4b73-5e24-83e1-5b68ce5deba2",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:fd9db0d1-d65c-5dd6-8fda-7706654ea4cb",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:a9fb5eea-5236-54fd-9bb2-b3ddb3d764a4",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:49454853-7cfc-5fed-835f-d296503c88d8",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:6c923ff6-ad7e-5763-b273-f47132be4ce2",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:cddb2bba-5d39-53da-948b-0fb83c72e9ab",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:8b373d1e-fe2e-5153-9992-946e629ce296",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:02b85d3e-fe4a-5f85-b2fe-89c3d53b4b43",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:6df7b1ce-334c-5c63-b08e-776cb39c3a2e",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:565bea69-73ac-5aae-9a97-d850bd8a3206",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:bdb8178e-5d5e-5b3a-b116-907346f55815",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:d6b35c05-0dde-57ad-96ec-d40e4925cc15",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:61bb548e-80fd-576b-b6d5-7b22bad28d7a",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:8432b4f6-592d-58e5-a29a-e7a194a58d29",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:c432a470-dd97-516a-acbe-a6f54a5a748f",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:715b8369-2d78-56a1-b8a5-07a063b78787",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:35070719-3df3-5371-9c04-74a22519dbfc",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:638caa17-4749-5a57-ad30-3b6ba56ca363",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:e19dc8da-1f66-56b0-9cb9-0d73decd2f4b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:bb5ca759-903a-5ce4-8969-6b7e649fbb98",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:0d64392e-6de1-514a-848e-89293adb7cb9",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:fa1126a5-a82b-58c5-81fc-5c4a7116f25b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:e0ba0c72-0ec8-518a-a5da-322cb0674f30",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:3b89cd2b-034b-5c29-a26d-076e16afbdbf",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:affac7af-8a3b-5187-ab9d-05c854886b87",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:411bbd64-35f5-54e9-be09-c50d2bbd8495",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:f7cc6619-3632-5031-85a1-7f5a65ddab7b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:166b5385-9da0-5617-8d32-824590a19c4a",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:7e974558-57ad-50e5-bdde-f9016d66a4cf",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:c3d57bf2-492d-5829-bb42-2c3874560439",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:a775ee8d-13bb-55cd-a339-28c6a643b201",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:2e7f0269-55cd-56e4-a481-57a9ab01da42",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:cf63bf43-0911-5c96-89be-a6191d74dbec",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:2335697e-6ff5-5a00-bbce-47a8b47299cf",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:27c4b185-4a95-5ec9-bc7a-8954bf6ae29b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Federal case 1:23-cr-00239-CKK",
+      "uco-core:eventType": [
+        "federal court case reference"
+      ],
+      "uco-core:description": "PACER/ECF case number: 1:23-cr-00239-CKK"
+    },
+    {
+      "@id": "urn:uuid:b0a961f5-6ccb-513b-be3e-81a71fdf6c09",
+      "@type": "uco-core:Event",
+      "uco-core:name": "PACER filing Document 95",
+      "uco-core:eventType": [
+        "pacer docket filing"
+      ],
+      "uco-core:description": "PACER document 95 filed 08/03/23."
+    },
+    {
+      "@id": "urn:uuid:1faae2f5-eb7b-5318-8b35-ab79b80a7e51",
+      "@type": "uco-core:Event",
+      "uco-core:name": "Date 08/03/23",
+      "uco-core:eventType": [
+        "document date reference"
+      ],
+      "uco-core:description": "Date reference in document text: 08/03/23"
+    },
+    {
+      "@id": "urn:uuid:b9f14401-b607-578f-9d34-b8e0144cf750",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 1 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8f95b7b9-5593-5a1b-91a1-5cafb95826e2"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:56f66ced-6aca-5b2f-b271-c6f68c3fca07",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 2 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:acb4c875-9d79-560a-9e33-46ca04f8fc55"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:aee594a4-6c63-50d9-91eb-64c443227874",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 3 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d049c5e8-734a-5308-a99d-ba619677f0e6"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:dbfd85de-4fb2-502b-8637-c53ed9dc5133",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 4 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:60f403cc-91f4-5e41-a433-6ea1faaf9c38"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:0bfae043-e227-5090-8505-f742374d6705",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 5 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:20e33aae-cefc-5649-a88e-f7e8c431e05b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:9ceacdca-d018-5154-9458-0c0e14ec34f6",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 6 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6819b2ab-4b73-5e24-83e1-5b68ce5deba2"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1b8381cf-d94b-5005-9df8-1a70f01a3f95",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 7 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:fd9db0d1-d65c-5dd6-8fda-7706654ea4cb"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:6acaaf82-5e28-503f-bf5e-316cb75a79b0",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 8 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:a9fb5eea-5236-54fd-9bb2-b3ddb3d764a4"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:59d53930-b7c9-5ec7-b79f-519c25ab249b",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 9 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:49454853-7cfc-5fed-835f-d296503c88d8"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a5bd8235-d7d1-512f-9cf7-aa440151f322",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 10 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6c923ff6-ad7e-5763-b273-f47132be4ce2"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:32f73b52-c612-58de-aa26-b22b3f717788",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 11 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:cddb2bba-5d39-53da-948b-0fb83c72e9ab"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b2df43b2-fcdd-5eeb-a613-88af076f7076",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 12 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8b373d1e-fe2e-5153-9992-946e629ce296"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:b40ee763-634b-5a5b-b7bb-73bd7fe1a601",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 13 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:02b85d3e-fe4a-5f85-b2fe-89c3d53b4b43"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:8eb1efa5-e4ba-5a7f-877d-eddc1cab7481",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 14 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:6df7b1ce-334c-5c63-b08e-776cb39c3a2e"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:2eb0ccd8-0b80-55fe-8f20-9cf58644274d",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 15 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:565bea69-73ac-5aae-9a97-d850bd8a3206"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:164c55c1-8f3b-5bf4-a3c6-041be5293669",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 16 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:bdb8178e-5d5e-5b3a-b116-907346f55815"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:dc09f795-c45e-5813-9200-4aa46d859680",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 17 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:d6b35c05-0dde-57ad-96ec-d40e4925cc15"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:7ca4fd84-895e-5a9f-a667-794cb02e7841",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 18 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:61bb548e-80fd-576b-b6d5-7b22bad28d7a"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:728f0fd8-3265-5718-8808-501d4fc12655",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 19 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:8432b4f6-592d-58e5-a29a-e7a194a58d29"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:11baa64c-7059-5dd8-b349-3f8fbd64976c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 20 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:c432a470-dd97-516a-acbe-a6f54a5a748f"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:5cd249b0-d15d-5e34-b1e8-d4e26514b24b",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 21 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:715b8369-2d78-56a1-b8a5-07a063b78787"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:2d0764e7-c5b2-5bcc-9298-5daa2681cbf1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 22 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:35070719-3df3-5371-9c04-74a22519dbfc"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:1a4ae11f-9f84-5657-b094-ab85e5093d31",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 23 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:638caa17-4749-5a57-ad30-3b6ba56ca363"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d42703d1-9c3b-5540-9cd7-b71e7537363e",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 24 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e19dc8da-1f66-56b0-9cb9-0d73decd2f4b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:342ad38c-541c-5111-b42a-8c2cc7e96f75",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 25 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:bb5ca759-903a-5ce4-8969-6b7e649fbb98"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:61da488c-25b8-512e-8437-e262fc7c0699",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 26 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:0d64392e-6de1-514a-848e-89293adb7cb9"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:206d7213-f08a-5979-945a-136f2282d0e9",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 27 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:fa1126a5-a82b-58c5-81fc-5c4a7116f25b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:51d2b18d-d30e-55ad-899e-4b9b2ccad409",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 28 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:e0ba0c72-0ec8-518a-a5da-322cb0674f30"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:ab27538e-f439-57c1-908b-24e0d1699ccd",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 29 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:3b89cd2b-034b-5c29-a26d-076e16afbdbf"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:eaffbe1d-5da1-538a-af75-2f6dfe659bb4",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 30 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:affac7af-8a3b-5187-ab9d-05c854886b87"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:a6d40216-a360-5f1f-a6e0-c770143ed080",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 31 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:411bbd64-35f5-54e9-be09-c50d2bbd8495"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:7df2b839-bf8a-5228-898e-70021390ce1d",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 32 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:f7cc6619-3632-5031-85a1-7f5a65ddab7b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:c98b27ae-79f0-53c0-9b01-f738ea81a264",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 33 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:166b5385-9da0-5617-8d32-824590a19c4a"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d458acaa-2a22-582e-9735-bbd7678bcf70",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 34 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:7e974558-57ad-50e5-bdde-f9016d66a4cf"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:cb4ee2df-4ea6-525d-b747-3cf9affadfa6",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 35 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:c3d57bf2-492d-5829-bb42-2c3874560439"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:498e75b7-eae8-5d4a-8121-8279f95b6b38",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 36 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:a775ee8d-13bb-55cd-a339-28c6a643b201"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:6a3017be-fe84-565d-adf1-0bc543770d0c",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 37 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2e7f0269-55cd-56e4-a481-57a9ab01da42"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:befcb55a-b4d0-5275-a8f0-bd879b6c96c1",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 38 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:cf63bf43-0911-5c96-89be-a6191d74dbec"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4ea398d6-0768-51ba-a8f4-b424b0b9ae49",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 39 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:2335697e-6ff5-5a00-bbce-47a8b47299cf"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:846f1f15-3154-50f7-8ec8-6e81d3307b2d",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 40 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:27c4b185-4a95-5ec9-bc7a-8954bf6ae29b"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:d2d40979-2713-5869-ae6c-ad015d567dbf",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 41 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:b0a961f5-6ccb-513b-be3e-81a71fdf6c09"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    },
+    {
+      "@id": "urn:uuid:4b359436-0496-51bb-a27e-899f029458e2",
+      "@type": "uco-core:Relationship",
+      "uco-core:name": "Extracted record 42 derived from pacer -- crypto -- Statement of Offense.pdf",
+      "uco-core:source": {
+        "@id": "urn:uuid:1faae2f5-eb7b-5318-8b35-ab79b80a7e51"
+      },
+      "uco-core:target": {
+        "@id": "urn:uuid:f9b487b9-d9ff-5bef-b882-617ad48060da"
+      },
+      "uco-core:kindOfRelationship": "Derived_From",
+      "uco-core:isDirectional": true
+    }
+  ]
+}

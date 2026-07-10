@@ -1,0 +1,23 @@
+# Weapons and Firearms Extension — gUFO alignment profile (bridge)
+#
+# Grounds weap:Weapon in the (gentle) Unified Foundational Ontology (gUFO,
+# https://nemo-ufes.github.io/gufo/) for graphs using the CDO gUFO profile
+# (CDO-Shapes-gufo). A weapon is a gufo:FunctionalComplex: an object whose
+# parts play different functional roles (barrel, receiver, trigger group).
+# This replaces the earlier per-graph dual-typing convention
+# ["uco-core:UcoObject", "gufo:FunctionalComplex"] with a subclass axiom,
+# so instances receive the gUFO grounding by inference.
+
+@prefix weap: <http://example.org/ontology/weapons/> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/weapons/profile/gufo>
+	a owl:Ontology ;
+	rdfs:label "Weapons Extension: gUFO alignment profile"@en ;
+	dcterms:source "https://nemo-ufes.github.io/gufo/"^^xsd:anyURI .
+
+weap:Weapon rdfs:subClassOf gufo:FunctionalComplex .

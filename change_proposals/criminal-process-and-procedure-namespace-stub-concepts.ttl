@@ -1,0 +1,92 @@
+# Proposed CASE criminal process and procedure stub namespace (T-Box)
+# Companion to change_proposals/criminal-process-and-procedure-namespace-stub-concepts.md
+# Namespace placeholder: the committee decides the final IRI
+# (suggested: https://ontology.caseontology.org/case/criminal/).
+
+@prefix proposed: <http://example.org/ontology/proposed/criminal/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/ontology/proposed/criminal>
+	a owl:Ontology ;
+	rdfs:label "Proposed CASE criminal process and procedure stubs"@en ;
+	rdfs:comment "Jurisdiction-neutral stub concepts for criminal legal process: charges, pleas, proceedings, sentences, forfeiture, and restitution. Application-domain ontologies (e.g. the CAC Ontology) inherit and specialize these."@en .
+
+proposed:CriminalCharge
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "CriminalCharge"@en ;
+	rdfs:comment "A criminal charge is a formal accusation, stated as a count within a charging instrument, that a person committed a specific statutory offense. See e.g. Federal Rule of Criminal Procedure 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7) for one jurisdiction's charging-instrument requirements."@en .
+
+proposed:Plea
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "Plea"@en ;
+	rdfs:comment "A plea is a defendant's formal answer to a criminal charge. See e.g. Federal Rule of Criminal Procedure 11 (https://www.law.cornell.edu/rules/frcrmp/rule_11)."@en .
+
+proposed:CriminalProceeding
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "CriminalProceeding"@en ;
+	rdfs:comment "A criminal proceeding is a formal event in a criminal case conducted before a tribunal, such as an arraignment, trial, plea hearing, sentencing hearing, or appeal."@en .
+
+proposed:Sentence
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "Sentence"@en ;
+	rdfs:comment "A sentence is a penalty recommended by a party or imposed by a tribunal upon conviction of a criminal charge. See e.g. 18 U.S.C. § 3553 (https://www.law.cornell.edu/uscode/text/18/3553)."@en .
+
+proposed:ForfeitureOrder
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "ForfeitureOrder"@en ;
+	rdfs:comment "A forfeiture order is an order, or pre-conviction allegation, requiring surrender to the state of property involved in or traceable to an offense. See e.g. 18 U.S.C. §§ 981-982 (https://www.law.cornell.edu/uscode/text/18/981)."@en .
+
+proposed:RestitutionOrder
+	a owl:Class ;
+	rdfs:subClassOf uco-core:UcoObject ;
+	rdfs:label "RestitutionOrder"@en ;
+	rdfs:comment "A restitution order is an order or request that an offender compensate victims for losses caused by the offense, monetarily or in kind. See e.g. 18 U.S.C. § 3663A (https://www.law.cornell.edu/uscode/text/18/3663A)."@en .
+
+proposed:statuteCitation
+	a owl:DatatypeProperty ;
+	rdfs:label "statuteCitation"@en ;
+	rdfs:comment "Citation of the charged offense in the governing jurisdiction, e.g. '18 U.S.C. § 1956(h)'."@en ;
+	rdfs:domain proposed:CriminalCharge ;
+	rdfs:range xsd:string .
+
+proposed:countNumber
+	a owl:DatatypeProperty ;
+	rdfs:label "countNumber"@en ;
+	rdfs:comment "Ordinal count number of the charge within its charging instrument."@en ;
+	rdfs:domain proposed:CriminalCharge ;
+	rdfs:range xsd:nonNegativeInteger .
+
+proposed:pleaType
+	a owl:DatatypeProperty ;
+	rdfs:label "pleaType"@en ;
+	rdfs:comment "The type of plea entered, as an open vocabulary. Recommended values: 'guilty', 'not-guilty', 'nolo-contendere'."@en ;
+	rdfs:domain proposed:Plea ;
+	rdfs:range xsd:string .
+
+proposed:proceedingType
+	a owl:DatatypeProperty ;
+	rdfs:label "proceedingType"@en ;
+	rdfs:comment "The type of criminal proceeding, as an open vocabulary. Recommended values: 'arraignment', 'preliminary-hearing', 'trial', 'plea-hearing', 'sentencing-hearing', 'appeal'."@en ;
+	rdfs:domain proposed:CriminalProceeding ;
+	rdfs:range xsd:string .
+
+proposed:sentenceStatus
+	a owl:DatatypeProperty ;
+	rdfs:label "sentenceStatus"@en ;
+	rdfs:comment "Whether the sentence is a party recommendation, an imposed judgment, or has been vacated, as an open vocabulary. Recommended values: 'recommended', 'imposed', 'vacated'."@en ;
+	rdfs:domain proposed:Sentence ;
+	rdfs:range xsd:string .
+
+proposed:concernsCharge
+	a owl:ObjectProperty ;
+	rdfs:label "concernsCharge"@en ;
+	rdfs:comment "Links a plea, proceeding, sentence, forfeiture order, or restitution order to the criminal charge(s) it concerns."@en ;
+	rdfs:range proposed:CriminalCharge .

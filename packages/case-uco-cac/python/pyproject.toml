@@ -1,0 +1,15 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "case-uco-cac"
+version = "3.0.0"
+description = "CAC Ontology - Crimes Against Children bindings for CASE/UCO SDK"
+requires-python = ">=3.10"
+dependencies = [
+    "case-uco>=1.4.0",
+]
+
+[project.entry-points."case_uco.extensions"]
+cac = "case_uco_cac:_REGISTRY_PATH"

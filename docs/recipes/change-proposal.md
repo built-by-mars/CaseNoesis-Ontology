@@ -11,6 +11,17 @@ This recipe covers the full workflow: confirming the gap, checking for existing 
 - **Explicit request**: You know you need a concept that doesn't exist (e.g., "there's no facet for drone telemetry data")
 - **Gap detected during modeling**: `search_classes` and `find_classes_for_domain` return no adequate match for what you're trying to model
 - **Agent-suggested**: While helping model data, the agent identifies that no existing class covers the concept and proactively suggests drafting a proposal
+- **Rejected by concept coverage**: `validate_graph` returned `conforms: False` with an `undeclared_concepts` list — the graph uses a class or property that no supported ontology declares. Do not invent terms or disable the check; file a proposal (this recipe) and/or declare the term in an extension ontology ([extensions recipe](extensions.md)) so validation passes.
+
+## Which tracker?
+
+| Concept namespace | Target repository |
+|---|---|
+| `uco-*` (general cyber-domain) | [ucoProject/UCO](https://github.com/ucoProject/UCO/issues) |
+| `case-*` (investigation-specific) | [casework/CASE](https://github.com/casework/CASE/issues) |
+| `cacontology*` (crimes against children) | [Project-VIC-International/CAC-Ontology](https://github.com/Project-VIC-International/CAC-Ontology/issues) |
+
+`check_existing_proposals` searches all three by default. Precedent CAC proposals filed from this SDK: [#40](https://github.com/Project-VIC-International/CAC-Ontology/issues/40) (legal-outcomes charging/sentencing properties) and [#41](https://github.com/Project-VIC-International/CAC-Ontology/issues/41) (core case-identification properties) — both backed locally by `extensions/cac/local/cacontology-sdk-pending.ttl` until they land upstream.
 
 ## Key tools
 
