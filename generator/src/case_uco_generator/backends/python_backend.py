@@ -58,13 +58,15 @@ class PythonBackend(CodegenBackend):
             )
             created.append(init_path)
 
-        # Write top-level __init__.py
+        # Write top-level __init__.py. __version__ is sourced from the
+        # package's pyproject.toml so regeneration cannot desynchronize the
+        # two (the CI Version Consistency Check compares them).
         top_init = self.output_dir / "__init__.py"
         top_init.write_text(
             '"""CASE/UCO Standard Library — construct and serialize CASE/UCO ontology graphs."""\n\n'
             "from case_uco.graph import CASEGraph\n\n"
             '__all__ = ["CASEGraph"]\n'
-            '__version__ = "0.1.0"\n',
+            f'__version__ = "{self._package_version()}"\n',
             encoding="utf-8",
         )
         created.append(top_init)
@@ -74,6 +76,27 @@ class PythonBackend(CodegenBackend):
         created.append(registry_path)
 
         return created
+
+    def _package_version(self) -> str:
+        """Read the release version from the enclosing package's pyproject.toml.
+
+        The generator writes into ``python/case_uco/``; the authoritative
+        version lives in ``python/pyproject.toml``. Falls back to "0.0.0"
+        when generating outside the SDK repository layout.
+        """
+
+        import re
+
+        pyproject = self.output_dir.parent / "pyproject.toml"
+        if pyproject.is_file():
+            match = re.search(
+                r'^version\s*=\s*"([^"]+)"',
+                pyproject.read_text(encoding="utf-8"),
+                re.MULTILINE,
+            )
+            if match:
+                return match.group(1)
+        return "0.0.0"
 
     def _emit_registry(self) -> Path:
         """Serialize the ontology schema to _registry.json for runtime discovery."""

@@ -7,6 +7,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.16.0] - 2026-07-10
+
+Validation-integrity and security-hardening release addressing the eight
+review issues [#47](https://github.com/vulnmaster/CASE-UCO-SDK/issues/47)–[#54](https://github.com/vulnmaster/CASE-UCO-SDK/issues/54).
+
+### Added
+
+#### Validation integrity (issues #47, #48, #49)
+
+- **Pinned upper-ontology term registry** (`mcp_server/upper_ontology_registry.json`, closes [#47](https://github.com/vulnmaster/CASE-UCO-SDK/issues/47)): strict concept coverage now validates profiled upper-ontology terms (BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL + Simple Features, FOAF, ORG, PROF) against the exact declared terms of pinned releases (543 terms with source URL and `owl:versionIRI` provenance) instead of accepting whole namespaces — a fabricated `prov:CompletelyImaginaryProperty` now fails with the distinct `unknown_upper_ontology_terms` report category. Regenerate with `mcp_server/tools/build_upper_ontology_registry.py` (supports `--source-dir` for air-gapped rebuilds). Foundational W3C vocabularies (RDF/RDFS/OWL/XSD/SHACL/SKOS/DC/OA) remain namespace-accepted under an explicitly documented policy.
+- **RDF-role-aware concept coverage** (closes [#48](https://github.com/vulnmaster/CASE-UCO-SDK/issues/48)): declared terms are tracked by role (class, property, SHACL shape, unknown) from explicit typing plus structural inference (`rdfs:subClassOf`, `rdfs:domain`/`range`, `sh:targetClass`, `sh:path`). A declared class used as a predicate — or a property used as an `rdf:type` class — is reported as a `role_mismatches` entry (`declared_role` / `used_as`) distinct from `undeclared`. OWL punning is supported: the ATT&CK `uco-action:Technique` metaclass pattern (technique = `owl:Class` + instance) has explicit tests.
+- **Content-fingerprint cache invalidation** (closes [#49](https://github.com/vulnmaster/CASE-UCO-SDK/issues/49)): the declared-term cache key now includes an mtime/size fingerprint of every ontology file, so a concept added, removed, or renamed in an extension mid-process is recognized on the next validation without restarting the MCP server — completing the self-improvement loop. A bounded cache (16 entries) plus an explicit `clear_declared_term_cache()` are provided; single-process cache-refresh tests included.
+- `extensions=[...]` lists now resolve manifest `depends_on` entries transitively (`resolve_extension_dependencies`): `rico` declares `depends_on: ["legalproc"]`, so its exemplar validates standalone.
+
+#### MCP security hardening (issues #50, #51)
+
+- **Filesystem workspace policy** (`mcp_server/workspace_policy.py`, closes [#50](https://github.com/vulnmaster/CASE-UCO-SDK/issues/50)): deployments confine `process_document_file` and `validate_graph` with `CASE_UCO_MCP_READ_ROOTS` / `CASE_UCO_MCP_WRITE_ROOTS` / `CASE_UCO_MCP_ALLOW_OVERWRITE`. Containment is enforced on fully resolved paths (`..` traversal and symlink escapes rejected), outputs never overwrite by default under an active policy, source and destination may never resolve to the same file, and violations return typed, non-sensitive errors (`source_outside_read_roots`, `output_outside_write_roots`, `progress_outside_write_roots`, `output_exists`, `source_output_conflict`). No policy configured = unchanged behavior. 14 tests in `mcp_server/tests/test_workspace_policy.py`; deployment guidance in `mcp_server/README.md`.
+- **Untrusted-evidence trust boundary** (closes [#51](https://github.com/vulnmaster/CASE-UCO-SDK/issues/51)): all extracted/submitted content is labeled `content_trust: untrusted-source-content` in `process_document_file` results, extraction bundles (`extracted-content.json`), and both routing tools. Extracted text is scanned for prompt-injection indicators (instruction override, role reassignment, prompt disclosure, tool invocation, persistence/exfiltration requests, chat markup) and results carry bounded `injection_warnings` that never echo the payload. The server's MCP instructions and the workspace agent rules now explicitly prohibit treating evidence text as directions and require persistent changes to originate from an operator decision. Tests in `mcp_server/tests/test_untrusted_content.py` demonstrate injection-bearing documents produce warnings and no writes beyond the declared output artifacts.
+
+#### Knowledge lifecycle (issue #52)
+
+- **Staged promotion for learned artifacts** (`mcp_server/knowledge_lifecycle.py`, closes [#52](https://github.com/vulnmaster/CASE-UCO-SDK/issues/52)): extensions carry a manifest `status` — `candidate` (excluded from routing discovery, still loadable explicitly by name), `operational` (default for the bundled nine), `deprecated` (emergency revocation, provenance retained). `make promote-extension EXT=... REVIEWER=...` runs validation gates (ontology parse, class subclass-anchoring, exemplar `case_validate` conformance) and records reviewer/timestamp/gate provenance in the manifest; a failed gate leaves the candidate untouched. `make deprecate-extension`, `make rollback-extension EXT=... REF=<git-ref>` (one-command git-based restore), and `make lifecycle-status` complete the workflow. Candidate recipes live in `docs/recipes/candidates/` (invisible to `RECIPE_INDEX` and routing) until promoted per the updated `docs/recipes/recipe-authoring.md`. 12 tests in `mcp_server/tests/test_knowledge_lifecycle.py`.
+
+#### Hybrid routing (issue #53)
+
+- **Hybrid retrieval with calibrated abstention** (`mcp_server/semantic_retrieval.py`, closes [#53](https://github.com/vulnmaster/CASE-UCO-SDK/issues/53)): `route_investigation_content` now layers an offline, deterministic lexical-semantic stage (token normalization, curated synonym-group expansion, bounded overlap scoring) over the keyword baseline. Every match reports `match_stages`, `scoring` (`keyword_score`, `semantic_score`, calibrated `confidence`), and `semantic_evidence`; the keyword-only result is always returned as `deterministic_baseline` for auditability. Below the abstention threshold the router returns `extension_gap_guidance` plus `abstained_candidates` instead of a weak guess; `routing_confidence` reports the level and thresholds. Colloquial paraphrases now route ("my daughter was blackmailed into sending photos" → CAC; "somebody hacked our network and encrypted our files, demanding bitcoin" → network intrusion + crypto). A labeled benchmark corpus (`mcp_server/tests/test_routing_benchmark.py`) proves recall improvement over the keyword baseline with zero precision regression on negatives. Adjusted from the issue: embeddings/LLM re-ranking were deliberately not built in — the semantic stage is curated-lexical so closed/offline Link-Look deployments work unchanged and generative steps cannot bypass validation or promotion controls.
+
+#### Extensions
+
+- `toolcap` gained `manifest.json` (and a bundled `capability-pending.ttl` declaring the proposed UCO capability namespace from [UCO #682](https://github.com/ucoProject/UCO/issues/682)), so it now participates in extension loading, strict concept coverage (`extensions=['toolcap']`), lifecycle status, and registry generation like the other bundled extensions.
+
+#### CI
+
+- The MCP server test suite (now 183 tests) runs in CI (`.github/workflows/ci.yml`), and `mcp_server/**` / `extensions/**` changes trigger the pipeline; new `make test-mcp` target.
+
+### Changed
+
+- **`SECURITY.md` rewritten for v1.16.0** (closes [#54](https://github.com/vulnmaster/CASE-UCO-SDK/issues/54)): supported-version table now names the current release line (1.16.x); bundled extension ontologies, manifests, registries, shapes, and the upper-ontology registry are in scope as operational capabilities (no longer "examples, not production dependencies"); documented MCP trust boundaries (filesystem policy, indirect prompt injection, self-improvement governance, validation integrity), upstream-vs-SDK reporting split, sensitive-investigative-data handling, and a release checklist item for the policy itself.
+- `process_document_file` MCP results now report `validation_status: "not_validated"` (the tool never ran SHACL — the previous hardcoded `"valid"` was misleading) and expose `extracted_content_path` / `annotations_path` so callers can find the extraction bundle.
+- `validate_graph` reports gained `unknown_upper_ontology_terms` and `role_mismatches` categories alongside `undeclared_concepts`, with per-category guidance.
+- The Python generator now sources `__version__` from `python/pyproject.toml` during generation instead of hardcoding `0.1.0` — fixes the CI Version Consistency Check failure introduced by regeneration during the v1.15.0 release (`generator/src/case_uco_generator/backends/python_backend.py`).
+- All language package versions synchronized to **1.16.0** (`python/pyproject.toml`, `python/case_uco/__init__.py`, `csharp/CaseUco/CaseUco.csproj`, `java/pom.xml`, `rust/Cargo.toml`, README header and version matrix).
+- Language registries (`_registry.json`) regenerated; they now include the `toolcap` and proposed-capability modules.
+
+### Fixed
+
+- Fabricated terms inside profiled upper-ontology namespaces no longer pass strict concept coverage (#47).
+- Declared terms used in the wrong RDF role no longer pass silently (#48).
+- Stale declared-term caches no longer hide mid-process ontology edits (#49).
+- `rico-exemplar.ttl` and `toolcap-exemplar.ttl` now pass strict concept coverage standalone (dependency resolution + toolcap manifest).
+
 ## [1.15.0] - 2026-07-10
 
 ### Added

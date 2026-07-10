@@ -11,6 +11,8 @@ on:
       - "java/**"
       - "rust/**"
       - "ontology/**"
+      - "mcp_server/**"
+      - "extensions/**"
       - "Makefile"
   pull_request:
     branches: [main, develop]
@@ -22,6 +24,8 @@ on:
       - "java/**"
       - "rust/**"
       - "ontology/**"
+      - "mcp_server/**"
+      - "extensions/**"
       - "Makefile"
 
 jobs:
@@ -101,6 +105,9 @@ jobs:
 
       - name: Run tests
         run: PYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v
+
+      - name: Run MCP server tests
+        run: python -m pytest mcp_server/tests -v
 
       - name: Type check
         run: cd python && mypy case_uco/ --ignore-missing-imports

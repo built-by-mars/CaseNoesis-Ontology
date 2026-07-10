@@ -260,6 +260,7 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **OffenderProfile** | ext.cac.cacontology-sex-offender-registry | Class | Comprehensive profile of registered sex offender including all required information. |
 | **PDFFile** | uco.observable | Class | A PDF file is a Portable Document Format (PDF) file. |
 | **PDFFileFacet** | uco.observable | Facet | A PDF file facet is a grouping of characteristics unique to a PDF (Portable Document Format) file. |
+| **Parser** | ext.toolcap.capability | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
 | **PathRelationFacet** | uco.observable | Facet | A path relation facet is a grouping of characteristics unique to the location of one object withi... |
 | **PaymentProcessing** | ext.cac.cacontology-platform-infrastructure | Class | Financial processing systems enabling platform monetization through subscription fees, content pu... |
 | **PersonLikeEntity** | ext.cac.cac-core | Class | An enduring entity that is person-like in the domain model. Use for natural persons and person-pr... |
@@ -273,7 +274,7 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **PlatformAnonymityFeature** | ext.cac.cacontology-grooming | Class | Platform features that enable anonymous communication (guest messaging, temporary accounts, no pr... |
 | **PlatformModerationPhase** | ext.cac.cacontology-platforms | Class | Phase of active content moderation and policy enforcement. Modeled as anti-rigid gUFO Phase. |
 | **PlatformMonitoring** | ext.cac.cacontology-partnerships | Class | Cooperative monitoring of platforms and services for illegal content and activities. Modeled as g... |
-| **PlatformSpecification** | ext.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
+| **PlatformSpecification** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
 | **PleaAgreement** | ext.cryptoinv.cryptoinv | Class | A plea agreement is a negotiated agreement under Federal Rule of Criminal Procedure 11(c) (https:... |
 | **PodcastEducationSeries** | ext.cac.cacontology-prevention | Class | Audio-based educational content delivery system, such as the Protect Kids Online (PKO) Podcast. |
 | **PretextBasedApproach** | ext.cac.cacontology-street-recruitment | Class | Initial approach using false pretext or offer of assistance to establish contact. |
@@ -485,7 +486,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **AcademicPartner** | ext.cac.cacontology-partnerships | Class | Academic institution participating in partnership with research and training capabilities. Modele... |
 | **AcademicPartnership** | ext.cac.cacontology-partnerships | Class | Partnership with academic institutions for research, training, and technology development in chil... |
 | **AcademicTermPhase** | ext.cac.cacontology-educational-exploitation | Class | Anti-rigid phase representing academic terms during which exploitation may occur. |
-| **AccessRestriction** | ext.toolcap | Class | An access restriction is a marking definition that describes a security, licensing, classificatio... |
+| **AccessRestriction** | ext.toolcap.toolcap | Class | An access restriction is a marking definition that describes a security, licensing, classificatio... |
 | **AccommodationMotion** | ext.cac.cacontology-case-management | Class | Court filing requesting witness or victim accommodations needed for testimony, accessibility, or ... |
 | **AccountLinking** | ext.cac.cacontology-us-ncmec | Class | Process of linking digital accounts to suspects through NCMEC tip analysis. |
 | **ActionLifecycle** | uco.action | Class | An action lifecycle is an action pattern consisting of an ordered set of multiple actions or subo... |
@@ -527,7 +528,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **AutonomousSystem** | uco.observable | Class | An autonomous system is a collection of connected Internet Protocol (IP) routing prefixes under t... |
 | **AutonomousSystemFacet** | uco.observable | Facet | An autonomous system facet is a grouping of characteristics unique to a collection of connected I... |
 | **BarricadeSituation** | ext.cac.cacontology-tactical | Class | Situation where suspect has barricaded themselves and refuses to surrender. A state/context, not ... |
-| **BenchmarkObservation** | ext.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
+| **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
 | **BlockDeviceNode** | uco.observable | Class | A block device node is a UNIX filesystem special file that serves as a conduit to communicate wit... |
 | **BotConfiguration** | uco.observable | Class | A bot configuration is a set of contextual settings for a software application that runs automate... |
 | **BrowserBookmark** | uco.observable | Class | A browser bookmark is a saved shortcut that directs a WWW (World Wide Web) browser software progr... |
@@ -538,7 +539,8 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **CSAMSolicitationAnnotation** | ext.cac.cacontology-us-ncmec | Class | Annotation indicating the report is associated with solicitation of CSAM. Source: NCMEC Cybertip ... |
 | **Call** | uco.observable | Class | A call is a connection as part of a realtime cyber communication between one or more parties. |
 | **CallFacet** | uco.observable | Facet | A call facet is a grouping of characteristics unique to a connection as part of a realtime cyber ... |
-| **CapabilityMatrix** | ext.toolcap | Class | DEPRECATED in 0.4.0. The capability matrix concept is superseded by querying the overall graph of... |
+| **Capability** | ext.toolcap.capability | Class | A capability is the ability of an entity to perform some action or produce some result. Capabilit... |
+| **CapabilityMatrix** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. The capability matrix concept is superseded by querying the overall graph of... |
 | **CapacityBuildingPartner** | ext.cac.cacontology-training | Class | Partner organization supporting capacity building efforts. Modeled as gUFO Organization. |
 | **CaregiverRelationship** | ext.cac.cacontology-custodial | Class | Relationship involving responsibility for child's care, welfare, or supervision. Modeled as gUFO ... |
 | **CaseDocumentation** | ext.cac.cacontology-case-management | Class | Comprehensive documentation management for case files, reports, evidence logs, and legal document... |
@@ -940,6 +942,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **MobileDeviceFacet** | uco.observable | Facet | A mobile device facet is a grouping of characteristics unique to a portable computing device. [ba... |
 | **MobilePhone** | uco.observable | Class | A mobile phone is a portable telephone that at least can make and receive calls over a radio freq... |
 | **MobileRecordingDevice** | ext.cac.cacontology-production | Class | Mobile phone, tablet, or portable device used for recording. |
+| **Module** | ext.toolcap.capability | Class | A module is a discrete, potentially reusable component of a larger software system. In forensic t... |
 | **MultiAgencyCoordination** | ext.cac.cacontology-investigation-coordination | Class | Coordination involving multiple law enforcement agencies at various jurisdictional levels. |
 | **MultiAgencyVictimResponse** | ext.cac.cacontology-victim-impact | Class | Coordinated victim assistance involving multiple agencies across jurisdictions. |
 | **MultiCountryTakedown** | ext.cac.cacontology-international | Class | Coordinated takedown operation involving law enforcement from multiple countries (like Kidflix op... |
@@ -1037,6 +1040,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **ParentNetworkDiscovery** | ext.cac.cacontology-athletic-exploitation | Class | Discovery through parent community networks and team family communications. Enhanced as gUFO Event. |
 | **ParentPersona** | ext.cac.cacontology-undercover | Class | Undercover identity portraying a parent or guardian of a child victim. |
 | **ParentalVigilanceProgram** | ext.cac.cacontology-prevention | Class | Program educating parents on recognizing signs of child exploitation and reporting. |
+| **Parser** | ext.toolcap.capability | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
 | **ParticipatingAgency** | ext.cac.cacontology-multi-jurisdiction | Class | Agency providing support or resources to multi-jurisdictional investigation. |
 | **PartnerRole** | ext.cac.cacontology-partnerships | Class | Role played by an organization within a public-private partnership framework. Modeled as anti-rig... |
 | **PartnershipFormationPhase** | ext.cac.cacontology-partnerships | Class | Phase of partnership formation including agreement negotiation and framework establishment. Model... |
@@ -1059,7 +1063,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **PlatformCooperation** | ext.cac.cacontology-us-ncmec | Class | Cooperation from digital platforms in providing information for NCMEC tips. |
 | **PlatformInfrastructure** | ext.cac.cacontology-platform-infrastructure | Class | Technical infrastructure supporting child exploitation platforms, including servers, networks, an... |
 | **PlatformInvestigationCoordination** | ext.cac.cacontology-platforms | Class | Coordinated investigation across multiple platforms and devices. |
-| **PlatformSpecification** | ext.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
+| **PlatformSpecification** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
 | **Plea** | ext.legalproc.legalproc | Class | A plea is a defendant's formal answer to a criminal charge. See Federal Rule of Criminal Procedur... |
 | **PleaAgreement** | ext.cryptoinv.cryptoinv | Class | A plea agreement is a negotiated agreement under Federal Rule of Criminal Procedure 11(c) (https:... |
 | **PocketLitter** | ext.aeo.engagement | Class | Pocket litter describes objects placed prior or during an adversary engagement operation for the ... |
@@ -1256,7 +1260,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **TipPrioritization** | ext.cac.cacontology-us-ncmec | Class | Priority assessment and ranking of NCMEC tips for investigation. |
 | **TipProcessing** | ext.cac.cacontology-us-ncmec | Class | Processing workflow for NCMEC tips from receipt to investigation referral. |
 | **TipValidation** | ext.cac.cacontology-us-ncmec | Class | Validation and verification of information in NCMEC tips. |
-| **ToolCapability** | ext.toolcap | Class | DEPRECATED in 0.4.0. Use capability:Capability (proposed uco-capability:Capability) instead, link... |
+| **ToolCapability** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use capability:Capability (proposed uco-capability:Capability) instead, link... |
 | **TraffickingEnterprise** | ext.cac.cacontology-sex-trafficking | Class | Criminal organization engaged in systematic sex trafficking operations with multiple defendants a... |
 | **TraffickingNetworkSituation** | ext.cac.cacontology-sex-trafficking | Class | Complex situation encompassing active trafficking network operations across multiple jurisdictions. |
 | **TraffickingOfPersonsForSexualServitudeCharge** | ext.cac.cacontology-legal-outcomes | Class | Georgia state charge for trafficking of persons for sexual servitude, as reported in a Georgia At... |
@@ -1841,7 +1845,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **PlatformModerationPhase** | ext.cac.cacontology-platforms | Class | Phase of active content moderation and policy enforcement. Modeled as anti-rigid gUFO Phase. |
 | **PlatformMonitoring** | ext.cac.cacontology-partnerships | Class | Cooperative monitoring of platforms and services for illegal content and activities. Modeled as g... |
 | **PlatformOperation** | ext.cac.cacontology-platforms | Class | Coordinated law enforcement operation targeting specific platforms or services. Modeled as gUFO E... |
-| **PlatformSpecification** | ext.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
+| **PlatformSpecification** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
 | **PlatformTakedownPhase** | ext.cac.cacontology-platforms | Class | Phase of platform takedown and shutdown operations. Modeled as anti-rigid gUFO Phase. |
 | **PleaAgreement** | ext.cryptoinv.cryptoinv | Class | A plea agreement is a negotiated agreement under Federal Rule of Criminal Procedure 11(c) (https:... |
 | **PleaBargaining** | ext.cac.cacontology-legal-outcomes | Class | Negotiation process between prosecution and defense for plea agreement. Modeled as gUFO Event. |
@@ -2159,7 +2163,7 @@ Classes for installed applications, operating systems, software packages, and pr
 | **AuditProcess** | ext.cac.cacontology-legal-harmonization | Class | Audit for compliance verification. |
 | **AutomatedEvidenceDistribution** | ext.cac.cacontology-multi-jurisdiction | Class | Automated system for distributing evidence packages to appropriate jurisdictions based on user lo... |
 | **AutomatedReporterAgent** | ext.cac.cacontology-hotlines | Class | A software agent that automatically reports content to hotlines. Enhanced as gUFO Object for comp... |
-| **BenchmarkObservation** | ext.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
+| **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
 | **BillDrafting** | ext.cac.cacontology-legal-harmonization | Class | Process of drafting legislation. |
 | **BlackberryPhone** | uco.observable | Class | A blackberry phone is a smart phone that applies the Blackberry OS mobile operating system. (Blac... |
 | **BookingAction** | ext.cac.cacontology-tactical | Class | Process of booking a suspect into a correctional facility including fingerprinting, photography, ... |
@@ -2172,6 +2176,7 @@ Classes for installed applications, operating systems, software packages, and pr
 | **BuildInformationType** | uco.tool | Class | A build information type is a grouping of characteristics that describe how a particular version ... |
 | **BuildUtilityType** | uco.tool | Class | A build utility type characterizes the tool used to convert from source code to executable code f... |
 | **BullyingPrevention** | ext.cac.cacontology-prevention | Class | Prevention programs focused on reducing bullying and shaming. |
+| **Capability** | ext.toolcap.capability | Class | A capability is the ability of an entity to perform some action or produce some result. Capabilit... |
 | **CapacityBuildingProgram** | ext.cac.cacontology-training | Class | Structured program for building organizational and individual capacity. Modeled as gUFO Organizat... |
 | **CaseAnalystRole** | ext.cac.cacontology-case-management | Class | Role responsible for case analysis, intelligence gathering, and data processing. Enhanced as anti... |
 | **CaseClosure** | ext.cac.cacontology-case-management | Class | Formal case closure process including disposition, appeals status, and archival procedures. Enhan... |
@@ -2274,6 +2279,7 @@ Classes for installed applications, operating systems, software packages, and pr
 | **MetadataExtractionAction** | ext.cac.cacontology-forensics | Class | The action of extracting metadata from digital artifacts including EXIF, file system timestamps, ... |
 | **ModelIdentification** | ext.cac.cacontology-ai-csam | Class | Process of identifying the specific AI model or algorithm used to generate illegal content. Enhan... |
 | **ModelTraining** | ext.cac.cacontology-ai-csam | Class | Process of training AI models on datasets that may include illegal content for the purpose of gen... |
+| **Module** | ext.toolcap.capability | Class | A module is a discrete, potentially reusable component of a larger software system. In forensic t... |
 | **Mutex** | uco.observable | Class | A mutex is a mechanism that enforces limits on access to a resource when there are many threads o... |
 | **MutexFacet** | uco.observable | Facet | A mutex facet is a grouping of characteristics unique to a mechanism that enforces limits on acce... |
 | **MutualLegalAssistanceTreatyOperation** | ext.cac.cacontology-international | Class | Operational process using Mutual Legal Assistance Treaty (MLAT) for international evidence sharin... |
@@ -2289,12 +2295,13 @@ Classes for installed applications, operating systems, software packages, and pr
 | **OperatingSystemFacet** | uco.observable | Facet | An operating system facet is a grouping of characteristics unique to the software that manages co... |
 | **ParentEducation** | ext.cac.cacontology-prevention | Class | Education programs for parents and caregivers. |
 | **ParentalVigilanceProgram** | ext.cac.cacontology-prevention | Class | Program educating parents on recognizing signs of child exploitation and reporting. |
+| **Parser** | ext.toolcap.capability | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
 | **PaymentProcessing** | ext.cac.cacontology-platform-infrastructure | Class | Financial processing systems enabling platform monetization through subscription fees, content pu... |
 | **PeerReview** | ext.cac.cacontology-case-management | Class | Peer review process for case methodology, analysis, and conclusions. Enhanced as gUFO Event. |
 | **PeerSupport** | ext.cac.cacontology-specialized-units | Class | Peer-to-peer support programs for CAC personnel. Modeled as gUFO Organization. |
 | **Phase** | ext.cac.cac-core | Class | A temporal stage of some enduring entity, process, or situation. The bearer remains the same enti... |
 | **Pipe** | uco.observable | Class | A pipe is a mechanism for one-way inter-process communication using message passing where data wr... |
-| **PlatformSpecification** | ext.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
+| **PlatformSpecification** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
 | **PleaBargaining** | ext.cac.cacontology-legal-outcomes | Class | Negotiation process between prosecution and defense for plea agreement. Modeled as gUFO Event. |
 | **PolicyHarmonization** | ext.cac.cacontology-legal-harmonization | Class | Process of harmonizing policies across jurisdictions. |
 | **PreventionEffectiveness** | ext.cac.cacontology-prevention | Class | Assessment of prevention program effectiveness. |
@@ -2343,7 +2350,7 @@ Classes for installed applications, operating systems, software packages, and pr
 | **TechnologySharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of technology resources including software, databases, communication systems, and analyti... |
 | **TipProcessing** | ext.cac.cacontology-us-ncmec | Class | Processing workflow for NCMEC tips from receipt to investigation referral. |
 | **Tool** | uco.tool | Class | A tool is an element of hardware and/or software utilized to carry out a particular function. |
-| **ToolCapability** | ext.toolcap | Class | DEPRECATED in 0.4.0. Use capability:Capability (proposed uco-capability:Capability) instead, link... |
+| **ToolCapability** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use capability:Capability (proposed uco-capability:Capability) instead, link... |
 | **TrainingCoordinator** | ext.cac.cacontology-training | Class | Coordinator responsible for organizing training programs. Modeled as anti-rigid gUFO Role. |
 | **TrainingParticipant** | ext.cac.cacontology-training | Class | Professional participating in training programs. Modeled as anti-rigid gUFO Role. |
 | **TrialProceeding** | ext.cac.cacontology-legal-outcomes | Class | Formal trial process with jury or judge determining guilt or innocence. Modeled as gUFO Event. |
@@ -2523,6 +2530,7 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **BrowserCookie** | uco.observable | Class | A browser cookie is a piece of of data sent from a website and stored on the user's computer by t... |
 | **BrowserCookieFacet** | uco.observable | Facet | A browser cookie facet is a grouping of characteristics unique to a piece of data sent from a web... |
 | **CEOSdivision** | ext.cac.cacontology-usa-federal-law | Class | DOJ Child Exploitation and Obscenity Section serving unique and critical function in enforcement ... |
+| **Capability** | ext.toolcap.capability | Class | A capability is the ability of an entity to perform some action or produce some result. Capabilit... |
 | **CapabilityPattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling specialized capabilities as intrinsic properties of organizations or in... |
 | **CapacityBuildingPartner** | ext.cac.cacontology-training | Class | Partner organization supporting capacity building efforts. Modeled as gUFO Organization. |
 | **CapacityBuildingProgram** | ext.cac.cacontology-training | Class | Structured program for building organizational and individual capacity. Modeled as gUFO Organizat... |
@@ -2966,6 +2974,7 @@ Classes for email messages, SMS/MMS, chat messages, and communication metadata. 
 | **OnlineIdentifier** | ext.cac.cacontology-sex-offender-registry | Class | Online username, email, or identifier used by registered sex offender. |
 | **OpenChatRooms** | ext.cac.cacontology-platforms | Class | Chat rooms open to anonymous users without verification or moderation. |
 | **ParentCommunityEmailList** | ext.cac.cacontology-prevention | Class | Specialized email list for parent and community safety updates and archived publication access. |
+| **Parser** | ext.toolcap.capability | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
 | **Pipe** | uco.observable | Class | A pipe is a mechanism for one-way inter-process communication using message passing where data wr... |
 | **Post** | uco.observable | Class | A post is message submitted to an online discussion/publishing site (forum, blog, etc.). |
 | **PrivateMessage** | ext.cac.cacontology-platforms | Class | Private messages or direct communications on social media platforms. |
@@ -3101,7 +3110,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **AthleticContactEscalation** | ext.cac.cacontology-athletic-exploitation | Class | Escalation of physical contact within legitimate athletic training context. Enhanced as gUFO Event. |
 | **AutomatedEvidenceDistribution** | ext.cac.cacontology-multi-jurisdiction | Class | Automated system for distributing evidence packages to appropriate jurisdictions based on user lo... |
 | **AutomatedReporterAgent** | ext.cac.cacontology-hotlines | Class | A software agent that automatically reports content to hotlines. Enhanced as gUFO Object for comp... |
-| **BenchmarkObservation** | ext.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
+| **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
 | **BlackberryPhone** | uco.observable | Class | A blackberry phone is a smart phone that applies the Blackberry OS mobile operating system. (Blac... |
 | **BluetoothAddress** | uco.observable | Class | A Bluetooth address is a Bluetooth standard conformant identifier assigned to a Bluetooth device ... |
 | **BluetoothAddressFacet** | uco.observable | Facet | A Bluetooth address facet is a grouping of characteristics unique to a Bluetooth standard conform... |
@@ -3245,6 +3254,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **OverClothingToUnderClothingEscalation** | ext.cac.cacontology-athletic-exploitation | Class | Progression from over-clothing to under-clothing contact during athletic activities. Enhanced as ... |
 | **ParallelEventCluster** | ext.cac.cacontology-temporal | Class | Set of investigation events occurring simultaneously or with temporal overlap. Modeled as gUFO co... |
 | **ParallelEvidenceCollectionSituation** | ext.cac.cacontology-temporal | Class | Situation where multiple evidence collection activities occur simultaneously across different pha... |
+| **Parser** | ext.toolcap.capability | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
 | **PathRelationFacet** | uco.observable | Facet | A path relation facet is a grouping of characteristics unique to the location of one object withi... |
 | **PerceptualHash** | ext.cac.cacontology-detection | Class | A hash that captures visual similarity rather than exact bit patterns (e.g., pHash, aHash, dHash)... |
 | **PersonalMeetingDemand** | ext.cac.cacontology-sextortion | Class | Demand for in-person meeting or physical contact. |
@@ -3478,7 +3488,7 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **BackgroundCheck** | ext.cac.cacontology-custodial | Class | Background verification conducted for custodial or care position. Modeled as gUFO Object with ver... |
 | **Beacon** | ext.aeo.engagement | Class | An Beacon action is refer to communication between two objects where the performer is an object a... |
 | **BehavioralPrevention** | ext.cac.cacontology-prevention | Class | Prevention strategies focused on behavioral changes. |
-| **BenchmarkObservation** | ext.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
+| **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
 | **BiometricInconsistencyAnalysis** | ext.cac.cacontology-ai-csam | Class | Analysis of biometric inconsistencies in AI-generated content, such as unnatural eye movements or... |
 | **BookingAction** | ext.cac.cacontology-tactical | Class | Process of booking a suspect into a correctional facility including fingerprinting, photography, ... |
 | **BullyingPrevention** | ext.cac.cacontology-prevention | Class | Prevention programs focused on reducing bullying and shaming. |
@@ -3489,6 +3499,7 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **CalendarEntry** | uco.observable | Class | A calendar entry is an appointment, meeting or event within a collection of appointments, meeting... |
 | **CalendarEntryFacet** | uco.observable | Facet | A calendar entry facet is a grouping of characteristics unique to an appointment, meeting, or eve... |
 | **CalendarFacet** | uco.observable | Facet | A calendar facet is a grouping of characteristics unique to a collection of appointments, meeting... |
+| **Capability** | ext.toolcap.capability | Class | A capability is the ability of an entity to perform some action or produce some result. Capabilit... |
 | **CaseAssignment** | ext.cac.cacontology-case-management | Class | Assignment of personnel and resources to specific cases with defined roles and responsibilities. ... |
 | **CaseClosure** | ext.cac.cacontology-case-management | Class | Formal case closure process including disposition, appeals status, and archival procedures. Enhan... |
 | **CaseMetrics** | ext.cac.cacontology-case-management | Class | Performance metrics and analytics for case management including duration, resolution rates, and r... |
@@ -3764,7 +3775,7 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **PlannedEvent** | ext.aeo.engagement | Class | A PlannedEvent is a collection of actions, entities, interactions designated to be performed at s... |
 | **PlatformMonitoring** | ext.cac.cacontology-partnerships | Class | Cooperative monitoring of platforms and services for illegal content and activities. Modeled as g... |
 | **PlatformOperation** | ext.cac.cacontology-platforms | Class | Coordinated law enforcement operation targeting specific platforms or services. Modeled as gUFO E... |
-| **PlatformSpecification** | ext.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
+| **PlatformSpecification** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
 | **PleaAgreement** | ext.cryptoinv.cryptoinv | Class | A plea agreement is a negotiated agreement under Federal Rule of Criminal Procedure 11(c) (https:... |
 | **PleaBargaining** | ext.cac.cacontology-legal-outcomes | Class | Negotiation process between prosecution and defense for plea agreement. Modeled as gUFO Event. |
 | **PositionOfTrustExploitation** | ext.cac.cacontology-educational-exploitation | Class | Exploitation leveraging educator's position of trust and authority over students. Enhanced as gUF... |
@@ -4007,7 +4018,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **AIContentDetection** | ext.cac.cacontology-ai-csam | Class | Process of identifying AI-generated or AI-altered content to distinguish from authentic material ... |
 | **AIContentInvestigationSituation** | ext.cac.cacontology-ai-csam | Class | Complex situation involving multiple stakeholders, technologies, and legal frameworks for investi... |
 | **AIForensicAnalyst** | ext.cac.cacontology-ai-csam | Class | Anti-rigid role of specialist analyzing AI-generated content for authenticity and generation meth... |
-| **AccessRestriction** | ext.toolcap | Class | An access restriction is a marking definition that describes a security, licensing, classificatio... |
+| **AccessRestriction** | ext.toolcap.toolcap | Class | An access restriction is a marking definition that describes a security, licensing, classificatio... |
 | **AcquisitionPhase** | ext.cac.cacontology-forensics | Class | Phase involving forensic acquisition of digital evidence. |
 | **ActiveInvestigationPhase** | ext.cac.cacontology-case-management | Class | Phase during which active investigation activities occur including evidence collection and analys... |
 | **AdministrativeReview** | ext.cac.cacontology-case-management | Class | Administrative review of case management, resource allocation, and procedural compliance. Enhance... |
@@ -4019,7 +4030,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **Attorney** | case.investigation | Class | Attorney is a role involved in preparing, interpreting, and applying law. |
 | **Authorization** | case.investigation | Class | An authorization is a grouping of characteristics unique to some form of authoritative permission... |
 | **BathroomSurveillance** | ext.cac.cacontology-production | Class | Specific surveillance of bathroom facilities, as observed in Vermont case. |
-| **BenchmarkObservation** | ext.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
+| **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
 | **BookingAction** | ext.cac.cacontology-tactical | Class | Process of booking a suspect into a correctional facility including fingerprinting, photography, ... |
 | **CACInvestigation** | ext.cac.cacontology | Class | A child-protection investigation that follows a standard action lifecycle that commonly begins wi... |
 | **CACTInvestigation** | ext.cac.cacontology-asset-forfeiture | Class | Investigation conducted by Criminal Assets Confiscation Taskforce targeting assets of child explo... |
@@ -4178,6 +4189,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **MemoryDump** | ext.cac.cacontology-forensics | Class | A snapshot of volatile system memory captured for forensic analysis. |
 | **MemoryForensicTool** | ext.cac.cacontology-forensics | Class | A tool specialized for analyzing volatile memory dumps (e.g., Volatility, Rekall, MAGNET RAM Capt... |
 | **MobileForensicTool** | ext.cac.cacontology-forensics | Class | A tool specialized for mobile device forensics including logical and physical extraction (e.g., C... |
+| **Module** | ext.toolcap.capability | Class | A module is a discrete, potentially reusable component of a larger software system. In forensic t... |
 | **MultiJurisdictionCoordinationSituation** | ext.cac.cacontology-temporal | Class | Situation where investigation requires coordination across multiple jurisdictions with timing syn... |
 | **MultiJurisdictionalCaseManagement** | ext.cac.cacontology-case-management | Class | Specialized management for cases spanning multiple jurisdictions with coordination requirements. ... |
 | **MultiJurisdictionalInvestigation** | ext.cac.cacontology-multi-jurisdiction | Class | Investigation spanning multiple legal jurisdictions requiring coordination between agencies. |
@@ -4195,6 +4207,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **ParallelEventCluster** | ext.cac.cacontology-temporal | Class | Set of investigation events occurring simultaneously or with temporal overlap. Modeled as gUFO co... |
 | **ParallelInvestigation** | ext.cac.cacontology-investigation-coordination | Class | Parallel investigation where multiple agencies investigate related aspects independently while ma... |
 | **ParentalConsent** | ext.cac.cacontology-custodial | Class | Consent given by parent or guardian for custodial arrangement. Modeled as gUFO Object with author... |
+| **Parser** | ext.toolcap.capability | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
 | **ParticipatingAgency** | ext.cac.cacontology-multi-jurisdiction | Class | Agency providing support or resources to multi-jurisdictional investigation. |
 | **PeerReview** | ext.cac.cacontology-case-management | Class | Peer review process for case methodology, analysis, and conclusions. Enhanced as gUFO Event. |
 | **Phase3Wave1** | ext.cac.cacontology-integration-patterns | Class | First wave implementing high-priority modules (forensics, multi-jurisdiction, legal outcomes, tas... |
@@ -4257,7 +4270,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **TimelineAnalysisAction** | ext.cac.cacontology-forensics | Class | The action of creating chronological sequences of digital artifacts and events for investigation ... |
 | **TipPrioritization** | ext.cac.cacontology-us-ncmec | Class | Priority assessment and ranking of NCMEC tips for investigation. |
 | **TipProcessing** | ext.cac.cacontology-us-ncmec | Class | Processing workflow for NCMEC tips from receipt to investigation referral. |
-| **ToolCapability** | ext.toolcap | Class | DEPRECATED in 0.4.0. Use capability:Capability (proposed uco-capability:Capability) instead, link... |
+| **ToolCapability** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use capability:Capability (proposed uco-capability:Capability) instead, link... |
 | **TrafficStop** | ext.cac.cacontology-tactical | Class | Investigative traffic stop used as part of undercover operation or to apprehend suspect. Extends ... |
 | **TraffickingCoordinationCenter** | ext.cac.cacontology-multi-jurisdiction | Class | Center coordinating multi-state trafficking investigations. |
 | **TraffickingInvestigationTask** | ext.cac.cacontology-multi-jurisdiction | Class | Specific investigation task in multi-state trafficking case. |
@@ -4350,7 +4363,7 @@ Classes for documenting forensic tools, their versions, build information, and c
 |-------|--------|------|-------------|
 | **AIDetectionTool** | ext.cac.cacontology-ai-csam | Class | Software tool specialized for detecting AI-generated content in digital media. Enhanced as gUFO O... |
 | **API** | uco.observable | Class | An API (application programming interface) is a computing interface that defines interactions bet... |
-| **AccessRestriction** | ext.toolcap | Class | An access restriction is a marking definition that describes a security, licensing, classificatio... |
+| **AccessRestriction** | ext.toolcap.toolcap | Class | An access restriction is a marking definition that describes a security, licensing, classificatio... |
 | **AnalyticTool** | uco.tool | Class | An analytic tool is an artifact of hardware and/or software utilized to accomplish a task or purp... |
 | **Appliance** | uco.observable | Class | An appliance is a purpose-built computer with software or firmware that is designed to provide a ... |
 | **Application** | uco.observable | Class | An application is a particular software program designed for end users. |
@@ -4359,7 +4372,7 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **ApplicationFacet** | uco.observable | Facet | An application facet is a grouping of characteristics unique to a particular software program des... |
 | **ApplicationVersion** | uco.observable | Class | An application version is a grouping of characteristics unique to a particular software program v... |
 | **AutomatedReporterAgent** | ext.cac.cacontology-hotlines | Class | A software agent that automatically reports content to hotlines. Enhanced as gUFO Object for comp... |
-| **BenchmarkObservation** | ext.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
+| **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
 | **BotConfiguration** | uco.observable | Class | A bot configuration is a set of contextual settings for a software application that runs automate... |
 | **BreachingTool** | ext.cac.cacontology-tactical | Class | Tool used to gain entry through doors, walls, or barriers. |
 | **BrowserBookmark** | uco.observable | Class | A browser bookmark is a saved shortcut that directs a WWW (World Wide Web) browser software progr... |
@@ -4367,7 +4380,8 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **BuildFacet** | uco.tool | Facet | A build facet is a grouping of characteristics unique to a particular version of a software. |
 | **BuildInformationType** | uco.tool | Class | A build information type is a grouping of characteristics that describe how a particular version ... |
 | **BuildUtilityType** | uco.tool | Class | A build utility type characterizes the tool used to convert from source code to executable code f... |
-| **CapabilityMatrix** | ext.toolcap | Class | DEPRECATED in 0.4.0. The capability matrix concept is superseded by querying the overall graph of... |
+| **Capability** | ext.toolcap.capability | Class | A capability is the ability of an entity to perform some action or produce some result. Capabilit... |
+| **CapabilityMatrix** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. The capability matrix concept is superseded by querying the overall graph of... |
 | **CapacityBuilding** | ext.cac.cacontology-legal-harmonization | Class | Building legal capacity for child protection. |
 | **CapacityBuildingPartner** | ext.cac.cacontology-training | Class | Partner organization supporting capacity building efforts. Modeled as gUFO Organization. |
 | **CapacityBuildingProgram** | ext.cac.cacontology-training | Class | Structured program for building organizational and individual capacity. Modeled as gUFO Organizat... |
@@ -4421,6 +4435,7 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **MemoryForensicTool** | ext.cac.cacontology-forensics | Class | A tool specialized for analyzing volatile memory dumps (e.g., Volatility, Rekall, MAGNET RAM Capt... |
 | **MetadataAnalysisTool** | ext.cac.cacontology-ai-csam | Class | Tool for analyzing metadata patterns that may indicate AI generation or manipulation. Enhanced as... |
 | **MobileForensicTool** | ext.cac.cacontology-forensics | Class | A tool specialized for mobile device forensics including logical and physical extraction (e.g., C... |
+| **Module** | ext.toolcap.capability | Class | A module is a discrete, potentially reusable component of a larger software system. In forensic t... |
 | **NetworkAppliance** | uco.observable | Class | A network appliance is a purpose-built computer with software or firmware that is designed to pro... |
 | **NetworkForensicTool** | ext.cac.cacontology-forensics | Class | A tool specialized for network traffic analysis and packet capture (e.g., Wireshark, NetworkMiner... |
 | **NetworkInterface** | uco.observable | Class | A network interface is a software or hardware interface between two pieces of equipment or protoc... |
@@ -4430,7 +4445,8 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **OperatingSystem** | uco.observable | Class | An operating system is the software that manages computer hardware, software resources, and provi... |
 | **OperatingSystemFacet** | uco.observable | Facet | An operating system facet is a grouping of characteristics unique to the software that manages co... |
 | **ParentalControl** | ext.cac.cacontology-prevention | Class | Technology tools for parental oversight. |
-| **PlatformSpecification** | ext.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
+| **Parser** | ext.toolcap.capability | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
+| **PlatformSpecification** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
 | **ProsecutionPreparationPhase** | ext.cac.cacontology-case-management | Class | Phase involving preparation for prosecution including legal review and case building. Anti-rigid ... |
 | **RapidEscalationGrooming** | ext.cac.cacontology-grooming | Class | Grooming with accelerated timeline from initial contact to exploitation attempt, bypassing tradit... |
 | **RiskAssessmentTool** | ext.cac.cacontology-prevention | Class | Tool for assessing risks to child safety. |
@@ -4446,7 +4462,7 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **TechnicalDataSharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of technical data including forensic tools, methodologies, and technical analysis results. |
 | **TechnologySharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of technology resources including software, databases, communication systems, and analyti... |
 | **Tool** | uco.tool | Class | A tool is an element of hardware and/or software utilized to carry out a particular function. |
-| **ToolCapability** | ext.toolcap | Class | DEPRECATED in 0.4.0. Use capability:Capability (proposed uco-capability:Capability) instead, link... |
+| **ToolCapability** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use capability:Capability (proposed uco-capability:Capability) instead, link... |
 | **ToolDevelopment** | ext.cac.cacontology-partnerships | Class | Joint development of investigative tools and technologies for law enforcement use. Modeled as gUF... |
 | **TrustBuildingBehavior** | ext.cac.cacontology-grooming | Class | Early grooming stage focused on establishing emotional connection with the child victim. |
 | **TrustBuildingPhase** | ext.cac.cacontology-grooming | Class | Phase focused on building emotional connection and trust with victim. |
@@ -4556,7 +4572,7 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **AnnualRegistrationReview** | ext.cac.cacontology-sex-offender-registry | Class | Annual review and update of sex offender registration information. |
 | **AssetForfeitureAction** | ext.cac.cacontology-asset-forfeiture | Class | Legal action to forfeit assets derived from or used in child exploitation crimes. Enhanced as gUF... |
 | **AthleticCoachingExploitation** | ext.cac.cacontology-athletic-exploitation | Class | Child sexual exploitation committed by athletic coaches using sports authority, team dynamics, an... |
-| **BenchmarkObservation** | ext.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
+| **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
 | **Call** | uco.observable | Class | A call is a connection as part of a realtime cyber communication between one or more parties. |
 | **CallFacet** | uco.observable | Facet | A call facet is a grouping of characteristics unique to a connection as part of a realtime cyber ... |
 | **CaseDurationMetrics** | ext.cac.cacontology-case-management | Class | Metrics tracking case duration from opening to closure across different stages. Enhanced as gUFO ... |
@@ -4745,7 +4761,7 @@ Classes for marking data with handling restrictions, classification levels, TLP 
 | **Access** | ext.aeo.engagement | Class | An Access action refers to an observed or deduced interaction between an entity and an object. |
 | **AccessControlSystem** | ext.cac.cacontology-extremist-enterprises | Class | System controlling access to enterprise channels and resources based on member status and content... |
 | **AccessPrivilegeAbuse** | ext.cac.cacontology-law-enforcement-corruption | Class | Abuse of special access privileges granted to law enforcement personnel. |
-| **AccessRestriction** | ext.toolcap | Class | An access restriction is a marking definition that describes a security, licensing, classificatio... |
+| **AccessRestriction** | ext.toolcap.toolcap | Class | An access restriction is a marking definition that describes a security, licensing, classificatio... |
 | **AccommodationMotion** | ext.cac.cacontology-case-management | Class | Court filing requesting witness or victim accommodations needed for testimony, accessibility, or ... |
 | **AccountAuthenticationFacet** | uco.observable | Facet | An account authentication facet is a grouping of characteristics unique to the mechanism of acces... |
 | **AlternateAccountSystem** | ext.cac.cacontology-extremist-enterprises | Class | System of alternate accounts (alts) used to evade platform restrictions and maintain operations. |
@@ -4756,7 +4772,7 @@ Classes for marking data with handling restrictions, classification levels, TLP 
 | **ArtifactClassificationResultFacet** | uco.analysis | Facet | An artifact classification result facet is a grouping of characteristics unique to the results of... |
 | **AssessmentResult** | ext.cac.cac-core | Class | An output or conclusion of some evaluative, analytic, classification, or decision-making process.... |
 | **AutomatedContentAnalysis** | ext.cac.cacontology-forensics | Class | Automated analysis of large volumes of content using machine learning and AI for rapid classifica... |
-| **BenchmarkObservation** | ext.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
+| **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
 | **BlockDeviceNode** | uco.observable | Class | A block device node is a UNIX filesystem special file that serves as a conduit to communicate wit... |
 | **BrowserBookmark** | uco.observable | Class | A browser bookmark is a saved shortcut that directs a WWW (World Wide Web) browser software progr... |
 | **BrowserBookmarkFacet** | uco.observable | Facet | A browser bookmark facet is a grouping of characteristics unique to a saved shortcut that directs... |
@@ -7337,7 +7353,15 @@ Extension ontologies add domain-specific classes beyond the core CASE/UCO specif
 | **EnterpriseRole** | Class | An enterprise role is a functional position or division-of-labor responsibility that a member or ... |
 | **RacketeeringEnterprise** | Class | A racketeering enterprise is an 'enterprise' as defined in 18 U.S.C. § 1961(4) (https://www.law.c... |
 
-### toolcap
+### toolcap.capability
+
+| Class | Type | Description |
+|-------|------|-------------|
+| **Capability** | Class | A capability is the ability of an entity to perform some action or produce some result. Capabilit... |
+| **Module** | Class | A module is a discrete, potentially reusable component of a larger software system. In forensic t... |
+| **Parser** | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
+
+### toolcap.toolcap
 
 | Class | Type | Description |
 |-------|------|-------------|

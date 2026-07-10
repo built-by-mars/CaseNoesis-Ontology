@@ -46,6 +46,8 @@ class GraphValidationReport:
     safe_summary: str
     undeclared_concepts: tuple[str, ...] = ()
     concept_guidance: str = ""
+    unknown_upper_ontology_terms: tuple[str, ...] = ()
+    role_mismatches: tuple[tuple[str, str, str], ...] = ()
 
 
 def validator_available() -> bool:
@@ -91,6 +93,41 @@ def load_extension_ontology_paths(
     return paths
 
 
+def resolve_extension_dependencies(
+    extension_names: list[str],
+    project_root: Path = PROJECT_ROOT,
+) -> list[str]:
+    """Expand an extension list with manifest ``depends_on`` entries.
+
+    An extension whose exemplars/graphs reuse another extension's terms (e.g.
+    ``rico`` builds on ``legalproc``) declares ``"depends_on": [...]`` in its
+    manifest; callers then only need to name the top-level extension. The
+    ``:full`` suffix on a requested name is preserved; dependencies load in
+    their default (subset-preferred) mode. Cycles are tolerated.
+    """
+
+    resolved: list[str] = []
+    seen: set[str] = set()
+    queue = list(extension_names)
+    while queue:
+        name = queue.pop(0)
+        clean = name.removesuffix(":full")
+        if clean in seen:
+            continue
+        seen.add(clean)
+        resolved.append(name)
+        manifest_path = project_root / "extensions" / clean / "manifest.json"
+        if manifest_path.is_file():
+            try:
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            for dep in manifest.get("depends_on", []):
+                if dep not in seen:
+                    queue.append(dep)
+    return resolved
+
+
 def extension_has_validation_subset(ext_name: str, project_root: Path = PROJECT_ROOT) -> bool:
     """Return True when an extension publishes a validation-subset manifest."""
 
@@ -105,6 +142,7 @@ def extension_ontology_args(
 
     if not extension_names:
         return []
+    extension_names = resolve_extension_dependencies(extension_names, project_root)
     args: list[str] = [
         "--built-version",
         DEFAULT_BUILT_VERSION,
@@ -151,7 +189,11 @@ def validate_graph_file(
 
     if not validator_available():
         raise ValueError("validator_unavailable")
-    graph = Path(graph_path).expanduser().resolve()
+    # Deployment filesystem policy: graph reads must stay inside configured
+    # read roots (typed error "source_outside_read_roots" when violated).
+    import workspace_policy
+
+    graph = workspace_policy.check_read_path(graph_path, include_write_roots=True)
     if not graph.exists() or not graph.is_file():
         raise ValueError("graph_missing")
     if graph.suffix.lower() not in SUPPORTED_GRAPH_EXTENSIONS:
@@ -214,6 +256,8 @@ def validate_graph_file(
 
     undeclared: tuple[str, ...] = ()
     concept_guidance = ""
+    unknown_upper: tuple[str, ...] = ()
+    role_mismatches: tuple[tuple[str, str, str], ...] = ()
     if strict_concepts:
         try:
             from concept_coverage import check_graph_concepts
@@ -231,17 +275,40 @@ def validate_graph_file(
         else:
             if not coverage.ok:
                 undeclared = coverage.undeclared_classes + coverage.undeclared_properties
+                unknown_upper = coverage.unknown_upper_ontology_terms
+                role_mismatches = coverage.role_mismatches
                 concept_guidance = coverage.guidance
                 shacl_passed = conforms is not False and violation_count == 0
                 conforms = False
-                shown = ", ".join(undeclared[:8])
-                more = f" (+{len(undeclared) - 8} more)" if len(undeclared) > 8 else ""
-                concept_summary = (
-                    f"Graph uses {len(undeclared)} class/property term(s) not declared "
-                    f"in CASE/UCO or supported extension ontologies: {shown}{more}. "
+                parts: list[str] = []
+                if undeclared:
+                    shown = ", ".join(undeclared[:8])
+                    more = f" (+{len(undeclared) - 8} more)" if len(undeclared) > 8 else ""
+                    parts.append(
+                        f"Graph uses {len(undeclared)} class/property term(s) not declared "
+                        f"in CASE/UCO or supported extension ontologies: {shown}{more}."
+                    )
+                if unknown_upper:
+                    shown = ", ".join(unknown_upper[:8])
+                    parts.append(
+                        f"Graph uses {len(unknown_upper)} term(s) inside profiled "
+                        f"upper-ontology namespaces that the pinned ontology releases "
+                        f"do not declare: {shown}."
+                    )
+                if role_mismatches:
+                    shown = "; ".join(
+                        f"{iri} (declared as {declared_role}, used as {used_as})"
+                        for iri, declared_role, used_as in role_mismatches[:4]
+                    )
+                    parts.append(
+                        f"Graph uses {len(role_mismatches)} declared term(s) in the "
+                        f"wrong RDF role: {shown}."
+                    )
+                parts.append(
                     "Draft a change proposal or add the concept(s) to an extension "
                     "ontology, then re-validate."
                 )
+                concept_summary = " ".join(parts)
                 summary = concept_summary if shacl_passed else f"{summary} {concept_summary}"
 
     return GraphValidationReport(
@@ -253,6 +320,8 @@ def validate_graph_file(
         safe_summary=summary,
         undeclared_concepts=undeclared,
         concept_guidance=concept_guidance,
+        unknown_upper_ontology_terms=unknown_upper,
+        role_mismatches=role_mismatches,
     )
 
 
@@ -269,6 +338,16 @@ def report_to_dict(report: GraphValidationReport) -> dict[str, Any]:
     }
     if report.undeclared_concepts:
         payload["undeclared_concepts"] = list(report.undeclared_concepts)
+    if report.unknown_upper_ontology_terms:
+        payload["unknown_upper_ontology_terms"] = list(
+            report.unknown_upper_ontology_terms
+        )
+    if report.role_mismatches:
+        payload["role_mismatches"] = [
+            {"iri": iri, "declared_role": declared_role, "used_as": used_as}
+            for iri, declared_role, used_as in report.role_mismatches
+        ]
+    if report.concept_guidance:
         payload["concept_guidance"] = report.concept_guidance
     return payload
 

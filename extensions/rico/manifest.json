@@ -15,6 +15,7 @@
     "rico-shapes.ttl"
   ],
   "bridge_files": [],
+  "depends_on": ["legalproc"],
   "exemplar_files": [
     "rico-exemplar.ttl"
   ],

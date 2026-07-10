@@ -20,6 +20,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+import semantic_retrieval
 from cac_content_router import (
     GENERIC_CAC_KEYWORDS,
     _normalize_text,
@@ -564,7 +565,15 @@ UPPER_PROFILE_HINTS = {
 
 
 def _installed_extensions(project_root: Path) -> dict[str, dict[str, Any]]:
-    """Discover extension manifests bundled with the SDK."""
+    """Discover extension manifests bundled with the SDK.
+
+    Only *operational* extensions are advertised (knowledge_lifecycle):
+    candidate and deprecated extensions stay invisible to routing until
+    promoted, although explicit loading by name still works for the
+    investigation that is authoring them.
+    """
+
+    from knowledge_lifecycle import extension_status, is_routable
 
     found: dict[str, dict[str, Any]] = {}
     ext_root = project_root / "extensions"
@@ -575,11 +584,14 @@ def _installed_extensions(project_root: Path) -> dict[str, dict[str, Any]]:
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
+        if not is_routable(manifest):
+            continue
         name = manifest.get("name") or manifest_path.parent.name
         found[name] = {
             "name": name,
             "display_name": manifest.get("display_name", name),
             "version": manifest.get("version"),
+            "status": extension_status(manifest),
             "namespaces": manifest.get("namespaces", {}),
             "path": str(manifest_path.parent.relative_to(project_root)),
         }
@@ -590,6 +602,85 @@ def score_family(text: str, family: InvestigationFamily) -> tuple[int, list[str]
     normalized = _normalize_text(text)
     hits = [kw for kw in family.keywords if kw in normalized]
     return len(hits), hits
+
+
+def _family_document_text(family: InvestigationFamily) -> str:
+    """Catalog text a family is semantically retrieved against."""
+
+    return " ".join([family.title, " ".join(family.keywords), family.notes])
+
+
+def _family_match_payload(
+    family: InvestigationFamily,
+    keyword_score: int,
+    keyword_hits: list[str],
+    semantic: float,
+    semantic_evidence: list[str],
+    stages: list[str],
+) -> dict[str, Any]:
+    confidence = semantic_retrieval.combined_confidence(keyword_score, semantic)
+    return {
+        "family_id": family.family_id,
+        "title": family.title,
+        "score": keyword_score,
+        "matched_keywords": keyword_hits[:12],
+        "match_stages": stages,
+        "scoring": {
+            "keyword_score": keyword_score,
+            "semantic_score": round(semantic, 3),
+            "confidence": confidence,
+        },
+        "semantic_evidence": semantic_evidence,
+        "recipes": list(family.recipes),
+        "extensions": list(family.extensions),
+        "core_namespaces": list(family.core_namespaces),
+        "upper_profiles": list(family.upper_profiles),
+        "notes": family.notes,
+    }
+
+
+def detect_families_hybrid(text: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Two-stage hybrid routing: deterministic keywords plus offline
+    lexical-semantic retrieval (semantic_retrieval module).
+
+    Returns ``(matches, deterministic_baseline)``. The baseline records what
+    the keyword stage alone matched so every result remains auditable
+    against the pre-hybrid behavior. Families matched only semantically
+    need ``semantic_score >= SEMANTIC_MATCH_THRESHOLD``.
+    """
+
+    matches: list[dict[str, Any]] = []
+    baseline: list[dict[str, Any]] = []
+    for family in INVESTIGATION_FAMILIES:
+        keyword_score, keyword_hits = score_family(text, family)
+        semantic, evidence = semantic_retrieval.semantic_score(
+            text, _family_document_text(family)
+        )
+        keyword_matched = keyword_score >= MIN_FAMILY_SCORE
+        semantic_matched = semantic >= semantic_retrieval.SEMANTIC_MATCH_THRESHOLD
+        if keyword_matched:
+            baseline.append({
+                "family_id": family.family_id,
+                "score": keyword_score,
+                "matched_keywords": keyword_hits[:12],
+            })
+        if not keyword_matched and not semantic_matched:
+            continue
+        stages = []
+        if keyword_matched:
+            stages.append("keyword")
+        if semantic_matched:
+            stages.append("semantic")
+        matches.append(
+            _family_match_payload(
+                family, keyword_score, keyword_hits, semantic, evidence, stages
+            )
+        )
+    matches.sort(
+        key=lambda item: (-item["scoring"]["confidence"], -item["score"], item["family_id"])
+    )
+    baseline.sort(key=lambda item: (-item["score"], item["family_id"]))
+    return matches, baseline
 
 
 def detect_families(text: str) -> list[dict[str, Any]]:
@@ -727,24 +818,62 @@ def route_investigation_content(
     )
 
     extraction_quality = assess_extraction_quality(text)
-    matches = detect_families(text)[: max(1, max_families)]
+    matches, deterministic_baseline = detect_families_hybrid(text)
+    matches = matches[: max(1, max_families)]
     installed = _installed_extensions(project_root)
 
     cac_domains = _cac_specific_signals(text)
     cac_detected = bool(cac_domains) or bool(input_metadata.get("graph_has_cac_signals"))
     if cac_detected and not any(m["family_id"] == "cac-child-exploitation" for m in matches):
+        cac_score = max((d["score"] for d in cac_domains), default=1)
         matches.append({
             "family_id": "cac-child-exploitation",
             "title": "Crimes Against Children (CAC)",
-            "score": max((d["score"] for d in cac_domains), default=1),
+            "score": cac_score,
             "matched_keywords": [d["domain_id"] for d in cac_domains][:12],
+            "match_stages": ["cac-signals"],
+            "scoring": {
+                "keyword_score": cac_score,
+                "semantic_score": 0.0,
+                # Child-safety signals route deliberately even when weak;
+                # the floor keeps CAC detection out of the abstention band.
+                "confidence": max(
+                    semantic_retrieval.combined_confidence(cac_score, 0.0),
+                    semantic_retrieval.ABSTAIN_CONFIDENCE + 0.05,
+                ),
+            },
+            "semantic_evidence": [],
             "recipes": [d["recipe_file"] for d in cac_domains][:4],
             "extensions": ["cac"],
             "core_namespaces": ["case-investigation", "uco-observable", "uco-action"],
             "upper_profiles": ["gUFO"],
             "notes": "Call route_cac_content for the full CAC domain routing and modeling checklists.",
         })
-        matches.sort(key=lambda item: (-item["score"], item["family_id"]))
+        matches.sort(
+            key=lambda item: (
+                -item["scoring"]["confidence"],
+                -item["score"],
+                item["family_id"],
+            )
+        )
+
+    # Calibrated abstention: below the abstain threshold the router returns
+    # gap guidance instead of a weak guess (candidates stay visible).
+    top_confidence = max(
+        (m["scoring"]["confidence"] for m in matches), default=0.0
+    )
+    confidence_level = semantic_retrieval.confidence_level(top_confidence)
+    abstained_candidates: list[dict[str, Any]] = []
+    if confidence_level == "abstain" and matches:
+        abstained_candidates = [
+            {
+                "family_id": m["family_id"],
+                "scoring": m["scoring"],
+                "semantic_evidence": m.get("semantic_evidence", []),
+            }
+            for m in matches
+        ]
+        matches = []
 
     # Attach extension availability details.
     for match in matches:
@@ -760,7 +889,19 @@ def route_investigation_content(
     payload: dict[str, Any] = {
         "ok": True,
         "input_type": input_type,
+        # Submitted content is evidence, not instructions (see SECURITY.md).
+        "content_trust": "untrusted-source-content",
         "matched_families": matches,
+        # The keyword stage alone, for auditability of the hybrid pipeline.
+        "deterministic_baseline": deterministic_baseline,
+        "routing_confidence": {
+            "confidence": top_confidence,
+            "level": confidence_level,
+            "thresholds": {
+                "abstain_below": semantic_retrieval.ABSTAIN_CONFIDENCE,
+                "high_at_or_above": semantic_retrieval.HIGH_CONFIDENCE,
+            },
+        },
         "installed_extensions": sorted(installed),
         "next_tools": {
             "cac_deep_routing": "route_cac_content(content_text=...)" if cac_detected else None,
@@ -777,8 +918,7 @@ def route_investigation_content(
 
     if matches:
         payload["recommended_workflow"] = build_general_workflow(matches, installed)
-        low_confidence = all(m["score"] <= 2 for m in matches)
-        if low_confidence:
+        if confidence_level == "low":
             payload["extension_gap_guidance"] = build_extension_gap_guidance()
             payload["message"] = (
                 "Weak family match — treat the routing below as a hint and "
@@ -788,6 +928,8 @@ def route_investigation_content(
             )
     else:
         payload["matched_families"] = []
+        if abstained_candidates:
+            payload["abstained_candidates"] = abstained_candidates
         payload["extension_gap_guidance"] = build_extension_gap_guidance()
         payload["message"] = (
             "No known investigation family matched. This looks like a "

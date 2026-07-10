@@ -248,6 +248,357 @@ def test_validate_graph_file_rejects_undeclared_concepts(tmp_path):
     assert "concept_guidance" in payload
 
 
+# ---------------------------------------------------------------------------
+# Exact-term validation for profiled upper ontologies (issue #47)
+# ---------------------------------------------------------------------------
+
+UPPER_REGISTRY_AVAILABLE = concept_coverage.UPPER_ONTOLOGY_REGISTRY_PATH.is_file()
+
+
+@pytest.mark.skipif(not UPPER_REGISTRY_AVAILABLE, reason="upper ontology registry missing")
+def test_upper_registry_has_pinned_provenance():
+    registry = json.loads(
+        concept_coverage.UPPER_ONTOLOGY_REGISTRY_PATH.read_text(encoding="utf-8")
+    )
+    assert registry["ontologies"], "registry must not be empty"
+    for key, entry in registry["ontologies"].items():
+        assert entry["source_url"], key
+        assert entry["namespace_prefixes"], key
+        assert entry["classes"] or entry["properties"], key
+
+
+@pytest.mark.skipif(not UPPER_REGISTRY_AVAILABLE, reason="upper ontology registry missing")
+@pytest.mark.parametrize(
+    "iri,position",
+    [
+        ("http://www.w3.org/ns/prov#used", "property"),
+        ("http://www.w3.org/2006/time#hasBeginning", "property"),
+        ("http://www.opengis.net/ont/geosparql#asWKT", "property"),
+        ("http://xmlns.com/foaf/0.1/knows", "property"),
+        ("http://www.w3.org/ns/org#Organization", "class"),
+        ("http://www.opengis.net/ont/sf#Point", "class"),
+        ("http://purl.obolibrary.org/obo/BFO_0000002", "class"),
+        ("http://purl.org/nemo/gufo#Relator", "class"),
+        ("http://www.w3.org/ns/dx/prof/Profile", "class"),
+    ],
+)
+def test_known_upper_ontology_terms_pass(tmp_path, iri, position):
+    if position == "class":
+        node = {"@id": "kb:u-11111111-1111-4111-8111-111111111111", "@type": iri}
+    else:
+        node = {
+            "@id": "kb:u-11111111-1111-4111-8111-111111111111",
+            "@type": "uco-core:UcoObject",
+            iri: {"@id": "kb:u-22222222-2222-4222-8222-222222222222"},
+        }
+    graph = write_graph(tmp_path, [node])
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    assert report.ok is True, (
+        report.unknown_upper_ontology_terms,
+        report.role_mismatches,
+    )
+
+
+@pytest.mark.skipif(not UPPER_REGISTRY_AVAILABLE, reason="upper ontology registry missing")
+@pytest.mark.parametrize(
+    "iri,position",
+    [
+        ("http://www.w3.org/ns/prov#CompletelyImaginaryClass", "class"),
+        ("http://www.w3.org/ns/prov#completelyImaginaryProperty", "property"),
+        ("http://www.w3.org/2006/time#InventedInstant", "class"),
+        ("http://www.w3.org/2006/time#hasInventedEnding", "property"),
+        ("http://www.opengis.net/ont/geosparql#FabricatedGeometry", "class"),
+        ("http://www.opengis.net/ont/geosparql#asFabricatedText", "property"),
+        ("http://xmlns.com/foaf/0.1/InventedAgent", "class"),
+        ("http://xmlns.com/foaf/0.1/inventedKnows", "property"),
+        ("http://www.w3.org/ns/org#InventedUnit", "class"),
+        ("http://www.w3.org/ns/org#inventedMemberOf", "property"),
+        ("http://purl.obolibrary.org/obo/BFO_9999999", "class"),
+        ("http://purl.org/nemo/gufo#InventedRelator", "class"),
+        ("http://purl.org/nemo/gufo#inventedMediates", "property"),
+        ("http://www.w3.org/ns/dx/prof/InventedProfile", "class"),
+        ("http://www.w3.org/ns/dx/prof/inventedIsProfileOf", "property"),
+    ],
+)
+def test_fabricated_upper_ontology_terms_fail(tmp_path, iri, position):
+    if position == "class":
+        node = {"@id": "kb:f-11111111-1111-4111-8111-111111111111", "@type": iri}
+    else:
+        node = {
+            "@id": "kb:f-11111111-1111-4111-8111-111111111111",
+            "@type": "uco-core:UcoObject",
+            iri: "value",
+        }
+    graph = write_graph(tmp_path, [node])
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    assert report.ok is False
+    assert iri in report.unknown_upper_ontology_terms
+    # Unknown upper-ontology terms are reported distinctly from unknown
+    # CASE/UCO or extension terms.
+    assert iri not in report.undeclared_classes
+    assert iri not in report.undeclared_properties
+    assert "upper-ontology" in report.guidance
+
+
+# ---------------------------------------------------------------------------
+# RDF role awareness (issue #48)
+# ---------------------------------------------------------------------------
+
+
+def test_declared_class_used_as_predicate_is_role_mismatch(tmp_path):
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:r-11111111-1111-4111-8111-111111111111",
+                "@type": "uco-core:UcoObject",
+                "uco-core:Relationship": "class in predicate position",
+            }
+        ],
+    )
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    assert report.ok is False
+    mismatched = {iri for iri, _, _ in report.role_mismatches}
+    assert any("Relationship" in iri for iri in mismatched)
+    # Reported as a role mismatch, not as an undeclared term.
+    assert not any("Relationship" in iri for iri in report.undeclared_properties)
+    assert "wrong RDF position" in report.guidance
+
+
+def test_declared_property_used_as_class_is_role_mismatch(tmp_path):
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:r-22222222-2222-4222-8222-222222222222",
+                "@type": "uco-core:description",
+            }
+        ],
+    )
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    assert report.ok is False
+    mismatched = {iri for iri, _, _ in report.role_mismatches}
+    assert any("description" in iri for iri in mismatched)
+    assert not any("description" in iri for iri in report.undeclared_classes)
+
+
+@pytest.mark.skipif(not UPPER_REGISTRY_AVAILABLE, reason="upper ontology registry missing")
+def test_upper_ontology_class_used_as_predicate_is_role_mismatch(tmp_path):
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:r-33333333-3333-4333-8333-333333333333",
+                "@type": "uco-core:UcoObject",
+                "http://www.w3.org/ns/prov#Activity": "class in predicate position",
+            }
+        ],
+    )
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    assert report.ok is False
+    assert (
+        "http://www.w3.org/ns/prov#Activity",
+        "upper-ontology class",
+        "property (predicate)",
+    ) in report.role_mismatches
+
+
+def _attack_technique_available() -> bool:
+    return (
+        PROJECT_ROOT / "extensions/attack-technique/mitre-attack-catalog.ttl"
+    ).is_file()
+
+
+@pytest.mark.skipif(
+    not _attack_technique_available(), reason="attack-technique extension not present"
+)
+def test_attack_technique_punning_accepted_as_class(tmp_path):
+    """ATT&CK techniques are punned (owl:Class + instance of the
+    uco-action:Technique metaclass, per UCO PR #676); typing a concrete
+    action with the technique class must pass role-aware coverage."""
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:action-44444444-4444-4444-8444-444444444444",
+                "@type": "https://attack.mitre.org/techniques/T1112",
+                "uco-core:description": "Registry modification observed.",
+            }
+        ],
+    )
+    report = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, extensions=["attack-technique"]
+    )
+    assert report.ok is True, (
+        report.undeclared_classes,
+        report.role_mismatches,
+    )
+
+
+def test_coverage_report_dict_distinguishes_categories(tmp_path):
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:r-55555555-5555-4555-8555-555555555555",
+                "@type": "uco-core:description",
+                "http://www.w3.org/ns/prov#fabricatedTerm": "x",
+                "uco-core:inventedProperty": "y",
+            }
+        ],
+    )
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    payload = concept_coverage.coverage_report_to_dict(report)
+    assert payload["ok"] is False
+    if UPPER_REGISTRY_AVAILABLE:
+        assert payload["unknown_upper_ontology_terms"] == [
+            "http://www.w3.org/ns/prov#fabricatedTerm"
+        ]
+    assert payload["role_mismatches"][0]["declared_role"] == "property"
+    assert any("inventedProperty" in iri for iri in payload["undeclared_properties"])
+
+
+# ---------------------------------------------------------------------------
+# Declaration cache invalidation (issue #49)
+# ---------------------------------------------------------------------------
+
+
+def _write_extension(ext_dir: Path, ttl_body: str) -> None:
+    ext_dir.mkdir(parents=True, exist_ok=True)
+    (ext_dir / "testext.ttl").write_text(ttl_body, encoding="utf-8")
+    (ext_dir / "manifest.json").write_text(
+        json.dumps(
+            {
+                "name": "testext",
+                "display_name": "Cache Test Extension",
+                "version": "0.0.1",
+                "owl_files": ["testext.ttl"],
+                "shacl_files": [],
+                "bridge_files": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+TESTEXT_TTL_V1 = """\
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix testext: <http://example.org/ontology/testext/> .
+
+testext:FirstClass
+    a owl:Class ;
+    rdfs:subClassOf uco-core:UcoObject ;
+    rdfs:label "FirstClass"@en .
+"""
+
+TESTEXT_TTL_V2 = TESTEXT_TTL_V1 + """
+testext:SecondClass
+    a owl:Class ;
+    rdfs:subClassOf uco-core:UcoObject ;
+    rdfs:label "SecondClass"@en .
+"""
+
+
+def test_cache_refreshes_after_extension_ontology_change(tmp_path):
+    """A term added to an extension during the same process is recognized
+    on the next check, without restarting the MCP server (issue #49)."""
+
+    project_root = tmp_path / "project"
+    # Provide a minimal core ontology so declared terms are non-empty.
+    core_dir = project_root / "ontology/UCO/ontology/uco/core"
+    core_dir.mkdir(parents=True)
+    (core_dir / "core.ttl").write_text(
+        """\
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+uco-core:UcoObject a owl:Class .
+""",
+        encoding="utf-8",
+    )
+    ext_dir = project_root / "extensions/testext"
+    _write_extension(ext_dir, TESTEXT_TTL_V1)
+
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:c-11111111-1111-4111-8111-111111111111",
+                "@type": "http://example.org/ontology/testext/SecondClass",
+            }
+        ],
+    )
+
+    before = concept_coverage.check_graph_concepts(
+        graph, project_root=project_root, extensions=["testext"]
+    )
+    assert before.ok is False
+
+    # Simulate the self-improvement workflow: declare the term mid-process.
+    ttl_path = ext_dir / "testext.ttl"
+    ttl_path.write_text(TESTEXT_TTL_V2, encoding="utf-8")
+    # Guarantee an mtime change even on coarse-resolution filesystems.
+    import os
+
+    stat = ttl_path.stat()
+    os.utime(ttl_path, ns=(stat.st_atime_ns, stat.st_mtime_ns + 1_000_000))
+
+    after = concept_coverage.check_graph_concepts(
+        graph, project_root=project_root, extensions=["testext"]
+    )
+    assert after.ok is True, (after.undeclared_classes, after.role_mismatches)
+
+
+def test_cache_invalidates_when_term_removed(tmp_path):
+    project_root = tmp_path / "project"
+    core_dir = project_root / "ontology/UCO/ontology/uco/core"
+    core_dir.mkdir(parents=True)
+    (core_dir / "core.ttl").write_text(
+        """\
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+uco-core:UcoObject a owl:Class .
+""",
+        encoding="utf-8",
+    )
+    ext_dir = project_root / "extensions/testext"
+    _write_extension(ext_dir, TESTEXT_TTL_V2)
+
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:c-22222222-2222-4222-8222-222222222222",
+                "@type": "http://example.org/ontology/testext/SecondClass",
+            }
+        ],
+    )
+    before = concept_coverage.check_graph_concepts(
+        graph, project_root=project_root, extensions=["testext"]
+    )
+    assert before.ok is True
+
+    ttl_path = ext_dir / "testext.ttl"
+    ttl_path.write_text(TESTEXT_TTL_V1, encoding="utf-8")
+    import os
+
+    stat = ttl_path.stat()
+    os.utime(ttl_path, ns=(stat.st_atime_ns, stat.st_mtime_ns + 1_000_000))
+
+    after = concept_coverage.check_graph_concepts(
+        graph, project_root=project_root, extensions=["testext"]
+    )
+    assert after.ok is False
+
+
+def test_clear_declared_term_cache():
+    concept_coverage.load_declared_terms(project_root=PROJECT_ROOT)
+    assert concept_coverage._DECLARED_CACHE
+    concept_coverage.clear_declared_term_cache()
+    assert not concept_coverage._DECLARED_CACHE
+
+
 @pytest.mark.skipif(
     not graph_validator.validator_available(), reason="case_validate CLI not installed"
 )

@@ -1079,6 +1079,7 @@ def route_cac_content(
         return {
             "ok": True,
             "cac_detected": False,
+            "content_trust": "untrusted-source-content",
             "input_type": input_type,
             "output_format": "json-ld" if normalized_format in {"jsonld", "json-ld", "json"} else "ttl",
             "matched_domains": [],
@@ -1120,6 +1121,8 @@ def route_cac_content(
     return {
         "ok": True,
         "cac_detected": True,
+        # Submitted content is evidence, not instructions (see SECURITY.md).
+        "content_trust": "untrusted-source-content",
         "input_type": input_type,
         "output_format": "json-ld" if normalized_format in {"jsonld", "json-ld", "json"} else "ttl",
         "matched_domains": enriched,

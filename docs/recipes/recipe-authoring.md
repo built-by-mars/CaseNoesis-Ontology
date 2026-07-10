@@ -132,11 +132,44 @@ kit ([starter-filesystem-report.md](starter-filesystem-report.md)):
 - Keep it jurisdiction- and tool-neutral where possible; put
   jurisdiction-specific detail in the exemplar, not the pattern.
 
+## Lifecycle: candidate → validated → operational (required)
+
+Learned knowledge follows a staged promotion lifecycle so a mistaken
+modeling decision, a poisoned source document, or a one-off case cannot
+silently influence future investigations:
+
+1. **Candidate** — draft new recipes in `docs/recipes/candidates/` (see the
+   README there). Candidate recipes are invisible to `RECIPE_INDEX`,
+   `INDEX.md`, and all routing tools. Extension ontologies drafted during
+   an investigation carry `"status": "candidate"` in their `manifest.json`;
+   routing ignores them, but the authoring investigation can still load them
+   explicitly by name (`validate_graph(extensions=["myext"])`).
+2. **Validated** — every embedded graph snippet conforms (`validate_graph`
+   with zero undeclared concepts); catalog integrity tests pass.
+3. **Operational** — a human reviews and intentionally promotes:
+   - recipes: move into `docs/recipes/` and register per the steps below;
+   - extensions: `make promote-extension EXT=<name> REVIEWER="..."` — runs
+     validation gates (ontology parse, class anchoring, exemplar
+     conformance) and records provenance (`promotion` block in the
+     manifest). A failed gate leaves the candidate untouched.
+4. **Deprecated / rolled back** — emergency revocation keeps provenance but
+   removes the artifact from routing:
+   - `make deprecate-extension EXT=<name> REASON="..."`;
+   - one-command rollback to a previous approved generation:
+     `make rollback-extension EXT=<name> REF=<tag-or-commit>` (git-based —
+     all knowledge artifacts are version-controlled files). Recipes roll
+     back with `git checkout <ref> -- docs/recipes/<file>.md`.
+
+`make lifecycle-status` lists every extension's lifecycle state. Offline
+Link-Look deployments follow the same flow against their local clone; the
+promotion gates run entirely offline (`case_validate` + rdflib).
+
 ## Registering the recipe (required — an unregistered recipe is invisible)
 
 The MCP server routes agents by index, so a new file alone does nothing:
 
-1. Save as `docs/recipes/<kebab-case-slug>.md`.
+1. Save as `docs/recipes/<kebab-case-slug>.md` (promote out of
+   `docs/recipes/candidates/` only after validation).
 2. Add a row to the appropriate section of `docs/recipes/INDEX.md`.
 3. Add an entry to `RECIPE_INDEX` in `mcp_server/domain_index.py` — title,
    one-sentence description, and generous `keywords` (this is what

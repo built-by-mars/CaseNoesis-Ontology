@@ -2,7 +2,7 @@
 
 # CASE/UCO SDK
 
-**v1.15.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md)
+**v1.16.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md)
 
 A multi-language data modeling library for digital forensics, cyber-investigation, and cyber-observable data. If your software produces or consumes forensic evidence, this SDK gives you typed, validated builders in **Python**, **C#**, **Java**, and **Rust** — so you can model investigation data in your language and produce interoperable [CASE/UCO](https://caseontology.org/) JSON-LD output.
 
@@ -47,7 +47,7 @@ For Java, add to your `pom.xml`:
 <dependency>
     <groupId>org.caseontology</groupId>
     <artifactId>case-uco</artifactId>
-    <version>1.15.0</version>
+    <version>1.16.0</version>
 </dependency>
 ```
 
@@ -547,6 +547,7 @@ All four language packages are released in lockstep from the same ontology sourc
 
 | SDK Version | UCO | CASE | Python `case-uco` | C# `CaseUco` | Java `case-uco` | Rust `case-uco` |
 |-------------|-----|------|-------------------|--------------|-----------------|-----------------|
+| 1.16.0 | 1.4.0 | 1.4.0 | 1.16.0 | 1.16.0 | 1.16.0 | 1.16.0 |
 | 1.15.0 | 1.4.0 | 1.4.0 | 1.15.0 | 1.15.0 | 1.15.0 | 1.15.0 |
 | 1.14.0 | 1.4.0 | 1.4.0 | 1.14.0 | 1.14.0 | 1.14.0 | 1.14.0 |
 | 1.11.0 | 1.4.0 | 1.4.0 | 1.11.0 | 1.11.0 | 1.11.0 | 1.11.0 |
@@ -571,9 +572,10 @@ The MCP server is the centerpiece. It carries a working knowledge of the entire 
 
 - **Core + extension discovery** — every tool accepts a `scope` parameter, so the agent can search core CASE/UCO, the CAC Ontology, the Adversary Engagement Ontology, or any bundled extension with the same calls.
 - **Upper-ontology profiles** — `get_uco_profiles` surfaces UCO's alignments with BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, and FOAF, so graphs can interoperate with formal-reasoning, provenance, temporal, geospatial, and social-network tooling.
-- **Investigation routing** — `route_investigation_content` classifies any submission (text, documents, partial graphs) into investigation families and returns the matching recipes, extensions, namespaces, and profiles; `route_cac_content` does deep routing within the crimes-against-children domain.
-- **Document processing** — `process_document_file` turns images, PDFs, Office documents, CSV tables, and PACER court filings into bounded CASE/UCO JSON-LD for human review.
-- **Validation** — `validate_graph` runs SHACL validation plus a closed-world concept-coverage check against core, loaded extensions, and profiled upper ontologies.
+- **Investigation routing** — `route_investigation_content` classifies any submission (text, documents, partial graphs) into investigation families and returns the matching recipes, extensions, namespaces, and profiles; `route_cac_content` does deep routing within the crimes-against-children domain. Since v1.16.0 routing is hybrid: a deterministic keyword baseline plus an offline lexical-semantic stage with synonym expansion, per-family confidence scores, explainable match evidence, and calibrated abstention — colloquial phrasings route correctly, unknown content gets extension-gap guidance instead of a weak guess.
+- **Document processing** — `process_document_file` turns images, PDFs, Office documents, CSV tables, and PACER court filings into bounded CASE/UCO JSON-LD for human review. All extracted content is labeled untrusted evidence data, scanned for prompt-injection patterns, and confined by the configurable filesystem workspace policy (see [SECURITY.md](SECURITY.md)).
+- **Validation** — `validate_graph` runs SHACL validation plus a closed-world concept-coverage check against core, loaded extensions, and profiled upper ontologies. Coverage is exact-term and role-aware: profiled upper-ontology terms (BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, FOAF, ORG, PROF) are checked against pinned releases (`mcp_server/upper_ontology_registry.json`) so fabricated terms fail, and declared terms used in the wrong RDF position (a class as a predicate, a property as a type) are reported as role mismatches. The declared-term set refreshes automatically when ontology files change mid-process.
+- **Knowledge lifecycle** — learned recipes and extension ontologies follow a staged candidate → validated → operational → deprecated lifecycle with validation-gated promotion, recorded provenance, emergency revocation, and one-command git rollback (`make promote-extension` / `deprecate-extension` / `rollback-extension` / `lifecycle-status`).
 - **CDO community awareness** — the server knows the [Community Playground](https://docs.google.com/document/d/1EiXQiAeUGk-629xdKx7HZHVn927k891LGkPcQzNLLr8/edit?usp=sharing) submission requirements and the UCO/CASE/CAC change-proposal process, so its output is aimed at upstream adoption rather than one-off hacks.
 
 The result: if a concept touches the cyber domain — or describes work done on, in, or through it — the agent can model it. When the ontology has a gap, the agent doesn't stop; it drafts a local extension to unblock the work and a formal change proposal to close the gap upstream. And because recipes are updated when live cases prove them wrong or incomplete ([recipe-authoring](docs/recipes/recipe-authoring.md)), the system improves with use.

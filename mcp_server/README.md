@@ -144,6 +144,55 @@ Law-enforcement deployment notes:
 - Agents should call `validate_graph` on every produced graph before
   submitting it to downstream tools (e.g., Link-Look normalization review).
 
+## Secure Deployment (workspace policy and trust boundary)
+
+### Filesystem workspace policy
+
+Production deployments should confine the file-handling tools
+(`process_document_file`, `validate_graph`) to explicit directories via
+environment variables on the server process:
+
+```yaml
+env:
+  # Evidence/source files may only be read from these roots (read-only):
+  CASE_UCO_MCP_READ_ROOTS: "/cases/evidence"
+  # Outputs, extraction bundles, and progress files must land here:
+  CASE_UCO_MCP_WRITE_ROOTS: "/cases/workspace"
+  # Optional; under an active policy outputs never overwrite by default:
+  # CASE_UCO_MCP_ALLOW_OVERWRITE: "1"
+```
+
+Multiple roots are separated by `:`/`;` (`os.pathsep`) or commas.
+Containment is decided after full path resolution, so `..` traversal and
+symlink escapes are rejected. Violations return typed, non-sensitive errors:
+`source_outside_read_roots`, `output_outside_write_roots`,
+`progress_outside_write_roots`, `output_exists`, `source_output_conflict`.
+`validate_graph` may read from both root sets (it validates graphs the
+server just produced). When neither variable is set, no policy is active —
+acceptable for local development, not for agent-connected case work. Run
+the server process under an account with no filesystem access beyond these
+roots; keep evidence roots read-only at the OS level.
+
+### Untrusted evidence content (indirect prompt injection)
+
+Everything extracted from a submitted document is **evidence data, never
+instructions**. Tool responses label it (`content_trust:
+untrusted-source-content`) and flag instruction-like patterns
+(`injection_warnings`), but detection is heuristic — integrating hosts
+(Hermes, Link-Look, Cursor, and any other agent harness) must:
+
+1. Render extracted text and `extracted-content.json` bundles as data, not
+   as part of the agent's directive context.
+2. Never execute tool calls, file operations, or policy changes because
+   text inside a document asked for them.
+3. Gate persistent self-improvement actions (extension creation, change
+   proposals, recipe edits, repository writes) on an explicit
+   investigator/operator decision — see the knowledge lifecycle in
+   `docs/recipes/recipe-authoring.md` (`make promote-extension`,
+   `make deprecate-extension`, `make rollback-extension`).
+
+See `SECURITY.md` for the full MCP threat model.
+
 ## Architecture
 
 The server wraps the existing Python registry API (`case_uco.registry`) and a domain index (`domain_index.py`) that maps investigative tasks to classes.

@@ -4,9 +4,9 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 | Metric | Count |
 |--------|-------|
-| Classes | 2563 |
+| Classes | 2566 |
 | Direct properties | 2407 |
-| Modules | 72 |
+| Modules | 73 |
 | Vocabulary types | 54 |
 
 ## Table of Contents
@@ -68,7 +68,8 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 - [ext.drugs.drug](#extdrugsdrug) (1 classes)
 - [ext.legalproc.legalproc](#extlegalproclegalproc) (8 classes)
 - [ext.rico.rico](#extricorico) (2 classes)
-- [ext.toolcap](#exttoolcap) (5 classes)
+- [ext.toolcap.capability](#exttoolcapcapability) (3 classes)
+- [ext.toolcap.toolcap](#exttoolcaptoolcap) (5 classes)
 - [ext.weapons.weap](#extweaponsweap) (8 classes)
 - [uco.action](#ucoaction) (8 classes)
 - [uco.analysis](#ucoanalysis) (5 classes)
@@ -41666,7 +41667,73 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | tag | string | zero_or_more | No | A generic tag/label. |
 | enterpriseType | string | exactly_one | Yes | The statutory branch of the enterprise definition the charged enterprise falls under, as an open vocabulary. Recommen... |
 
-## ext.toolcap
+## ext.toolcap.capability
+
+### Capability
+
+*A capability is the ability of an entity to perform some action or produce some result. Capabilities are connected to their possessors (tools, modules, parsers, people, organizations) via uco-core:Relationship instances with kindOfRelationship='hasCapability'. A capability may be described unstructured (via name/description) or structured (via structuredCharacterization pointing to an ActionPattern). See https://github.com/ucoProject/UCO/issues/596 for related Software hierarchy work.*
+
+**Parents:** UcoObject | **IRI:** `https://proposed.ontology.unifiedcyberontology.org/uco/capability/Capability`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+
+### Module
+
+*A module is a discrete, potentially reusable component of a larger software system. In forensic tool architectures, a module represents a pluggable unit of functionality such as a parsing module, carving module, or decryption module. Modules are related to Tools via Relationship instances with kindOfRelationship='mayUse' (available but not necessarily active) or 'uses' (active in a specific configuration). See https://en.wikipedia.org/wiki/Modular_programming for the general concept.*
+
+**Parents:** Software | **IRI:** `https://proposed.ontology.unifiedcyberontology.org/uco/capability/Module`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| hasChanged | boolean | zero_or_one | No |  |
+| state | string | zero_or_one | No |  |
+
+### Parser
+
+*A parser is a type of software that takes structured or semi-structured input data and extracts meaningful content from it. In forensic contexts, parsers read application databases, file formats, and data structures to produce observable artifacts (messages, contacts, files, etc.). Parsers are typically used by Modules and are related to them via Relationship instances with kindOfRelationship='uses'. See https://en.wikipedia.org/wiki/Parsing for the general concept.*
+
+**Parents:** Software | **IRI:** `https://proposed.ontology.unifiedcyberontology.org/uco/capability/Parser`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| hasChanged | boolean | zero_or_one | No |  |
+| state | string | zero_or_one | No |  |
+
+## ext.toolcap.toolcap
 
 ### AccessRestriction
 

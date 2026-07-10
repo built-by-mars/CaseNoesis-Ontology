@@ -58,6 +58,29 @@ test-rust:
 test-docs:
 	$(PYTHON) scripts/test_doc_snippets.py
 
+test-mcp:
+	$(PYTHON) -m pytest mcp_server/tests/ -v
+
+# --- Knowledge artifact lifecycle (mcp_server/knowledge_lifecycle.py) ------
+# Promote a candidate extension to operational after validation gates pass:
+#   make promote-extension EXT=myext REVIEWER="Jane Analyst"
+promote-extension:
+	$(PYTHON) mcp_server/knowledge_lifecycle.py promote $(EXT) --reviewed-by "$(REVIEWER)"
+
+# Emergency revocation of a bad extension (kept on disk with provenance):
+#   make deprecate-extension EXT=myext REASON="modeling error in facet X"
+deprecate-extension:
+	$(PYTHON) mcp_server/knowledge_lifecycle.py deprecate $(EXT) --reason "$(REASON)"
+
+# One-command rollback to a previously approved knowledge generation:
+#   make rollback-extension EXT=myext REF=v1.15.0
+rollback-extension:
+	git checkout $(REF) -- extensions/$(EXT)
+	@echo "Restored extensions/$(EXT) from $(REF); review and commit the rollback."
+
+lifecycle-status:
+	$(PYTHON) mcp_server/knowledge_lifecycle.py status
+
 lint: typecheck-python lint-csharp lint-java lint-rust
 
 typecheck-python:
