@@ -18,6 +18,7 @@ use case_uco::uco::action::ActionFrequencyFacet;
 use case_uco::uco::action::ActionLifecycle;
 use case_uco::uco::action::ActionPattern;
 use case_uco::uco::action::ArrayOfAction;
+use case_uco::uco::action::Technique;
 use case_uco::uco::analysis::Analysis;
 use case_uco::uco::analysis::AnalyticResult;
 use case_uco::uco::analysis::AnalyticResultFacet;
@@ -47,6 +48,7 @@ use case_uco::uco::core::Relationship;
 use case_uco::uco::core::UcoInherentCharacterizationThing;
 use case_uco::uco::core::UcoObject;
 use case_uco::uco::core::UcoThing;
+use case_uco::uco::core::UcoType;
 use case_uco::uco::identity::AddressFacet;
 use case_uco::uco::identity::AffiliationFacet;
 use case_uco::uco::identity::BirthInformationFacet;
@@ -451,6 +453,7 @@ fn test_all_classes_can_be_instantiated() {
     instances.push(Box::new(ActionLifecycle::builder().build()));
     instances.push(Box::new(ActionPattern::builder().build()));
     instances.push(Box::new(ArrayOfAction::builder().build()));
+    instances.push(Box::new(Technique::builder().build()));
     instances.push(Box::new(Analysis::builder().build()));
     instances.push(Box::new(AnalyticResult::builder().build()));
     instances.push(Box::new(AnalyticResultFacet::builder().build()));
@@ -480,6 +483,7 @@ fn test_all_classes_can_be_instantiated() {
     instances.push(Box::new(UcoInherentCharacterizationThing::builder().build()));
     instances.push(Box::new(UcoObject::builder().build()));
     instances.push(Box::new(UcoThing::builder().build()));
+    instances.push(Box::new(UcoType::builder().build()));
     instances.push(Box::new(AddressFacet::builder().build()));
     instances.push(Box::new(AffiliationFacet::builder().build()));
     instances.push(Box::new(BirthInformationFacet::builder().build()));
@@ -862,5 +866,5 @@ fn test_all_classes_can_be_instantiated() {
     instances.push(Box::new(ThreadItem::builder().build()));
     instances.push(Box::new(Victim::builder().build()));
     instances.push(Box::new(VictimTargeting::builder().build()));
-    assert_eq!(instances.len(), 429);
+    assert_eq!(instances.len(), 431);
 }

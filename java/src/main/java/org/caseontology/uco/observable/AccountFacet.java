@@ -13,7 +13,7 @@ public class AccountFacet extends Facet {
 
     private String accountIdentifier;
     private UcoObject accountIssuer;
-    private List<String> accountType;
+    private String accountType;
     private java.time.ZonedDateTime expirationTime;
     private Boolean isActive;
     private java.time.ZonedDateTime modifiedTime;
@@ -21,7 +21,6 @@ public class AccountFacet extends Facet {
     private UcoObject owner;
 
     public AccountFacet() {
-        this.accountType = new ArrayList<>();
     }
 
     public String getAccountIdentifier() { return this.accountIdentifier; }
@@ -30,8 +29,8 @@ public class AccountFacet extends Facet {
     public UcoObject getAccountIssuer() { return this.accountIssuer; }
     public AccountFacet setAccountIssuer(UcoObject value) { this.accountIssuer = value; return this; }
 
-    public List<String> getAccountType() { return this.accountType; }
-    public AccountFacet setAccountType(List<String> value) { this.accountType = value; return this; }
+    public String getAccountType() { return this.accountType; }
+    public AccountFacet setAccountType(String value) { this.accountType = value; return this; }
 
     public java.time.ZonedDateTime getExpirationTime() { return this.expirationTime; }
     public AccountFacet setExpirationTime(java.time.ZonedDateTime value) { this.expirationTime = value; return this; }

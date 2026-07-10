@@ -12,7 +12,7 @@ public class Action extends UcoObject {
     public static final String NAMESPACE_PREFIX = "uco-action";
 
     private Long actionCount;
-    private List<String> actionStatus;
+    private String actionStatus;
     private java.time.ZonedDateTime endTime;
     private UcoObject environment;
     private List<UcoObject> error;
@@ -26,7 +26,6 @@ public class Action extends UcoObject {
     private List<Action> subaction;
 
     public Action() {
-        this.actionStatus = new ArrayList<>();
         this.error = new ArrayList<>();
         this.instrument = new ArrayList<>();
         this.location = new ArrayList<>();
@@ -39,8 +38,8 @@ public class Action extends UcoObject {
     public Long getActionCount() { return this.actionCount; }
     public Action setActionCount(Long value) { this.actionCount = value; return this; }
 
-    public List<String> getActionStatus() { return this.actionStatus; }
-    public Action setActionStatus(List<String> value) { this.actionStatus = value; return this; }
+    public String getActionStatus() { return this.actionStatus; }
+    public Action setActionStatus(String value) { this.actionStatus = value; return this; }
 
     public java.time.ZonedDateTime getEndTime() { return this.endTime; }
     public Action setEndTime(java.time.ZonedDateTime value) { this.endTime = value; return this; }

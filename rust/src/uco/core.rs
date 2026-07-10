@@ -1104,3 +1104,37 @@ impl CaseObject for UcoThing {
     fn class_iri() -> &'static str { UcoThing::CLASS_IRI }
     fn type_name() -> &'static str { "UcoThing" }
 }
+
+/// UcoThing is the top-level class for metaclasses within UCO.  An instance of core:UcoType is also an instance of owl:Class, and is or specializes core:UcoThing.
+#[derive(Debug, Clone, Serialize)]
+pub struct UcoType {
+    #[serde(skip_serializing)]
+    pub class_iri: &'static str,
+}
+
+impl UcoType {
+    pub const CLASS_IRI: &'static str = "https://ontology.unifiedcyberontology.org/uco/core/UcoType";
+    pub const NAMESPACE_PREFIX: &'static str = "uco-core";
+
+    pub fn builder() -> UcoTypeBuilder {
+        UcoTypeBuilder {
+        }
+    }
+}
+
+#[derive(Debug, Default, Clone)]
+pub struct UcoTypeBuilder {
+}
+
+impl UcoTypeBuilder {
+    pub fn build(self) -> UcoType {
+        UcoType {
+            class_iri: UcoType::CLASS_IRI,
+        }
+    }
+}
+
+impl CaseObject for UcoType {
+    fn class_iri() -> &'static str { UcoType::CLASS_IRI }
+    fn type_name() -> &'static str { "UcoType" }
+}

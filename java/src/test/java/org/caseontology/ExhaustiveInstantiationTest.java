@@ -19,6 +19,7 @@ import org.caseontology.uco.action.ActionFrequencyFacet;
 import org.caseontology.uco.action.ActionLifecycle;
 import org.caseontology.uco.action.ActionPattern;
 import org.caseontology.uco.action.ArrayOfAction;
+import org.caseontology.uco.action.Technique;
 import org.caseontology.uco.analysis.Analysis;
 import org.caseontology.uco.analysis.AnalyticResult;
 import org.caseontology.uco.analysis.AnalyticResultFacet;
@@ -48,6 +49,7 @@ import org.caseontology.uco.core.Relationship;
 import org.caseontology.uco.core.UcoInherentCharacterizationThing;
 import org.caseontology.uco.core.UcoObject;
 import org.caseontology.uco.core.UcoThing;
+import org.caseontology.uco.core.UcoType;
 import org.caseontology.uco.identity.AddressFacet;
 import org.caseontology.uco.identity.AffiliationFacet;
 import org.caseontology.uco.identity.BirthInformationFacet;
@@ -458,6 +460,7 @@ public class ExhaustiveInstantiationTest {
         instances.add(new ActionLifecycle());
         instances.add(new ActionPattern());
         instances.add(new ArrayOfAction());
+        instances.add(new Technique());
         instances.add(new Analysis());
         instances.add(new AnalyticResult());
         instances.add(new AnalyticResultFacet());
@@ -487,6 +490,7 @@ public class ExhaustiveInstantiationTest {
         instances.add(new UcoInherentCharacterizationThing());
         instances.add(new UcoObject());
         instances.add(new UcoThing());
+        instances.add(new UcoType());
         instances.add(new AddressFacet());
         instances.add(new AffiliationFacet());
         instances.add(new BirthInformationFacet());
@@ -869,6 +873,6 @@ public class ExhaustiveInstantiationTest {
         instances.add(new ThreadItem());
         instances.add(new Victim());
         instances.add(new VictimTargeting());
-        assertEquals(429, instances.size());
+        assertEquals(431, instances.size());
     }
 }

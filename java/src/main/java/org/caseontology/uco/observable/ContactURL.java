@@ -10,15 +10,14 @@ public class ContactURL extends UcoInherentCharacterizationThing {
     public static final String CLASS_IRI = "https://ontology.unifiedcyberontology.org/uco/observable/ContactURL";
     public static final String NAMESPACE_PREFIX = "uco-observable";
 
-    private List<String> contactURLScope;
+    private String contactURLScope;
     private ObservableObject url;
 
     public ContactURL() {
-        this.contactURLScope = new ArrayList<>();
     }
 
-    public List<String> getContactURLScope() { return this.contactURLScope; }
-    public ContactURL setContactURLScope(List<String> value) { this.contactURLScope = value; return this; }
+    public String getContactURLScope() { return this.contactURLScope; }
+    public ContactURL setContactURLScope(String value) { this.contactURLScope = value; return this; }
 
     public ObservableObject getUrl() { return this.url; }
     public ContactURL setUrl(ObservableObject value) { this.url = value; return this; }

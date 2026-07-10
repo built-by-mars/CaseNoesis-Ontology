@@ -48,8 +48,9 @@ namespace CaseUco.Uco.Types
     {
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/types/Hash";
         public new const string NamespacePrefix = "uco-types";
+        [global::CaseUco.CaseRequired]
         [global::CaseUco.JsonLdProperty("uco-types:hashMethod")]
-        public List<string> HashMethod { get; set; }
+        public string HashMethod { get; set; }
         [global::CaseUco.CaseRequired]
         [global::CaseUco.JsonLdProperty("uco-types:hashValue")]
         public byte[] HashValue { get; set; }
@@ -72,14 +73,14 @@ namespace CaseUco.Uco.Types
     }
 
     /// <summary>A semi-ordered array of items, that can be present in multiple copies.  Implemetation of a UCO Thread is similar to a Collections Ontology List, except a Thread may fork and merge - that is, one of it</summary>
-    public class Thread : CaseUco.Uco.Core.UcoThing
+    public class Thread : CaseUco.Uco.Core.UcoInherentCharacterizationThing
     {
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/types/Thread";
         public new const string NamespacePrefix = "uco-types";
     }
 
     /// <summary>A ThreadItem is a member of a thread.</summary>
-    public class ThreadItem : CaseUco.Uco.Core.UcoThing
+    public class ThreadItem : CaseUco.Uco.Core.UcoInherentCharacterizationThing
     {
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/types/ThreadItem";
         public new const string NamespacePrefix = "uco-types";

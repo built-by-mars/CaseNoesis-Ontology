@@ -6,7 +6,8 @@
   "upstream_ref": "issues/666",
   "license": "Apache-2.0",
   "namespaces": {
-    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/"
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "attack": "https://attack.mitre.org/techniques/"
   },
   "owl_files": [
     "attack-technique.ttl",

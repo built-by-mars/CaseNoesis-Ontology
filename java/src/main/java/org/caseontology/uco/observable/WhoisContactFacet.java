@@ -9,13 +9,12 @@ public class WhoisContactFacet extends ContactFacet {
     public static final String CLASS_IRI = "https://ontology.unifiedcyberontology.org/uco/observable/WhoisContactFacet";
     public static final String NAMESPACE_PREFIX = "uco-observable";
 
-    private List<String> whoisContactType;
+    private String whoisContactType;
 
     public WhoisContactFacet() {
-        this.whoisContactType = new ArrayList<>();
     }
 
-    public List<String> getWhoisContactType() { return this.whoisContactType; }
-    public WhoisContactFacet setWhoisContactType(List<String> value) { this.whoisContactType = value; return this; }
+    public String getWhoisContactType() { return this.whoisContactType; }
+    public WhoisContactFacet setWhoisContactType(String value) { this.whoisContactType = value; return this; }
 
 }

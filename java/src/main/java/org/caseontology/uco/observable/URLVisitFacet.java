@@ -13,12 +13,11 @@ public class URLVisitFacet extends Facet {
     private ObservableObject browserInformation;
     private ObservableObject fromURLVisit;
     private ObservableObject url;
-    private List<String> urlTransitionType;
+    private String urlTransitionType;
     private java.time.Duration visitDuration;
     private java.time.ZonedDateTime visitTime;
 
     public URLVisitFacet() {
-        this.urlTransitionType = new ArrayList<>();
     }
 
     public ObservableObject getBrowserInformation() { return this.browserInformation; }
@@ -30,8 +29,8 @@ public class URLVisitFacet extends Facet {
     public ObservableObject getUrl() { return this.url; }
     public URLVisitFacet setUrl(ObservableObject value) { this.url = value; return this; }
 
-    public List<String> getUrlTransitionType() { return this.urlTransitionType; }
-    public URLVisitFacet setUrlTransitionType(List<String> value) { this.urlTransitionType = value; return this; }
+    public String getUrlTransitionType() { return this.urlTransitionType; }
+    public URLVisitFacet setUrlTransitionType(String value) { this.urlTransitionType = value; return this; }
 
     public java.time.Duration getVisitDuration() { return this.visitDuration; }
     public URLVisitFacet setVisitDuration(java.time.Duration value) { this.visitDuration = value; return this; }

@@ -4,9 +4,9 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 | Metric | Count |
 |--------|-------|
-| Classes | 2514 |
-| Direct properties | 2336 |
-| Modules | 66 |
+| Classes | 2563 |
+| Direct properties | 2407 |
+| Modules | 72 |
 | Vocabulary types | 54 |
 
 ## Table of Contents
@@ -16,8 +16,9 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 - [ext.aeo.engagement](#extaeoengagement) (22 classes)
 - [ext.aeo.identity](#extaeoidentity) (2 classes)
 - [ext.aeo.objective](#extaeoobjective) (1 classes)
+- [ext.attack-technique.attack](#extattack-techniqueattack) (12 classes)
 - [ext.cac.cac-core](#extcaccac-core) (19 classes)
-- [ext.cac.cacontology](#extcaccacontology) (33 classes)
+- [ext.cac.cacontology](#extcaccacontology) (34 classes)
 - [ext.cac.cacontology-ai-csam](#extcaccacontology-ai-csam) (37 classes)
 - [ext.cac.cacontology-analyst-wellbeing](#extcaccacontology-analyst-wellbeing) (4 classes)
 - [ext.cac.cacontology-asset-forfeiture](#extcaccacontology-asset-forfeiture) (34 classes)
@@ -36,7 +37,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 - [ext.cac.cacontology-investigation-coordination](#extcaccacontology-investigation-coordination) (54 classes)
 - [ext.cac.cacontology-law-enforcement-corruption](#extcaccacontology-law-enforcement-corruption) (27 classes)
 - [ext.cac.cacontology-legal-harmonization](#extcaccacontology-legal-harmonization) (78 classes)
-- [ext.cac.cacontology-legal-outcomes](#extcaccacontology-legal-outcomes) (60 classes)
+- [ext.cac.cacontology-legal-outcomes](#extcaccacontology-legal-outcomes) (62 classes)
 - [ext.cac.cacontology-multi-jurisdiction](#extcaccacontology-multi-jurisdiction) (83 classes)
 - [ext.cac.cacontology-partnerships](#extcaccacontology-partnerships) (39 classes)
 - [ext.cac.cacontology-physical-evidence](#extcaccacontology-physical-evidence) (44 classes)
@@ -63,11 +64,16 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 - [ext.cac.cacontology-usa-federal-law](#extcaccacontology-usa-federal-law) (40 classes)
 - [ext.cac.cacontology-usa-legislative](#extcaccacontology-usa-legislative) (18 classes)
 - [ext.cac.cacontology-victim-impact](#extcaccacontology-victim-impact) (67 classes)
+- [ext.cryptoinv.cryptoinv](#extcryptoinvcryptoinv) (13 classes)
+- [ext.drugs.drug](#extdrugsdrug) (1 classes)
+- [ext.legalproc.legalproc](#extlegalproclegalproc) (8 classes)
+- [ext.rico.rico](#extricorico) (2 classes)
 - [ext.toolcap](#exttoolcap) (5 classes)
-- [uco.action](#ucoaction) (7 classes)
+- [ext.weapons.weap](#extweaponsweap) (8 classes)
+- [uco.action](#ucoaction) (8 classes)
 - [uco.analysis](#ucoanalysis) (5 classes)
 - [uco.configuration](#ucoconfiguration) (3 classes)
-- [uco.core](#ucocore) (21 classes)
+- [uco.core](#ucocore) (22 classes)
 - [uco.identity](#ucoidentity) (20 classes)
 - [uco.location](#ucolocation) (4 classes)
 - [uco.marking](#ucomarking) (7 classes)
@@ -165,7 +171,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_more | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_more | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -226,7 +232,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -323,7 +329,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_more | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_more | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -357,7 +363,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_more | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_more | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -393,7 +399,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -427,7 +433,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_more | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_more | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -461,7 +467,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -497,7 +503,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -530,7 +536,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -563,7 +569,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -683,7 +689,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -762,7 +768,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -795,7 +801,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -945,7 +951,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -1021,7 +1027,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -1119,6 +1125,404 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
+
+## ext.attack-technique.attack
+
+### T1016
+
+*Tactic: Discovery. Platforms: Windows, Linux, macOS. Adversaries look for details about the network configuration and settings of compromised systems.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1016`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1027.002
+
+*Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries perform software packing to compress or encrypt an executable and hinder analysis or signature detection.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1027.002`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1041
+
+*Tactic: Exfiltration. Platforms: Windows, Linux, macOS. Adversaries steal data by exfiltrating it over an existing command-and-control channel.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1041`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1047
+
+*Tactic: Execution. Platforms: Windows. Adversaries abuse Windows Management Instrumentation (WMI) to execute malicious commands and payloads, including on remote hosts for lateral movement.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1047`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1055.001
+
+*Tactics: Defense Evasion, Privilege Escalation. Platforms: Windows. Adversaries inject dynamic-link libraries into processes to evade process-based defenses and elevate privileges.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1055.001`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1071.001
+
+*Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries communicate using application-layer web protocols (HTTP/HTTPS) to avoid detection by blending with existing traffic.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1071.001`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1090.001
+
+*Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries use an internal proxy to direct command-and-control traffic between compromised systems and out to the internet.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1090.001`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1102.002
+
+*Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries use an existing, legitimate external web service for bidirectional command-and-control communication to blend with normal traffic.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1102.002`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1112
+
+*Tactic: Defense Evasion. Platforms: Windows. Adversaries interact with the Windows Registry to hide configuration information, remove information, or evade defenses.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1112`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1539
+
+*Tactic: Credential Access. Platforms: Windows, Linux, macOS. Adversaries steal web application or service session cookies to authenticate to systems as the compromised user.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1539`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1543.003
+
+*Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries create or modify Windows services to repeatedly execute malicious payloads as part of persistence.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1543.003`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+
+### T1560.001
+
+*Tactic: Collection. Platforms: Windows, Linux, macOS. Adversaries use a utility to compress and/or encrypt collected data prior to exfiltration.*
+
+**Parents:** Action | **IRI:** `https://attack.mitre.org/techniques/T1560.001`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
 
 ## ext.cac.cac-core
 
@@ -1264,7 +1668,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -1477,7 +1881,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -1603,7 +2007,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -1672,7 +2076,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -1750,7 +2154,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -1842,7 +2246,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -1897,7 +2301,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -1919,6 +2323,26 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 *No direct or inherited properties.*
 
+### Subject
+
+*Role of a person whose conduct is within the scope of a CAC investigation. Equivalent to case-investigation:Subject (https://ontology.caseontology.org/case/investigation/Subject); alias pending the alignment decision in CAC-Ontology issue #41.*
+
+**Parents:** Role | **IRI:** `https://cacontology.projectvic.org#Subject`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+
 ### UnknownVictimSubmission
 
 *The action of submitting information about unidentified victims to relevant databases.*
@@ -1939,7 +2363,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -2380,7 +2804,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -2482,7 +2906,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -2692,7 +3116,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -2868,7 +3292,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -4054,7 +4478,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -4183,7 +4607,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -4378,7 +4802,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -4435,7 +4859,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -4604,7 +5028,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -4689,7 +5113,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -4749,7 +5173,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -4812,7 +5236,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -4893,7 +5317,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -4953,7 +5377,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -5022,7 +5446,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -5083,7 +5507,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -5252,7 +5676,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -6493,7 +6917,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | tag | string | zero_or_more | No | A generic tag/label. |
 | hasChanged | boolean | zero_or_one | No |  |
 | state | string | zero_or_one | No |  |
-| hashMethod | string | zero_or_more | No | A particular cryptographic hashing method (e.g., MD5). |
+| hashMethod | string | exactly_one | Yes | A particular cryptographic hashing method (e.g., MD5). |
 | hashValue | hexBinary | exactly_one | Yes | A cryptographic hash value. |
 | hashAlgorithm | string | exactly_one | Yes | The specific algorithm used for perceptual hashing (e.g., 'pHash', 'aHash', 'dHash'). |
 | perceptualHashValue | string | exactly_one | Yes | The perceptual hash value as a hexadecimal string. |
@@ -6520,7 +6944,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | tag | string | zero_or_more | No | A generic tag/label. |
 | hasChanged | boolean | zero_or_one | No |  |
 | state | string | zero_or_one | No |  |
-| hashMethod | string | zero_or_more | No | A particular cryptographic hashing method (e.g., MD5). |
+| hashMethod | string | exactly_one | Yes | A particular cryptographic hashing method (e.g., MD5). |
 | hashValue | hexBinary | exactly_one | Yes | A cryptographic hash value. |
 | photoDNAValue | string | exactly_one | Yes | The PhotoDNA hash value as a hexadecimal string. |
 | createdTime | dateTime | zero_or_one | No |  |
@@ -7423,7 +7847,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -7468,7 +7892,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -7528,7 +7952,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -7686,7 +8110,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -7880,7 +8304,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8122,7 +8546,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8163,7 +8587,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8205,7 +8629,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8244,7 +8668,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8285,7 +8709,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8324,7 +8748,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8366,7 +8790,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8409,7 +8833,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8473,7 +8897,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8512,7 +8936,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8545,7 +8969,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8584,7 +9008,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8643,7 +9067,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8687,7 +9111,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8728,7 +9152,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8767,7 +9191,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8900,7 +9324,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -8970,7 +9394,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9018,7 +9442,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9057,7 +9481,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9096,7 +9520,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9144,7 +9568,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9186,7 +9610,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9275,7 +9699,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9317,7 +9741,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9434,7 +9858,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9473,7 +9897,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9552,7 +9976,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9596,7 +10020,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9647,7 +10071,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9686,7 +10110,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9725,7 +10149,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -9783,7 +10207,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -11418,7 +11842,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -11586,7 +12010,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -11715,7 +12139,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -15304,7 +15728,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -17755,6 +18179,30 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | floridaStatute | string | zero_or_one | No | Reference to Florida Statute section for the charge (e.g., 'F.S. 847.0135'). |
 | childDelinquencyContribution | boolean | zero_or_one | No |  |
 
+### ConvictionRecord
+
+*Record of a criminal conviction (verdict or plea) against a defendant. Already targeted by ConvictionRecordShape in cacontology-legal-outcomes-shapes.ttl; OWL class pending upstream per CAC-Ontology issue #36.*
+
+**Parents:** UcoObject | **IRI:** `https://cacontology.projectvic.org/legal-outcomes#ConvictionRecord`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| chargeCount | nonNegativeInteger | exactly_one | Yes | Number of criminal charges, or the ordinal count number of a charge within its charging instrument. Upstream proposal... |
+| convictionDate | dateTime | exactly_one | Yes | Date of conviction. Referenced by ConvictionRecordShape; declaration pending upstream per CAC-Ontology issue #36. |
+| convictionType | string | exactly_one | Yes | How the conviction was obtained: jury_verdict, bench_trial, plea_agreement, default_judgment, or summary_conviction. ... |
+| priorConvictions | nonNegativeInteger | zero_or_one | No |  |
+
 ### CriminalCharge
 
 *Formal accusation of criminal activity in CAC cases. Modeled as gUFO Object.*
@@ -17936,6 +18384,26 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | tag | string | zero_or_more | No | A generic tag/label. |
 | hasChanged | boolean | zero_or_one | No |  |
 | state | string | zero_or_one | No |  |
+
+### FederalProsecution
+
+*Alias for cacontology-usa-federal:FederalProsecution, provided for continuity with existing graphs pending the namespace-alignment decision in CAC-Ontology issue #40.*
+
+**Parents:** UcoObject | **IRI:** `https://cacontology.projectvic.org/legal-outcomes#FederalProsecution`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
 
 ### FloridaStateCharge
 
@@ -18668,7 +19136,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -18728,7 +19196,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -18787,7 +19255,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -18833,7 +19301,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -19223,7 +19691,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -19284,7 +19752,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -19366,7 +19834,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -19562,7 +20030,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -19622,7 +20090,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -19768,7 +20236,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -19895,7 +20363,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -19968,7 +20436,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -20001,7 +20469,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -20070,7 +20538,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -20103,7 +20571,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -20136,7 +20604,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -20212,7 +20680,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -20334,7 +20802,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -20402,7 +20870,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -20435,7 +20903,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -21056,7 +21524,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -21320,7 +21788,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -21406,7 +21874,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -21468,7 +21936,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -21617,7 +22085,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -21673,7 +22141,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -21863,7 +22331,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -21897,7 +22365,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -21933,7 +22401,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -22067,7 +22535,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -22154,7 +22622,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -22218,7 +22686,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -22326,7 +22794,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -22418,7 +22886,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -22502,7 +22970,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -22679,7 +23147,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -22784,7 +23252,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -23052,7 +23520,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -23134,7 +23602,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -23213,7 +23681,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -23324,7 +23792,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -23382,7 +23850,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -23419,7 +23887,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -23629,7 +24097,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -23678,7 +24146,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -23790,7 +24258,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -24742,7 +25210,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -26318,7 +26786,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -26380,7 +26848,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -27215,7 +27683,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -28105,7 +28573,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -28350,7 +28818,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -28601,7 +29069,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -28819,7 +29287,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -28909,7 +29377,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -28959,7 +29427,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -29105,7 +29573,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -29161,7 +29629,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -29622,7 +30090,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -29803,7 +30271,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -29944,7 +30412,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -30050,7 +30518,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -30179,7 +30647,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -30281,7 +30749,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -30326,7 +30794,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -30429,7 +30897,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -30466,7 +30934,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -32932,7 +33400,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -33008,7 +33476,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -33142,7 +33610,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -33186,7 +33654,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -33255,7 +33723,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -33407,7 +33875,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -33451,7 +33919,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -33589,7 +34057,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -33693,7 +34161,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -34183,7 +34651,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -34465,7 +34933,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -34505,7 +34973,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -34799,7 +35267,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -35121,7 +35589,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36299,7 +36767,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36386,7 +36854,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36451,7 +36919,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36491,7 +36959,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36531,7 +36999,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36670,7 +37138,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36740,7 +37208,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36838,7 +37306,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36902,7 +37370,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36942,7 +37410,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -36985,7 +37453,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -37097,7 +37565,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -37137,7 +37605,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -37199,7 +37667,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -37247,7 +37715,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -37344,7 +37812,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -37408,7 +37876,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -37448,7 +37916,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -37572,7 +38040,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -37686,7 +38154,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -37765,7 +38233,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -38731,7 +39199,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -39643,7 +40111,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -39834,7 +40302,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -39867,7 +40335,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -40312,7 +40780,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -40513,7 +40981,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -40640,7 +41108,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -40674,6 +41142,529 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 |----------|------|-------------|----------|-------------|
 | serviceProvider | string | zero_or_one | No | Organization or entity providing support services. |
 | serviceType | string | exactly_one | Yes | Type of support service (advocacy, safety, educational, legal, financial). |
+
+## ext.cryptoinv.cryptoinv
+
+### AssetSeizureAction
+
+*An investigative action in which law enforcement takes custody of assets — including virtual assets seized by using recovered private keys to transfer wallet contents to government-controlled addresses — pursuant to a seizure warrant under Federal Rule of Criminal Procedure 41 (https://www.law.cornell.edu/rules/frcrmp/rule_41) and 21 U.S.C. § 853(f), or under exigent circumstances with subsequent judicial approval (see United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts para. 6).*
+
+**Parents:** InvestigativeAction | **IRI:** `http://example.org/ontology/cryptoinv/AssetSeizureAction`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
+| endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
+| environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
+| error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
+| instrument | UcoObject | zero_or_more | No | The things used to perform an action. |
+| location | Location | zero_or_more | No | The locations where an action occurs. |
+| object | UcoObject | zero_or_more | No | The things that the action is performed on/against. |
+| participant | UcoObject | zero_or_more | No | The supporting (non-primary) performers of an action. |
+| performer | UcoObject | zero_or_one | No | The primary performer of an action. |
+| result | UcoObject | zero_or_more | No | The things resulting from performing an action. |
+| startTime | dateTime | zero_or_one | No | The time at which performance of the action began. |
+| subaction | Action | zero_or_more | No | References to other actions that make up part of a larger more complex action. |
+| wasInformedBy | InvestigativeAction | zero_or_more | No | A re-implementation of the wasInformedBy property in W3C PROV-O, where an entity is exchanged by two activities, 'one... |
+
+### CriminalCharge
+
+*A criminal charge is a formal accusation, stated as a count within a charging instrument (indictment or information), that a person committed a specific statutory offense — e.g. Count One, Money Laundering Conspiracy in violation of 18 U.S.C. § 1956(h). Charging instruments and their required contents are governed by Federal Rule of Criminal Procedure 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7).*
+
+**Parents:** UcoObject | **IRI:** `http://example.org/ontology/cryptoinv/CriminalCharge`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| chargeDescription | string | zero_or_one | No | The plain-language name of the charged offense as stated in the charging instrument, e.g. 'Money Laundering Conspirac... |
+| countNumber | nonNegativeInteger | zero_or_one | No | The ordinal number of this charge (count) within its charging instrument, per Federal Rule of Criminal Procedure 7(c)... |
+| statuteCitation | string | one_or_more | Yes | The statutory citation for the charged offense, e.g. '18 U.S.C. § 1956(h)' (https://uscode.house.gov/). |
+
+### CryptocurrencyAddressFacet
+
+*A cryptocurrency address facet is a grouping of characteristics unique to a blockchain address used to send and receive virtual assets on a distributed ledger network. A virtual currency address is roughly equivalent to an anonymous account number and has a corresponding private key needed to spend value held at the address (see the affidavit in United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts nn.4-9, and the INTERPOL DW-VA Taxonomy entity 'wallet': https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#wallet). Attach to a uco-observable:ObservableObject via uco-core:hasFacet.*
+
+**Parents:** Facet | **Type:** Facet | **IRI:** `http://example.org/ontology/cryptoinv/CryptocurrencyAddressFacet`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| addressFormat | string | zero_or_one | No | The encoding format of the address as an open vocabulary. Recommended values: 'Base58Check', 'Bech32', 'Hex'. See BIP... |
+| addressValue | string | exactly_one | Yes | The cryptocurrency address string, e.g. '1CGA4s...' (Base58Check), 'bc1q...' (Bech32), or '0x8CE693CB0626924583931F25... |
+| blockchainNetwork | string | zero_or_one | No | The distributed ledger network the address or transaction belongs to, e.g. 'Bitcoin Mainnet', 'Ethereum', 'Litecoin'.... |
+| cryptocurrencyType | string | zero_or_one | No | The type of cryptocurrency, as an open vocabulary of ticker symbols. Recommended values: BTC, ETH, LTC, XMR, ZEC, DAS... |
+
+### CryptocurrencyMixingService
+
+*A cryptocurrency mixing service (mixer or tumbler) obscures the link between transaction inputs and outputs by combining or shuffling the virtual assets of multiple users — for example via coinjoin, a method where two or more user transactions are combined into a single blockchain transaction with multiple inputs and outputs (INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#coinjoin). Examples cited in federal prosecutions include Bitcoin Fog, Helix, and ChipMixer (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of the Offense para. 19; see also FinCEN guidance FIN-2019-G001, https://www.fincen.gov/resources/statutes-and-regulations/guidance).*
+
+**Parents:** Organization | **IRI:** `http://example.org/ontology/cryptoinv/CryptocurrencyMixingService`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+
+### CryptocurrencyTransactionFacet
+
+*A cryptocurrency transaction facet is a grouping of characteristics unique to a transfer of value recorded on a blockchain distributed ledger. Attach to a uco-observable:ObservableObject representing the transaction; model the source and destination addresses as uco-observable:ObservableRelationship instances with uco-core:kindOfRelationship values 'Transaction_Input' and 'Transaction_Output' and a cryptoinv:transferAmount. This pattern natively supports UTXO-chain transactions (Bitcoin) with multiple inputs and outputs (see https://developer.bitcoin.org/devguide/transactions.html) as well as account-based chains (Ethereum).*
+
+**Parents:** Facet | **Type:** Facet | **IRI:** `http://example.org/ontology/cryptoinv/CryptocurrencyTransactionFacet`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| blockHash | string | zero_or_one | No | The hash of the block containing this transaction (https://developer.bitcoin.org/reference/block_chain.html). |
+| blockNumber | integer | zero_or_one | No | The block number (block height) in the blockchain at which the transaction was confirmed (https://developer.bitcoin.o... |
+| confirmationCount | integer | zero_or_one | No | The number of blockchain confirmations at the time of observation. This is a point-in-time snapshot, not a time-varyi... |
+| transactionFee | decimal | zero_or_one | No | The transaction fee in the native cryptocurrency unit of the network (https://developer.bitcoin.org/devguide/transact... |
+| transactionHash | string | exactly_one | Yes | The unique hash identifier of the blockchain transaction, e.g. '6e0d701ac2ea3ad87fc8bcaa786b994aa943f5eb9a67a1e345769... |
+| transactionStatus | string | zero_or_one | No | The status of the transaction at the time of observation, as an open vocabulary. Recommended values: 'Confirmed', 'Pe... |
+| transactionType | string | zero_or_one | No | The investigative characterization of the transaction, as an open vocabulary. Recommended values: 'Transfer', 'Exchan... |
+
+### CryptocurrencyWalletFacet
+
+*A cryptocurrency wallet facet is a grouping of characteristics unique to a wallet: software, a device, or a hosted service that keeps track of the private keys used to sign virtual-asset transactions, and which may contain many virtual currency addresses (INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#wallet). First proposed as CryptoWalletFacet in https://github.com/casework/CASE/issues/87; this revision omits time-varying balance properties, which remain blocked by https://github.com/ucoProject/UCO/issues/535 — use cryptoinv:VirtualAssetHoldingFacet for point-in-time holdings snapshots.*
+
+**Parents:** Facet | **Type:** Facet | **IRI:** `http://example.org/ontology/cryptoinv/CryptocurrencyWalletFacet`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| addressCount | nonNegativeInteger | zero_or_one | No | The number of virtual currency addresses contained in the wallet at the time of observation (a wallet may include man... |
+| walletIdentifier | string | zero_or_one | No | An investigative identifier for the wallet or address cluster, e.g. the first characters of a representative address ... |
+| walletType | string | zero_or_one | No | The custody model and form factor of the wallet, as an open vocabulary. Recommended values: 'hosted' (a third party r... |
+
+### DarknetMarket
+
+*A darknet market is an e-commerce platform, typically reachable only via anonymizing networks such as Tor, through which vendors can sell illegal goods and services such as narcotics, stolen financial information, and hacking tools. Darknet markets typically allow users to create accounts and deposit, store, and withdraw virtual currency, which makes them usable as money-laundering pass-throughs that break up fund-flow trails on public blockchains (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts n.12 and paras. 11-12; INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/).*
+
+**Parents:** Organization | **IRI:** `http://example.org/ontology/cryptoinv/DarknetMarket`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+
+### ForfeitureOrder
+
+*A forfeiture order (or forfeiture allegation, prior to conviction) requires a defendant to forfeit to the government property involved in or traceable to the offense, under statutes such as 18 U.S.C. § 981(a)(1)(C) (https://www.law.cornell.edu/uscode/text/18/981), 18 U.S.C. § 982(a)(1) (https://www.law.cornell.edu/uscode/text/18/982), 28 U.S.C. § 2461(c), and the substitute-assets provision 21 U.S.C. § 853(p) (https://www.law.cornell.edu/uscode/text/21/853). A forfeiture money judgment for a sum equal to the value of the property involved may accompany the forfeiture of specific property.*
+
+**Parents:** UcoObject | **IRI:** `http://example.org/ontology/cryptoinv/ForfeitureOrder`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| moneyJudgmentAmount | decimal | zero_or_one | No | The amount of the forfeiture money judgment, equal to the value of property involved in the offense (see 18 U.S.C. §§... |
+| moneyJudgmentCurrencyCode | string | zero_or_one | No | The ISO 4217 alphabetic currency code of the forfeiture money judgment, e.g. 'USD' (https://www.iso.org/iso-4217-curr... |
+
+### PleaAgreement
+
+*A plea agreement is a negotiated agreement under Federal Rule of Criminal Procedure 11(c) (https://www.law.cornell.edu/rules/frcrmp/rule_11) in which a defendant agrees to plead guilty to one or more charges, typically in exchange for concessions such as dismissal of other charges, a sentencing recommendation, or non-prosecution commitments. This class models the legal instrument and its terms; model the underlying court-filed document separately as a uco-observable:ObservableObject with a uco-observable:FileFacet and link the two with a uco-core:Relationship.*
+
+**Parents:** UcoObject | **IRI:** `http://example.org/ontology/cryptoinv/PleaAgreement`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| pleaDate | dateTime | zero_or_one | No | The date the plea agreement was executed or the guilty plea was entered before the court (Federal Rule of Criminal Pr... |
+| pleadsGuiltyTo | CriminalCharge | one_or_more | Yes | Links a plea agreement to the criminal charge(s) the defendant agrees to plead guilty to under Federal Rule of Crimin... |
+
+### RestitutionOrder
+
+*A restitution order (or restitution request) compensates victims for losses caused by the offense. For most federal property crimes restitution is mandatory under the Mandatory Victims Restitution Act, 18 U.S.C. § 3663A (https://www.law.cornell.edu/uscode/text/18/3663A). Restitution may be in-kind, e.g. return of forfeited virtual assets to the victim exchange.*
+
+**Parents:** UcoObject | **IRI:** `http://example.org/ontology/cryptoinv/RestitutionOrder`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| restitutionDescription | string | zero_or_one | No | A description of the restitution proposed or ordered, e.g. 'in-kind restitution of forfeited cryptocurrency to the vi... |
+| restitutionInKind | boolean | zero_or_one | No | True when restitution is proposed or ordered in-kind (return of specific property, such as seized virtual assets) rat... |
+
+### SentencingOutcome
+
+*A sentencing outcome records a sentence recommended by a party or imposed by the court under 18 U.S.C. § 3553(a) (https://www.law.cornell.edu/uscode/text/18/3553) and the United States Sentencing Guidelines (https://www.ussc.gov/guidelines), including the term of imprisonment, supervised release, offense level, and advisory Guidelines range. Use cryptoinv:sentenceStatus to distinguish a party recommendation from an imposed judgment.*
+
+**Parents:** UcoObject | **IRI:** `http://example.org/ontology/cryptoinv/SentencingOutcome`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| guidelineRangeHighMonths | nonNegativeInteger | zero_or_one | No | The high end of the advisory Sentencing Guidelines range in months (U.S.S.G. Ch. 5 Pt. A Sentencing Table, https://ww... |
+| guidelineRangeLowMonths | nonNegativeInteger | zero_or_one | No | The low end of the advisory Sentencing Guidelines range in months (U.S.S.G. Ch. 5 Pt. A Sentencing Table, https://www... |
+| offenseLevel | integer | zero_or_one | No | The total offense level under the United States Sentencing Guidelines used to derive the advisory range (U.S.S.G. Ch.... |
+| sentenceDurationMonths | nonNegativeInteger | zero_or_one | No | The term of imprisonment in months (recommended or imposed) under 18 U.S.C. § 3553 (https://www.law.cornell.edu/uscod... |
+| sentenceStatus | string | exactly_one | Yes | Whether the sentencing outcome is a recommendation or an imposed judgment, as an open vocabulary. Recommended values:... |
+| sentencingDate | dateTime | zero_or_one | No | The date the sentencing outcome was recommended (date of the sentencing memorandum) or imposed (date of the judgment). |
+| supervisedReleaseMonths | nonNegativeInteger | zero_or_one | No | The term of supervised release in months under 18 U.S.C. § 3583 (https://www.law.cornell.edu/uscode/text/18/3583). |
+
+### VirtualAssetHoldingFacet
+
+*A virtual asset holding facet is a grouping of characteristics describing a point-in-time quantity of a specific virtual asset held at, contained in, or seized from a wallet, address, or account — for example 'approximately 94,636 BTC seized on 2022-02-01, valued at $3.629 billion' (United States v. Lichtenstein, No. 1:23-cr-00239-CKK (D.D.C.), Statement of Facts para. 6). Each holding is an observation snapshot with an optional fiat valuation, deliberately avoiding the time-varying balance problem deferred to https://github.com/ucoProject/UCO/issues/535.*
+
+**Parents:** Facet | **Type:** Facet | **IRI:** `http://example.org/ontology/cryptoinv/VirtualAssetHoldingFacet`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| assetQuantity | decimal | exactly_one | Yes | The quantity of the virtual asset in its native unit at the observation time, e.g. 94643.29837084. |
+| assetSymbol | string | exactly_one | Yes | The ticker symbol of the held virtual asset, as an open vocabulary (same recommended values as cryptoinv:cryptocurren... |
+| fiatCurrencyCode | string | zero_or_one | No | The ISO 4217 alphabetic currency code of the fiat valuation, e.g. 'USD' (https://www.iso.org/iso-4217-currency-codes.... |
+| fiatValue | decimal | zero_or_one | No | The fiat-currency valuation of the holding at the valuation date. Fiat money is a currency established as money by go... |
+| valuationDate | dateTime | zero_or_one | No | The date and time at which the fiat valuation of the holding was made. The trading value of virtual assets fluctuates... |
+
+### VirtualAssetServiceProvider
+
+*A virtual asset service provider (VASP) is any natural or legal person who as a business conducts one or more of the following activities for or on behalf of another natural or legal person: exchange between virtual assets and fiat currencies; exchange between one or more forms of virtual assets; transfer of virtual assets; safekeeping and/or administration of virtual assets or instruments enabling control over virtual assets; and participation in and provision of financial services related to an issuer's offer and/or sale of a virtual asset (FATF definition, as recorded in the INTERPOL DW-VA Taxonomy: https://interpol-innovation-centre.github.io/DW-VA-Taxonomy/taxonomies/entities#VASP). Virtual currency exchanges (VCEs) doing business in the United States are regulated by the U.S. Department of the Treasury and must establish anti-money-laundering programs under the Bank Secrecy Act (31 U.S.C. § 5311 et seq., https://www.fincen.gov/resources/statutes-and-regulations/bank-secrecy-act).*
+
+**Parents:** Organization | **IRI:** `http://example.org/ontology/cryptoinv/VirtualAssetServiceProvider`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+
+## ext.drugs.drug
+
+### ControlledSubstance
+
+*A controlled substance is a concrete portion (lot, package, or charged quantity) of a drug or other substance included in a schedule of a controlled-substances regime, such as Schedules I-V of the U.S. Controlled Substances Act, 21 U.S.C. § 802(6) (https://www.law.cornell.edu/uscode/text/21/802). The instance represents the seized or charged quantity of matter, not the chemical kind; identify the chemical kind with the substance property referencing a ChEBI class IRI.*
+
+**Parents:** UcoObject | **IRI:** `http://example.org/ontology/drugs/ControlledSubstance`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| csaSchedule | string | zero_or_one | No | The controlled-substance schedule assigned in the governing jurisdiction, as an open vocabulary. Recommended values f... |
+| mass | decimal | zero_or_one | No | The measured or charged mass of the portion, in the unit given by massUnit. For threshold quantities charged in the a... |
+| massUnit | string | zero_or_one | No | The unit of the mass value, as a UCUM code (https://ucum.org/ucum), e.g. 'g', 'kg', 'mg'. |
+| purity | decimal | zero_or_one | No | Laboratory-determined purity of the portion as a percentage (0-100) of the controlled substance in the mixture. |
+| purityBasis | string | zero_or_one | No | Whether recorded quantities describe the whole mixture or the actual controlled substance it contains, as an open voc... |
+| quantityDescription | string | zero_or_one | No | The quantity as stated verbatim in the source record, to avoid fabricating precision, e.g. '500 grams or more of a mi... |
+| substanceForm | string | zero_or_one | No | The physical form of the portion, as an open vocabulary. Recommended values: 'powder', 'crystal', 'tablet', 'capsule'... |
+| substanceName | string | zero_or_one | No | The substance name as recorded in the source record, kept verbatim, e.g. 'methamphetamine', 'a mixture and substance ... |
+
+## ext.legalproc.legalproc
+
+### ChargingInstrument
+
+*A charging instrument is a formal document that initiates or amends criminal charges against one or more defendants, such as a criminal complaint, indictment, superseding indictment, or information. See Federal Rule of Criminal Procedure 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7).*
+
+**Parents:** UcoObject | **IRI:** `https://ontology.caseontology.org/case/criminal/ChargingInstrument`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| instrumentType | string | exactly_one | Yes | The type of charging instrument, as an open vocabulary. Recommended values: 'complaint', 'indictment', 'superseding-i... |
+
+### CriminalCharge
+
+*A criminal charge is a formal accusation, stated as one or more counts within a charging instrument, that a person committed a specific statutory offense. Inchoate and derivative offenses (conspiracy, attempt, solicitation, aiding and abetting, and predicate-linked offenses such as 18 U.S.C. § 924(c) firearm counts) are criminal charges whose offenseForm and objectOffense properties record the form and the object or predicate offense. See Federal Rule of Criminal Procedure 7 (https://www.law.cornell.edu/rules/frcrmp/rule_7).*
+
+**Parents:** UcoObject | **IRI:** `https://ontology.caseontology.org/case/criminal/CriminalCharge`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| assertedIn | ChargingInstrument | zero_or_more | No | Links a criminal charge to the charging instrument (complaint, indictment, superseding indictment, information) in wh... |
+| chargeClassification | string | zero_or_one | No | The offense classification in the governing jurisdiction, e.g. 'Class A Felony' per 18 U.S.C. § 3559 (https://www.law... |
+| chargeDisposition | string | zero_or_more | No | The current disposition of the charge, as an open vocabulary. Recommended values: 'pending', 'dismissed', 'acquitted'... |
+| countLabel | string | zero_or_one | No | The count designation as printed in the charging instrument, e.g. 'Count 1', 'Counts 4-10', 'Count 1sss' (PACER super... |
+| countNumber | nonNegativeInteger | zero_or_more | No | Ordinal count number of the charge within its charging instrument. A charge asserted in a range of counts (e.g. Count... |
+| objectOffense | CriminalCharge | zero_or_more | No | Links an inchoate or derivative criminal charge (conspiracy, attempt, solicitation, aiding-abetting, predicate-linked... |
+| offenseForm | string | zero_or_one | No | The form of the charged offense, as an open vocabulary. Recommended values: 'substantive' (completed offense), 'consp... |
+| statuteCitation | string | one_or_more | Yes | Citation of the charged offense in the governing jurisdiction, e.g. '18 U.S.C. §§ 1117 & 1114'. |
+
+### CriminalProceeding
+
+*A criminal proceeding is a formal event in a criminal case conducted before a tribunal, such as an arraignment, detention hearing, trial, plea hearing, sentencing hearing, or appeal.*
+
+**Parents:** UcoObject | **IRI:** `https://ontology.caseontology.org/case/criminal/CriminalProceeding`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| proceedingType | string | exactly_one | Yes | The type of criminal proceeding, as an open vocabulary. Recommended values: 'arraignment', 'detention-hearing', 'prel... |
+
+### ForfeitureOrder
+
+*A forfeiture order is an order, or pre-conviction allegation, requiring surrender to the state of property involved in or traceable to an offense. See 18 U.S.C. §§ 981-982 (https://www.law.cornell.edu/uscode/text/18/981).*
+
+**Parents:** UcoObject | **IRI:** `https://ontology.caseontology.org/case/criminal/ForfeitureOrder`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| currencyCode | string | zero_or_one | No | ISO 4217 currency code for a monetary amount, e.g. 'USD' (https://www.iso.org/iso-4217-currency-codes.html). |
+| monetaryAmount | decimal | zero_or_one | No | The monetary amount of a restitution or forfeiture obligation, in the currency identified by currencyCode. |
+
+### Plea
+
+*A plea is a defendant's formal answer to a criminal charge. See Federal Rule of Criminal Procedure 11 (https://www.law.cornell.edu/rules/frcrmp/rule_11).*
+
+**Parents:** UcoObject | **IRI:** `https://ontology.caseontology.org/case/criminal/Plea`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| concernsCharge | CriminalCharge | zero_or_more | No | Links a plea, proceeding, verdict, sentence, forfeiture order, or restitution order to the criminal charge(s) it conc... |
+| pleaType | string | exactly_one | Yes | The type of plea entered, as an open vocabulary. Recommended values: 'guilty', 'not-guilty', 'nolo-contendere'. |
+
+### RestitutionOrder
+
+*A restitution order is an order or request that an offender compensate victims for losses caused by the offense, monetarily or in kind. See 18 U.S.C. § 3663A (https://www.law.cornell.edu/uscode/text/18/3663A).*
+
+**Parents:** UcoObject | **IRI:** `https://ontology.caseontology.org/case/criminal/RestitutionOrder`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| currencyCode | string | zero_or_one | No | ISO 4217 currency code for a monetary amount, e.g. 'USD' (https://www.iso.org/iso-4217-currency-codes.html). |
+| monetaryAmount | decimal | zero_or_one | No | The monetary amount of a restitution or forfeiture obligation, in the currency identified by currencyCode. |
+
+### Sentence
+
+*A sentence is a penalty recommended by a party or imposed by a tribunal upon conviction of a criminal charge, including custodial terms, supervised release, and special assessments. See 18 U.S.C. § 3553 (https://www.law.cornell.edu/uscode/text/18/3553).*
+
+**Parents:** UcoObject | **IRI:** `https://ontology.caseontology.org/case/criminal/Sentence`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| sentenceStatus | string | exactly_one | Yes | Whether the sentence is a party recommendation, an imposed judgment, or has been vacated, as an open vocabulary. Reco... |
+| sentenceTerm | string | zero_or_one | No | The custodial term as stated in the record, kept verbatim to avoid fabricating precision, e.g. 'Life', '165 years', '... |
+
+### Verdict
+
+*A verdict is a finder of fact's formal determination on a criminal charge, such as a jury's finding of guilty or not guilty on a count. See Federal Rule of Criminal Procedure 31 (https://www.law.cornell.edu/rules/frcrmp/rule_31).*
+
+**Parents:** UcoObject | **IRI:** `https://ontology.caseontology.org/case/criminal/Verdict`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| concernsCharge | CriminalCharge | zero_or_more | No | Links a plea, proceeding, verdict, sentence, forfeiture order, or restitution order to the criminal charge(s) it conc... |
+| verdictType | string | exactly_one | Yes | The determination recorded by the verdict, as an open vocabulary. Recommended values: 'guilty', 'not-guilty'. |
+
+## ext.rico.rico
+
+### EnterpriseRole
+
+*An enterprise role is a functional position or division-of-labor responsibility that a member or associate serves within a racketeering enterprise, as alleged in a charging instrument — for example organizer, target identifier, caller (social engineer), money launderer, database hacker, or residential burglar (see the roles alleged in United States v. Lam et al., No. 1:24-cr-00417-CKK (D.D.C.), Second Superseding Indictment ¶¶ 25-32). Link a person to the role with a uco-core:Relationship of kind 'Has_Role' and the role to the enterprise with a uco-core:Relationship of kind 'Role_Within'; one person may fulfill several roles and one role may be fulfilled by several persons.*
+
+**Parents:** Role | **IRI:** `http://example.org/ontology/rico/EnterpriseRole`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| roleFunction | string | exactly_one | Yes | The function of the enterprise role, kept close to the charging language, as an open vocabulary. Recommended values d... |
+
+### RacketeeringEnterprise
+
+*A racketeering enterprise is an 'enterprise' as defined in 18 U.S.C. § 1961(4) (https://www.law.cornell.edu/uscode/text/18/1961): any individual, partnership, corporation, association, or other legal entity, and any union or group of individuals associated in fact although not a legal entity, whose affairs are conducted or participated in through a pattern of racketeering activity (18 U.S.C. § 1962, https://www.law.cornell.edu/uscode/text/18/1962). An association-in-fact enterprise must have a purpose, relationships among those associated with the enterprise, and longevity sufficient to permit the associates to pursue the enterprise's purpose (Boyle v. United States, 556 U.S. 938 (2009), https://supreme.justia.com/cases/federal/us/556/938/). Record the charged purposes and the interstate/foreign commerce nexus in uco-core:description; record membership with uco-core:Relationship nodes of kind 'Member_Of' from persons to the enterprise; record the charged operating span with existence-interval or description conventions.*
+
+**Parents:** Organization | **IRI:** `http://example.org/ontology/rico/RacketeeringEnterprise`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| enterpriseType | string | exactly_one | Yes | The statutory branch of the enterprise definition the charged enterprise falls under, as an open vocabulary. Recommen... |
 
 ## ext.toolcap
 
@@ -40811,6 +41802,208 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 
+## ext.weapons.weap
+
+### Ammunition
+
+*Ammunition is ammunition or cartridge cases, primers, bullets, or propellent powder designed for use in any firearm. Definition follows 18 U.S.C. § 921(a)(17)(A) (https://www.law.cornell.edu/uscode/text/18/921); classed as a weapon consistent with the Common Core Ontologies 'Portion of Ammunition' (a Weapon designed to inflict harm by being projected toward its target).*
+
+**Parents:** Weapon | **IRI:** `http://example.org/ontology/weapons/Ammunition`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| caliber | string | zero_or_one | No | The caliber or gauge designation of a firearm or ammunition as recorded in the source record, e.g. '9mm', '.223', '12... |
+| make | string | zero_or_one | No | The manufacturer or maker name of the weapon as recorded in the source record, e.g. 'SIG Sauer', 'Ruger'. Parallels N... |
+| model | string | zero_or_one | No | The model name or number of the weapon as recorded in the source record, e.g. 'P365', 'Security-9'. Parallels NIEM nc... |
+| serialNumber | string | zero_or_more | No | The manufacturer serial number identifying the individual weapon, e.g. '21221464'. Importation and marking requiremen... |
+| serialNumberObliterated | boolean | zero_or_one | No | True when the weapon's manufacturer serial number has been removed, obliterated, or altered; possession or transport ... |
+
+### CuttingWeapon
+
+*A cutting weapon is a weapon designed to inflict harm by separating some portion of its target through acutely directed force, such as a knife, sword, or machete. Definition follows the Common Core Ontologies 'Cutting Weapon'.*
+
+**Parents:** Weapon | **IRI:** `http://example.org/ontology/weapons/CuttingWeapon`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| caliber | string | zero_or_one | No | The caliber or gauge designation of a firearm or ammunition as recorded in the source record, e.g. '9mm', '.223', '12... |
+| make | string | zero_or_one | No | The manufacturer or maker name of the weapon as recorded in the source record, e.g. 'SIG Sauer', 'Ruger'. Parallels N... |
+| model | string | zero_or_one | No | The model name or number of the weapon as recorded in the source record, e.g. 'P365', 'Security-9'. Parallels NIEM nc... |
+| serialNumber | string | zero_or_more | No | The manufacturer serial number identifying the individual weapon, e.g. '21221464'. Importation and marking requiremen... |
+| serialNumberObliterated | boolean | zero_or_one | No | True when the weapon's manufacturer serial number has been removed, obliterated, or altered; possession or transport ... |
+
+### Firearm
+
+*A firearm is a weapon that will, is designed to, or may readily be converted to expel a projectile by the action of an explosive, including the frame or receiver of such a weapon. Definition follows 18 U.S.C. § 921(a)(3) (https://www.law.cornell.edu/uscode/text/18/921) and the Common Core Ontologies 'Firearm' (a Projectile Launcher designed to launch Bullets or Cartridges).*
+
+**Parents:** Weapon | **IRI:** `http://example.org/ontology/weapons/Firearm`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| caliber | string | zero_or_one | No | The caliber or gauge designation of a firearm or ammunition as recorded in the source record, e.g. '9mm', '.223', '12... |
+| make | string | zero_or_one | No | The manufacturer or maker name of the weapon as recorded in the source record, e.g. 'SIG Sauer', 'Ruger'. Parallels N... |
+| model | string | zero_or_one | No | The model name or number of the weapon as recorded in the source record, e.g. 'P365', 'Security-9'. Parallels NIEM nc... |
+| serialNumber | string | zero_or_more | No | The manufacturer serial number identifying the individual weapon, e.g. '21221464'. Importation and marking requiremen... |
+| serialNumberObliterated | boolean | zero_or_one | No | True when the weapon's manufacturer serial number has been removed, obliterated, or altered; possession or transport ... |
+
+### Handgun
+
+*A handgun is a firearm designed to have a relatively short barrel and to be held and fired in one or two hands without being braced against the shoulder, such as a pistol or revolver. Definition follows 18 U.S.C. § 921(a)(30) and the Common Core Ontologies 'Hand Gun'.*
+
+**Parents:** Firearm | **IRI:** `http://example.org/ontology/weapons/Handgun`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| caliber | string | zero_or_one | No | The caliber or gauge designation of a firearm or ammunition as recorded in the source record, e.g. '9mm', '.223', '12... |
+| make | string | zero_or_one | No | The manufacturer or maker name of the weapon as recorded in the source record, e.g. 'SIG Sauer', 'Ruger'. Parallels N... |
+| model | string | zero_or_one | No | The model name or number of the weapon as recorded in the source record, e.g. 'P365', 'Security-9'. Parallels NIEM nc... |
+| serialNumber | string | zero_or_more | No | The manufacturer serial number identifying the individual weapon, e.g. '21221464'. Importation and marking requiremen... |
+| serialNumberObliterated | boolean | zero_or_one | No | True when the weapon's manufacturer serial number has been removed, obliterated, or altered; possession or transport ... |
+
+### LongGun
+
+*A long gun is a firearm designed to have a longer barrel than a handgun and to be fired while braced against the shoulder. Definition follows the Common Core Ontologies 'Long Gun' (https://en.wikipedia.org/wiki/Long_gun).*
+
+**Parents:** Firearm | **IRI:** `http://example.org/ontology/weapons/LongGun`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| caliber | string | zero_or_one | No | The caliber or gauge designation of a firearm or ammunition as recorded in the source record, e.g. '9mm', '.223', '12... |
+| make | string | zero_or_one | No | The manufacturer or maker name of the weapon as recorded in the source record, e.g. 'SIG Sauer', 'Ruger'. Parallels N... |
+| model | string | zero_or_one | No | The model name or number of the weapon as recorded in the source record, e.g. 'P365', 'Security-9'. Parallels NIEM nc... |
+| serialNumber | string | zero_or_more | No | The manufacturer serial number identifying the individual weapon, e.g. '21221464'. Importation and marking requiremen... |
+| serialNumberObliterated | boolean | zero_or_one | No | True when the weapon's manufacturer serial number has been removed, obliterated, or altered; possession or transport ... |
+
+### Rifle
+
+*A rifle is a long gun designed to have a rifled barrel and to fire single bullets over long ranges with high accuracy. Definition follows 18 U.S.C. § 921(a)(7) and the Common Core Ontologies 'Rifle'.*
+
+**Parents:** LongGun | **IRI:** `http://example.org/ontology/weapons/Rifle`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| caliber | string | zero_or_one | No | The caliber or gauge designation of a firearm or ammunition as recorded in the source record, e.g. '9mm', '.223', '12... |
+| make | string | zero_or_one | No | The manufacturer or maker name of the weapon as recorded in the source record, e.g. 'SIG Sauer', 'Ruger'. Parallels N... |
+| model | string | zero_or_one | No | The model name or number of the weapon as recorded in the source record, e.g. 'P365', 'Security-9'. Parallels NIEM nc... |
+| serialNumber | string | zero_or_more | No | The manufacturer serial number identifying the individual weapon, e.g. '21221464'. Importation and marking requiremen... |
+| serialNumberObliterated | boolean | zero_or_one | No | True when the weapon's manufacturer serial number has been removed, obliterated, or altered; possession or transport ... |
+
+### Shotgun
+
+*A shotgun is a long gun designed to fire packets of shot, a single slug, or a specialty round through a typically smooth bore. Definition follows 18 U.S.C. § 921(a)(5) and the Common Core Ontologies 'Shotgun'.*
+
+**Parents:** LongGun | **IRI:** `http://example.org/ontology/weapons/Shotgun`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| caliber | string | zero_or_one | No | The caliber or gauge designation of a firearm or ammunition as recorded in the source record, e.g. '9mm', '.223', '12... |
+| make | string | zero_or_one | No | The manufacturer or maker name of the weapon as recorded in the source record, e.g. 'SIG Sauer', 'Ruger'. Parallels N... |
+| model | string | zero_or_one | No | The model name or number of the weapon as recorded in the source record, e.g. 'P365', 'Security-9'. Parallels NIEM nc... |
+| serialNumber | string | zero_or_more | No | The manufacturer serial number identifying the individual weapon, e.g. '21221464'. Importation and marking requiremen... |
+| serialNumberObliterated | boolean | zero_or_one | No | True when the weapon's manufacturer serial number has been removed, obliterated, or altered; possession or transport ... |
+
+### Weapon
+
+*A weapon is a material item designed or used to kill, wound, or inflict damage on persons, structures, or systems. Definition follows the Common Core Ontologies Artifact Ontology 'Weapon' (https://github.com/CommonCoreOntology/CommonCoreOntologies) and the NIEM nc:WeaponType 'property item used as an instrument of attack or defense' (http://www.datypic.com/sc/niem31/t-nc_WeaponType.html).*
+
+**Parents:** UcoObject | **IRI:** `http://example.org/ontology/weapons/Weapon`
+
+| Property | Type | Cardinality | Required | Description |
+|----------|------|-------------|----------|-------------|
+| createdBy | IdentityAbstraction | zero_or_one | No | The identity that created a characterization of a concept. |
+| description | string | zero_or_more | No | A description of a particular concept characterization. |
+| externalReference | ExternalReference | zero_or_more | No | Specifies a reference to a resource outside of the UCO. |
+| hasFacet | Facet | zero_or_more | No | Further sets of properties characterizing a concept based on the particular context of the class and of the particula... |
+| modifiedTime | dateTime | zero_or_more | No | Specifies the time that this particular version of the object was modified. The object creator can use the time it de... |
+| name | string | zero_or_one | No | The name of a particular concept characterization. |
+| objectCreatedTime | dateTime | zero_or_one | No | The time at which a characterization of a concept is created. This time pertains to the time of creating the record o... |
+| objectMarking | MarkingDefinitionAbstraction | zero_or_more | No | Marking definitions to be applied to a particular concept characterization in its entirety. |
+| objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
+| specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
+| tag | string | zero_or_more | No | A generic tag/label. |
+| caliber | string | zero_or_one | No | The caliber or gauge designation of a firearm or ammunition as recorded in the source record, e.g. '9mm', '.223', '12... |
+| make | string | zero_or_one | No | The manufacturer or maker name of the weapon as recorded in the source record, e.g. 'SIG Sauer', 'Ruger'. Parallels N... |
+| model | string | zero_or_one | No | The model name or number of the weapon as recorded in the source record, e.g. 'P365', 'Security-9'. Parallels NIEM nc... |
+| serialNumber | string | zero_or_more | No | The manufacturer serial number identifying the individual weapon, e.g. '21221464'. Importation and marking requiremen... |
+| serialNumberObliterated | boolean | zero_or_one | No | True when the weapon's manufacturer serial number has been removed, obliterated, or altered; possession or transport ... |
+
 ## uco.action
 
 ### Action
@@ -40833,7 +42026,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -40880,14 +42073,14 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 |----------|------|-------------|----------|-------------|
 | rate | decimal | exactly_one | Yes | The frequency rate for the occurence of an action. |
 | scale | string | exactly_one | Yes | The time scale utilized for the frequency rate count for the occurence of an action. |
-| trend | string | zero_or_more | No | A characterization of the frequency trend for the occurence of an action. |
+| trend | string | exactly_one | Yes | A characterization of the frequency trend for the occurence of an action. |
 | units | string | exactly_one | Yes | The units of measure utilized for the frequency rate count for the occurence of an action. |
 
 ### ActionLifecycle
 
 *An action lifecycle is an action pattern consisting of an ordered set of multiple actions or subordinate action lifecycles.*
 
-**Parents:** Action | **IRI:** `https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle`
+**Parents:** ActionPattern | **IRI:** `https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle`
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
@@ -40903,7 +42096,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_more | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_more | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -40937,7 +42130,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -40959,6 +42152,14 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
 | action | Action | one_or_more | Yes | A characterization of a single action. |
+
+### Technique
+
+*A technique is a class of actions joined by some common characteristics.  uco-action:Technique itself is a metaclass.  A Technique instance is an owl:Class that is a subclass of uco-action:Action.*
+
+**Parents:** UcoType | **IRI:** `https://ontology.unifiedcyberontology.org/uco/action/Technique`
+
+*No direct or inherited properties.*
 
 ## uco.analysis
 
@@ -40982,7 +42183,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -41486,6 +42687,14 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 *No direct or inherited properties.*
 
+### UcoType
+
+*UcoThing is the top-level class for metaclasses within UCO.  An instance of core:UcoType is also an instance of owl:Class, and is or specializes core:UcoThing.*
+
+**IRI:** `https://ontology.unifiedcyberontology.org/uco/core/UcoType`
+
+*No direct or inherited properties.*
+
 ## uco.identity
 
 ### AddressFacet
@@ -41954,7 +43163,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 |----------|------|-------------|----------|-------------|
 | accountIdentifier | string | zero_or_one | No | The unique identifier for the account. |
 | accountIssuer | UcoObject | zero_or_one | No | The issuer of this account. |
-| accountType | string | zero_or_more | No | The type of account, for instance bank, phone, application, service, etc. |
+| accountType | string | zero_or_one | No | The type of account, for instance bank, phone, application, service, etc. |
 | expirationTime | dateTime | zero_or_one | No | The date and time at which the validity of the object expires. |
 | isActive | boolean | zero_or_one | No | Indicates whether the network connection is still active. |
 | modifiedTime | dateTime | zero_or_one | No | The date and time at which the Object was last modified. |
@@ -42009,7 +43218,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 *An alternate data stream is data content stored within an NTFS file that is independent of the standard content stream of the file and is hidden from access by default NTFS file viewing mechanisms.*
 
-**Parents:** ObservableObject | **IRI:** `https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStream`
+**Parents:** FileSystemObject | **IRI:** `https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStream`
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
@@ -42337,7 +43546,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 |----------|------|-------------|----------|-------------|
 | asHandle | string | zero_or_one | No |  |
 | number | integer | zero_or_one | No |  |
-| regionalInternetRegistry | string | zero_or_more | No | specifies the name of the Regional Internet Registry (RIR) which allocated the IP address contained in a WHOIS entry. |
+| regionalInternetRegistry | string | zero_or_one | No | specifies the name of the Regional Internet Registry (RIR) which allocated the IP address contained in a WHOIS entry. |
 
 ### BlackberryPhone
 
@@ -42882,7 +44091,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
-| contactAddressScope | string | zero_or_more | No | Contact address scope specifies the relevant scope (home, work, school, etc) for a geolocation address of a contact e... |
+| contactAddressScope | string | zero_or_one | No | Contact address scope specifies the relevant scope (home, work, school, etc) for a geolocation address of a contact e... |
 | geolocationAddress | Location | zero_or_one | No | An administrative address for a particular geolocation. |
 
 ### ContactAffiliation
@@ -42911,7 +44120,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
-| contactEmailScope | string | zero_or_more | No | Contact email scope specifies the relevant scope (home, work, school, etc) of details for contacting a contact entity... |
+| contactEmailScope | string | zero_or_one | No | Contact email scope specifies the relevant scope (home, work, school, etc) of details for contacting a contact entity... |
 | emailAddress | ObservableObject | zero_or_one | No | An email address. |
 
 ### ContactFacet
@@ -42999,7 +44208,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
 | contactPhoneNumber | ObservableObject | zero_or_one | No | Contact phone number specifies a telephone service account number for contacting a contact entity by telephone. |
-| contactPhoneScope | string | zero_or_more | No | Contact phone scope specifies the relevant scope (home, work, school, etc) of details for contacting a contact entity... |
+| contactPhoneScope | string | zero_or_one | No | Contact phone scope specifies the relevant scope (home, work, school, etc) of details for contacting a contact entity... |
 
 ### ContactProfile
 
@@ -43020,7 +44229,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
-| contactSIPScope | string | zero_or_more | No | Contact SIP scope specifies the relevant scope (home, work, school, etc) of details for contacting a contact entity b... |
+| contactSIPScope | string | zero_or_one | No | Contact SIP scope specifies the relevant scope (home, work, school, etc) of details for contacting a contact entity b... |
 | sipAddress | ObservableObject | zero_or_one | No | A SIP address specifies Session Initiation Protocol (SIP) identifier. |
 
 ### ContactURL
@@ -43031,7 +44240,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
-| contactURLScope | string | zero_or_more | No | Contact url scope specifies the relevant scope (homepage, home, work, school, etc) of details for contacting a contac... |
+| contactURLScope | string | zero_or_one | No | Contact url scope specifies the relevant scope (homepage, home, work, school, etc) of details for contacting a contac... |
 | url | ObservableObject | zero_or_one | No | Specifies a URL associated with a particular observable object or facet. |
 
 ### ContentData
@@ -43064,7 +44273,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
-| byteOrder | string | zero_or_more | No |  |
+| byteOrder | string | zero_or_one | No |  |
 | dataPayload | string | zero_or_one | No |  |
 | dataPayloadReferenceURL | ObservableObject | zero_or_one | No |  |
 | entropy | decimal | zero_or_one | No | Shannon entropy (a measure of randomness) of the data. |
@@ -43394,7 +44603,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 *A disk is a storage mechanism where data is recorded by various electronic, magnetic, optical, or mechanical changes to a surface layer of one or more rotating disks.*
 
-**Parents:** ObservableObject | **IRI:** `https://ontology.unifiedcyberontology.org/uco/observable/Disk`
+**Parents:** StorageMedium | **IRI:** `https://ontology.unifiedcyberontology.org/uco/observable/Disk`
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
@@ -44634,7 +45843,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
-| blockType | string | zero_or_more | No | The blockType property specifies the block type of a particular memory object. |
+| blockType | string | zero_or_one | No | The blockType property specifies the block type of a particular memory object. |
 | isInjected | boolean | zero_or_one | No | The isInjected property specifies whether or not the particular memory object has had data/code injected into it by a... |
 | isMapped | boolean | zero_or_one | No | The isMapped property specifies whether or not the particular memory object has been assigned a byte-for-byte correla... |
 | isProtected | boolean | zero_or_one | No | The isProtected property specifies whether or not the particular memory object is protected (read/write only from the... |
@@ -45221,7 +46430,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -45260,7 +46469,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 *An observable pattern is a grouping of characteristics unique to a logical pattern composed of observable object and observable action properties.*
 
-**Parents:** Observable | **IRI:** `https://ontology.unifiedcyberontology.org/uco/observable/ObservablePattern`
+**Parents:** Observable, Pattern | **IRI:** `https://ontology.unifiedcyberontology.org/uco/observable/ObservablePattern`
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
@@ -45322,7 +46531,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
 | actionCount | nonNegativeInteger | zero_or_one | No | The number of times that the action was performed. |
-| actionStatus | string | zero_or_more | No | The current state of the action. |
+| actionStatus | string | zero_or_one | No | The current state of the action. |
 | endTime | dateTime | zero_or_one | No | The time at which performance of the action ended. |
 | environment | UcoObject | zero_or_one | No | The environment wherein an action occurs. |
 | error | UcoObject | zero_or_more | No | A characterization of the differences between the expected and the actual performance of the action. |
@@ -45373,7 +46582,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 *An operating system is the software that manages computer hardware, software resources, and provides common services for computer programs. [based on https://en.wikipedia.org/wiki/Operating_system]*
 
-**Parents:** ObservableObject | **IRI:** `https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystem`
+**Parents:** Software | **IRI:** `https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystem`
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
@@ -45404,8 +46613,6 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | environmentVariables | Dictionary | zero_or_one | No | A list of environment variables associated with the process.  |
 | installDate | dateTime | zero_or_one | No | Specifies the date the operating system or application was installed. |
 | isLimitAdTrackingEnabled | boolean | zero_or_one | No | Limits advertising tracking if enabled. [based on https://developer.android.com/reference/androidx/ads/identifier/Adv... |
-| manufacturer | Identity | zero_or_one | No |  |
-| version | string | zero_or_one | No |  |
 
 ### PDFFile
 
@@ -45772,9 +46979,9 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
-| contentRecoveredStatus | string | zero_or_more | No | Specifies the recoverability status of the content of an object. |
-| metadataRecoveredStatus | string | zero_or_more | No | Specifies the recoverability status of the metadata of an object. |
-| nameRecoveredStatus | string | zero_or_more | No | Specifies the recoverability status of the name of an object. |
+| contentRecoveredStatus | string | zero_or_one | No | Specifies the recoverability status of the content of an object. |
+| metadataRecoveredStatus | string | zero_or_one | No | Specifies the recoverability status of the metadata of an object. |
+| nameRecoveredStatus | string | zero_or_one | No | Specifies the recoverability status of the name of an object. |
 
 ### ReparsePoint
 
@@ -46357,7 +47564,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
 | actionID | string | zero_or_one | No | Specifies the user-defined identifier for the action. This identifier is used by the Task Scheduler for logging purpo... |
-| actionType | string | zero_or_more | No | Specifies the type of the action. See also: http://msdn.microsoft.com/en-us/library/windows/desktop/aa380596(v=vs.85)... |
+| actionType | string | zero_or_one | No | Specifies the type of the action. See also: http://msdn.microsoft.com/en-us/library/windows/desktop/aa380596(v=vs.85)... |
 | iComHandlerAction | IComHandlerActionType | zero_or_one | No | Specifies the data associated with the task action-fired COM handler. |
 | iEmailAction | ObservableObject | zero_or_one | No | Specifies an action that sends an e-mail, which in this context refers to actual email message sent. See also: http:/... |
 | iExecAction | IExecActionType | zero_or_one | No | Specifies an action that executes a command-line operation. See also: http://msdn.microsoft.com/en-us/library/windows... |
@@ -46375,10 +47582,10 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | triggerBeginTime | dateTime | zero_or_one | No | Specifies the date/time that the trigger is activated. |
 | triggerDelay | string | zero_or_one | No | Specifies the delay that takes place between when the task is registered and when the task is started. |
 | triggerEndTime | dateTime | zero_or_one | No | Specifies the date/time that the trigger is deactivated. |
-| triggerFrequency | string | zero_or_more | No | Specifies the frequency at which the trigger repeats. |
+| triggerFrequency | string | zero_or_one | No | Specifies the frequency at which the trigger repeats. |
 | triggerMaxRunTime | string | zero_or_one | No | The maximum amount of time that the task launched by the trigger is allowed to run. See also: http://msdn.microsoft.c... |
 | triggerSessionChangeType | string | zero_or_one | No | Specifies the type of Terminal Server session change that would trigger a task launch. See also: http://msdn.microsof... |
-| triggerType | string | zero_or_more | No | Specifies the type of the task trigger. |
+| triggerType | string | zero_or_one | No | Specifies the type of the task trigger. |
 
 ### Tweet
 
@@ -46660,7 +47867,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | browserInformation | ObservableObject | zero_or_one | No | Specifies information about the particular Web Browser. |
 | fromURLVisit | ObservableObject | zero_or_one | No | Specifies the URL visit origination point (i.e., URL) of the URL captured in the URL history entry, if applicable. |
 | url | ObservableObject | zero_or_one | No | Specifies a URL associated with a particular observable object or facet. |
-| urlTransitionType | string | zero_or_more | No | Specifies how a browser navigated to a particular URL on a particular visit. |
+| urlTransitionType | string | zero_or_one | No | Specifies how a browser navigated to a particular URL on a particular visit. |
 | visitDuration | duration | zero_or_one | No | Specifies the duration of a specific visit of a URL within a particular browser. |
 | visitTime | dateTime | zero_or_one | No | Specifies the date/time of a specific visit of a URL within a particular browser. |
 
@@ -46860,14 +48067,14 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | ipAddress | ObservableObject | zero_or_one | No | Specifies the corresponding ip address for a whois entry. Usually corresponds to a name server lookup. |
 | lookupDate | dateTime | zero_or_one | No | Specifies the date and time that the Whois record was queried. |
 | nameServer | ObservableObject | zero_or_more | No | Specifies a list of name server entries for a Whois entry. |
-| regionalInternetRegistry | string | zero_or_more | No | specifies the name of the Regional Internet Registry (RIR) which allocated the IP address contained in a WHOIS entry. |
+| regionalInternetRegistry | string | zero_or_one | No | specifies the name of the Regional Internet Registry (RIR) which allocated the IP address contained in a WHOIS entry. |
 | registrantContactInfo | ObservableObject | zero_or_one | No | Specifies contact info for the registrant of a domain within a WHOIS entity. |
 | registrantIDs | string | zero_or_more | No | Specifies the registrant IDs associated with a domain lookup. |
 | registrarInfo | WhoisRegistrarInfoType | zero_or_one | No | Specifies registrar info that would be returned from a registrar lookup. |
 | remarks | string | zero_or_one | No | Specifies any remarks associated with this Whois entry. |
 | serverName | ObservableObject | zero_or_one | No | Specifies the corresponding server name for a whois entry. This usually corresponds to a name server lookup. |
 | sponsoringRegistrar | string | zero_or_one | No | Specifies the name of the sponsoring registrar for a domain. |
-| status | string | zero_or_more | No | Specifies a list of statuses for a given Whois entry. |
+| status | string | zero_or_one | No | Specifies a list of statuses for a given Whois entry. |
 | updatedDate | dateTime | zero_or_one | No | Specifies the date in which the registered domain information was last updated. |
 
 ### WhoisContactFacet
@@ -46901,7 +48108,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | nickname | string | zero_or_more | No | Nickname specifies an alternate, unofficial and typically informal name for a person independent of their official name. |
 | numberTimesContacted | integer | zero_or_one | No | Number times contacted specifies the number of times a particular contact has been contacted. |
 | sourceApplication | ObservableObject | zero_or_one | No | Source application specifies the software application that a particular contact or contact list is associated with. |
-| whoisContactType | string | zero_or_more | No | Specifies what type of WHOIS contact this is. |
+| whoisContactType | string | zero_or_one | No | Specifies what type of WHOIS contact this is. |
 
 ### WhoisRegistrarInfoType
 
@@ -47625,7 +48832,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | observableCreatedTime | dateTime | zero_or_one | No | The date and time at which the observable object being characterized was created. This time pertains to an intrinsic ... |
 | parameters | string | zero_or_one | No | Specifies the command line parameters used to launch the scheduled task. See also: http://msdn.microsoft.com/en-us/li... |
 | priority | integer | zero_or_more | No | The priority of the email. |
-| status | string | zero_or_more | No | Specifies a list of statuses for a given Whois entry. |
+| status | string | zero_or_one | No | Specifies a list of statuses for a given Whois entry. |
 | taskComment | string | zero_or_one | No | Specifies a comment for the scheduled task. See also: http://msdn.microsoft.com/en-us/library/windows/desktop/aa38123... |
 | taskCreator | string | zero_or_one | No | Specifies the name of the creator of the scheduled task. See also: http://msdn.microsoft.com/en-us/library/windows/de... |
 | triggerList | TriggerType | zero_or_more | No | Specifies a set of triggers used by the scheduled task. See also: http://msdn.microsoft.com/en-us/library/windows/des... |
@@ -47664,7 +48871,6 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 |----------|------|-------------|----------|-------------|
 | context | string | zero_or_one | No |  |
 | creationFlags | unsignedInt | zero_or_more | No |  |
-| creationTime | dateTime | zero_or_one | No |  |
 | observableCreatedTime | dateTime | zero_or_one | No | The date and time at which the observable object being characterized was created. This time pertains to an intrinsic ... |
 | parameterAddress | hexBinary | zero_or_more | No |  |
 | priority | integer | zero_or_one | No | The priority of the email. |
@@ -47683,7 +48889,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
 | driveLetter | string | zero_or_one | No | Specifies the drive letter of a windows volume. |
-| driveType | string | zero_or_more | No | Specifies the drive type of a windows volume. |
+| driveType | string | zero_or_one | No | Specifies the drive type of a windows volume. |
 | windowsVolumeAttributes | WindowsVolumeAttributeVocab | zero_or_more | No | Specifies the attributes of a windows volume. |
 
 ### WindowsWaitableTime
@@ -47741,7 +48947,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | baseStation | string | zero_or_one | No | The base station. |
 | password | string | zero_or_one | No | Specifies an authentication password. |
 | ssid | string | zero_or_one | No | Network identifier. |
-| wirelessNetworkSecurityMode | string | zero_or_more | No | Specifies the security mode of a wireless network (None, WEP, WPA, etc). |
+| wirelessNetworkSecurityMode | string | zero_or_one | No | Specifies the security mode of a wireless network (None, WEP, WPA, etc). |
 
 ### WriteBlocker
 
@@ -47880,7 +49086,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 | objectStatus | string | zero_or_one | No | The current state of formality and acceptance for a UCO object. |
 | specVersion | string | zero_or_one | No | The version of UCO ontology or subontology specification used to characterize a concept. |
 | tag | string | zero_or_more | No | A generic tag/label. |
-| patternExpression | PatternExpression | zero_or_one | No | An explicit logical pattern expression. |
+| patternExpression | string | zero_or_one | No | An explicit logical pattern expression. |
 
 ### Pattern
 
@@ -48238,7 +49444,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 | Property | Type | Cardinality | Required | Description |
 |----------|------|-------------|----------|-------------|
-| hashMethod | string | zero_or_more | No | A particular cryptographic hashing method (e.g., MD5). |
+| hashMethod | string | exactly_one | Yes | A particular cryptographic hashing method (e.g., MD5). |
 | hashValue | hexBinary | exactly_one | Yes | A cryptographic hash value. |
 
 ### ImproperDictionary
@@ -48264,7 +49470,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 *A semi-ordered array of items, that can be present in multiple copies.  Implemetation of a UCO Thread is similar to a Collections Ontology List, except a Thread may fork and merge - that is, one of its members may have two or more direct successors, and two or more direct predecessors.*
 
-**Parents:** UcoThing | **IRI:** `https://ontology.unifiedcyberontology.org/uco/types/Thread`
+**Parents:** UcoInherentCharacterizationThing | **IRI:** `https://ontology.unifiedcyberontology.org/uco/types/Thread`
 
 *No direct or inherited properties.*
 
@@ -48272,7 +49478,7 @@ Auto-generated reference for all classes, properties, and vocabulary types in th
 
 *A ThreadItem is a member of a thread.*
 
-**Parents:** UcoThing | **IRI:** `https://ontology.unifiedcyberontology.org/uco/types/ThreadItem`
+**Parents:** UcoInherentCharacterizationThing | **IRI:** `https://ontology.unifiedcyberontology.org/uco/types/ThreadItem`
 
 *No direct or inherited properties.*
 

@@ -25,7 +25,7 @@ class LogicalPattern(Pattern):
     CLASS_IRI: str = "https://ontology.unifiedcyberontology.org/uco/pattern/LogicalPattern"
     NAMESPACE_PREFIX: str = "uco-pattern"
 
-    pattern_expression: Optional[PatternExpression] = field(default=None, metadata={'jsonld_key': 'uco-pattern:patternExpression', 'required': False, 'cardinality': 'zero_or_one', 'range_iri': 'https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression', 'alternate_range_iris': []})
+    pattern_expression: Optional[str] = field(default=None, metadata={'jsonld_key': 'uco-pattern:patternExpression', 'required': False, 'cardinality': 'zero_or_one', 'range_iri': 'http://www.w3.org/2001/XMLSchema#string', 'alternate_range_iris': []})
 
 
 @dataclass

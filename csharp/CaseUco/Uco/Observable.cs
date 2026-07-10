@@ -74,7 +74,7 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:accountIssuer")]
         public CaseUco.Uco.Core.UcoObject AccountIssuer { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:accountType")]
-        public List<string> AccountType { get; set; }
+        public string AccountType { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:expirationTime")]
         public System.DateTime? ExpirationTime { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:isActive")]
@@ -102,7 +102,7 @@ namespace CaseUco.Uco.Observable
     }
 
     /// <summary>An alternate data stream is data content stored within an NTFS file that is independent of the standard content stream of the file and is hidden from access by default NTFS file viewing mechanisms.</summary>
-    public class AlternateDataStream : CaseUco.Uco.Observable.ObservableObject
+    public class AlternateDataStream : CaseUco.Uco.Observable.FileSystemObject
     {
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/AlternateDataStream";
         public new const string NamespacePrefix = "uco-observable";
@@ -297,7 +297,7 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:number")]
         public long? Number { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:regionalInternetRegistry")]
-        public List<string> RegionalInternetRegistry { get; set; }
+        public string RegionalInternetRegistry { get; set; }
     }
 
     /// <summary>A blackberry phone is a smart phone that applies the Blackberry OS mobile operating system. (Blackberry 10 re-introduces Blackberry OS, prior to that the OS was Android.)</summary>
@@ -642,7 +642,7 @@ namespace CaseUco.Uco.Observable
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/ContactAddress";
         public new const string NamespacePrefix = "uco-observable";
         [global::CaseUco.JsonLdProperty("uco-observable:contactAddressScope")]
-        public List<string> ContactAddressScope { get; set; }
+        public string ContactAddressScope { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:geolocationAddress")]
         public CaseUco.Uco.Location.Location GeolocationAddress { get; set; }
     }
@@ -678,7 +678,7 @@ namespace CaseUco.Uco.Observable
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/ContactEmail";
         public new const string NamespacePrefix = "uco-observable";
         [global::CaseUco.JsonLdProperty("uco-observable:contactEmailScope")]
-        public List<string> ContactEmailScope { get; set; }
+        public string ContactEmailScope { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:emailAddress")]
         public CaseUco.Uco.Observable.ObservableObject EmailAddress { get; set; }
     }
@@ -773,7 +773,7 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:contactPhoneNumber")]
         public CaseUco.Uco.Observable.ObservableObject ContactPhoneNumber { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:contactPhoneScope")]
-        public List<string> ContactPhoneScope { get; set; }
+        public string ContactPhoneScope { get; set; }
     }
 
     /// <summary>A contact profile is a grouping of characteristics unique to details for contacting a contact entity by online service.</summary>
@@ -793,7 +793,7 @@ namespace CaseUco.Uco.Observable
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/ContactSIP";
         public new const string NamespacePrefix = "uco-observable";
         [global::CaseUco.JsonLdProperty("uco-observable:contactSIPScope")]
-        public List<string> ContactSIPScope { get; set; }
+        public string ContactSIPScope { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:sipAddress")]
         public CaseUco.Uco.Observable.ObservableObject SipAddress { get; set; }
     }
@@ -804,7 +804,7 @@ namespace CaseUco.Uco.Observable
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/ContactURL";
         public new const string NamespacePrefix = "uco-observable";
         [global::CaseUco.JsonLdProperty("uco-observable:contactURLScope")]
-        public List<string> ContactURLScope { get; set; }
+        public string ContactURLScope { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:url")]
         public CaseUco.Uco.Observable.ObservableObject Url { get; set; }
     }
@@ -822,7 +822,7 @@ namespace CaseUco.Uco.Observable
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet";
         public new const string NamespacePrefix = "uco-observable";
         [global::CaseUco.JsonLdProperty("uco-observable:byteOrder")]
-        public List<string> ByteOrder { get; set; }
+        public string ByteOrder { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:dataPayload")]
         public string DataPayload { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:dataPayloadReferenceURL")]
@@ -1003,7 +1003,7 @@ namespace CaseUco.Uco.Observable
     }
 
     /// <summary>A disk is a storage mechanism where data is recorded by various electronic, magnetic, optical, or mechanical changes to a surface layer of one or more rotating disks.</summary>
-    public class Disk : CaseUco.Uco.Observable.ObservableObject
+    public class Disk : CaseUco.Uco.Observable.StorageMedium
     {
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/Disk";
         public new const string NamespacePrefix = "uco-observable";
@@ -1754,7 +1754,7 @@ namespace CaseUco.Uco.Observable
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/MemoryFacet";
         public new const string NamespacePrefix = "uco-observable";
         [global::CaseUco.JsonLdProperty("uco-observable:blockType")]
-        public List<string> BlockType { get; set; }
+        public string BlockType { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:isInjected")]
         public bool? IsInjected { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:isMapped")]
@@ -2188,7 +2188,7 @@ namespace CaseUco.Uco.Observable
     }
 
     /// <summary>An operating system is the software that manages computer hardware, software resources, and provides common services for computer programs. [based on https://en.wikipedia.org/wiki/Operating_system]</summary>
-    public class OperatingSystem : CaseUco.Uco.Observable.ObservableObject
+    public class OperatingSystem : CaseUco.Uco.Observable.Software
     {
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/OperatingSystem";
         public new const string NamespacePrefix = "uco-observable";
@@ -2209,10 +2209,6 @@ namespace CaseUco.Uco.Observable
         public System.DateTime? InstallDate { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:isLimitAdTrackingEnabled")]
         public bool? IsLimitAdTrackingEnabled { get; set; }
-        [global::CaseUco.JsonLdProperty("uco-observable:manufacturer")]
-        public CaseUco.Uco.Identity.Identity Manufacturer { get; set; }
-        [global::CaseUco.JsonLdProperty("uco-observable:version")]
-        public string Version { get; set; }
     }
 
     /// <summary>A PDF file is a Portable Document Format (PDF) file.</summary>
@@ -2440,11 +2436,11 @@ namespace CaseUco.Uco.Observable
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/RecoveredObjectFacet";
         public new const string NamespacePrefix = "uco-observable";
         [global::CaseUco.JsonLdProperty("uco-observable:contentRecoveredStatus")]
-        public List<string> ContentRecoveredStatus { get; set; }
+        public string ContentRecoveredStatus { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:metadataRecoveredStatus")]
-        public List<string> MetadataRecoveredStatus { get; set; }
+        public string MetadataRecoveredStatus { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:nameRecoveredStatus")]
-        public List<string> NameRecoveredStatus { get; set; }
+        public string NameRecoveredStatus { get; set; }
     }
 
     /// <summary>A reparse point is a type of NTFS (New Technology File System) object which is an optional attribute of files and directories meant to define some sort of preprocessing before accessing the said file </summary>
@@ -2734,7 +2730,7 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:actionID")]
         public string ActionID { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:actionType")]
-        public List<string> ActionType { get; set; }
+        public string ActionType { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:iComHandlerAction")]
         public CaseUco.Uco.Observable.IComHandlerActionType IComHandlerAction { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:iEmailAction")]
@@ -2759,13 +2755,13 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:triggerEndTime")]
         public System.DateTime? TriggerEndTime { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:triggerFrequency")]
-        public List<string> TriggerFrequency { get; set; }
+        public string TriggerFrequency { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:triggerMaxRunTime")]
         public string TriggerMaxRunTime { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:triggerSessionChangeType")]
         public string TriggerSessionChangeType { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:triggerType")]
-        public List<string> TriggerTypeValue { get; set; }
+        public string TriggerTypeValue { get; set; }
     }
 
     /// <summary>A tweet is message submitted by a Twitter user account to the Twitter microblogging platform.</summary>
@@ -2973,7 +2969,7 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:url")]
         public CaseUco.Uco.Observable.ObservableObject Url { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:urlTransitionType")]
-        public List<string> UrlTransitionType { get; set; }
+        public string UrlTransitionType { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:visitDuration")]
         public System.TimeSpan? VisitDuration { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:visitTime")]
@@ -3096,7 +3092,7 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:nameServer")]
         public List<CaseUco.Uco.Observable.ObservableObject> NameServer { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:regionalInternetRegistry")]
-        public List<string> RegionalInternetRegistry { get; set; }
+        public string RegionalInternetRegistry { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:registrantContactInfo")]
         public CaseUco.Uco.Observable.ObservableObject RegistrantContactInfo { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:registrantIDs")]
@@ -3110,7 +3106,7 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:sponsoringRegistrar")]
         public string SponsoringRegistrar { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:status")]
-        public List<string> Status { get; set; }
+        public string Status { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:updatedDate")]
         public System.DateTime? UpdatedDate { get; set; }
     }
@@ -3121,7 +3117,7 @@ namespace CaseUco.Uco.Observable
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/observable/WhoisContactFacet";
         public new const string NamespacePrefix = "uco-observable";
         [global::CaseUco.JsonLdProperty("uco-observable:whoisContactType")]
-        public List<string> WhoisContactType { get; set; }
+        public string WhoisContactType { get; set; }
     }
 
     /// <summary>A Whois registrar info type is a grouping of characteristics unique to registrar-related information present in a response record conformant to the WHOIS protocol standard (RFC 3912). [based on https:</summary>
@@ -3612,7 +3608,7 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:priority")]
         public List<object> Priority { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:status")]
-        public List<string> Status { get; set; }
+        public string Status { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:taskComment")]
         public string TaskComment { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:taskCreator")]
@@ -3641,8 +3637,6 @@ namespace CaseUco.Uco.Observable
         public string Context { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:creationFlags")]
         public List<uint> CreationFlags { get; set; }
-        [global::CaseUco.JsonLdProperty("uco-observable:creationTime")]
-        public System.DateTime? CreationTime { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:observableCreatedTime")]
         public System.DateTime? ObservableCreatedTime { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:parameterAddress")]
@@ -3669,7 +3663,7 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:driveLetter")]
         public string DriveLetter { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:driveType")]
-        public List<string> DriveType { get; set; }
+        public string DriveType { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:windowsVolumeAttributes")]
         public List<string> WindowsVolumeAttributes { get; set; }
     }
@@ -3700,7 +3694,7 @@ namespace CaseUco.Uco.Observable
         [global::CaseUco.JsonLdProperty("uco-observable:ssid")]
         public string Ssid { get; set; }
         [global::CaseUco.JsonLdProperty("uco-observable:wirelessNetworkSecurityMode")]
-        public List<string> WirelessNetworkSecurityMode { get; set; }
+        public string WirelessNetworkSecurityMode { get; set; }
     }
 
     /// <summary>A write blocker is a device that allows read-only access to storage mediums in order to preserve the integrity of the data being analyzed. Examples include Tableau, Cellibrite, Talon, etc.</summary>

@@ -9,12 +9,12 @@ public class LogicalPattern extends Pattern {
     public static final String CLASS_IRI = "https://ontology.unifiedcyberontology.org/uco/pattern/LogicalPattern";
     public static final String NAMESPACE_PREFIX = "uco-pattern";
 
-    private PatternExpression patternExpression;
+    private String patternExpression;
 
     public LogicalPattern() {
     }
 
-    public PatternExpression getPatternExpression() { return this.patternExpression; }
-    public LogicalPattern setPatternExpression(PatternExpression value) { this.patternExpression = value; return this; }
+    public String getPatternExpression() { return this.patternExpression; }
+    public LogicalPattern setPatternExpression(String value) { this.patternExpression = value; return this; }
 
 }

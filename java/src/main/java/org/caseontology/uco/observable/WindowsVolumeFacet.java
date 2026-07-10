@@ -11,19 +11,18 @@ public class WindowsVolumeFacet extends Facet {
     public static final String NAMESPACE_PREFIX = "uco-observable";
 
     private String driveLetter;
-    private List<String> driveType;
+    private String driveType;
     private List<WindowsVolumeAttributeVocab> windowsVolumeAttributes;
 
     public WindowsVolumeFacet() {
-        this.driveType = new ArrayList<>();
         this.windowsVolumeAttributes = new ArrayList<>();
     }
 
     public String getDriveLetter() { return this.driveLetter; }
     public WindowsVolumeFacet setDriveLetter(String value) { this.driveLetter = value; return this; }
 
-    public List<String> getDriveType() { return this.driveType; }
-    public WindowsVolumeFacet setDriveType(List<String> value) { this.driveType = value; return this; }
+    public String getDriveType() { return this.driveType; }
+    public WindowsVolumeFacet setDriveType(String value) { this.driveType = value; return this; }
 
     public List<WindowsVolumeAttributeVocab> getWindowsVolumeAttributes() { return this.windowsVolumeAttributes; }
     public WindowsVolumeFacet setWindowsVolumeAttributes(List<WindowsVolumeAttributeVocab> value) { this.windowsVolumeAttributes = value; return this; }

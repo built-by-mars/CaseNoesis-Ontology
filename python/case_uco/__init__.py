@@ -3,4 +3,4 @@
 from case_uco.graph import CASEGraph
 
 __all__ = ["CASEGraph"]
-__version__ = "1.15.0"
+__version__ = "0.1.0"

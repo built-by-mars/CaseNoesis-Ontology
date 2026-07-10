@@ -11,16 +11,15 @@ public class ContactPhone extends UcoInherentCharacterizationThing {
     public static final String NAMESPACE_PREFIX = "uco-observable";
 
     private ObservableObject contactPhoneNumber;
-    private List<String> contactPhoneScope;
+    private String contactPhoneScope;
 
     public ContactPhone() {
-        this.contactPhoneScope = new ArrayList<>();
     }
 
     public ObservableObject getContactPhoneNumber() { return this.contactPhoneNumber; }
     public ContactPhone setContactPhoneNumber(ObservableObject value) { this.contactPhoneNumber = value; return this; }
 
-    public List<String> getContactPhoneScope() { return this.contactPhoneScope; }
-    public ContactPhone setContactPhoneScope(List<String> value) { this.contactPhoneScope = value; return this; }
+    public String getContactPhoneScope() { return this.contactPhoneScope; }
+    public ContactPhone setContactPhoneScope(String value) { this.contactPhoneScope = value; return this; }
 
 }

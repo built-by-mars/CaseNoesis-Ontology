@@ -11,21 +11,20 @@ public class TaskActionType extends UcoInherentCharacterizationThing {
     public static final String NAMESPACE_PREFIX = "uco-observable";
 
     private String actionID;
-    private List<String> actionType;
+    private String actionType;
     private IComHandlerActionType iComHandlerAction;
     private ObservableObject iEmailAction;
     private IExecActionType iExecAction;
     private IShowMessageActionType iShowMessageAction;
 
     public TaskActionType() {
-        this.actionType = new ArrayList<>();
     }
 
     public String getActionID() { return this.actionID; }
     public TaskActionType setActionID(String value) { this.actionID = value; return this; }
 
-    public List<String> getActionType() { return this.actionType; }
-    public TaskActionType setActionType(List<String> value) { this.actionType = value; return this; }
+    public String getActionType() { return this.actionType; }
+    public TaskActionType setActionType(String value) { this.actionType = value; return this; }
 
     public IComHandlerActionType getIComHandlerAction() { return this.iComHandlerAction; }
     public TaskActionType setIComHandlerAction(IComHandlerActionType value) { this.iComHandlerAction = value; return this; }

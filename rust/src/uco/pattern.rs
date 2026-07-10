@@ -9,7 +9,7 @@ pub struct LogicalPattern {
     #[serde(skip_serializing)]
     pub class_iri: &'static str,
     #[serde(rename = "uco-pattern:patternExpression")]
-    pub pattern_expression: Option<PatternExpression>,
+    pub pattern_expression: Option<String>,
 }
 
 impl LogicalPattern {
@@ -25,11 +25,11 @@ impl LogicalPattern {
 
 #[derive(Debug, Default, Clone)]
 pub struct LogicalPatternBuilder {
-    pattern_expression: Option<PatternExpression>,
+    pattern_expression: Option<String>,
 }
 
 impl LogicalPatternBuilder {
-    pub fn pattern_expression(mut self, value: PatternExpression) -> Self {
+    pub fn pattern_expression(mut self, value: String) -> Self {
         self.pattern_expression = Some(value);
         self
     }

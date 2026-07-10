@@ -13,7 +13,7 @@ namespace CaseUco.Uco.Action
         [global::CaseUco.JsonLdProperty("uco-action:actionCount")]
         public ulong? ActionCount { get; set; }
         [global::CaseUco.JsonLdProperty("uco-action:actionStatus")]
-        public List<string> ActionStatus { get; set; }
+        public string ActionStatus { get; set; }
         [global::CaseUco.JsonLdProperty("uco-action:endTime")]
         public System.DateTime? EndTime { get; set; }
         [global::CaseUco.JsonLdProperty("uco-action:environment")]
@@ -77,15 +77,16 @@ namespace CaseUco.Uco.Action
         [global::CaseUco.CaseRequired]
         [global::CaseUco.JsonLdProperty("uco-action:scale")]
         public string Scale { get; set; }
+        [global::CaseUco.CaseRequired]
         [global::CaseUco.JsonLdProperty("uco-action:trend")]
-        public List<string> Trend { get; set; }
+        public string Trend { get; set; }
         [global::CaseUco.CaseRequired]
         [global::CaseUco.JsonLdProperty("uco-action:units")]
         public string Units { get; set; }
     }
 
     /// <summary>An action lifecycle is an action pattern consisting of an ordered set of multiple actions or subordinate action lifecycles.</summary>
-    public class ActionLifecycle : CaseUco.Uco.Action.Action
+    public class ActionLifecycle : CaseUco.Uco.Action.ActionPattern
     {
         public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle";
         public new const string NamespacePrefix = "uco-action";
@@ -117,6 +118,13 @@ namespace CaseUco.Uco.Action
         [global::CaseUco.CaseRequired]
         [global::CaseUco.JsonLdProperty("uco-action:action")]
         public List<CaseUco.Uco.Action.Action> Action { get; set; }
+    }
+
+    /// <summary>A technique is a class of actions joined by some common characteristics.  uco-action:Technique itself is a metaclass.  A Technique instance is an owl:Class that is a subclass of uco-action:Action.</summary>
+    public class Technique : CaseUco.Uco.Core.UcoType
+    {
+        public new const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/action/Technique";
+        public new const string NamespacePrefix = "uco-action";
     }
 
 }

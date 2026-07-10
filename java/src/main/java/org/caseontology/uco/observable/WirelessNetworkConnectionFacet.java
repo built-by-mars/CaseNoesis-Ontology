@@ -13,10 +13,9 @@ public class WirelessNetworkConnectionFacet extends Facet {
     private String baseStation;
     private String password;
     private String ssid;
-    private List<String> wirelessNetworkSecurityMode;
+    private String wirelessNetworkSecurityMode;
 
     public WirelessNetworkConnectionFacet() {
-        this.wirelessNetworkSecurityMode = new ArrayList<>();
     }
 
     public String getBaseStation() { return this.baseStation; }
@@ -28,7 +27,7 @@ public class WirelessNetworkConnectionFacet extends Facet {
     public String getSsid() { return this.ssid; }
     public WirelessNetworkConnectionFacet setSsid(String value) { this.ssid = value; return this; }
 
-    public List<String> getWirelessNetworkSecurityMode() { return this.wirelessNetworkSecurityMode; }
-    public WirelessNetworkConnectionFacet setWirelessNetworkSecurityMode(List<String> value) { this.wirelessNetworkSecurityMode = value; return this; }
+    public String getWirelessNetworkSecurityMode() { return this.wirelessNetworkSecurityMode; }
+    public WirelessNetworkConnectionFacet setWirelessNetworkSecurityMode(String value) { this.wirelessNetworkSecurityMode = value; return this; }
 
 }

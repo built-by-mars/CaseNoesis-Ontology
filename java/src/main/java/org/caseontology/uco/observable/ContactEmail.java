@@ -10,15 +10,14 @@ public class ContactEmail extends UcoInherentCharacterizationThing {
     public static final String CLASS_IRI = "https://ontology.unifiedcyberontology.org/uco/observable/ContactEmail";
     public static final String NAMESPACE_PREFIX = "uco-observable";
 
-    private List<String> contactEmailScope;
+    private String contactEmailScope;
     private ObservableObject emailAddress;
 
     public ContactEmail() {
-        this.contactEmailScope = new ArrayList<>();
     }
 
-    public List<String> getContactEmailScope() { return this.contactEmailScope; }
-    public ContactEmail setContactEmailScope(List<String> value) { this.contactEmailScope = value; return this; }
+    public String getContactEmailScope() { return this.contactEmailScope; }
+    public ContactEmail setContactEmailScope(String value) { this.contactEmailScope = value; return this; }
 
     public ObservableObject getEmailAddress() { return this.emailAddress; }
     public ContactEmail setEmailAddress(ObservableObject value) { this.emailAddress = value; return this; }

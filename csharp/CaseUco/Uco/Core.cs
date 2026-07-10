@@ -229,4 +229,11 @@ namespace CaseUco.Uco.Core
         public const string NamespacePrefix = "uco-core";
     }
 
+    /// <summary>UcoThing is the top-level class for metaclasses within UCO.  An instance of core:UcoType is also an instance of owl:Class, and is or specializes core:UcoThing.</summary>
+    public class UcoType
+    {
+        public const string ClassIri = "https://ontology.unifiedcyberontology.org/uco/core/UcoType";
+        public const string NamespacePrefix = "uco-core";
+    }
+
 }

@@ -11,7 +11,7 @@ public class ContentDataFacet extends Facet {
     public static final String CLASS_IRI = "https://ontology.unifiedcyberontology.org/uco/observable/ContentDataFacet";
     public static final String NAMESPACE_PREFIX = "uco-observable";
 
-    private List<String> byteOrder;
+    private String byteOrder;
     private String dataPayload;
     private ObservableObject dataPayloadReferenceURL;
     private java.math.BigDecimal entropy;
@@ -23,13 +23,12 @@ public class ContentDataFacet extends Facet {
     private Long sizeInBytes;
 
     public ContentDataFacet() {
-        this.byteOrder = new ArrayList<>();
         this.hash = new ArrayList<>();
         this.mimeType = new ArrayList<>();
     }
 
-    public List<String> getByteOrder() { return this.byteOrder; }
-    public ContentDataFacet setByteOrder(List<String> value) { this.byteOrder = value; return this; }
+    public String getByteOrder() { return this.byteOrder; }
+    public ContentDataFacet setByteOrder(String value) { this.byteOrder = value; return this; }
 
     public String getDataPayload() { return this.dataPayload; }
     public ContentDataFacet setDataPayload(String value) { this.dataPayload = value; return this; }

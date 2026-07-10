@@ -12,10 +12,9 @@ public class AutonomousSystemFacet extends Facet {
 
     private String asHandle;
     private Long number;
-    private List<String> regionalInternetRegistry;
+    private String regionalInternetRegistry;
 
     public AutonomousSystemFacet() {
-        this.regionalInternetRegistry = new ArrayList<>();
     }
 
     public String getAsHandle() { return this.asHandle; }
@@ -24,7 +23,7 @@ public class AutonomousSystemFacet extends Facet {
     public Long getNumber() { return this.number; }
     public AutonomousSystemFacet setNumber(Long value) { this.number = value; return this; }
 
-    public List<String> getRegionalInternetRegistry() { return this.regionalInternetRegistry; }
-    public AutonomousSystemFacet setRegionalInternetRegistry(List<String> value) { this.regionalInternetRegistry = value; return this; }
+    public String getRegionalInternetRegistry() { return this.regionalInternetRegistry; }
+    public AutonomousSystemFacet setRegionalInternetRegistry(String value) { this.regionalInternetRegistry = value; return this; }
 
 }

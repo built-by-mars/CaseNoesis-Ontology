@@ -14,14 +14,12 @@ public class TriggerType extends UcoInherentCharacterizationThing {
     private java.time.ZonedDateTime triggerBeginTime;
     private String triggerDelay;
     private java.time.ZonedDateTime triggerEndTime;
-    private List<String> triggerFrequency;
+    private String triggerFrequency;
     private String triggerMaxRunTime;
     private String triggerSessionChangeType;
-    private List<String> triggerType;
+    private String triggerType;
 
     public TriggerType() {
-        this.triggerFrequency = new ArrayList<>();
-        this.triggerType = new ArrayList<>();
     }
 
     public Boolean getIsEnabled() { return this.isEnabled; }
@@ -36,8 +34,8 @@ public class TriggerType extends UcoInherentCharacterizationThing {
     public java.time.ZonedDateTime getTriggerEndTime() { return this.triggerEndTime; }
     public TriggerType setTriggerEndTime(java.time.ZonedDateTime value) { this.triggerEndTime = value; return this; }
 
-    public List<String> getTriggerFrequency() { return this.triggerFrequency; }
-    public TriggerType setTriggerFrequency(List<String> value) { this.triggerFrequency = value; return this; }
+    public String getTriggerFrequency() { return this.triggerFrequency; }
+    public TriggerType setTriggerFrequency(String value) { this.triggerFrequency = value; return this; }
 
     public String getTriggerMaxRunTime() { return this.triggerMaxRunTime; }
     public TriggerType setTriggerMaxRunTime(String value) { this.triggerMaxRunTime = value; return this; }
@@ -45,7 +43,7 @@ public class TriggerType extends UcoInherentCharacterizationThing {
     public String getTriggerSessionChangeType() { return this.triggerSessionChangeType; }
     public TriggerType setTriggerSessionChangeType(String value) { this.triggerSessionChangeType = value; return this; }
 
-    public List<String> getTriggerType() { return this.triggerType; }
-    public TriggerType setTriggerType(List<String> value) { this.triggerType = value; return this; }
+    public String getTriggerType() { return this.triggerType; }
+    public TriggerType setTriggerType(String value) { this.triggerType = value; return this; }
 
 }

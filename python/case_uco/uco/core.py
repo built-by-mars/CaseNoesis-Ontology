@@ -230,3 +230,12 @@ class Relationship(UcoObject):
     start_time: list[datetime] = field(default_factory=list, metadata={'jsonld_key': 'uco-core:startTime', 'required': False, 'cardinality': 'zero_or_more', 'range_iri': 'http://www.w3.org/2001/XMLSchema#dateTime', 'alternate_range_iris': []})
     target: Optional[UcoObject] = field(default=None, metadata={'jsonld_key': 'uco-core:target', 'required': True, 'cardinality': 'exactly_one', 'range_iri': 'https://ontology.unifiedcyberontology.org/uco/core/UcoObject', 'alternate_range_iris': []})
 
+
+@dataclass
+class UcoType:
+    """UcoThing is the top-level class for metaclasses within UCO.  An instance of core:UcoType is also an instance of owl:Class, and is or specializes core:UcoThing."""
+
+    CLASS_IRI: str = "https://ontology.unifiedcyberontology.org/uco/core/UcoType"
+    NAMESPACE_PREFIX: str = "uco-core"
+
+

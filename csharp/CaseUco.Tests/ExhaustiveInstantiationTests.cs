@@ -28,6 +28,7 @@ namespace CaseUco.Tests
             instances.Add(new CaseUco.Uco.Action.ActionLifecycle());
             instances.Add(new CaseUco.Uco.Action.ActionPattern());
             instances.Add(new CaseUco.Uco.Action.ArrayOfAction());
+            instances.Add(new CaseUco.Uco.Action.Technique());
             instances.Add(new CaseUco.Uco.Analysis.Analysis());
             instances.Add(new CaseUco.Uco.Analysis.AnalyticResult());
             instances.Add(new CaseUco.Uco.Analysis.AnalyticResultFacet());
@@ -57,6 +58,7 @@ namespace CaseUco.Tests
             instances.Add(new CaseUco.Uco.Core.UcoInherentCharacterizationThing());
             instances.Add(new CaseUco.Uco.Core.UcoObject());
             instances.Add(new CaseUco.Uco.Core.UcoThing());
+            instances.Add(new CaseUco.Uco.Core.UcoType());
             instances.Add(new CaseUco.Uco.Identity.AddressFacet());
             instances.Add(new CaseUco.Uco.Identity.AffiliationFacet());
             instances.Add(new CaseUco.Uco.Identity.BirthInformationFacet());
@@ -439,7 +441,7 @@ namespace CaseUco.Tests
             instances.Add(new CaseUco.Uco.Types.ThreadItem());
             instances.Add(new CaseUco.Uco.Victim.Victim());
             instances.Add(new CaseUco.Uco.Victim.VictimTargeting());
-            Assert.Equal(429, instances.Count);
+            Assert.Equal(431, instances.Count);
         }
     }
 }

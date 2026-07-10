@@ -14,12 +14,12 @@ public class ActionFrequencyFacet extends Facet {
     private java.math.BigDecimal rate;
     @org.caseontology.CaseRequired
     private String scale;
-    private List<String> trend;
+    @org.caseontology.CaseRequired
+    private String trend;
     @org.caseontology.CaseRequired
     private String units;
 
     public ActionFrequencyFacet() {
-        this.trend = new ArrayList<>();
     }
 
     public java.math.BigDecimal getRate() { return this.rate; }
@@ -28,8 +28,8 @@ public class ActionFrequencyFacet extends Facet {
     public String getScale() { return this.scale; }
     public ActionFrequencyFacet setScale(String value) { this.scale = value; return this; }
 
-    public List<String> getTrend() { return this.trend; }
-    public ActionFrequencyFacet setTrend(List<String> value) { this.trend = value; return this; }
+    public String getTrend() { return this.trend; }
+    public ActionFrequencyFacet setTrend(String value) { this.trend = value; return this; }
 
     public String getUnits() { return this.units; }
     public ActionFrequencyFacet setUnits(String value) { this.units = value; return this; }

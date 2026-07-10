@@ -10,16 +10,16 @@ public class Hash extends UcoInherentCharacterizationThing {
     public static final String CLASS_IRI = "https://ontology.unifiedcyberontology.org/uco/types/Hash";
     public static final String NAMESPACE_PREFIX = "uco-types";
 
-    private List<String> hashMethod;
+    @org.caseontology.CaseRequired
+    private String hashMethod;
     @org.caseontology.CaseRequired
     private byte[] hashValue;
 
     public Hash() {
-        this.hashMethod = new ArrayList<>();
     }
 
-    public List<String> getHashMethod() { return this.hashMethod; }
-    public Hash setHashMethod(List<String> value) { this.hashMethod = value; return this; }
+    public String getHashMethod() { return this.hashMethod; }
+    public Hash setHashMethod(String value) { this.hashMethod = value; return this; }
 
     public byte[] getHashValue() { return this.hashValue; }
     public Hash setHashValue(byte[] value) { this.hashValue = value; return this; }

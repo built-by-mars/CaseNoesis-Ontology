@@ -18,21 +18,19 @@ public class WhoIsFacet extends Facet {
     private ObservableObject ipAddress;
     private java.time.ZonedDateTime lookupDate;
     private List<ObservableObject> nameServer;
-    private List<String> regionalInternetRegistry;
+    private String regionalInternetRegistry;
     private ObservableObject registrantContactInfo;
     private List<String> registrantIDs;
     private WhoisRegistrarInfoType registrarInfo;
     private String remarks;
     private ObservableObject serverName;
     private String sponsoringRegistrar;
-    private List<String> status;
+    private String status;
     private java.time.ZonedDateTime updatedDate;
 
     public WhoIsFacet() {
         this.nameServer = new ArrayList<>();
-        this.regionalInternetRegistry = new ArrayList<>();
         this.registrantIDs = new ArrayList<>();
-        this.status = new ArrayList<>();
     }
 
     public java.time.ZonedDateTime getCreationDate() { return this.creationDate; }
@@ -59,8 +57,8 @@ public class WhoIsFacet extends Facet {
     public List<ObservableObject> getNameServer() { return this.nameServer; }
     public WhoIsFacet setNameServer(List<ObservableObject> value) { this.nameServer = value; return this; }
 
-    public List<String> getRegionalInternetRegistry() { return this.regionalInternetRegistry; }
-    public WhoIsFacet setRegionalInternetRegistry(List<String> value) { this.regionalInternetRegistry = value; return this; }
+    public String getRegionalInternetRegistry() { return this.regionalInternetRegistry; }
+    public WhoIsFacet setRegionalInternetRegistry(String value) { this.regionalInternetRegistry = value; return this; }
 
     public ObservableObject getRegistrantContactInfo() { return this.registrantContactInfo; }
     public WhoIsFacet setRegistrantContactInfo(ObservableObject value) { this.registrantContactInfo = value; return this; }
@@ -80,8 +78,8 @@ public class WhoIsFacet extends Facet {
     public String getSponsoringRegistrar() { return this.sponsoringRegistrar; }
     public WhoIsFacet setSponsoringRegistrar(String value) { this.sponsoringRegistrar = value; return this; }
 
-    public List<String> getStatus() { return this.status; }
-    public WhoIsFacet setStatus(List<String> value) { this.status = value; return this; }
+    public String getStatus() { return this.status; }
+    public WhoIsFacet setStatus(String value) { this.status = value; return this; }
 
     public java.time.ZonedDateTime getUpdatedDate() { return this.updatedDate; }
     public WhoIsFacet setUpdatedDate(java.time.ZonedDateTime value) { this.updatedDate = value; return this; }

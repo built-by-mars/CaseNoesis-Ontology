@@ -10,7 +10,7 @@ public class MemoryFacet extends Facet {
     public static final String CLASS_IRI = "https://ontology.unifiedcyberontology.org/uco/observable/MemoryFacet";
     public static final String NAMESPACE_PREFIX = "uco-observable";
 
-    private List<String> blockType;
+    private String blockType;
     private Boolean isInjected;
     private Boolean isMapped;
     private Boolean isProtected;
@@ -20,13 +20,12 @@ public class MemoryFacet extends Facet {
     private List<byte[]> regionStartAddress;
 
     public MemoryFacet() {
-        this.blockType = new ArrayList<>();
         this.regionEndAddress = new ArrayList<>();
         this.regionStartAddress = new ArrayList<>();
     }
 
-    public List<String> getBlockType() { return this.blockType; }
-    public MemoryFacet setBlockType(List<String> value) { this.blockType = value; return this; }
+    public String getBlockType() { return this.blockType; }
+    public MemoryFacet setBlockType(String value) { this.blockType = value; return this; }
 
     public Boolean getIsInjected() { return this.isInjected; }
     public MemoryFacet setIsInjected(Boolean value) { this.isInjected = value; return this; }
