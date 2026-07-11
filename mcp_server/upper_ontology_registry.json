@@ -1,6 +1,6 @@
 {
   "registry_version": "1.0",
-  "generated": "2026-07-10T15:29:30.559257+00:00",
+  "generated": "2026-07-11T04:16:34.262048+00:00",
   "generator": "mcp_server/tools/build_upper_ontology_registry.py",
   "description": "Exact declared terms of upper/external ontologies that UCO maintains CDO-Shapes profiles for. Strict concept coverage accepts only these terms inside the profiled namespaces.",
   "ontologies": {

@@ -5,7 +5,7 @@ Investigation Techniques, https://solveit-df.org) organizes digital forensic
 practice as objectives -> techniques -> weaknesses -> mitigations, with
 weaknesses classified by ASTM E3016-18 error category. The SDK vendors the
 upstream-compiled RDF knowledge base at
-``extensions/solveit/solve-it-kb.ttl`` (pinned by
+``ontology/solveit/solve-it-kb.ttl`` (pinned by
 ``mcp_server/tools/sync_solveit.py``); this module parses it once and serves
 the MCP tools ``search_solveit``, ``get_solveit_details``, and
 ``plan_solveit_workflow``.
@@ -22,8 +22,10 @@ import threading
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from extension_paths import extension_dir as _solveit_dir
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-KB_PATH = PROJECT_ROOT / "extensions" / "solveit" / "solve-it-kb.ttl"
+KB_PATH = _solveit_dir("solveit", PROJECT_ROOT) / "solve-it-kb.ttl"
 
 SOLVEIT_CORE = "https://ontology.solveit-df.org/solveit/core/"
 
@@ -438,7 +440,7 @@ def _kb_provenance() -> dict:
 
     import json
 
-    manifest_path = PROJECT_ROOT / "extensions" / "solveit" / "manifest.json"
+    manifest_path = _solveit_dir("solveit", PROJECT_ROOT) / "manifest.json"
     try:
         provenance = json.loads(manifest_path.read_text(encoding="utf-8")).get("provenance", {})
     except (OSError, ValueError):

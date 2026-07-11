@@ -48,13 +48,13 @@ def write_graph(tmp_path: Path, payload: dict, name: str = "graph.jsonld") -> Pa
 
 
 def _cac_ontology_available(project_root: Path) -> bool:
-    sample = project_root / "extensions/cac/ontology/ontology/cacontology-core-shapes.ttl"
+    sample = project_root / "ontology/cac/ontology/ontology/cacontology-core-shapes.ttl"
     return sample.is_file()
 
 
 def test_extension_ontology_args_uses_cac_subset_by_default() -> None:
     project_root = Path(__file__).resolve().parent.parent.parent
-    subset = project_root / "extensions" / "cac" / "validation-subset.json"
+    subset = project_root / "ontology" / "cac" / "validation-subset.json"
     if not subset.exists():
         pytest.skip("CAC validation subset not present")
     if not _cac_ontology_available(project_root):
@@ -77,7 +77,7 @@ def test_extension_ontology_args_uses_cac_subset_by_default() -> None:
 
 def test_extension_ontology_args_cac_full_uses_manifest() -> None:
     project_root = Path(__file__).resolve().parent.parent.parent
-    manifest = project_root / "extensions" / "cac" / "manifest.json"
+    manifest = project_root / "ontology" / "cac" / "manifest.json"
     if not manifest.exists():
         pytest.skip("CAC extension manifest not present")
     if not _cac_ontology_available(project_root):

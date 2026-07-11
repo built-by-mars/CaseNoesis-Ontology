@@ -142,8 +142,10 @@ def _load_extension_registries() -> None:
 
 def _find_extension_registry(ext_name: str) -> dict[str, Any] | None:
     """Locate and load a _registry.json for the given extension name."""
+    import extension_paths
+
     search_paths = [
-        PROJECT_ROOT / "extensions" / ext_name / "_registry.json",
+        extension_paths.extension_dir(ext_name, PROJECT_ROOT) / "_registry.json",
         PROJECT_ROOT / "packages" / f"case-uco-{ext_name}" / "_registry.json",
         PROJECT_ROOT / "packages" / f"case-uco-{ext_name}" / "python" / f"case_uco_{ext_name}" / "_registry.json",
     ]
@@ -345,7 +347,7 @@ def validate_graph(
     Turtle graph file and returns a bounded conformance report (conforms,
     warning_count, violation_count, safe_summary). Pass extensions=['cac']
     to validate against the CAC press-release subset
-    (extensions/cac/validation-subset.json). Pass extensions=['cac:full']
+    (ontology/cac/validation-subset.json). Pass extensions=['cac:full']
     for the complete CAC manifest when upstream SHACL SPARQL constraints
     are repaired. Pass extensions=['cryptoinv'] for cryptocurrency /
     financial-crime graphs (crypto address/transaction/wallet facets,
@@ -624,7 +626,7 @@ def find_classes_for_domain(domain: str, scope: str = "all") -> dict:
                 'Already loaded — use scope="cac" to search CAC classes directly.'
                 if cac_loaded else
                 'Set CASE_UCO_EXTENSIONS=cac in your MCP server config to load CAC classes. '
-                'See extensions/cac/README.md for setup instructions.'
+                'See ontology/cac/README.md for setup instructions.'
             ),
             "repo_url": "https://github.com/Project-VIC-International/CAC-Ontology",
             "relevant_modules": [
@@ -693,6 +695,10 @@ def get_uco_profiles(query: str = "") -> dict:
             "repo_url": p["repo_url"],
             "ontology_url": p["ontology_url"],
             "ontology_file": p["ontology_file"],
+            # Vendored offline copies (v1.19.0): upper-ontology source and
+            # CDO-Shapes SHACL profile, usable without network access.
+            "local_source": p.get("local_source"),
+            "local_shapes": p.get("local_shapes"),
             "related_recipes": p.get("related_recipes", []),
         }
         ext_compat = p.get("extension_compatibility", {})
@@ -926,7 +932,7 @@ def route_cac_content(
 
     Examples:
       route_cac_content(content_text="ICAC task force rescued victims from trafficking ring")
-      route_cac_content(source_path="extensions/cac/ontology/examples_knowledge_graphs/hotline-lifecycle.ttl", output_format="ttl")
+      route_cac_content(source_path="ontology/cac/ontology/examples_knowledge_graphs/hotline-lifecycle.ttl", output_format="ttl")
       route_cac_content(content_text=..., source_path="case-notes.txt")
     """
     try:
@@ -1093,7 +1099,7 @@ def search_solveit(query: str, kind: str | None = None, limit: int = 10) -> dict
     SOLVE-IT (https://solveit-df.org) catalogs digital forensic practice as
     objectives -> techniques -> weaknesses -> mitigations, with weaknesses
     classified per ASTM E3016-18. The SDK vendors a pinned snapshot in
-    extensions/solveit/ (synced with mcp_server/tools/sync_solveit.py).
+    ontology/solveit/ (synced with mcp_server/tools/sync_solveit.py).
 
     kind filters to one of: objective, technique, weakness, mitigation.
     Identifiers work directly (e.g. query="DFT-1002"). Follow up with
@@ -1111,7 +1117,7 @@ def search_solveit(query: str, kind: str | None = None, limit: int = 10) -> dict
     except FileNotFoundError:
         return {
             "error": "solveit_kb_missing",
-            "detail": "extensions/solveit/solve-it-kb.ttl not found; run "
+            "detail": "ontology/solveit/solve-it-kb.ttl not found; run "
                       "`make sync-solveit` to vendor the knowledge base",
         }
 
@@ -1141,7 +1147,7 @@ def get_solveit_details(item_id: str) -> dict:
     except FileNotFoundError:
         return {
             "error": "solveit_kb_missing",
-            "detail": "extensions/solveit/solve-it-kb.ttl not found; run "
+            "detail": "ontology/solveit/solve-it-kb.ttl not found; run "
                       "`make sync-solveit` to vendor the knowledge base",
         }
 
@@ -1170,7 +1176,7 @@ def plan_solveit_workflow(description: str) -> dict:
     except FileNotFoundError:
         return {
             "error": "solveit_kb_missing",
-            "detail": "extensions/solveit/solve-it-kb.ttl not found; run "
+            "detail": "ontology/solveit/solve-it-kb.ttl not found; run "
                       "`make sync-solveit` to vendor the knowledge base",
         }
 

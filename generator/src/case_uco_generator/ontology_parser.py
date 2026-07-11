@@ -380,32 +380,54 @@ def load_extension_manifest(ext_dir: Path) -> dict | None:
         return None
 
 
-def load_extensions(g: Graph, extensions_dir: Path) -> dict[str, tuple[str, str]]:
+# Subdirectories of the ontology/ vendoring root that are core/upper
+# ontologies, not extension directories.
+_NON_EXTENSION_DIRS = {"CASE", "UCO", "upper"}
+
+
+def load_extensions(
+    g: Graph,
+    extensions_dir: Path | list[Path],
+) -> dict[str, tuple[str, str]]:
     """Load extension ontology TTL files into the graph and return namespace mappings.
+
+    ``extensions_dir`` may be a single root or a list of roots (v1.19.0:
+    SDK-native extensions live in ``extensions/`` while upstream-vendored
+    ontologies such as CAC, AEO, and SOLVE-IT live in ``ontology/``). When
+    the same extension name appears in several roots, the first root wins.
 
     Uses manifest.json when present in each extension directory for explicit
     namespace-to-module mapping and file lists.  Falls back to the legacy
-    heuristic for directories without a manifest (e.g., toolcap).
+    heuristic for directories without a manifest (e.g., toolcap) — but only
+    inside an ``extensions/`` root, so that CASE/UCO submodules and vendored
+    upper ontologies under ``ontology/`` are never swept in as extensions.
 
     Returns a dict mapping namespace URI -> (top_level, module) for each
-    extension directory found under extensions_dir.
+    extension directory found.
     """
+    roots = [extensions_dir] if isinstance(extensions_dir, Path) else list(extensions_dir)
+
     ext_modules: dict[str, tuple[str, str]] = {}
-    if not extensions_dir.exists():
-        logger.info("No extensions directory at %s", extensions_dir)
-        return ext_modules
-
     ttl_count = 0
-    for ext_dir in sorted(extensions_dir.iterdir()):
-        if not ext_dir.is_dir():
+    seen_names: set[str] = set()
+    for root in roots:
+        if not root.exists():
+            logger.info("No extensions directory at %s", root)
             continue
-        ext_name = ext_dir.name
+        for ext_dir in sorted(root.iterdir()):
+            if not ext_dir.is_dir():
+                continue
+            ext_name = ext_dir.name
+            if ext_name in _NON_EXTENSION_DIRS or ext_name in seen_names:
+                continue
 
-        manifest = load_extension_manifest(ext_dir)
-        if manifest is not None:
-            ttl_count += _load_extension_from_manifest(g, ext_dir, manifest, ext_modules)
-        else:
-            ttl_count += _load_extension_legacy(g, ext_dir, ext_name, ext_modules)
+            manifest = load_extension_manifest(ext_dir)
+            if manifest is not None:
+                seen_names.add(ext_name)
+                ttl_count += _load_extension_from_manifest(g, ext_dir, manifest, ext_modules)
+            elif root.name == "extensions":
+                seen_names.add(ext_name)
+                ttl_count += _load_extension_legacy(g, ext_dir, ext_name, ext_modules)
 
     logger.info("Loaded %d extension Turtle files", ttl_count)
     return ext_modules
@@ -491,12 +513,13 @@ def _load_extension_legacy(
 
 def parse_ontology(
     ontology_root: Path,
-    extensions_dir: Path | None = None,
+    extensions_dir: Path | list[Path] | None = None,
 ) -> OntologySchema:
     """Parse the UCO/CASE ontology and return a typed schema model.
 
-    If extensions_dir is provided, extension ontologies are loaded and their
-    classes are included with module keys like ``ext.<name>``.
+    If extensions_dir is provided (a single root or a list of roots),
+    extension ontologies are loaded and their classes are included with
+    module keys like ``ext.<name>``.
     """
     g = load_ontology(ontology_root)
 

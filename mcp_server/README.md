@@ -85,7 +85,7 @@ CAC-specific continuation:
 
 1. **Route** — `route_cac_content(content_text=<clean narrative excerpt>)` returns multiple matched recipes (e.g. task force + warrant arrest + grooming + legal charges + CSAM purchasing).
 2. **Build** — Agent reads returned recipe files and composes JSON-LD or TTL using CAC classes (`CASE_UCO_EXTENSIONS=cac`).
-3. **Validate** — `validate_graph("output.jsonld", extensions=["cac"])` uses `extensions/cac/validation-subset.json` (recommended for press-release KGs). Use `extensions=["cac:full"]` only when the full CAC manifest SHACL is repaired upstream.
+3. **Validate** — `validate_graph("output.jsonld", extensions=["cac"])` uses `ontology/cac/validation-subset.json` (recommended for press-release KGs). Use `extensions=["cac:full"]` only when the full CAC manifest SHACL is repaired upstream.
 
 For non-CAC prosecutions (violent crime, terrorism, generic federal cases), build with the `legalproc` extension and validate with `extensions=["legalproc"]` — see `docs/recipes/legal-process-modeling.md` and the exemplar at `examples/pacer/wdmo_2022_cr_04065/`.
 

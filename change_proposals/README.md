@@ -10,7 +10,7 @@ Each file is a filled-in version of the official [change proposal template](../d
 2. Existing proposals are checked in the [UCO](https://github.com/ucoProject/UCO/issues), [CASE](https://github.com/casework/CASE/issues), and [CAC](https://github.com/Project-VIC-International/CAC-Ontology/issues) issue trackers (`check_existing_proposals` searches all three)
 3. A proposal is drafted here using the official template
 4. The developer reviews, refines, and submits the proposal as a GitHub issue in the appropriate repository
-5. For terms needed immediately, the concept is declared in a local extension file (e.g. `extensions/cac/local/cacontology-sdk-pending.ttl`) referencing the filed issue, so strict validation passes until the proposal lands upstream
+5. For terms needed immediately, the concept is declared in a local extension file (e.g. `ontology/cac/local/cacontology-sdk-pending.ttl`) referencing the filed issue, so strict validation passes until the proposal lands upstream
 
 ## File naming
 
@@ -28,8 +28,8 @@ When ready, copy the contents of the proposal file into a new GitHub issue:
 
 | Proposal | Issue | Local pending declarations |
 |---|---|---|
-| [`cac-legal-outcomes-charging-properties.md`](cac-legal-outcomes-charging-properties.md) | [CAC-Ontology #40](https://github.com/Project-VIC-International/CAC-Ontology/issues/40) | `extensions/cac/local/cacontology-sdk-pending.ttl` |
-| [`cac-core-case-identification-properties.md`](cac-core-case-identification-properties.md) | [CAC-Ontology #41](https://github.com/Project-VIC-International/CAC-Ontology/issues/41) | `extensions/cac/local/cacontology-sdk-pending.ttl` |
+| [`cac-legal-outcomes-charging-properties.md`](cac-legal-outcomes-charging-properties.md) | [CAC-Ontology #40](https://github.com/Project-VIC-International/CAC-Ontology/issues/40) | `ontology/cac/local/cacontology-sdk-pending.ttl` |
+| [`cac-core-case-identification-properties.md`](cac-core-case-identification-properties.md) | [CAC-Ontology #41](https://github.com/Project-VIC-International/CAC-Ontology/issues/41) | `ontology/cac/local/cacontology-sdk-pending.ttl` |
 
 ## Filed UCO proposals
 

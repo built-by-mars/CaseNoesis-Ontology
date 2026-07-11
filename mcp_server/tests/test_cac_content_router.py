@@ -18,7 +18,7 @@ from cac_content_router import (
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 HOTLINE_EXAMPLE = (
     PROJECT_ROOT
-    / "extensions/cac/ontology/examples_knowledge_graphs/hotline-lifecycle.ttl"
+    / "ontology/cac/ontology/examples_knowledge_graphs/hotline-lifecycle.ttl"
 )
 
 

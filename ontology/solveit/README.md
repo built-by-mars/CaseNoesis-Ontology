@@ -92,7 +92,7 @@ make sync-solveit REF=<sha>   # pin a specific solve-it-ontology commit
 
 The sync tool re-vendors every file, regenerates the punned technique
 catalog, and rewrites manifest provenance. A weekly GitHub Actions check
-(`.github/workflows/solveit-freshness.yml`) fails when the pinned snapshot
+(`.github/workflows/upstream-freshness.yml`) fails when the pinned snapshot
 falls behind the newest upstream release.
 
 There is intentionally no `validation-subset.json`: subset mode skips RDFS

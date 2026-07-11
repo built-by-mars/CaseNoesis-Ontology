@@ -2,7 +2,7 @@
 
 # CASE/UCO SDK
 
-**v1.18.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md)
+**v1.19.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md)
 
 A multi-language data modeling library for digital forensics, cyber-investigation, and cyber-observable data. If your software produces or consumes forensic evidence, this SDK gives you typed, validated builders in **Python**, **C#**, **Java**, and **Rust** — so you can model investigation data in your language and produce interoperable [CASE/UCO](https://caseontology.org/) JSON-LD output.
 
@@ -47,7 +47,7 @@ For Java, add to your `pom.xml`:
 <dependency>
     <groupId>org.caseontology</groupId>
     <artifactId>case-uco</artifactId>
-    <version>1.18.0</version>
+    <version>1.19.0</version>
 </dependency>
 ```
 
@@ -254,14 +254,14 @@ For detailed benchmarks, partitioning strategies, validation tool comparisons, a
 
 ## Bundled Extension Ontologies
 
-Core CASE/UCO covers cyber-observables and investigation management, but real investigations reach into domains the core ontology doesn't cover. The SDK bundles ten extension ontologies under `extensions/`, all queryable through the same registry, CLI explorer, and MCP tools as core classes (set `CASE_UCO_EXTENSIONS` or use the `scope` parameter to include them):
+Core CASE/UCO covers cyber-observables and investigation management, but real investigations reach into domains the core ontology doesn't cover. The SDK bundles ten extension ontologies, all queryable through the same registry, CLI explorer, and MCP tools as core classes (set `CASE_UCO_EXTENSIONS` or use the `scope` parameter to include them). Upstream-maintained ontologies (`cac`, `aeo`, `solveit`) are vendored under `ontology/` alongside CASE and UCO and refreshed with `make sync-upstream`; SDK-developed extensions live under `extensions/`:
 
 | Extension | Version | Domain |
 |-----------|---------|--------|
-| [`cac`](extensions/cac/) | 3.0.0 | [Crimes Against Children Ontology](https://site.cacontology.projectvic.org) — 35+ modules for CSAM, trafficking, grooming, sextortion, hotline intake, task force operations, and federal prosecution |
-| [`aeo`](extensions/aeo/) | 0.2.1 | [Adversary Engagement Ontology](https://github.com/UNHSAILLab/Adversary-Engagement-Ontology) — cyber deception, honeypots, and adversary engagement operations |
+| [`cac`](ontology/cac/) | 3.0.0 | [Crimes Against Children Ontology](https://site.cacontology.projectvic.org) — 35+ modules for CSAM, trafficking, grooming, sextortion, hotline intake, task force operations, and federal prosecution |
+| [`aeo`](ontology/aeo/) | 0.2.1 | [Adversary Engagement Ontology](https://github.com/UNHSAILLab/Adversary-Engagement-Ontology) — cyber deception, honeypots, and adversary engagement operations |
 | [`attack-technique`](extensions/attack-technique/) | 0.1.0 | MITRE ATT&CK technique metaclass (forward-implementation of UCO PR #676) plus a technique catalog for CTI and APT reporting |
-| [`solveit`](extensions/solveit/) | 0.1.9 | [SOLVE-IT](https://solveit-df.org) digital forensics knowledge base — objectives, techniques, weaknesses (ASTM E3016-18), mitigations; pinned upstream snapshot with `SolveitInvestigativeAction`, method-centric observables, weakness assessment, and a punned technique catalog for the UCO 1.5.0 metaclass style |
+| [`solveit`](ontology/solveit/) | 0.1.9 | [SOLVE-IT](https://solveit-df.org) digital forensics knowledge base — objectives, techniques, weaknesses (ASTM E3016-18), mitigations; pinned upstream snapshot with `SolveitInvestigativeAction`, method-centric observables, weakness assessment, and a punned technique catalog for the UCO 1.5.0 metaclass style |
 | [`cryptoinv`](extensions/cryptoinv/) | 0.1.0 | Cryptocurrency and financial-crime investigation — typed crypto facets, blockchain tracing, exchange records |
 | [`legalproc`](extensions/legalproc/) | 0.1.0 | Legal process — charges, verdicts, pleas, sentences, forfeiture, restitution for any investigation type |
 | [`rico`](extensions/rico/) | 0.1.0 | Racketeering and criminal enterprise — association-in-fact enterprises, enterprise roles, predicate statutes |
@@ -473,7 +473,13 @@ The catalog is self-improving: the [recipe-authoring recipe](docs/recipes/recipe
 ```
 CASE-UCO-SDK/
 ├── generator/              Code generator + CLI explorer + docs generators
-├── ontology/               Git submodules: UCO 1.4.0 + CASE 1.4.0 sources
+├── ontology/               Upstream-vendored ontologies (refreshed via `make sync-upstream`)
+│   ├── UCO/                UCO 1.4.0 sources (git submodule)
+│   ├── CASE/               CASE 1.4.0 sources (git submodule)
+│   ├── cac/                Crimes Against Children Ontology (Project VIC, submodule)
+│   ├── aeo/                Adversary Engagement Ontology (submodule)
+│   ├── solveit/            SOLVE-IT knowledge base + ontology (pinned snapshot)
+│   └── upper/              Pinned upper-ontology sources + CDO-Shapes profiles (offline)
 ├── python/                 Generated Python library (case-uco) + runtime registry
 │   └── tests/              pytest suite + exhaustive instantiation tests
 ├── csharp/                 Generated C# library (CaseUco, netstandard2.0)
@@ -484,9 +490,7 @@ CASE-UCO-SDK/
 ├── rust/                   Generated Rust crate (case-uco)
 │   ├── tests/              Integration + exhaustive instantiation tests
 │   └── examples/smoke.rs   Smoke test binary (import + serialize)
-├── extensions/             Nine bundled extension ontologies (queryable via registry + MCP)
-│   ├── cac/                Crimes Against Children Ontology (Project VIC)
-│   ├── aeo/                Adversary Engagement Ontology
+├── extensions/             SDK-developed extension ontologies (queryable via registry + MCP)
 │   ├── attack-technique/   MITRE ATT&CK technique metaclass + catalog
 │   ├── cryptoinv/          Cryptocurrency and financial-crime investigation
 │   ├── legalproc/          Legal process (charges, verdicts, sentences)
@@ -548,6 +552,7 @@ All four language packages are released in lockstep from the same ontology sourc
 
 | SDK Version | UCO | CASE | Python `case-uco` | C# `CaseUco` | Java `case-uco` | Rust `case-uco` |
 |-------------|-----|------|-------------------|--------------|-----------------|-----------------|
+| 1.19.0 | 1.4.0 | 1.4.0 | 1.19.0 | 1.19.0 | 1.19.0 | 1.19.0 |
 | 1.18.0 | 1.4.0 | 1.4.0 | 1.18.0 | 1.18.0 | 1.18.0 | 1.18.0 |
 | 1.17.0 | 1.4.0 | 1.4.0 | 1.17.0 | 1.17.0 | 1.17.0 | 1.17.0 |
 | 1.16.0 | 1.4.0 | 1.4.0 | 1.16.0 | 1.16.0 | 1.16.0 | 1.16.0 |
@@ -574,7 +579,7 @@ The SDK is designed to work with AI coding assistants like Cursor, Claude Code, 
 The MCP server is the centerpiece. It carries a working knowledge of the entire Linux Foundation [Cyber Domain Ontology](https://cyberdomainontology.org/) project — not just class lookup, but the ecosystem around it:
 
 - **Core + extension discovery** — every tool accepts a `scope` parameter, so the agent can search core CASE/UCO, the CAC Ontology, the Adversary Engagement Ontology, or any bundled extension with the same calls.
-- **Upper-ontology profiles** — `get_uco_profiles` surfaces UCO's alignments with BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, and FOAF, so graphs can interoperate with formal-reasoning, provenance, temporal, geospatial, and social-network tooling.
+- **Upper-ontology profiles** — `get_uco_profiles` surfaces UCO's alignments with BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, and FOAF, so graphs can interoperate with formal-reasoning, provenance, temporal, geospatial, and social-network tooling. Since v1.19.0 the upper-ontology sources and CDO-Shapes SHACL profiles are vendored under `ontology/upper/` (each profile reports its `local_source` / `local_shapes` paths), so profile inspection, conformance checks, and registry rebuilds all work fully offline — nothing in the SDK requires network access at investigation time.
 - **Investigation routing** — `route_investigation_content` classifies any submission (text, documents, partial graphs) into investigation families and returns the matching recipes, extensions, namespaces, and profiles; `route_cac_content` does deep routing within the crimes-against-children domain. Since v1.16.0 routing is hybrid: a deterministic keyword baseline plus an offline lexical-semantic stage with synonym expansion, per-family confidence scores, explainable match evidence, and calibrated abstention — colloquial phrasings route correctly, unknown content gets extension-gap guidance instead of a weak guess.
 - **Forensic method planning** — `plan_solveit_workflow` maps an investigation goal to [SOLVE-IT](https://solveit-df.org) objectives, candidate techniques, and per-technique weakness/mitigation checklists (ASTM E3016-18 Error Mitigation Analysis); `search_solveit` and `get_solveit_details` query the pinned knowledge base (23 objectives, 187 techniques, 339 weaknesses, 270 mitigations), and the `solveit` extension records the method in the graph via `SolveitInvestigativeAction` or the punned technique classes — kept current against SOLVE-IT's rapid release cycle with `make sync-solveit` and a weekly CI freshness check.
 - **Document processing** — `process_document_file` turns images, PDFs, Office documents, CSV tables, and PACER court filings into bounded CASE/UCO JSON-LD for human review. All extracted content is labeled untrusted evidence data, scanned for prompt-injection patterns, and confined by the configurable filesystem workspace policy (see [SECURITY.md](SECURITY.md)).
@@ -687,7 +692,7 @@ Drafted proposals are saved to `change_proposals/` and can be submitted as GitHu
 
 ### Example Agent Outputs
 
-The `example_agentmcp_outputs/` directory contains four complete worked examples produced by the AI agent using this SDK and MCP server:
+The `examples/agent-outputs/` directory contains four complete worked examples produced by the AI agent using this SDK and MCP server:
 
 | Example | What it demonstrates |
 |---------|---------------------|
@@ -724,9 +729,9 @@ The CASE community maintains tool-specific mappings and working implementations.
 
 Projects that extend CASE/UCO into specialized domains:
 
-- **[CAC Ontology](https://github.com/Project-VIC-International/CAC-Ontology)** — 35+ modules for crimes against children investigations. Maintained by Project VIC International. *Bundled with this SDK* (`extensions/cac/`) and fully queryable through the registry and MCP tools.
-- **[Adversary Engagement Ontology](https://github.com/UNHSAILLab/Adversary-Engagement-Ontology)** — UCO sub-ontology for cyber deception, honeypots, and adversary engagement operations. *Bundled with this SDK* (`extensions/aeo/`).
-- **[SOLVE-IT](https://github.com/SOLVE-IT-DF)** — Knowledge base of digital forensic objectives, techniques, weaknesses, and mitigations, with its own CASE/UCO extension ontology. *Bundled with this SDK* (`extensions/solveit/`) as a pinned, sync-managed snapshot with dedicated MCP query tools (`search_solveit`, `get_solveit_details`, `plan_solveit_workflow`).
+- **[CAC Ontology](https://github.com/Project-VIC-International/CAC-Ontology)** — 35+ modules for crimes against children investigations. Maintained by Project VIC International. *Bundled with this SDK* (`ontology/cac/`) and fully queryable through the registry and MCP tools.
+- **[Adversary Engagement Ontology](https://github.com/UNHSAILLab/Adversary-Engagement-Ontology)** — UCO sub-ontology for cyber deception, honeypots, and adversary engagement operations. *Bundled with this SDK* (`ontology/aeo/`).
+- **[SOLVE-IT](https://github.com/SOLVE-IT-DF)** — Knowledge base of digital forensic objectives, techniques, weaknesses, and mitigations, with its own CASE/UCO extension ontology. *Bundled with this SDK* (`ontology/solveit/`) as a pinned, sync-managed snapshot with dedicated MCP query tools (`search_solveit`, `get_solveit_details`, `plan_solveit_workflow`).
 
 See [Bundled Extension Ontologies](#bundled-extension-ontologies) for the full list of extensions shipped with the SDK, including the SDK-native `cryptoinv`, `legalproc`, `rico`, `weapons`, `drugs`, `attack-technique`, and `toolcap` extensions.
 

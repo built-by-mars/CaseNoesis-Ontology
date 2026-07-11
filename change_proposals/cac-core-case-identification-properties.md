@@ -106,5 +106,5 @@ cacontology:participatesInEvent rdf:type owl:ObjectProperty ;
   statuteCitation, countNumber, sentenceDurationMonths, phaseStatus, FederalProsecution), filed
   separately.
 - Interim measure: the CASE/UCO SDK carries these declarations in a clearly-marked local pending
-  extension (`extensions/cac/local/cacontology-sdk-pending.ttl`) that will be retired when this
+  extension (`ontology/cac/local/cacontology-sdk-pending.ttl`) that will be retired when this
   lands upstream.

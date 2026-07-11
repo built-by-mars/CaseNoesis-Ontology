@@ -2,8 +2,8 @@
 """Validate extension ontology data against its manifest-declared TTL files.
 
 Usage:
-    python scripts/validate_extension.py extensions/cac/manifest.json data.jsonld
-    python scripts/validate_extension.py extensions/aeo/manifest.json data.jsonld
+    python scripts/validate_extension.py ontology/cac/manifest.json data.jsonld
+    python scripts/validate_extension.py ontology/aeo/manifest.json data.jsonld
 
 Reads the manifest.json to discover all OWL and SHACL files, then invokes
 case_validate with the appropriate --ontology-graph flags.

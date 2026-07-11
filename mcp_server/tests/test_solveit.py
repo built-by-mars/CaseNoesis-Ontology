@@ -20,7 +20,7 @@ import graph_validator
 import solveit_index
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-EXT_DIR = PROJECT_ROOT / "extensions" / "solveit"
+EXT_DIR = PROJECT_ROOT / "ontology" / "solveit"
 
 UCO_ACTION = "https://ontology.unifiedcyberontology.org/uco/action/"
 SOLVEIT_DATA = "https://ontology.solveit-df.org/solveit/data/"

@@ -10,7 +10,7 @@ Use extension ontologies to model domain-specific concepts that aren't covered b
 
 1. Check whether the concept already exists in an upper/external ontology with a UCO profile — if so, use that ontology's term directly (no extension needed).
 2. File an upstream change proposal ([change-proposal recipe](change-proposal.md)).
-3. Declare the term in an extension ontology (this recipe) — for CAC pending-proposal terms, add to `extensions/cac/local/cacontology-sdk-pending.ttl` with a `dcterms:source` pointing at the proposal issue.
+3. Declare the term in an extension ontology (this recipe) — for CAC pending-proposal terms, add to `ontology/cac/local/cacontology-sdk-pending.ttl` with a `dcterms:source` pointing at the proposal issue.
 4. Register the file in the extension's `manifest.json` (`owl_files`) and, if it should participate in subset validation, `validation-subset.json` (`ontology_files`).
 5. Re-run `validate_graph` — it passes as soon as the concept is declared. Remove the local declaration when the upstream ontology adopts the term.
 

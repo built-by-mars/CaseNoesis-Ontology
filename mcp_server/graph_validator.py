@@ -19,6 +19,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from extension_paths import extension_dir as _extension_dir
+from extension_paths import find_extension_dir as _find_extension_dir
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_BUILT_VERSION = "case-1.4.0"
 
@@ -73,12 +76,13 @@ def load_extension_ontology_paths(
 ) -> list[Path]:
     """Return ontology graph paths for an extension.
 
-    mode ``subset`` uses ``extensions/<ext>/validation-subset.json`` when present
+    mode ``subset`` uses the extension's ``validation-subset.json`` when present
     (recommended for MCP / press-release KGs). mode ``full`` uses the extension
-    manifest (all owl/shacl/bridge files).
+    manifest (all owl/shacl/bridge files). Extension directories are resolved
+    across both vendoring roots (``extensions/`` and ``ontology/``).
     """
 
-    ext_dir = project_root / "extensions" / ext_name
+    ext_dir = _extension_dir(ext_name, project_root)
     paths: list[Path] = []
     if mode == "subset":
         subset_path = ext_dir / "validation-subset.json"
@@ -122,8 +126,9 @@ def resolve_extension_dependencies(
     """
 
     def _manifest_for(clean: str) -> dict | None:
-        manifest_path = project_root / "extensions" / clean / "manifest.json"
-        if not manifest_path.is_file():
+        ext_dir = _find_extension_dir(clean, project_root)
+        manifest_path = None if ext_dir is None else ext_dir / "manifest.json"
+        if manifest_path is None or not manifest_path.is_file():
             return None
         try:
             return json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -158,7 +163,8 @@ def resolve_extension_dependencies(
 def extension_has_validation_subset(ext_name: str, project_root: Path = PROJECT_ROOT) -> bool:
     """Return True when an extension publishes a validation-subset manifest."""
 
-    return (project_root / "extensions" / ext_name / "validation-subset.json").is_file()
+    ext_dir = _find_extension_dir(ext_name, project_root)
+    return ext_dir is not None and (ext_dir / "validation-subset.json").is_file()
 
 
 def extension_ontology_args(

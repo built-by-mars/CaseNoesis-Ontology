@@ -63,5 +63,5 @@ All CDO Shapes profiles are compatible with AEO since it does not import any upp
 The `ontology/` directory is a git submodule pointing to the upstream AEO repository.
 
 ```bash
-git submodule update --init extensions/aeo/ontology
+git submodule update --init ontology/aeo/ontology
 ```

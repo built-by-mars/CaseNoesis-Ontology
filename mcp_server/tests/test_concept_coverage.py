@@ -44,7 +44,7 @@ def _core_ontologies_available() -> bool:
 
 def _cac_available() -> bool:
     return (
-        PROJECT_ROOT / "extensions/cac/ontology/ontology/cacontology-core.ttl"
+        PROJECT_ROOT / "ontology/cac/ontology/ontology/cacontology-core.ttl"
     ).is_file()
 
 

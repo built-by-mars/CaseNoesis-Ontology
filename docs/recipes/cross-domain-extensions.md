@@ -50,10 +50,10 @@ graph.write("cac-investigation.jsonld")
 
 ```bash
 case_validate \
-  --ontology-graph extensions/cac/ontology/ontology/cacontology-core-spine.ttl \
-  --ontology-graph extensions/cac/ontology/ontology/cacontology-core-spine-shapes.ttl \
-  --ontology-graph extensions/cac/ontology/ontology/cacontology-detection.ttl \
-  --ontology-graph extensions/cac/ontology/ontology/cacontology-detection-shapes.ttl \
+  --ontology-graph ontology/cac/ontology/ontology/cacontology-core-spine.ttl \
+  --ontology-graph ontology/cac/ontology/ontology/cacontology-core-spine-shapes.ttl \
+  --ontology-graph ontology/cac/ontology/ontology/cacontology-detection.ttl \
+  --ontology-graph ontology/cac/ontology/ontology/cacontology-detection-shapes.ttl \
   cac-investigation.jsonld
 ```
 
@@ -173,7 +173,7 @@ To generate publishable binding packages for an extension:
 
 ```bash
 case-uco-generate generate-extension \
-  --extension extensions/cac/ \
+  --extension ontology/cac/ \
   --output-dir packages/case-uco-cac/ \
   --lang all
 ```

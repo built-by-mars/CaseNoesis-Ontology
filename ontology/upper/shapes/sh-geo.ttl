@@ -1,0 +1,510 @@
+# imports: http://www.opengis.net/def/geosparql/validator/1.1
+# imports: http://www.opengis.net/ont/geosparql/1.1
+# imports: https://ontology.unifiedcyberontology.org/owl/1.4.0
+
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix sh-geo: <http://example.org/shapes/sh-geo/> .
+@prefix uco-owl: <https://ontology.unifiedcyberontology.org/owl/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/shapes/sh-geo>
+	a owl:Ontology ;
+	owl:imports
+		<http://www.opengis.net/def/geosparql/validator/1.1> ,
+		<http://www.opengis.net/ont/geosparql/1.1> ,
+		uco-owl:1.4.0
+		;
+	.
+
+sh-geo:Feature-disjointWith-Geometry-shape
+	a sh:NodeShape ;
+	sh:not [
+		a sh:NodeShape ;
+		sh:class geo:Geometry ;
+	] ;
+	sh:targetClass geo:Feature ;
+	.
+
+sh-geo:TopologicalRelationship-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:SpatialObject ;
+	sh:targetSubjectsOf
+		geo:ehContains ,
+		geo:ehCoveredBy ,
+		geo:ehCovers ,
+		geo:ehDisjoint ,
+		geo:ehEquals ,
+		geo:ehInside ,
+		geo:ehMeet ,
+		geo:ehOverlap ,
+		geo:rcc8dc ,
+		geo:rcc8ec ,
+		geo:rcc8eq ,
+		geo:rcc8ntpp ,
+		geo:rcc8ntppi ,
+		geo:rcc8po ,
+		geo:rcc8tpp ,
+		geo:rcc8tppi ,
+		geo:sfContains ,
+		geo:sfCrosses ,
+		geo:sfDisjoint ,
+		geo:sfEquals ,
+		geo:sfIntersects ,
+		geo:sfOverlaps ,
+		geo:sfTouches ,
+		geo:sfWithin
+		;
+	.
+
+sh-geo:asDGGS-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype geo:dggsLiteral ;
+	sh:node sh-geo:hasSerialization-objects-node-shape ;
+	sh:path geo:asDGGS ;
+	sh:targetSubjectsOf geo:asDGGS ;
+	.
+
+sh-geo:asGML-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype geo:gmlLiteral ;
+	sh:node sh-geo:hasSerialization-objects-node-shape ;
+	sh:path geo:asGML ;
+	sh:targetSubjectsOf geo:asGML ;
+	.
+
+sh-geo:asGeoJSON-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype geo:geoJSONLiteral ;
+	sh:node sh-geo:hasSerialization-objects-node-shape ;
+	sh:path geo:asGeoJSON ;
+	sh:targetSubjectsOf geo:asGeoJSON ;
+	.
+
+sh-geo:asKML-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype geo:kmlLiteral ;
+	sh:node sh-geo:hasSerialization-objects-node-shape ;
+	sh:path geo:asKML ;
+	sh:targetSubjectsOf geo:asKML ;
+	.
+
+sh-geo:asWKT-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype geo:wktLiteral ;
+	sh:node sh-geo:hasSerialization-objects-node-shape ;
+	sh:path geo:asWKT ;
+	sh:targetSubjectsOf geo:asWKT ;
+	.
+
+sh-geo:coordinateDimension-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:integer ;
+	sh:path geo:coordinateDimension ;
+	sh:targetSubjectsOf geo:coordinateDimension ;
+	.
+
+sh-geo:coordinateDimension-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Geometry ;
+	sh:targetSubjectsOf geo:coordinateDimension ;
+	.
+
+sh-geo:dimension-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:integer ;
+	sh:path geo:dimension ;
+	sh:targetSubjectsOf geo:dimension ;
+	.
+
+sh-geo:dimension-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Geometry ;
+	sh:targetSubjectsOf geo:dimension ;
+	.
+
+sh-geo:ehContains-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:ehContains ;
+	sh:targetSubjectsOf geo:ehContains ;
+	.
+
+sh-geo:ehCoveredBy-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:ehCoveredBy ;
+	sh:targetSubjectsOf geo:ehCoveredBy ;
+	.
+
+sh-geo:ehCovers-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:ehCovers ;
+	sh:targetSubjectsOf geo:ehCovers ;
+	.
+
+sh-geo:ehDisjoint-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:ehDisjoint ;
+	sh:targetSubjectsOf geo:ehDisjoint ;
+	.
+
+sh-geo:ehEquals-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:ehEquals ;
+	sh:targetSubjectsOf geo:ehEquals ;
+	.
+
+sh-geo:ehInside-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:ehInside ;
+	sh:targetSubjectsOf geo:ehInside ;
+	.
+
+sh-geo:ehMeet-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:ehMeet ;
+	sh:targetSubjectsOf geo:ehMeet ;
+	.
+
+sh-geo:ehOverlap-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:ehOverlap ;
+	sh:targetSubjectsOf geo:ehOverlap ;
+	.
+
+sh-geo:hasBoundingBox-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:Geometry ;
+	sh:path geo:hasBoundingBox ;
+	sh:targetSubjectsOf geo:hasBoundingBox ;
+	.
+
+sh-geo:hasCentroid-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:Geometry ;
+	sh:path geo:hasCentroid ;
+	sh:targetSubjectsOf geo:hasCentroid ;
+	.
+
+sh-geo:hasDefaultGeometry-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:Geometry ;
+	sh:path geo:hasDefaultGeometry ;
+	sh:targetSubjectsOf geo:hasDefaultGeometry ;
+	.
+
+sh-geo:hasGeometry-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:Geometry ;
+	sh:path geo:hasGeometry ;
+	sh:targetSubjectsOf geo:hasGeometry ;
+	.
+
+sh-geo:hasGeometry-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Feature ;
+	sh:targetSubjectsOf
+		geo:hasBoundingBox ,
+		geo:hasCentroid ,
+		geo:hasDefaultGeometry ,
+		geo:hasGeometry
+		;
+	.
+
+sh-geo:hasMetricArea-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:double ;
+	sh:path geo:hasMetricArea ;
+	sh:targetSubjectsOf geo:hasMetricArea ;
+	.
+
+sh-geo:hasMetricLength-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:double ;
+	sh:path geo:hasMetricLength ;
+	sh:targetSubjectsOf geo:hasMetricLength ;
+	.
+
+sh-geo:hasMetricPerimeterLength-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:double ;
+	sh:path geo:hasMetricPerimeterLength ;
+	sh:targetSubjectsOf geo:hasMetricPerimeterLength ;
+	.
+
+sh-geo:hasMetricSize-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:double ;
+	sh:path geo:hasMetricSize ;
+	sh:targetSubjectsOf geo:hasMetricSize ;
+	.
+
+sh-geo:hasMetricSize-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:SpatialObject ;
+	sh:targetSubjectsOf
+		geo:hasMetricArea ,
+		geo:hasMetricLength ,
+		geo:hasMetricPerimeterLength ,
+		geo:hasMetricSize ,
+		geo:hasMetricVolume
+		;
+	.
+
+sh-geo:hasMetricSpatialAccuracy-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:double ;
+	sh:path geo:hasMetricSpatialAccuracy ;
+	sh:targetSubjectsOf geo:hasMetricSpatialAccuracy ;
+	.
+
+sh-geo:hasMetricSpatialAccuracy-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Geometry ;
+	sh:targetSubjectsOf geo:hasMetricSpatialAccuracy ;
+	.
+
+sh-geo:hasMetricSpatialResolution-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:double ;
+	sh:path geo:hasMetricSpatialResolution ;
+	sh:targetSubjectsOf geo:hasMetricSpatialResolution ;
+	.
+
+sh-geo:hasMetricSpatialResolution-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Geometry ;
+	sh:targetSubjectsOf geo:hasMetricSpatialResolution ;
+	.
+
+sh-geo:hasMetricVolume-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:double ;
+	sh:path geo:hasMetricVolume ;
+	sh:targetSubjectsOf geo:hasMetricVolume ;
+	.
+
+sh-geo:hasSerialization-objects-node-shape
+	a sh:NodeShape ;
+	sh:nodeKind sh:Literal ;
+	.
+
+sh-geo:hasSerialization-objects-property-shape
+	a sh:PropertyShape ;
+	sh:node sh-geo:hasSerialization-objects-node-shape ;
+	sh:path geo:hasSerialization ;
+	sh:targetSubjectsOf geo:hasSerialization ;
+	.
+
+sh-geo:hasSerialization-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Geometry ;
+	sh:targetSubjectsOf
+		geo:asDGGS ,
+		geo:asGML ,
+		geo:asGeoJSON ,
+		geo:asKML ,
+		geo:asWKT ,
+		geo:hasSerialization
+		;
+	.
+
+sh-geo:hasSize-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:SpatialObject ;
+	sh:targetSubjectsOf
+		geo:hasArea ,
+		geo:hasLength ,
+		geo:hasPerimeterLength ,
+		geo:hasSize ,
+		geo:hasVolume
+		;
+	.
+
+sh-geo:hasSpatialAccuracy-objects-property-shape
+	a sh:PropertyShape ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path geo:hasSpatialAccuracy ;
+	sh:targetSubjectsOf geo:hasSpatialAccuracy ;
+	.
+
+sh-geo:hasSpatialAccuracy-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Geometry ;
+	sh:targetSubjectsOf geo:hasSpatialAccuracy ;
+	.
+
+sh-geo:hasSpatialResolution-objects-property-shape
+	a sh:PropertyShape ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path geo:hasSpatialResolution ;
+	sh:targetSubjectsOf geo:hasSpatialResolution ;
+	.
+
+sh-geo:hasSpatialResolution-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Geometry ;
+	sh:targetSubjectsOf geo:hasSpatialResolution ;
+	.
+
+sh-geo:isEmpty-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:boolean ;
+	sh:path geo:isEmpty ;
+	sh:targetSubjectsOf geo:isEmpty ;
+	.
+
+sh-geo:isEmpty-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Geometry ;
+	sh:targetSubjectsOf geo:isEmpty ;
+	.
+
+sh-geo:isSimple-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:boolean ;
+	sh:path geo:isSimple ;
+	sh:targetSubjectsOf geo:isSimple ;
+	.
+
+sh-geo:isSimple-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Geometry ;
+	sh:targetSubjectsOf geo:isSimple ;
+	.
+
+sh-geo:rcc8dc-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:rcc8dc ;
+	sh:targetSubjectsOf geo:rcc8dc ;
+	.
+
+sh-geo:rcc8ec-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:rcc8ec ;
+	sh:targetSubjectsOf geo:rcc8ec ;
+	.
+
+sh-geo:rcc8eq-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:rcc8eq ;
+	sh:targetSubjectsOf geo:rcc8eq ;
+	.
+
+sh-geo:rcc8ntpp-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:rcc8ntpp ;
+	sh:targetSubjectsOf geo:rcc8ntpp ;
+	.
+
+sh-geo:rcc8ntppi-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:rcc8ntppi ;
+	sh:targetSubjectsOf geo:rcc8ntppi ;
+	.
+
+sh-geo:rcc8po-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:rcc8po ;
+	sh:targetSubjectsOf geo:rcc8po ;
+	.
+
+sh-geo:rcc8tpp-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:rcc8tpp ;
+	sh:targetSubjectsOf geo:rcc8tpp ;
+	.
+
+sh-geo:rcc8tppi-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:rcc8tppi ;
+	sh:targetSubjectsOf geo:rcc8tppi ;
+	.
+
+sh-geo:sfContains-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:sfContains ;
+	sh:targetSubjectsOf geo:sfContains ;
+	.
+
+sh-geo:sfCrosses-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:sfCrosses ;
+	sh:targetSubjectsOf geo:sfCrosses ;
+	.
+
+sh-geo:sfDisjoint-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:sfDisjoint ;
+	sh:targetSubjectsOf geo:sfDisjoint ;
+	.
+
+sh-geo:sfEquals-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:sfEquals ;
+	sh:targetSubjectsOf geo:sfEquals ;
+	.
+
+sh-geo:sfIntersects-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:sfIntersects ;
+	sh:targetSubjectsOf geo:sfIntersects ;
+	.
+
+sh-geo:sfOverlaps-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:sfOverlaps ;
+	sh:targetSubjectsOf geo:sfOverlaps ;
+	.
+
+sh-geo:sfTouches-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:sfTouches ;
+	sh:targetSubjectsOf geo:sfTouches ;
+	.
+
+sh-geo:sfWithin-objects-property-shape
+	a sh:PropertyShape ;
+	sh:class geo:SpatialObject ;
+	sh:path geo:sfWithin ;
+	sh:targetSubjectsOf geo:sfWithin ;
+	.
+
+sh-geo:spatialDimension-objects-property-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:integer ;
+	sh:path geo:spatialDimension ;
+	sh:targetSubjectsOf geo:spatialDimension ;
+	.
+
+sh-geo:spatialDimension-subjects-shape
+	a sh:NodeShape ;
+	sh:class geo:Geometry ;
+	sh:targetSubjectsOf geo:spatialDimension ;
+	.
+

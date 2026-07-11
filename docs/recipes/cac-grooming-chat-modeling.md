@@ -245,8 +245,8 @@ graph.write("grooming_chat.jsonld")
 
 ```bash
 case_validate --built-version case-1.4.0 \
-  --ontology-graph extensions/cac/ontology/ontology/cacontology-core-spine.ttl \
-  --ontology-graph extensions/cac/ontology/ontology/cacontology-grooming.ttl \
+  --ontology-graph ontology/cac/ontology/ontology/cacontology-core-spine.ttl \
+  --ontology-graph ontology/cac/ontology/ontology/cacontology-grooming.ttl \
   --inference rdfs --allow-infos \
   grooming_chat.jsonld
 ```

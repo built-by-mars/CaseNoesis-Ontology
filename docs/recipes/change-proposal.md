@@ -21,7 +21,7 @@ This recipe covers the full workflow: confirming the gap, checking for existing 
 | `case-*` (investigation-specific) | [casework/CASE](https://github.com/casework/CASE/issues) |
 | `cacontology*` (crimes against children) | [Project-VIC-International/CAC-Ontology](https://github.com/Project-VIC-International/CAC-Ontology/issues) |
 
-`check_existing_proposals` searches all three by default. Precedent CAC proposals filed from this SDK: [#40](https://github.com/Project-VIC-International/CAC-Ontology/issues/40) (legal-outcomes charging/sentencing properties) and [#41](https://github.com/Project-VIC-International/CAC-Ontology/issues/41) (core case-identification properties) — both backed locally by `extensions/cac/local/cacontology-sdk-pending.ttl` until they land upstream.
+`check_existing_proposals` searches all three by default. Precedent CAC proposals filed from this SDK: [#40](https://github.com/Project-VIC-International/CAC-Ontology/issues/40) (legal-outcomes charging/sentencing properties) and [#41](https://github.com/Project-VIC-International/CAC-Ontology/issues/41) (core case-identification properties) — both backed locally by `ontology/cac/local/cacontology-sdk-pending.ttl` until they land upstream.
 
 ## Key tools
 

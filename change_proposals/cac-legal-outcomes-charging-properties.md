@@ -138,5 +138,5 @@ the cleaner outcome if maintainers agree.
 - Related open issues: #36 (ConvictionRecord class + shape-referenced properties),
   #37 (supervised-release special conditions, payment schedule), #34 (CriminalComplaint).
 - Interim measure: the CASE/UCO SDK carries these declarations in a clearly-marked local pending
-  extension (`extensions/cac/local/cacontology-sdk-pending.ttl`) that will be retired when this
+  extension (`ontology/cac/local/cacontology-sdk-pending.ttl`) that will be retired when this
   lands upstream.

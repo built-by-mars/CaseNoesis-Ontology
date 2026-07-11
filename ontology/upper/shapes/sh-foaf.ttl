@@ -1,0 +1,79 @@
+# imports: http://xmlns.com/foaf/0.1/
+# imports: https://shapes.cyberdomainontology.org/sh-owl/1.4.0
+
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix sh-foaf: <http://example.org/shapes/sh-foaf/> .
+@prefix sh-owl: <https://shapes.cyberdomainontology.org/sh-owl/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/shapes/sh-foaf>
+	a owl:Ontology ;
+	owl:imports
+		<http://xmlns.com/foaf/0.1/> ,
+		sh-owl:1.4.0
+		;
+	.
+
+sh-foaf:Document-disjointWith-Organization-shape
+	a sh:NodeShape ;
+	sh:message "foaf:Document and foaf:Organization are disjoint classes."@en ;
+	sh:not [
+		a sh:NodeShape ;
+		sh:class foaf:Organization ;
+	] ;
+	sh:targetClass foaf:Document ;
+	.
+
+sh-foaf:Document-disjointWith-Project-shape
+	a sh:NodeShape ;
+	sh:message "foaf:Document and foaf:Project are disjoint classes."@en ;
+	sh:not [
+		a sh:NodeShape ;
+		sh:class foaf:Project ;
+	] ;
+	sh:targetClass foaf:Document ;
+	.
+
+sh-foaf:Organization-disjointWith-Person-shape
+	a sh:NodeShape ;
+	sh:message "foaf:Organization and foaf:Person are disjoint classes."@en ;
+	sh:not [
+		a sh:NodeShape ;
+		sh:class foaf:Person ;
+	] ;
+	sh:targetClass foaf:Organization ;
+	.
+
+sh-foaf:Person-disjointWith-Project-shape
+	a sh:NodeShape ;
+	sh:message "foaf:Person and foaf:Project are disjoint classes."@en ;
+	sh:not [
+		a sh:NodeShape ;
+		sh:class foaf:Project ;
+	] ;
+	sh:targetClass foaf:Person ;
+	.
+
+sh-foaf:depiction-objects-shape
+	a sh:NodeShape ;
+	sh:class foaf:Image ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:targetObjectsOf foaf:depiction ;
+	.
+
+sh-foaf:depicts-objects-shape
+	a sh:NodeShape ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:targetObjectsOf foaf:depicts ;
+	.
+
+sh-foaf:depicts-subjects-shape
+	a sh:NodeShape ;
+	sh:class foaf:Image ;
+	sh:targetSubjectsOf foaf:depicts ;
+	.
+

@@ -81,7 +81,12 @@ def main(argv: list[str] | None = None) -> int:
 
     repo_root = Path.cwd()
     ontology_dir = args.ontology_dir or repo_root / "ontology"
-    extensions_dir = None if args.no_extensions else (args.extensions_dir or repo_root / "extensions")
+    if args.no_extensions:
+        extensions_dir = None
+    elif args.extensions_dir:
+        extensions_dir = [args.extensions_dir]
+    else:
+        extensions_dir = [repo_root / "extensions", repo_root / "ontology"]
 
     if not ontology_dir.exists():
         print(f"Error: ontology directory not found: {ontology_dir}", file=sys.stderr)

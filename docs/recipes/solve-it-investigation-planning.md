@@ -14,13 +14,13 @@ executed, which mitigations were applied, and how residual risk was
 assessed — the systematic Error Mitigation Analysis that examination
 reports and quality-assurance reviews increasingly expect.
 
-The SDK vendors a pinned SOLVE-IT snapshot in `extensions/solveit/`
+The SDK vendors a pinned SOLVE-IT snapshot in `ontology/solveit/`
 (ontology + compiled knowledge base: 23 objectives, 187 techniques, 339
 weaknesses, 270 mitigations; see the manifest `provenance` block for exact
 versions; refresh with `make sync-solveit`).
 
 Validated against `examples/solveit/` (synthetic laptop acquisition) and
-`extensions/solveit/solveit-exemplar.ttl`.
+`ontology/solveit/solveit-exemplar.ttl`.
 
 **When to use this recipe**
 

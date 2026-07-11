@@ -122,7 +122,13 @@ def main(argv: list[str] | None = None) -> int:
 def _cmd_generate(args) -> int:
     repo_root = args.output_dir or Path.cwd()
     ontology_dir = args.ontology_dir or repo_root / "ontology"
-    extensions_dir = None if args.no_extensions else (args.extensions_dir or repo_root / "extensions")
+    if args.no_extensions:
+        extensions_dir = None
+    elif args.extensions_dir:
+        extensions_dir = [args.extensions_dir]
+    else:
+        # v1.19.0: SDK-native extensions plus upstream-vendored ontologies.
+        extensions_dir = [repo_root / "extensions", repo_root / "ontology"]
 
     if not ontology_dir.exists():
         logging.error("Ontology directory not found: %s", ontology_dir)
@@ -242,7 +248,10 @@ def _cmd_generate_extension(args) -> int:
         return 1
 
     logging.info("Parsing core ontology from %s ...", ontology_dir)
-    schema = parse_ontology(ontology_dir, extensions_dir=ext_dir.parent)
+    ext_roots = [ext_dir.parent, repo_root / "extensions", repo_root / "ontology"]
+    # Dedupe while preserving priority: the requested extension's own root first.
+    unique_roots = list(dict.fromkeys(r.resolve() for r in ext_roots))
+    schema = parse_ontology(ontology_dir, extensions_dir=unique_roots)
 
     ext_schema = _filter_extension_schema(schema, ext_name)
     if not ext_schema.classes:

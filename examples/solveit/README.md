@@ -4,7 +4,7 @@ Synthetic (Tier T0) worked example behind
 `docs/recipes/solve-it-investigation-planning.md`: a seized laptop SSD is
 imaged and hash-verified, with every step documented against the
 [SOLVE-IT](https://solveit-df.org) knowledge base vendored in
-`extensions/solveit/`.
+`ontology/solveit/`.
 
 What it demonstrates:
 

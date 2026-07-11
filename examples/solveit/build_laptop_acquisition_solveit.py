@@ -19,12 +19,12 @@ documented the SOLVE-IT way (https://solveit-df.org):
 * The hash verification is also shown in the UCO 1.5.0 *metaclass* style:
   the action is typed directly with the punned technique class
   solveit-data:techniqueDFT-1042 from
-  extensions/solveit/solveit-technique-catalog.ttl (ucoProject/UCO PR #676
+  ontology/solveit/solveit-technique-catalog.ttl (ucoProject/UCO PR #676
   pattern, same as MITRE ATT&CK techniques in
   extensions/attack-technique/).
 
 The technique/weakness/mitigation IRIs are the canonical SOLVE-IT
-knowledge-base IRIs vendored in extensions/solveit/solve-it-kb.ttl, so
+knowledge-base IRIs vendored in ontology/solveit/solve-it-kb.ttl, so
 tools that resolve them get the full upstream record. Discover them with
 the MCP tools: search_solveit, get_solveit_details, plan_solveit_workflow.
 

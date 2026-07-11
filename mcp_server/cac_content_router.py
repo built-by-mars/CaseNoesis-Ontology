@@ -536,7 +536,9 @@ def _load_recipe_content(project_root: Path, recipe_file: str, include_content: 
 def build_validation_guidance(project_root: Path, output_format: str) -> dict[str, Any]:
     output_suffix = "jsonld" if output_format in {"jsonld", "json-ld", "json"} else "ttl"
     sample_output = f"output.{output_suffix}"
-    subset_path = project_root / "extensions" / "cac" / "validation-subset.json"
+    import extension_paths
+
+    subset_path = extension_paths.extension_dir("cac", project_root) / "validation-subset.json"
     return {
         "built_version": "case-1.4.0",
         "extension": "cac",
@@ -551,7 +553,7 @@ def build_validation_guidance(project_root: Path, output_format: str) -> dict[st
             "ttl": "graph.write('output.ttl', format='turtle') or serialize with rdflib after graph.write",
         },
         "note": (
-            "MCP validate_graph uses extensions/cac/validation-subset.json by default. "
+            "MCP validate_graph uses the CAC validation-subset.json by default. "
             "Pass extensions=['cac:full'] for the complete CAC manifest when upstream "
             "SHACL SPARQL constraints are repaired."
         ),

@@ -1,0 +1,115 @@
+{
+  "description": "Pinned upper-ontology source files and CDO-Shapes profiles vendored for offline registry rebuilds and profile conformance checks. Refresh with build_upper_ontology_registry.py --fetch.",
+  "files": {
+    "bfo.owl": {
+      "ontology": "bfo",
+      "source_url": "http://purl.obolibrary.org/obo/bfo.owl",
+      "sha256": "ca399c2b8b79f4d12b296d5c4ea4c00940e1f82cee7d1a50ddc292aa4f6c4666",
+      "fetched": "2026-07-11T04:16:27.940604+00:00"
+    },
+    "gufo.ttl": {
+      "ontology": "gufo",
+      "source_url": "https://nemo-ufes.github.io/gufo/gufo.ttl",
+      "sha256": "bd85657d3fb1ef5893c6d7a29dd6387fca130ee5ab60921f5f8ebdc84cacfc49",
+      "fetched": "2026-07-11T04:16:28.050255+00:00"
+    },
+    "prov-o.ttl": {
+      "ontology": "prov-o",
+      "source_url": "http://www.w3.org/ns/prov-o.ttl",
+      "sha256": "7d203989f67b38bca572253942acc5a1bf24ce3ccfece16f072dcb4be2b79a96",
+      "fetched": "2026-07-11T04:16:28.239408+00:00"
+    },
+    "time.ttl": {
+      "ontology": "owl-time",
+      "source_url": "https://www.w3.org/2006/time.ttl",
+      "sha256": "251bd6970b0d7a5efa97ff681afe81a297df85deab3d860fa4f8eeba72d8f16c",
+      "fetched": "2026-07-11T04:16:28.337577+00:00"
+    },
+    "geo.ttl": {
+      "ontology": "geosparql",
+      "source_url": "https://opengeospatial.github.io/ogc-geosparql/geosparql11/geo.ttl",
+      "sha256": "7a8028dba554f069265a244d7899afb3fb97bf66795c65f7be676984d39289d7",
+      "fetched": "2026-07-11T04:16:28.417088+00:00"
+    },
+    "sf.ttl": {
+      "ontology": "geosparql-sf",
+      "source_url": "https://opengeospatial.github.io/ogc-geosparql/geosparql11/sf_geometries.ttl",
+      "sha256": "8dfb6539cee91933b05fa64d5393ee6b0057d78ad441934a90979a435083e1a4",
+      "fetched": "2026-07-11T04:16:28.499012+00:00"
+    },
+    "foaf.rdf": {
+      "ontology": "foaf",
+      "source_url": "http://xmlns.com/foaf/spec/index.rdf",
+      "sha256": "3d859b5d92a2c3d041545d014fa826f682ca06d056af8c7b31e32d930abf2bc5",
+      "fetched": "2026-07-11T04:16:28.900965+00:00"
+    },
+    "org.ttl": {
+      "ontology": "org",
+      "source_url": "https://www.w3.org/ns/org.ttl",
+      "sha256": "3e01f89a17475a88f8b1606ca0fae04800d34dbbf93adc6db12dc30929848729",
+      "fetched": "2026-07-11T04:16:29.014269+00:00"
+    },
+    "prof.ttl": {
+      "ontology": "prof",
+      "source_url": "https://www.w3.org/ns/dx/prof/",
+      "sha256": "625f8ebed133ffd393d6a664455a0cf1cf1750907f8a016fb06f928db08636d6",
+      "fetched": "2026-07-11T04:16:29.127269+00:00"
+    },
+    "shapes/sh-bfo.ttl": {
+      "ontology": "bfo",
+      "source_repo": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-BFO",
+      "source_commit": "6127b5c5911f09925d568e42229f6b5ccd284bc8",
+      "sha256": "2b565390ff2316e5f5e0e92debb32c1622a381a358b4a459132f98aad4bec04d",
+      "fetched": "2026-07-11T04:16:29.898099+00:00"
+    },
+    "shapes/sh-gufo.ttl": {
+      "ontology": "gufo",
+      "source_repo": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-gufo",
+      "source_commit": "eaadeea5b5481fc209b7ad104893a24dbc8c9c26",
+      "sha256": "c247af8a337d67d74405b8e437a40b81742f3588ab9695cffa7a73337741b936",
+      "fetched": "2026-07-11T04:16:30.542773+00:00"
+    },
+    "shapes/sh-prov-o.ttl": {
+      "ontology": "prov-o",
+      "source_repo": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-PROV-O",
+      "source_commit": "dbcfd2468e985d84fc33c18874da548630c0a9af",
+      "sha256": "ef1c9d69f2c7e9a09ef8f8a1346d1a5c0229a589d3279c793a95d34c6d2615c5",
+      "fetched": "2026-07-11T04:16:31.162118+00:00"
+    },
+    "shapes/sh-time.ttl": {
+      "ontology": "owl-time",
+      "source_repo": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-Time",
+      "source_commit": "6312d8d4d5971ffa4af029b12411cf4fca333d44",
+      "sha256": "e5fcd889a62980797e67347472b00949c2a2365cdce8abfcf5768418f4b4b114",
+      "fetched": "2026-07-11T04:16:31.758666+00:00"
+    },
+    "shapes/sh-geo.ttl": {
+      "ontology": "geosparql",
+      "source_repo": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-GeoSPARQL",
+      "source_commit": "67cafc7b73d97c27ceda02cbf04bdc05db254edf",
+      "sha256": "e1510bf0c7502376bedd6d5ec5b7c7955a98d3f164e5ef67635a125a8e26001b",
+      "fetched": "2026-07-11T04:16:32.352966+00:00"
+    },
+    "shapes/sh-foaf.ttl": {
+      "ontology": "foaf",
+      "source_repo": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-FOAF",
+      "source_commit": "0804019be329155fc59643c2d5cffe618206fe42",
+      "sha256": "be3370c4ce4e033b98a0065e17ea4b0a1b109e3af6558906fefb7671fd016861",
+      "fetched": "2026-07-11T04:16:32.982922+00:00"
+    },
+    "shapes/sh-org.ttl": {
+      "ontology": "org",
+      "source_repo": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-ORG",
+      "source_commit": "af0dada319a69518eac8b4f3f11eabb07707c7f6",
+      "sha256": "242c272fa58f3e00299859801136fbbd640f30df58d42f8333de58e21b9ef3c2",
+      "fetched": "2026-07-11T04:16:33.539707+00:00"
+    },
+    "shapes/sh-prof.ttl": {
+      "ontology": "prof",
+      "source_repo": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-PROF",
+      "source_commit": "1610ae59f2aea8f074410f3eba78a38136e19426",
+      "sha256": "1b8a2e7833698935845a2e422f92d5e3d82dc32fbbe9a82be8cc9a80092d6dbf",
+      "fetched": "2026-07-11T04:16:34.105690+00:00"
+    }
+  }
+}

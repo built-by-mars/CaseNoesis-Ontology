@@ -11,18 +11,25 @@ property, individual, datatype), and writes a compact JSON registry to
 repository so validation works offline; re-run this script to refresh it when
 a profiled ontology publishes a new supported release.
 
-Usage:
-    python3 mcp_server/tools/build_upper_ontology_registry.py
-    python3 mcp_server/tools/build_upper_ontology_registry.py --source-dir /path/to/downloaded
+The pinned source files themselves are vendored under ``ontology/upper/``
+(v1.19.0) so registry rebuilds are fully offline by default — no network
+access is required unless you explicitly refresh the vendored snapshot.
 
-With ``--source-dir`` the script reads previously downloaded ontology files
-(named per the ``local_file`` field below) instead of fetching over HTTP,
-which supports air-gapped rebuilds.
+Usage:
+    # Offline rebuild from the vendored sources in ontology/upper/ (default)
+    python3 mcp_server/tools/build_upper_ontology_registry.py
+
+    # Refresh the vendored sources from upstream, then rebuild the registry
+    python3 mcp_server/tools/build_upper_ontology_registry.py --fetch
+
+    # Rebuild from an alternate directory of downloaded files
+    python3 mcp_server/tools/build_upper_ontology_registry.py --source-dir /path/to/downloaded
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import urllib.request
@@ -31,6 +38,8 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 REGISTRY_PATH = PROJECT_ROOT / "mcp_server" / "upper_ontology_registry.json"
+VENDORED_SOURCE_DIR = PROJECT_ROOT / "ontology" / "upper"
+VENDORED_PROVENANCE = VENDORED_SOURCE_DIR / "provenance.json"
 
 # Pinned sources for every ontology that UCO maintains a CDO-Shapes profile
 # for. ``namespace_prefixes`` filters extracted terms so annotation vocabulary
@@ -115,10 +124,42 @@ ONTOLOGY_SOURCES: dict[str, dict] = {
 }
 
 
+# CDO-Shapes conformance profiles (SHACL) published by the Cyber Domain
+# Ontology project — vendored alongside the upper-ontology sources so
+# profile conformance checks run offline:
+#   case_validate --ontology-graph ontology/upper/shapes/sh-prov-o.ttl ...
+SHAPES_SOURCES: dict[str, dict] = {
+    "bfo": {"repo": "Cyber-Domain-Ontology/CDO-Shapes-BFO", "path": "shapes/sh-bfo.ttl"},
+    "gufo": {"repo": "Cyber-Domain-Ontology/CDO-Shapes-gufo", "path": "shapes/sh-gufo.ttl"},
+    "prov-o": {"repo": "Cyber-Domain-Ontology/CDO-Shapes-PROV-O", "path": "shapes/sh-prov-o.ttl"},
+    "owl-time": {"repo": "Cyber-Domain-Ontology/CDO-Shapes-Time", "path": "shapes/sh-time.ttl"},
+    "geosparql": {"repo": "Cyber-Domain-Ontology/CDO-Shapes-GeoSPARQL", "path": "shapes/sh-geo.ttl"},
+    "foaf": {"repo": "Cyber-Domain-Ontology/CDO-Shapes-FOAF", "path": "shapes/sh-foaf.ttl"},
+    "org": {"repo": "Cyber-Domain-Ontology/CDO-Shapes-ORG", "path": "shapes/sh-org.ttl"},
+    "prof": {"repo": "Cyber-Domain-Ontology/CDO-Shapes-PROF", "path": "shapes/sh-prof.ttl"},
+}
+
+
 def _fetch(url: str, accept: str | None) -> bytes:
     request = urllib.request.Request(url, headers={"Accept": accept or "text/turtle, application/rdf+xml"})
     with urllib.request.urlopen(request, timeout=60) as response:
         return response.read()
+
+
+def _github_default_branch_sha(repo: str) -> str:
+    """Resolve the current commit SHA of a repo's default branch."""
+
+    data = json.loads(
+        _fetch(f"https://api.github.com/repos/{repo}", "application/vnd.github+json")
+    )
+    branch = data.get("default_branch", "main")
+    commit = json.loads(
+        _fetch(
+            f"https://api.github.com/repos/{repo}/commits/{branch}",
+            "application/vnd.github+json",
+        )
+    )
+    return commit["sha"]
 
 
 def _extract_terms(graph, prefixes: tuple[str, ...]) -> dict[str, list[str]]:
@@ -208,6 +249,61 @@ def _version_metadata(graph) -> dict[str, str]:
     return meta
 
 
+def fetch_vendored_sources(target_dir: Path = VENDORED_SOURCE_DIR) -> None:
+    """Download every pinned upper ontology into ``ontology/upper/``.
+
+    Writes a ``provenance.json`` next to the files recording source URL,
+    SHA-256, and fetch time for each so the vendored snapshot is auditable.
+    """
+
+    target_dir.mkdir(parents=True, exist_ok=True)
+    provenance: dict[str, dict] = {}
+    if VENDORED_PROVENANCE.is_file():
+        provenance = json.loads(VENDORED_PROVENANCE.read_text(encoding="utf-8")).get("files", {})
+    for key, spec in ONTOLOGY_SOURCES.items():
+        data = _fetch(spec["source_url"], spec.get("accept"))
+        (target_dir / spec["local_file"]).write_bytes(data)
+        provenance[spec["local_file"]] = {
+            "ontology": key,
+            "source_url": spec["source_url"],
+            "sha256": hashlib.sha256(data).hexdigest(),
+            "fetched": datetime.now(timezone.utc).isoformat(),
+        }
+        print(f"fetched {key} -> ontology/upper/{spec['local_file']} ({len(data)} bytes)")
+    shapes_dir = target_dir / "shapes"
+    shapes_dir.mkdir(parents=True, exist_ok=True)
+    for key, spec in SHAPES_SOURCES.items():
+        sha = _github_default_branch_sha(spec["repo"])
+        raw_url = f"https://raw.githubusercontent.com/{spec['repo']}/{sha}/{spec['path']}"
+        data = _fetch(raw_url, "text/turtle")
+        local_name = Path(spec["path"]).name
+        (shapes_dir / local_name).write_bytes(data)
+        provenance[f"shapes/{local_name}"] = {
+            "ontology": key,
+            "source_repo": f"https://github.com/{spec['repo']}",
+            "source_commit": sha,
+            "sha256": hashlib.sha256(data).hexdigest(),
+            "fetched": datetime.now(timezone.utc).isoformat(),
+        }
+        print(f"fetched CDO-Shapes {key} -> ontology/upper/shapes/{local_name} ({len(data)} bytes)")
+    VENDORED_PROVENANCE.write_text(
+        json.dumps(
+            {
+                "description": (
+                    "Pinned upper-ontology source files and CDO-Shapes profiles "
+                    "vendored for offline registry rebuilds and profile "
+                    "conformance checks. Refresh with "
+                    "build_upper_ontology_registry.py --fetch."
+                ),
+                "files": provenance,
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
 def build_registry(source_dir: Path | None) -> dict:
     import rdflib
 
@@ -262,7 +358,18 @@ def main() -> int:
         "--source-dir",
         type=Path,
         default=None,
-        help="Read ontology files from this directory instead of fetching over HTTP.",
+        help=(
+            "Read ontology files from this directory. Default: the vendored "
+            f"snapshot at {VENDORED_SOURCE_DIR} when present (offline rebuild)."
+        ),
+    )
+    parser.add_argument(
+        "--fetch",
+        action="store_true",
+        help=(
+            "Refresh the vendored snapshot in ontology/upper/ from upstream "
+            "before rebuilding the registry (requires network access)."
+        ),
     )
     parser.add_argument(
         "--output",
@@ -272,7 +379,21 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    registry = build_registry(args.source_dir)
+    source_dir = args.source_dir
+    if args.fetch:
+        fetch_vendored_sources()
+        source_dir = source_dir or VENDORED_SOURCE_DIR
+    elif source_dir is None:
+        if not VENDORED_SOURCE_DIR.is_dir():
+            print(
+                f"error: no vendored snapshot at {VENDORED_SOURCE_DIR}; run with "
+                "--fetch (network) or pass --source-dir",
+                file=sys.stderr,
+            )
+            return 1
+        source_dir = VENDORED_SOURCE_DIR
+
+    registry = build_registry(source_dir)
     args.output.write_text(json.dumps(registry, indent=2, sort_keys=False) + "\n", encoding="utf-8")
     total = sum(
         sum(entry["term_counts"].values()) for entry in registry["ontologies"].values()

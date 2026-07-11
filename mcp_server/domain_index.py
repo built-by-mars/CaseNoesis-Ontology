@@ -593,6 +593,8 @@ UCO_PROFILES: list[dict[str, Any]] = [
         "repo_url": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-BFO",
         "profile_type": "top-level",
         "ontology_file": "uco-bfo.ttl",
+        "local_source": "ontology/upper/bfo.owl",
+        "local_shapes": "ontology/upper/shapes/sh-bfo.ttl",
         "status": "exploratory",
         "description": (
             "Grounds UCO in BFO's Endurant/Perdurant distinction. "
@@ -615,6 +617,8 @@ UCO_PROFILES: list[dict[str, Any]] = [
         "repo_url": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-gufo",
         "profile_type": "top-level",
         "ontology_file": "uco-gufo.ttl",
+        "local_source": "ontology/upper/gufo.ttl",
+        "local_shapes": "ontology/upper/shapes/sh-gufo.ttl",
         "status": "exploratory",
         "description": (
             "Grounds UCO in gUFO types and relators (OntoUML-based). "
@@ -637,6 +641,8 @@ UCO_PROFILES: list[dict[str, Any]] = [
         "repo_url": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-PROV-O",
         "profile_type": "adopting",
         "ontology_file": "uco-prov-o.ttl",
+        "local_source": "ontology/upper/prov-o.ttl",
+        "local_shapes": "ontology/upper/shapes/sh-prov-o.ttl",
         "status": "exploratory",
         "description": (
             "Aligns UCO actions and provenance concepts with PROV-O Activities, "
@@ -659,6 +665,8 @@ UCO_PROFILES: list[dict[str, Any]] = [
         "repo_url": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-Time",
         "profile_type": "adopting",
         "ontology_file": "uco-time.ttl",
+        "local_source": "ontology/upper/time.ttl",
+        "local_shapes": "ontology/upper/shapes/sh-time.ttl",
         "status": "exploratory",
         "description": (
             "Aligns UCO temporal concepts with OWL-Time instants and intervals "
@@ -681,6 +689,8 @@ UCO_PROFILES: list[dict[str, Any]] = [
         "repo_url": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-GeoSPARQL",
         "profile_type": "adopting",
         "ontology_file": "uco-geo.ttl",
+        "local_source": "ontology/upper/geo.ttl",
+        "local_shapes": "ontology/upper/shapes/sh-geo.ttl",
         "status": "exploratory",
         "description": (
             "Aligns UCO locations with GeoSPARQL Features and Geometries "
@@ -703,6 +713,8 @@ UCO_PROFILES: list[dict[str, Any]] = [
         "repo_url": "https://github.com/Cyber-Domain-Ontology/CDO-Shapes-FOAF",
         "profile_type": "adopting",
         "ontology_file": "uco-foaf.ttl",
+        "local_source": "ontology/upper/foaf.rdf",
+        "local_shapes": "ontology/upper/shapes/sh-foaf.ttl",
         "status": "exploratory",
         "description": (
             "Aligns UCO identities with FOAF Persons, Organizations, and Agents "

@@ -44,7 +44,8 @@ control, so restoring the previous approved generation is::
 
     make rollback-extension EXT=<name> REF=<tag-or-commit>
 
-which runs ``git checkout <ref> -- extensions/<name>``. Recipes roll back
+which runs ``git checkout <ref> -- <root>/<name>`` (root resolved across
+``extensions/`` and ``ontology/``). Recipes roll back
 with ``git checkout <ref> -- docs/recipes/<file>.md``. See
 docs/recipes/recipe-authoring.md.
 """
@@ -60,6 +61,8 @@ import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
+
+import extension_paths
 
 _logger = logging.getLogger(__name__)
 
@@ -107,7 +110,7 @@ def is_routable(manifest: dict) -> bool:
 
 
 def _manifest_path(name: str, project_root: Path) -> Path:
-    return project_root / "extensions" / name / "manifest.json"
+    return extension_paths.extension_manifest_path(name, project_root)
 
 
 def _load_manifest(name: str, project_root: Path) -> dict:
@@ -170,7 +173,7 @@ def _gate_ontology_files_parse(name: str, manifest: dict, project_root: Path) ->
 
     import rdflib
 
-    ext_dir = project_root / "extensions" / name
+    ext_dir = extension_paths.extension_dir(name, project_root)
     checked = 0
     for key in ("owl_files", "shacl_files", "bridge_files"):
         for rel in manifest.get(key, []):
@@ -202,7 +205,7 @@ def _gate_classes_anchored(name: str, manifest: dict, project_root: Path) -> dic
 
     import concept_coverage
 
-    ext_dir = project_root / "extensions" / name
+    ext_dir = extension_paths.extension_dir(name, project_root)
     graph = rdflib.Graph()
     for key in ("owl_files", "bridge_files"):
         for rel in manifest.get(key, []):
@@ -275,7 +278,7 @@ def _gate_exemplars_validate(
 
     import graph_validator
 
-    ext_dir = project_root / "extensions" / name
+    ext_dir = extension_paths.extension_dir(name, project_root)
     exemplars = manifest.get("exemplar_files", [])
     if not exemplars:
         return {"gate": "exemplars_validate", "ok": False,
@@ -320,7 +323,7 @@ def _gate_negative_fixtures(
 
     import graph_validator
 
-    ext_dir = project_root / "extensions" / name
+    ext_dir = extension_paths.extension_dir(name, project_root)
     fixtures = manifest.get("invalid_exemplar_files", [])
     if not fixtures:
         if manifest.get("shacl_files"):
@@ -369,7 +372,7 @@ def _gate_competency_queries(name: str, manifest: dict, project_root: Path) -> d
 
     import rdflib
 
-    ext_dir = project_root / "extensions" / name
+    ext_dir = extension_paths.extension_dir(name, project_root)
     queries = manifest.get("competency_queries", [])
     if not queries:
         return {"gate": "competency_queries", "ok": True,
@@ -742,10 +745,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{result['extension']}: {result['status']} — {result['reason']}")
         return 0
     if args.command == "status":
-        ext_root = args.project_root / "extensions"
-        for manifest_path in sorted(ext_root.glob("*/manifest.json")):
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            print(f"{manifest_path.parent.name}: {extension_status(manifest)}")
+        for ext_dir in extension_paths.iter_extension_dirs(args.project_root):
+            manifest = json.loads((ext_dir / "manifest.json").read_text(encoding="utf-8"))
+            print(f"{ext_dir.name}: {extension_status(manifest)}")
         return 0
     if args.command == "promote-recipe":
         result = promote_recipe(

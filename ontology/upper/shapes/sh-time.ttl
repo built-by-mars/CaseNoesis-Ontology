@@ -1,0 +1,636 @@
+# imports: http://www.w3.org/2006/time#2016
+# imports: https://ontology.unifiedcyberontology.org/owl/1.4.0
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix sh-time: <http://example.org/shapes/sh-time/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix uco-owl: <https://ontology.unifiedcyberontology.org/owl/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/shapes/sh-time>
+	a owl:Ontology ;
+	owl:imports
+		time:2016 ,
+		uco-owl:1.4.0
+		;
+	.
+
+sh-time:GeneralDurationDescription-days-shape
+	a sh:PropertyShape ;
+	sh:maxCount "1"^^xsd:integer ;
+	sh:path time:days ;
+	.
+
+sh-time:GeneralDurationDescription-hasTRS-shape
+	a sh:PropertyShape ;
+	sh:maxCount "1"^^xsd:integer ;
+	sh:path time:hasTRS ;
+	.
+
+sh-time:GeneralDurationDescription-hours-shape
+	a sh:PropertyShape ;
+	sh:maxCount "1"^^xsd:integer ;
+	sh:path time:hours ;
+	.
+
+sh-time:GeneralDurationDescription-minutes-shape
+	a sh:PropertyShape ;
+	sh:maxCount "1"^^xsd:integer ;
+	sh:path time:minutes ;
+	.
+
+sh-time:GeneralDurationDescription-months-shape
+	a sh:PropertyShape ;
+	sh:maxCount "1"^^xsd:integer ;
+	sh:path time:months ;
+	.
+
+sh-time:GeneralDurationDescription-seconds-shape
+	a sh:PropertyShape ;
+	sh:maxCount "1"^^xsd:integer ;
+	sh:path time:seconds ;
+	.
+
+sh-time:GeneralDurationDescription-shape
+	a sh:NodeShape ;
+	sh:property
+		sh-time:GeneralDurationDescription-days-shape ,
+		sh-time:GeneralDurationDescription-hasTRS-shape ,
+		sh-time:GeneralDurationDescription-hours-shape ,
+		sh-time:GeneralDurationDescription-minutes-shape ,
+		sh-time:GeneralDurationDescription-months-shape ,
+		sh-time:GeneralDurationDescription-seconds-shape ,
+		sh-time:GeneralDurationDescription-weeks-shape ,
+		sh-time:GeneralDurationDescription-years-shape
+		;
+	sh:targetClass time:GeneralDurationDescription ;
+	.
+
+sh-time:GeneralDurationDescription-weeks-shape
+	a sh:PropertyShape ;
+	sh:maxCount "1"^^xsd:integer ;
+	sh:path time:weeks ;
+	.
+
+sh-time:GeneralDurationDescription-years-shape
+	a sh:PropertyShape ;
+	sh:maxCount "1"^^xsd:integer ;
+	sh:path time:years ;
+	.
+
+sh-time:Instant-disjointWith-ProperInterval-shape
+	a sh:NodeShape ;
+	sh:message "The classes time:Instant and time:ProperInterval are disjoint."@en ;
+	sh:not [
+		a sh:NodeShape ;
+		sh:class time:ProperInterval ;
+	] ;
+	sh:targetClass time:Instant ;
+	.
+
+sh-time:TRS-shape
+	a sh:NodeShape ;
+	rdfs:comment "This shape intentionally left blank."@en ;
+	sh:targetClass time:TRS ;
+	.
+
+sh-time:TemporalDuration-shape
+	a sh:NodeShape ;
+	rdfs:comment "This shape intentionally left blank."@en ;
+	sh:targetClass time:TemporalDuration ;
+	.
+
+sh-time:TemporalPosition-hasTRS-shape
+	a sh:PropertyShape ;
+	sh:maxCount "1"^^xsd:integer ;
+	sh:path time:hasTRS ;
+	.
+
+sh-time:TemporalPosition-shape
+	a sh:NodeShape ;
+	sh:targetClass time:TemporalPosition ;
+	.
+
+sh-time:TemporalUnit-shape
+	a sh:NodeShape ;
+	rdfs:comment "This shape intentionally left blank."@en ;
+	sh:targetClass time:TemporalUnit ;
+	.
+
+sh-time:after-subjects-after-shape
+	a sh:PropertyShape ;
+	sh:class time:TemporalEntity ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:after ;
+	.
+
+sh-time:after-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:TemporalEntity ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:after-subjects-after-shape ;
+	sh:targetSubjectsOf time:after ;
+	.
+
+sh-time:before-subjects-before-shape
+	a sh:PropertyShape ;
+	sh:class time:TemporalEntity ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:before ;
+	.
+
+sh-time:before-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:TemporalEntity ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:before-subjects-before-shape ;
+	sh:targetSubjectsOf time:before ;
+	.
+
+sh-time:days-subjects-days-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:decimal ;
+	sh:path time:days ;
+	.
+
+sh-time:days-subjects-shape
+	a sh:NodeShape ;
+	rdfs:comment "Property demonstrated on time:TemporalUnit instances in OWL-Time."@en ;
+	rdfs:seeAlso time:unitDay ;
+	sh:class time:GeneralDurationDescription ;
+	sh:property sh-time:days-subjects-days-shape ;
+	sh:targetSubjectsOf time:days ;
+	.
+
+sh-time:hasBeginning-subjects-hasBeginning-shape
+	a sh:PropertyShape ;
+	sh:class time:Instant ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:hasBeginning ;
+	.
+
+sh-time:hasBeginning-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:TemporalEntity ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:hasBeginning-subjects-hasBeginning-shape ;
+	sh:targetSubjectsOf time:hasBeginning ;
+	.
+
+sh-time:hasDurationDescription-subjects-hasDurationDescription-shape
+	a sh:PropertyShape ;
+	sh:class time:GeneralDurationDescription ;
+	sh:path time:hasDurationDescription ;
+	.
+
+sh-time:hasDurationDescription-subjects-shape
+	a sh:NodeShape ;
+	sh:property sh-time:hasDurationDescription-subjects-hasDurationDescription-shape ;
+	sh:targetSubjectsOf time:hasDurationDescription ;
+	.
+
+sh-time:hasEnd-subjects-hasEnd-shape
+	a sh:PropertyShape ;
+	sh:class time:Instant ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:hasEnd ;
+	.
+
+sh-time:hasEnd-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:TemporalEntity ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:hasEnd-subjects-hasEnd-shape ;
+	sh:targetSubjectsOf time:hasEnd ;
+	.
+
+sh-time:hasTRS-subjects-hasTRS-shape
+	a sh:PropertyShape ;
+	sh:class time:TRS ;
+	sh:path time:hasTRS ;
+	.
+
+sh-time:hasTRS-subjects-shape
+	a sh:NodeShape ;
+	sh:or (
+		[
+			sh:class time:TemporalPosition ;
+		]
+		[
+			sh:class time:GeneralDurationDescription ;
+		]
+	) ;
+	sh:property sh-time:hasTRS-subjects-hasTRS-shape ;
+	sh:targetSubjectsOf time:hasTRS ;
+	.
+
+sh-time:hasTemporalDuration-subjects-hasTemporalDuration-shape
+	a sh:PropertyShape ;
+	sh:class time:TemporalDuration ;
+	sh:path time:hasTemporalDuration ;
+	.
+
+sh-time:hasTemporalDuration-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:TemporalEntity ;
+	sh:property sh-time:hasTemporalDuration-subjects-hasTemporalDuration-shape ;
+	sh:targetSubjectsOf time:hasTemporalDuration ;
+	.
+
+sh-time:hasTime-subjects-hasTime-shape
+	a sh:PropertyShape ;
+	sh:class time:TemporalEntity ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:hasTime ;
+	.
+
+sh-time:hasTime-subjects-shape
+	a sh:NodeShape ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:hasTime-subjects-hasTime-shape ;
+	sh:targetSubjectsOf time:hasTime ;
+	.
+
+sh-time:hours-subjects-hours-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:decimal ;
+	sh:path time:hours ;
+	.
+
+sh-time:hours-subjects-shape
+	a sh:NodeShape ;
+	rdfs:comment "Property demonstrated on time:TemporalUnit instances in OWL-Time."@en ;
+	rdfs:seeAlso time:unitHour ;
+	sh:class time:GeneralDurationDescription ;
+	sh:property sh-time:hours-subjects-hours-shape ;
+	sh:targetSubjectsOf time:hours ;
+	.
+
+sh-time:inXSDDate-subjects-inXSDDate-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:date ;
+	sh:nodeKind sh:Literal ;
+	sh:path time:inXSDDate ;
+	.
+
+sh-time:inXSDDate-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:Instant ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:inXSDDate-subjects-inXSDDate-shape ;
+	sh:targetSubjectsOf time:inXSDDate ;
+	.
+
+sh-time:inXSDDateTime-shape
+	a sh:PropertyShape ;
+	sh:maxCount "0"^^xsd:integer ;
+	sh:message "time:inXSDDateTime is deprecated."@en ;
+	sh:path time:inXSDDateTime ;
+	sh:severity sh:Warning ;
+	sh:targetSubjectsOf time:inXSDDateTime ;
+	.
+
+sh-time:inXSDDateTimeStamp-subjects-inXSDDateTimeStamp-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:dateTimeStamp ;
+	sh:nodeKind sh:Literal ;
+	sh:path time:inXSDDateTimeStamp ;
+	.
+
+sh-time:inXSDDateTimeStamp-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:Instant ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:inXSDDateTimeStamp-subjects-inXSDDateTimeStamp-shape ;
+	sh:targetSubjectsOf time:inXSDDateTimeStamp ;
+	.
+
+sh-time:inside-subjects-inside-shape
+	a sh:PropertyShape ;
+	sh:class time:Instant ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:inside ;
+	.
+
+sh-time:inside-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:Interval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:inside-subjects-inside-shape ;
+	sh:targetSubjectsOf time:inside ;
+	.
+
+sh-time:intervalAfter-subjects-intervalAfter-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalAfter ;
+	.
+
+sh-time:intervalAfter-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalAfter-subjects-intervalAfter-shape ;
+	sh:targetSubjectsOf time:intervalAfter ;
+	.
+
+sh-time:intervalBefore-subjects-intervalBefore-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalBefore ;
+	.
+
+sh-time:intervalBefore-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalBefore-subjects-intervalBefore-shape ;
+	sh:targetSubjectsOf time:intervalBefore ;
+	.
+
+sh-time:intervalContains-subjects-intervalContains-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalContains ;
+	.
+
+sh-time:intervalContains-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalContains-subjects-intervalContains-shape ;
+	sh:targetSubjectsOf time:intervalContains ;
+	.
+
+sh-time:intervalDisjoint-subjects-intervalDisjoint-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalEquals ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalDisjoint ;
+	.
+
+sh-time:intervalDisjoint-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalDisjoint-subjects-intervalDisjoint-shape ;
+	sh:targetSubjectsOf time:intervalDisjoint ;
+	.
+
+sh-time:intervalDuring-subjects-intervalDuring-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalDuring ;
+	.
+
+sh-time:intervalDuring-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalDuring-subjects-intervalDuring-shape ;
+	sh:targetSubjectsOf time:intervalDuring ;
+	.
+
+sh-time:intervalEquals-subjects-intervalEquals-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalIn ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalEquals ;
+	.
+
+sh-time:intervalEquals-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalEquals-subjects-intervalEquals-shape ;
+	sh:targetSubjectsOf time:intervalEquals ;
+	.
+
+sh-time:intervalFinishedBy-subjects-intervalFinishedBy-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalEquals ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalFinishedBy ;
+	.
+
+sh-time:intervalFinishedBy-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalFinishedBy-subjects-intervalFinishedBy-shape ;
+	sh:targetSubjectsOf time:intervalFinishedBy ;
+	.
+
+sh-time:intervalFinishes-subjects-intervalFinishes-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalEquals ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalFinishes ;
+	.
+
+sh-time:intervalFinishes-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalFinishes-subjects-intervalFinishes-shape ;
+	sh:targetSubjectsOf time:intervalFinishes ;
+	.
+
+sh-time:intervalIn-subjects-intervalIn-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalEquals ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalIn ;
+	.
+
+sh-time:intervalIn-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalIn-subjects-intervalIn-shape ;
+	sh:targetSubjectsOf time:intervalIn ;
+	.
+
+sh-time:intervalMeets-subjects-intervalMeets-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalEquals ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalMeets ;
+	.
+
+sh-time:intervalMeets-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalMeets-subjects-intervalMeets-shape ;
+	sh:targetSubjectsOf time:intervalMeets ;
+	.
+
+sh-time:intervalMetBy-subjects-intervalMetBy-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalEquals ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalMetBy ;
+	.
+
+sh-time:intervalMetBy-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalMetBy-subjects-intervalMetBy-shape ;
+	sh:targetSubjectsOf time:intervalMetBy ;
+	.
+
+sh-time:intervalOverlappedBy-subjects-intervalOverlappedBy-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalEquals ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalOverlappedBy ;
+	.
+
+sh-time:intervalOverlappedBy-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalOverlappedBy-subjects-intervalOverlappedBy-shape ;
+	sh:targetSubjectsOf time:intervalOverlappedBy ;
+	.
+
+sh-time:intervalOverlaps-subjects-intervalOverlaps-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalEquals ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalOverlaps ;
+	.
+
+sh-time:intervalOverlaps-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalOverlaps-subjects-intervalOverlaps-shape ;
+	sh:targetSubjectsOf time:intervalOverlaps ;
+	.
+
+sh-time:intervalStartedBy-subjects-intervalStartedBy-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalEquals ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalStartedBy ;
+	.
+
+sh-time:intervalStartedBy-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalStartedBy-subjects-intervalStartedBy-shape ;
+	sh:targetSubjectsOf time:intervalStartedBy ;
+	.
+
+sh-time:intervalStarts-subjects-intervalStarts-shape
+	a sh:PropertyShape ;
+	sh:class time:ProperInterval ;
+	sh:disjoint time:intervalEquals ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:path time:intervalStarts ;
+	.
+
+sh-time:intervalStarts-subjects-shape
+	a sh:NodeShape ;
+	sh:class time:ProperInterval ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:property sh-time:intervalStarts-subjects-intervalStarts-shape ;
+	sh:targetSubjectsOf time:intervalStarts ;
+	.
+
+sh-time:minutes-subjects-minutes-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:decimal ;
+	sh:path time:minutes ;
+	.
+
+sh-time:minutes-subjects-shape
+	a sh:NodeShape ;
+	rdfs:comment "Property demonstrated on time:TemporalUnit instances in OWL-Time."@en ;
+	rdfs:seeAlso time:unitMinute ;
+	sh:class time:GeneralDurationDescription ;
+	sh:property sh-time:minutes-subjects-minutes-shape ;
+	sh:targetSubjectsOf time:minutes ;
+	.
+
+sh-time:months-subjects-months-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:decimal ;
+	sh:path time:months ;
+	.
+
+sh-time:months-subjects-shape
+	a sh:NodeShape ;
+	rdfs:comment "Property demonstrated on time:TemporalUnit instances in OWL-Time."@en ;
+	rdfs:seeAlso time:unitMonth ;
+	sh:class time:GeneralDurationDescription ;
+	sh:property sh-time:months-subjects-months-shape ;
+	sh:targetSubjectsOf time:months ;
+	.
+
+sh-time:seconds-subjects-seconds-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:decimal ;
+	sh:path time:seconds ;
+	.
+
+sh-time:seconds-subjects-shape
+	a sh:NodeShape ;
+	rdfs:comment "Property demonstrated on time:TemporalUnit instances in OWL-Time."@en ;
+	rdfs:seeAlso time:unitSecond ;
+	sh:class time:GeneralDurationDescription ;
+	sh:property sh-time:seconds-subjects-seconds-shape ;
+	sh:targetSubjectsOf time:seconds ;
+	.
+
+sh-time:weeks-subjects-shape
+	a sh:NodeShape ;
+	rdfs:comment "Property demonstrated on time:TemporalUnit instances in OWL-Time."@en ;
+	rdfs:seeAlso time:unitWeek ;
+	sh:class time:GeneralDurationDescription ;
+	sh:property sh-time:weeks-subjects-weeks-shape ;
+	sh:targetSubjectsOf time:weeks ;
+	.
+
+sh-time:weeks-subjects-weeks-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:decimal ;
+	sh:path time:weeks ;
+	.
+
+sh-time:years-subjects-shape
+	a sh:NodeShape ;
+	rdfs:comment "Property demonstrated on time:TemporalUnit instances in OWL-Time."@en ;
+	rdfs:seeAlso time:unitYear ;
+	sh:class time:GeneralDurationDescription ;
+	sh:property sh-time:years-subjects-years-shape ;
+	sh:targetSubjectsOf time:years ;
+	.
+
+sh-time:years-subjects-years-shape
+	a sh:PropertyShape ;
+	sh:datatype xsd:decimal ;
+	sh:path time:years ;
+	.
+

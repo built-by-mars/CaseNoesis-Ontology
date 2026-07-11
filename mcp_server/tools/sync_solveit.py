@@ -16,7 +16,7 @@ refreshes them:
    punned as an ``owl:Class`` typed ``uco-action:Technique`` per the UCO
    1.5.0 metaclass pattern (ucoProject/UCO PR #676), matching the bundled
    MITRE ATT&CK catalog in ``extensions/attack-technique/``.
-3. Rewrites the ``provenance`` block in ``extensions/solveit/manifest.json``
+3. Rewrites the ``provenance`` block in ``ontology/solveit/manifest.json``
    (commit SHA, upstream release tag, ontology version, retrieval time).
 
 Usage:
@@ -41,7 +41,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-EXT_DIR = PROJECT_ROOT / "extensions" / "solveit"
+
+sys.path.insert(0, str(PROJECT_ROOT / "mcp_server"))
+from extension_paths import extension_dir  # noqa: E402
+
+EXT_DIR = extension_dir("solveit", PROJECT_ROOT)
 CATALOG_FILE = "solveit-technique-catalog.ttl"
 KB_FILE = "solve-it-kb.ttl"
 

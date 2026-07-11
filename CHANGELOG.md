@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.19.0] - 2026-07-11
+
+Reorganize vendored upstream ontologies under `ontology/`, vendor upper-ontology
+sources and CDO-Shapes profiles for fully offline operation, consolidate example
+directories, and unify upstream freshness checks — without breaking name-based
+extension APIs (`CASE_UCO_EXTENSIONS=cac`, `validate_graph(extensions=[...])`,
+`search_classes(scope="solveit")`).
+
+### Changed
+
+#### Ontology directory layout
+
+- **Upstream-maintained ontologies moved to `ontology/`** — `cac`, `aeo`, and
+  `solveit` now live alongside CASE and UCO git submodules under `ontology/`
+  instead of `extensions/`. SDK-developed extensions (`attack-technique`,
+  `cryptoinv`, `legalproc`, `rico`, `weapons`, `drugs`, `toolcap`) remain in
+  `extensions/`.
+- **`mcp_server/extension_paths.py`** — central resolver searches both roots
+  (`extensions/` first, then `ontology/`) for `manifest.json`-bearing
+  directories. All MCP, validation, lifecycle, routing, and generator code
+  paths updated to use it; name-based APIs are unchanged.
+- **Git submodule paths updated** — CAC and AEO submodule entries now point at
+  `ontology/cac/ontology` and `ontology/aeo/ontology` (was
+  `extensions/cac/ontology` / `extensions/aeo/ontology`).
+- **Makefile `EXT_DIR` and `rollback-extension`** — resolve the correct root per
+  extension name.
+
+### Added
+
+#### Offline upper-ontology vendoring (`ontology/upper/`)
+
+- **Pinned source files** for all eight profiled upper ontologies (BFO, gUFO,
+  PROV-O, OWL-Time, GeoSPARQL core + Simple Features, FOAF, ORG, PROF) plus
+  `provenance.json` recording source URL, SHA-256, and fetch timestamp.
+- **CDO-Shapes SHACL profiles** vendored under `ontology/upper/shapes/`
+  (`sh-bfo.ttl` through `sh-prof.ttl`), pinned to specific upstream commits.
+- **`build_upper_ontology_registry.py`** defaults to the vendored snapshot
+  (offline rebuild); `--fetch` refreshes sources then rebuilds the registry.
+  `make rebuild-upper-registry` (offline) and `make sync-upper` (network).
+- **`get_uco_profiles`** reports `local_source` and `local_shapes` paths for
+  each profile so agents can reference offline files without fetching URLs.
+
+#### Unified upstream freshness
+
+- **`.github/workflows/upstream-freshness.yml`** replaces the SOLVE-IT-only
+  weekly check: compares CASE, UCO, AEO, CAC, and SOLVE-IT pins against
+  upstream (release lag fails the job for CAC/SOLVE-IT; branch drift on
+  CASE/UCO/AEO emits warnings only).
+- **`make sync-upstream`** — one command to refresh all submodule pins, the
+  SOLVE-IT snapshot, and the upper-ontology vendored files.
+
+#### Examples consolidation
+
+- **`example_agentmcp_outputs/` merged into `examples/agent-outputs/`** — four
+  early MCP worked examples (Cellebrite extraction, chain of custody, USN
+  journal, WiFi capture) now live under the main examples tree.
+
+### Migration notes
+
+- Scripts that hardcoded filesystem paths like
+  `extensions/cac/ontology/...` or `extensions/solveit/solve-it-kb.ttl`
+  should switch to `ontology/cac/...` and `ontology/solveit/...`. The SDK
+  APIs that take extension *names* (`cac`, `solveit`, etc.) are unaffected.
+- After upgrading, run `git submodule update --init --recursive` so CAC/AEO
+  submodules resolve at their new paths.
+
+### Tests
+
+- `mcp_server/tests/test_extension_paths.py` — dual-root resolution, search
+  order, and non-extension directory filtering.
+
 ## [1.18.0] - 2026-07-10
 
 SOLVE-IT support: the SDK bundles a pinned, sync-managed snapshot of the

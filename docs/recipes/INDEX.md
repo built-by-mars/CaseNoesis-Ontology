@@ -66,7 +66,7 @@ End-to-end mapping recipes that walk through source input, modeling choices, ant
 
 ### Crimes Against Children (CAC Ontology)
 
-Requires `CASE_UCO_EXTENSIONS=cac`. Use `route_cac_content` via the MCP server to detect which recipes apply to submitted content. Validate output with `validate_graph(..., extensions=['cac'])` (uses `extensions/cac/validation-subset.json` by default) or `extensions=['cac:full']` for the complete manifest.
+Requires `CASE_UCO_EXTENSIONS=cac`. Use `route_cac_content` via the MCP server to detect which recipes apply to submitted content. Validate output with `validate_graph(..., extensions=['cac'])` (uses `ontology/cac/validation-subset.json` by default) or `extensions=['cac:full']` for the complete manifest.
 
 | Recipe | File | Description |
 |---|---|---|

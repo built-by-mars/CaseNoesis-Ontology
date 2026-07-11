@@ -62,7 +62,7 @@ Set the `CASE_UCO_EXTENSIONS` environment variable to include CAC:
 The `ontology/` directory is a git submodule pointing to the upstream CAC Ontology repository.
 
 ```bash
-git submodule update --init extensions/cac/ontology
+git submodule update --init ontology/cac/ontology
 ```
 
 ## Registry Coverage
@@ -72,9 +72,9 @@ The `_registry.json` is the source of truth for runtime discovery (`search_class
 It is regenerated from the TTL submodule with:
 
 ```bash
-case-uco-generate generate-extension --extension extensions/cac \
-    --output-dir extensions/cac/_build --lang python
-cp extensions/cac/_build/_registry.json extensions/cac/_registry.json
+case-uco-generate generate-extension --extension ontology/cac \
+    --output-dir ontology/cac/_build --lang python
+cp ontology/cac/_build/_registry.json ontology/cac/_registry.json
 ```
 
 The generator indexes both:

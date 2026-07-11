@@ -1,11 +1,17 @@
 .PHONY: all generate build test clean init lint smoke check venv \
        test-proposal validate-proposal sparql-test-proposal \
        test-extension-compat test-extension-main test-extension-develop test-extension-develop2 \
-       playground-test test-docs sync-solveit sync-solveit-offline
+       playground-test test-docs sync-solveit sync-solveit-offline \
+       rebuild-upper-registry sync-upper sync-upstream
 
 VENV := .venv
 PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
+
+# Resolve an extension name to its vendoring root (v1.19.0): SDK-native
+# extensions live in extensions/, upstream-vendored ontologies (cac, aeo,
+# solveit) in ontology/. Mirrors mcp_server/extension_paths.py search order.
+EXT_DIR = $(shell if [ -f extensions/$(EXT)/manifest.json ] || [ -d extensions/$(EXT) ]; then echo extensions/$(EXT); elif [ -f ontology/$(EXT)/manifest.json ]; then echo ontology/$(EXT); else echo extensions/$(EXT); fi)
 
 all: init generate build test
 
@@ -75,8 +81,8 @@ deprecate-extension:
 # One-command rollback to a previously approved knowledge generation:
 #   make rollback-extension EXT=myext REF=v1.15.0
 rollback-extension:
-	git checkout $(REF) -- extensions/$(EXT)
-	@echo "Restored extensions/$(EXT) from $(REF); review and commit the rollback."
+	git checkout $(REF) -- $(EXT_DIR)
+	@echo "Restored $(EXT_DIR) from $(REF); review and commit the rollback."
 
 lifecycle-status:
 	$(PYTHON) mcp_server/knowledge_lifecycle.py status
@@ -104,6 +110,26 @@ sync-solveit:
 # already-vendored files (offline):
 sync-solveit-offline:
 	$(PYTHON) mcp_server/tools/sync_solveit.py --skip-fetch
+
+# Rebuild the strict upper-ontology term registry from the vendored
+# snapshot in ontology/upper/ (offline; no network needed):
+rebuild-upper-registry:
+	$(PYTHON) mcp_server/tools/build_upper_ontology_registry.py
+
+# Refresh the vendored upper-ontology snapshot from upstream, then
+# rebuild the registry (network required):
+sync-upper:
+	$(PYTHON) mcp_server/tools/build_upper_ontology_registry.py --fetch
+
+# Refresh every vendored upstream source: CASE + UCO submodules, CAC and
+# AEO submodules, the SOLVE-IT snapshot, and the upper-ontology snapshot.
+#   make sync-upstream
+sync-upstream:
+	git submodule update --remote --checkout ontology/UCO ontology/CASE \
+		ontology/cac/ontology ontology/aeo/ontology
+	$(MAKE) sync-solveit
+	$(MAKE) sync-upper
+	@echo "All upstream snapshots refreshed; review diffs, run 'make test-mcp', and commit."
 
 # Held-out routing evaluation (issue #58) — runs separately from unit tests:
 #   make eval-routing
@@ -304,22 +330,22 @@ validate-extension:
 ifndef DATA
 	$(error DATA is required. Usage: make validate-extension EXT=$(EXT) DATA=path/to/data.jsonld)
 endif
-	$(VENV)/bin/python scripts/validate_extension.py extensions/$(EXT)/manifest.json $(DATA)
+	$(VENV)/bin/python scripts/validate_extension.py $(EXT_DIR)/manifest.json $(DATA)
 
 test-ext-cac:
 	$(MAKE) test-extension-compat \
-	  EXT_TTL=extensions/cac/ontology/ontology/cacontology-core-spine.ttl \
-	  EXT_SHAPES=extensions/cac/ontology/ontology/cacontology-core-spine-shapes.ttl \
-	  EXT_DATA=extensions/cac/ontology/ontology/cacontology-core-spine-shapes.ttl
+	  EXT_TTL=ontology/cac/ontology/ontology/cacontology-core-spine.ttl \
+	  EXT_SHAPES=ontology/cac/ontology/ontology/cacontology-core-spine-shapes.ttl \
+	  EXT_DATA=ontology/cac/ontology/ontology/cacontology-core-spine-shapes.ttl
 
 test-ext-aeo:
 	$(MAKE) test-extension-compat \
-	  EXT_TTL=extensions/aeo/ontology/ontology/engagement/engagement.ttl \
-	  EXT_SHAPES=extensions/aeo/ontology/ontology/engagement/engagement.ttl \
-	  EXT_DATA=extensions/aeo/ontology/ontology/engagement/engagement.ttl
+	  EXT_TTL=ontology/aeo/ontology/ontology/engagement/engagement.ttl \
+	  EXT_SHAPES=ontology/aeo/ontology/ontology/engagement/engagement.ttl \
+	  EXT_DATA=ontology/aeo/ontology/ontology/engagement/engagement.ttl
 
 generate-ext:
 	$(VENV)/bin/case-uco-generate generate-extension \
-	  --extension extensions/$(EXT)/ \
+	  --extension $(EXT_DIR)/ \
 	  --output-dir packages/case-uco-$(EXT)/ \
 	  --lang all

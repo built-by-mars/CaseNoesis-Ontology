@@ -377,7 +377,7 @@ INVESTIGATION_FAMILIES: tuple[InvestigationFamily, ...] = (
         upper_profiles=("PROV-O",),
         notes=(
             "Document forensic method with the pinned SOLVE-IT knowledge "
-            "base (extensions/solveit/): record each step as a "
+            "base (ontology/solveit/): record each step as a "
             "solveit-core:SolveitInvestigativeAction with usedTechnique "
             "(DFT-*) and appliedMitigation (DFM-*), and rate residual risk "
             "with solveit-wa:WeaknessEvaluation (ASTM E3016-18 categories). "
@@ -619,12 +619,12 @@ def _installed_extensions(
 
     from knowledge_lifecycle import extension_status, is_routable
 
+    import extension_paths
+
     found: dict[str, dict[str, Any]] = {}
-    ext_root = project_root / "extensions"
-    if not ext_root.is_dir():
-        return found
-    for manifest_path in sorted(ext_root.glob("*/manifest.json")):
-        ext_dir_name = manifest_path.parent.name
+    for ext_dir in extension_paths.iter_extension_dirs(project_root):
+        manifest_path = ext_dir / "manifest.json"
+        ext_dir_name = ext_dir.name
         try:
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
