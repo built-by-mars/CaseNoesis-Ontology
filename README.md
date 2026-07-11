@@ -2,7 +2,7 @@
 
 # CASE/UCO SDK
 
-**v1.19.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md)
+**v1.20.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md)
 
 A multi-language data modeling library for digital forensics, cyber-investigation, and cyber-observable data. If your software produces or consumes forensic evidence, this SDK gives you typed, validated builders in **Python**, **C#**, **Java**, and **Rust** — so you can model investigation data in your language and produce interoperable [CASE/UCO](https://caseontology.org/) JSON-LD output.
 
@@ -47,7 +47,7 @@ For Java, add to your `pom.xml`:
 <dependency>
     <groupId>org.caseontology</groupId>
     <artifactId>case-uco</artifactId>
-    <version>1.19.0</version>
+    <version>1.20.0</version>
 </dependency>
 ```
 
@@ -552,6 +552,7 @@ All four language packages are released in lockstep from the same ontology sourc
 
 | SDK Version | UCO | CASE | Python `case-uco` | C# `CaseUco` | Java `case-uco` | Rust `case-uco` |
 |-------------|-----|------|-------------------|--------------|-----------------|-----------------|
+| 1.20.0 | 1.4.0 | 1.4.0 | 1.20.0 | 1.20.0 | 1.20.0 | 1.20.0 |
 | 1.19.0 | 1.4.0 | 1.4.0 | 1.19.0 | 1.19.0 | 1.19.0 | 1.19.0 |
 | 1.18.0 | 1.4.0 | 1.4.0 | 1.18.0 | 1.18.0 | 1.18.0 | 1.18.0 |
 | 1.17.0 | 1.4.0 | 1.4.0 | 1.17.0 | 1.17.0 | 1.17.0 | 1.17.0 |
@@ -704,6 +705,32 @@ The `examples/agent-outputs/` directory contains four complete worked examples p
 Each example includes both the Python source that builds the graph and the validated JSON-LD output.
 
 The `examples/` directory goes further, with validated end-to-end investigation graphs built from real public-record sources: PACER federal case dockets processed through `process_document_file` (`examples/pacer/` — trafficking, CSAM production, cryptocurrency, and racketeering cases), a cyber threat intelligence exemplar (`examples/cti/`), ICAC arrest and CyberTip workflows, and document-processing outputs.
+
+### Operation PHANTOM GATE — fictitious scenario stress test
+
+**[`examples/scenarios/`](examples/scenarios/)** adds a deliberately **fabricated**, multipart investigation exercise — **Operation PHANTOM GATE** ([`operation-phantom-gate.md`](examples/scenarios/operation-phantom-gate.md), case ID **INV-2026-PGA-001**). This is **Tier T0 synthetic data**: every person, docket number, wallet address, and artifact identifier is invented for SDK and MCP testing. It is **not** a real investigation, not derived from operational case material, and must not be treated as exemplar evidence for production workflows.
+
+The scenario exists to **stress-test** what this SDK can express when modeling work that is **adjacent to, in, and through the cyber domain** — often several such threads at once:
+
+| Track | What it exercises |
+|-------|-------------------|
+| Elder-fraud couriers (E.D. La.) | Chain of custody, mobile extraction, location corroboration, legal process |
+| RICO / crypto social engineering (D.D.C.) | Enterprise modeling, cryptocurrency tracing, FinCEN handling markings |
+| Insider / export control (N.D. Cal.) | Email and messaging threads, trade-secret charges, corporate network capture |
+| APT / GateRunner CTI | ATT&CK technique extension, malware handling, PCAP flow analysis |
+| ICAC / CAC sextortion (D. Alaska) | CAC Ontology grooming workflow, juvenile privacy markings, CyberTip routing |
+| Classified disclosure (D. Mass.) | TS//SCI markings, Discord exports, espionage charges |
+| Fargo safehouse | Weapons and controlled-substance extensions |
+
+The validated output graph ([`operation-phantom-gate.jsonld`](examples/scenarios/operation-phantom-gate.jsonld), **452 nodes**, nine extension bundles, **`Conforms: True`**) is built by [`build_phantom_gate_scenario.py`](examples/scenarios/build_phantom_gate_scenario.py) with long-tail coverage in [`phantom_gate_longtail.py`](examples/scenarios/phantom_gate_longtail.py) and post-build gates in [`phantom_gate_acceptance.py`](examples/scenarios/phantom_gate_acceptance.py). Fidelity is checked against [`phantom_gate_coverage.json`](examples/scenarios/phantom_gate_coverage.json) via [`check_phantom_gate_coverage.py`](examples/scenarios/check_phantom_gate_coverage.py) (artifact labels, scenario hash, authorization placement); [`build_phantom_gate_typed.py`](examples/scenarios/build_phantom_gate_typed.py) verifies CASEGraph round-trip. See [`examples/scenarios/README.md`](examples/scenarios/README.md) for the agent workflow.
+
+```bash
+python3 examples/scenarios/build_phantom_gate_scenario.py
+python3 examples/scenarios/check_phantom_gate_coverage.py
+python3 examples/scenarios/build_phantom_gate_typed.py
+```
+
+Use this scenario to evaluate MCP routing (`route_investigation_content`, `route_cac_content`, `guide_mapping`, `plan_solveit_workflow`), recipe coverage, extension interoperability, and semantic modeling — not as a template for real case data.
 
 For MCP server setup details and troubleshooting, see **[mcp_server/README.md](mcp_server/README.md)**.
 

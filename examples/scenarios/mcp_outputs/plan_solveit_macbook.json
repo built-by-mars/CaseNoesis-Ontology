@@ -1,0 +1,472 @@
+{
+  "content_trust": "untrusted-source-content",
+  "matched_objectives": [
+    {
+      "id": "DFO-1010",
+      "kind": "objective",
+      "name": "Preserve digital evidence",
+      "iri": "https://ontology.solveit-df.org/solveit/data/objectiveDFO-1010",
+      "description": "Ensure the integrity and authenticity of digital evidence is maintained."
+    },
+    {
+      "id": "DFO-1022",
+      "kind": "objective",
+      "name": "Store acquired data",
+      "iri": "https://ontology.solveit-df.org/solveit/data/objectiveDFO-1022",
+      "description": "Store acquired data in one or more formats for subsequent examination and analysis"
+    },
+    {
+      "id": "DFO-1018",
+      "kind": "objective",
+      "name": "Read data from digital evidence storage formats",
+      "iri": "https://ontology.solveit-df.org/solveit/data/objectiveDFO-1018",
+      "description": "Access data within digital evidence containers such as disk images, memory dumps, or archive formats."
+    },
+    {
+      "id": "DFO-1021",
+      "kind": "objective",
+      "name": "Access device data for acquisition",
+      "iri": "https://ontology.solveit-df.org/solveit/data/objectiveDFO-1021",
+      "description": "Connect to physical sources of digital evidence to facilitate data extraction"
+    },
+    {
+      "id": "DFO-1002",
+      "kind": "objective",
+      "name": "Extract data from specific formats",
+      "iri": "https://ontology.solveit-df.org/solveit/data/objectiveDFO-1002",
+      "description": "Process data to extract artifacts from specific data formats."
+    }
+  ],
+  "candidate_techniques": [
+    {
+      "id": "DFT-1012",
+      "kind": "technique",
+      "name": "Write protect storage media using a hardware write blocker",
+      "iri": "https://ontology.solveit-df.org/solveit/data/techniqueDFT-1012",
+      "description": "A hardware write blocking device [should] prevent any change to data in the user area of a hard drive while allowing access to all data on a hard drive. (Lyle 2006)",
+      "error_mitigation_checklist": [
+        {
+          "weakness": {
+            "id": "DFW-1118",
+            "kind": "weakness",
+            "name": "Hardware write blocker fails to prevent modifications to the attached device.",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1118",
+            "astm_categories": [
+              "ASTM_INAC_COR"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1071",
+              "kind": "mitigation",
+              "name": "Thorough testing of write blocker against multiple targets to ensure that writes are not possible.",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1071"
+            },
+            {
+              "id": "DFM-1072",
+              "kind": "mitigation",
+              "name": "Regular checks for hardware write blocker firmware updates.",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1072"
+            },
+            {
+              "id": "DFM-1073",
+              "kind": "mitigation",
+              "name": "Subscription to notifications from write blocker vendor for firmware updates or identified problems.",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1073"
+            }
+          ]
+        },
+        {
+          "weakness": {
+            "id": "DFW-1119",
+            "kind": "weakness",
+            "name": "Hardware write blocker hides the existence of an HPA.",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1119",
+            "astm_categories": [
+              "ASTM_INCOMP"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1005",
+              "kind": "mitigation",
+              "name": "Testing to ensure that the software and hardware disk imaging setup can detect HPAs",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1005",
+              "description": "Tests have been performed that the combination of hardware and software used can detect when HPAs are present."
+            }
+          ]
+        },
+        {
+          "weakness": {
+            "id": "DFW-1120",
+            "kind": "weakness",
+            "name": "Hardware write blocker hides the existence of an DCO.",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1120",
+            "astm_categories": [
+              "ASTM_INCOMP"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1006",
+              "kind": "mitigation",
+              "name": "Testing to ensure software and hardware setup detects DCOs",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1006"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DFT-1013",
+      "kind": "technique",
+      "name": "Write protect storage media using a software write blocker",
+      "iri": "https://ontology.solveit-df.org/solveit/data/techniqueDFT-1013",
+      "description": "Use of a software-based tool that prevents a computer from writing to computer storage media connected to it (NIST 2006)",
+      "error_mitigation_checklist": []
+    },
+    {
+      "id": "DFT-1025",
+      "kind": "technique",
+      "name": "Store bitstream data in a forensic image format",
+      "iri": "https://ontology.solveit-df.org/solveit/data/techniqueDFT-1025",
+      "description": "Storage of bitstream data recovered from a digital device",
+      "error_mitigation_checklist": [
+        {
+          "weakness": {
+            "id": "DFW-1043",
+            "kind": "weakness",
+            "name": "Data is written to forensic format that does not preserve the original raw data",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1043",
+            "astm_categories": [
+              "ASTM_INAC_ALT"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1009",
+              "kind": "mitigation",
+              "name": "Check hash of image matches hash of source material",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1009"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DFT-1178",
+      "kind": "technique",
+      "name": "Store bitstream data in a raw image format",
+      "iri": "https://ontology.solveit-df.org/solveit/data/techniqueDFT-1178",
+      "description": "Storage of bitstream data recovered from a digital device as raw files.",
+      "error_mitigation_checklist": []
+    },
+    {
+      "id": "DFT-1166",
+      "kind": "technique",
+      "name": "Connect directly to storage media",
+      "iri": "https://ontology.solveit-df.org/solveit/data/techniqueDFT-1166",
+      "description": "This technique describes the occasions where it is necessary to connect directly to a disk without a hardware write blocker. This would typically then involve a subseqeunt software write blocker, which then presents a write protected interface.",
+      "error_mitigation_checklist": [
+        {
+          "weakness": {
+            "id": "DFW-1277",
+            "kind": "weakness",
+            "name": "Connection over a direct media interface causes changes to the target media",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1277",
+            "astm_categories": [
+              "ASTM_INAC_ALT",
+              "ASTM_INAC_COR",
+              "ASTM_INCOMP"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1008",
+              "kind": "mitigation",
+              "name": "Use software write blocker",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1008"
+            },
+            {
+              "id": "DFM-1241",
+              "kind": "mitigation",
+              "name": "Avoid direct connection to media and use hardware write blocker instead",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1241"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DFT-1043",
+      "kind": "technique",
+      "name": "Read bitstream from forensic image container file(s)",
+      "iri": "https://ontology.solveit-df.org/solveit/data/techniqueDFT-1043",
+      "description": "The decoding of a forensic format such as EWF such that the raw sectors can be accessed by a forensic tool (typically performed on-the-fly internally in a tool.)",
+      "error_mitigation_checklist": [
+        {
+          "weakness": {
+            "id": "DFW-1121",
+            "kind": "weakness",
+            "name": "Image format parsing fails to to present all blocks from within a forensic container image in their \u2018flat\u2019 (dd) representation",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1121",
+            "astm_categories": [
+              "ASTM_INCOMP"
+            ]
+          },
+          "mitigations": []
+        },
+        {
+          "weakness": {
+            "id": "DFW-1122",
+            "kind": "weakness",
+            "name": "Image format parsing presents incorrect data within sectors of the image",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1122",
+            "astm_categories": [
+              "ASTM_INAC_ALT"
+            ]
+          },
+          "mitigations": []
+        },
+        {
+          "weakness": {
+            "id": "DFW-1123",
+            "kind": "weakness",
+            "name": "Image format parsing presents incorrect forensic image metadata",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1123",
+            "astm_categories": [
+              "ASTM_INAC_ALT"
+            ]
+          },
+          "mitigations": []
+        },
+        {
+          "weakness": {
+            "id": "DFW-1259",
+            "kind": "weakness",
+            "name": "Image format parsing fails to identify or assemble split forensic images",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1259",
+            "astm_categories": [
+              "ASTM_INAC_COR",
+              "ASTM_INCOMP"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1004",
+              "kind": "mitigation",
+              "name": "Check hash of image matches hash of source device",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1004"
+            },
+            {
+              "id": "DFM-1009",
+              "kind": "mitigation",
+              "name": "Check hash of image matches hash of source material",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1009"
+            },
+            {
+              "id": "DFM-1210",
+              "kind": "mitigation",
+              "name": "Use a forensic image format with internal integrity and continuity metadata",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1210"
+            },
+            {
+              "id": "DFM-1211",
+              "kind": "mitigation",
+              "name": "Test the parsing of split forensic images",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1211"
+            },
+            {
+              "id": "DFM-1212",
+              "kind": "mitigation",
+              "name": "Test the parsing of split forensic images with the maximum number of segments possible",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1212"
+            },
+            {
+              "id": "DFM-1213",
+              "kind": "mitigation",
+              "name": "Test the parsing of split forensic images with missing segments",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1213"
+            },
+            {
+              "id": "DFM-1214",
+              "kind": "mitigation",
+              "name": "Ensure forensic tool UI clearly warns that there are problems while parsing a split forensic image file",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1214"
+            },
+            {
+              "id": "DFM-1215",
+              "kind": "mitigation",
+              "name": "Test the parsing of split forensic images with a corrupt segment",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1215"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DFT-1100",
+      "kind": "technique",
+      "name": "Extract metadata from within images",
+      "iri": "https://ontology.solveit-df.org/solveit/data/techniqueDFT-1100",
+      "description": "The extraction of metadata from within images (pictures). e.g. EXIF, XMP. IPTC, iTXt etc.",
+      "error_mitigation_checklist": []
+    },
+    {
+      "id": "DFT-1113",
+      "kind": "technique",
+      "name": "Access internal storage via bootable environment",
+      "iri": "https://ontology.solveit-df.org/solveit/data/techniqueDFT-1113",
+      "description": "Booting the suspected computer device into an alternative operating system in order to image the attached disks.",
+      "error_mitigation_checklist": [
+        {
+          "weakness": {
+            "id": "DFW-1177",
+            "kind": "weakness",
+            "name": "Failing to boot from intended forensic bootable environment, causing the normal system boot process to commence",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1177",
+            "astm_categories": [
+              "ASTM_INAC_ALT",
+              "ASTM_INAC_COR"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1126",
+              "kind": "mitigation",
+              "name": "Use forensic bootable environment to gain access to internal media",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1126"
+            },
+            {
+              "id": "DFM-1127",
+              "kind": "mitigation",
+              "name": "Use a similar system to test steps required to interrupt the normal boot process and boot from Trusted Bootable Environment",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1127"
+            }
+          ]
+        },
+        {
+          "weakness": {
+            "id": "DFW-1178",
+            "kind": "weakness",
+            "name": "Inability to load the forensic bootable environment due to system configuration",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1178",
+            "description": "System configuration may not permit alternative booting e.g., Secureboot is enabled",
+            "astm_categories": [
+              "ASTM_INCOMP"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1128",
+              "kind": "mitigation",
+              "name": "Use a Trusted Bootable Environment that is permitted to boot",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1128"
+            },
+            {
+              "id": "DFM-1129",
+              "kind": "mitigation",
+              "name": "Use USB flashdrive version if a CD version is not permitted to boot",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1129"
+            },
+            {
+              "id": "DFM-1130",
+              "kind": "mitigation",
+              "name": "Disable Secureboot in BIOS to permit bootable environment to load (risks wiping FDE key, requiring ADK).",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1130"
+            }
+          ]
+        },
+        {
+          "weakness": {
+            "id": "DFW-1179",
+            "kind": "weakness",
+            "name": "Failure to detect internal disk from bootable environment",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1179",
+            "description": "For example this may be due to missing drivers",
+            "astm_categories": [
+              "ASTM_INCOMP"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1131",
+              "kind": "mitigation",
+              "name": "Use a Trusted Bootable Environment that supports accessing the internal disk",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1131"
+            }
+          ]
+        },
+        {
+          "weakness": {
+            "id": "DFW-1180",
+            "kind": "weakness",
+            "name": "Failing to decrypt internal disk using the bootable environment",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1180",
+            "astm_categories": [
+              "ASTM_INCOMP"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1132",
+              "kind": "mitigation",
+              "name": "Use a Trusted Bootable Environment that supports decryption of the internal disk",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1132"
+            },
+            {
+              "id": "DFM-1133",
+              "kind": "mitigation",
+              "name": "Acquire the encrypted contents of the internal disk and decrypt the copy within a virtualized environment",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1133"
+            }
+          ]
+        },
+        {
+          "weakness": {
+            "id": "DFW-1182",
+            "kind": "weakness",
+            "name": "Bootable environment overwrites relevant data on the target device",
+            "iri": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1182",
+            "astm_categories": [
+              "ASTM_INAC_COR",
+              "ASTM_INCOMP"
+            ]
+          },
+          "mitigations": [
+            {
+              "id": "DFM-1008",
+              "kind": "mitigation",
+              "name": "Use software write blocker",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1008"
+            },
+            {
+              "id": "DFM-1014",
+              "kind": "mitigation",
+              "name": "Test and document changes made by the tools used",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1014"
+            },
+            {
+              "id": "DFM-1015",
+              "kind": "mitigation",
+              "name": "Use tools only if changes made are to locations where relevant evidence is unlikely to be located.",
+              "iri": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1015"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "workflow_guidance": [
+    "1. Confirm the objective(s) below match the investigative goal; use get_solveit_details(objective id) to see every candidate technique.",
+    "2. For each selected technique, review its error_mitigation_checklist (weaknesses are classified per ASTM E3016-18) and decide which mitigations to apply.",
+    "3. Record each executed step as a solveit-core:SolveitInvestigativeAction with usedTechnique and appliedMitigation, then validate the graph with validate_graph(extensions=['solveit']).",
+    "4. Optionally rate residual risk with solveit-wa:WeaknessEvaluation (likelihood x impact), as shown in the solve-it-investigation-planning recipe."
+  ],
+  "recipe": "docs/recipes/solve-it-investigation-planning.md",
+  "knowledge_base": {
+    "source": "SOLVE-IT (https://solveit-df.org)",
+    "release": "v0.2026-06",
+    "ontology_version": "0.1.9"
+  }
+}

@@ -206,6 +206,8 @@ def validate_graph_file(
     extensions: list[str] | None = None,
     project_root: Path = PROJECT_ROOT,
     strict_concepts: bool = True,
+    extra_ontology_graphs: list[str | Path] | None = None,
+    force_rdfs_inference: bool = False,
 ) -> GraphValidationReport:
     """Validate a CASE/UCO graph file with the local case_validate tool.
 
@@ -242,6 +244,11 @@ def validate_graph_file(
         args.extend(extension_args)
     elif extensions:
         args.extend(["--built-version", DEFAULT_BUILT_VERSION])
+    if extra_ontology_graphs:
+        for graph_path_extra in extra_ontology_graphs:
+            args.extend(["--ontology-graph", str(graph_path_extra)])
+    if force_rdfs_inference and "--inference" not in args:
+        args.extend(["--inference", "rdfs"])
     args.append(str(graph))
     try:
         completed = subprocess.run(

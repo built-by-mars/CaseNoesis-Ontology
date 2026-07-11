@@ -7,6 +7,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.0] - 2026-07-11
+
+Add **Operation PHANTOM GATE** — a fictitious, multipart investigation stress-test
+scenario with a validated 452-node JSON-LD graph, acceptance gates, coverage
+contract, and CASEGraph round-trip — plus graph-validator hooks for SOLVE-IT KB
+individuals when CAC validation-subset is active.
+
+### Added
+
+#### Operation PHANTOM GATE — fictitious multipart investigation stress test (`examples/scenarios/`)
+
+- **`operation-phantom-gate.md`** — Tier **T0 (fully synthetic)** multipart
+  investigation narrative (**INV-2026-PGA-001**). All persons, docket numbers,
+  identifiers, and evidence content are **fabricated for SDK/MCP exercise only**
+  — not a real case, not derived from live investigative data, and not suitable
+  for operational use. The scenario is designed to **stress-test** the SDK's
+  ability to model investigations that are **adjacent to, in, and through the
+  cyber domain**: elder-fraud couriers, RICO/crypto social engineering,
+  insider/export tracks, APT/ATT&CK CTI, ICAC/CAC sextortion, classified
+  disclosure, weapons/drugs takedown, chain of custody, data-handling markings,
+  SOLVE-IT acquisition workflows, and AI/ML analysis pipelines — in one
+  interoperable graph.
+- **`build_phantom_gate_scenario.py`** → **`operation-phantom-gate.jsonld`**
+  (452 nodes, **`Conforms: True`**) — validated builder exercising nine
+  extension bundles (`legalproc`, `rico`, `cryptoinv`, `attack-technique:full`,
+  `solveit`, `weapons`, `drugs`, `cac`) with fail-closed validation (raises
+  if `case_validate` is unavailable or non-conformant).
+- **`phantom_gate_acceptance.py`** — post-build acceptance gates: strip
+  `relevantAuthorization` from actions (use `Authorized_By` relationships
+  instead), multi-pass marking inheritance (`Derived_From`, `Contained_Within`,
+  `Part_Of`, `Attachment_Of`, action inputs→results, SOLVE-IT `contains`),
+  duplicate `@id` deduplication, embedded scenario SHA-256 verification, and
+  four SOLVE-IT `WeaknessEvaluationSet` chains (ART-002 imaging, ART-001 logical
+  acquisition, ART-006 partial juvenile scope, DFT-1046 redaction).
+- **`phantom_gate_longtail.py`** — long-tail coverage module (per-docket
+  sub-investigations, ART-003..008, MSG/EMAIL/FS/NET/PROC depth, COC-003/004,
+  AI-003/004, expanded authorizations and charging instruments) wired into the
+  main builder.
+- **`phantom_gate_coverage.json`** + **`check_phantom_gate_coverage.py`** —
+  machine-readable fidelity contract (69 artifact labels, six docketed
+  sub-tracks + CTI wing, authorization and node-count gates, scenario hash
+  and authorization-placement assertions).
+- **`build_phantom_gate_typed.py`** — CASEGraph load/serialize round-trip smoke
+  test with post-roundtrip SHACL validation.
+- **`examples/scenarios/README.md`** — scenario index and agent workflow.
+- Sample MCP routing outputs under `examples/scenarios/mcp_outputs/`.
+
+The scenario is structurally grounded in validated exemplars under
+`examples/pacer/`, `examples/cti/`, and `examples/solveit/` but combines them
+into a single composite exercise for recipe routing, extension interop, and
+semantic modeling review.
+
+### Changed
+
+- **README.md** — documents the fictitious scenario stress test, its purpose,
+  and the `examples/scenarios/` workflow.
+- **Operation PHANTOM GATE (round 2 modeling review)** — authorization
+  semantics corrected (`relevantAuthorization` only on `Investigation`; actions
+  use `performer`/`instrument`/`object`/`result` plus `Authorized_By` edges);
+  stable scenario IRIs consolidated (no duplicate UUID proxies for ART-003/007,
+  FS-004/008, ART-002 E01/container); scenario markdown synced with graph facts
+  (iPhone 13 Pro, APFS FS-006, prepaid-card 11:45) and auto-embedded SHA-256;
+  marking inheritance fixed (parent→derived direction); redundant reverse
+  `part_of` containment removed (`Investigation.object` is canonical); MSG-004
+  direction and Mei Chen WeChat account; AI-002 full ranked result set; AI-004
+  structured action; COC-003 performers/instruments/hash verification.
+- **`mcp_server/graph_validator.py`** — optional `extra_ontology_graphs` and
+  `force_rdfs_inference` for graphs that need SOLVE-IT KB individuals when CAC
+  validation-subset disables default RDFS inference.
+
 ## [1.19.0] - 2026-07-11
 
 Reorganize vendored upstream ontologies under `ontology/`, vendor upper-ontology

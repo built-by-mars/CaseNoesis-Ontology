@@ -1,0 +1,636 @@
+{
+  "ok": true,
+  "input_type": "free_text",
+  "content_trust": "untrusted-source-content",
+  "matched_families": [
+    {
+      "family_id": "cyber-threat-intelligence",
+      "title": "Cyber Threat Intelligence and APT Reporting",
+      "score": 17,
+      "matched_keywords": [
+        "apt",
+        "sagerunex",
+        "rat",
+        "c2",
+        "beacon",
+        "persistence",
+        "servicedll",
+        "registry persistence",
+        "cookie stealer",
+        "ttp",
+        "ttps",
+        "att&ck"
+      ],
+      "match_stages": [
+        "keyword",
+        "semantic"
+      ],
+      "scoring": {
+        "keyword_score": 17,
+        "semantic_score": 0.955,
+        "confidence": 0.888
+      },
+      "semantic_evidence": [
+        "about",
+        "acces",
+        "acquir",
+        "action",
+        "analyz",
+        "attack-technique",
+        "beacon",
+        "blossom",
+        "captur",
+        "catalog"
+      ],
+      "recipes": [
+        "docs/recipes/cyber-threat-intelligence.md",
+        "docs/recipes/network-investigation.md",
+        "docs/recipes/analysis.md"
+      ],
+      "extensions": [
+        "attack-technique"
+      ],
+      "core_namespaces": [
+        "case-investigation",
+        "uco-observable",
+        "uco-action",
+        "uco-tool",
+        "uco-identity",
+        "uco-location"
+      ],
+      "upper_profiles": [
+        "PROV-O",
+        "OWL-Time"
+      ],
+      "notes": "For open-source CTI / APT threat reports (Talos, Mandiant, vendor blogs) analyzing a threat actor, its malware families, and TTPs, follow cyber-threat-intelligence.md (exemplar: examples/cti/lotus_blossom_2025/). This is intelligence about an adversary, not acquired host/network evidence: the report itself is an ObservableObject, in-report graphics are RasterPicture observables captured by hash with a description of what each depicts (they carry IOCs/config detail absent from the prose), and the threat actor is a uco-identity:Organization (UCO has no ThreatActor class) whose behaviors are uco-action:Action nodes. Malware families/tools are uco-tool:MaliciousTool; samples/variants are File observables with hashes and existence intervals. Registry persistence is fully covered by core UCO \u2014 WindowsRegistryKey + WindowsRegistryKeyFacet with embedded WindowsRegistryValue (name/data/dataType via RegistryDatatypeVocab: reg_expand_sz, reg_dword) plus WindowsService (startType service_auto_start from Start=2); no change proposal is needed for registry data. MITRE ATT&CK techniques use the uco-action:Technique metaclass (ucoProject/UCO PR #676, UCO 1.5.0): a technique is an owl:Class that is a subclass of uco-action:Action and carries uco-action:techniqueID, and a behavior Action that exhibits it is rdf:typed with that technique class (punning) \u2014 not a plain instance node and not a Uses_Technique relationship. The attack-technique extension forward-implements the metaclass, the uco-core:UcoType anchor, and a partial ATT&CK catalog; validate with extensions=['attack-technique:full'] (RDFS inference). Enrich from the MITRE group/software pages (e.g. Lotus Blossom G0030, Sagerunex S1156) even when the report prose omits IDs. Contrast with network-intrusion (single incident with acquired pcap/host evidence) and spear-phishing (delivery-chain narrative).",
+      "extension_details": [
+        {
+          "name": "attack-technique",
+          "display_name": "Technique Meta-Class Extension (UCO #666 forward-implementation)",
+          "version": "0.1.0",
+          "status": "operational",
+          "namespaces": {
+            "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+            "attack": "https://attack.mitre.org/techniques/"
+          },
+          "path": "extensions/attack-technique"
+        }
+      ],
+      "upper_profile_hints": {
+        "PROV-O": "provenance chains (prov:wasDerivedFrom, prov:used) \u2014 UCO action/provenance alignment",
+        "OWL-Time": "temporal intervals and precision-honest periods (time:Interval, time:hasBeginning)"
+      }
+    },
+    {
+      "family_id": "financial-crime-crypto",
+      "title": "Financial Crime, Cryptocurrency, and Money Laundering",
+      "score": 15,
+      "matched_keywords": [
+        "cryptocurrency",
+        "ethereum",
+        "blockchain",
+        "wallet",
+        "laundering",
+        "wire fraud",
+        "peel chain",
+        "elder fraud",
+        "impersonation",
+        "money mule",
+        "courier",
+        "runner"
+      ],
+      "match_stages": [
+        "keyword",
+        "semantic"
+      ],
+      "scoring": {
+        "keyword_score": 15,
+        "semantic_score": 0.923,
+        "confidence": 0.877
+      },
+      "semantic_evidence": [
+        "00115",
+        "account",
+        "address",
+        "blockchain",
+        "chain",
+        "couri",
+        "crypto",
+        "cryptocurrency",
+        "cryptoinv",
+        "elder"
+      ],
+      "recipes": [
+        "docs/recipes/fraud-crypto-laundering.md",
+        "docs/recipes/elder-fraud-impersonation.md",
+        "docs/recipes/legal-process-modeling.md"
+      ],
+      "extensions": [
+        "cryptoinv",
+        "legalproc"
+      ],
+      "core_namespaces": [
+        "case-investigation",
+        "uco-observable",
+        "uco-action",
+        "uco-identity"
+      ],
+      "upper_profiles": [
+        "PROV-O"
+      ],
+      "notes": "Typed crypto observables (addresses, transactions, wallets, holdings) come from the cryptoinv extension tracking UCO #675. Exemplar: examples/pacer/doj_crypto_2023_239/. For government-impersonation / money-courier elder fraud (no crypto layer), follow elder-fraud-impersonation.md; exemplar: examples/pacer/edla_2022_cr_00115/.",
+      "extension_details": [
+        {
+          "name": "cryptoinv",
+          "display_name": "Cryptocurrency and Financial Crime Investigation Extension",
+          "version": "0.1.0",
+          "status": "operational",
+          "namespaces": {
+            "cryptoinv": "http://example.org/ontology/cryptoinv/"
+          },
+          "path": "extensions/cryptoinv"
+        },
+        {
+          "name": "legalproc",
+          "display_name": "Legal Process and Procedure Extension",
+          "version": "0.1.0",
+          "status": "operational",
+          "namespaces": {
+            "legalproc": "https://ontology.caseontology.org/case/criminal/"
+          },
+          "path": "extensions/legalproc"
+        }
+      ],
+      "upper_profile_hints": {
+        "PROV-O": "provenance chains (prov:wasDerivedFrom, prov:used) \u2014 UCO action/provenance alignment"
+      }
+    },
+    {
+      "family_id": "legal-filings-docket",
+      "title": "Court Filings, Dockets, and Legal Process",
+      "score": 9,
+      "matched_keywords": [
+        "pacer",
+        "indictment",
+        "superseding indictment",
+        "information",
+        "forfeiture",
+        "count",
+        "u.s.c.",
+        "verdict",
+        "warrant return"
+      ],
+      "match_stages": [
+        "keyword",
+        "semantic"
+      ],
+      "scoring": {
+        "keyword_score": 9,
+        "semantic_score": 0.893,
+        "confidence": 0.824
+      },
+      "semantic_evidence": [
+        "appeal",
+        "court",
+        "criminal",
+        "document",
+        "filing",
+        "forfeiture",
+        "grp:court",
+        "indictment",
+        "information",
+        "investigation"
+      ],
+      "recipes": [
+        "docs/recipes/legal-process-modeling.md",
+        "docs/recipes/cac-pacer-document-ingestion.md"
+      ],
+      "extensions": [
+        "legalproc"
+      ],
+      "core_namespaces": [
+        "case-investigation",
+        "uco-action",
+        "uco-identity",
+        "uco-observable"
+      ],
+      "upper_profiles": [
+        "PROV-O",
+        "OWL-Time"
+      ],
+      "notes": "Process PDFs with process_document_file first (OCR fallback for scanned filings), keep SHA-256 provenance on each source document, and never fabricate date precision the filing does not state.",
+      "extension_details": [
+        {
+          "name": "legalproc",
+          "display_name": "Legal Process and Procedure Extension",
+          "version": "0.1.0",
+          "status": "operational",
+          "namespaces": {
+            "legalproc": "https://ontology.caseontology.org/case/criminal/"
+          },
+          "path": "extensions/legalproc"
+        }
+      ],
+      "upper_profile_hints": {
+        "PROV-O": "provenance chains (prov:wasDerivedFrom, prov:used) \u2014 UCO action/provenance alignment",
+        "OWL-Time": "temporal intervals and precision-honest periods (time:Interval, time:hasBeginning)"
+      }
+    },
+    {
+      "family_id": "email-messaging",
+      "title": "Email and Messaging Evidence",
+      "score": 9,
+      "matched_keywords": [
+        "mailbox",
+        "eml",
+        "thread",
+        "message thread",
+        "whatsapp",
+        "telegram",
+        "signal",
+        "imessage",
+        "wechat"
+      ],
+      "match_stages": [
+        "keyword",
+        "semantic"
+      ],
+      "scoring": {
+        "keyword_score": 9,
+        "semantic_score": 0.85,
+        "confidence": 0.822
+      },
+      "semantic_evidence": [
+        "email",
+        "evidence",
+        "export",
+        "group",
+        "grp:chat",
+        "grp:email",
+        "imessage",
+        "mailbox",
+        "messag",
+        "message"
+      ],
+      "recipes": [
+        "docs/recipes/starter-email-export.md",
+        "docs/recipes/email-messaging.md",
+        "docs/recipes/threaded-messaging.md"
+      ],
+      "extensions": [],
+      "core_namespaces": [
+        "uco-observable",
+        "uco-identity"
+      ],
+      "upper_profiles": [
+        "FOAF"
+      ],
+      "notes": "",
+      "extension_details": [],
+      "upper_profile_hints": {
+        "FOAF": "social-network and account-holder structures (foaf:knows, foaf:account)"
+      }
+    },
+    {
+      "family_id": "cac-child-exploitation",
+      "title": "Crimes Against Children (CAC)",
+      "score": 6,
+      "matched_keywords": [
+        "federal-prosecution-relationships",
+        "multi-jurisdiction-task-force",
+        "csam-forensic-provenance",
+        "sextortion-coercion",
+        "legal-sentencing-outcomes",
+        "grooming-chat",
+        "trafficking-recruitment",
+        "cybertip-ncmec",
+        "pacer-document-ingestion",
+        "federal-trial-proceedings",
+        "victim-rescue-extraction"
+      ],
+      "match_stages": [
+        "cac-signals"
+      ],
+      "scoring": {
+        "keyword_score": 6,
+        "semantic_score": 0.0,
+        "confidence": 0.706
+      },
+      "semantic_evidence": [],
+      "recipes": [
+        "docs/recipes/cac-federal-prosecution-relationships.md",
+        "docs/recipes/cac-multi-jurisdiction-task-force.md",
+        "docs/recipes/cac-csam-forensic-provenance.md",
+        "docs/recipes/cac-sextortion-coercion.md"
+      ],
+      "extensions": [
+        "cac"
+      ],
+      "core_namespaces": [
+        "case-investigation",
+        "uco-observable",
+        "uco-action"
+      ],
+      "upper_profiles": [
+        "gUFO"
+      ],
+      "notes": "Call route_cac_content for the full CAC domain routing and modeling checklists.",
+      "extension_details": [
+        {
+          "name": "cac",
+          "display_name": "CAC Ontology - Crimes Against Children",
+          "version": "3.0.0",
+          "status": "operational",
+          "namespaces": {
+            "cacontology": "https://cacontology.projectvic.org#",
+            "cac-core": "https://cacontology.projectvic.org/core#",
+            "cacontology-ai-csam": "https://cacontology.projectvic.org/ai-csam#",
+            "cacontology-analyst-wellbeing": "https://cacontology.projectvic.org/analyst-wellbeing#",
+            "cacontology-asset-forfeiture": "https://cacontology.projectvic.org/asset-forfeiture#",
+            "cacontology-athletic-exploitation": "https://cacontology.projectvic.org/athletic#",
+            "cacontology-case-management": "https://cacontology.projectvic.org/case-management#",
+            "cacontology-custodial": "https://cacontology.projectvic.org/custodial#",
+            "cacontology-detection": "https://cacontology.projectvic.org/detection#",
+            "cacontology-educational-exploitation": "https://cacontology.projectvic.org/educational#",
+            "cacontology-extremist-enterprises": "https://cacontology.projectvic.org/extremist-enterprises#",
+            "cacontology-forensics": "https://cacontology.projectvic.org/forensics#",
+            "cacontology-grooming": "https://cacontology.projectvic.org/grooming#",
+            "cacontology-hotlines": "https://cacontology.projectvic.org/hotlines#",
+            "cacontology-institutional-exploitation": "https://cacontology.projectvic.org/institutional-exploitation#",
+            "cacontology-integration-patterns": "https://cacontology.projectvic.org/integration-patterns#",
+            "cacontology-international": "https://cacontology.projectvic.org/international#",
+            "cacontology-investigation-coordination": "https://cacontology.projectvic.org/investigation-coordination#",
+            "cacontology-law-enforcement-corruption": "https://cacontology.projectvic.org/law-enforcement-corruption#",
+            "cacontology-legal-harmonization": "https://cacontology.projectvic.org/legal-harmonization#",
+            "cacontology-legal-outcomes": "https://cacontology.projectvic.org/legal-outcomes#",
+            "cacontology-multi-jurisdiction": "https://cacontology.projectvic.org/multi-jurisdiction#",
+            "cacontology-partnerships": "https://cacontology.projectvic.org/partnerships#",
+            "cacontology-physical-evidence": "https://cacontology.projectvic.org/physical#",
+            "cacontology-platform-infrastructure": "https://cacontology.projectvic.org/infrastructure#",
+            "cacontology-platforms": "https://cacontology.projectvic.org/platforms#",
+            "cacontology-prevention": "https://cacontology.projectvic.org/prevention#",
+            "cacontology-production": "https://cacontology.projectvic.org/production#",
+            "cacontology-recantation": "https://cacontology.projectvic.org/recantation#",
+            "cacontology-recruitment-networks": "https://cacontology.projectvic.org/recruitment-networks#",
+            "cacontology-sadistic-online-exploitation": "https://cacontology.projectvic.org/soe#",
+            "cacontology-sex-offender-registry": "https://cacontology.projectvic.org/sex-offender-registry#",
+            "cacontology-sex-trafficking": "https://cacontology.projectvic.org/trafficking#",
+            "cacontology-sextortion": "https://cacontology.projectvic.org/sextortion#",
+            "cacontology-specialized-units": "https://cacontology.projectvic.org/specialized-units#",
+            "cacontology-stranger-abduction": "https://cacontology.projectvic.org/abduction#",
+            "cacontology-street-recruitment": "https://cacontology.projectvic.org/street#",
+            "cacontology-synthesis": "https://cacontology.projectvic.org/synthesis#",
+            "cacontology-tactical": "https://cacontology.projectvic.org/tactical#",
+            "cacontology-taskforce": "https://cacontology.projectvic.org/taskforce#",
+            "cacontology-temporal": "https://cacontology.projectvic.org/temporal#",
+            "cacontology-training": "https://cacontology.projectvic.org/training#",
+            "cacontology-undercover": "https://cacontology.projectvic.org/undercover#",
+            "cacontology-us-ncmec": "https://cacontology.projectvic.org/us/ncmec#",
+            "cacontology-usa-federal-law": "https://cacontology.projectvic.org/usa-federal-law#",
+            "cacontology-usa-legislative": "https://cacontology.projectvic.org/usa-legislative#",
+            "cacontology-victim-impact": "https://cacontology.projectvic.org/victim-impact#",
+            "cacontology-bridge-uco": "https://cacontology.projectvic.org/bridge/uco#",
+            "cacontology-bridge-case": "https://cacontology.projectvic.org/bridge/case#",
+            "cacontology-bridge-gufo": "https://cacontology.projectvic.org/bridge/gufo#"
+          },
+          "path": "ontology/cac"
+        }
+      ],
+      "upper_profile_hints": {
+        "gUFO": "foundational typing (events, roles, relators) used across the CAC Ontology"
+      }
+    }
+  ],
+  "deterministic_baseline": [
+    {
+      "family_id": "cyber-threat-intelligence",
+      "score": 17,
+      "matched_keywords": [
+        "apt",
+        "sagerunex",
+        "rat",
+        "c2",
+        "beacon",
+        "persistence",
+        "servicedll",
+        "registry persistence",
+        "cookie stealer",
+        "ttp",
+        "ttps",
+        "att&ck"
+      ]
+    },
+    {
+      "family_id": "financial-crime-crypto",
+      "score": 15,
+      "matched_keywords": [
+        "cryptocurrency",
+        "ethereum",
+        "blockchain",
+        "wallet",
+        "laundering",
+        "wire fraud",
+        "peel chain",
+        "elder fraud",
+        "impersonation",
+        "money mule",
+        "courier",
+        "runner"
+      ]
+    },
+    {
+      "family_id": "email-messaging",
+      "score": 9,
+      "matched_keywords": [
+        "mailbox",
+        "eml",
+        "thread",
+        "message thread",
+        "whatsapp",
+        "telegram",
+        "signal",
+        "imessage",
+        "wechat"
+      ]
+    },
+    {
+      "family_id": "legal-filings-docket",
+      "score": 9,
+      "matched_keywords": [
+        "pacer",
+        "indictment",
+        "superseding indictment",
+        "information",
+        "forfeiture",
+        "count",
+        "u.s.c.",
+        "verdict",
+        "warrant return"
+      ]
+    },
+    {
+      "family_id": "device-mobile-forensics",
+      "score": 8,
+      "matched_keywords": [
+        "cellebrite",
+        "ufed",
+        "axiom",
+        "sms",
+        "call log",
+        "logical extraction",
+        "android",
+        "iphone"
+      ]
+    },
+    {
+      "family_id": "national-security-espionage",
+      "score": 7,
+      "matched_keywords": [
+        "espionage",
+        "793",
+        "top secret",
+        "scif",
+        "//sci",
+        "ts//sci",
+        "unauthorized disclosure"
+      ]
+    },
+    {
+      "family_id": "cac-child-exploitation",
+      "score": 6,
+      "matched_keywords": [
+        "csam",
+        "grooming",
+        "cybertip",
+        "ncmec",
+        "icac",
+        "sextortion"
+      ]
+    },
+    {
+      "family_id": "filesystem-media",
+      "score": 6,
+      "matched_keywords": [
+        "e01",
+        "partition",
+        "usn journal",
+        "carving",
+        "deleted file",
+        "unallocated"
+      ]
+    },
+    {
+      "family_id": "export-control-sanctions",
+      "score": 5,
+      "matched_keywords": [
+        "export control",
+        "ieepa",
+        "entity list",
+        "ear99",
+        "end user"
+      ]
+    },
+    {
+      "family_id": "racketeering-enterprise",
+      "score": 5,
+      "matched_keywords": [
+        "racketeering",
+        "rico",
+        "1962(d)",
+        "criminal enterprise",
+        "association-in-fact"
+      ]
+    },
+    {
+      "family_id": "corporate-internal",
+      "score": 3,
+      "matched_keywords": [
+        "1832",
+        "1831",
+        "badge"
+      ]
+    },
+    {
+      "family_id": "drug-trafficking",
+      "score": 3,
+      "matched_keywords": [
+        "methamphetamine",
+        "narcotics",
+        "controlled substance"
+      ]
+    },
+    {
+      "family_id": "forensic-process-qa",
+      "score": 3,
+      "matched_keywords": [
+        "solve-it",
+        "solveit",
+        "write blocker"
+      ]
+    },
+    {
+      "family_id": "network-intrusion",
+      "score": 3,
+      "matched_keywords": [
+        "pcap",
+        "malware",
+        "phishing"
+      ]
+    },
+    {
+      "family_id": "civil-ediscovery",
+      "score": 2,
+      "matched_keywords": [
+        "legal hold",
+        "custodian"
+      ]
+    }
+  ],
+  "routing_confidence": {
+    "confidence": 0.888,
+    "level": "high",
+    "thresholds": {
+      "abstain_below": 0.3,
+      "high_at_or_above": 0.55
+    }
+  },
+  "installed_extensions": [
+    "aeo",
+    "attack-technique",
+    "cac",
+    "cryptoinv",
+    "drugs",
+    "legalproc",
+    "rico",
+    "solveit",
+    "toolcap",
+    "weapons"
+  ],
+  "next_tools": {
+    "cac_deep_routing": "route_cac_content(content_text=...)",
+    "recipe_discovery": "get_recipes(scenario, include_content=True) \u2014 ranked matches across the full recipe catalog",
+    "class_discovery": "search_classes(query, scope='all'); find_classes_for_domain(task)",
+    "upper_ontologies": "get_uco_profiles(query)",
+    "per_source_mapping": "guide_mapping(evidence_source)",
+    "validation": "validate_graph(graph_path, extensions=[...])"
+  },
+  "source_path": "/home/cory/CASE-UCO-Libraries/examples/scenarios/operation-phantom-gate.md",
+  "extraction_quality": {
+    "noisy_extraction": true,
+    "noise_marker_hits": 0,
+    "cac_signal_hits": 12,
+    "url_count": 6,
+    "word_count": 10674,
+    "recommendation": "PDF or web-page extraction appears noisy (ads, navigation, repeated URLs). For better recipe routing, pass a clean narrative excerpt via content_text after process_document_file, or summarize the investigative facts before calling route_cac_content."
+  },
+  "recommended_workflow": [
+    "Enable extensions: set CASE_UCO_EXTENSIONS=attack-technique,cac,cryptoinv,legalproc (server) and pass extensions=[\"attack-technique\", \"cac\", \"cryptoinv\", \"legalproc\"] to validate_graph.",
+    "Multiple families matched (Cyber Threat Intelligence and APT Reporting, Financial Crime, Cryptocurrency, and Money Laundering, Court Filings, Dockets, and Legal Process, Email and Messaging Evidence, Crimes Against Children (CAC)): this is ONE investigation spanning several domains, not several investigations. Build a single graph, compose the recipes from every matched family on it, and enable the union of their extensions \u2014 see docs/recipes/cross-domain-extensions.md. Do not split the case per family or model only the top-scoring one.",
+    "Process binary source files with process_document_file (keeps SHA-256 provenance; OCR fallback for scanned pages); keep one investigation graph per case, partitioned only at natural forensic boundaries.",
+    "Model observable evidence first (documents, messages, devices, accounts, transactions), then investigative actions with performers and authorizations, then domain interpretation (charges, events, roles) \u2014 never collapse evidence and interpretation into one node.",
+    "Follow each matched recipe; use guide_mapping(evidence_source) for per-source field mapping, get_recipes(scenario) for ranked recipe matches across the whole catalog (60+ recipes \u2014 family routing surfaces anchors, not the full list), and get_recipes(..., include_content=True) for full recipe text.",
+    "The family recipes cover the domain interpretation layer; the underlying evidence still uses the per-artifact recipes (devices, files, messages, call logs, locations, accounts, EXIF, databases) \u2014 query get_recipes for each evidence type you actually hold.",
+    "Validate with validate_graph(...) \u2014 SHACL plus strict concept coverage. If undeclared concepts are reported, follow the extension-gap workflow instead of renaming terms to force a pass.",
+    "Close the self-improvement loop (docs/recipes/recipe-authoring.md): if you worked out a pattern no recipe covers, write and register a new recipe; if a recipe you followed was wrong, incomplete, or missed by routing, improve that recipe (or its index keywords) in place and re-validate its snippets \u2014 the catalog is how this deployment accumulates modeling judgment for non-technical investigators while every published pattern stays verifiable against the public ontology specifications."
+  ]
+}
