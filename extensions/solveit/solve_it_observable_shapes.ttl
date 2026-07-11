@@ -1,0 +1,191 @@
+@prefix : <https://ontology.solveit-df.org/solveit/observable/shapes/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix solveit-observable: <https://ontology.solveit-df.org/solveit/observable/> .
+@prefix uco-observable: <https://ontology.unifiedcyberontology.org/uco/observable/> .
+@base <https://ontology.solveit-df.org/solveit/observable/shapes/> .
+
+#################################################################
+#    SOLVE-IT Observable SHACL Shapes
+#    Validation constraints for SOLVE-IT observable objects
+#################################################################
+
+#################################################################
+#    TimelineEntry Shape
+#################################################################
+
+:TimelineEntryShape a sh:NodeShape ;
+    sh:targetClass solveit-observable:TimelineEntry ;
+    rdfs:label "Timeline Entry Shape"@en ;
+    rdfs:comment "Validates that TimelineEntry has exactly one value of the correct type."@en ;
+    sh:property [
+        sh:path solveit-observable:timelineEntryValue ;
+        sh:or (
+            [ sh:class solveit-observable:DateTimeStamp ]
+            [ sh:class solveit-observable:DateTimeRange ]
+            [ sh:class solveit-observable:ImplicitTimingInformation ]
+        ) ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "timelineEntryValue must be exactly one DateTimeStamp, DateTimeRange, or ImplicitTimingInformation"@en ;
+    ] .
+
+#################################################################
+#    DateTimeRange Shape
+#################################################################
+
+:DateTimeRangeShape a sh:NodeShape ;
+    sh:targetClass solveit-observable:DateTimeRange ;
+    rdfs:label "Date Time Range Shape"@en ;
+    rdfs:comment "Validates DateTimeRange instances have exactly one start and one end boundary."@en ;
+    sh:xone (
+        [ sh:property [ sh:path solveit-observable:startTimeInclusive ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ; ] ]
+        [ sh:property [ sh:path solveit-observable:startTimeExclusive ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ; ] ]
+    ) ;
+    sh:xone (
+        [ sh:property [ sh:path solveit-observable:endTimeInclusive ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ; ] ]
+        [ sh:property [ sh:path solveit-observable:endTimeExclusive ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ; ] ]
+    ) .
+
+
+#################################################################
+#    PhysicalImageContainer Shape
+#################################################################
+
+:PhysicalImageContainerShape a sh:NodeShape ;
+    sh:targetClass solveit-observable:PhysicalImageContainer ;
+    rdfs:label "Physical Image Container Shape"@en ;
+    rdfs:comment "Validates that a PhysicalImageContainer contains a Bitstream."@en ;
+    sh:property [
+        sh:path solveit-observable:contains ;
+        sh:class solveit-observable:Bitstream ;
+        sh:minCount 1 ;
+        sh:message "contains must reference at least one Bitstream instance"@en ;
+    ] .
+
+#################################################################
+#    LogicalImageContainer Shape
+#################################################################
+
+:ForensicImageContainerShape a sh:NodeShape ;
+    sh:targetClass solveit-observable:ForensicImageContainer ;
+    rdfs:label "Forensic Image Container Shape"@en ;
+    rdfs:comment "Validates that a ForensicImageContainer contains a Bitstream or FileSet."@en ;
+    sh:property [
+        sh:path solveit-observable:contains ;
+        sh:or (
+            [ sh:class solveit-observable:Bitstream ]
+            [ sh:class solveit-observable:FileSet ]
+        ) ;
+        sh:minCount 1 ;
+        sh:message "contains must reference at least one Bitstream or FileSet instance"@en ;
+    ] .
+
+#################################################################
+#    RawImage Shape
+#################################################################
+
+:RawImageShape a sh:NodeShape ;
+    sh:targetClass solveit-observable:RawImage ;
+    rdfs:label "Raw Image Shape"@en ;
+    rdfs:comment "Validates that a RawImage contains a Bitstream."@en ;
+    sh:property [
+        sh:path solveit-observable:contains ;
+        sh:class solveit-observable:Bitstream ;
+        sh:minCount 1 ;
+        sh:message "contains must reference at least one Bitstream instance"@en ;
+    ] .
+
+#################################################################
+#    LogicalImageContainer Shape
+#################################################################
+
+:LogicalImageContainerShape a sh:NodeShape ;
+    sh:targetClass solveit-observable:LogicalImageContainer ;
+    rdfs:label "Logical Image Container Shape"@en ;
+    rdfs:comment "Validates that a LogicalImageContainer contains a FileSet."@en ;
+    sh:property [
+        sh:path solveit-observable:contains ;
+        sh:class solveit-observable:FileSet ;
+        sh:minCount 1 ;
+        sh:message "contains must reference at least one FileSet instance"@en ;
+    ] .
+
+#################################################################
+#    DeviceScreenshotCapture Shape
+#################################################################
+
+:DeviceScreenshotCaptureShape a sh:NodeShape ;
+    sh:targetClass solveit-observable:DeviceScreenshotCapture ;
+    rdfs:label "Device Screenshot Capture Shape"@en ;
+    rdfs:comment "Validates that a DeviceScreenshotCapture contains a RasterPicture."@en ;
+    sh:property [
+        sh:path solveit-observable:contains ;
+        sh:class uco-observable:RasterPicture ;
+        sh:minCount 1 ;
+        sh:message "contains must reference at least one RasterPicture instance"@en ;
+    ] .
+
+#################################################################
+#    ClockOffsetCapture Shape
+#################################################################
+
+:ClockOffsetCaptureShape a sh:NodeShape ;
+    sh:targetClass solveit-observable:ClockOffsetCapture ;
+    rdfs:label "Clock Offset Capture Shape"@en ;
+    rdfs:comment "Validates that a ClockOffsetCapture contains a ClockOffsetMeasurement."@en ;
+    sh:property [
+        sh:path solveit-observable:contains ;
+        sh:class solveit-observable:ClockOffsetMeasurement ;
+        sh:minCount 1 ;
+        sh:message "contains must reference at least one ClockOffsetMeasurement instance"@en ;
+    ] .
+
+#################################################################
+#    ApplicationFiles Shape
+#################################################################
+
+#################################################################
+#    SortedTimelineEntry Shape
+#################################################################
+
+:SortedTimelineEntryShape a sh:NodeShape ;
+    sh:targetClass solveit-observable:SortedTimelineEntry ;
+    rdfs:label "Sorted Timeline Entry Shape"@en ;
+    rdfs:comment "Validates that each SortedTimelineEntry has exactly one referencesTimelineEntry and exactly one sortPosition."@en ;
+    sh:property [
+        sh:path solveit-observable:referencesTimelineEntry ;
+        sh:class solveit-observable:TimelineEntry ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "referencesTimelineEntry must reference exactly one TimelineEntry"@en ;
+    ] ;
+    sh:property [
+        sh:path solveit-observable:sortPosition ;
+        sh:datatype xsd:nonNegativeInteger ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "sortPosition must be exactly one xsd:nonNegativeInteger"@en ;
+    ] .
+
+#################################################################
+#    ApplicationFiles Shape
+#################################################################
+
+:ApplicationFilesShape a sh:NodeShape ;
+    sh:targetClass solveit-observable:ApplicationFiles ;
+    rdfs:label "Application Files Shape"@en ;
+    rdfs:comment "Validates that ApplicationFiles has at most one sourceApplication and zero or more files."@en ;
+    sh:property [
+        sh:path solveit-observable:sourceApplication ;
+        sh:class uco-observable:Application ;
+        sh:maxCount 1 ;
+        sh:message "sourceApplication must reference at most one uco-observable:Application"@en ;
+    ] ;
+    sh:property [
+        sh:path solveit-observable:hasFile ;
+        sh:class uco-observable:File ;
+        sh:message "hasFile must reference uco-observable:File instances"@en ;
+    ] .
+

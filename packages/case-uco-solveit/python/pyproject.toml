@@ -1,0 +1,15 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "case-uco-solveit"
+version = "0.1.9"
+description = "SOLVE-IT Digital Forensics Knowledge Base and Ontology bindings for CASE/UCO SDK"
+requires-python = ">=3.10"
+dependencies = [
+    "case-uco>=1.4.0",
+]
+
+[project.entry-points."case_uco.extensions"]
+solveit = "case_uco_solveit:REGISTRY_PATH"

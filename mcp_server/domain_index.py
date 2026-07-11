@@ -1110,6 +1110,12 @@ RECIPE_INDEX: list[dict[str, str]] = [
         "file": "docs/recipes/cyber-threat-intelligence.md",
     },
     {
+        "title": "SOLVE-IT Investigation Planning and Error Mitigation",
+        "description": "Plan and document forensic method with the pinned SOLVE-IT knowledge base (23 objectives, 187 techniques, 339 weaknesses, 270 mitigations): state objectives, record SolveitInvestigativeAction with usedTechnique/appliedMitigation, type acquisition outputs with SOLVE-IT observables, rate weaknesses (ASTM E3016-18) with solveit-wa:WeaknessEvaluation, and optionally type actions with punned DFT-* technique classes (UCO 1.5.0 metaclass style). Discover techniques with plan_solveit_workflow / search_solveit / get_solveit_details.",
+        "keywords": "solve-it solveit technique selection objective forensic method methodology error mitigation analysis weakness mitigation astm e3016 disk imaging acquisition plan hash verification write blocker dual-tool verification tool testing quality assurance qa lab accreditation error rate daubert examination report investigative action dft dfw dfm dfo weakness evaluation rpn likelihood impact",
+        "file": "docs/recipes/solve-it-investigation-planning.md",
+    },
+    {
         "title": "Insider Threat, Trade Secret Theft, and Economic Espionage",
         "description": "Model insider exfiltration of trade secrets: corporate telemetry, personal cloud accounts, per-category 1832/1831 counts, foreign-government-benefit evidence, and jury verdicts.",
         "keywords": "insider threat trade secret economic espionage 1832 1831 exfiltration data loss prevention dlp badge access personal cloud account proprietary confidential employee resignation talent program foreign instrumentality startup competitor source code wechat jury verdict",

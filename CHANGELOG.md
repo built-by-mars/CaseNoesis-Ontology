@@ -7,6 +7,116 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.18.0] - 2026-07-10
+
+SOLVE-IT support: the SDK bundles a pinned, sync-managed snapshot of the
+[SOLVE-IT](https://solveit-df.org) digital forensics knowledge base and its
+CASE/UCO extension ontology, with dedicated MCP query tools, a modeling
+recipe, routing, and a validated exemplar — so investigators can state
+objectives, select techniques, and work through weaknesses and mitigations
+(ASTM E3016-18 Error Mitigation Analysis) inside CASE/UCO graphs.
+
+### Added
+
+#### Bundled `solveit` extension (`extensions/solveit/`)
+
+- **Vendored pinned snapshot** of upstream
+  [solve-it-ontology](https://github.com/SOLVE-IT-DF/solve-it-ontology)
+  (v0.1.9, commit-pinned; MIT): the core module
+  (`solveit-core:Objective/Technique/Weakness/Mitigation`,
+  `SolveitInvestigativeAction` with `usedTechnique`/`appliedMitigation`),
+  four observable modules (~60 method-centric classes: image containers,
+  bitstreams, timelines, keyword search artifacts, acquisition records),
+  SHACL shapes, analysis (Hypothesis), SQLite internals, tool capability
+  profiles, and weakness assessment (`solveit-wa:WeaknessEvaluation` with
+  likelihood/impact/RPN ratings).
+- **Compiled knowledge base** (`solve-it-kb.ttl`, from the
+  [SOLVE-IT](https://github.com/SOLVE-IT-DF/solve-it) `v0.2026-06` release
+  line): 23 objectives, 187 techniques, 339 weaknesses (ASTM E3016-18
+  categorized), 270 mitigations, fully cross-linked with CASE/UCO
+  input/output class annotations.
+- **Generated punned technique catalog**
+  (`solveit-technique-catalog.ttl`): every technique punned as an
+  `owl:Class` typed `uco-action:Technique` and subclassing
+  `uco-action:Action` with `techniqueID` — the UCO 1.5.0 metaclass pattern
+  (ucoProject/UCO PR #676), identical in shape to the bundled MITRE ATT&CK
+  catalog. Catalog IRIs are the canonical knowledge-base IRIs, so the
+  native individuals and the punned classes coexist in one graph; the
+  manifest declares `depends_on: ["attack-technique"]` for the metaclass.
+- **Promotion-gate-quality manifest**: full upstream provenance (repos,
+  commit SHA, release tag, ontology version, sync timestamp), a conforming
+  exemplar (`solveit-exemplar.ttl` — disk imaging with applied mitigations
+  and a weakness evaluation, demonstrating both modeling styles), an
+  expected-invalid fixture proving the SHACL shapes constrain, and two
+  competency queries (technique → weakness → mitigation chain; exemplar
+  uses-technique). All six v1.17.0 lifecycle gates pass. A small SDK-local
+  bridge (`solveit-local-anchors.ttl`) anchors three upstream
+  enumeration classes that ship without `rdfs:subClassOf`.
+- **Class registry** (`_registry.json`, 296 classes including the punned
+  techniques) so `search_classes(scope="solveit")` and the other discovery
+  tools cover SOLVE-IT, plus a `packages/case-uco-solveit/` Python package
+  scaffold exposing the registry via the `case_uco.extensions` entry point.
+
+#### MCP knowledge-base tools (`mcp_server/solveit_index.py`)
+
+- **`search_solveit(query, kind?, limit?)`** — ranked keyword search across
+  objectives/techniques/weaknesses/mitigations with exact-identifier
+  lookup, kind filtering, bounded results, and a knowledge-base provenance
+  stamp on every response.
+- **`get_solveit_details(id)`** — the full record for a DFO-/DFT-/DFW-/DFM-
+  identifier with cross-references: objective → techniques; technique →
+  objectives, subtechniques, weaknesses and each weakness's mitigations
+  (the Error Mitigation Analysis view), example tools, synonyms, CASE/UCO
+  input/output classes, and modeling guidance; weakness → mitigations and
+  affected techniques; mitigation → what it mitigates.
+- **`plan_solveit_workflow(text)`** — maps free-text investigation goals to
+  matched objectives (own-text match lifted by best member-technique
+  scores), ranked candidate techniques, and per-technique
+  weakness/mitigation checklists, with step-by-step workflow guidance.
+  Submitted text is treated as untrusted content; responses contain only
+  pinned knowledge-base metadata.
+
+#### Sync tooling for SOLVE-IT's rapid release cycle
+
+- **`mcp_server/tools/sync_solveit.py`** re-vendors every upstream file at
+  a named ref, regenerates the punned technique catalog from the knowledge
+  base, verifies every TTL parses, and rewrites manifest provenance —
+  `make sync-solveit [REF=<sha>]`, or `make sync-solveit-offline` to
+  regenerate from already-vendored files (air-gapped `--source-dir`
+  supported).
+- **Weekly CI freshness check** (`.github/workflows/solveit-freshness.yml`)
+  compares the pinned knowledge-base release and ontology commit against
+  upstream and fails when the snapshot is behind — the "keeping pace"
+  signal.
+
+#### Recipe, routing, and exemplar
+
+- **New recipe** `docs/recipes/solve-it-investigation-planning.md` (69
+  recipes total): state the objective, record method with
+  `SolveitInvestigativeAction`, type acquisition outputs with SOLVE-IT
+  observables, rate residual risk with `WeaknessEvaluation`, and use both
+  technique styles (native today, metaclass for UCO 1.5.0) — registered in
+  `docs/recipes/INDEX.md` and `RECIPE_INDEX`.
+- **New routing family** `forensic-process-qa` (technique selection, tool
+  testing/validation, quality assurance, Daubert-style methodology
+  challenges, error mitigation) plus `solveit` extension/recipe wiring on
+  the `device-mobile-forensics` and `filesystem-media` families. The
+  held-out routing evaluation passes unchanged (no corpus modification, no
+  governance tag needed).
+- **Validated worked example** `examples/solveit/` — a synthetic laptop
+  acquisition (DFT-1002 with DFM-1003/DFM-1004 applied, weakness
+  evaluation of DFW-1004, and a metaclass-style hash-verification action)
+  that builds and conforms via `validate_graph(extensions=["solveit"])`.
+
+### Tests
+
+- `mcp_server/tests/test_solveit.py` (23 tests): index integrity and
+  bounds, exact-ID/keyword/kind search, detail cross-references, workflow
+  planning (including injection-styled input), punned catalog completeness
+  and shape, dependency resolution pulling `attack-technique`, strict
+  concept coverage for both modeling styles (fabricated `solveit-core:`
+  terms fail), exemplar conformance, and the expected-invalid fixture.
+
 ## [1.17.0] - 2026-07-10
 
 Fail-closed validation, enforceable secure deployment, hardened knowledge

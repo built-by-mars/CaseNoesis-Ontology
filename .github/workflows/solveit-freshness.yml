@@ -1,0 +1,77 @@
+name: SOLVE-IT Freshness
+
+# SOLVE-IT has a rapid release cycle. The SDK vendors a pinned snapshot in
+# extensions/solveit/; this weekly check compares the pinned knowledge-base
+# release and ontology commit against upstream and fails when we have
+# fallen behind, signalling that a `make sync-solveit` refresh (and a
+# review of the regenerated technique catalog) is due.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freshness:
+    name: Compare pinned SOLVE-IT snapshot with upstream
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Check pinned snapshot against upstream releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'EOF'
+          import json
+          import os
+          import sys
+          import urllib.request
+
+          manifest = json.load(open("extensions/solveit/manifest.json"))
+          provenance = manifest.get("provenance", {})
+          pinned_release = provenance.get("knowledge_base_release", "")
+          pinned_commit = provenance.get("ontology_commit", "")
+
+          def api(url: str) -> dict:
+              request = urllib.request.Request(url, headers={
+                  "User-Agent": "case-uco-sdk-freshness",
+                  "Authorization": f"Bearer {os.environ['GH_TOKEN']}",
+              })
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  return json.load(response)
+
+          latest = api("https://api.github.com/repos/SOLVE-IT-DF/solve-it/releases/latest")
+          latest_release = latest.get("tag_name", "")
+          head = api("https://api.github.com/repos/SOLVE-IT-DF/solve-it-ontology/commits/main")
+          head_commit = head.get("sha", "")
+
+          print(f"pinned KB release:  {pinned_release}")
+          print(f"latest KB release:  {latest_release}")
+          print(f"pinned ontology:    {pinned_commit}")
+          print(f"upstream ontology:  {head_commit}")
+
+          stale = []
+          if latest_release and latest_release != pinned_release:
+              stale.append(
+                  f"knowledge base: pinned {pinned_release}, upstream released {latest_release}"
+              )
+          if head_commit and head_commit != pinned_commit:
+              stale.append(
+                  f"ontology: pinned {pinned_commit[:12]}, upstream main is {head_commit[:12]}"
+              )
+          if stale:
+              print("::error::SOLVE-IT snapshot is behind upstream — run "
+                    "`make sync-solveit` and review the regenerated catalog:")
+              for line in stale:
+                  print(f"::error::  {line}")
+              sys.exit(1)
+          print("Pinned SOLVE-IT snapshot matches upstream.")
+          EOF

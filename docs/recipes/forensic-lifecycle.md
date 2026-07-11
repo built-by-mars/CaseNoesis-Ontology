@@ -110,5 +110,6 @@ graph.write("forensic_lifecycle.jsonld")
 
 - [chain-of-custody.md](chain-of-custody.md) — custody events within the phases
 - [forensic-tool.md](forensic-tool.md) — the tool runs each phase contains
+- [solve-it-investigation-planning.md](solve-it-investigation-planning.md) — SOLVE-IT technique selection and error mitigation for the steps inside each phase
 - [event.md](event.md) — structured events inside phases
 - [starter-tool-run.md](starter-tool-run.md) — tool-run provenance starter kit

@@ -4,8 +4,8 @@
 
 | Version | Supported          |
 |---------|--------------------|
-| 1.17.x  | Yes (current)      |
-| < 1.17  | No                 |
+| 1.18.x  | Yes (current)      |
+| < 1.18  | No                 |
 
 Only the latest SDK release line receives security updates. This project
 tracks the CASE 1.4.0 and UCO 1.4.0 ontology releases; profiled upper

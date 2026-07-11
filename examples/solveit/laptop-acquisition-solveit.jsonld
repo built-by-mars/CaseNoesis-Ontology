@@ -1,0 +1,170 @@
+{
+  "@context": {
+    "kb": "https://example.org/cases/solveit-laptop-acquisition-2026/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+    "solveit-core": "https://ontology.solveit-df.org/solveit/core/",
+    "solveit-observable": "https://ontology.solveit-df.org/solveit/observable/",
+    "solveit-wa": "https://ontology.solveit-df.org/solveit/weakness-assessment/",
+    "solveit-data": "https://ontology.solveit-df.org/solveit/data/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:1db4fc3f-335a-5cc6-9914-3915eb9113d0",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Synthetic case 2026-XX-0001: laptop acquisition",
+      "uco-core:description": "SOLVE-IT objective DFO-1006 (Acquire data): image the seized laptop SSD and verify integrity before examination. Planned with plan_solveit_workflow; techniques and mitigations below reference the pinned SOLVE-IT knowledge base."
+    },
+    {
+      "@id": "urn:uuid:e2ce5a80-ace4-5041-b719-fce04884a600",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Examiner One (synthetic)"
+    },
+    {
+      "@id": "urn:uuid:15363439-b798-54b6-a556-2a1fb20fbeae",
+      "@type": "uco-identity:Identity",
+      "uco-core:name": "Digital Forensics Unit (synthetic)"
+    },
+    {
+      "@id": "urn:uuid:f0aa4183-7e57-5ca5-bb80-d0b54ec69672",
+      "@type": "uco-tool:Tool",
+      "uco-core:name": "Imaging workstation with hardware write blocker",
+      "uco-tool:version": "2026.1"
+    },
+    {
+      "@id": "urn:uuid:6cff39f1-8e33-5329-9c64-88640382bf79",
+      "@type": "uco-observable:Device",
+      "uco-core:name": "Seized laptop internal SSD (synthetic serial SN-0000)"
+    },
+    {
+      "@id": "urn:uuid:1ccc6bf1-4747-513d-a4bb-104b57f07e05",
+      "@type": "solveit-observable:Bitstream",
+      "uco-core:name": "Sector-by-sector bitstream LBA0..LBAmax"
+    },
+    {
+      "@id": "urn:uuid:23ff8d4a-f359-5ef6-b669-da73c8db31dc",
+      "@type": "solveit-observable:PhysicalImageContainer",
+      "uco-core:name": "E01 physical image of laptop SSD",
+      "solveit-observable:contains": [
+        {
+          "@id": "urn:uuid:1ccc6bf1-4747-513d-a4bb-104b57f07e05"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:054fad2a-5d97-5df1-810f-baeed28732d6",
+      "@type": "solveit-observable:HashVerificationResult",
+      "uco-core:name": "SHA-256 of image matches SHA-256 of source device"
+    },
+    {
+      "@id": "urn:uuid:67e2fce1-6aa1-59a1-9ff3-924bbe574b5b",
+      "@type": "solveit-core:SolveitInvestigativeAction",
+      "uco-core:name": "acquire-laptop-image",
+      "uco-core:description": "Physical acquisition of the seized laptop SSD (SOLVE-IT DFT-1002) with image-size check (DFM-1003) and source/image hash verification (DFM-1004) applied.",
+      "solveit-core:usedTechnique": [
+        {
+          "@id": "https://ontology.solveit-df.org/solveit/data/techniqueDFT-1002"
+        }
+      ],
+      "solveit-core:appliedMitigation": [
+        {
+          "@id": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1003"
+        },
+        {
+          "@id": "https://ontology.solveit-df.org/solveit/data/mitigationDFM-1004"
+        }
+      ],
+      "uco-action:startTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-06-01T09:15:00Z"
+      },
+      "uco-action:endTime": {
+        "@type": "xsd:dateTime",
+        "@value": "2026-06-01T11:42:00Z"
+      },
+      "uco-action:performer": {
+        "@id": "urn:uuid:e2ce5a80-ace4-5041-b719-fce04884a600"
+      },
+      "uco-action:instrument": {
+        "@id": "urn:uuid:f0aa4183-7e57-5ca5-bb80-d0b54ec69672"
+      },
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:6cff39f1-8e33-5329-9c64-88640382bf79"
+        }
+      ],
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:23ff8d4a-f359-5ef6-b669-da73c8db31dc"
+        },
+        {
+          "@id": "urn:uuid:054fad2a-5d97-5df1-810f-baeed28732d6"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:7ad6e0ac-49fc-5734-b981-f3152fde7f6b",
+      "@type": "solveit-wa:WeaknessEvaluation",
+      "uco-core:name": "DFW-1004 evaluation for laptop SSD acquisition",
+      "solveit-wa:evaluatesWeakness": {
+        "@id": "https://ontology.solveit-df.org/solveit/data/weaknessDFW-1004"
+      },
+      "solveit-wa:likelihoodRating": {
+        "@type": "xsd:integer",
+        "@value": "1"
+      },
+      "solveit-wa:likelihoodRationale": "Hardware write blocker and current imaging firmware; no damaged-media indicators.",
+      "solveit-wa:impactRating": {
+        "@type": "xsd:integer",
+        "@value": "3"
+      },
+      "solveit-wa:impactRationale": "Missing sectors would silently omit evidence from the examination.",
+      "solveit-wa:liImpactScore": {
+        "@type": "xsd:integer",
+        "@value": "3"
+      }
+    },
+    {
+      "@id": "urn:uuid:8b461a91-51a9-56dd-9d7c-14dc3e315635",
+      "@type": "solveit-wa:WeaknessEvaluationSet",
+      "uco-core:name": "Acquisition weakness assessment session",
+      "solveit-wa:scopedToTechnique": {
+        "@id": "https://ontology.solveit-df.org/solveit/data/techniqueDFT-1002"
+      },
+      "solveit-wa:evaluatedBy": {
+        "@id": "urn:uuid:15363439-b798-54b6-a556-2a1fb20fbeae"
+      },
+      "solveit-wa:hasEvaluation": [
+        {
+          "@id": "urn:uuid:7ad6e0ac-49fc-5734-b981-f3152fde7f6b"
+        }
+      ],
+      "solveit-wa:evaluationDate": {
+        "@type": "xsd:date",
+        "@value": "2026-06-01"
+      }
+    },
+    {
+      "@id": "urn:uuid:98f5e555-093f-5685-9114-dc7c13055e4e",
+      "@type": [
+        "uco-action:Action",
+        "solveit-data:techniqueDFT-1042"
+      ],
+      "uco-core:name": "verify-image-hash",
+      "uco-core:description": "Computed SHA-256 over the acquired image and compared with the source-device hash (SOLVE-IT DFT-1042, metaclass style).",
+      "uco-action:performer": {
+        "@id": "urn:uuid:e2ce5a80-ace4-5041-b719-fce04884a600"
+      },
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:054fad2a-5d97-5df1-810f-baeed28732d6"
+        }
+      ]
+    }
+  ]
+}

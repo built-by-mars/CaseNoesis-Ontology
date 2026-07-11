@@ -1,0 +1,19 @@
+# SOLVE-IT extension — expected-INVALID fixture (synthetic).
+#
+# Violates PhysicalImageContainerShape: a PhysicalImageContainer must
+# contain at least one Bitstream (sh:minCount 1 on
+# solveit-observable:contains), but this one contains nothing. Also
+# violates TimelineEntryShape: a TimelineEntry must carry exactly one
+# timelineEntryValue. This fixture must FAIL validation — it proves the
+# vendored SOLVE-IT SHACL shapes actually constrain instance data.
+
+@prefix solveit-observable: <https://ontology.solveit-df.org/solveit/observable/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+
+<urn:uuid:cafe0001-0000-5000-8000-000000000001>
+	a solveit-observable:PhysicalImageContainer ;
+	uco-core:name "Physical image container with no bitstream (invalid)" .
+
+<urn:uuid:cafe0002-0000-5000-8000-000000000002>
+	a solveit-observable:TimelineEntry ;
+	uco-core:name "Timeline entry with no timelineEntryValue (invalid)" .

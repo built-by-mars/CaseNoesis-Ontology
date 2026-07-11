@@ -1,0 +1,79 @@
+{
+  "name": "solveit",
+  "display_name": "SOLVE-IT Digital Forensics Knowledge Base and Ontology",
+  "version": "0.1.9",
+  "upstream_repo": "https://github.com/SOLVE-IT-DF/solve-it-ontology",
+  "upstream_ref": "main",
+  "license": "MIT",
+  "namespaces": {
+    "solveit-core": "https://ontology.solveit-df.org/solveit/core/",
+    "solveit-observable": "https://ontology.solveit-df.org/solveit/observable/",
+    "solveit-analysis": "https://ontology.solveit-df.org/solveit/analysis/",
+    "solveit-sqlite": "https://ontology.solveit-df.org/solveit/sqlite/",
+    "solveit-tool-profile": "https://ontology.solveit-df.org/solveit/tool-profile/",
+    "solveit-wa": "https://ontology.solveit-df.org/solveit/weakness-assessment/",
+    "solveit-data": "https://ontology.solveit-df.org/solveit/data/"
+  },
+  "depends_on": [
+    "attack-technique"
+  ],
+  "owl_files": [
+    "solve_it_core.ttl",
+    "solve_it_observable.ttl",
+    "solve_it_observable_acquisition.ttl",
+    "solve_it_observable_search.ttl",
+    "solve_it_observable_timeline.ttl",
+    "solve_it_analysis.ttl",
+    "solve_it_sqlite.ttl",
+    "solve_it_tool_profile.ttl",
+    "solve_it_weakness_assessment.ttl",
+    "solveit-technique-catalog.ttl",
+    "solve-it-kb.ttl"
+  ],
+  "shacl_files": [
+    "solve_it_observable_shapes.ttl"
+  ],
+  "bridge_files": [
+    "solveit-local-anchors.ttl"
+  ],
+  "exemplar_files": [
+    "solveit-exemplar.ttl"
+  ],
+  "invalid_exemplar_files": [
+    "solveit-invalid-exemplar.ttl"
+  ],
+  "competency_queries": [
+    {
+      "file": "queries/technique-weakness-mitigation.sparql",
+      "against": "solve-it-kb.ttl",
+      "expect": "nonempty"
+    },
+    {
+      "file": "queries/exemplar-uses-technique.sparql",
+      "against": "solveit-exemplar.ttl",
+      "expect": "nonempty"
+    }
+  ],
+  "uco_compat": [
+    "1.4.0"
+  ],
+  "upper_ontology": "none",
+  "cdo_shapes_compatibility": {
+    "CDO-Shapes-gufo": "compatible",
+    "CDO-Shapes-BFO": "compatible",
+    "CDO-Shapes-PROV-O": "compatible",
+    "CDO-Shapes-Time": "compatible",
+    "CDO-Shapes-GeoSPARQL": "compatible",
+    "CDO-Shapes-FOAF": "compatible"
+  },
+  "provenance": {
+    "ontology_repo": "https://github.com/SOLVE-IT-DF/solve-it-ontology",
+    "ontology_commit": "1d846949f97f68d05e3a80a5029fc2f648c61bf3",
+    "knowledge_base_repo": "https://github.com/SOLVE-IT-DF/solve-it",
+    "knowledge_base_release": "v0.2026-06",
+    "ontology_version": "0.1.9",
+    "sync_tool": "mcp_server/tools/sync_solveit.py",
+    "technique_count": 187,
+    "synced": "2026-07-11T03:03:14+00:00"
+  }
+}

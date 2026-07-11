@@ -1,0 +1,418 @@
+@prefix : <https://ontology.solveit-df.org/solveit/observable/> .
+@prefix solveit-observable: <https://ontology.solveit-df.org/solveit/observable/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-observable: <https://ontology.unifiedcyberontology.org/uco/observable/> .
+@prefix uco-types: <https://ontology.unifiedcyberontology.org/uco/types/> .
+@prefix cacontology-forensics: <https://cacontology.projectvic.org/forensics#> .
+@base <https://ontology.solveit-df.org/solveit/observable/> .
+
+#################################################################
+#    SOLVE-IT Observable Module
+#    Observable objects and facets for digital forensics
+#################################################################
+
+<https://ontology.solveit-df.org/solveit/observable> rdf:type owl:Ontology ;
+    owl:versionIRI <https://ontology.solveit-df.org/solveit/observable/0.1.9> ;
+    owl:imports <https://ontology.unifiedcyberontology.org/uco/core/1.4.0> ,
+                <https://ontology.unifiedcyberontology.org/uco/observable/1.4.0> ,
+                <https://ontology.solveit-df.org/solveit/observable/acquisition> ,
+                <https://ontology.solveit-df.org/solveit/observable/timeline> ,
+                <https://ontology.solveit-df.org/solveit/observable/search> ;
+    dcterms:title "SOLVE-IT Observable Module"@en ;
+    dcterms:description "Observable objects for SOLVE-IT digital forensics, including video frames and other forensic artifacts. This module imports sub-modules for acquisition, timeline, and search observables."@en ;
+    dcterms:creator "SOLVE-IT Project" ;
+    owl:versionInfo "0.1.9" ;
+    rdfs:label "SOLVE-IT Observable Module"@en .
+
+#################################################################
+#    Classes
+#################################################################
+
+###  Bitstream Observable Object
+solveit-observable:Bitstream rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Bitstream"@en ;
+    rdfs:comment "A sequential, complete bit-for-bit copy of a storage medium (LBA0 to LBAmax). Represents data in transit from a capture process to a storage format."@en .
+
+###  BitstreamRandomAccessed Observable Object
+solveit-observable:BitstreamRandomAccessed rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Bitstream Random Accessed"@en ;
+    rdfs:comment "Random access to sector-level data, whether from a live device or a decoded forensic image container. Enables partition parsing, filesystem traversal, and logical operations."@en .
+
+###  VideoFile Observable Object
+solveit-observable:VideoFile rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:File ;
+    rdfs:label "Video File"@en ;
+    rdfs:comment "A file whose primary content is video data (e.g. MP4, MOV, AVI, MKV)."@en .
+
+###  AudioFile Observable Object
+solveit-observable:AudioFile rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:File ;
+    rdfs:label "Audio File"@en ;
+    rdfs:comment "A file whose primary content is audio data (e.g. MP3, WAV, AAC, FLAC)."@en .
+
+###  VideoFrame Observable Object
+solveit-observable:VideoFrame rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Video Frame"@en ;
+    rdfs:comment "A single frame extracted from a video file during forensic analysis."@en .
+
+###  NetworkPacketCapture Observable Object
+solveit-observable:NetworkPacketCapture rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Network Packet Capture"@en ;
+    rdfs:comment "A network packet capture file."@en .
+
+###  DecryptionKey Observable Object
+solveit-observable:DecryptionKey rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Decryption Key"@en ;
+    rdfs:comment "A cryptographic key intended for decryption."@en .
+
+###  UnlockPattern Observable Object
+solveit-observable:UnlockPattern rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Unlock Pattern"@en ;
+    rdfs:comment "A pattern used to unlock a device, i.e. screen lock pattern."@en .
+
+###  FileSet Observable Object
+solveit-observable:FileSet rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject , uco-core:ContextualCompilation ;
+    rdfs:label "File Set"@en ;
+    rdfs:comment "A contextual compilation of files grouped together for some purpose, such as filtering, extraction, or association with an application."@en .
+
+###  FilteredFileSet Observable Object
+solveit-observable:FilteredFileSet rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:FileSet ;
+    rdfs:label "Filtered File Set"@en ;
+    rdfs:comment "A subset of files selected from a larger collection by some filtering criteria, such as file type, path, date range, or relevance to an investigation."@en .
+
+###  RedactedFileSet Observable Object
+solveit-observable:RedactedFileSet rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:FilteredFileSet ;
+    rdfs:label "Redacted File Set"@en ;
+    rdfs:comment "A subset of files reduced by a redaction process to remove sensitive or privileged content before disclosure."@en .
+
+###  ArtifactSet Observable Object
+solveit-observable:ArtifactSet rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject , uco-core:ContextualCompilation ;
+    rdfs:label "Artifact Set"@en ;
+    rdfs:comment "A contextual compilation of forensic artifacts grouped together for some purpose, such as filtering, redaction, or association with an investigation."@en .
+
+###  RedactedArtifactSet Observable Object
+solveit-observable:RedactedArtifactSet rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ArtifactSet ;
+    rdfs:label "Redacted Artifact Set"@en ;
+    rdfs:comment "A collection of artifacts reduced by a redaction process to remove sensitive or privileged content before disclosure."@en .
+
+###  httpResponseHeader Observable Object
+solveit-observable:httpResponseHeader rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "HTTP Response Header"@en ;
+    rdfs:comment "An HTTP response header containing multiple header fields from an HTTP server response."@en .
+
+###  DeviceInterface Observable Object
+solveit-observable:DeviceInterface rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Device Interface"@en ;
+    rdfs:comment "A logical interface representing a direct connection to a storage device, such as a USB, SATA."@en .
+
+###  WriteProtectedDeviceInterface Observable Object
+solveit-observable:WriteProtectedDeviceInterface rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:DeviceInterface ;
+    rdfs:label "Write Protected Device Interface"@en ;
+    rdfs:comment "A logical interface to a storage device that has been interfaced with in a write-protected manner, either via a hardware write blocker, software write blocking, or a read-only boot environment."@en .
+
+###  LiveOSDeviceInterface Observable Object
+solveit-observable:LiveOSDeviceInterface rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:DeviceInterface ;
+    rdfs:label "Live OS Device Interface"@en ;
+    rdfs:comment "Access to a block device via the operating system on a live, running system. Provides sector-level access to storage without relying on the OS for file system parsing."@en .
+
+###  ReadWriteDeviceInterface Observable Object
+solveit-observable:ReadWriteDeviceInterface rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:DeviceInterface ;
+    rdfs:label "Read Write Device Interface"@en ;
+    rdfs:comment "A logical interface to a storage device that has been interfaced with in a read-write manner, as yet, without write protection."@en .
+
+###  HashVerificationResult Observable Object
+solveit-observable:HashVerificationResult rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Hash Verification Result"@en ;
+    rdfs:comment "The result of comparing hash values to verify data integrity, typically comparing a source hash against a computed hash of acquired or copied data."@en .
+
+###  Wordlist Observable Object
+solveit-observable:Wordlist rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Wordlist"@en ;
+    rdfs:comment "A list of words or terms used as input to techniques such as keyword searching or dictionary-based password attacks. May be a case-type wordlist (standard terms for a category of investigation), a case-specific wordlist (names, addresses, dates etc. specific to the investigation), or a general-purpose dictionary (e.g. for password recovery)."@en .
+
+###  ClusterRun Observable Object
+solveit-observable:ClusterRun rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Cluster Run"@en ;
+    rdfs:comment "A contiguous run of clusters allocated to a file in a cluster-based file system (e.g., FAT, NTFS, exFAT). Multiple runs indicate file fragmentation."@en .
+
+###  ApplicationFiles Observable Object
+solveit-observable:ApplicationFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:FileSet ;
+    rdfs:label "Application Files"@en ;
+    rdfs:comment "A contextual compilation of files associated with a specific application version. Groups the files belonging to a particular application (e.g. WhatsApp v13.2 database files) for forensic examination."@en .
+
+###  BrowserAppFiles Observable Object
+solveit-observable:BrowserAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Browser App Files"@en ;
+    rdfs:comment "Files associated with a web browser application, including browsing history, bookmarks, cookies, saved passwords, session data, and extensions."@en .
+
+###  BrowserCacheData Observable Object
+solveit-observable:BrowserCacheData rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:BrowserAppFiles ;
+    rdfs:label "Browser Cache Data"@en ;
+    rdfs:comment "The locally cached data stored by a web browser to improve performance. This may include cached web pages, images, scripts, and associated metadata. The storage format varies by browser (e.g. Chrome simple cache, Firefox cache2, SQLite indexes)."@en .
+
+###  CalendarAppFiles Observable Object
+solveit-observable:CalendarAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Calendar App Files"@en ;
+    rdfs:comment "Files associated with a calendar application, including events, appointments, invitations, recurring schedules, and attendee data (e.g. Apple Calendar, Google Calendar, Outlook Calendar)."@en .
+
+###  ChatAppFiles Observable Object
+solveit-observable:ChatAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Chat App Files"@en ;
+    rdfs:comment "Files associated with a messaging or chat application, including message databases, media attachments, contact lists, and encryption key material (e.g. WhatsApp, Signal, Telegram)."@en .
+
+###  AiChatAppFiles Observable Object
+solveit-observable:AiChatAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "AI Chat App Files"@en ;
+    rdfs:comment "Files associated with an AI chatbot or assistant application, including conversation histories, prompt logs, cached model responses, and user preference data (e.g. ChatGPT, Claude, Gemini)."@en .
+
+###  EmailAppFiles Observable Object
+solveit-observable:EmailAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Email App Files"@en ;
+    rdfs:comment "Files associated with an email client application, including message stores, mailbox databases, attachments, contact data, and account configuration (e.g. Outlook, Apple Mail, Gmail app)."@en .
+
+###  HealthAppFiles Observable Object
+solveit-observable:HealthAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Health App Files"@en ;
+    rdfs:comment "Files associated with a health or fitness tracking application, including activity logs, heart rate data, sleep records, workout history, and medical records (e.g. Apple Health, Google Fit, Fitbit)."@en .
+
+###  MapsAppFiles Observable Object
+solveit-observable:MapsAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Maps App Files"@en ;
+    rdfs:comment "Files associated with a mapping application, including search history, saved locations, offline map tiles, and location history (e.g. Google Maps, Apple Maps, Waze)."@en .
+
+###  NavigationAppFiles Observable Object
+solveit-observable:NavigationAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Navigation App Files"@en ;
+    rdfs:comment "Files associated with a turn-by-turn navigation application, including route history, recent destinations, favourite locations, and trip logs (e.g. Waze, TomTom, Garmin)."@en .
+
+###  PhotosAppFiles Observable Object
+solveit-observable:PhotosAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Photos App Files"@en ;
+    rdfs:comment "Files associated with a photos or gallery management application, including image and video databases, album metadata, facial recognition data, location tags, and editing history (e.g. Apple Photos, Google Photos, Samsung Gallery)."@en .
+
+###  PaymentAppFiles Observable Object
+solveit-observable:PaymentAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Payment App Files"@en ;
+    rdfs:comment "Files associated with a mobile payment or digital wallet application, including transaction history, linked accounts, merchant data, and receipts (e.g. Apple Pay, Google Pay, PayPal, Venmo)."@en .
+
+###  RemindersAppFiles Observable Object
+solveit-observable:RemindersAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Reminders App Files"@en ;
+    rdfs:comment "Files associated with a reminders or to-do list application, including task lists, due dates, recurring reminders, and completion history (e.g. Apple Reminders, Google Tasks, Todoist)."@en .
+
+###  GamingAppFiles Observable Object
+solveit-observable:GamingAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Gaming App Files"@en ;
+    rdfs:comment "Files associated with a gaming application, including save data, player profiles, in-app purchase records, chat logs, friend lists, and gameplay statistics (e.g. Steam, Xbox, PlayStation, Epic Games, Roblox, mobile games)."@en .
+
+###  SocialMediaAppFiles Observable Object
+solveit-observable:SocialMediaAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Social Media App Files"@en ;
+    rdfs:comment "Files associated with a social media application, including posts, direct messages, friend/follower lists, media uploads, and notification data (e.g. Instagram, Facebook, TikTok, X)."@en .
+
+###  SmartHomeAppFiles Observable Object
+solveit-observable:SmartHomeAppFiles rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:ApplicationFiles ;
+    rdfs:label "Smart Home App Files"@en ;
+    rdfs:comment "Files associated with a smart home or IoT control application, including device registries, automation routines, activity logs, sensor data, camera event histories, and network configuration (e.g. Apple Home, Google Home, Amazon Alexa, Samsung SmartThings)."@en .
+
+###  DeviceSet Observable Object
+solveit-observable:DeviceSet rdf:type owl:Class ;
+    rdfs:subClassOf uco-core:ContextualCompilation ;
+    rdfs:label "Device Set"@en ;
+    rdfs:comment "A contextual compilation of devices that are associated in some way, such as devices belonging to the same suspect, devices seized from the same location, or devices connected to the same network."@en .
+
+###  PrioritizedDeviceSet Observable Object
+solveit-observable:PrioritizedDeviceSet rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:DeviceSet ;
+    rdfs:label "Prioritized Device Set"@en ;
+    rdfs:comment "A device set where each device has been triaged and assigned a priority classification. Contains PrioritizedDeviceEntry instances that pair each device with its priority."@en .
+
+###  PrioritizedDeviceEntry
+solveit-observable:PrioritizedDeviceEntry rdf:type owl:Class ;
+    rdfs:label "Prioritized Device Entry"@en ;
+    rdfs:comment "An entry pairing a device with its triage priority classification."@en .
+
+###  HashSet Observable Object
+solveit-observable:HashSet rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject , uco-core:ContextualCompilation ;
+    rdfs:label "Hash Set"@en ;
+    rdfs:comment "A reference set of known file hashes used to match against files under examination, in order to reduce or flag the files examined (e.g. NSRL RDS). Composed of HashSetEntry instances."@en .
+
+###  HashSetEntry Observable Object
+solveit-observable:HashSetEntry rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Hash Set Entry"@en ;
+    rdfs:comment "A single entry within a hash set. At minimum it carries a hash value; further details (e.g. file name, size, product or operating system, classification) may be added as required."@en .
+
+###  VirtualizedDevice Observable Object
+solveit-observable:VirtualizedDevice rdf:type owl:Class ;
+    rdfs:subClassOf uco-observable:ObservableObject ;
+    rdfs:label "Virtualized Device"@en ;
+    rdfs:comment "A device or system that exists as a virtual machine, defined by virtualization configuration and one or more virtual disks rather than running on dedicated physical hardware. A virtualized device may arise in several ways, for example a virtual machine recovered from a suspect's storage, a forensic image booted as a virtual machine for previewing, or a virtual machine built as an analysis platform. This is the parent class for virtualized representations of any device type (e.g. computers, mobile devices)."@en .
+
+###  VirtualizedComputer Observable Object
+solveit-observable:VirtualizedComputer rdf:type owl:Class ;
+    rdfs:subClassOf solveit-observable:VirtualizedDevice ;
+    rdfs:label "Virtualized Computer"@en ;
+    rdfs:comment "A computer (desktop, laptop, or server) that exists as a virtual machine rather than running on physical hardware. The most common form is a server running as a virtual machine in a datacentre or cloud environment, which may itself be the subject of an investigation or host evidence. In a forensic context a virtualized computer may also, for example, be a virtual machine recovered from seized media, a forensic disk image booted as a virtual machine for previewing, or a virtual machine provisioned as an analysis environment."@en .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+solveit-observable:extractedFromVideo rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:VideoFrame ;
+    rdfs:range solveit-observable:VideoFile ;
+    rdfs:label "extracted from video"@en ;
+    rdfs:comment "Links a VideoFrame to the source video file."@en .
+
+solveit-observable:virtualizedFromFile rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:VirtualizedDevice ;
+    rdfs:range uco-observable:File ;
+    rdfs:label "virtualized from file"@en ;
+    rdfs:comment "Links a virtualized device to the file or files that constitute its virtual machine, such as a configuration file (e.g. .vmx) and one or more virtual disk files (e.g. .vmdk). Multiple files can be linked."@en .
+
+solveit-observable:unlockPatternSequence rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:UnlockPattern ;
+    rdfs:range rdf:List ;
+    rdfs:label "unlock pattern sequence"@en ;
+    rdfs:comment "An ordered list of grid positions (integers) representing the unlock pattern sequence. For example, a 3x3 grid uses positions 1-9."@en .
+
+solveit-observable:hasDevice rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:DeviceSet ;
+    rdfs:range uco-observable:Device ;
+    rdfs:label "has device"@en ;
+    rdfs:comment "A device belonging to this device set."@en .
+
+solveit-observable:hasEntry rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:PrioritizedDeviceSet ;
+    rdfs:range solveit-observable:PrioritizedDeviceEntry ;
+    rdfs:label "has entry"@en ;
+    rdfs:comment "A prioritized device entry in this set."@en .
+
+solveit-observable:entryDevice rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:PrioritizedDeviceEntry ;
+    rdfs:range uco-observable:Device ;
+    rdfs:label "entry device"@en ;
+    rdfs:comment "The device in this prioritized entry."@en .
+
+solveit-observable:entryPriority rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:PrioritizedDeviceEntry ;
+    rdfs:label "entry priority"@en ;
+    rdfs:comment "The triage priority classification for this device, using cacontology-forensics:priorityClassification values."@en .
+
+solveit-observable:sourceApplication rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:ApplicationFiles ;
+    rdfs:range uco-observable:Application ;
+    rdfs:label "source application"@en ;
+    rdfs:comment "The application associated with these files."@en .
+
+solveit-observable:hasFile rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:FileSet ;
+    rdfs:range uco-observable:File ;
+    rdfs:label "has file"@en ;
+    rdfs:comment "A file belonging to this file set."@en .
+
+solveit-observable:hasArtifact rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:ArtifactSet ;
+    rdfs:range uco-observable:ObservableObject ;
+    rdfs:label "has artifact"@en ;
+    rdfs:comment "An artifact belonging to this artifact set."@en .
+
+solveit-observable:hasClusterRun rdf:type owl:ObjectProperty ;
+    rdfs:domain uco-observable:File ;
+    rdfs:range solveit-observable:ClusterRun ;
+    rdfs:label "has cluster run"@en ;
+    rdfs:comment "Links a file to its cluster allocation runs. A contiguous file has one run; a fragmented file has multiple runs."@en .
+
+solveit-observable:containsHashSetEntry rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:HashSet ;
+    rdfs:range solveit-observable:HashSetEntry ;
+    rdfs:label "contains hash set entry"@en ;
+    rdfs:comment "Links a hash set to one of the entries it contains."@en .
+
+solveit-observable:containsHash rdf:type owl:ObjectProperty ;
+    rdfs:domain solveit-observable:HashSetEntry ;
+    rdfs:range uco-types:Hash ;
+    rdfs:label "contains hash"@en ;
+    rdfs:comment "The hash value carried by a hash set entry. The algorithm (MD5, SHA-1, SHA-256, etc.) is held within the uco-types:Hash instance via its hashMethod and hashValue."@en .
+
+#################################################################
+#    Data Properties
+#################################################################
+
+solveit-observable:videoFrameNumber rdf:type owl:DatatypeProperty ;
+    rdfs:domain solveit-observable:VideoFrame ;
+    rdfs:range xsd:integer ;
+    rdfs:label "frame number"@en ;
+    rdfs:comment "The sequential number of this frame in the video."@en .
+
+solveit-observable:videoFramePixelWidth rdf:type owl:DatatypeProperty ;
+    rdfs:domain solveit-observable:VideoFrame ;
+    rdfs:range xsd:integer ;
+    rdfs:label "width"@en ;
+    rdfs:comment "Video frame width in pixels."@en .
+
+solveit-observable:videoFramePixelHeight rdf:type owl:DatatypeProperty ;
+    rdfs:domain solveit-observable:VideoFrame ;
+    rdfs:range xsd:integer ;
+    rdfs:label "height"@en ;
+    rdfs:comment "Video frame height in pixels."@en .
+
+solveit-observable:verificationPassed rdf:type owl:DatatypeProperty ;
+    rdfs:domain solveit-observable:HashVerificationResult ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "verification passed"@en ;
+    rdfs:comment "Indicates whether the hash verification was successful (true) or failed (false)."@en .
+
+solveit-observable:runStartCluster rdf:type owl:DatatypeProperty ;
+    rdfs:domain solveit-observable:ClusterRun ;
+    rdfs:range xsd:integer ;
+    rdfs:label "run start cluster"@en ;
+    rdfs:comment "The first cluster number in this contiguous run."@en .
+
+solveit-observable:runClusterCount rdf:type owl:DatatypeProperty ;
+    rdfs:domain solveit-observable:ClusterRun ;
+    rdfs:range xsd:integer ;
+    rdfs:label "run cluster count"@en ;
+    rdfs:comment "The number of contiguous clusters in this run."@en .

@@ -1,0 +1,15 @@
+# Competency: the vendored knowledge base must answer the core SOLVE-IT
+# question — "for a technique, what can go wrong, and what mitigates it?"
+# Expect a non-empty technique -> weakness -> mitigation chain.
+PREFIX solveit-core: <https://ontology.solveit-df.org/solveit/core/>
+
+SELECT ?techniqueID ?weaknessID ?mitigationID
+WHERE {
+  ?technique a solveit-core:Technique ;
+             solveit-core:techniqueID ?techniqueID ;
+             solveit-core:hasPotentialWeakness ?weakness .
+  ?weakness solveit-core:weaknessID ?weaknessID ;
+            solveit-core:hasPotentialMitigation ?mitigation .
+  ?mitigation solveit-core:mitigationID ?mitigationID .
+}
+LIMIT 10

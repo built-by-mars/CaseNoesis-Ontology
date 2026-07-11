@@ -1,0 +1,114 @@
+# SOLVE-IT extension — exemplar A-Box (synthetic, Tier T0 public-safe data).
+#
+# A disk-imaging acquisition documented the SOLVE-IT way:
+#   1. state the objective (DFO-1006 "Acquire data" — referenced in prose),
+#   2. record the acquisition as a solveit-core:SolveitInvestigativeAction
+#      linking the technique used (DFT-1002 "Copy sectors from storage
+#      media") and the mitigations applied (DFM-1003 image-size check,
+#      DFM-1004 hash verification),
+#   3. assess the technique's known weaknesses (DFW-1004) with a
+#      solveit-wa:WeaknessEvaluation (systematic Error Mitigation Analysis
+#      per ASTM E3016-18),
+#   4. demonstrate the UCO 1.5.0 metaclass style: an action typed directly
+#      with the punned technique class from solveit-technique-catalog.ttl.
+#
+# Technique/weakness/mitigation IRIs are the canonical SOLVE-IT
+# knowledge-base IRIs vendored in solve-it-kb.ttl.
+
+@prefix case-investigation: <https://ontology.caseontology.org/case/investigation/> .
+@prefix solveit-core: <https://ontology.solveit-df.org/solveit/core/> .
+@prefix solveit-data: <https://ontology.solveit-df.org/solveit/data/> .
+@prefix solveit-observable: <https://ontology.solveit-df.org/solveit/observable/> .
+@prefix solveit-wa: <https://ontology.solveit-df.org/solveit/weakness-assessment/> .
+@prefix uco-action: <https://ontology.unifiedcyberontology.org/uco/action/> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+@prefix uco-identity: <https://ontology.unifiedcyberontology.org/uco/identity/> .
+@prefix uco-observable: <https://ontology.unifiedcyberontology.org/uco/observable/> .
+@prefix uco-tool: <https://ontology.unifiedcyberontology.org/uco/tool/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:0a1b2c3d-4e5f-5a6b-8c7d-9e0f1a2b3c4d>
+	a case-investigation:Investigation ;
+	uco-core:name "Synthetic exemplar case 2026-XX-0001 (laptop acquisition)" ;
+	uco-core:description "Objective DFO-1006 (Acquire data): image the seized laptop drive and verify integrity before examination." .
+
+<urn:uuid:1b2c3d4e-5f6a-5b7c-9d8e-0f1a2b3c4d5e>
+	a uco-identity:Person ;
+	uco-core:name "Examiner One (synthetic)" .
+
+<urn:uuid:2c3d4e5f-6a7b-5c8d-0e9f-1a2b3c4d5e6f>
+	a uco-tool:Tool ;
+	uco-core:name "Imaging workstation with hardware write blocker" ;
+	uco-tool:version "2026.1" .
+
+<urn:uuid:3d4e5f6a-7b8c-5d9e-1f0a-2b3c4d5e6f7a>
+	a uco-observable:Device ;
+	uco-core:name "Seized laptop internal SSD (synthetic serial SN-0000)" .
+
+# Acquisition output: a physical image container holding the bitstream
+# (satisfies the PhysicalImageContainerShape minCount constraint).
+<urn:uuid:4e5f6a7b-8c9d-5e0f-2a1b-3c4d5e6f7a8b>
+	a solveit-observable:Bitstream ;
+	uco-core:name "Sector-by-sector bitstream LBA0..LBAmax" .
+
+<urn:uuid:5f6a7b8c-9d0e-5f1a-3b2c-4d5e6f7a8b9c>
+	a solveit-observable:PhysicalImageContainer ;
+	uco-core:name "E01 physical image of laptop SSD" ;
+	solveit-observable:contains <urn:uuid:4e5f6a7b-8c9d-5e0f-2a1b-3c4d5e6f7a8b> .
+
+<urn:uuid:6a7b8c9d-0e1f-5a2b-4c3d-5e6f7a8b9c0d>
+	a solveit-observable:HashVerificationResult ;
+	uco-core:name "SHA-256 of image matches SHA-256 of source device" .
+
+# 1) Native SOLVE-IT style: a SolveitInvestigativeAction records which
+#    technique was executed and which mitigations were actively applied.
+<urn:uuid:7b8c9d0e-1f2a-5b3c-5d4e-6f7a8b9c0d1e>
+	a solveit-core:SolveitInvestigativeAction ;
+	uco-core:name "acquire-laptop-image" ;
+	uco-core:description "Physical acquisition of the seized laptop SSD (SOLVE-IT DFT-1002) with image-size check (DFM-1003) and source/image hash verification (DFM-1004) applied." ;
+	solveit-core:usedTechnique solveit-data:techniqueDFT-1002 ;
+	solveit-core:appliedMitigation solveit-data:mitigationDFM-1003 ,
+		solveit-data:mitigationDFM-1004 ;
+	uco-action:startTime "2026-06-01T09:15:00Z"^^xsd:dateTime ;
+	uco-action:endTime "2026-06-01T11:42:00Z"^^xsd:dateTime ;
+	uco-action:performer <urn:uuid:1b2c3d4e-5f6a-5b7c-9d8e-0f1a2b3c4d5e> ;
+	uco-action:instrument <urn:uuid:2c3d4e5f-6a7b-5c8d-0e9f-1a2b3c4d5e6f> ;
+	uco-action:object <urn:uuid:3d4e5f6a-7b8c-5d9e-1f0a-2b3c4d5e6f7a> ;
+	uco-action:result <urn:uuid:5f6a7b8c-9d0e-5f1a-3b2c-4d5e6f7a8b9c> ,
+		<urn:uuid:6a7b8c9d-0e1f-5a2b-4c3d-5e6f7a8b9c0d> .
+
+# 2) Weakness assessment (Error Mitigation Analysis): the examiner rated
+#    DFT-1002's known weakness DFW-1004 (incomplete sector copy, ASTM
+#    INCOMP) for this specific acquisition.
+<urn:uuid:8c9d0e1f-2a3b-5c4d-6e5f-7a8b9c0d1e2f>
+	a solveit-wa:WeaknessEvaluation ;
+	uco-core:name "DFW-1004 evaluation for laptop SSD acquisition" ;
+	solveit-wa:evaluatesWeakness solveit-data:weaknessDFW-1004 ;
+	solveit-wa:likelihoodRating 1 ;
+	solveit-wa:likelihoodRationale "Hardware write blocker and current imaging firmware; no damaged-media indicators." ;
+	solveit-wa:impactRating 3 ;
+	solveit-wa:impactRationale "Missing sectors would silently omit evidence from the examination." ;
+	solveit-wa:liImpactScore 3 .
+
+<urn:uuid:9d0e1f2a-3b4c-5d5e-7f6a-8b9c0d1e2f3a>
+	a solveit-wa:WeaknessEvaluationSet ;
+	uco-core:name "Acquisition weakness assessment session" ;
+	solveit-wa:scopedToTechnique solveit-data:techniqueDFT-1002 ;
+	solveit-wa:evaluatedBy <urn:uuid:ae1f2a3b-4c5d-5e6f-8a7b-9c0d1e2f3a4b> ;
+	solveit-wa:hasEvaluation <urn:uuid:8c9d0e1f-2a3b-5c4d-6e5f-7a8b9c0d1e2f> ;
+	solveit-wa:evaluationDate "2026-06-01"^^xsd:date .
+
+<urn:uuid:ae1f2a3b-4c5d-5e6f-8a7b-9c0d1e2f3a4b>
+	a uco-identity:Identity ;
+	uco-core:name "Digital Forensics Unit (synthetic)" .
+
+# 3) UCO 1.5.0 metaclass style (forward-implemented by the bundled
+#    attack-technique extension): the hash-verification action is typed
+#    directly with the punned SOLVE-IT technique class, exactly like a
+#    MITRE ATT&CK technique on a CTI action.
+<urn:uuid:bf2a3b4c-5d6e-5f7a-9b8c-0d1e2f3a4b5c>
+	a uco-action:Action , solveit-data:techniqueDFT-1042 ;
+	uco-core:name "verify-image-hash" ;
+	uco-core:description "Computed SHA-256 over the acquired image and compared with the source-device hash (SOLVE-IT DFT-1042, metaclass style)." ;
+	uco-action:performer <urn:uuid:1b2c3d4e-5f6a-5b7c-9d8e-0f1a2b3c4d5e> ;
+	uco-action:result <urn:uuid:6a7b8c9d-0e1f-5a2b-4c3d-5e6f7a8b9c0d> .

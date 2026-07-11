@@ -70,11 +70,13 @@ case-uco-generate scaffold \
 
 **Domains covered:** investigations, hotline operations, forensics, detection, grooming, sextortion, victim impact, task force management, legal outcomes, international coordination, and more.
 
-### SOLVE-IT — Digital Forensics Knowledge Base
+### SOLVE-IT — Digital Forensics Knowledge Base (included in SDK)
 
-**[SOLVE-IT](https://github.com/SOLVE-IT-DF)** is a CASE/UCO-based knowledge base and extension framework for digital forensics investigation workflows. SOLVE-IT provides practical tools and examples for applying CASE/UCO to real forensic scenarios, and includes an extension framework ([SOLVE-IT-X](https://github.com/SOLVE-IT-DF/solve-it-x)) for building domain-specific additions.
+**[SOLVE-IT](https://github.com/SOLVE-IT-DF)** (Systematic Objective-based Listing of Various Established digital Investigation Techniques, [solveit-df.org](https://solveit-df.org)) organizes digital forensic practice as objectives → techniques → weaknesses (classified per ASTM E3016-18) → mitigations, enabling systematic Error Mitigation Analysis. The [solve-it-ontology](https://github.com/SOLVE-IT-DF/solve-it-ontology) companion is a CASE/UCO extension ontology (core classes, `SolveitInvestigativeAction`, ~60 method-centric observables, analysis and weakness-assessment modules, SHACL shapes) with an hourly-compiled RDF knowledge base. SOLVE-IT also includes an extension framework ([SOLVE-IT-X](https://github.com/SOLVE-IT-DF/solve-it-x)) for building domain-specific additions.
 
-**Domains covered:** digital forensics workflows, investigative knowledge management, educational materials.
+*Bundled with this SDK* (`extensions/solveit/`) as a pinned snapshot: the ontology modules, the compiled knowledge base (23 objectives, 187 techniques, 339 weaknesses, 270 mitigations), and a generated punned technique catalog for the UCO 1.5.0 `uco-action:Technique` metaclass style. Query it with the `search_solveit` / `get_solveit_details` / `plan_solveit_workflow` MCP tools, model with the [solve-it-investigation-planning recipe](recipes/solve-it-investigation-planning.md), and keep pace with upstream's rapid release cycle via `make sync-solveit` plus a weekly CI freshness check.
+
+**Domains covered:** forensic method and technique selection, error mitigation analysis, tool testing and quality assurance, investigative knowledge management, educational materials.
 
 ### Adversary Engagement Ontology — Cyber Denial & Deception
 

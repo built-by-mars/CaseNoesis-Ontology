@@ -309,7 +309,9 @@ INVESTIGATION_FAMILIES: tuple[InvestigationFamily, ...] = (
             "docs/recipes/mobile-device.md",
             "docs/recipes/mobile-device-sim.md",
             "docs/recipes/sms-and-contacts.md",
+            "docs/recipes/solve-it-investigation-planning.md",
         ),
+        extensions=("solveit",),
         core_namespaces=("uco-observable", "uco-action", "uco-tool"),
         upper_profiles=("PROV-O",),
     ),
@@ -345,9 +347,46 @@ INVESTIGATION_FAMILIES: tuple[InvestigationFamily, ...] = (
             "docs/recipes/file-system.md",
             "docs/recipes/file-recovery.md",
             "docs/recipes/partitions.md",
+            "docs/recipes/solve-it-investigation-planning.md",
         ),
+        extensions=("solveit",),
         core_namespaces=("uco-observable", "uco-types", "uco-tool"),
         upper_profiles=("PROV-O",),
+    ),
+    InvestigationFamily(
+        family_id="forensic-process-qa",
+        title="Forensic Process, Technique Selection, and Quality Assurance",
+        keywords=(
+            "solve-it", "solveit", "error mitigation", "error mitigation analysis",
+            "technique selection", "tool testing", "tool validation",
+            "dual-tool verification", "quality assurance", "lab accreditation",
+            "examination methodology", "methodology challenge", "daubert",
+            "error rate", "astm e3016", "weakness assessment",
+            "acquisition plan", "imaging procedure", "write blocker",
+            "hash verification", "standard operating procedure", "sop",
+            "peer review of examination", "competency test", "proficiency test",
+        ),
+        recipes=(
+            "docs/recipes/solve-it-investigation-planning.md",
+            "docs/recipes/forensic-lifecycle.md",
+            "docs/recipes/forensic-tool.md",
+            "docs/recipes/chain-of-custody.md",
+        ),
+        extensions=("solveit",),
+        core_namespaces=("case-investigation", "uco-action", "uco-tool", "uco-analysis"),
+        upper_profiles=("PROV-O",),
+        notes=(
+            "Document forensic method with the pinned SOLVE-IT knowledge "
+            "base (extensions/solveit/): record each step as a "
+            "solveit-core:SolveitInvestigativeAction with usedTechnique "
+            "(DFT-*) and appliedMitigation (DFM-*), and rate residual risk "
+            "with solveit-wa:WeaknessEvaluation (ASTM E3016-18 categories). "
+            "Use plan_solveit_workflow(text) to go from an investigation "
+            "goal to candidate techniques with per-technique weakness/"
+            "mitigation checklists, and search_solveit / "
+            "get_solveit_details for the catalog. Exemplar: "
+            "examples/solveit/."
+        ),
     ),
     InvestigationFamily(
         family_id="civil-ediscovery",

@@ -1,0 +1,18 @@
+# SDK-local anchoring bridge — NOT part of upstream SOLVE-IT.
+#
+# Three upstream classes are enumeration/category classes declared without
+# an rdfs:subClassOf. The SDK's knowledge-lifecycle anchoring gate requires
+# every declared class to anchor to a declared parent, so this bridge pins
+# them to owl:Thing without modifying the vendored upstream files. Remove
+# any entry here once upstream declares its own parent
+# (https://github.com/SOLVE-IT-DF/solve-it-ontology).
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix solveit-core: <https://ontology.solveit-df.org/solveit/core/> .
+@prefix solveit-observable: <https://ontology.solveit-df.org/solveit/observable/> .
+@prefix solveit-tool-profile: <https://ontology.solveit-df.org/solveit/tool-profile/> .
+
+solveit-core:ASTMErrorCategory rdfs:subClassOf owl:Thing .
+solveit-observable:PrioritizedDeviceEntry rdfs:subClassOf owl:Thing .
+solveit-tool-profile:ConditionTargetType rdfs:subClassOf owl:Thing .

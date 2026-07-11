@@ -1,0 +1,10 @@
+# Competency: the exemplar must record at least one investigative action
+# linked to the SOLVE-IT technique it executed and a mitigation it applied.
+PREFIX solveit-core: <https://ontology.solveit-df.org/solveit/core/>
+
+SELECT ?action ?technique ?mitigation
+WHERE {
+  ?action a solveit-core:SolveitInvestigativeAction ;
+          solveit-core:usedTechnique ?technique ;
+          solveit-core:appliedMitigation ?mitigation .
+}

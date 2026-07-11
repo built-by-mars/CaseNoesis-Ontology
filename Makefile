@@ -1,7 +1,7 @@
 .PHONY: all generate build test clean init lint smoke check venv \
        test-proposal validate-proposal sparql-test-proposal \
        test-extension-compat test-extension-main test-extension-develop test-extension-develop2 \
-       playground-test test-docs
+       playground-test test-docs sync-solveit sync-solveit-offline
 
 VENV := .venv
 PYTHON := $(VENV)/bin/python
@@ -92,6 +92,18 @@ promote-recipe:
 #   make deprecate-recipe SLUG=my-recipe REASON="taught an invalid pattern"
 deprecate-recipe:
 	$(PYTHON) mcp_server/knowledge_lifecycle.py deprecate-recipe $(SLUG) --reason "$(REASON)"
+
+# Re-vendor the pinned SOLVE-IT snapshot (ontology + compiled knowledge
+# base) and regenerate the punned technique catalog:
+#   make sync-solveit                # pin current upstream main
+#   make sync-solveit REF=<sha>      # pin a specific solve-it-ontology ref
+sync-solveit:
+	$(PYTHON) mcp_server/tools/sync_solveit.py --ontology-ref $(or $(REF),main)
+
+# Regenerate the SOLVE-IT technique catalog + provenance from the
+# already-vendored files (offline):
+sync-solveit-offline:
+	$(PYTHON) mcp_server/tools/sync_solveit.py --skip-fetch
 
 # Held-out routing evaluation (issue #58) — runs separately from unit tests:
 #   make eval-routing

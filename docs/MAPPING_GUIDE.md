@@ -27,6 +27,7 @@ Classes for representing files, directories, file systems, and their metadata. U
 
 | Class | Module | Type | Description |
 |-------|--------|------|-------------|
+| **AFCExtractionData** | ext.solveit.solveit-observable | Class | Data obtained via Apple File Conduit (AFC) service from iOS devices. |
 | **AIContentDetection** | ext.cac.cacontology-ai-csam | Class | Process of identifying AI-generated or AI-altered content to distinguish from authentic material ... |
 | **AIContentGeneration** | ext.cac.cacontology-ai-csam | Class | Process of creating artificial CSAM using machine learning models, neural networks, or other AI t... |
 | **AIContentInvestigationSituation** | ext.cac.cacontology-ai-csam | Class | Complex situation involving multiple stakeholders, technologies, and legal frameworks for investi... |
@@ -38,41 +39,52 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **AccelerationistGroup** | ext.cac.cacontology-extremist-enterprises | Class | Extremist group with accelerationist goals seeking to hasten societal collapse through criminal a... |
 | **AccessControlSystem** | ext.cac.cacontology-extremist-enterprises | Class | System controlling access to enterprise channels and resources based on member status and content... |
 | **AccountMetadata** | ext.cac.cacontology-platforms | Class | Account-level metadata including creation date, profile information, and activity patterns. |
+| **AcquisitionRecordFile** | ext.solveit.solveit-observable | Class | A file containing records generated during a data acquisition process, such as error logs or acqu... |
 | **AdditionalContentDemand** | ext.cac.cacontology-sextortion | Class | Demand for more graphic content or additional intimate images. |
 | **AgeDeceptionSextortion** | ext.cac.cacontology-sextortion | Class | Sextortion incident involving offender lying about their age when interacting with children (e.g.... |
 | **AgeProgression** | ext.cac.cacontology-ai-csam | Class | AI technique for artificially aging or de-aging subjects in content, potentially creating illegal... |
 | **AgingOutVictimProfile** | ext.cac.cacontology-sex-trafficking | Class | Vulnerability profile for youth aging out of foster care system. |
+| **AiChatAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an AI chatbot or assistant application, including conversation histories, p... |
 | **AlternateDataStream** | uco.observable | Class | An alternate data stream is data content stored within an NTFS file that is independent of the st... |
 | **AlternateDataStreamFacet** | uco.observable | Facet | An alternate data stream facet is a grouping of characteristics unique to data content stored wit... |
 | **Ammunition** | ext.weapons.weap | Class | Ammunition is ammunition or cartridge cases, primers, bullets, or propellent powder designed for ... |
 | **Analysis** | uco.analysis | Class | An analysis is an action of detailed examination of something in order to understand its nature, ... |
+| **AndroidDeviceGeneratedBackup** | ext.solveit.solveit-observable | Class | Data produced by Android's backup mechanism (e.g., adb backup). Potentially contains application ... |
+| **ApplicationFiles** | ext.solveit.solveit-observable | Class | A contextual compilation of files associated with a specific application version. Groups the file... |
 | **ArchiveFile** | uco.observable | Class | An archive file is a file that is composed of one or more computer files along with metadata. |
 | **ArchiveFileFacet** | uco.observable | Facet | An archive file facet is a grouping of characteristics unique to a file that is composed of one o... |
 | **ArrestOperation** | ext.cac.cacontology-tactical | Class | Law enforcement operation to apprehend and take suspect into custody. Extends investigation:Inves... |
 | **ArrestReport** | ext.cac.cacontology-tactical | Class | Formal arrest report documenting the arrest including charges, evidence, and suspect information.... |
+| **ArtifactSet** | ext.solveit.solveit-observable | Class | A contextual compilation of forensic artifacts grouped together for some purpose, such as filteri... |
 | **AssetSeizureAction** | ext.cryptoinv.cryptoinv | Class | An investigative action in which law enforcement takes custody of assets — including virtual asse... |
 | **AthleticContactEscalation** | ext.cac.cacontology-athletic-exploitation | Class | Escalation of physical contact within legitimate athletic training context. Enhanced as gUFO Event. |
 | **AttackPattern** | ext.aeo.attack | Class | An attack pattern is a common approach (set of actions) utilized by a person or organization to c... |
+| **AudioFile** | ext.solveit.solveit-observable | Class | A file whose primary content is audio data (e.g. MP3, WAV, AAC, FLAC). |
 | **AutomatedContentAnalysis** | ext.cac.cacontology-forensics | Class | Automated analysis of large volumes of content using machine learning and AI for rapid classifica... |
 | **AutomatedDetectionAction** | ext.cac.cacontology-detection | Class | The action of using automated systems to detect potential CSAM content. Modeled as gUFO Event. |
 | **AutomatedReporterAgent** | ext.cac.cacontology-hotlines | Class | A software agent that automatically reports content to hotlines. Enhanced as gUFO Object for comp... |
 | **BarricadeSituation** | ext.cac.cacontology-tactical | Class | Situation where suspect has barricaded themselves and refuses to surrender. A state/context, not ... |
 | **BidirectionalContentExchange** | ext.cac.cacontology-sex-offender-registry | Class | Exchange where offender both sends explicit content to victim and solicits/receives explicit cont... |
 | **BiometricInconsistencyAnalysis** | ext.cac.cacontology-ai-csam | Class | Analysis of biometric inconsistencies in AI-generated content, such as unnatural eye movements or... |
+| **BitstreamRandomAccessed** | ext.solveit.solveit-observable | Class | Random access to sector-level data, whether from a live device or a decoded forensic image contai... |
 | **BlockDeviceNode** | uco.observable | Class | A block device node is a UNIX filesystem special file that serves as a conduit to communicate wit... |
 | **BookingAction** | ext.cac.cacontology-tactical | Class | Process of booking a suspect into a correctional facility including fingerprinting, photography, ... |
 | **BotConfiguration** | uco.observable | Class | A bot configuration is a set of contextual settings for a software application that runs automate... |
 | **Breadcrumb** | ext.aeo.engagement | Class | A Breadcrumb is a set of objects placed to be at least partially, sequentially interacted by an a... |
+| **BrowserAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a web browser application, including browsing history, bookmarks, cookies, ... |
 | **Bundle** | uco.core | Class | A bundle is a container for a grouping of UCO content with no presumption of shared context. |
 | **CACInvestigation** | ext.cac.cacontology | Class | A child-protection investigation that follows a standard action lifecycle that commonly begins wi... |
+| **CalendarAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a calendar application, including events, appointments, invitations, recurr... |
 | **CaseDocumentation** | ext.cac.cacontology-case-management | Class | Comprehensive documentation management for case files, reports, evidence logs, and legal document... |
 | **CaseInformationSharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of case-specific information including case files, reports, witness statements, and inves... |
 | **CharacterDeviceNode** | uco.observable | Class | A character device node is a UNIX filesystem special file that serves as a conduit to communicate... |
+| **ChatAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a messaging or chat application, including message databases, media attachm... |
 | **ChildSexTourismIncident** | ext.cac.cacontology-us-ncmec | Class | Incidents involving child sex tourism. Source: NCMEC Cybertip API Section B.1.1, incidentType 'Ch... |
 | **ChildSexTraffickingIncident** | ext.cac.cacontology-us-ncmec | Class | Incidents involving child sex trafficking. Source: NCMEC Cybertip API Section B.1.1, incidentType... |
 | **Claim** | ext.cac.cacontology-synthesis | Class | A first-class, queryable claim extracted from a report (finding, recommendation, distribution, ga... |
 | **ClassificationResult** | ext.cac.cacontology-detection | Class | The result of content classification using standard scales like SAR or COPINE. |
 | **ClassroomExploitationContext** | ext.cac.cacontology-educational-exploitation | Class | Specific classroom situations and contexts where exploitation occurs. Enhanced as gUFO Object for... |
+| **ClusterRun** | ext.solveit.solveit-observable | Class | A contiguous run of clusters allocated to a file in a cluster-based file system (e.g., FAT, NTFS,... |
 | **CommunicationDevice** | ext.cac.cacontology-physical-evidence | Class | Devices used to communicate with victims or distribute illegal content (gUFO FunctionalComplex). |
 | **ComplexCaseManagement** | ext.cac.cacontology-case-management | Class | Specialized management for complex cases involving multiple offenses, victims, or extensive evide... |
 | **ComplexTrauma** | ext.cac.cacontology-victim-impact | Class | Complex trauma resulting from multiple types of victimization or prolonged abuse. |
@@ -103,6 +115,7 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **ContentModerationCapability** | ext.cac.cacontology-platforms | Class | The ability and methods a platform uses to detect, review, and remove inappropriate content. Mode... |
 | **ContentModerationQueue** | ext.cac.cacontology-platforms | Class | A queue/backlog of content items awaiting moderation review and operational handling at scale (e.... |
 | **ContentProducerRole** | ext.cac.cacontology-extremist-enterprises | Class | Role focused on producing high-quality exploitative content for enterprise operations. |
+| **ContentQueryData** | ext.solveit.solveit-observable | Class | Data obtained from an Android device by querying content providers via an ADB shell connection (e... |
 | **ContentValueAssessment** | ext.cac.cacontology-extremist-enterprises | Class | Assessment of content value based on quality, notoriety, and enterprise utility. |
 | **ContextualCompilation** | uco.core | Class | A contextual compilation is a grouping of things sharing some context (e.g., a set of network con... |
 | **ControlledSubstance** | ext.drugs.drug | Class | A controlled substance is a concrete portion (lot, package, or charged quantity) of a drug or oth... |
@@ -125,6 +138,8 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **DetectionEvent** | ext.cac.cac-core | Class | An event representing the detection, identification, or flagging of content, behavior, or indicat... |
 | **DetectionResult** | ext.cac.cacontology-detection | Class | The result of a content detection action including confidence scores and classification. |
 | **DeviceForensicAnalysis** | ext.cac.cacontology-sextortion | Class | Forensic examination of seized devices for sextortion evidence. |
+| **DeviceGeneratedBackup** | ext.solveit.solveit-observable | Class | Data produced by a device's built-in backup mechanism. Content is determined by the device's back... |
+| **DeviceSet** | ext.solveit.solveit-observable | Class | A contextual compilation of devices that are associated in some way, such as devices belonging to... |
 | **DigitalFollowUp** | ext.cac.cacontology-street-recruitment | Class | Follow-up through digital communication channels (text, social media, calls). |
 | **Directory** | uco.observable | Class | A directory is a file system cataloging structure which contains references to other computer fil... |
 | **Disk** | uco.observable | Class | A disk is a storage mechanism where data is recorded by various electronic, magnetic, optical, or... |
@@ -136,6 +151,7 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **EditedContent** | ext.cac.cacontology-production | Class | Original content that has been digitally modified or enhanced. |
 | **EducationPlatformIntegration** | ext.cac.cacontology-prevention | Class | Integration capabilities between different educational delivery platforms and content management ... |
 | **ElectronicServiceProvider** | ext.cac.cacontology-platforms | Class | An organization that provides digital services and platforms, with responsibilities for content m... |
+| **EmailAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an email client application, including message stores, mailbox databases, a... |
 | **EncodedStreamFacet** | uco.observable | Facet | An encoded stream facet is a grouping of characteristics unique to the conversion of a body of da... |
 | **EncryptedChannelInfiltration** | ext.cac.cacontology-extremist-enterprises | Class | Infiltration of encrypted channels used by extremist networks for evidence collection. |
 | **EncryptedChannelNetwork** | ext.cac.cacontology-extremist-enterprises | Class | Network of encrypted messaging channels used for enterprise coordination and content sharing. |
@@ -174,16 +190,21 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **FileFacet** | uco.observable | Facet | A file facet is a grouping of characteristics unique to the storage of a file (computer resource ... |
 | **FileHostingService** | ext.cac.cacontology-platforms | Class | A service for storing and sharing files online (e.g., Google Drive, Dropbox, OneDrive, MEGA). Mod... |
 | **FilePermissionsFacet** | uco.observable | Facet | A file permissions facet is a grouping of characteristics unique to the access rights (e.g., view... |
+| **FileSet** | ext.solveit.solveit-observable | Class | A contextual compilation of files grouped together for some purpose, such as filtering, extractio... |
 | **FileSystem** | uco.observable | Class | A file system is the process that manages how and where data on a storage medium is stored, acces... |
+| **FileSystemExtraction** | ext.solveit.solveit-observable | Class | Data obtained through direct access to a file system structure. Represents the files and folders ... |
 | **FileSystemFacet** | uco.observable | Facet | A file system facet is a grouping of characteristics unique to the process that manages how and w... |
 | **FileSystemObject** | uco.observable | Class | A file system object is an informational object represented and managed within a file system. |
+| **FilteredFileSet** | ext.solveit.solveit-observable | Class | A subset of files selected from a larger collection by some filtering criteria, such as file type... |
 | **Firearm** | ext.weapons.weap | Class | A firearm is a weapon that will, is designed to, or may readily be converted to expel a projectil... |
 | **ForensicAnalysisPhase** | ext.cac.cacontology-ai-csam | Class | Anti-rigid phase during which AI-generated content undergoes detailed forensic examination. |
+| **ForensicImageContainer** | ext.solveit.solveit-observable | Class | A forensic image in a container format that encapsulates acquired data, potentially compressed or... |
 | **ForfeitureOrder** | ext.cryptoinv.cryptoinv | Class | A forfeiture order (or forfeiture allegation, prior to conviction) requires a defendant to forfei... |
 | **ForfeitureOrder** | ext.legalproc.legalproc | Class | A forfeiture order is an order, or pre-conviction allegation, requiring surrender to the state of... |
 | **ForumPost** | uco.observable | Class | A forum post is message submitted by a user account to an online forum where the message content ... |
 | **FragmentFacet** | uco.observable | Facet | A fragment facet is a grouping of characteristics unique to an individual piece of the content of... |
 | **GUI** | uco.observable | Class | A GUI is a graphical user interface that allows users to interact with electronic devices through... |
+| **GamingAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a gaming application, including save data, player profiles, in-app purchase... |
 | **GeoLocationTrack** | uco.observable | Class | A geolocation track is a set of contiguous geolocation entries representing a path/track taken. |
 | **GeoLocationTrackFacet** | uco.observable | Facet | A geolocation track facet is a grouping of characteristics unique to a set of contiguous geolocat... |
 | **GroomingMessage** | ext.cac.cacontology-grooming | Class | Communication containing grooming behavior or inappropriate content directed at a child. |
@@ -192,13 +213,18 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **HTTPConnection** | uco.observable | Class | An HTTP connection is network connection that is conformant to the Hypertext Transfer Protocol (H... |
 | **HTTPConnectionFacet** | uco.observable | Facet | An HTTP connection facet is a grouping of characteristics unique to portions of a network connect... |
 | **HashComparisonPhase** | ext.cac.cacontology-detection | Class | Phase of comparing content hashes against known databases. Modeled as anti-rigid gUFO Phase. |
+| **HashSet** | ext.solveit.solveit-observable | Class | A reference set of known file hashes used to match against files under examination, in order to r... |
+| **HashSetEntry** | ext.solveit.solveit-observable | Class | A single entry within a hash set. At minimum it carries a hash value; further details (e.g. file ... |
 | **HashSharingProtocol** | ext.cac.cacontology-partnerships | Class | Protocol for sharing cryptographic hashes of illegal content between partners for detection and p... |
+| **HealthAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a health or fitness tracking application, including activity logs, heart ra... |
 | **HelpSeekingFacilitator** | ext.cac.cacontology-victim-impact | Class | Factor that enables or encourages victim to seek help (opportunity, trust, desperation, external ... |
 | **HiddenRecordingDevice** | ext.cac.cacontology-production | Class | Covert recording equipment designed to capture content without victim awareness. |
 | **HighPriorityModule** | ext.cac.cacontology-integration-patterns | Class | CAC module requiring immediate gUFO integration due to core investigation role or external depend... |
 | **HighVolumeDigitalExploitation** | ext.cac.cacontology-sex-offender-registry | Class | Digital exploitation involving thousands of messages or communications over extended period. |
 | **HotlineReport** | ext.cac.cacontology-hotlines | Class | A report submitted to a hotline about potential child sexual abuse material. Enhanced as gUFO Sit... |
 | **HybridCSAM** | ext.cac.cacontology-ai-csam | Class | Content combining real and AI-generated elements, making it difficult to distinguish between auth... |
+| **HypothesisedCommunication** | ext.solveit.solveit-analysis | Class | A communication that is hypothesised to have occurred between parties, potentially inferred from ... |
+| **HypothesisedWebSearch** | ext.solveit.solveit-analysis | Class | A web search that is hypothesised to have been performed, potentially inferred from browser histo... |
 | **IdeologyPattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling extremist ideologies as belief systems influencing criminal behavior. |
 | **IllinoisICACtaskForce** | ext.cac.cacontology-taskforce | Class | Illinois state CAC task force with specialized capabilities and extensive network partnerships. |
 | **Image** | uco.observable | Class | An image is a complete copy of a hard disk, memory, or other digital media. |
@@ -216,15 +242,19 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **InvestigativeAction** | case.investigation | Class | An investigative action is something that may be done or performed within the context of an inves... |
 | **IsolationBasedControl** | ext.cac.cacontology-institutional-exploitation | Class | Control method using isolation from family, community, and external oversight. |
 | **Junction** | uco.observable | Class | A junction is a specific NTFS (New Technology File System) reparse point to redirect a directory ... |
+| **KeywordSearchResultSet** | ext.solveit.solveit-observable | Class | A collection of keyword search results from a search operation. Subsequent techniques may filter ... |
 | **KnowingParadox** | ext.cac.cacontology-legal-harmonization | Class | A policy incentive conflict where platforms face liability both for detecting content (creating k... |
 | **LargeScaleOperation** | ext.cac.cacontology-multi-jurisdiction | Class | Operation involving 100+ law enforcement actions or extensive coordination. |
+| **LiveOSDeviceInterface** | ext.solveit.solveit-observable | Class | Access to a block device via the operating system on a live, running system. Provides sector-leve... |
 | **LiveStreamContent** | ext.cac.cacontology-production | Class | Content transmitted in real-time during live production events. |
 | **LivestreamedCoercionShow** | ext.cac.cacontology-sadistic-online-exploitation | Class | A coordinated livestreamed coercion event (ritualized 'show') in which participants celebrate, wi... |
+| **LogicalImageContainer** | ext.solveit.solveit-observable | Class | A forensic image container that encapsulates a logical collection of files rather than a bitstrea... |
 | **LongTermMonitoringPhase** | ext.cac.cacontology-victim-impact | Class | Extended phase monitoring long-term effects and continued support needs. |
 | **Lorebook** | ext.cac.cacontology-extremist-enterprises | Class | Edited compilation of victim content including images, videos, and personal information organized... |
 | **MachineLearningDetectionTool** | ext.cac.cacontology-detection | Class | A tool using machine learning algorithms to detect CSAM content (e.g., Google's CSAI Classifier, ... |
 | **ManualClassificationAction** | ext.cac.cacontology-detection | Class | The action of human review and classification of suspected CSAM content. Modeled as gUFO Event. |
 | **ManualReviewTool** | ext.cac.cacontology-detection | Class | A tool supporting human review and classification of potentially illegal content. Modeled as gUFO... |
+| **MapsAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a mapping application, including search history, saved locations, offline m... |
 | **MassContentAnalysisSituation** | ext.cac.cacontology-detection | Class | Situation involving analysis of large volumes of content requiring coordinated detection systems.... |
 | **MassDigitalEvidenceProcessing** | ext.cac.cacontology-forensics | Class | Processing of massive volumes of digital evidence requiring specialized automated tools and distr... |
 | **MasturbationDiscussionExploitation** | ext.cac.cacontology-athletic-exploitation | Class | Exploitation through extensive masturbation discussions during athletic training. Enhanced as gUF... |
@@ -246,7 +276,9 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **NTFSFilePermissionsFacet** | uco.observable | Facet | An NTFS file permissions facet is a grouping of characteristics unique to the access rights (e.g.... |
 | **NamedPipe** | uco.observable | Class | A named pipe is a mechanism for FIFO (first-in-first-out) inter-process communication. It is pers... |
 | **NationalICACtaskForceDirectory** | ext.cac.cacontology-taskforce | Class | Comprehensive directory of all 61 CAC task forces across the United States, territories, and mili... |
+| **NavigationAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a turn-by-turn navigation application, including route history, recent dest... |
 | **NetworkMappingInvestigation** | ext.cac.cacontology-extremist-enterprises | Class | Investigation mapping the structure and relationships within extremist child exploitation networks. |
+| **NetworkPacketCapture** | ext.solveit.solveit-observable | Class | A network packet capture file. |
 | **NetworkProtocol** | uco.observable | Class | A network protocol is an established set of structured rules that determine how data is transmitt... |
 | **NetworkRoute** | uco.observable | Class | A network route is a specific path (of specific network nodes, connections and protocols) for tra... |
 | **NextDayFollowUp** | ext.cac.cacontology-street-recruitment | Class | Follow-up contact occurring the day after initial encounter. |
@@ -262,12 +294,15 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **PDFFileFacet** | uco.observable | Facet | A PDF file facet is a grouping of characteristics unique to a PDF (Portable Document Format) file. |
 | **Parser** | ext.toolcap.capability | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
 | **PathRelationFacet** | uco.observable | Facet | A path relation facet is a grouping of characteristics unique to the location of one object withi... |
+| **PaymentAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a mobile payment or digital wallet application, including transaction histo... |
 | **PaymentProcessing** | ext.cac.cacontology-platform-infrastructure | Class | Financial processing systems enabling platform monetization through subscription fees, content pu... |
 | **PersonLikeEntity** | ext.cac.cac-core | Class | An enduring entity that is person-like in the domain model. Use for natural persons and person-pr... |
 | **Phase3Wave3** | ext.cac.cacontology-integration-patterns | Class | Third wave implementing low-priority modules (AI CSAM, extremist enterprises, advanced features). |
 | **PhoneChargingOffer** | ext.cac.cacontology-street-recruitment | Class | Specific pretext offering to charge victim's phone in vehicle or location. |
+| **PhotosAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a photos or gallery management application, including image and video datab... |
 | **PhysicalContactEscalation** | ext.cac.cacontology-athletic-exploitation | Class | Escalation of physical contact within athletic training context. Enhanced as gUFO Event. |
 | **PhysicalEvidenceProvenanceRecord** | ext.cac.cacontology-physical-evidence | Class | Provenance record tracking chain of custody and handling of physical evidence. Extends investigat... |
+| **PhysicalImageContainer** | ext.solveit.solveit-observable | Class | A forensic image container that encapsulates a bitstream (bit-for-bit) copy of a source medium, s... |
 | **PhysicalSearch** | ext.cac.cacontology-physical-evidence | Class | Law enforcement search of physical premises for evidence. Extends investigation:InvestigativeActi... |
 | **Pipe** | uco.observable | Class | A pipe is a mechanism for one-way inter-process communication using message passing where data wr... |
 | **PlaceLikeEntity** | ext.cac.cac-core | Class | An enduring entity used to represent places, venues, virtual environments treated as locatable co... |
@@ -288,13 +323,18 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **ProgressiveEscalation** | ext.cac.cacontology-sextortion | Class | Gradual increase in sexual content and requests to avoid triggering victim resistance. |
 | **PropertyDestructionThreat** | ext.cac.cacontology-sextortion | Class | Threat mechanism involving destruction of property to compel compliance (e.g., 'destruction' thre... |
 | **RacketeeringEnterprise** | ext.rico.rico | Class | A racketeering enterprise is an 'enterprise' as defined in 18 U.S.C. § 1961(4) (https://www.law.c... |
+| **RawImage** | ext.solveit.solveit-observable | Class | A raw forensic image containing a bitstream without container metadata. Unlike a ForensicImageCon... |
+| **RawImageInfoFile** | ext.solveit.solveit-observable | Class | A sidecar file containing metadata for a raw/dd forensic image, including hash values, case infor... |
 | **ReciprocityGrooming** | ext.cac.cacontology-grooming | Class | Grooming technique encouraging victim to reciprocate with sexual content. |
 | **RecordingDevice** | ext.cac.cacontology-production | Class | Device capable of capturing video or photographic content. |
 | **RecoveredFile** | ext.cac.cacontology-forensics | Class | A file recovered from deleted or unallocated space on digital media through forensic analysis tec... |
 | **RecoveredObjectFacet** | uco.observable | Facet | Recoverability status of name, metadata, and content. |
 | **RecruitmentHierarchy** | ext.cac.cacontology-extremist-enterprises | Class | Hierarchy governing recruitment of new members based on content quality and notoriety. |
 | **RecruitmentSpecialistRole** | ext.cac.cacontology-extremist-enterprises | Class | Role specializing in recruiting new members based on content quality and enterprise needs. |
+| **RedactedArtifactSet** | ext.solveit.solveit-observable | Class | A collection of artifacts reduced by a redaction process to remove sensitive or privileged conten... |
+| **RedactedFileSet** | ext.solveit.solveit-observable | Class | A subset of files reduced by a redaction process to remove sensitive or privileged content before... |
 | **ReleaseToMarking** | uco.marking | Class | A release-to marking is a grouping of characteristics unique to the expression of data marking de... |
+| **RemindersAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a reminders or to-do list application, including task lists, due dates, rec... |
 | **ReparsePoint** | uco.observable | Class | A reparse point is a type of NTFS (New Technology File System) object which is an optional attrib... |
 | **RepeatedCrossBorderTravel** | ext.cac.cacontology-institutional-exploitation | Class | Pattern of repeated travel to foreign country for exploitation over extended period. |
 | **ReportArtifact** | ext.cac.cacontology-synthesis | Class | A concrete artifact that realizes a Report (e.g., a PDF file). Use this when you want a report-as... |
@@ -303,6 +343,10 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **Role** | ext.cac.cac-core | Class | A non-rigid role borne by an enduring entity in a certain relational or contextual setting. A bea... |
 | **Role** | uco.role | Class | A role is a usual or customary function based on contextual perspective. |
 | **RunawayVictimProfile** | ext.cac.cacontology-sex-trafficking | Class | Vulnerability profile for runaway or homeless youth targeted by traffickers. |
+| **SQLiteDatabase** | ext.solveit.solveit-observable | Class | A SQLite database file stored on disk. |
+| **SQLiteJournal** | ext.solveit.solveit-observable | Class | A rollback journal file associated with a SQLite database, containing pre-modification page images. |
+| **SQLitePage** | ext.solveit.solveit-observable | Class | A physical storage page within a SQLite database file. |
+| **SQLiteWAL** | ext.solveit.solveit-observable | Class | A Write-Ahead Log file associated with a SQLite database. |
 | **SadisticOnlineExploitationNetwork** | ext.cac.cacontology-sadistic-online-exploitation | Class | A DHS/Know2Protect-defined online group (network/community) engaged in sadistic coercion and expl... |
 | **SadisticSextortion** | ext.cac.cacontology-sextortion | Class | Sextortion incident in which the coercive leverage includes threats compelling suffering, submiss... |
 | **ScalableHashAnalysis** | ext.cac.cacontology-forensics | Class | Hash analysis systems capable of processing millions of files against large databases of known il... |
@@ -310,6 +354,7 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **SelfHarmCoercion** | ext.cac.cacontology-extremist-enterprises | Class | Coercion of victims to engage in self-harm activities including cutting, burning, and extreme deg... |
 | **Sentence** | ext.legalproc.legalproc | Class | A sentence is a penalty recommended by a party or imposed by a tribunal upon conviction of a crim... |
 | **SentencingOutcome** | ext.cryptoinv.cryptoinv | Class | A sentencing outcome records a sentence recommended by a party or imposed by the court under 18 U... |
+| **ServiceBasedExtractionData** | ext.solveit.solveit-observable | Class | Data obtained by interacting with services provided by a device rather than direct storage access. |
 | **SexTourism** | ext.cac.cacontology-usa-federal-law | Class | Federal crime of traveling abroad with intent to engage in sexual conduct with minors. Modeled as... |
 | **SexTrafficking** | ext.cac.cacontology-legal-outcomes | Class | Charge for sex trafficking of minors. Modeled as gUFO Object. |
 | **SexTraffickingConspiracy** | ext.cac.cacontology-usa-federal-law | Class | Federal crime of conspiracy to engage in sex trafficking of minors. Modeled as gUFO Event. |
@@ -333,11 +378,14 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **SexuallyExplicitConversation** | ext.cac.cacontology-sextortion | Class | Conversation containing sexually explicit content directed at children. |
 | **SimultaneousRoleSituation** | ext.cac.cacontology-temporal | Class | Situation where person plays multiple roles simultaneously in investigation context. Modeled as g... |
 | **Situation** | ext.cac.cac-core | Class | A context, state, or configuration that holds at a time and may involve multiple participants. Al... |
+| **SmartHomeAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a smart home or IoT control application, including device registries, autom... |
 | **Snapshot** | uco.observable | Class | A snapshot is a file system object representing a snapshot of the contents of a part of a file sy... |
+| **SocialMediaAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a social media application, including posts, direct messages, friend/follow... |
 | **SocialMediaPlatform** | ext.cac.cacontology-platforms | Class | A digital platform for social networking and content sharing (e.g., Facebook, Instagram, TikTok, ... |
 | **SocialMediaPost** | ext.cac.cacontology-platforms | Class | Individual posts, updates, or content shared on social media platforms. |
 | **SocialMediaSextortion** | ext.cac.cacontology-sextortion | Class | Sextortion conducted through social media platforms and networks. |
 | **Socket** | uco.observable | Class | A socket is a special file used for inter-process communication, which enables communication betw... |
+| **SolveitAwareInstrument** | ext.solveit.solveit-tool-profile | Class | A specialised tool that has been evaluated against SOLVE-IT tool capability profiles. Adds the co... |
 | **SportsContextPhysicalAbuse** | ext.cac.cacontology-athletic-exploitation | Class | Physical abuse within sports training context disguised as coaching. Enhanced as gUFO Event. |
 | **StatementChangeContext** | ext.cac.cacontology-recantation | Class | A situation capturing the social, familial, investigative, and coercive conditions surrounding a ... |
 | **StatementMarking** | uco.marking | Class | A statement marking is a grouping of characteristics unique to the expression of data marking def... |
@@ -358,6 +406,8 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **TermsOfUseMarking** | uco.marking | Class | A terms of use marking is a grouping of characteristics unique to the expression of data marking ... |
 | **TextEvidencePointer** | ext.cac.cacontology-synthesis | Class | A resolvable pointer to a location in a text artifact (e.g., normalized.txt lines), optionally wi... |
 | **TextMessageFollowUp** | ext.cac.cacontology-street-recruitment | Class | Follow-up through text messaging to reinforce trafficking proposition. |
+| **Timeline** | ext.solveit.solveit-observable | Class | A set of timeline entries extracted during forensic analysis. |
+| **ToolCapabilityProfile** | ext.solveit.solveit-tool-profile | Class | A declaration of what techniques a specific version of a tool can perform and what mitigations it... |
 | **TrafficStop** | ext.cac.cacontology-tactical | Class | Investigative traffic stop used as part of undercover operation or to apprehend suspect. Extends ... |
 | **TrainingCampExploitation** | ext.cac.cacontology-athletic-exploitation | Class | Exploitation during intensive training camps or extended athletic sessions. Enhanced as gUFO Event. |
 | **TrainingDataAnalysis** | ext.cac.cacontology-ai-csam | Class | Analysis of datasets potentially used to train AI models for generating illegal content. Enhanced... |
@@ -377,10 +427,15 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **VictimResponse** | ext.cac.cacontology-sextortion | Class | Pattern of victim response to sextortion attempts. |
 | **VictimStatement** | ext.cac.cacontology-recantation | Class | A statement or account by a child victim concerning abuse, disclosure, denial, or recantation. Mo... |
 | **VictimVulnerabilityProfile** | ext.cac.cacontology-sex-trafficking | Class | Profile of factors that make individuals vulnerable to trafficking recruitment. Modeled as gUFO O... |
+| **VideoFile** | ext.solveit.solveit-observable | Class | A file whose primary content is video data (e.g. MP4, MOV, AVI, MKV). |
+| **VideoFrame** | ext.solveit.solveit-observable | Class | A single frame extracted from a video file during forensic analysis. |
 | **VideoGeneration** | ext.cac.cacontology-ai-csam | Class | Generation of video content using AI models capable of creating temporal sequences and motion. En... |
 | **VideoStreamingPlatform** | ext.cac.cacontology-platforms | Class | A platform for video content streaming and sharing (e.g., YouTube, Twitch, OnlyFans, Periscope). ... |
+| **VirtualizedComputer** | ext.solveit.solveit-observable | Class | A computer (desktop, laptop, or server) that exists as a virtual machine rather than running on p... |
+| **VirtualizedDevice** | ext.solveit.solveit-observable | Class | A device or system that exists as a virtual machine, defined by virtualization configuration and ... |
 | **Volume** | uco.observable | Class | A volume is a single accessible storage area (volume) with a single file system. [based on https:... |
 | **VolumeFacet** | uco.observable | Facet | A volume facet is a grouping of characteristics unique to a single accessible storage area (volum... |
+| **WeaknessEvaluationSet** | ext.solveit.solveit-wa | Class | A collection of weakness evaluations scoped to a technique or context, with authorship and date m... |
 | **Wiki** | uco.observable | Class | A wiki is an online hypertext publication collaboratively edited and managed by its own audience ... |
 | **WindowsActiveDirectoryAccount** | uco.observable | Class | A Windows Active Directory account is an account managed by directory-based identity-related serv... |
 | **WindowsActiveDirectoryAccountFacet** | uco.observable | Facet | A Windows Active Directory account facet is a grouping of characteristics unique to an account ma... |
@@ -397,6 +452,122 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **WindowsSystemRestore** | uco.observable | Class | A Windows system restore is a capture of a Windows computer's state (including system files, inst... |
 | **WindowsVolumeFacet** | uco.observable | Facet | A Windows volume facet is a grouping of characteristics unique to a single accessible storage are... |
 | **X509V3ExtensionsFacet** | uco.observable | Facet | An X.509 v3 certificate extensions facet is a grouping of characteristics unique to a public key ... |
+| **iOSDeviceGeneratedBackup** | ext.solveit.solveit-observable | Class | Data produced by the iOS backup mechanism via iTunes, Finder, or libimobiledevice. Contains a man... |
+| **techniqueDFT-1004** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1004: Collect logical files selectively. Objective(s): Acquire data. See h... |
+| **techniqueDFT-1015** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1015: Collect logical files selectively based on privacy preserving criter... |
+| **techniqueDFT-1019** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1019: Extract a backup from a mobile device. See https://solveit-df.org fo... |
+| **techniqueDFT-1020** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1020: Extract the file system from a mobile device. Objective(s): Acquire ... |
+| **techniqueDFT-1021** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1021: Extract artifacts from a configuration file. Objective(s): Extract s... |
+| **techniqueDFT-1033** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1033: Extract credential(s) from an accessible device to attempt access to... |
+| **techniqueDFT-1039** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1039: Downgrade apps to facilitate data extraction. Objective(s): Overcome... |
+| **techniqueDFT-1040** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1040: Exploit a mobile device to facilitate privileged access for data ext... |
+| **techniqueDFT-1043** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1043: Read bitstream from forensic image container file(s). Objective(s): ... |
+| **techniqueDFT-1045** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1045: Read contents from standard archive file(s). Objective(s): Read data... |
+| **techniqueDFT-1047** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1047: Filter files using a hashset to reduce files examined. Objective(s):... |
+| **techniqueDFT-1049** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1049: Keyword search. Objective(s): Locate potentially relevant content. S... |
+| **techniqueDFT-1050** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1050: Locate relevant files using a hashset to identify files of interest.... |
+| **techniqueDFT-1051** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1051: Locate potentially relevant files using fuzzy hash matching. Objecti... |
+| **techniqueDFT-1052** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1052: Generate timeline. Objective(s): Extract specific artifact types. Se... |
+| **techniqueDFT-1053** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1053: Extract 'entities' from a data source. Objective(s): Extract specifi... |
+| **techniqueDFT-1054** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1054: Review artifacts or content manually for relevant material. Objectiv... |
+| **techniqueDFT-1055** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1055: Examine file and folder structure. Objective(s): Review content for ... |
+| **techniqueDFT-1056** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1056: Enumerate connections between artifacts. Objective(s): Extract speci... |
+| **techniqueDFT-1058** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1058: Search for mismatched file extensions. Objective(s): Detect anti-for... |
+| **techniqueDFT-1059** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1059: Identify partitions. Objective(s): Access partitions, volumes and fi... |
+| **techniqueDFT-1060** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1060: Enumerate allocated files and folders. Objective(s): Access partitio... |
+| **techniqueDFT-1061** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1061: Recover non-allocated files. Objective(s): Access partitions, volume... |
+| **techniqueDFT-1062** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1062: Decrypt encrypted file systems/volumes. Objective(s): Access partiti... |
+| **techniqueDFT-1063** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1063: Identify file types. Objective(s): Access partitions, volumes and fi... |
+| **techniqueDFT-1064** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1064: Carve non-allocated files. See https://solveit-df.org for weaknesses... |
+| **techniqueDFT-1065** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1065: Extract artifacts from operating system-level content indexer(s). Ob... |
+| **techniqueDFT-1066** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1066: Extract artifacts from operating system log files. Objective(s): Ext... |
+| **techniqueDFT-1067** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1067: Extract artifacts from operating system cloud synchronization featur... |
+| **techniqueDFT-1068** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1068: Extract operating system artifacts indicating recently used files. O... |
+| **techniqueDFT-1069** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1069: Extract artifacts from a web browser. Objective(s): Extract artifact... |
+| **techniqueDFT-1070** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1070: Extract artifacts from email client(s) or webmail access. Objective(... |
+| **techniqueDFT-1071** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1071: Extract data from SQLite database(s). Objective(s): Extract data fro... |
+| **techniqueDFT-1072** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1072: Extract artifacts from chat app(s). Objective(s): Extract artifacts ... |
+| **techniqueDFT-1073** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1073: Extract artifacts from calendar app(s). Objective(s): Extract artifa... |
+| **techniqueDFT-1074** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1074: Extract artifacts from social network app(s). Objective(s): Extract ... |
+| **techniqueDFT-1075** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1075: Extract artifacts from maps/travel app(s). Objective(s): Extract art... |
+| **techniqueDFT-1076** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1076: Extract artifacts from log files. Objective(s): Extract specific art... |
+| **techniqueDFT-1077** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1077: Extract artifacts from photo management app(s). Objective(s): Extrac... |
+| **techniqueDFT-1078** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1078: Extract artifacts from cloud synchronization app(s). Objective(s): E... |
+| **techniqueDFT-1079** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1079: Examine audio content. Objective(s): Review content for relevance. S... |
+| **techniqueDFT-1080** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1080: Examine video content. Objective(s): Review content for relevance. S... |
+| **techniqueDFT-1081** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1081: Examine image/picture content. Objective(s): Review content for rele... |
+| **techniqueDFT-1082** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1082: Examine document content. Objective(s): Review content for relevance... |
+| **techniqueDFT-1083** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1083: Extract artifacts from operating system memory structures. Objective... |
+| **techniqueDFT-1084** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1084: Extract potentially user-identifying content from account informatio... |
+| **techniqueDFT-1086** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1086: Analyze timeline. Objective(s): Locate potentially relevant content.... |
+| **techniqueDFT-1096** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1096: Extract operating system artifacts indicating program execution. Obj... |
+| **techniqueDFT-1097** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1097: Extract operating system artifacts indicating installed software. Ob... |
+| **techniqueDFT-1098** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1098: Enumerate operating system user accounts. Objective(s): Extract arti... |
+| **techniqueDFT-1099** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1099: Repair a damaged or incomplete file using `grafting`. Objective(s): ... |
+| **techniqueDFT-1100** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1100: Extract metadata from within images. Objective(s): Extract data from... |
+| **techniqueDFT-1102** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1102: Decode data extracted from unmanaged NAND. Objective(s): Read data f... |
+| **techniqueDFT-1105** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1105: Examine memory dump from an application. Objective(s): Extract artif... |
+| **techniqueDFT-1107** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1107: Extract artifacts from health/fitness app(s). Objective(s): Extract ... |
+| **techniqueDFT-1108** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1108: Extract artifacts from reminders app(s). Objective(s): Extract artif... |
+| **techniqueDFT-1109** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1109: Extract artifacts from payment app(s). Objective(s): Extract artifac... |
+| **techniqueDFT-1112** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1112: Locate and remove physical disks from a device. Objective(s): Access... |
+| **techniqueDFT-1114** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1114: Preserve memory contents via Cold Boot Attack. Objective(s): Preserv... |
+| **techniqueDFT-1116** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1116: Extract references to connected devices. Objective(s): Extract artif... |
+| **techniqueDFT-1118** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1118: Locate relevant files by path. Objective(s): Locate potentially rele... |
+| **techniqueDFT-1120** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1120: Extract artifacts from app data automatically. Objective(s): Extract... |
+| **techniqueDFT-1121** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1121: Index a data source for keyword searching. Objective(s): Extract spe... |
+| **techniqueDFT-1133** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1133: Extract artifacts from AI companion app(s). Objective(s): Extract ar... |
+| **techniqueDFT-1137** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1137: Extract browser history artifacts. See https://solveit-df.org for we... |
+| **techniqueDFT-1138** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1138: Extract browser cache artifacts. See https://solveit-df.org for weak... |
+| **techniqueDFT-1139** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1139: Extract browser session artifacts. See https://solveit-df.org for we... |
+| **techniqueDFT-1140** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1140: Extract browser autofill artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1141** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1141: Extract browser bookmark artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1142** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1142: Extract browser download artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1143** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1143: Extract browser configuration artifacts. See https://solveit-df.org ... |
+| **techniqueDFT-1144** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1144: Enumerate browser profiles. See https://solveit-df.org for weaknesse... |
+| **techniqueDFT-1145** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1145: Extract browser extensions artifacts. See https://solveit-df.org for... |
+| **techniqueDFT-1146** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1146: Extract browser synchronization artifacts. See https://solveit-df.or... |
+| **techniqueDFT-1147** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1147: Extract browser cookie artifacts. See https://solveit-df.org for wea... |
+| **techniqueDFT-1148** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1148: Extract browser web storage artifacts. See https://solveit-df.org fo... |
+| **techniqueDFT-1149** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1149: Extract artifacts from the file versioning feature. Objective(s): Ex... |
+| **techniqueDFT-1150** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1150: Recover non-allocated files using residual file metadata. See https:... |
+| **techniqueDFT-1151** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1151: Keyword search (over extracted artifacts). See https://solveit-df.or... |
+| **techniqueDFT-1157** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1157: Extract device data using exposed service. Objective(s): Acquire dat... |
+| **techniqueDFT-1158** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1158: Configure device to enable a service needed for data extraction. Obj... |
+| **techniqueDFT-1159** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1159: Extract mobile data via deployed agent. Objective(s): Acquire data. ... |
+| **techniqueDFT-1165** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1165: Extract software configuration information. Objective(s): Extract sp... |
+| **techniqueDFT-1167** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1167: Extract search terms from URLs. Objective(s): Extract data from spec... |
+| **techniqueDFT-1168** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1168: Identify volumes. Objective(s): Access partitions, volumes and file ... |
+| **techniqueDFT-1169** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1169: Filter files related to an application. Objective(s): Extract specif... |
+| **techniqueDFT-1170** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1170: Read contents from logical forensic container file(s). Objective(s):... |
+| **techniqueDFT-1171** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1171: Access a file system via live operating system. Objective(s): Access... |
+| **techniqueDFT-1172** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1172: Read bitstream from raw image file(s). Objective(s): Read data from ... |
+| **techniqueDFT-1173** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1173: Extract data from captured screenshots. Objective(s): Read data from... |
+| **techniqueDFT-1174** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1174: Read evidential files stored directly on local file system. Objectiv... |
+| **techniqueDFT-1175** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1175: Extract data from an Android device using content queries. Objective... |
+| **techniqueDFT-1177** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1177: Extract artifacts from multiplayer game app(s). Objective(s): Extrac... |
+| **techniqueDFT-1179** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1179: Extract artifacts from drone/UAV app(s). Objective(s): Extract artif... |
+| **techniqueDFT-1180** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1180: Extract file(s) from a pre-deletion container. Objective(s): Extract... |
+| **techniqueDFT-1181** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1181: Extract artifacts from smart home app(s). Objective(s): Extract arti... |
+| **techniqueDFT-1185** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1185: Extract data from operating system notifications. Objective(s): Extr... |
+| **techniqueDFT-1186** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1186: Compute per-file hash values. Objective(s): Extract specific artifac... |
+| **techniqueDFT-1187** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1187: Extract content from compound files. Objective(s): Extract data from... |
+| **techniqueDFT-1190** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1190: Extract operating system version(s) from data source. Objective(s): ... |
+| **techniqueDFT-1191** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1191: Parse allocated structures in Windows HIVE files. Objective(s): Extr... |
+
+**AFCExtractionData** key properties:
+
+| Property | Type | Required |
+|----------|------|----------|
+| createdBy | IdentityAbstraction | No |
+| description | string | No |
+| externalReference | ExternalReference | No |
+| hasFacet | Facet | No |
+| modifiedTime | dateTime | No |
+| name | string | No |
+| objectCreatedTime | dateTime | No |
+| objectMarking | MarkingDefinitionAbstraction | No |
+| *... 5 more* | | |
 
 **AIContentDetection** key properties:
 
@@ -489,6 +660,8 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **AccessRestriction** | ext.toolcap.toolcap | Class | An access restriction is a marking definition that describes a security, licensing, classificatio... |
 | **AccommodationMotion** | ext.cac.cacontology-case-management | Class | Court filing requesting witness or victim accommodations needed for testimony, accessibility, or ... |
 | **AccountLinking** | ext.cac.cacontology-us-ncmec | Class | Process of linking digital accounts to suspects through NCMEC tip analysis. |
+| **AcquisitionErrorRecord** | ext.solveit.solveit-observable | Class | A record of an error encountered during data acquisition such as a bad sector, read timeout, I/O ... |
+| **AcquisitionRecordFile** | ext.solveit.solveit-observable | Class | A file containing records generated during a data acquisition process, such as error logs or acqu... |
 | **ActionLifecycle** | uco.action | Class | An action lifecycle is an action pattern consisting of an ordered set of multiple actions or subo... |
 | **ActionPhase** | ext.cac.cacontology-hotlines | Class | The phase during which responsive actions are taken (forwarding, takedown requests, etc.). |
 | **ActiveCustodyPhase** | ext.cac.cacontology-custodial | Class | Phase when custodial relationship is actively maintained and operational. Modeled as anti-rigid g... |
@@ -533,6 +706,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **BotConfiguration** | uco.observable | Class | A bot configuration is a set of contextual settings for a software application that runs automate... |
 | **BrowserBookmark** | uco.observable | Class | A browser bookmark is a saved shortcut that directs a WWW (World Wide Web) browser software progr... |
 | **BrowserBookmarkFacet** | uco.observable | Facet | A browser bookmark facet is a grouping of characteristics unique to a saved shortcut that directs... |
+| **BrowserCacheData** | ext.solveit.solveit-observable | Class | The locally cached data stored by a web browser to improve performance. This may include cached w... |
 | **BrowserCookie** | uco.observable | Class | A browser cookie is a piece of of data sent from a website and stored on the user's computer by t... |
 | **BrowserCookieFacet** | uco.observable | Facet | A browser cookie facet is a grouping of characteristics unique to a piece of data sent from a web... |
 | **CACInvestigation** | ext.cac.cacontology | Class | A child-protection investigation that follows a standard action lifecycle that commonly begins wi... |
@@ -568,6 +742,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **ClassmateRecruitmentNetwork** | ext.cac.cacontology-recruitment-networks | Class | Recruitment network operating within educational institutions using existing victims to recruit c... |
 | **ClassroomBasedExploitation** | ext.cac.cacontology-educational-exploitation | Class | Sexual exploitation occurring within classroom setting during academic activities. Enhanced as gU... |
 | **ClosurePhase** | ext.cac.cacontology-hotlines | Class | The phase during which reports are finalized and closed. |
+| **ClusterRun** | ext.solveit.solveit-observable | Class | A contiguous run of clusters allocated to a file in a cluster-based file system (e.g., FAT, NTFS,... |
 | **Coach** | ext.cac.cacontology-custodial | Class | Sports or activity coach with authority over young participants. Modeled as anti-rigid gUFO Role ... |
 | **CoalitionBuilding** | ext.cac.cacontology-legal-harmonization | Class | Building coalitions to support advocacy goals. |
 | **Code** | uco.observable | Class | Code is a direct representation (source, byte or binary) of a collection of computer instructions... |
@@ -606,6 +781,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **ContentDeliveryNetwork** | ext.cac.cacontology-platform-infrastructure | Class | CDN infrastructure used for distributing illegal content globally with high availability and perf... |
 | **ContentGenerationPhase** | ext.cac.cacontology-ai-csam | Class | Anti-rigid phase during which AI systems generate illegal content. |
 | **ContentIdentification** | ext.cac.cacontology-us-ncmec | Class | Identification and classification of illegal content in NCMEC tips. |
+| **ContentQueryData** | ext.solveit.solveit-observable | Class | Data obtained from an Android device by querying content providers via an ADB shell connection (e... |
 | **ContextualCompilation** | uco.core | Class | A contextual compilation is a grouping of things sharing some context (e.g., a set of network con... |
 | **ControlledSubstance** | ext.drugs.drug | Class | A controlled substance is a concrete portion (lot, package, or charged quantity) of a drug or oth... |
 | **CoordinatedCharging** | ext.cac.cacontology-multi-jurisdiction | Class | Coordinated charging decisions across multiple jurisdictions to ensure consistent prosecution app... |
@@ -672,6 +848,8 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **Device** | uco.observable | Class | A device is a piece of equipment or a mechanism designed to serve a special purpose or perform a ... |
 | **DeviceDetection** | ext.cac.cacontology-specialized-units | Class | Detection of electronic storage devices during search operations. Modeled as gUFO Event. |
 | **DeviceFacet** | uco.observable | Facet | A device facet is a grouping of characteristics unique to a piece of equipment or a mechanism des... |
+| **DeviceInterface** | ext.solveit.solveit-observable | Class | A logical interface representing a direct connection to a storage device, such as a USB, SATA. |
+| **DeviceSet** | ext.solveit.solveit-observable | Class | A contextual compilation of devices that are associated in some way, such as devices belonging to... |
 | **DigitalAccount** | uco.observable | Class | A digital account is an arrangement with an entity to enable and control the provision of some ca... |
 | **DigitalAccountFacet** | uco.observable | Facet | A digital account facet is a grouping of characteristics unique to an arrangement with an entity ... |
 | **DigitalCamera** | uco.observable | Class | A digital camera is a camera that captures photographs in digital memory as opposed to capturing ... |
@@ -759,6 +937,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **FirearmThreats** | ext.cac.cacontology-stranger-abduction | Class | Use of firearm to threaten and control victim during abduction. |
 | **FloridaStateCharge** | ext.cac.cacontology-legal-outcomes | Class | Criminal charge under Florida state law and jurisdiction for ICAC-related offenses. Modeled as gU... |
 | **ForensicAnalysisPhase** | ext.cac.cacontology-ai-csam | Class | Anti-rigid phase during which AI-generated content undergoes detailed forensic examination. |
+| **ForensicToolTagBasedReport** | ext.solveit.solveit-analysis | Class | A report generated by a forensic tool based on tags added during analysis. |
 | **ForfeitureOrder** | ext.cryptoinv.cryptoinv | Class | A forfeiture order (or forfeiture allegation, prior to conviction) requires a defendant to forfei... |
 | **ForfeitureOrder** | ext.legalproc.legalproc | Class | A forfeiture order is an order, or pre-conviction allegation, requiring surrender to the state of... |
 | **FormalCommunicationChannel** | ext.cac.cacontology-investigation-coordination | Class | Official communication channels following established protocols and hierarchies. |
@@ -800,6 +979,9 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **HotlineAnalystRole** | ext.cac.cacontology-hotlines | Class | The role of a specialist who analyzes hotline reports. |
 | **HotlineOrganization** | ext.cac.cacontology-hotlines | Class | An organization that operates a hotline for receiving and processing reports of child sexual abus... |
 | **HotlineReport** | ext.cac.cacontology-hotlines | Class | A report submitted to a hotline about potential child sexual abuse material. Enhanced as gUFO Sit... |
+| **Hypothesis** | ext.solveit.solveit-analysis | Class | A proposition or explanation put forward for consideration during forensic analysis, which may be... |
+| **HypothesisedRelationship** | ext.solveit.solveit-analysis | Class | A relationship between entities that is hypothesised to exist, such as an inferred association be... |
+| **HypothesisedUserAccount** | ext.solveit.solveit-analysis | Class | A user account that is hypothesised to have existed, for example inferred from recovered deleted ... |
 | **ICACAffiliateNetwork** | ext.cac.cacontology-prevention | Class | Network of formally affiliated CAC organizations for coordinated child protection efforts. |
 | **ICMPConnection** | uco.observable | Class | An ICMP connection is a network connection that is conformant to the Internet Control Message Pro... |
 | **ICMPConnectionFacet** | uco.observable | Facet | An ICMP connection facet is a grouping of characteristics unique to portions of a network connect... |
@@ -882,6 +1064,9 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **JurisdictionalVariation** | ext.cac.cacontology-legal-harmonization | Class | Variation in legal approaches across jurisdictions. |
 | **JurisdictionalWarrant** | ext.cac.cacontology-multi-jurisdiction | Class | Legal authorization that specifies jurisdictional authority. |
 | **KeyFinding** | ext.cac.cacontology-synthesis | Class | A numbered key finding stated by a report. |
+| **KeywordIndex** | ext.solveit.solveit-observable | Class | An index of keywords created during forensic analysis. |
+| **KeywordIndexingConfiguration** | ext.solveit.solveit-observable | Class | Configuration settings used for keyword indexing during forensic analysis. |
+| **KeywordSearchResult** | ext.solveit.solveit-observable | Class | A result from a keyword search operation during forensic analysis. |
 | **Laptop** | uco.observable | Class | A laptop, laptop computer, or notebook computer is a small, portable personal computer with a scr... |
 | **LawEnforcementAgency** | ext.cac.cacontology-multi-jurisdiction | Class | Government organization responsible for law enforcement within a jurisdiction. |
 | **LawEnforcementPartner** | ext.cac.cacontology-partnerships | Class | Law enforcement agency participating in partnership with investigative and enforcement responsibi... |
@@ -894,6 +1079,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **LegislativeProcess** | ext.cac.cacontology-legal-harmonization | Class | A step in the legislative lifecycle - applicable across jurisdictions. |
 | **Library** | uco.observable | Class | A library is a suite of data and programming code that is used to develop software programs and a... |
 | **LibraryFacet** | uco.observable | Facet | A library facet is a grouping of characteristics unique to a suite of data and programming code t... |
+| **LiveDataCapture** | ext.solveit.solveit-observable | Class | Volatile or transient data captured from a running system at a specific point in time. Includes r... |
 | **LiveStreamContent** | ext.cac.cacontology-production | Class | Content transmitted in real-time during live production events. |
 | **LivestreamedCoercionShow** | ext.cac.cacontology-sadistic-online-exploitation | Class | A coordinated livestreamed coercion event (ritualized 'show') in which participants celebrate, wi... |
 | **LoadBalancer** | ext.cac.cacontology-platform-infrastructure | Class | Load balancing infrastructure distributing traffic across multiple servers for high availability ... |
@@ -903,6 +1089,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **LocalLawEnforcementReferral** | ext.cac.cacontology-us-ncmec | Class | Referral of NCMEC tip to local law enforcement agency. |
 | **LocalPoliceHost** | ext.cac.cacontology-taskforce | Class | Local police department hosting CAC task force (Phoenix PD, Los Angeles PD, San Jose PD, etc.). |
 | **LocationBasedExploitation** | ext.cac.cacontology-stranger-abduction | Class | Exploitation occurring at specific location following victim transportation. |
+| **LogicalImageContainer** | ext.solveit.solveit-observable | Class | A forensic image container that encapsulates a logical collection of files rather than a bitstrea... |
 | **LongGun** | ext.weapons.weap | Class | A long gun is a firearm designed to have a longer barrel than a handgun and to be fired while bra... |
 | **LongTermAbusePattern** | ext.cac.cacontology-institutional-exploitation | Class | Evidence of abuse patterns spanning multiple years or decades. |
 | **LongTermInstitutionalControl** | ext.cac.cacontology-institutional-exploitation | Class | Long-term control and exploitation spanning multiple years or decades within institution. |
@@ -984,6 +1171,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **Narrative** | ext.aeo.engagement | Class | A narrative is a script of all expected sequence of actions, events, entities and their interacti... |
 | **NationalCoordinatedOperation** | ext.cac.cacontology-multi-jurisdiction | Class | Operation coordinated across multiple CAC task forces nationally. |
 | **NationwideAwarenessInitiative** | ext.cac.cacontology-prevention | Class | Nationwide coordinated awareness campaign involving multiple agencies and communities. |
+| **NavigationAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a turn-by-turn navigation application, including route history, recent dest... |
 | **NetworkAppliance** | uco.observable | Class | A network appliance is a purpose-built computer with software or firmware that is designed to pro... |
 | **NetworkCapture** | ext.cac.cacontology-forensics | Class | A capture of network traffic packets for forensic analysis. |
 | **NetworkConnection** | uco.observable | Class | A network connection is a connection (completed or attempted) across a digital network (a group o... |
@@ -995,6 +1183,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **NetworkInterface** | uco.observable | Class | A network interface is a software or hardware interface between two pieces of equipment or protoc... |
 | **NetworkInterfaceFacet** | uco.observable | Facet | A network interface facet is a grouping of characteristics unique to a software or hardware inter... |
 | **NetworkMappingInvestigation** | ext.cac.cacontology-extremist-enterprises | Class | Investigation mapping the structure and relationships within extremist child exploitation networks. |
+| **NetworkPacketCapture** | ext.solveit.solveit-observable | Class | A network packet capture file. |
 | **NetworkPerformance** | ext.cac.cacontology-taskforce | Class | Performance metrics for multi-agency network coordination. |
 | **NetworkProtocol** | uco.observable | Class | A network protocol is an established set of structured rules that determine how data is transmitt... |
 | **NetworkRoute** | uco.observable | Class | A network route is a specific path (of specific network nodes, connections and protocols) for tra... |
@@ -1044,6 +1233,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **ParticipatingAgency** | ext.cac.cacontology-multi-jurisdiction | Class | Agency providing support or resources to multi-jurisdictional investigation. |
 | **PartnerRole** | ext.cac.cacontology-partnerships | Class | Role played by an organization within a public-private partnership framework. Modeled as anti-rig... |
 | **PartnershipFormationPhase** | ext.cac.cacontology-partnerships | Class | Phase of partnership formation including agreement negotiation and framework establishment. Model... |
+| **PaymentAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a mobile payment or digital wallet application, including transaction histo... |
 | **PaymentCard** | uco.observable | Class | A payment card is a physical token that is part of a payment system issued by financial instituti... |
 | **PaymentProcessing** | ext.cac.cacontology-platform-infrastructure | Class | Financial processing systems enabling platform monetization through subscription fees, content pu... |
 | **PeerPersonaGrooming** | ext.cac.cacontology-grooming | Class | Grooming using false peer identity to establish rapport with victims. |
@@ -1179,6 +1369,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **SkiMaskConcealment** | ext.cac.cacontology-stranger-abduction | Class | Use of ski mask or balaclava to conceal identity during approach. |
 | **SkippedGroomingPhases** | ext.cac.cacontology-grooming | Class | Grooming that bypasses traditional phases like trust building, isolation, and normalization. |
 | **SmartDevice** | uco.observable | Class | A smart device is a microprocessor IoT device that is expected to be connected directly to cloud-... |
+| **SmartHomeAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a smart home or IoT control application, including device registries, autom... |
 | **SmartPhone** | uco.observable | Class | A smartphone is a portable device that combines mobile telephone and computing functions into one... |
 | **SocialConnectionLeverage** | ext.cac.cacontology-recruitment-networks | Class | Leveraging existing social connections between victims to facilitate new recruitment. |
 | **SocialIndicator** | ext.cac.cacontology-victim-impact | Class | Changes in social behavior or relationships due to trauma. |
@@ -1190,6 +1381,9 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **SocketAddress** | uco.observable | Class | A socket address (combining and IP address and a port number) is a composite identifier for a net... |
 | **Software** | uco.observable | Class | Software is a definitely scoped instance of a collection of data or computer instructions that te... |
 | **SoftwareFacet** | uco.observable | Facet | A software facet is a grouping of characteristics unique to a software program (a definitively sc... |
+| **SolveitAwareInstrument** | ext.solveit.solveit-tool-profile | Class | A specialised tool that has been evaluated against SOLVE-IT tool capability profiles. Adds the co... |
+| **SolveitInvestigativeAction** | ext.solveit.solveit-core | Class | A SOLVE-IT aware InvestigativeAction that links an investigative action to the SOLVE-IT technique... |
+| **SortedTimeline** | ext.solveit.solveit-observable | Class | A timeline whose entries have been ordered by position, as determined by a sorting process. Multi... |
 | **SpamAnnotation** | ext.cac.cacontology-us-ncmec | Class | Annotation indicating the report is associated with spam. Source: NCMEC Cybertip API Section B.1.... |
 | **SportsContextPhysicalAbuse** | ext.cac.cacontology-athletic-exploitation | Class | Physical abuse within sports training context disguised as coaching. Enhanced as gUFO Event. |
 | **StateAgency** | ext.cac.cacontology-multi-jurisdiction | Class | Law enforcement agency with state-level jurisdiction. |
@@ -1256,6 +1450,7 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **TherapyDog** | ext.cac.cacontology-specialized-units | Class | Trained therapy dog providing emotional support to officers. Modeled as gUFO Object. |
 | **TherapyParticipant** | ext.cac.cacontology-victim-impact | Class | Role of victim participating in therapeutic interventions. |
 | **Thread** | uco.types | Class | A semi-ordered array of items, that can be present in multiple copies.  Implemetation of a UCO Th... |
+| **Timeline** | ext.solveit.solveit-observable | Class | A set of timeline entries extracted during forensic analysis. |
 | **TipEnrichment** | ext.cac.cacontology-us-ncmec | Class | Enhancement of NCMEC tips with additional investigative information. |
 | **TipPrioritization** | ext.cac.cacontology-us-ncmec | Class | Priority assessment and ranking of NCMEC tips for investigation. |
 | **TipProcessing** | ext.cac.cacontology-us-ncmec | Class | Processing workflow for NCMEC tips from receipt to investigation referral. |
@@ -1326,11 +1521,15 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **VictimSupport** | ext.cac.cacontology-victim-impact | Class | Support services provided to child victims and their families. |
 | **VictimTransportation** | ext.cac.cacontology-sex-trafficking | Class | Transportation of trafficking victims between locations for commercial sexual exploitation. Model... |
 | **VictimTransportationAssistance** | ext.cac.cacontology-victim-impact | Class | Provision of transportation assistance to trafficking victims (bus tickets, safe transport). |
+| **VideoFrame** | ext.solveit.solveit-observable | Class | A single frame extracted from a video file during forensic analysis. |
 | **VirtualAssetHoldingFacet** | ext.cryptoinv.cryptoinv | Facet | A virtual asset holding facet is a grouping of characteristics describing a point-in-time quantit... |
 | **VirtualAssetServiceProvider** | ext.cryptoinv.cryptoinv | Class | A virtual asset service provider (VASP) is any natural or legal person who as a business conducts... |
+| **VirtualizedComputer** | ext.solveit.solveit-observable | Class | A computer (desktop, laptop, or server) that exists as a virtual machine rather than running on p... |
 | **Volume** | uco.observable | Class | A volume is a single accessible storage area (volume) with a single file system. [based on https:... |
 | **VolumeFacet** | uco.observable | Facet | A volume facet is a grouping of characteristics unique to a single accessible storage area (volum... |
 | **VulnerabilityExploitation** | ext.cac.cacontology-stranger-abduction | Class | Exploitation of specific victim vulnerabilities during stranger abduction. |
+| **WeaknessEvaluation** | ext.solveit.solveit-wa | Class | A risk assessment of a single SOLVE-IT weakness, capturing likelihood, impact, and optionally det... |
+| **WeaknessEvaluationSet** | ext.solveit.solveit-wa | Class | A collection of weakness evaluations scoped to a technique or context, with authorship and date m... |
 | **Weapon** | ext.weapons.weap | Class | A weapon is a material item designed or used to kill, wound, or inflict damage on persons, struct... |
 | **WeaponBasedCoercion** | ext.cac.cacontology-stranger-abduction | Class | Use of weapons to threaten, intimidate, and control victims during abduction and exploitation. |
 | **WebPage** | uco.observable | Class | A web page is a specific collection of information provided by a website and displayed to a user ... |
@@ -1368,6 +1567,195 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **WindowsWaitableTime** | uco.observable | Class | A Windows waitable timer is a synchronization object within the Windows operating system whose st... |
 | **WirelessNetworkConnection** | uco.observable | Class | A wireless network connection is a connection (completed or attempted) across an IEEE 802.11 stan... |
 | **WirelessNetworkConnectionFacet** | uco.observable | Facet | A wireless network connection facet is a grouping of characteristics unique to a connection (comp... |
+| **httpResponseHeader** | ext.solveit.solveit-observable | Class | An HTTP response header containing multiple header fields from an HTTP server response. |
+| **iOSDeviceGeneratedBackup** | ext.solveit.solveit-observable | Class | Data produced by the iOS backup mechanism via iTunes, Finder, or libimobiledevice. Contains a man... |
+| **techniqueDFT-1001** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1001: Triage devices or media. Objective(s): Prioritize digital evidence s... |
+| **techniqueDFT-1002** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1002: Copy sectors from storage media. Objective(s): Acquire data. See htt... |
+| **techniqueDFT-1003** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1003: Copy pages from physical memory. Objective(s): Acquire data. See htt... |
+| **techniqueDFT-1004** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1004: Collect logical files selectively. Objective(s): Acquire data. See h... |
+| **techniqueDFT-1005** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1005: Search a crime scene for relevant physical evidence. Objective(s): F... |
+| **techniqueDFT-1006** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1006: Search a crime scene using digital sniffer dogs. Objective(s): Find ... |
+| **techniqueDFT-1007** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1007: Detect the potential existence of digital devices using a SyncTriage... |
+| **techniqueDFT-1008** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1008: Detect the potential existence of digital devices by profiling netwo... |
+| **techniqueDFT-1009** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1009: Locate potential digital evidence sources via cloud account identifi... |
+| **techniqueDFT-1010** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1010: Place device in a faraday environment. Objective(s): Preserve digita... |
+| **techniqueDFT-1011** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1011: Store seized devices or media in evidence bags. Objective(s): Preser... |
+| **techniqueDFT-1012** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1012: Write protect storage media using a hardware write blocker. Objectiv... |
+| **techniqueDFT-1013** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1013: Write protect storage media using a software write blocker. Objectiv... |
+| **techniqueDFT-1014** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1014: Document the chain of custody. Objective(s): Document digital forens... |
+| **techniqueDFT-1015** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1015: Collect logical files selectively based on privacy preserving criter... |
+| **techniqueDFT-1016** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1016: Collect specific pieces of information from a live running device. O... |
+| **techniqueDFT-1017** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1017: Capture network packets. Objective(s): Acquire data. See https://sol... |
+| **techniqueDFT-1018** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1018: Collect data from a remote networked device. Objective(s): Acquire d... |
+| **techniqueDFT-1019** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1019: Extract a backup from a mobile device. See https://solveit-df.org fo... |
+| **techniqueDFT-1020** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1020: Extract the file system from a mobile device. Objective(s): Acquire ... |
+| **techniqueDFT-1021** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1021: Extract artifacts from a configuration file. Objective(s): Extract s... |
+| **techniqueDFT-1022** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1022: Capture mobile device screenshots (manually). Objective(s): Acquire ... |
+| **techniqueDFT-1023** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1023: Collect data from cloud service via a live web page using credential... |
+| **techniqueDFT-1024** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1024: Collect data from cloud service via submission of request to service... |
+| **techniqueDFT-1025** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1025: Store bitstream data in a forensic image format. Objective(s): Store... |
+| **techniqueDFT-1026** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1026: Store data in standard archive format. Objective(s): Store acquired ... |
+| **techniqueDFT-1027** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1027: Read data from a device using JTAG. See https://solveit-df.org for w... |
+| **techniqueDFT-1028** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1028: Physically remove a storage chip from a device (chip-off). Objective... |
+| **techniqueDFT-1029** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1029: Read data from a desoldered eMMC via a chip reader. Objective(s): Ac... |
+| **techniqueDFT-1030** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1030: Read data from unmanaged NAND. Objective(s): Acquire data. See https... |
+| **techniqueDFT-1031** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1031: Recover encryption/decryption key from memory. Objective(s): Overcom... |
+| **techniqueDFT-1032** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1032: Recover encryption/decryption key information using side channel att... |
+| **techniqueDFT-1033** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1033: Extract credential(s) from an accessible device to attempt access to... |
+| **techniqueDFT-1034** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1034: Attack a stored credential or device using a brute force approach. O... |
+| **techniqueDFT-1035** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1035: Attack a stored credential or device using a dictionary-based approa... |
+| **techniqueDFT-1036** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1036: Recover information about a potential device PIN or pattern lock usi... |
+| **techniqueDFT-1037** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1037: Obtain password from the device's owner. Objective(s): Overcome prot... |
+| **techniqueDFT-1038** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1038: Attack a stored credential or device using a rainbow table-based app... |
+| **techniqueDFT-1039** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1039: Downgrade apps to facilitate data extraction. Objective(s): Overcome... |
+| **techniqueDFT-1040** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1040: Exploit a mobile device to facilitate privileged access for data ext... |
+| **techniqueDFT-1041** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1041: Gain access to a device via a Pin2Pwn approach. Objective(s): Overco... |
+| **techniqueDFT-1042** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1042: Verify hash of imaged data matches the hash of the source device. Ob... |
+| **techniqueDFT-1043** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1043: Read bitstream from forensic image container file(s). Objective(s): ... |
+| **techniqueDFT-1044** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1044: Decode data stored in a mobile backup format. Objective(s): Read dat... |
+| **techniqueDFT-1045** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1045: Read contents from standard archive file(s). Objective(s): Read data... |
+| **techniqueDFT-1046** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1046: Redact digital forensic tool results to protect privileged material.... |
+| **techniqueDFT-1047** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1047: Filter files using a hashset to reduce files examined. Objective(s):... |
+| **techniqueDFT-1048** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1048: Protect privacy by only partially processing data from a source. Obj... |
+| **techniqueDFT-1049** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1049: Keyword search. Objective(s): Locate potentially relevant content. S... |
+| **techniqueDFT-1050** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1050: Locate relevant files using a hashset to identify files of interest.... |
+| **techniqueDFT-1051** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1051: Locate potentially relevant files using fuzzy hash matching. Objecti... |
+| **techniqueDFT-1052** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1052: Generate timeline. Objective(s): Extract specific artifact types. Se... |
+| **techniqueDFT-1053** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1053: Extract 'entities' from a data source. Objective(s): Extract specifi... |
+| **techniqueDFT-1054** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1054: Review artifacts or content manually for relevant material. Objectiv... |
+| **techniqueDFT-1055** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1055: Examine file and folder structure. Objective(s): Review content for ... |
+| **techniqueDFT-1056** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1056: Enumerate connections between artifacts. Objective(s): Extract speci... |
+| **techniqueDFT-1057** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1057: Search for indicators of steganography. Objective(s): Detect anti-fo... |
+| **techniqueDFT-1058** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1058: Search for mismatched file extensions. Objective(s): Detect anti-for... |
+| **techniqueDFT-1059** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1059: Identify partitions. Objective(s): Access partitions, volumes and fi... |
+| **techniqueDFT-1060** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1060: Enumerate allocated files and folders. Objective(s): Access partitio... |
+| **techniqueDFT-1061** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1061: Recover non-allocated files. Objective(s): Access partitions, volume... |
+| **techniqueDFT-1062** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1062: Decrypt encrypted file systems/volumes. Objective(s): Access partiti... |
+| **techniqueDFT-1063** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1063: Identify file types. Objective(s): Access partitions, volumes and fi... |
+| **techniqueDFT-1064** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1064: Carve non-allocated files. See https://solveit-df.org for weaknesses... |
+| **techniqueDFT-1065** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1065: Extract artifacts from operating system-level content indexer(s). Ob... |
+| **techniqueDFT-1066** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1066: Extract artifacts from operating system log files. Objective(s): Ext... |
+| **techniqueDFT-1067** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1067: Extract artifacts from operating system cloud synchronization featur... |
+| **techniqueDFT-1068** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1068: Extract operating system artifacts indicating recently used files. O... |
+| **techniqueDFT-1069** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1069: Extract artifacts from a web browser. Objective(s): Extract artifact... |
+| **techniqueDFT-1070** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1070: Extract artifacts from email client(s) or webmail access. Objective(... |
+| **techniqueDFT-1071** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1071: Extract data from SQLite database(s). Objective(s): Extract data fro... |
+| **techniqueDFT-1072** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1072: Extract artifacts from chat app(s). Objective(s): Extract artifacts ... |
+| **techniqueDFT-1073** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1073: Extract artifacts from calendar app(s). Objective(s): Extract artifa... |
+| **techniqueDFT-1074** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1074: Extract artifacts from social network app(s). Objective(s): Extract ... |
+| **techniqueDFT-1075** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1075: Extract artifacts from maps/travel app(s). Objective(s): Extract art... |
+| **techniqueDFT-1076** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1076: Extract artifacts from log files. Objective(s): Extract specific art... |
+| **techniqueDFT-1077** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1077: Extract artifacts from photo management app(s). Objective(s): Extrac... |
+| **techniqueDFT-1078** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1078: Extract artifacts from cloud synchronization app(s). Objective(s): E... |
+| **techniqueDFT-1079** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1079: Examine audio content. Objective(s): Review content for relevance. S... |
+| **techniqueDFT-1080** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1080: Examine video content. Objective(s): Review content for relevance. S... |
+| **techniqueDFT-1081** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1081: Examine image/picture content. Objective(s): Review content for rele... |
+| **techniqueDFT-1082** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1082: Examine document content. Objective(s): Review content for relevance... |
+| **techniqueDFT-1083** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1083: Extract artifacts from operating system memory structures. Objective... |
+| **techniqueDFT-1084** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1084: Extract potentially user-identifying content from account informatio... |
+| **techniqueDFT-1085** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1085: Conflate specific account identifiers to a single user identity. Obj... |
+| **techniqueDFT-1086** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1086: Analyze timeline. Objective(s): Locate potentially relevant content.... |
+| **techniqueDFT-1087** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1087: Reconstruct the location-based properties of an event. Objective(s):... |
+| **techniqueDFT-1088** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1088: Reconstruct an relations between events properties of events. Object... |
+| **techniqueDFT-1089** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1089: Review source code of software. Objective(s): Conduct research. See ... |
+| **techniqueDFT-1090** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1090: Experiment with software to ascertain forensic artifacts. Objective(... |
+| **techniqueDFT-1091** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1091: Tag artifacts. Objective(s): Document digital forensic activities. S... |
+| **techniqueDFT-1092** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1092: Generate tag-based automated report. Objective(s): Document digital ... |
+| **techniqueDFT-1093** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1093: Write expert report. Objective(s): Document digital forensic activit... |
+| **techniqueDFT-1094** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1094: Disclose investigation material to an authorized legal authority. Ob... |
+| **techniqueDFT-1095** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1095: Instrument a piece of running software. Objective(s): Conduct resear... |
+| **techniqueDFT-1096** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1096: Extract operating system artifacts indicating program execution. Obj... |
+| **techniqueDFT-1097** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1097: Extract operating system artifacts indicating installed software. Ob... |
+| **techniqueDFT-1098** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1098: Enumerate operating system user accounts. Objective(s): Extract arti... |
+| **techniqueDFT-1099** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1099: Repair a damaged or incomplete file using `grafting`. Objective(s): ... |
+| **techniqueDFT-1100** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1100: Extract metadata from within images. Objective(s): Extract data from... |
+| **techniqueDFT-1101** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1101: Conduct cell site survey. Objective(s): Conduct research. See https:... |
+| **techniqueDFT-1102** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1102: Decode data extracted from unmanaged NAND. Objective(s): Read data f... |
+| **techniqueDFT-1103** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1103: Virtualize suspect system for previewing. Objective(s): Create visua... |
+| **techniqueDFT-1104** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1104: Collect data using open source intelligence. Objective(s): Acquire d... |
+| **techniqueDFT-1105** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1105: Examine memory dump from an application. Objective(s): Extract artif... |
+| **techniqueDFT-1106** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1106: Classify if a video is potentially synthetically generated. See http... |
+| **techniqueDFT-1107** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1107: Extract artifacts from health/fitness app(s). Objective(s): Extract ... |
+| **techniqueDFT-1108** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1108: Extract artifacts from reminders app(s). Objective(s): Extract artif... |
+| **techniqueDFT-1109** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1109: Extract artifacts from payment app(s). Objective(s): Extract artifac... |
+| **techniqueDFT-1110** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1110: Preserve reference data. Objective(s): Prepare for a digital investi... |
+| **techniqueDFT-1111** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1111: Record system clock offset. Objective(s): Acquire data. See https://... |
+| **techniqueDFT-1112** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1112: Locate and remove physical disks from a device. Objective(s): Access... |
+| **techniqueDFT-1113** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1113: Access internal storage via bootable environment. Objective(s): Acce... |
+| **techniqueDFT-1114** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1114: Preserve memory contents via Cold Boot Attack. Objective(s): Preserv... |
+| **techniqueDFT-1115** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1115: Visualize geolocation information. Objective(s): Create visualizatio... |
+| **techniqueDFT-1116** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1116: Extract references to connected devices. Objective(s): Extract artif... |
+| **techniqueDFT-1117** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1117: Reconstruct the time that an event may have occurred. Objective(s): ... |
+| **techniqueDFT-1118** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1118: Locate relevant files by path. Objective(s): Locate potentially rele... |
+| **techniqueDFT-1119** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1119: Automatically scan for artifact changes caused by app updates. Objec... |
+| **techniqueDFT-1120** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1120: Extract artifacts from app data automatically. Objective(s): Extract... |
+| **techniqueDFT-1121** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1121: Index a data source for keyword searching. Objective(s): Extract spe... |
+| **techniqueDFT-1122** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1122: Keyword search (case-type wordlists). See https://solveit-df.org for... |
+| **techniqueDFT-1123** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1123: Keyword search (case-specific wordlists). See https://solveit-df.org... |
+| **techniqueDFT-1124** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1124: Keyword search (indexed). See https://solveit-df.org for weaknesses ... |
+| **techniqueDFT-1125** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1125: Keyword search (live). See https://solveit-df.org for weaknesses and... |
+| **techniqueDFT-1126** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1126: Keyword search (live) (physical). See https://solveit-df.org for wea... |
+| **techniqueDFT-1127** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1127: Keyword search (live) (logical). See https://solveit-df.org for weak... |
+| **techniqueDFT-1128** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1128: Search for indicators of malware. Objective(s): Detect anti-forensic... |
+| **techniqueDFT-1129** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1129: Search for indicators of clock tampering. Objective(s): Detect anti-... |
+| **techniqueDFT-1130** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1130: Search for indicators of encrypted data. Objective(s): Detect anti-f... |
+| **techniqueDFT-1131** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1131: Search for indicators of trail obfuscation. Objective(s): Detect ant... |
+| **techniqueDFT-1132** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1132: Search for indicators of artifact wiping. Objective(s): Detect anti-... |
+| **techniqueDFT-1133** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1133: Extract artifacts from AI companion app(s). Objective(s): Extract ar... |
+| **techniqueDFT-1134** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1134: Use time anchors to estimate clock offset. See https://solveit-df.or... |
+| **techniqueDFT-1137** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1137: Extract browser history artifacts. See https://solveit-df.org for we... |
+| **techniqueDFT-1138** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1138: Extract browser cache artifacts. See https://solveit-df.org for weak... |
+| **techniqueDFT-1139** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1139: Extract browser session artifacts. See https://solveit-df.org for we... |
+| **techniqueDFT-1140** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1140: Extract browser autofill artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1141** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1141: Extract browser bookmark artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1142** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1142: Extract browser download artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1143** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1143: Extract browser configuration artifacts. See https://solveit-df.org ... |
+| **techniqueDFT-1144** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1144: Enumerate browser profiles. See https://solveit-df.org for weaknesse... |
+| **techniqueDFT-1145** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1145: Extract browser extensions artifacts. See https://solveit-df.org for... |
+| **techniqueDFT-1146** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1146: Extract browser synchronization artifacts. See https://solveit-df.or... |
+| **techniqueDFT-1147** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1147: Extract browser cookie artifacts. See https://solveit-df.org for wea... |
+| **techniqueDFT-1148** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1148: Extract browser web storage artifacts. See https://solveit-df.org fo... |
+| **techniqueDFT-1149** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1149: Extract artifacts from the file versioning feature. Objective(s): Ex... |
+| **techniqueDFT-1150** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1150: Recover non-allocated files using residual file metadata. See https:... |
+| **techniqueDFT-1151** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1151: Keyword search (over extracted artifacts). See https://solveit-df.or... |
+| **techniqueDFT-1153** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1153: Apply offset to a timestamp. See https://solveit-df.org for weakness... |
+| **techniqueDFT-1154** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1154: Reconstruct an identity associated with an event. Objective(s): Reco... |
+| **techniqueDFT-1155** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1155: Reconstruct that a specific event may have occurred. Objective(s): R... |
+| **techniqueDFT-1156** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1156: Reconstruct if an event could have functionally occurred on a system... |
+| **techniqueDFT-1157** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1157: Extract device data using exposed service. Objective(s): Acquire dat... |
+| **techniqueDFT-1158** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1158: Configure device to enable a service needed for data extraction. Obj... |
+| **techniqueDFT-1159** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1159: Extract mobile data via deployed agent. Objective(s): Acquire data. ... |
+| **techniqueDFT-1160** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1160: Collect data with 'cloud backup restore' approach. Objective(s): Acq... |
+| **techniqueDFT-1161** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1161: Collect data from cloud service via API using credentials. Objective... |
+| **techniqueDFT-1162** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1162: Read data from a device via In-System Programming (ISP). Objective(s... |
+| **techniqueDFT-1163** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1163: Capture mobile device screenshots (automatically). Objective(s): Acq... |
+| **techniqueDFT-1164** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1164: Read data directly from a block device. Objective(s): Acquire data. ... |
+| **techniqueDFT-1165** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1165: Extract software configuration information. Objective(s): Extract sp... |
+| **techniqueDFT-1166** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1166: Connect directly to storage media. Objective(s): Access device data ... |
+| **techniqueDFT-1167** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1167: Extract search terms from URLs. Objective(s): Extract data from spec... |
+| **techniqueDFT-1168** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1168: Identify volumes. Objective(s): Access partitions, volumes and file ... |
+| **techniqueDFT-1169** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1169: Filter files related to an application. Objective(s): Extract specif... |
+| **techniqueDFT-1170** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1170: Read contents from logical forensic container file(s). Objective(s):... |
+| **techniqueDFT-1171** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1171: Access a file system via live operating system. Objective(s): Access... |
+| **techniqueDFT-1172** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1172: Read bitstream from raw image file(s). Objective(s): Read data from ... |
+| **techniqueDFT-1173** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1173: Extract data from captured screenshots. Objective(s): Read data from... |
+| **techniqueDFT-1174** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1174: Read evidential files stored directly on local file system. Objectiv... |
+| **techniqueDFT-1175** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1175: Extract data from an Android device using content queries. Objective... |
+| **techniqueDFT-1176** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1176: Classify if an image is potentially synthetically generated. See htt... |
+| **techniqueDFT-1177** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1177: Extract artifacts from multiplayer game app(s). Objective(s): Extrac... |
+| **techniqueDFT-1178** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1178: Store bitstream data in a raw image format. Objective(s): Store acqu... |
+| **techniqueDFT-1179** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1179: Extract artifacts from drone/UAV app(s). Objective(s): Extract artif... |
+| **techniqueDFT-1180** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1180: Extract file(s) from a pre-deletion container. Objective(s): Extract... |
+| **techniqueDFT-1181** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1181: Extract artifacts from smart home app(s). Objective(s): Extract arti... |
+| **techniqueDFT-1182** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1182: Filter a timeline for relevant entries. See https://solveit-df.org f... |
+| **techniqueDFT-1184** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1184: Sort a timeline so entries are ordered chronologically. See https://... |
+| **techniqueDFT-1185** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1185: Extract data from operating system notifications. Objective(s): Extr... |
+| **techniqueDFT-1186** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1186: Compute per-file hash values. Objective(s): Extract specific artifac... |
+| **techniqueDFT-1187** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1187: Extract content from compound files. Objective(s): Extract data from... |
+| **techniqueDFT-1190** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1190: Extract operating system version(s) from data source. Objective(s): ... |
+| **techniqueDFT-1191** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1191: Parse allocated structures in Windows HIVE files. Objective(s): Extr... |
+| **techniqueDFT-1192** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1192: Disable connectivity using device configuration settings. Objective(... |
+| **techniqueDFT-1193** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1193: Read metadata from within a forensic image container. Objective(s): ... |
 
 **AIContentDetection** key properties:
 
@@ -1444,6 +1832,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 
 | Class | Module | Type | Description |
 |-------|--------|------|-------------|
+| **AFCExtractionData** | ext.solveit.solveit-observable | Class | Data obtained via Apple File Conduit (AFC) service from iOS devices. |
 | **AICSAMInvestigation** | ext.cac.cacontology-ai-csam | Class | Investigation specifically focused on AI-generated child sexual abuse material, requiring special... |
 | **AIContentDetection** | ext.cac.cacontology-ai-csam | Class | Process of identifying AI-generated or AI-altered content to distinguish from authentic material ... |
 | **AIContentGeneration** | ext.cac.cacontology-ai-csam | Class | Process of creating artificial CSAM using machine learning models, neural networks, or other AI t... |
@@ -1459,22 +1848,26 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **AcademicPartner** | ext.cac.cacontology-partnerships | Class | Academic institution participating in partnership with research and training capabilities. Modele... |
 | **AcademicPartnership** | ext.cac.cacontology-partnerships | Class | Partnership with academic institutions for research, training, and technology development in chil... |
 | **AccountSuspensionAction** | ext.cac.cacontology-platforms | Class | An action to suspend or terminate a user account due to policy violations. Modeled as gUFO Event. |
+| **AcquiredData** | ext.solveit.solveit-observable | Class | Data that has been forensically collected from a source device or system. This is the parent clas... |
 | **ActiveCooperationPhase** | ext.cac.cacontology-partnerships | Class | Phase of active cooperation with joint operations and information sharing. Modeled as anti-rigid ... |
 | **ActiveCustodyPhase** | ext.cac.cacontology-custodial | Class | Phase when custodial relationship is actively maintained and operational. Modeled as anti-rigid g... |
 | **Adaptor** | uco.observable | Class | An adaptor is a device that physically converts the pin outputs but does not alter the underlying... |
 | **AdultTraffickingVictimRole** | ext.cac.cacontology-sex-trafficking | Class | Role of adult being sex trafficked through force, fraud, or coercion. Modeled as anti-rigid gUFO ... |
 | **Age** | ext.cac.cacontology-temporal | Class | Age of a person modeled as a gUFO Quality whose concrete value is attributed in time-bounded situ... |
 | **AggravatedSexualAbuse** | ext.cac.cacontology-usa-federal-law | Class | Federal crime of aggravated sexual abuse involving children in federal jurisdiction. Modeled as g... |
+| **AiChatAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an AI chatbot or assistant application, including conversation histories, p... |
 | **AnalystRole** | ext.cac.cacontology | Class | Role of professional analyzing cybertips and digital evidence. Modeled as anti-rigid gUFO Role. |
 | **AnalystRole** | ext.cac.cacontology-specialized-units | Class | Role of analyst supporting specialized unit operations. Modeled as anti-rigid gUFO Role. |
 | **AnalyticTool** | uco.tool | Class | An analytic tool is an artifact of hardware and/or software utilized to accomplish a task or purp... |
 | **AndroidDevice** | uco.observable | Class | An Android device is a device running the Android operating system. [based on https://en.wikipedi... |
 | **AndroidDeviceFacet** | uco.observable | Facet | An Android device facet is a grouping of characteristics unique to an Android device. [based on h... |
+| **AndroidDeviceGeneratedBackup** | ext.solveit.solveit-observable | Class | Data produced by Android's backup mechanism (e.g., adb backup). Potentially contains application ... |
 | **AndroidPhone** | uco.observable | Class | An android phone is a smart phone that applies the Android mobile operating system. |
 | **AppealProcess** | ext.cac.cacontology-legal-outcomes | Class | Legal process to challenge conviction or sentence in higher court. Modeled as gUFO Event. |
 | **AppellateDisposition** | ext.cac.cacontology-legal-outcomes | Class | Outcome of an appellate issue or appeal (e.g., affirmed, reversed, vacated, remanded). Modeled as... |
 | **AppellateIssue** | ext.cac.cacontology-legal-outcomes | Class | Issue raised on appeal to challenge a conviction or sentence (e.g., evidentiary admission, suffic... |
 | **AppleDevice** | uco.observable | Class | An apple device is a smart device that applies either the MacOS or iOS operating system. |
+| **AppleUnifiedLogArchive** | ext.solveit.solveit-observable | Class | Data obtained by collecting Apple Unified Logs from a macOS or iOS device. |
 | **Appliance** | uco.observable | Class | An appliance is a purpose-built computer with software or firmware that is designed to provide a ... |
 | **ArchiveFile** | uco.observable | Class | An archive file is a file that is composed of one or more computer files along with metadata. |
 | **ArchiveFileFacet** | uco.observable | Facet | An archive file facet is a grouping of characteristics unique to a file that is composed of one o... |
@@ -1489,11 +1882,14 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **AutomatedReporterAgent** | ext.cac.cacontology-hotlines | Class | A software agent that automatically reports content to hotlines. Enhanced as gUFO Object for comp... |
 | **Babysitter** | ext.cac.cacontology-custodial | Class | Individual temporarily caring for children in parents' absence. Modeled as anti-rigid gUFO Role w... |
 | **BackgroundCheck** | ext.cac.cacontology-custodial | Class | Background verification conducted for custodial or care position. Modeled as gUFO Object with ver... |
+| **Bitstream** | ext.solveit.solveit-observable | Class | A sequential, complete bit-for-bit copy of a storage medium (LBA0 to LBAmax). Represents data in ... |
+| **BitstreamRandomAccessed** | ext.solveit.solveit-observable | Class | Random access to sector-level data, whether from a live device or a decoded forensic image contai... |
 | **BlackberryPhone** | uco.observable | Class | A blackberry phone is a smart phone that applies the Blackberry OS mobile operating system. (Blac... |
 | **BlockDeviceNode** | uco.observable | Class | A block device node is a UNIX filesystem special file that serves as a conduit to communicate wit... |
 | **BluetoothAddress** | uco.observable | Class | A Bluetooth address is a Bluetooth standard conformant identifier assigned to a Bluetooth device ... |
 | **BluetoothAddressFacet** | uco.observable | Facet | A Bluetooth address facet is a grouping of characteristics unique to a Bluetooth standard conform... |
 | **BreachOfCare** | ext.cac.cacontology-custodial | Class | Failure to provide appropriate care while in custodial role. Modeled as gUFO SubKind with care ob... |
+| **BrowserCacheData** | ext.solveit.solveit-observable | Class | The locally cached data stored by a web browser to improve performance. This may include cached w... |
 | **BrowserCookie** | uco.observable | Class | A browser cookie is a piece of of data sent from a website and stored on the user's computer by t... |
 | **BrowserCookieFacet** | uco.observable | Facet | A browser cookie facet is a grouping of characteristics unique to a piece of data sent from a web... |
 | **CACInvestigation** | ext.cac.cacontology | Class | A child-protection investigation that follows a standard action lifecycle that commonly begins wi... |
@@ -1533,6 +1929,8 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **CivilSocietyPartner** | ext.cac.cacontology-partnerships | Class | Civil society organization participating in partnership with community engagement capabilities. M... |
 | **ClassroomExploitationContext** | ext.cac.cacontology-educational-exploitation | Class | Specific classroom situations and contexts where exploitation occurs. Enhanced as gUFO Object for... |
 | **ClientCommunicationInterception** | ext.cac.cacontology-undercover | Class | Interception of phone communications between traffickers, victims, and clients. |
+| **ClockOffsetCapture** | ext.solveit.solveit-observable | Class | The acquisition of a clock offset measurement from a device. Contains the ClockOffsetMeasurement ... |
+| **ClockOffsetMeasurement** | ext.solveit.solveit-observable | Class | The measured difference between a device clock and a reference time source. Records what was comp... |
 | **Coach** | ext.cac.cacontology-custodial | Class | Sports or activity coach with authority over young participants. Modeled as anti-rigid gUFO Role ... |
 | **Code** | uco.observable | Class | Code is a direct representation (source, byte or binary) of a collection of computer instructions... |
 | **CollaborativeInvestigationSituation** | ext.cac.cacontology-partnerships | Class | Complex situation involving multiple partners working together on investigations. Modeled as gUFO... |
@@ -1566,6 +1964,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **ContentHashingTool** | ext.cac.cacontology-detection | Class | A tool for generating perceptual or cryptographic hashes for content matching (e.g., PhotoDNA, pH... |
 | **ContentModerationAction** | ext.cac.cacontology-platforms | Class | An action taken by a platform to moderate content (review, remove, restrict, etc.). Modeled as gU... |
 | **ContentModerationCapability** | ext.cac.cacontology-platforms | Class | The ability and methods a platform uses to detect, review, and remove inappropriate content. Mode... |
+| **ContentQueryData** | ext.solveit.solveit-observable | Class | Data obtained from an Android device by querying content providers via an ADB shell connection (e... |
 | **ContinuingEducation** | ext.cac.cacontology-training | Class | Ongoing education for certified professionals. Modeled as gUFO Organization. |
 | **ContributingToDelinquency** | ext.cac.cacontology-legal-outcomes | Class | Florida state charge for contributing to the delinquency or dependency of a child. Applies when a... |
 | **CoordinatedArrest** | ext.cac.cacontology-specialized-units | Class | Arrest coordinated as part of larger operation. Modeled as gUFO Event. |
@@ -1608,6 +2007,10 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **DeviceDetection** | ext.cac.cacontology-specialized-units | Class | Detection of electronic storage devices during search operations. Modeled as gUFO Event. |
 | **DeviceFacet** | uco.observable | Facet | A device facet is a grouping of characteristics unique to a piece of equipment or a mechanism des... |
 | **DeviceForensicAnalysis** | ext.cac.cacontology-sextortion | Class | Forensic examination of seized devices for sextortion evidence. |
+| **DeviceGeneratedBackup** | ext.solveit.solveit-observable | Class | Data produced by a device's built-in backup mechanism. Content is determined by the device's back... |
+| **DeviceInterface** | ext.solveit.solveit-observable | Class | A logical interface representing a direct connection to a storage device, such as a USB, SATA. |
+| **DeviceScreenshotCapture** | ext.solveit.solveit-observable | Class | The acquisition of a screenshot from a device screen. Contains the captured image (RasterPicture). |
+| **DeviceSet** | ext.solveit.solveit-observable | Class | A contextual compilation of devices that are associated in some way, such as devices belonging to... |
 | **DeviceSocialMediaCorrelation** | ext.cac.cacontology-platforms | Class | Correlation between evidence found on devices and social media accounts. |
 | **DigitalEvidenceCorrelation** | ext.cac.cacontology-platforms | Class | Process of correlating evidence found across devices and platforms. |
 | **DigitalForensicsTraining** | ext.cac.cacontology-training | Class | Training on digital forensics techniques for child protection cases. Modeled as gUFO Event. |
@@ -1663,6 +2066,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **FileFacet** | uco.observable | Facet | A file facet is a grouping of characteristics unique to the storage of a file (computer resource ... |
 | **FileHostingService** | ext.cac.cacontology-platforms | Class | A service for storing and sharing files online (e.g., Google Drive, Dropbox, OneDrive, MEGA). Mod... |
 | **FileSystem** | uco.observable | Class | A file system is the process that manages how and where data on a storage medium is stored, acces... |
+| **FileSystemExtraction** | ext.solveit.solveit-observable | Class | Data obtained through direct access to a file system structure. Represents the files and folders ... |
 | **FileSystemFacet** | uco.observable | Facet | A file system facet is a grouping of characteristics unique to the process that manages how and w... |
 | **FinancialAccount** | ext.cac.cacontology-asset-forfeiture | Class | Bank account or financial instrument subject to restraint or forfeiture. Enhanced as gUFO Object ... |
 | **FinancialFacilitatorRole** | ext.cac.cacontology-sex-trafficking | Class | Role managing financial aspects including collecting earnings and money laundering. Modeled as an... |
@@ -1674,6 +2078,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **ForwardToLEAction** | ext.cac.cacontology-hotlines | Class | The action of forwarding a report to law enforcement. Enhanced as gUFO Event for inter-agency coo... |
 | **GUI** | uco.observable | Class | A GUI is a graphical user interface that allows users to interact with electronic devices through... |
 | **GamePlatform** | ext.cac.cacontology-platforms | Class | A digital platform for gaming with communication features (e.g., Xbox Live, PlayStation Network, ... |
+| **GamingAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a gaming application, including save data, player profiles, in-app purchase... |
 | **GamingConsole** | uco.observable | Class | A gaming console (video game console or game console) is an electronic system that connects to a ... |
 | **GeolocationRequest** | ext.cac.cacontology-partnerships | Class | Request for public assistance in identifying geographic locations from visual evidence. Modeled a... |
 | **GeorgiaStateCharge** | ext.cac.cacontology-legal-outcomes | Class | Criminal charge under Georgia state law and jurisdiction for CAC-related offenses. Modeled as gUF... |
@@ -1692,6 +2097,8 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **HouseholdItems** | ext.cac.cacontology-asset-forfeiture | Class | High-value household items including electronics, furniture, and appliances subject to forfeiture... |
 | **HybridCSAM** | ext.cac.cacontology-ai-csam | Class | Content combining real and AI-generated elements, making it difficult to distinguish between auth... |
 | **HybridTraining** | ext.cac.cacontology-training | Class | Training combining online and in-person delivery. Modeled as gUFO Event. |
+| **HypothesisedDevice** | ext.solveit.solveit-analysis | Class | A device that is hypothesised to have been involved, such as a device inferred from artifacts but... |
+| **HypothesisedRelationship** | ext.solveit.solveit-analysis | Class | A relationship between entities that is hypothesised to exist, such as an inferred association be... |
 | **IPAddress** | uco.observable | Class | An IP address is an Internet Protocol (IP) standards conformant identifier assigned to a device t... |
 | **IPAddressFacet** | uco.observable | Facet | An IP address facet is a grouping of characteristics unique to an Internet Protocol (IP) standard... |
 | **IPhone** | uco.observable | Class | An iPhone is a smart phone that applies the iOS mobile operating system. |
@@ -1740,6 +2147,8 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **LegalProceeding** | ext.cac.cacontology-legal-outcomes | Class | Formal judicial process for prosecuting cacontology-related crimes. Modeled as gUFO Event. |
 | **LegalTraining** | ext.cac.cacontology-training | Class | Training on legal aspects of child protection. Modeled as gUFO Event. |
 | **LifeImprisonmentSentence** | ext.cac.cacontology-legal-outcomes | Class | Prison sentence of life imprisonment (typically without a fixed term duration). Modeled as gUFO O... |
+| **LiveDataCapture** | ext.solveit.solveit-observable | Class | Volatile or transient data captured from a running system at a specific point in time. Includes r... |
+| **LiveOSDeviceInterface** | ext.solveit.solveit-observable | Class | Access to a block device via the operating system on a live, running system. Provides sector-leve... |
 | **LiveStreamingOffense** | ext.cac.cacontology-legal-outcomes | Class | Offense involving live streaming of child abuse, often carrying severe sentences. Modeled as gUFO... |
 | **LivestreamedCoercionShow** | ext.cac.cacontology-sadistic-online-exploitation | Class | A coordinated livestreamed coercion event (ritualized 'show') in which participants celebrate, wi... |
 | **MachineLearningDetectionTool** | ext.cac.cacontology-detection | Class | A tool using machine learning algorithms to detect CSAM content (e.g., Google's CSAI Classifier, ... |
@@ -1825,6 +2234,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **ParentalConsent** | ext.cac.cacontology-custodial | Class | Consent given by parent or guardian for custodial arrangement. Modeled as gUFO Object with author... |
 | **PartnerRole** | ext.cac.cacontology-partnerships | Class | Role played by an organization within a public-private partnership framework. Modeled as anti-rig... |
 | **PartnershipFormationPhase** | ext.cac.cacontology-partnerships | Class | Phase of partnership formation including agreement negotiation and framework establishment. Model... |
+| **PaymentAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a mobile payment or digital wallet application, including transaction histo... |
 | **PeerSupport** | ext.cac.cacontology-specialized-units | Class | Peer-to-peer support programs for CAC personnel. Modeled as gUFO Organization. |
 | **PerceptualHash** | ext.cac.cacontology-detection | Class | A hash that captures visual similarity rather than exact bit patterns (e.g., pHash, aHash, dHash)... |
 | **PersonLikeEntity** | ext.cac.cac-core | Class | An enduring entity that is person-like in the domain model. Use for natural persons and person-pr... |
@@ -1837,6 +2247,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **PhoneNumberTrace** | ext.cac.cacontology-us-ncmec | Class | Tracing of phone numbers linked to accounts in NCMEC tips. |
 | **PhotoDNAHash** | ext.cac.cacontology-detection | Class | A Microsoft PhotoDNA hash for robust image matching that survives common transformations. Modeled... |
 | **PhysicalDeviceModification** | ext.cac.cacontology-production | Class | Physical alterations made to recording devices to enable concealment. |
+| **PhysicalImageContainer** | ext.solveit.solveit-observable | Class | A forensic image container that encapsulates a bitstream (bit-for-bit) copy of a source medium, s... |
 | **PlatformCooperationSituation** | ext.cac.cacontology-platforms | Class | Situation involving cooperative efforts between platforms and law enforcement. Modeled as gUFO Si... |
 | **PlatformDeploymentPhase** | ext.cac.cacontology-platforms | Class | Phase when platform is deployed and becomes operational. Modeled as anti-rigid gUFO Phase. |
 | **PlatformGrowthPhase** | ext.cac.cacontology-platforms | Class | Phase of platform expansion and user base growth. Modeled as anti-rigid gUFO Phase. |
@@ -1856,6 +2267,8 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **PreventiveActionPattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling prevention activities as actions with preventive intent and outcome mea... |
 | **PrimaryTraffickerRole** | ext.cac.cacontology-sex-trafficking | Class | Leading role in trafficking operation, often controlling multiple victims and coordinating activi... |
 | **PrinceGeorgesCountyPolice** | ext.cac.cacontology-specialized-units | Class | Prince George's County Police Department supporting Maryland State Police computer crimes investi... |
+| **PrioritizedDeviceEntry** | ext.solveit.solveit-observable | Class | An entry pairing a device with its triage priority classification. |
+| **PrioritizedDeviceSet** | ext.solveit.solveit-observable | Class | A device set where each device has been triaged and assigned a priority classification. Contains ... |
 | **PrisonSentence** | ext.cac.cacontology-legal-outcomes | Class | Sentence involving incarceration in federal or state prison. Modeled as gUFO Object. |
 | **ProbationOfficerRole** | ext.cac.cacontology-legal-outcomes | Class | Role of probation officer supervising CAC offenders. Modeled as anti-rigid gUFO Role. |
 | **ProbationSentence** | ext.cac.cacontology-legal-outcomes | Class | Supervised release with conditions instead of or after incarceration. Modeled as gUFO Object. |
@@ -1876,6 +2289,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **PublicPrivatePartnership** | ext.cac.cacontology-partnerships | Class | Formal partnership between government/law enforcement agencies and private sector organizations f... |
 | **PublicTip** | ext.cac.cacontology-partnerships | Class | Information provided by members of the public in response to crowdsourcing requests. Modeled as g... |
 | **QualityAssuranceAnalystRole** | ext.cac.cacontology-detection | Class | Role focused on validating detection accuracy and managing quality metrics. Modeled as anti-rigid... |
+| **ReadWriteDeviceInterface** | ext.solveit.solveit-observable | Class | A logical interface to a storage device that has been interfaced with in a read-write manner, as ... |
 | **RecordingDevice** | ext.cac.cacontology-production | Class | Device capable of capturing video or photographic content. |
 | **RecordingEquipment** | ext.cac.cacontology-physical-evidence | Class | Devices used to create audio or video recordings of criminal activity (gUFO FunctionalComplex). |
 | **RecruitmentFacilitatorRole** | ext.cac.cacontology-sex-trafficking | Class | Role focused on recruiting and grooming new victims for trafficking. Modeled as anti-rigid gUFO R... |
@@ -1896,6 +2310,8 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **SIMCard** | uco.observable | Class | A SIM card is a subscriber identification module card intended to securely store the internationa... |
 | **SIMCardFacet** | uco.observable | Facet | A SIM card facet is a grouping of characteristics unique to a subscriber identification module ca... |
 | **SIPAddressFacet** | uco.observable | Facet | A SIP address facet is a grouping of characteristics unique to a Session Initiation Protocol (SIP... |
+| **SQLiteDatabase** | ext.solveit.solveit-observable | Class | A SQLite database file stored on disk. |
+| **SQLitePage** | ext.solveit.solveit-observable | Class | A physical storage page within a SQLite database file. |
 | **SchoolAllegationProtocol** | ext.cac.cacontology-prevention | Class | Protocol for managing allegations of abuse in school settings. Modeled as gUFO Object. |
 | **SecurityAppliance** | uco.observable | Class | A security appliance is a purpose-built computer with software or firmware that is designed to pr... |
 | **SentencingHearing** | ext.cac.cacontology-legal-outcomes | Class | Court proceeding where sentence is determined and imposed. Modeled as gUFO Event. |
@@ -1903,6 +2319,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **SentencingPhase** | ext.cac.cacontology-legal-outcomes | Class | Phase focused on sentencing determination and imposition. Modeled as anti-rigid gUFO Phase. |
 | **SentencingReasonablenessIssue** | ext.cac.cacontology-legal-outcomes | Class | Appellate issue challenging the procedural and/or substantive reasonableness of a sentence (e.g.,... |
 | **Server** | uco.observable | Class | A server is a server rack-mount based computer, minicomputer, supercomputer, etc. |
+| **ServiceBasedExtractionData** | ext.solveit.solveit-observable | Class | Data obtained by interacting with services provided by a device rather than direct storage access. |
 | **SexTourism** | ext.cac.cacontology-usa-federal-law | Class | Federal crime of traveling abroad with intent to engage in sexual conduct with minors. Modeled as... |
 | **SexTrafficking** | ext.cac.cacontology-legal-outcomes | Class | Charge for sex trafficking of minors. Modeled as gUFO Object. |
 | **SexTraffickingConspiracy** | ext.cac.cacontology-usa-federal-law | Class | Federal crime of conspiracy to engage in sex trafficking of minors. Modeled as gUFO Event. |
@@ -1916,6 +2333,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **SkillsDevelopmentProgram** | ext.cac.cacontology-training | Class | Program focused on developing specific professional skills. Modeled as gUFO Organization. |
 | **SkillsValidation** | ext.cac.cacontology-training | Class | Validation of skills acquired through training programs. Modeled as gUFO Object. |
 | **SmartDevice** | uco.observable | Class | A smart device is a microprocessor IoT device that is expected to be connected directly to cloud-... |
+| **SmartHomeAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a smart home or IoT control application, including device registries, autom... |
 | **SmartPhone** | uco.observable | Class | A smartphone is a portable device that combines mobile telephone and computing functions into one... |
 | **SocialMediaAppData** | ext.cac.cacontology-platforms | Class | Application data from social media apps stored on devices. |
 | **SocialMediaPlatform** | ext.cac.cacontology-platforms | Class | A digital platform for social networking and content sharing (e.g., Facebook, Instagram, TikTok, ... |
@@ -1999,6 +2417,7 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **UnitDeploymentPhase** | ext.cac.cacontology-specialized-units | Class | Phase when specialized unit is deployed for operations. Modeled as anti-rigid gUFO Phase. |
 | **UnitMaintenancePhase** | ext.cac.cacontology-specialized-units | Class | Phase for equipment maintenance and unit readiness. Modeled as anti-rigid gUFO Phase. |
 | **UnitTrainingPhase** | ext.cac.cacontology-specialized-units | Class | Phase focused on specialized unit training and preparation. Modeled as anti-rigid gUFO Phase. |
+| **UnlockPattern** | ext.solveit.solveit-observable | Class | A pattern used to unlock a device, i.e. screen lock pattern. |
 | **UserRiskClassification** | ext.cac.cacontology-platforms | Class | Automated classification of user risk levels based on platform activity patterns, content sharing... |
 | **UserScaleClassification** | ext.cac.cacontology-platforms | Class | Classification system for platform size based on user base: small (<1K), medium (1K-100K), large ... |
 | **UserSession** | uco.observable | Class | A user session is a temporary and interactive information interchange between two or more communi... |
@@ -2024,6 +2443,8 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **VictimVulnerabilityProfile** | ext.cac.cacontology-sex-trafficking | Class | Profile of factors that make individuals vulnerable to trafficking recruitment. Modeled as gUFO O... |
 | **VideoGeneration** | ext.cac.cacontology-ai-csam | Class | Generation of video content using AI models capable of creating temporal sequences and motion. En... |
 | **VideoStreamingPlatform** | ext.cac.cacontology-platforms | Class | A platform for video content streaming and sharing (e.g., YouTube, Twitch, OnlyFans, Periscope). ... |
+| **VirtualizedComputer** | ext.solveit.solveit-observable | Class | A computer (desktop, laptop, or server) that exists as a virtual machine rather than running on p... |
+| **VirtualizedDevice** | ext.solveit.solveit-observable | Class | A device or system that exists as a virtual machine, defined by virtualization configuration and ... |
 | **VisitationArrangement** | ext.cac.cacontology-custodial | Class | Scheduled visitation or contact arrangement with child. Modeled as gUFO SubKind with temporal sch... |
 | **Volume** | uco.observable | Class | A volume is a single accessible storage area (volume) with a single file system. [based on https:... |
 | **VolumeFacet** | uco.observable | Facet | A volume facet is a grouping of characteristics unique to a single accessible storage area (volum... |
@@ -2044,6 +2465,70 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **WirelessNetworkConnection** | uco.observable | Class | A wireless network connection is a connection (completed or attempted) across an IEEE 802.11 stan... |
 | **WirelessNetworkConnectionFacet** | uco.observable | Facet | A wireless network connection facet is a grouping of characteristics unique to a connection (comp... |
 | **WriteBlocker** | uco.observable | Class | A write blocker is a device that allows read-only access to storage mediums in order to preserve ... |
+| **WriteProtectedDeviceInterface** | ext.solveit.solveit-observable | Class | A logical interface to a storage device that has been interfaced with in a write-protected manner... |
+| **iOSDeviceGeneratedBackup** | ext.solveit.solveit-observable | Class | Data produced by the iOS backup mechanism via iTunes, Finder, or libimobiledevice. Contains a man... |
+| **techniqueDFT-1001** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1001: Triage devices or media. Objective(s): Prioritize digital evidence s... |
+| **techniqueDFT-1002** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1002: Copy sectors from storage media. Objective(s): Acquire data. See htt... |
+| **techniqueDFT-1007** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1007: Detect the potential existence of digital devices using a SyncTriage... |
+| **techniqueDFT-1008** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1008: Detect the potential existence of digital devices by profiling netwo... |
+| **techniqueDFT-1010** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1010: Place device in a faraday environment. Objective(s): Preserve digita... |
+| **techniqueDFT-1011** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1011: Store seized devices or media in evidence bags. Objective(s): Preser... |
+| **techniqueDFT-1012** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1012: Write protect storage media using a hardware write blocker. Objectiv... |
+| **techniqueDFT-1013** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1013: Write protect storage media using a software write blocker. Objectiv... |
+| **techniqueDFT-1016** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1016: Collect specific pieces of information from a live running device. O... |
+| **techniqueDFT-1018** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1018: Collect data from a remote networked device. Objective(s): Acquire d... |
+| **techniqueDFT-1019** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1019: Extract a backup from a mobile device. See https://solveit-df.org fo... |
+| **techniqueDFT-1020** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1020: Extract the file system from a mobile device. Objective(s): Acquire ... |
+| **techniqueDFT-1022** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1022: Capture mobile device screenshots (manually). Objective(s): Acquire ... |
+| **techniqueDFT-1027** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1027: Read data from a device using JTAG. See https://solveit-df.org for w... |
+| **techniqueDFT-1028** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1028: Physically remove a storage chip from a device (chip-off). Objective... |
+| **techniqueDFT-1029** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1029: Read data from a desoldered eMMC via a chip reader. Objective(s): Ac... |
+| **techniqueDFT-1033** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1033: Extract credential(s) from an accessible device to attempt access to... |
+| **techniqueDFT-1034** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1034: Attack a stored credential or device using a brute force approach. O... |
+| **techniqueDFT-1035** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1035: Attack a stored credential or device using a dictionary-based approa... |
+| **techniqueDFT-1036** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1036: Recover information about a potential device PIN or pattern lock usi... |
+| **techniqueDFT-1037** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1037: Obtain password from the device's owner. Objective(s): Overcome prot... |
+| **techniqueDFT-1038** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1038: Attack a stored credential or device using a rainbow table-based app... |
+| **techniqueDFT-1040** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1040: Exploit a mobile device to facilitate privileged access for data ext... |
+| **techniqueDFT-1041** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1041: Gain access to a device via a Pin2Pwn approach. Objective(s): Overco... |
+| **techniqueDFT-1042** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1042: Verify hash of imaged data matches the hash of the source device. Ob... |
+| **techniqueDFT-1043** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1043: Read bitstream from forensic image container file(s). Objective(s): ... |
+| **techniqueDFT-1044** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1044: Decode data stored in a mobile backup format. Objective(s): Read dat... |
+| **techniqueDFT-1045** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1045: Read contents from standard archive file(s). Objective(s): Read data... |
+| **techniqueDFT-1102** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1102: Decode data extracted from unmanaged NAND. Objective(s): Read data f... |
+| **techniqueDFT-1112** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1112: Locate and remove physical disks from a device. Objective(s): Access... |
+| **techniqueDFT-1113** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1113: Access internal storage via bootable environment. Objective(s): Acce... |
+| **techniqueDFT-1116** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1116: Extract references to connected devices. Objective(s): Extract artif... |
+| **techniqueDFT-1148** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1148: Extract browser web storage artifacts. See https://solveit-df.org fo... |
+| **techniqueDFT-1157** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1157: Extract device data using exposed service. Objective(s): Acquire dat... |
+| **techniqueDFT-1158** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1158: Configure device to enable a service needed for data extraction. Obj... |
+| **techniqueDFT-1159** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1159: Extract mobile data via deployed agent. Objective(s): Acquire data. ... |
+| **techniqueDFT-1162** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1162: Read data from a device via In-System Programming (ISP). Objective(s... |
+| **techniqueDFT-1163** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1163: Capture mobile device screenshots (automatically). Objective(s): Acq... |
+| **techniqueDFT-1164** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1164: Read data directly from a block device. Objective(s): Acquire data. ... |
+| **techniqueDFT-1166** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1166: Connect directly to storage media. Objective(s): Access device data ... |
+| **techniqueDFT-1170** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1170: Read contents from logical forensic container file(s). Objective(s):... |
+| **techniqueDFT-1171** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1171: Access a file system via live operating system. Objective(s): Access... |
+| **techniqueDFT-1172** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1172: Read bitstream from raw image file(s). Objective(s): Read data from ... |
+| **techniqueDFT-1173** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1173: Extract data from captured screenshots. Objective(s): Read data from... |
+| **techniqueDFT-1174** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1174: Read evidential files stored directly on local file system. Objectiv... |
+| **techniqueDFT-1175** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1175: Extract data from an Android device using content queries. Objective... |
+| **techniqueDFT-1192** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1192: Disable connectivity using device configuration settings. Objective(... |
+| **techniqueDFT-1193** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1193: Read metadata from within a forensic image container. Objective(s): ... |
+
+**AFCExtractionData** key properties:
+
+| Property | Type | Required |
+|----------|------|----------|
+| createdBy | IdentityAbstraction | No |
+| description | string | No |
+| externalReference | ExternalReference | No |
+| hasFacet | Facet | No |
+| modifiedTime | dateTime | No |
+| name | string | No |
+| objectCreatedTime | dateTime | No |
+| objectMarking | MarkingDefinitionAbstraction | No |
+| *... 5 more* | | |
 
 **AICSAMInvestigation** key properties:
 
@@ -2068,17 +2553,6 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | evidenceAdmissibility | string | No |
 | processingTime | decimal | No |
 | detectionTimePoint | dateTime | Yes |
-| startTime | dateTime | Yes |
-
-**AIContentGeneration** key properties:
-
-| Property | Type | Required |
-|----------|------|----------|
-| generationComplexity | string | No |
-| generationTechnique | string | No |
-| technicalExpertiseRequired | string | No |
-| generationDuration | duration | No |
-| endTime | dateTime | No |
 | startTime | dateTime | Yes |
 
 **Example usage:**
@@ -2143,11 +2617,14 @@ Classes for installed applications, operating systems, software packages, and pr
 | **AIGenerationPattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling AI generation processes creating synthetic CSAM with algorithmic charac... |
 | **API** | uco.observable | Class | An API (application programming interface) is a computing interface that defines interactions bet... |
 | **AccountLinking** | ext.cac.cacontology-us-ncmec | Class | Process of linking digital accounts to suspects through NCMEC tip analysis. |
+| **AcquisitionRecordFile** | ext.solveit.solveit-observable | Class | A file containing records generated during a data acquisition process, such as error logs or acqu... |
 | **AdvocacyProcess** | ext.cac.cacontology-legal-harmonization | Class | Process used in legislative advocacy. |
 | **AgeTargetedEducation** | ext.cac.cacontology-prevention | Class | Education programs targeted to specific age groups. |
+| **AiChatAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an AI chatbot or assistant application, including conversation histories, p... |
 | **AmendmentProcess** | ext.cac.cacontology-legal-harmonization | Class | Process of amending legislation. |
 | **AnalyticTool** | uco.tool | Class | An analytic tool is an artifact of hardware and/or software utilized to accomplish a task or purp... |
 | **AndroidDevice** | uco.observable | Class | An Android device is a device running the Android operating system. [based on https://en.wikipedi... |
+| **AndroidDeviceGeneratedBackup** | ext.solveit.solveit-observable | Class | Data produced by Android's backup mechanism (e.g., adb backup). Potentially contains application ... |
 | **AndroidPhone** | uco.observable | Class | An android phone is a smart phone that applies the Android mobile operating system. |
 | **AnnualReview** | ext.cac.cacontology-legal-harmonization | Class | Annual compliance review process. |
 | **AppealProcess** | ext.cac.cacontology-legal-outcomes | Class | Legal process to challenge conviction or sentence in higher court. Modeled as gUFO Event. |
@@ -2157,6 +2634,7 @@ Classes for installed applications, operating systems, software packages, and pr
 | **ApplicationAccount** | uco.observable | Class | An application account is an account within a particular software program designed for end users. |
 | **ApplicationAccountFacet** | uco.observable | Facet | An application account facet is a grouping of characteristics unique to an account within a parti... |
 | **ApplicationFacet** | uco.observable | Facet | An application facet is a grouping of characteristics unique to a particular software program des... |
+| **ApplicationFiles** | ext.solveit.solveit-observable | Class | A contextual compilation of files associated with a specific application version. Groups the file... |
 | **ApplicationVersion** | uco.observable | Class | An application version is a grouping of characteristics unique to a particular software program v... |
 | **ArrestWarrant** | ext.cac.cacontology-case-management | Class | Legal documentation for arrest warrants including applications, approvals, and execution records.... |
 | **AssessmentResult** | ext.cac.cac-core | Class | An output or conclusion of some evaluative, analytic, classification, or decision-making process.... |
@@ -2165,17 +2643,21 @@ Classes for installed applications, operating systems, software packages, and pr
 | **AutomatedReporterAgent** | ext.cac.cacontology-hotlines | Class | A software agent that automatically reports content to hotlines. Enhanced as gUFO Object for comp... |
 | **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
 | **BillDrafting** | ext.cac.cacontology-legal-harmonization | Class | Process of drafting legislation. |
+| **Bitstream** | ext.solveit.solveit-observable | Class | A sequential, complete bit-for-bit copy of a storage medium (LBA0 to LBAmax). Represents data in ... |
 | **BlackberryPhone** | uco.observable | Class | A blackberry phone is a smart phone that applies the Blackberry OS mobile operating system. (Blac... |
 | **BookingAction** | ext.cac.cacontology-tactical | Class | Process of booking a suspect into a correctional facility including fingerprinting, photography, ... |
 | **BotConfiguration** | uco.observable | Class | A bot configuration is a set of contextual settings for a software application that runs automate... |
+| **BrowserAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a web browser application, including browsing history, bookmarks, cookies, ... |
 | **BrowserBookmark** | uco.observable | Class | A browser bookmark is a saved shortcut that directs a WWW (World Wide Web) browser software progr... |
 | **BrowserBookmarkFacet** | uco.observable | Facet | A browser bookmark facet is a grouping of characteristics unique to a saved shortcut that directs... |
+| **BrowserCacheData** | ext.solveit.solveit-observable | Class | The locally cached data stored by a web browser to improve performance. This may include cached w... |
 | **BrowserCookie** | uco.observable | Class | A browser cookie is a piece of of data sent from a website and stored on the user's computer by t... |
 | **BrowserCookieFacet** | uco.observable | Facet | A browser cookie facet is a grouping of characteristics unique to a piece of data sent from a web... |
 | **BuildFacet** | uco.tool | Facet | A build facet is a grouping of characteristics unique to a particular version of a software. |
 | **BuildInformationType** | uco.tool | Class | A build information type is a grouping of characteristics that describe how a particular version ... |
 | **BuildUtilityType** | uco.tool | Class | A build utility type characterizes the tool used to convert from source code to executable code f... |
 | **BullyingPrevention** | ext.cac.cacontology-prevention | Class | Prevention programs focused on reducing bullying and shaming. |
+| **CalendarAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a calendar application, including events, appointments, invitations, recurr... |
 | **Capability** | ext.toolcap.capability | Class | A capability is the ability of an entity to perform some action or produce some result. Capabilit... |
 | **CapacityBuildingProgram** | ext.cac.cacontology-training | Class | Structured program for building organizational and individual capacity. Modeled as gUFO Organizat... |
 | **CaseAnalystRole** | ext.cac.cacontology-case-management | Class | Role responsible for case analysis, intelligence gathering, and data processing. Enhanced as anti... |
@@ -2183,6 +2665,7 @@ Classes for installed applications, operating systems, software packages, and pr
 | **CaseReview** | ext.cac.cacontology-case-management | Class | Formal review processes for case quality assurance, supervisory oversight, and legal compliance. ... |
 | **CaseWorkflow** | ext.cac.cacontology-case-management | Class | Structured workflow stages and processes for managing case progression from intake to disposition... |
 | **CertificationProcess** | ext.cac.cacontology-legal-harmonization | Class | Process for obtaining compliance certification. |
+| **ChatAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a messaging or chat application, including message databases, media attachm... |
 | **ChildSafetyEducation** | ext.cac.cacontology-prevention | Class | Education programs teaching children about safety. |
 | **Code** | uco.observable | Class | Code is a direct representation (source, byte or binary) of a collection of computer instructions... |
 | **CommunityEducation** | ext.cac.cacontology-prevention | Class | Education programs for community members. |
@@ -2221,6 +2704,7 @@ Classes for installed applications, operating systems, software packages, and pr
 | **EducationalInstitution** | ext.cac.cacontology-educational-exploitation | Class | Educational institution where child exploitation occurs, including schools, colleges, and educati... |
 | **EducationalPattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling educational interventions as processes with learning outcomes and effec... |
 | **EducatorTraining** | ext.cac.cacontology-prevention | Class | Training programs specifically designed for educators. |
+| **EmailAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an email client application, including message stores, mailbox databases, a... |
 | **EmbeddedDevice** | uco.observable | Class | An embedded device is a highly specialized microprocessor device meant for one or very few specif... |
 | **EnvironmentVariable** | uco.observable | Class | An environment variable is a grouping of characteristics unique to a dynamic-named value that can... |
 | **Event** | ext.cac.cac-core | Class | Something that happens or unfolds in time — an action, interaction, incident, hearing, or process... |
@@ -2230,19 +2714,24 @@ Classes for installed applications, operating systems, software packages, and pr
 | **FamilyReunification** | ext.cac.cacontology-victim-impact | Class | Process of reuniting trafficking victims with their families. |
 | **FederalProsecution** | ext.cac.cacontology-usa-federal-law | Class | Federal legal prosecution process for child exploitation crimes. Modeled as gUFO Event with tempo... |
 | **FileFacet** | uco.observable | Facet | A file facet is a grouping of characteristics unique to the storage of a file (computer resource ... |
+| **FileSet** | ext.solveit.solveit-observable | Class | A contextual compilation of files grouped together for some purpose, such as filtering, extractio... |
 | **FileSystem** | uco.observable | Class | A file system is the process that manages how and where data on a storage medium is stored, acces... |
 | **FileSystemFacet** | uco.observable | Facet | A file system facet is a grouping of characteristics unique to the process that manages how and w... |
 | **ForensicsLifecyclePattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling forensics process lifecycle with acquisition, analysis, and presentatio... |
 | **FundingStream** | ext.cac.cacontology-usa-legislative | Class | Source of funding for CAC programs. |
+| **GamingAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a gaming application, including save data, player profiles, in-app purchase... |
 | **GenerationSourceTracking** | ext.cac.cacontology-ai-csam | Class | Investigation process to identify the source, tools, and methods used to generate AI-CSAM. Enhanc... |
 | **GeoLocationEntry** | uco.observable | Class | A geolocation entry is a single application-specific geolocation entry. |
 | **GeoLocationEntryFacet** | uco.observable | Facet | A geolocation entry facet is a grouping of characteristics unique to a single application-specifi... |
 | **GlobalFlagType** | uco.observable | Class | A global flag type is a grouping of characteristics unique to the Windows systemwide global varia... |
 | **GroomingPhase** | ext.cac.cacontology-grooming | Class | A temporal phase within the grooming process. |
+| **HashSetEntry** | ext.solveit.solveit-observable | Class | A single entry within a hash set. At minimum it carries a hash value; further details (e.g. file ... |
+| **HealthAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a health or fitness tracking application, including activity logs, heart ra... |
 | **HighPriorityCaseManagement** | ext.cac.cacontology-case-management | Class | Enhanced management protocols for critical and high-priority cases requiring expedited processing... |
 | **HotlineAction** | ext.cac.cacontology-hotlines | Class | An action taken as part of processing a hotline report. Enhanced as gUFO Event for comprehensive ... |
 | **HotlineOrganization** | ext.cac.cacontology-hotlines | Class | An organization that operates a hotline for receiving and processing reports of child sexual abus... |
 | **HotlineReport** | ext.cac.cacontology-hotlines | Class | A report submitted to a hotline about potential child sexual abuse material. Enhanced as gUFO Sit... |
+| **HypothesisedWebSearch** | ext.solveit.solveit-analysis | Class | A web search that is hypothesised to have been performed, potentially inferred from browser histo... |
 | **IExecActionType** | uco.observable | Class | An IExec action type is a grouping of characteristics unique to an action that executes a command... |
 | **IPhone** | uco.observable | Class | An iPhone is a smart phone that applies the iOS mobile operating system. |
 | **InappropriateGift** | ext.cac.cacontology-grooming | Class | Offer or provision of gifts, money, or favors as part of grooming process. |
@@ -2271,7 +2760,10 @@ Classes for installed applications, operating systems, software packages, and pr
 | **Library** | uco.observable | Class | A library is a suite of data and programming code that is used to develop software programs and a... |
 | **LibraryFacet** | uco.observable | Facet | A library facet is a grouping of characteristics unique to a suite of data and programming code t... |
 | **LibraryType** | uco.tool | Class | A library type is a grouping of characteristics unique to a collection of resources incorporated ... |
+| **LiveDataCapture** | ext.solveit.solveit-observable | Class | Volatile or transient data captured from a running system at a specific point in time. Includes r... |
+| **LiveOSDeviceInterface** | ext.solveit.solveit-observable | Class | Access to a block device via the operating system on a live, running system. Provides sector-leve... |
 | **MaliciousTool** | uco.tool | Class | A malicious tool is an artifact of hardware and/or software utilized to accomplish a malevolent t... |
+| **MapsAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a mapping application, including search history, saved locations, offline m... |
 | **MassDigitalEvidenceProcessing** | ext.cac.cacontology-forensics | Class | Processing of massive volumes of digital evidence requiring specialized automated tools and distr... |
 | **MassUserAnalysis** | ext.cac.cacontology-international | Class | Analysis of massive user databases requiring international coordination for processing users acro... |
 | **MassUserDatabase** | ext.cac.cacontology-platforms | Class | User database analysis for platforms with massive user bases requiring specialized processing tec... |
@@ -2284,6 +2776,7 @@ Classes for installed applications, operating systems, software packages, and pr
 | **MutexFacet** | uco.observable | Facet | A mutex facet is a grouping of characteristics unique to a mechanism that enforces limits on acce... |
 | **MutualLegalAssistanceTreatyOperation** | ext.cac.cacontology-international | Class | Operational process using Mutual Legal Assistance Treaty (MLAT) for international evidence sharin... |
 | **NamedPipe** | uco.observable | Class | A named pipe is a mechanism for FIFO (first-in-first-out) inter-process communication. It is pers... |
+| **NavigationAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a turn-by-turn navigation application, including route history, recent dest... |
 | **NetworkAppliance** | uco.observable | Class | A network appliance is a purpose-built computer with software or firmware that is designed to pro... |
 | **NetworkInterface** | uco.observable | Class | A network interface is a software or hardware interface between two pieces of equipment or protoc... |
 | **NetworkInterfaceFacet** | uco.observable | Facet | A network interface facet is a grouping of characteristics unique to a software or hardware inter... |
@@ -2296,10 +2789,12 @@ Classes for installed applications, operating systems, software packages, and pr
 | **ParentEducation** | ext.cac.cacontology-prevention | Class | Education programs for parents and caregivers. |
 | **ParentalVigilanceProgram** | ext.cac.cacontology-prevention | Class | Program educating parents on recognizing signs of child exploitation and reporting. |
 | **Parser** | ext.toolcap.capability | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
+| **PaymentAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a mobile payment or digital wallet application, including transaction histo... |
 | **PaymentProcessing** | ext.cac.cacontology-platform-infrastructure | Class | Financial processing systems enabling platform monetization through subscription fees, content pu... |
 | **PeerReview** | ext.cac.cacontology-case-management | Class | Peer review process for case methodology, analysis, and conclusions. Enhanced as gUFO Event. |
 | **PeerSupport** | ext.cac.cacontology-specialized-units | Class | Peer-to-peer support programs for CAC personnel. Modeled as gUFO Organization. |
 | **Phase** | ext.cac.cac-core | Class | A temporal stage of some enduring entity, process, or situation. The bearer remains the same enti... |
+| **PhotosAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a photos or gallery management application, including image and video datab... |
 | **Pipe** | uco.observable | Class | A pipe is a mechanism for one-way inter-process communication using message passing where data wr... |
 | **PlatformSpecification** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use first-class uco-observable:OperatingSystem instances linked via uco-core... |
 | **PleaBargaining** | ext.cac.cacontology-legal-outcomes | Class | Negotiation process between prosecution and defense for plea agreement. Modeled as gUFO Event. |
@@ -2317,6 +2812,9 @@ Classes for installed applications, operating systems, software packages, and pr
 | **PropertiesEnumeratedEffectFacet** | uco.observable | Facet | A properties enumerated effect facet is a grouping of characteristics unique to the effects of ac... |
 | **PropertyReadEffectFacet** | uco.observable | Facet | A properties read effect facet is a grouping of characteristics unique to the effects of actions ... |
 | **RecoveryProcess** | ext.cac.cacontology-victim-impact | Class | Process of healing and recovery from victimization. |
+| **RedactedArtifactSet** | ext.solveit.solveit-observable | Class | A collection of artifacts reduced by a redaction process to remove sensitive or privileged conten... |
+| **RedactedFileSet** | ext.solveit.solveit-observable | Class | A subset of files reduced by a redaction process to remove sensitive or privileged content before... |
+| **RemindersAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a reminders or to-do list application, including task lists, due dates, rec... |
 | **ReparsePoint** | uco.observable | Class | A reparse point is a type of NTFS (New Technology File System) object which is an optional attrib... |
 | **RiskPrevention** | ext.cac.cacontology-prevention | Class | Programs focused on preventing risk factors for child abuse. Modeled as gUFO Event. |
 | **SafetyCoordinator** | ext.cac.cacontology-prevention | Class | Coordinator responsible for safety programs. |
@@ -2335,10 +2833,13 @@ Classes for installed applications, operating systems, software packages, and pr
 | **SkillsDevelopmentProgram** | ext.cac.cacontology-training | Class | Program focused on developing specific professional skills. Modeled as gUFO Organization. |
 | **SkillsValidation** | ext.cac.cacontology-training | Class | Validation of skills acquired through training programs. Modeled as gUFO Object. |
 | **SmartDevice** | uco.observable | Class | A smart device is a microprocessor IoT device that is expected to be connected directly to cloud-... |
+| **SmartHomeAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a smart home or IoT control application, including device registries, autom... |
 | **SocialMediaAppData** | ext.cac.cacontology-platforms | Class | Application data from social media apps stored on devices. |
+| **SocialMediaAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a social media application, including posts, direct messages, friend/follow... |
 | **Socket** | uco.observable | Class | A socket is a special file used for inter-process communication, which enables communication betw... |
 | **Software** | uco.observable | Class | Software is a definitely scoped instance of a collection of data or computer instructions that te... |
 | **SoftwareFacet** | uco.observable | Facet | A software facet is a grouping of characteristics unique to a software program (a definitively sc... |
+| **SortedTimeline** | ext.solveit.solveit-observable | Class | A timeline whose entries have been ordered by position, as determined by a sorting process. Multi... |
 | **StressManagement** | ext.cac.cacontology-specialized-units | Class | Programs and techniques for managing work-related stress. Modeled as gUFO Organization. |
 | **StudentEducation** | ext.cac.cacontology-prevention | Class | Safety education program for students. |
 | **SubscriptionManagement** | ext.cac.cacontology-platform-infrastructure | Class | Systems managing user subscriptions, access levels, and recurring payment processing (gUFO Functi... |
@@ -2413,6 +2914,57 @@ Classes for installed applications, operating systems, software packages, and pr
 | **WindowsThread** | uco.observable | Class | A Windows thread is a single thread of execution within a Windows process. |
 | **WindowsThreadFacet** | uco.observable | Facet | A Windows thread facet is a grouping os characteristics unique to a single thread of execution wi... |
 | **WindowsWaitableTime** | uco.observable | Class | A Windows waitable timer is a synchronization object within the Windows operating system whose st... |
+| **WriteProtectedDeviceInterface** | ext.solveit.solveit-observable | Class | A logical interface to a storage device that has been interfaced with in a write-protected manner... |
+| **techniqueDFT-1013** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1013: Write protect storage media using a software write blocker. Objectiv... |
+| **techniqueDFT-1048** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1048: Protect privacy by only partially processing data from a source. Obj... |
+| **techniqueDFT-1065** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1065: Extract artifacts from operating system-level content indexer(s). Ob... |
+| **techniqueDFT-1066** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1066: Extract artifacts from operating system log files. Objective(s): Ext... |
+| **techniqueDFT-1067** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1067: Extract artifacts from operating system cloud synchronization featur... |
+| **techniqueDFT-1068** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1068: Extract operating system artifacts indicating recently used files. O... |
+| **techniqueDFT-1069** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1069: Extract artifacts from a web browser. Objective(s): Extract artifact... |
+| **techniqueDFT-1070** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1070: Extract artifacts from email client(s) or webmail access. Objective(... |
+| **techniqueDFT-1072** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1072: Extract artifacts from chat app(s). Objective(s): Extract artifacts ... |
+| **techniqueDFT-1073** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1073: Extract artifacts from calendar app(s). Objective(s): Extract artifa... |
+| **techniqueDFT-1074** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1074: Extract artifacts from social network app(s). Objective(s): Extract ... |
+| **techniqueDFT-1075** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1075: Extract artifacts from maps/travel app(s). Objective(s): Extract art... |
+| **techniqueDFT-1077** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1077: Extract artifacts from photo management app(s). Objective(s): Extrac... |
+| **techniqueDFT-1078** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1078: Extract artifacts from cloud synchronization app(s). Objective(s): E... |
+| **techniqueDFT-1083** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1083: Extract artifacts from operating system memory structures. Objective... |
+| **techniqueDFT-1089** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1089: Review source code of software. Objective(s): Conduct research. See ... |
+| **techniqueDFT-1090** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1090: Experiment with software to ascertain forensic artifacts. Objective(... |
+| **techniqueDFT-1095** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1095: Instrument a piece of running software. Objective(s): Conduct resear... |
+| **techniqueDFT-1096** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1096: Extract operating system artifacts indicating program execution. Obj... |
+| **techniqueDFT-1097** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1097: Extract operating system artifacts indicating installed software. Ob... |
+| **techniqueDFT-1098** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1098: Enumerate operating system user accounts. Objective(s): Extract arti... |
+| **techniqueDFT-1105** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1105: Examine memory dump from an application. Objective(s): Extract artif... |
+| **techniqueDFT-1107** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1107: Extract artifacts from health/fitness app(s). Objective(s): Extract ... |
+| **techniqueDFT-1108** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1108: Extract artifacts from reminders app(s). Objective(s): Extract artif... |
+| **techniqueDFT-1109** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1109: Extract artifacts from payment app(s). Objective(s): Extract artifac... |
+| **techniqueDFT-1116** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1116: Extract references to connected devices. Objective(s): Extract artif... |
+| **techniqueDFT-1133** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1133: Extract artifacts from AI companion app(s). Objective(s): Extract ar... |
+| **techniqueDFT-1137** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1137: Extract browser history artifacts. See https://solveit-df.org for we... |
+| **techniqueDFT-1138** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1138: Extract browser cache artifacts. See https://solveit-df.org for weak... |
+| **techniqueDFT-1139** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1139: Extract browser session artifacts. See https://solveit-df.org for we... |
+| **techniqueDFT-1140** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1140: Extract browser autofill artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1141** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1141: Extract browser bookmark artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1142** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1142: Extract browser download artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1143** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1143: Extract browser configuration artifacts. See https://solveit-df.org ... |
+| **techniqueDFT-1144** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1144: Enumerate browser profiles. See https://solveit-df.org for weaknesse... |
+| **techniqueDFT-1145** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1145: Extract browser extensions artifacts. See https://solveit-df.org for... |
+| **techniqueDFT-1146** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1146: Extract browser synchronization artifacts. See https://solveit-df.or... |
+| **techniqueDFT-1147** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1147: Extract browser cookie artifacts. See https://solveit-df.org for wea... |
+| **techniqueDFT-1148** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1148: Extract browser web storage artifacts. See https://solveit-df.org fo... |
+| **techniqueDFT-1149** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1149: Extract artifacts from the file versioning feature. Objective(s): Ex... |
+| **techniqueDFT-1162** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1162: Read data from a device via In-System Programming (ISP). Objective(s... |
+| **techniqueDFT-1165** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1165: Extract software configuration information. Objective(s): Extract sp... |
+| **techniqueDFT-1169** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1169: Filter files related to an application. Objective(s): Extract specif... |
+| **techniqueDFT-1171** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1171: Access a file system via live operating system. Objective(s): Access... |
+| **techniqueDFT-1177** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1177: Extract artifacts from multiplayer game app(s). Objective(s): Extrac... |
+| **techniqueDFT-1179** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1179: Extract artifacts from drone/UAV app(s). Objective(s): Extract artif... |
+| **techniqueDFT-1180** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1180: Extract file(s) from a pre-deletion container. Objective(s): Extract... |
+| **techniqueDFT-1181** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1181: Extract artifacts from smart home app(s). Objective(s): Extract arti... |
+| **techniqueDFT-1185** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1185: Extract data from operating system notifications. Objective(s): Extr... |
+| **techniqueDFT-1190** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1190: Extract operating system version(s) from data source. Objective(s): ... |
 
 **AIContentDetection** key properties:
 
@@ -2511,6 +3063,7 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **AgeAcknowledgment** | ext.cac.cacontology-undercover | Class | Suspect explicitly acknowledging the stated age of the minor persona during communication. |
 | **AgeAtTimeSituation** | ext.cac.cacontology-temporal | Class | gUFO QualityValueAttributionSituation specializing in attribution of an Age quality value to a sp... |
 | **AgingOutVictimProfile** | ext.cac.cacontology-sex-trafficking | Class | Vulnerability profile for youth aging out of foster care system. |
+| **AiChatAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an AI chatbot or assistant application, including conversation histories, p... |
 | **AlternateAccountSystem** | ext.cac.cacontology-extremist-enterprises | Class | System of alternate accounts (alts) used to evade platform restrictions and maintain operations. |
 | **AnalystRole** | ext.cac.cacontology-platform-infrastructure | Class | Role of person conducting infrastructure analysis (gUFO Role - anti-rigid). |
 | **AnonymityInfrastructure** | ext.cac.cacontology-platform-infrastructure | Class | Systems providing anonymity to users and operators, including Tor integration and VPN services (g... |
@@ -2527,6 +3080,7 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **AutomatedEvidenceDistribution** | ext.cac.cacontology-multi-jurisdiction | Class | Automated system for distributing evidence packages to appropriate jurisdictions based on user lo... |
 | **BehavioralFingerprinting** | ext.cac.cacontology-forensics | Class | Analysis creating unique behavioral fingerprints from user activities to identify individuals acr... |
 | **BirthInformationFacet** | uco.identity | Facet | Birth information is a grouping of characteristics unique to information pertaining to the birth ... |
+| **BrowserAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a web browser application, including browsing history, bookmarks, cookies, ... |
 | **BrowserCookie** | uco.observable | Class | A browser cookie is a piece of of data sent from a website and stored on the user's computer by t... |
 | **BrowserCookieFacet** | uco.observable | Facet | A browser cookie facet is a grouping of characteristics unique to a piece of data sent from a web... |
 | **CEOSdivision** | ext.cac.cacontology-usa-federal-law | Class | DOJ Child Exploitation and Obscenity Section serving unique and critical function in enforcement ... |
@@ -2600,6 +3154,7 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **EmailAccountFacet** | uco.observable | Facet | An email account facet is a grouping of characteristics unique to an arrangement with an entity t... |
 | **EmailAddress** | uco.observable | Class | An email address is an identifier for an electronic mailbox to which electronic mail messages (co... |
 | **EmailAddressFacet** | uco.observable | Facet | An email address facet is a grouping of characteristics unique to an identifier for an electronic... |
+| **EmailAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an email client application, including message stores, mailbox databases, a... |
 | **EncryptionInfrastructure** | ext.cac.cacontology-platform-infrastructure | Class | Encryption systems protecting data transmission, storage, and user communications (gUFO Functiona... |
 | **EnduringEntity** | ext.cac.cac-core | Class | A thing that persists through time while potentially changing state. This is the CAC-facing root ... |
 | **EnterpriseHierarchy** | ext.cac.cacontology-extremist-enterprises | Class | Organizational hierarchy within child exploitation enterprise defining leadership and member roles. |
@@ -2614,9 +3169,11 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **ForensicAccountant** | ext.cac.cacontology-asset-forfeiture | Class | Specialist in tracing financial assets and determining proceeds of crime. |
 | **ForensicAnalystRole** | ext.cac.cacontology-physical-evidence | Class | Role of person conducting forensic analysis of physical evidence (gUFO Role - anti-rigid). Roles ... |
 | **ForensicExaminerRole** | ext.cac.cacontology-forensics | Class | Role of a person conducting digital forensic examination and analysis. |
+| **ForensicImageContainer** | ext.solveit.solveit-observable | Class | A forensic image in a container format that encapsulates acquired data, potentially compressed or... |
 | **ForumPost** | uco.observable | Class | A forum post is message submitted by a user account to an online forum where the message content ... |
 | **ForumPrivateMessage** | uco.observable | Class | A forum private message (aka PM or DM (direct message)) is a one-to-one message from one specific... |
 | **GUI** | uco.observable | Class | A GUI is a graphical user interface that allows users to interact with electronic devices through... |
+| **GamingAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a gaming application, including save data, player profiles, in-app purchase... |
 | **GlobalPlatformTakedown** | ext.cac.cacontology-international | Class | Takedown of global platforms with international user bases requiring coordinated action across mu... |
 | **GlobalTrainingSituation** | ext.cac.cacontology-training | Class | Situation involving global training initiatives across multiple countries and organizations. Mode... |
 | **GuestChatFeature** | ext.cac.cacontology-platforms | Class | Platform feature allowing users to chat without creating accounts or verifying identity. |
@@ -2627,6 +3184,8 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **HouseholdItems** | ext.cac.cacontology-asset-forfeiture | Class | High-value household items including electronics, furniture, and appliances subject to forfeiture... |
 | **HumanitarianOrganization** | ext.cac.cacontology-institutional-exploitation | Class | International humanitarian organization working with vulnerable populations. |
 | **HybridTraining** | ext.cac.cacontology-training | Class | Training combining online and in-person delivery. Modeled as gUFO Event. |
+| **HypothesisedRelationship** | ext.solveit.solveit-analysis | Class | A relationship between entities that is hypothesised to exist, such as an inferred association be... |
+| **HypothesisedUserAccount** | ext.solveit.solveit-analysis | Class | A user account that is hypothesised to have existed, for example inferred from recovered deleted ... |
 | **ICACAffiliateNetwork** | ext.cac.cacontology-prevention | Class | Network of formally affiliated CAC organizations for coordinated child protection efforts. |
 | **IdentifierFacet** | uco.identity | Facet | Identifier is a grouping of characteristics unique to information that uniquely and specifically ... |
 | **Identity** | uco.identity | Class | An identity is a grouping of identifying characteristics unique to an individual or organization. |
@@ -2696,6 +3255,7 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **OrganizationalPattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling CAC taskforces and law enforcement organizations with structure and cap... |
 | **ParentPersona** | ext.cac.cacontology-undercover | Class | Undercover identity portraying a parent or guardian of a child victim. |
 | **PartnerRole** | ext.cac.cacontology-partnerships | Class | Role played by an organization within a public-private partnership framework. Modeled as anti-rig... |
+| **PaymentAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a mobile payment or digital wallet application, including transaction histo... |
 | **PaymentCard** | uco.observable | Class | A payment card is a physical token that is part of a payment system issued by financial instituti... |
 | **PeerImpersonation** | ext.cac.cacontology-sextortion | Class | Posing as age-appropriate peer to gain victim trust. |
 | **PeerPersonaGrooming** | ext.cac.cacontology-grooming | Class | Grooming using false peer identity to establish rapport with victims. |
@@ -2762,6 +3322,7 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **SocialMediaAccount** | ext.cac.cacontology-platforms | Class | User account on a social media platform potentially containing evidence. |
 | **SocialMediaAccount** | ext.cac.cacontology-sex-offender-registry | Class | Social media account belonging to registered sex offender. |
 | **SocialMediaEvidence** | ext.cac.cacontology-platforms | Class | Digital evidence collected from social media platforms, including posts, messages, and account in... |
+| **SolveitAwareInstrument** | ext.solveit.solveit-tool-profile | Class | A specialised tool that has been evaluated against SOLVE-IT tool capability profiles. Adds the co... |
 | **SpecializedInvestigativeUnit** | ext.cac.cacontology-specialized-units | Class | Specialized unit with unique capabilities for CAC investigations. Modeled as gUFO Organization. |
 | **StatePoliceBarrack** | ext.cac.cacontology-specialized-units | Class | Regional state police barrack providing local law enforcement support and coordination. Modeled a... |
 | **StatePoliceComputerCrimesUnit** | ext.cac.cacontology-specialized-units | Class | State police unit specialized in computer crimes and digital investigations involving child explo... |
@@ -2785,6 +3346,7 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **TechnicalSupport** | ext.cac.cacontology-undercover | Class | Personnel providing technical infrastructure and monitoring for undercover operations. |
 | **TeenageImpersonationGrooming** | ext.cac.cacontology-grooming | Class | Grooming involving impersonation of teenage peer to gain victim trust. |
 | **TemporaryAccountSystem** | ext.cac.cacontology-platforms | Class | System allowing creation of temporary accounts with minimal verification requirements. |
+| **ToolCapabilityProfile** | ext.solveit.solveit-tool-profile | Class | A declaration of what techniques a specific version of a tool can perform and what mitigations it... |
 | **TraffickingCell** | ext.cac.cacontology-sex-trafficking | Class | Smaller operational unit within trafficking ring, often controlling specific victims or geographi... |
 | **TraffickingEnterprise** | ext.cac.cacontology-sex-trafficking | Class | Criminal organization engaged in systematic sex trafficking operations with multiple defendants a... |
 | **TraffickingHierarchy** | ext.cac.cacontology-sex-trafficking | Class | Organizational structure within trafficking enterprise defining roles and authority levels. |
@@ -2834,10 +3396,24 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **WindowsAccountFacet** | uco.observable | Facet | A Windows account facet is a grouping of characteristics unique to a user account on a Windows op... |
 | **WindowsActiveDirectoryAccount** | uco.observable | Class | A Windows Active Directory account is an account managed by directory-based identity-related serv... |
 | **WindowsActiveDirectoryAccountFacet** | uco.observable | Facet | A Windows Active Directory account facet is a grouping of characteristics unique to an account ma... |
+| **Wordlist** | ext.solveit.solveit-observable | Class | A list of words or terms used as input to techniques such as keyword searching or dictionary-base... |
 | **X509Certificate** | uco.observable | Class | A X.509 certificate is a public key digital identity certificate conformant to the X.509 PKI (Pub... |
 | **X509CertificateFacet** | uco.observable | Facet | A X.509 certificate facet is a grouping of characteristics unique to a public key digital identit... |
 | **X509V3Certificate** | uco.observable | Class | An X.509 v3 certificate is a public key digital identity certificate conformant to the X.509 v3 P... |
 | **X509V3ExtensionsFacet** | uco.observable | Facet | An X.509 v3 certificate extensions facet is a grouping of characteristics unique to a public key ... |
+| **techniqueDFT-1009** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1009: Locate potential digital evidence sources via cloud account identifi... |
+| **techniqueDFT-1023** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1023: Collect data from cloud service via a live web page using credential... |
+| **techniqueDFT-1033** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1033: Extract credential(s) from an accessible device to attempt access to... |
+| **techniqueDFT-1034** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1034: Attack a stored credential or device using a brute force approach. O... |
+| **techniqueDFT-1035** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1035: Attack a stored credential or device using a dictionary-based approa... |
+| **techniqueDFT-1037** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1037: Obtain password from the device's owner. Objective(s): Overcome prot... |
+| **techniqueDFT-1038** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1038: Attack a stored credential or device using a rainbow table-based app... |
+| **techniqueDFT-1084** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1084: Extract potentially user-identifying content from account informatio... |
+| **techniqueDFT-1085** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1085: Conflate specific account identifiers to a single user identity. Obj... |
+| **techniqueDFT-1098** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1098: Enumerate operating system user accounts. Objective(s): Extract arti... |
+| **techniqueDFT-1144** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1144: Enumerate browser profiles. See https://solveit-df.org for weaknesse... |
+| **techniqueDFT-1154** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1154: Reconstruct an identity associated with an event. Objective(s): Reco... |
+| **techniqueDFT-1161** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1161: Collect data from cloud service via API using credentials. Objective... |
 
 **AcademicPartnership** key properties:
 
@@ -2921,17 +3497,20 @@ Classes for email messages, SMS/MMS, chat messages, and communication metadata. 
 | Class | Module | Type | Description |
 |-------|--------|------|-------------|
 | **AgeProgression** | ext.cac.cacontology-ai-csam | Class | AI technique for artificially aging or de-aging subjects in content, potentially creating illegal... |
+| **AiChatAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an AI chatbot or assistant application, including conversation histories, p... |
 | **AlternateDataStream** | uco.observable | Class | An alternate data stream is data content stored within an NTFS file that is independent of the st... |
 | **AlternateDataStreamFacet** | uco.observable | Facet | An alternate data stream facet is a grouping of characteristics unique to data content stored wit... |
 | **AnonymousChatPlatform** | ext.cac.cacontology-platforms | Class | Platform that allows anonymous or minimally verified communication, enabling contact without iden... |
 | **AthleticCoachingExploitation** | ext.cac.cacontology-athletic-exploitation | Class | Child sexual exploitation committed by athletic coaches using sports authority, team dynamics, an... |
 | **AthleticExploitationDiscovery** | ext.cac.cacontology-athletic-exploitation | Class | Discovery of athletic coaching exploitation through various reporting mechanisms. Enhanced as gUF... |
 | **CasualConversationApproach** | ext.cac.cacontology-street-recruitment | Class | Approach through seemingly innocent casual conversation to assess vulnerability. |
+| **ChatAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a messaging or chat application, including message databases, media attachm... |
 | **ChatInvestigationAgent** | ext.cac.cacontology-undercover | Class | Agent specialized in chat-based undercover investigations for predator identification. |
 | **ChatRoomInfiltration** | ext.cac.cacontology-undercover | Class | Undercover operation involving infiltration of online chat rooms or messaging platforms to invest... |
 | **CommonwealthChildAbuseOffense** | ext.cac.cacontology-legal-outcomes | Class | Child abuse offense under Commonwealth law subject to mandatory minimum sentencing provisions. Mo... |
 | **CommunityEmailList** | ext.cac.cacontology-prevention | Class | Organized email communication system for ongoing safety updates to parents and community members. |
 | **ContactEmail** | uco.observable | Class | A contact email is a grouping of characteristics unique to details for contacting a contact entit... |
+| **ContentQueryData** | ext.solveit.solveit-observable | Class | Data obtained from an Android device by querying content providers via an ADB shell connection (e... |
 | **ConversationReconstruction** | ext.cac.cacontology-sextortion | Class | Reconstruction of conversation patterns and progression timelines. |
 | **DemandMessage** | ext.cac.cacontology-sextortion | Class | Message making specific demands backed by threats. |
 | **DigitalSignatureInfo** | uco.observable | Class | A digital signature info is a value calculated via a mathematical scheme for demonstrating the au... |
@@ -2942,6 +3521,7 @@ Classes for email messages, SMS/MMS, chat messages, and communication metadata. 
 | **EmailAccountFacet** | uco.observable | Facet | An email account facet is a grouping of characteristics unique to an arrangement with an entity t... |
 | **EmailAddress** | uco.observable | Class | An email address is an identifier for an electronic mailbox to which electronic mail messages (co... |
 | **EmailAddressFacet** | uco.observable | Facet | An email address facet is a grouping of characteristics unique to an identifier for an electronic... |
+| **EmailAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an email client application, including message stores, mailbox databases, a... |
 | **EmailListEngagementMetrics** | ext.cac.cacontology-prevention | Class | Metrics tracking email list subscription rates, open rates, and engagement patterns. |
 | **EmailMessage** | uco.observable | Class | An email message is a message that is an instance of an electronic mail correspondence conformant... |
 | **EmailMessageFacet** | uco.observable | Facet | An email message facet is a grouping of characteristics unique to a message that is an instance o... |
@@ -2951,12 +3531,14 @@ Classes for email messages, SMS/MMS, chat messages, and communication metadata. 
 | **FinancialAccount** | ext.cac.cacontology-asset-forfeiture | Class | Bank account or financial instrument subject to restraint or forfeiture. Enhanced as gUFO Object ... |
 | **ForumPost** | uco.observable | Class | A forum post is message submitted by a user account to an online forum where the message content ... |
 | **ForumPrivateMessage** | uco.observable | Class | A forum private message (aka PM or DM (direct message)) is a one-to-one message from one specific... |
+| **GamingAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a gaming application, including save data, player profiles, in-app purchase... |
 | **GlobalFlagType** | uco.observable | Class | A global flag type is a grouping of characteristics unique to the Windows systemwide global varia... |
 | **GraphicConversationGrooming** | ext.cac.cacontology-grooming | Class | Grooming involving progressively graphic sexual conversations. |
 | **GroomingMessage** | ext.cac.cacontology-grooming | Class | Communication containing grooming behavior or inappropriate content directed at a child. |
 | **GuestChatFeature** | ext.cac.cacontology-platforms | Class | Platform feature allowing users to chat without creating accounts or verifying identity. |
 | **HighVolumeDigitalExploitation** | ext.cac.cacontology-sex-offender-registry | Class | Digital exploitation involving thousands of messages or communications over extended period. |
 | **HouseholdItems** | ext.cac.cacontology-asset-forfeiture | Class | High-value household items including electronics, furniture, and appliances subject to forfeiture... |
+| **HypothesisedCommunication** | ext.solveit.solveit-analysis | Class | A communication that is hypothesised to have occurred between parties, potentially inferred from ... |
 | **ICMPConnection** | uco.observable | Class | An ICMP connection is a network connection that is conformant to the Internet Control Message Pro... |
 | **ICMPConnectionFacet** | uco.observable | Facet | An ICMP connection facet is a grouping of characteristics unique to portions of a network connect... |
 | **IShowMessageActionType** | uco.observable | Class | An IShow message action type is a grouping of characteristics unique to an action that shows a me... |
@@ -2970,6 +3552,7 @@ Classes for email messages, SMS/MMS, chat messages, and communication metadata. 
 | **MessageThreadFacet** | uco.observable | Facet | A message thread facet is a grouping of characteristics unique to a running commentary of electro... |
 | **MimePartType** | uco.observable | Class | A mime part type is a grouping of characteristics unique to a component of a multi-part email body. |
 | **MinimalVerificationRequirement** | ext.cac.cacontology-platforms | Class | Verification requirements that are easily bypassed or minimal (email only, no identity check). |
+| **MitigationCapability** | ext.solveit.solveit-tool-profile | Class | A declared capability that a specific mitigation is provided by a tool, optionally subject to con... |
 | **NormalizationGrooming** | ext.cac.cacontology-grooming | Class | Grooming technique to normalize sexual conversations and content sharing. |
 | **OnlineIdentifier** | ext.cac.cacontology-sex-offender-registry | Class | Online username, email, or identifier used by registered sex offender. |
 | **OpenChatRooms** | ext.cac.cacontology-platforms | Class | Chat rooms open to anonymous users without verification or moderation. |
@@ -2986,6 +3569,7 @@ Classes for email messages, SMS/MMS, chat messages, and communication metadata. 
 | **SexualSolicitation** | ext.cac.cacontology-grooming | Class | Message explicitly requesting sexual activity, images, or meetings from a child. |
 | **SexualSolicitationPhase** | ext.cac.cacontology-sextortion | Class | Phase involving sexually explicit conversations and image solicitation. |
 | **SexuallyExplicitConversation** | ext.cac.cacontology-sextortion | Class | Conversation containing sexually explicit content directed at children. |
+| **SocialMediaAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a social media application, including posts, direct messages, friend/follow... |
 | **SocialMediaEvidence** | ext.cac.cacontology-platforms | Class | Digital evidence collected from social media platforms, including posts, messages, and account in... |
 | **Subject** | case.investigation | Class | Subject is a role whose conduct is within the scope of an investigation. |
 | **Subject** | ext.cac.cacontology | Class | Role of a person whose conduct is within the scope of a CAC investigation. Equivalent to case-inv... |
@@ -2998,9 +3582,24 @@ Classes for email messages, SMS/MMS, chat messages, and communication metadata. 
 | **Tweet** | uco.observable | Class | A tweet is message submitted by a Twitter user account to the Twitter microblogging platform. |
 | **UndercoverChatInvestigation** | ext.cac.cacontology-undercover | Class | Investigation using chat communications on various platforms with agents posing as minors. |
 | **VictimIsolation** | ext.cac.cacontology-sextortion | Class | Tactics to isolate victim from support systems and reporting mechanisms. |
+| **VirtualizedComputer** | ext.solveit.solveit-observable | Class | A computer (desktop, laptop, or server) that exists as a virtual machine rather than running on p... |
 | **Wiki** | uco.observable | Class | A wiki is an online hypertext publication collaboratively edited and managed by its own audience ... |
 | **WindowsHook** | uco.observable | Class | A Windows hook is a mechanism by which an application can intercept events, such as messages, mou... |
 | **WindowsMailslot** | uco.observable | Class | A Windows mailslot is is a pseudofile that resides in memory, and may be accessed using standard ... |
+| **techniqueDFT-1031** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1031: Recover encryption/decryption key from memory. Objective(s): Overcom... |
+| **techniqueDFT-1032** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1032: Recover encryption/decryption key information using side channel att... |
+| **techniqueDFT-1033** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1033: Extract credential(s) from an accessible device to attempt access to... |
+| **techniqueDFT-1034** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1034: Attack a stored credential or device using a brute force approach. O... |
+| **techniqueDFT-1035** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1035: Attack a stored credential or device using a dictionary-based approa... |
+| **techniqueDFT-1036** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1036: Recover information about a potential device PIN or pattern lock usi... |
+| **techniqueDFT-1037** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1037: Obtain password from the device's owner. Objective(s): Overcome prot... |
+| **techniqueDFT-1038** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1038: Attack a stored credential or device using a rainbow table-based app... |
+| **techniqueDFT-1039** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1039: Downgrade apps to facilitate data extraction. Objective(s): Overcome... |
+| **techniqueDFT-1040** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1040: Exploit a mobile device to facilitate privileged access for data ext... |
+| **techniqueDFT-1041** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1041: Gain access to a device via a Pin2Pwn approach. Objective(s): Overco... |
+| **techniqueDFT-1070** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1070: Extract artifacts from email client(s) or webmail access. Objective(... |
+| **techniqueDFT-1072** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1072: Extract artifacts from chat app(s). Objective(s): Extract artifacts ... |
+| **techniqueDFT-1158** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1158: Configure device to enable a service needed for data extraction. Obj... |
 
 **AgeProgression** key properties:
 
@@ -3012,6 +3611,20 @@ Classes for email messages, SMS/MMS, chat messages, and communication metadata. 
 | generationDuration | duration | No |
 | endTime | dateTime | No |
 | startTime | dateTime | Yes |
+
+**AiChatAppFiles** key properties:
+
+| Property | Type | Required |
+|----------|------|----------|
+| createdBy | IdentityAbstraction | No |
+| description | string | No |
+| externalReference | ExternalReference | No |
+| hasFacet | Facet | No |
+| modifiedTime | dateTime | No |
+| name | string | No |
+| objectCreatedTime | dateTime | No |
+| objectMarking | MarkingDefinitionAbstraction | No |
+| *... 6 more* | | |
 
 **AlternateDataStream** key properties:
 
@@ -3026,20 +3639,6 @@ Classes for email messages, SMS/MMS, chat messages, and communication metadata. 
 | objectCreatedTime | dateTime | No |
 | objectMarking | MarkingDefinitionAbstraction | No |
 | *... 5 more* | | |
-
-**AnonymousChatPlatform** key properties:
-
-| Property | Type | Required |
-|----------|------|----------|
-| createdBy | IdentityAbstraction | No |
-| description | string | No |
-| externalReference | ExternalReference | No |
-| hasFacet | Facet | No |
-| modifiedTime | dateTime | No |
-| name | string | Yes |
-| objectCreatedTime | dateTime | No |
-| objectMarking | MarkingDefinitionAbstraction | No |
-| *... 8 more* | | |
 
 **Example usage:**
 
@@ -3097,6 +3696,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **AICSAMInvestigation** | ext.cac.cacontology-ai-csam | Class | Investigation specifically focused on AI-generated child sexual abuse material, requiring special... |
 | **API** | uco.observable | Class | An API (application programming interface) is a computing interface that defines interactions bet... |
 | **AbusiveContactWithMinor** | ext.cac.cacontology-usa-federal-law | Class | Federal crime involving abusive sexual contact with minor victims. Modeled as gUFO Event. |
+| **AcquiredData** | ext.solveit.solveit-observable | Class | Data that has been forensically collected from a source device or system. This is the parent clas... |
 | **Adaptor** | uco.observable | Class | An adaptor is a device that physically converts the pin outputs but does not alter the underlying... |
 | **AddressFacet** | uco.identity | Facet | An address facet is a grouping of characteristics unique to an administrative identifier for a ge... |
 | **AdministrativeReview** | ext.cac.cacontology-case-management | Class | Administrative review of case management, resource allocation, and procedural compliance. Enhance... |
@@ -3114,10 +3714,12 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **BlackberryPhone** | uco.observable | Class | A blackberry phone is a smart phone that applies the Blackberry OS mobile operating system. (Blac... |
 | **BluetoothAddress** | uco.observable | Class | A Bluetooth address is a Bluetooth standard conformant identifier assigned to a Bluetooth device ... |
 | **BluetoothAddressFacet** | uco.observable | Facet | A Bluetooth address facet is a grouping of characteristics unique to a Bluetooth standard conform... |
+| **BrowserCacheData** | ext.solveit.solveit-observable | Class | The locally cached data stored by a web browser to improve performance. This may include cached w... |
 | **CACInvestigation** | ext.cac.cacontology | Class | A child-protection investigation that follows a standard action lifecycle that commonly begins wi... |
 | **CSAM_Production** | ext.cac.cacontology-legal-outcomes | Class | Charge for production of child sexual abuse material, typically carrying severe mandatory minimum... |
 | **CSAM_ReceivingOnCellularDevice** | ext.cac.cacontology-legal-outcomes | Class | Charge for receiving child sexual abuse material on cellular phone or mobile device. Modeled as g... |
 | **Calendar** | uco.observable | Class | A calendar is a collection of appointments, meetings, and events. |
+| **CalendarAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a calendar application, including events, appointments, invitations, recurr... |
 | **CalendarEntry** | uco.observable | Class | A calendar entry is an appointment, meeting or event within a collection of appointments, meeting... |
 | **CalendarEntryFacet** | uco.observable | Facet | A calendar entry facet is a grouping of characteristics unique to an appointment, meeting, or eve... |
 | **CalendarFacet** | uco.observable | Facet | A calendar facet is a grouping of characteristics unique to a collection of appointments, meeting... |
@@ -3127,6 +3729,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **CellSite** | uco.observable | Class |  |
 | **CellSiteFacet** | uco.observable | Facet | A cell site facet contains the metadata surrounding the cell site. |
 | **CellphoneSearch** | ext.cac.cacontology-physical-evidence | Class | Search of cellphone or mobile device for evidence. Typically requires consent or warrant (gUFO Ev... |
+| **ChatAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a messaging or chat application, including message databases, media attachm... |
 | **ChildTargetedItem** | ext.cac.cacontology-physical-evidence | Class | Items specifically designed to appeal to or attract children (gUFO Object). |
 | **ClientCommunicationInterception** | ext.cac.cacontology-undercover | Class | Interception of phone communications between traffickers, victims, and clients. |
 | **CompilerType** | uco.tool | Class | A compiler type is a grouping of characteristics unique to a specific program that translates com... |
@@ -3148,6 +3751,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **ContactRestriction** | ext.cac.cacontology-sex-offender-registry | Class | Restriction on contact with certain individuals or groups. |
 | **ContactSIP** | uco.observable | Class | A contact SIP is a grouping of characteristics unique to details for contacting a contact entity ... |
 | **ContactURL** | uco.observable | Class | A contact URL is a grouping of characteristics unique to details for contacting a contact entity ... |
+| **ContentQueryData** | ext.solveit.solveit-observable | Class | Data obtained from an Android device by querying content providers via an ADB shell connection (e... |
 | **ControlledEnvironment** | ext.cac.cacontology-production | Class | Location specifically prepared or modified for production activities. |
 | **CoordinatedOffensePattern** | ext.cac.cacontology | Class | Pattern of coordinated criminal activities involving multiple perpetrators working together acros... |
 | **CorrectionalFacility** | ext.cac.cacontology-tactical | Class | Physical correctional facility where suspects are booked and held. Examples include county jails ... |
@@ -3159,6 +3763,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **DarknetMarket** | ext.cryptoinv.cryptoinv | Class | A darknet market is an e-commerce platform, typically reachable only via anonymizing networks suc... |
 | **DeepfakeDetectionTool** | ext.cac.cacontology-ai-csam | Class | Tool specifically designed to identify deepfake content and face manipulation techniques. Enhance... |
 | **DeviceConsentSearch** | ext.cac.cacontology-physical-evidence | Class | Consent authorization specific to electronic device search (cellphone, computer, etc.). |
+| **DeviceSet** | ext.solveit.solveit-observable | Class | A contextual compilation of devices that are associated in some way, such as devices belonging to... |
 | **DigitalFollowUp** | ext.cac.cacontology-street-recruitment | Class | Follow-up through digital communication channels (text, social media, calls). |
 | **DisappearingMessageFeature** | ext.cac.cacontology-sextortion | Class | Platform feature where messages automatically delete after viewing. |
 | **DistributedForensicProcessing** | ext.cac.cacontology-forensics | Class | Forensic processing distributed across multiple systems and locations for handling massive eviden... |
@@ -3169,6 +3774,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **ElectronicDeviceEvidence** | ext.cac.cacontology-platforms | Class | Digital evidence found on electronic devices including computers, phones, and storage media. |
 | **EmailAddress** | uco.observable | Class | An email address is an identifier for an electronic mailbox to which electronic mail messages (co... |
 | **EmailAddressFacet** | uco.observable | Facet | An email address facet is a grouping of characteristics unique to an identifier for an electronic... |
+| **EmailAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an email client application, including message stores, mailbox databases, a... |
 | **EmergencyHelpSeeking** | ext.cac.cacontology-victim-impact | Class | Victim's attempt to seek emergency help during trafficking or exploitation, such as calling 911 (... |
 | **EnterpriseRole** | ext.rico.rico | Class | An enterprise role is a functional position or division-of-labor responsibility that a member or ... |
 | **ExpansionPhase** | ext.cac.cacontology-sex-trafficking | Class | Phase of trafficking enterprise growth, adding victims and locations. |
@@ -3177,12 +3783,14 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **FailureToRegisterOffense** | ext.cac.cacontology-sex-offender-registry | Class | Criminal offense for failing to register or update required information in a sex offender registr... |
 | **FalseInformationRegistrationOffense** | ext.cac.cacontology-sex-offender-registry | Class | Criminal offense for knowingly providing false or misleading information in connection with sex o... |
 | **FederatedDatabaseQuery** | ext.cac.cacontology-international | Class | Query system enabling simultaneous searches across multiple international databases. |
+| **FileSystemExtraction** | ext.solveit.solveit-observable | Class | Data obtained through direct access to a file system structure. Represents the files and folders ... |
 | **ForcedLocationEntry** | ext.cac.cacontology-stranger-abduction | Class | Forcing victim to enter buildings, apartments, or other locations for exploitation. |
 | **ForensicAcquisitionAction** | ext.cac.cacontology-forensics | Class | The action of creating a forensically sound copy of digital evidence using write-blocking and ver... |
 | **ForensicImage** | ext.cac.cacontology-forensics | Class | A bit-for-bit copy of digital media created using forensically sound methods, maintaining evidenc... |
 | **FormerLawEnforcementOfficer** | ext.cac.cacontology-law-enforcement-corruption | Class | Former law enforcement officer using previous position and contacts for exploitation. |
 | **ForumPost** | uco.observable | Class | A forum post is message submitted by a user account to an online forum where the message content ... |
 | **GPSCoordinatesFacet** | uco.location | Facet | A GPS coordinates facet is a grouping of characteristics unique to the expression of quantified d... |
+| **GamingAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a gaming application, including save data, player profiles, in-app purchase... |
 | **GamingConsole** | uco.observable | Class | A gaming console (video game console or game console) is an electronic system that connects to a ... |
 | **GeoLocationEntry** | uco.observable | Class | A geolocation entry is a single application-specific geolocation entry. |
 | **GeoLocationEntryFacet** | uco.observable | Facet | A geolocation entry facet is a grouping of characteristics unique to a single application-specifi... |
@@ -3197,10 +3805,14 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **GroomingBehavior** | ext.cac.cacontology-grooming | Class | Predatory behavior designed to prepare a child for abuse by building trust, isolating them, and n... |
 | **HandsOnOffenseInvestigation** | ext.cac.cacontology-multi-jurisdiction | Class | Investigation specifically targeting hands-on sexual offenses against children. |
 | **Hash** | uco.types | Class | A hash is a grouping of characteristics unique to the result of applying a mathematical algorithm... |
+| **HashVerificationResult** | ext.solveit.solveit-observable | Class | The result of comparing hash values to verify data integrity, typically comparing a source hash a... |
 | **HelpOfferApproach** | ext.cac.cacontology-street-recruitment | Class | Approach offering assistance such as phone charging, food, transportation, or shelter. |
 | **HighwayLocation** | ext.cac.cacontology-street-recruitment | Class | Location near or alongside highways used for isolated exploitation. |
 | **HospitalIntervention** | ext.cac.cacontology-victim-impact | Class | Medical intervention and assessment of trafficking victim at hospital following emergency call. |
 | **Hotel** | ext.cac.cacontology-undercover | Class | Hotel used or intended for sexual exploitation of minors. Physical location. |
+| **HypothesisedCommunication** | ext.solveit.solveit-analysis | Class | A communication that is hypothesised to have occurred between parties, potentially inferred from ... |
+| **HypothesisedDevice** | ext.solveit.solveit-analysis | Class | A device that is hypothesised to have been involved, such as a device inferred from artifacts but... |
+| **HypothesisedRelationship** | ext.solveit.solveit-analysis | Class | A relationship between entities that is hypothesised to exist, such as an inferred association be... |
 | **IComHandlerActionType** | uco.observable | Class | An IComHandler action type is a grouping of characteristics unique to a Windows Task-related acti... |
 | **IPhone** | uco.observable | Class | An iPhone is a smart phone that applies the iOS mobile operating system. |
 | **IdentifierFacet** | uco.identity | Facet | Identifier is a grouping of characteristics unique to information that uniquely and specifically ... |
@@ -3228,6 +3840,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **LocationIsolation** | ext.cac.cacontology-stranger-abduction | Class | Use of isolated or secluded locations to prevent victim escape or discovery. |
 | **LocationSpecificGrooming** | ext.cac.cacontology-grooming | Class | Grooming that references or prepares for specific physical locations. |
 | **LocationTransition** | ext.cac.cacontology-street-recruitment | Class | Movement of victim from initial contact location to exploitation location. |
+| **MapsAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a mapping application, including search history, saved locations, offline m... |
 | **MassProsecutionCoordination** | ext.cac.cacontology-multi-jurisdiction | Class | Coordination of prosecutions for massive user bases from large-scale platform takedowns requiring... |
 | **MassUserJurisdictionMapping** | ext.cac.cacontology-multi-jurisdiction | Class | Mapping of massive user bases to appropriate jurisdictions for prosecution based on location and ... |
 | **MeetingLocation** | ext.cac.cacontology-undercover | Class | Physical location arranged for meeting with alleged minor. Extends uco-location:Location as this ... |
@@ -3245,6 +3858,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **Motel** | ext.cac.cacontology-undercover | Class | Motel used or intended for sexual exploitation of minors (e.g., 'Princess Motel'). Physical locat... |
 | **MultiPlatformUndercoverOperation** | ext.cac.cacontology-undercover | Class | Undercover operation conducted across multiple social media platforms simultaneously. |
 | **NamedPipe** | uco.observable | Class | A named pipe is a mechanism for FIFO (first-in-first-out) inter-process communication. It is pers... |
+| **NavigationAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a turn-by-turn navigation application, including route history, recent dest... |
 | **NextDayFollowUp** | ext.cac.cacontology-street-recruitment | Class | Follow-up contact occurring the day after initial encounter. |
 | **NineOneOneCall** | ext.cac.cacontology-victim-impact | Class | Emergency call to 911 by trafficking victim seeking help and reporting forced prostitution. |
 | **ObjectIdentificationRequest** | ext.cac.cacontology-partnerships | Class | Request for public assistance in identifying objects, locations, or other evidence from case mate... |
@@ -3256,6 +3870,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **ParallelEvidenceCollectionSituation** | ext.cac.cacontology-temporal | Class | Situation where multiple evidence collection activities occur simultaneously across different pha... |
 | **Parser** | ext.toolcap.capability | Class | A parser is a type of software that takes structured or semi-structured input data and extracts m... |
 | **PathRelationFacet** | uco.observable | Facet | A path relation facet is a grouping of characteristics unique to the location of one object withi... |
+| **PaymentAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a mobile payment or digital wallet application, including transaction histo... |
 | **PerceptualHash** | ext.cac.cacontology-detection | Class | A hash that captures visual similarity rather than exact bit patterns (e.g., pHash, aHash, dHash)... |
 | **PersonalMeetingDemand** | ext.cac.cacontology-sextortion | Class | Demand for in-person meeting or physical contact. |
 | **PhoneAccount** | uco.observable | Class | A phone account is an arrangement with an entity to enable and control the provision of a telepho... |
@@ -3263,6 +3878,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **PhoneChargingOffer** | ext.cac.cacontology-street-recruitment | Class | Specific pretext offering to charge victim's phone in vehicle or location. |
 | **PhoneInstructionMonitoring** | ext.cac.cacontology-undercover | Class | Monitoring and interception of phone communications used to instruct victims in trafficking opera... |
 | **PhoneNumberTrace** | ext.cac.cacontology-us-ncmec | Class | Tracing of phone numbers linked to accounts in NCMEC tips. |
+| **PhotosAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a photos or gallery management application, including image and video datab... |
 | **PhysicalContactEscalation** | ext.cac.cacontology-athletic-exploitation | Class | Escalation of physical contact within athletic training context. Enhanced as gUFO Event. |
 | **PhysicalLocationSting** | ext.cac.cacontology-undercover | Class | Undercover operation conducted at physical location to apprehend suspects responding to trafficki... |
 | **PlanningPhase** | ext.cac.cacontology-taskforce | Class | Phase involving operational planning and resource allocation. |
@@ -3278,6 +3894,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **PublicToPrivateGrooming** | ext.cac.cacontology-grooming | Class | Grooming that transitions from public contact to private exploitation. |
 | **RapidEscalationGrooming** | ext.cac.cacontology-grooming | Class | Grooming with accelerated timeline from initial contact to exploitation attempt, bypassing tradit... |
 | **RapidEscalationRecruitment** | ext.cac.cacontology-street-recruitment | Class | Trafficking recruitment with accelerated timeline from initial contact to exploitation attempt. |
+| **RawImage** | ext.solveit.solveit-observable | Class | A raw forensic image containing a bitstream without container metadata. Unlike a ForensicImageCon... |
 | **RealTimeIntelligenceSharing** | ext.cac.cacontology-international | Class | Real-time sharing of intelligence and alerts between international partners for immediate threat ... |
 | **RegistrationRequirement** | ext.cac.cacontology-sex-offender-registry | Class | Specific requirement for sex offender registration (location, frequency, restrictions). |
 | **ResidentialStingLocation** | ext.cac.cacontology-undercover | Class | Residential property (apartment, house, etc.) used as staging area for undercover sting operations. |
@@ -3286,6 +3903,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **RestrictedContactArrangement** | ext.cac.cacontology-custodial | Class | A visitation or contact arrangement that restricts or suspends offender or high-risk contact afte... |
 | **SIMCard** | uco.observable | Class | A SIM card is a subscriber identification module card intended to securely store the internationa... |
 | **SIMCardFacet** | uco.observable | Facet | A SIM card facet is a grouping of characteristics unique to a subscriber identification module ca... |
+| **SQLiteField** | ext.solveit.solveit-observable | Class | A field (cell) within a SQLite record. |
 | **SameDayProgression** | ext.cac.cacontology-street-recruitment | Class | Progression from initial contact to sexual assault and trafficking proposition within same day. |
 | **SameDayProgression** | ext.cac.cacontology-grooming | Class | Grooming progression from initial contact to sexual exploitation within the same day. |
 | **SchoolLocation** | ext.cac.cacontology-sex-offender-registry | Class | Educational institution where offender is enrolled. |
@@ -3342,6 +3960,7 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **VictimRotation** | ext.cac.cacontology-sex-trafficking | Class | Systematic movement of victims between different locations to avoid detection and maintain contro... |
 | **VictimTransportation** | ext.cac.cacontology-sex-trafficking | Class | Transportation of trafficking victims between locations for commercial sexual exploitation. Model... |
 | **VideoCallRequestAction** | ext.cac.cacontology-undercover | Class | Suspect requesting video call with undercover persona, often to confirm alone or for explicit pur... |
+| **VirtualizedDevice** | ext.solveit.solveit-observable | Class | A device or system that exists as a virtual machine, defined by virtualization configuration and ... |
 | **VisitationArrangement** | ext.cac.cacontology-custodial | Class | Scheduled visitation or contact arrangement with child. Modeled as gUFO SubKind with temporal sch... |
 | **WebPage** | uco.observable | Class | A web page is a specific collection of information provided by a website and displayed to a user ... |
 | **WhoisContactFacet** | uco.observable | Facet | A Whois contact type is a grouping of characteristics unique to contact-related information prese... |
@@ -3352,6 +3971,24 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **WindowsServiceFacet** | uco.observable | Facet | A Windows service facet is a grouping of characteristics unique to a specific Windows service (a ... |
 | **WorkLocation** | ext.cac.cacontology-sex-offender-registry | Class | Location where registered sex offender is employed. |
 | **WriteBlocker** | uco.observable | Class | A write blocker is a device that allows read-only access to storage mediums in order to preserve ... |
+| **iOSDeviceGeneratedBackup** | ext.solveit.solveit-observable | Class | Data produced by the iOS backup mechanism via iTunes, Finder, or libimobiledevice. Contains a man... |
+| **techniqueDFT-1019** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1019: Extract a backup from a mobile device. See https://solveit-df.org fo... |
+| **techniqueDFT-1020** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1020: Extract the file system from a mobile device. Objective(s): Acquire ... |
+| **techniqueDFT-1022** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1022: Capture mobile device screenshots (manually). Objective(s): Acquire ... |
+| **techniqueDFT-1028** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1028: Physically remove a storage chip from a device (chip-off). Objective... |
+| **techniqueDFT-1040** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1040: Exploit a mobile device to facilitate privileged access for data ext... |
+| **techniqueDFT-1044** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1044: Decode data stored in a mobile backup format. Objective(s): Read dat... |
+| **techniqueDFT-1073** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1073: Extract artifacts from calendar app(s). Objective(s): Extract artifa... |
+| **techniqueDFT-1087** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1087: Reconstruct the location-based properties of an event. Objective(s):... |
+| **techniqueDFT-1101** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1101: Conduct cell site survey. Objective(s): Conduct research. See https:... |
+| **techniqueDFT-1106** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1106: Classify if a video is potentially synthetically generated. See http... |
+| **techniqueDFT-1115** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1115: Visualize geolocation information. Objective(s): Create visualizatio... |
+| **techniqueDFT-1119** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1119: Automatically scan for artifact changes caused by app updates. Objec... |
+| **techniqueDFT-1120** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1120: Extract artifacts from app data automatically. Objective(s): Extract... |
+| **techniqueDFT-1159** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1159: Extract mobile data via deployed agent. Objective(s): Acquire data. ... |
+| **techniqueDFT-1163** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1163: Capture mobile device screenshots (automatically). Objective(s): Acq... |
+| **techniqueDFT-1176** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1176: Classify if an image is potentially synthetically generated. See htt... |
+| **techniqueDFT-1184** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1184: Sort a timeline so entries are ordered chronologically. See https://... |
 
 **AICSAMInvestigation** key properties:
 
@@ -3434,6 +4071,7 @@ Classes for modeling actions taken during an investigation or actions performed 
 
 | Class | Module | Type | Description |
 |-------|--------|------|-------------|
+| **AFCExtractionData** | ext.solveit.solveit-observable | Class | Data obtained via Apple File Conduit (AFC) service from iOS devices. |
 | **AICSAMInvestigation** | ext.cac.cacontology-ai-csam | Class | Investigation specifically focused on AI-generated child sexual abuse material, requiring special... |
 | **AIContentDetection** | ext.cac.cacontology-ai-csam | Class | Process of identifying AI-generated or AI-altered content to distinguish from authentic material ... |
 | **AIContentGeneration** | ext.cac.cacontology-ai-csam | Class | Process of creating artificial CSAM using machine learning models, neural networks, or other AI t... |
@@ -3472,6 +4110,7 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **ArrestOperation** | ext.cac.cacontology-tactical | Class | Law enforcement operation to apprehend and take suspect into custody. Extends investigation:Inves... |
 | **ArtifactAnalysis** | ext.cac.cacontology-ai-csam | Class | Analysis of digital artifacts and inconsistencies that may indicate AI generation, such as compre... |
 | **ArtifactClassificationResultFacet** | uco.analysis | Facet | An artifact classification result facet is a grouping of characteristics unique to the results of... |
+| **ArtifactSet** | ext.solveit.solveit-observable | Class | A contextual compilation of forensic artifacts grouped together for some purpose, such as filteri... |
 | **AssessmentResult** | ext.cac.cac-core | Class | An output or conclusion of some evaluative, analytic, classification, or decision-making process.... |
 | **AssetAssessmentAction** | ext.cac.cacontology-asset-forfeiture | Class | Action to assess the value and ownership of assets for potential forfeiture. Enhanced as gUFO Eve... |
 | **AssetForfeitureAction** | ext.cac.cacontology-asset-forfeiture | Class | Legal action to forfeit assets derived from or used in child exploitation crimes. Enhanced as gUF... |
@@ -3491,11 +4130,13 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
 | **BiometricInconsistencyAnalysis** | ext.cac.cacontology-ai-csam | Class | Analysis of biometric inconsistencies in AI-generated content, such as unnatural eye movements or... |
 | **BookingAction** | ext.cac.cacontology-tactical | Class | Process of booking a suspect into a correctional facility including fingerprinting, photography, ... |
+| **BrowserCacheData** | ext.solveit.solveit-observable | Class | The locally cached data stored by a web browser to improve performance. This may include cached w... |
 | **BullyingPrevention** | ext.cac.cacontology-prevention | Class | Prevention programs focused on reducing bullying and shaming. |
 | **CACInvestigation** | ext.cac.cacontology | Class | A child-protection investigation that follows a standard action lifecycle that commonly begins wi... |
 | **CACTInvestigation** | ext.cac.cacontology-asset-forfeiture | Class | Investigation conducted by Criminal Assets Confiscation Taskforce targeting assets of child explo... |
 | **CSAMCurationAction** | ext.cac.cacontology | Class | The action of curating and classifying child sexual abuse material using standard classification ... |
 | **Calendar** | uco.observable | Class | A calendar is a collection of appointments, meetings, and events. |
+| **CalendarAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a calendar application, including events, appointments, invitations, recurr... |
 | **CalendarEntry** | uco.observable | Class | A calendar entry is an appointment, meeting or event within a collection of appointments, meeting... |
 | **CalendarEntryFacet** | uco.observable | Facet | A calendar entry facet is a grouping of characteristics unique to an appointment, meeting, or eve... |
 | **CalendarFacet** | uco.observable | Facet | A calendar facet is a grouping of characteristics unique to a collection of appointments, meeting... |
@@ -3533,6 +4174,7 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **CompletedPhase** | ext.cac.cacontology-temporal | Class | Terminal phase indicating investigation has been fully concluded with all actions finalized. |
 | **ComplexTrauma** | ext.cac.cacontology-victim-impact | Class | Complex trauma resulting from multiple types of victimization or prolonged abuse. |
 | **ComplianceDocumentationArtifact** | ext.cac.cacontology-legal-harmonization | Class | Documentation artifact (record/report/audit trail element) used to prove appropriate action to re... |
+| **ConditionTargetType** | ext.solveit.solveit-tool-profile | Class | Enumeration of action components that conditions can evaluate against. |
 | **ConditioningCoercion** | ext.cac.cacontology-athletic-exploitation | Class | Use of physical conditioning exercises as coercion mechanism for sexual compliance. Enhanced as g... |
 | **ContentCurationAction** | ext.cac.cacontology-extremist-enterprises | Class | Action of curating and organizing exploitative content for enterprise purposes. |
 | **ContentDeliveryNetwork** | ext.cac.cacontology-platform-infrastructure | Class | CDN infrastructure used for distributing illegal content globally with high availability and perf... |
@@ -3635,6 +4277,8 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **FederalInvestigation** | ext.cac.cacontology-usa-federal-law | Class | Federal investigation of child exploitation crimes. Modeled as gUFO Event with temporal boundarie... |
 | **FederalProsecution** | ext.cac.cacontology-usa-federal-law | Class | Federal legal prosecution process for child exploitation crimes. Modeled as gUFO Event with tempo... |
 | **FilePermissionsFacet** | uco.observable | Facet | A file permissions facet is a grouping of characteristics unique to the access rights (e.g., view... |
+| **FileSet** | ext.solveit.solveit-observable | Class | A contextual compilation of files grouped together for some purpose, such as filtering, extractio... |
+| **FileSystemExtraction** | ext.solveit.solveit-observable | Class | Data obtained through direct access to a file system structure. Represents the files and folders ... |
 | **FinancialAccount** | ext.cac.cacontology-asset-forfeiture | Class | Bank account or financial instrument subject to restraint or forfeiture. Enhanced as gUFO Object ... |
 | **FinancialFlowAnalysis** | ext.cac.cacontology-platform-infrastructure | Class | Analysis of financial transactions and payment flows through platform monetization systems (gUFO ... |
 | **FinancialObfuscation** | ext.cac.cacontology-platform-infrastructure | Class | Methods used to obscure financial transactions and payment flows to avoid detection (gUFO Object). |
@@ -3658,12 +4302,15 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **HashFeedbackAction** | ext.cac.cacontology-hotlines | Class | The action of providing feedback about a hash submission. Enhanced as gUFO Event for collaborativ... |
 | **HashSharingProtocol** | ext.cac.cacontology-partnerships | Class | Protocol for sharing cryptographic hashes of illegal content between partners for detection and p... |
 | **HashSubmissionAction** | ext.cac.cacontology-hotlines | Class | The action of submitting a hash to a hash-sharing service. Enhanced as gUFO Event for digital for... |
+| **HashVerificationResult** | ext.solveit.solveit-observable | Class | The result of comparing hash values to verify data integrity, typically comparing a source hash a... |
 | **HelpSeekingBarrier** | ext.cac.cacontology-victim-impact | Class | Factor that prevents or impedes victim from seeking help (fear, control, isolation, trauma bonding). |
 | **HistoricalMetrics** | ext.cac.cacontology-taskforce | Class | Long-term historical performance data for task force operations. |
 | **Honeypot** | ext.aeo.engagement | Class |  A controlled environment intended to be probed, compromised or attacked by adversaries or malware. |
 | **HotlineAction** | ext.cac.cacontology-hotlines | Class | An action taken as part of processing a hotline report. Enhanced as gUFO Event for comprehensive ... |
 | **HotlineTraining** | ext.cac.cacontology-training | Class | Training for hotline operators and managers. Modeled as gUFO Event. |
 | **HybridTraining** | ext.cac.cacontology-training | Class | Training combining online and in-person delivery. Modeled as gUFO Event. |
+| **HypothesisedEvent** | ext.solveit.solveit-analysis | Class | An event that is hypothesised to have occurred. |
+| **HypothesisedWebSearch** | ext.solveit.solveit-analysis | Class | A web search that is hypothesised to have been performed, potentially inferred from browser histo... |
 | **IComHandlerActionType** | uco.observable | Class | An IComHandler action type is a grouping of characteristics unique to a Windows Task-related acti... |
 | **IExecActionType** | uco.observable | Class | An IExec action type is a grouping of characteristics unique to an action that executes a command... |
 | **IShowMessageActionType** | uco.observable | Class | An IShow message action type is a grouping of characteristics unique to an action that shows a me... |
@@ -3694,6 +4341,8 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **ItemModification** | ext.cac.cacontology-physical-evidence | Class | Alteration or customization of items to facilitate criminal activity (gUFO Event). |
 | **JointOperation** | ext.cac.cacontology-partnerships | Class | Operation conducted jointly by multiple partners with shared resources and coordination. Modeled ... |
 | **K9SearchOperation** | ext.cac.cacontology-specialized-units | Class | Search operation utilizing K9 detection capabilities. Modeled as gUFO Event. |
+| **KeywordSearchResult** | ext.solveit.solveit-observable | Class | A result from a keyword search operation during forensic analysis. |
+| **KeywordSearchResultSet** | ext.solveit.solveit-observable | Class | A collection of keyword search results from a search operation. Subsequent techniques may filter ... |
 | **LargeScaleOperation** | ext.cac.cacontology-multi-jurisdiction | Class | Operation involving 100+ law enforcement actions or extensive coordination. |
 | **LargeScalePlatformTakedown** | ext.cac.cacontology-platforms | Class | Coordinated takedown of major exploitation platforms with user bases exceeding 1 million accounts... |
 | **LegalBasisForForfeiture** | ext.cac.cacontology-asset-forfeiture | Class | Legal justification and framework for asset forfeiture action. |
@@ -3723,6 +4372,7 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **MetadataExtractionAction** | ext.cac.cacontology-forensics | Class | The action of extracting metadata from digital artifacts including EXIF, file system timestamps, ... |
 | **MinorToMinorInteractionAnnotation** | ext.cac.cacontology-us-ncmec | Class | Annotation indicating the report is associated with an interaction between minors. Source: NCMEC ... |
 | **MissingChildRescueOperation** | ext.cac.cacontology-investigation-coordination | Class | Time-boxed, multi-party operation focused on locating missing children/teens at risk of endangerm... |
+| **Mitigation** | ext.solveit.solveit-core | Class | An action that can be performed to prevent a weakness from occurring or to minimize its impact. |
 | **MobileForensicTool** | ext.cac.cacontology-forensics | Class | A tool specialized for mobile device forensics including logical and physical extraction (e.g., C... |
 | **ModelIdentification** | ext.cac.cacontology-ai-csam | Class | Process of identifying the specific AI model or algorithm used to generate illegal content. Enhan... |
 | **ModelTraining** | ext.cac.cacontology-ai-csam | Class | Process of training AI models on datasets that may include illegal content for the purpose of gen... |
@@ -3761,6 +4411,7 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **OverClothingToUnderClothingEscalation** | ext.cac.cacontology-athletic-exploitation | Class | Progression from over-clothing to under-clothing contact during athletic activities. Enhanced as ... |
 | **ParallelEventCluster** | ext.cac.cacontology-temporal | Class | Set of investigation events occurring simultaneously or with temporal overlap. Modeled as gUFO co... |
 | **ParentNetworkDiscovery** | ext.cac.cacontology-athletic-exploitation | Class | Discovery through parent community networks and team family communications. Enhanced as gUFO Event. |
+| **PaymentAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a mobile payment or digital wallet application, including transaction histo... |
 | **PaymentProcessing** | ext.cac.cacontology-platform-infrastructure | Class | Financial processing systems enabling platform monetization through subscription fees, content pu... |
 | **PeerReview** | ext.cac.cacontology-case-management | Class | Peer review process for case methodology, analysis, and conclusions. Enhanced as gUFO Event. |
 | **PersonLikeEntity** | ext.cac.cac-core | Class | An enduring entity that is person-like in the domain model. Use for natural persons and person-pr... |
@@ -3810,6 +4461,8 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **RecordingAction** | ext.cac.cacontology-production | Class | Action of recording child sexual abuse for the purpose of creating illegal material. |
 | **RecoveredObject** | uco.observable | Class | An observable object that was the result of a recovery operation. |
 | **RecruitmentTiming** | ext.cac.cacontology-recruitment-networks | Class | Temporal patterns and timing of recruitment activities within educational environments. |
+| **RedactedArtifactSet** | ext.solveit.solveit-observable | Class | A collection of artifacts reduced by a redaction process to remove sensitive or privileged conten... |
+| **RedactedFileSet** | ext.solveit.solveit-observable | Class | A subset of files reduced by a redaction process to remove sensitive or privileged content before... |
 | **RegistrationReviewArrest** | ext.cac.cacontology-sex-offender-registry | Class | Arrest executed when offender arrives for scheduled registration review or update. |
 | **RegularMeeting** | ext.cac.cacontology-partnerships | Class | Regular meetings between partners for coordination, information sharing, and strategic planning. ... |
 | **ReportReviewAction** | ext.cac.cacontology-hotlines | Class | The action of reviewing and triaging a hotline report. Enhanced as gUFO Event with comprehensive ... |
@@ -3835,6 +4488,7 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **SendControlCodeEffectFacet** | uco.observable | Facet | A send control code effect facet is a grouping of characteristics unique to the effects of action... |
 | **SentencingHearing** | ext.cac.cacontology-legal-outcomes | Class | Court proceeding where sentence is determined and imposed. Modeled as gUFO Event. |
 | **ServerSeizure** | ext.cac.cacontology-platform-infrastructure | Class | Physical or virtual seizure of servers hosting platform infrastructure (gUFO Event). |
+| **ServiceBasedExtractionData** | ext.solveit.solveit-observable | Class | Data obtained by interacting with services provided by a device rather than direct storage access. |
 | **SexTourism** | ext.cac.cacontology-usa-federal-law | Class | Federal crime of traveling abroad with intent to engage in sexual conduct with minors. Modeled as... |
 | **SexTraffickingConspiracy** | ext.cac.cacontology-usa-federal-law | Class | Federal crime of conspiracy to engage in sex trafficking of minors. Modeled as gUFO Event. |
 | **SexTraffickingOfMinors** | ext.cac.cacontology-usa-federal-law | Class | Federal crime of sex trafficking involving minors, including recruitment, harboring, transportati... |
@@ -3846,7 +4500,10 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **SexualExploitation** | ext.cac.cacontology-grooming | Class | Direct exploitation of child for sexual purposes including solicitation of images or performances. |
 | **SexualTopicGrooming** | ext.cac.cacontology-athletic-exploitation | Class | Grooming through inappropriate sexual discussions during athletic activities. Enhanced as gUFO Ev... |
 | **SilenceEnforcement** | ext.cac.cacontology-stranger-abduction | Class | Specific threats or actions to prevent victim from calling for help. |
+| **SmartHomeAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a smart home or IoT control application, including device registries, autom... |
 | **SocialIsolationAtSchool** | ext.cac.cacontology-recruitment-networks | Class | Student isolation within school environment making them vulnerable to recruitment. |
+| **SolveitAwareInstrument** | ext.solveit.solveit-tool-profile | Class | A specialised tool that has been evaluated against SOLVE-IT tool capability profiles. Adds the co... |
+| **SolveitInvestigativeAction** | ext.solveit.solveit-core | Class | A SOLVE-IT aware InvestigativeAction that links an investigative action to the SOLVE-IT technique... |
 | **SportsContextPhysicalAbuse** | ext.cac.cacontology-athletic-exploitation | Class | Physical abuse within sports training context disguised as coaching. Enhanced as gUFO Event. |
 | **StateChangeEffectFacet** | uco.observable | Facet | A state change effect facet is a grouping of characteristics unique to the effects of actions upo... |
 | **StatewideCampaignMetrics** | ext.cac.cacontology-prevention | Class | Metrics for measuring statewide prevention campaign effectiveness. |
@@ -3872,10 +4529,12 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **TeamDynamicsExploitation** | ext.cac.cacontology-athletic-exploitation | Class | Contextual situation in which exploitation occurs using team membership, group dynamics, and athl... |
 | **TechnicalDataSharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of technical data including forensic tools, methodologies, and technical analysis results. |
 | **Technique** | uco.action | Class | A technique is a class of actions joined by some common characteristics.  uco-action:Technique it... |
+| **Technique** | ext.solveit.solveit-core | Class | A digital forensic technique representing how one might achieve an objective by performing an act... |
 | **TechnologyCooperation** | ext.cac.cacontology-partnerships | Class | Cooperation in developing and deploying technology solutions for child protection. Modeled as gUF... |
 | **TertiaryPrevention** | ext.cac.cacontology-prevention | Class | Prevention of re-victimization and recurrence. |
 | **ThreatBasedControl** | ext.cac.cacontology-stranger-abduction | Class | Use of threats to maintain victim compliance and prevent resistance. |
 | **TimelineAnalysisAction** | ext.cac.cacontology-forensics | Class | The action of creating chronological sequences of digital artifacts and events for investigation ... |
+| **ToolCapabilityProfile** | ext.solveit.solveit-tool-profile | Class | A declaration of what techniques a specific version of a tool can perform and what mitigations it... |
 | **ToolDevelopment** | ext.cac.cacontology-partnerships | Class | Joint development of investigative tools and technologies for law enforcement use. Modeled as gUF... |
 | **TrafficStop** | ext.cac.cacontology-tactical | Class | Investigative traffic stop used as part of undercover operation or to apprehend suspect. Extends ... |
 | **TraffickerControlBarrier** | ext.cac.cacontology-victim-impact | Class | Control mechanisms used by traffickers that prevent victims from seeking help. |
@@ -3918,6 +4577,8 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **VideoCallRequestAction** | ext.cac.cacontology-undercover | Class | Suspect requesting video call with undercover persona, often to confirm alone or for explicit pur... |
 | **VideoGeneration** | ext.cac.cacontology-ai-csam | Class | Generation of video content using AI models capable of creating temporal sequences and motion. En... |
 | **VirtualAssetServiceProvider** | ext.cryptoinv.cryptoinv | Class | A virtual asset service provider (VASP) is any natural or legal person who as a business conducts... |
+| **VirtualizedComputer** | ext.solveit.solveit-observable | Class | A computer (desktop, laptop, or server) that exists as a virtual machine rather than running on p... |
+| **Weakness** | ext.solveit.solveit-core | Class | A potential problem resulting from using a technique, classified according to ASTM E3016-18 error... |
 | **Weapon** | ext.weapons.weap | Class | A weapon is a material item designed or used to kill, wound, or inflict damage on persons, struct... |
 | **WellnessCheck** | ext.cac.cacontology-specialized-units | Class | Regular check on officer mental health and wellbeing. Modeled as gUFO Event. |
 | **WindowsCriticalSection** | uco.observable | Class | A Windows critical section is a Windows object that provides synchronization similar to that prov... |
@@ -3927,7 +4588,35 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **WindowsTask** | uco.observable | Class | A Windows task is a process that is scheduled to execute on a Windows operating system by the Win... |
 | **WindowsTaskFacet** | uco.observable | Facet | A Windows Task facet is a grouping of characteristics unique to a Windows Task (a process that is... |
 | **WorkplaceSearch** | ext.cac.cacontology-physical-evidence | Class | Search of workplace or commercial premises (gUFO Event). |
+| **WriteProtectedDeviceInterface** | ext.solveit.solveit-observable | Class | A logical interface to a storage device that has been interfaced with in a write-protected manner... |
 | **WrittenHarassment** | ext.cac.cacontology-educational-exploitation | Class | Harassment through written comments on student work, assignments, or academic materials. Enhanced... |
+| **techniqueDFT-1010** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1010: Place device in a faraday environment. Objective(s): Preserve digita... |
+| **techniqueDFT-1039** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1039: Downgrade apps to facilitate data extraction. Objective(s): Overcome... |
+| **techniqueDFT-1040** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1040: Exploit a mobile device to facilitate privileged access for data ext... |
+| **techniqueDFT-1046** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1046: Redact digital forensic tool results to protect privileged material.... |
+| **techniqueDFT-1087** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1087: Reconstruct the location-based properties of an event. Objective(s):... |
+| **techniqueDFT-1088** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1088: Reconstruct an relations between events properties of events. Object... |
+| **techniqueDFT-1095** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1095: Instrument a piece of running software. Objective(s): Conduct resear... |
+| **techniqueDFT-1113** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1113: Access internal storage via bootable environment. Objective(s): Acce... |
+| **techniqueDFT-1117** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1117: Reconstruct the time that an event may have occurred. Objective(s): ... |
+| **techniqueDFT-1154** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1154: Reconstruct an identity associated with an event. Objective(s): Reco... |
+| **techniqueDFT-1155** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1155: Reconstruct that a specific event may have occurred. Objective(s): R... |
+| **techniqueDFT-1156** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1156: Reconstruct if an event could have functionally occurred on a system... |
+| **techniqueDFT-1158** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1158: Configure device to enable a service needed for data extraction. Obj... |
+
+**AFCExtractionData** key properties:
+
+| Property | Type | Required |
+|----------|------|----------|
+| createdBy | IdentityAbstraction | No |
+| description | string | No |
+| externalReference | ExternalReference | No |
+| hasFacet | Facet | No |
+| modifiedTime | dateTime | No |
+| name | string | No |
+| objectCreatedTime | dateTime | No |
+| objectMarking | MarkingDefinitionAbstraction | No |
+| *... 5 more* | | |
 
 **AICSAMInvestigation** key properties:
 
@@ -3952,17 +4641,6 @@ Classes for modeling actions taken during an investigation or actions performed 
 | evidenceAdmissibility | string | No |
 | processingTime | decimal | No |
 | detectionTimePoint | dateTime | Yes |
-| startTime | dateTime | Yes |
-
-**AIContentGeneration** key properties:
-
-| Property | Type | Required |
-|----------|------|----------|
-| generationComplexity | string | No |
-| generationTechnique | string | No |
-| technicalExpertiseRequired | string | No |
-| generationDuration | duration | No |
-| endTime | dateTime | No |
 | startTime | dateTime | Yes |
 
 **Example usage:**
@@ -4019,18 +4697,22 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **AIContentInvestigationSituation** | ext.cac.cacontology-ai-csam | Class | Complex situation involving multiple stakeholders, technologies, and legal frameworks for investi... |
 | **AIForensicAnalyst** | ext.cac.cacontology-ai-csam | Class | Anti-rigid role of specialist analyzing AI-generated content for authenticity and generation meth... |
 | **AccessRestriction** | ext.toolcap.toolcap | Class | An access restriction is a marking definition that describes a security, licensing, classificatio... |
+| **AcquiredData** | ext.solveit.solveit-observable | Class | Data that has been forensically collected from a source device or system. This is the parent clas... |
 | **AcquisitionPhase** | ext.cac.cacontology-forensics | Class | Phase involving forensic acquisition of digital evidence. |
 | **ActiveInvestigationPhase** | ext.cac.cacontology-case-management | Class | Phase during which active investigation activities occur including evidence collection and analys... |
 | **AdministrativeReview** | ext.cac.cacontology-case-management | Class | Administrative review of case management, resource allocation, and procedural compliance. Enhance... |
 | **Ammunition** | ext.weapons.weap | Class | Ammunition is ammunition or cartridge cases, primers, bullets, or propellent powder designed for ... |
 | **AnalysisPhase** | ext.cac.cacontology-forensics | Class | Phase involving detailed forensic analysis of acquired evidence. |
 | **AnalysisTransitionEvent** | ext.cac.cacontology-temporal | Class | Event transitioning investigation from Initial to Analysis Phase. |
+| **ApplicationFiles** | ext.solveit.solveit-observable | Class | A contextual compilation of files associated with a specific application version. Groups the file... |
 | **ArrestOperation** | ext.cac.cacontology-tactical | Class | Law enforcement operation to apprehend and take suspect into custody. Extends investigation:Inves... |
 | **ArrestReport** | ext.cac.cacontology-tactical | Class | Formal arrest report documenting the arrest including charges, evidence, and suspect information.... |
+| **ArtifactSet** | ext.solveit.solveit-observable | Class | A contextual compilation of forensic artifacts grouped together for some purpose, such as filteri... |
 | **Attorney** | case.investigation | Class | Attorney is a role involved in preparing, interpreting, and applying law. |
 | **Authorization** | case.investigation | Class | An authorization is a grouping of characteristics unique to some form of authoritative permission... |
 | **BathroomSurveillance** | ext.cac.cacontology-production | Class | Specific surveillance of bathroom facilities, as observed in Vermont case. |
 | **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
+| **BitstreamRandomAccessed** | ext.solveit.solveit-observable | Class | Random access to sector-level data, whether from a live device or a decoded forensic image contai... |
 | **BookingAction** | ext.cac.cacontology-tactical | Class | Process of booking a suspect into a correctional facility including fingerprinting, photography, ... |
 | **CACInvestigation** | ext.cac.cacontology | Class | A child-protection investigation that follows a standard action lifecycle that commonly begins wi... |
 | **CACTInvestigation** | ext.cac.cacontology-asset-forfeiture | Class | Investigation conducted by Criminal Assets Confiscation Taskforce targeting assets of child explo... |
@@ -4088,6 +4770,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **CustodyDocument** | ext.cac.cacontology-forensics | Class | Documentation recording the handling and transfer of evidence maintaining chain of custody. |
 | **CyberCrimeUnit** | ext.cac.cacontology-specialized-units | Class | Unit specialized in cyber crime investigations. Modeled as gUFO Organization. |
 | **DataMirrorCreation** | ext.cac.cacontology-platform-infrastructure | Class | Creating forensic mirrors of seized infrastructure for analysis and evidence preservation (gUFO E... |
+| **DateTimeStamp** | ext.solveit.solveit-observable | Class | A timestamp observed in forensic analysis. |
 | **DetectionDog** | ext.cac.cacontology-specialized-units | Class | Trained dog used for detection operations in CAC investigations. Modeled as gUFO Object. |
 | **DetectionDogAssist** | ext.cac.cacontology-forensics | Class | Assistance provided by trained detection dogs in forensic searches. |
 | **DeviceConsentSearch** | ext.cac.cacontology-physical-evidence | Class | Consent authorization specific to electronic device search (cellphone, computer, etc.). |
@@ -4123,6 +4806,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **FederalICACtaskForce** | ext.cac.cacontology-taskforce | Class | Federal-level CAC task force for complex or multi-jurisdictional cases. |
 | **FederalInvestigation** | ext.cac.cacontology-usa-federal-law | Class | Federal investigation of child exploitation crimes. Modeled as gUFO Event with temporal boundarie... |
 | **FederalProsecutorRole** | ext.cac.cacontology-usa-federal-law | Class | Role of federal prosecutor handling child exploitation cases. Modeled as anti-rigid gUFO Role. |
+| **FilteredFileSet** | ext.solveit.solveit-observable | Class | A subset of files selected from a larger collection by some filtering criteria, such as file type... |
 | **FinancialControlPattern** | ext.cac.cacontology-usa-federal-law | Class | Pattern where child support evasion is used as mechanism of control in exploitation cases. |
 | **ForensicAccountant** | ext.cac.cacontology-asset-forfeiture | Class | Specialist in tracing financial assets and determining proceeds of crime. |
 | **ForensicAcquisitionAction** | ext.cac.cacontology-forensics | Class | The action of creating a forensically sound copy of digital evidence using write-blocking and ver... |
@@ -4130,7 +4814,9 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **ForensicAnalystRole** | ext.cac.cacontology-physical-evidence | Class | Role of person conducting forensic analysis of physical evidence (gUFO Role - anti-rigid). Roles ... |
 | **ForensicExaminerRole** | ext.cac.cacontology-forensics | Class | Role of a person conducting digital forensic examination and analysis. |
 | **ForensicImage** | ext.cac.cacontology-forensics | Class | A bit-for-bit copy of digital media created using forensically sound methods, maintaining evidenc... |
+| **ForensicImageContainer** | ext.solveit.solveit-observable | Class | A forensic image in a container format that encapsulates acquired data, potentially compressed or... |
 | **ForensicImagingTool** | ext.cac.cacontology-forensics | Class | A tool specialized for creating forensic images of digital media using write-blocking and verific... |
+| **ForensicToolTagBasedReport** | ext.solveit.solveit-analysis | Class | A report generated by a forensic tool based on tags added during analysis. |
 | **ForensicsLifecyclePattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling forensics process lifecycle with acquisition, analysis, and presentatio... |
 | **ForensicsSpecialistRole** | ext.cac.cacontology-hotlines | Class | The role of a specialist who performs forensic analysis of evidence. |
 | **GenerationSourceTracking** | ext.cac.cacontology-ai-csam | Class | Investigation process to identify the source, tools, and methods used to generate AI-CSAM. Enhanc... |
@@ -4141,6 +4827,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **HighPriorityCaseManagement** | ext.cac.cacontology-case-management | Class | Enhanced management protocols for critical and high-priority cases requiring expedited processing... |
 | **HighPriorityModule** | ext.cac.cacontology-integration-patterns | Class | CAC module requiring immediate gUFO integration due to core investigation role or external depend... |
 | **HumanTraffickingSquad** | ext.cac.cacontology-victim-impact | Class | Specialized law enforcement unit focused on human trafficking investigations. |
+| **Hypothesis** | ext.solveit.solveit-analysis | Class | A proposition or explanation put forward for consideration during forensic analysis, which may be... |
 | **ICACtaskForce** | ext.cac.cacontology-taskforce | Class | Internet Crimes Against Children task force unit specializing in child exploitation investigations. |
 | **InformationSharing** | ext.cac.cacontology-investigation-coordination | Class | Systematic sharing of information between agencies including intelligence, evidence, case data, a... |
 | **InformationSharingFramework** | ext.cac.cacontology-partnerships | Class | Framework governing how information is shared between public and private partners while protectin... |
@@ -4177,6 +4864,9 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **JurisdictionalWarrant** | ext.cac.cacontology-multi-jurisdiction | Class | Legal authorization that specifies jurisdictional authority. |
 | **K9AssistedForensics** | ext.cac.cacontology-forensics | Class | Forensic process enhanced by K9 detection capabilities for electronic storage devices. |
 | **K9DetectionProgram** | ext.cac.cacontology-specialized-units | Class | Program utilizing trained detection dogs for CAC investigations. Modeled as gUFO Organization. |
+| **KeywordIndex** | ext.solveit.solveit-observable | Class | An index of keywords created during forensic analysis. |
+| **KeywordIndexingConfiguration** | ext.solveit.solveit-observable | Class | Configuration settings used for keyword indexing during forensic analysis. |
+| **KeywordSearchResult** | ext.solveit.solveit-observable | Class | A result from a keyword search operation during forensic analysis. |
 | **LargeScalePlatformTakedown** | ext.cac.cacontology-platforms | Class | Coordinated takedown of major exploitation platforms with user bases exceeding 1 million accounts... |
 | **LawEnforcementOfficer** | ext.cac.cacontology-legal-harmonization | Class | Officer involved in child safety investigations. |
 | **LeadAgency** | ext.cac.cacontology-multi-jurisdiction | Class | Primary agency responsible for coordinating multi-jurisdictional investigation. |
@@ -4184,6 +4874,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **LegalCaseSituation** | ext.cac.cacontology-legal-outcomes | Class | Complex situation encompassing the entire legal case from charges to resolution. Modeled as gUFO ... |
 | **LegalProcessTransitionEvent** | ext.cac.cacontology-temporal | Class | Event transitioning investigation from Analysis to Legal Process Phase. |
 | **LegalReview** | ext.cac.cacontology-case-management | Class | Legal review of case materials, procedures, and prosecution readiness. Enhanced as gUFO Event. |
+| **LogicalImageContainer** | ext.solveit.solveit-observable | Class | A forensic image container that encapsulates a logical collection of files rather than a bitstrea... |
 | **MassUserBehaviorAnalysis** | ext.cac.cacontology-platforms | Class | Analysis of user behavior patterns across massive user bases for investigation prioritization and... |
 | **MassivePlatformSituation** | ext.cac.cacontology-platforms | Class | Situation involving platforms with massive user bases requiring specialized investigation approac... |
 | **MemoryDump** | ext.cac.cacontology-forensics | Class | A snapshot of volatile system memory captured for forensic analysis. |
@@ -4202,6 +4893,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **NetworkMappingInvestigation** | ext.cac.cacontology-extremist-enterprises | Class | Investigation mapping the structure and relationships within extremist child exploitation networks. |
 | **OSINTInvestigation** | ext.cac.cacontology-partnerships | Class | Open source intelligence investigation conducted by skilled volunteers and researchers. Modeled a... |
 | **ObjectIdentificationRequest** | ext.cac.cacontology-partnerships | Class | Request for public assistance in identifying objects, locations, or other evidence from case mate... |
+| **Objective** | ext.solveit.solveit-core | Class | A goal or objective in a digital forensic investigation that can be achieved through one or more ... |
 | **OngoingImpactMonitoring** | ext.cac.cacontology-victim-impact | Class | Continuous monitoring of victim impact during investigation and recovery. |
 | **OutreachTriggeredInvestigation** | ext.cac.cacontology-prevention | Class | Investigation initiated as direct result of community outreach presentation. |
 | **ParallelEventCluster** | ext.cac.cacontology-temporal | Class | Set of investigation events occurring simultaneously or with temporal overlap. Modeled as gUFO co... |
@@ -4214,6 +4906,7 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **PhaseTransitionEvent** | ext.cac.cacontology-temporal | Class | Event marking transition between investigation phases. Modeled as gUFO Event with temporal bounda... |
 | **PhysicalEvidence** | ext.cac.cacontology-physical-evidence | Class | Tangible items collected as evidence in CAC investigations (gUFO Object). |
 | **PhysicalEvidenceProvenanceRecord** | ext.cac.cacontology-physical-evidence | Class | Provenance record tracking chain of custody and handling of physical evidence. Extends investigat... |
+| **PhysicalImageContainer** | ext.solveit.solveit-observable | Class | A forensic image container that encapsulates a bitstream (bit-for-bit) copy of a source medium, s... |
 | **PhysicalSearch** | ext.cac.cacontology-physical-evidence | Class | Law enforcement search of physical premises for evidence. Extends investigation:InvestigativeActi... |
 | **PlatformInvestigationCoordination** | ext.cac.cacontology-platforms | Class | Coordinated investigation across multiple platforms and devices. |
 | **PlatformInvestigationPhase** | ext.cac.cacontology-platforms | Class | Phase when platform is under law enforcement investigation. Modeled as anti-rigid gUFO Phase. |
@@ -4230,6 +4923,8 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **PublicIntegrityInvestigation** | ext.cac.cacontology-law-enforcement-corruption | Class | Investigation into public integrity violations by law enforcement personnel. |
 | **QualityScoreMetrics** | ext.cac.cacontology-case-management | Class | Quality assessment metrics evaluating case management effectiveness and outcomes. Enhanced as gUF... |
 | **RacketeeringEnterprise** | ext.rico.rico | Class | A racketeering enterprise is an 'enterprise' as defined in 18 U.S.C. § 1961(4) (https://www.law.c... |
+| **RawImage** | ext.solveit.solveit-observable | Class | A raw forensic image containing a bitstream without container metadata. Unlike a ForensicImageCon... |
+| **RawImageInfoFile** | ext.solveit.solveit-observable | Class | A sidecar file containing metadata for a raw/dd forensic image, including hash values, case infor... |
 | **RecantationAssessment** | ext.cac.cacontology-recantation | Class | An investigative or prosecutorial assessment of a recantation, its credibility, surrounding press... |
 | **RecoveredFile** | ext.cac.cacontology-forensics | Class | A file recovered from deleted or unallocated space on digital media through forensic analysis tec... |
 | **RefusalResponse** | ext.cac.cacontology-sextortion | Class | Victim refuses demands triggering threat escalation (as in WA case). |
@@ -4266,8 +4961,11 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **TaskForceReferral** | ext.cac.cacontology-us-ncmec | Class | Referral of NCMEC tip to appropriate CAC task force for investigation. |
 | **TechnicalAnalysisSituation** | ext.cac.cacontology-ai-csam | Class | Situation requiring coordination between technical experts, forensic analysts, and legal teams fo... |
 | **TechnicalDataSharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of technical data including forensic tools, methodologies, and technical analysis results. |
+| **Technique** | ext.solveit.solveit-core | Class | A digital forensic technique representing how one might achieve an objective by performing an act... |
 | **TestimonyContingencyPlan** | ext.cac.cacontology-case-management | Class | Case documentation describing fallback testimony strategies when a child witness recants, shuts d... |
+| **Timeline** | ext.solveit.solveit-observable | Class | A set of timeline entries extracted during forensic analysis. |
 | **TimelineAnalysisAction** | ext.cac.cacontology-forensics | Class | The action of creating chronological sequences of digital artifacts and events for investigation ... |
+| **TimelineEntry** | ext.solveit.solveit-observable | Class | A single entry in a forensic timeline. |
 | **TipPrioritization** | ext.cac.cacontology-us-ncmec | Class | Priority assessment and ranking of NCMEC tips for investigation. |
 | **TipProcessing** | ext.cac.cacontology-us-ncmec | Class | Processing workflow for NCMEC tips from receipt to investigation referral. |
 | **ToolCapability** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use capability:Capability (proposed uco-capability:Capability) instead, link... |
@@ -4285,6 +4983,31 @@ CASE-specific classes for structuring an investigation: cases, investigative act
 | **VictimDeviceForensics** | ext.cac.cacontology-sex-offender-registry | Class | Forensic examination of victim's device to recover evidence of digital exploitation. |
 | **VictimIdentificationProcess** | ext.cac.cacontology-forensics | Class | Systematic process for identifying child victims from seized images and videos during long-term i... |
 | **VictimTargetingPattern** | ext.cac.cacontology-stranger-abduction | Class | Patterns of victim selection and targeting in stranger abduction cases. |
+| **VideoFrame** | ext.solveit.solveit-observable | Class | A single frame extracted from a video file during forensic analysis. |
+| **VirtualizedComputer** | ext.solveit.solveit-observable | Class | A computer (desktop, laptop, or server) that exists as a virtual machine rather than running on p... |
+| **VirtualizedDevice** | ext.solveit.solveit-observable | Class | A device or system that exists as a virtual machine, defined by virtualization configuration and ... |
+| **Wordlist** | ext.solveit.solveit-observable | Class | A list of words or terms used as input to techniques such as keyword searching or dictionary-base... |
+| **techniqueDFT-1014** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1014: Document the chain of custody. Objective(s): Document digital forens... |
+| **techniqueDFT-1025** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1025: Store bitstream data in a forensic image format. Objective(s): Store... |
+| **techniqueDFT-1043** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1043: Read bitstream from forensic image container file(s). Objective(s): ... |
+| **techniqueDFT-1046** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1046: Redact digital forensic tool results to protect privileged material.... |
+| **techniqueDFT-1057** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1057: Search for indicators of steganography. Objective(s): Detect anti-fo... |
+| **techniqueDFT-1058** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1058: Search for mismatched file extensions. Objective(s): Detect anti-for... |
+| **techniqueDFT-1090** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1090: Experiment with software to ascertain forensic artifacts. Objective(... |
+| **techniqueDFT-1091** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1091: Tag artifacts. Objective(s): Document digital forensic activities. S... |
+| **techniqueDFT-1092** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1092: Generate tag-based automated report. Objective(s): Document digital ... |
+| **techniqueDFT-1093** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1093: Write expert report. Objective(s): Document digital forensic activit... |
+| **techniqueDFT-1094** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1094: Disclose investigation material to an authorized legal authority. Ob... |
+| **techniqueDFT-1110** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1110: Preserve reference data. Objective(s): Prepare for a digital investi... |
+| **techniqueDFT-1122** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1122: Keyword search (case-type wordlists). See https://solveit-df.org for... |
+| **techniqueDFT-1123** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1123: Keyword search (case-specific wordlists). See https://solveit-df.org... |
+| **techniqueDFT-1128** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1128: Search for indicators of malware. Objective(s): Detect anti-forensic... |
+| **techniqueDFT-1129** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1129: Search for indicators of clock tampering. Objective(s): Detect anti-... |
+| **techniqueDFT-1130** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1130: Search for indicators of encrypted data. Objective(s): Detect anti-f... |
+| **techniqueDFT-1131** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1131: Search for indicators of trail obfuscation. Objective(s): Detect ant... |
+| **techniqueDFT-1132** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1132: Search for indicators of artifact wiping. Objective(s): Detect anti-... |
+| **techniqueDFT-1170** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1170: Read contents from logical forensic container file(s). Objective(s):... |
+| **techniqueDFT-1193** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1193: Read metadata from within a forensic image container. Objective(s): ... |
 
 **AICSAMInvestigation** key properties:
 
@@ -4370,6 +5093,7 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **ApplicationAccount** | uco.observable | Class | An application account is an account within a particular software program designed for end users. |
 | **ApplicationAccountFacet** | uco.observable | Facet | An application account facet is a grouping of characteristics unique to an account within a parti... |
 | **ApplicationFacet** | uco.observable | Facet | An application facet is a grouping of characteristics unique to a particular software program des... |
+| **ApplicationFiles** | ext.solveit.solveit-observable | Class | A contextual compilation of files associated with a specific application version. Groups the file... |
 | **ApplicationVersion** | uco.observable | Class | An application version is a grouping of characteristics unique to a particular software program v... |
 | **AutomatedReporterAgent** | ext.cac.cacontology-hotlines | Class | A software agent that automatically reports content to hotlines. Enhanced as gUFO Object for comp... |
 | **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
@@ -4406,6 +5130,7 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **Dependency** | uco.configuration | Class | A dependency is a grouping of characteristics unique to something that a tool or other software r... |
 | **DigitalSystemEntity** | ext.cac.cac-core | Class | An enduring entity representing a software or system-level resource such as an online service pla... |
 | **EditingEquipment** | ext.cac.cacontology-production | Class | Computer hardware and software used to edit or enhance produced material. |
+| **EmailAppFiles** | ext.solveit.solveit-observable | Class | Files associated with an email client application, including message stores, mailbox databases, a... |
 | **EncodedStreamFacet** | uco.observable | Facet | An encoded stream facet is a grouping of characteristics unique to the conversion of a body of da... |
 | **EncryptedStreamFacet** | uco.observable | Facet | An encrypted stream facet is a grouping of characteristics unique to the conversion of a body of ... |
 | **EquipmentSharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of specialized equipment including forensic tools, surveillance equipment, and technical ... |
@@ -4413,6 +5138,7 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **FireEscapeEntry** | ext.cac.cacontology-stranger-abduction | Class | Forcing victim to climb fire escapes to enter buildings through windows. |
 | **ForcedLocationEntry** | ext.cac.cacontology-stranger-abduction | Class | Forcing victim to enter buildings, apartments, or other locations for exploitation. |
 | **ForensicImagingTool** | ext.cac.cacontology-forensics | Class | A tool specialized for creating forensic images of digital media using write-blocking and verific... |
+| **ForensicToolTagBasedReport** | ext.solveit.solveit-analysis | Class | A report generated by a forensic tool based on tags added during analysis. |
 | **GenerationSourceTracking** | ext.cac.cacontology-ai-csam | Class | Investigation process to identify the source, tools, and methods used to generate AI-CSAM. Enhanc... |
 | **GroomingBehavior** | ext.cac.cacontology-grooming | Class | Predatory behavior designed to prepare a child for abuse by building trust, isolating them, and n... |
 | **HashingTool** | ext.cac.cacontology-forensics | Class | A tool specialized for generating cryptographic hashes for evidence verification (e.g., hashdeep,... |
@@ -4423,6 +5149,7 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **ImmediateExploitationAttempt** | ext.cac.cacontology-grooming | Class | Attempt to immediately exploit victim without extended grooming or relationship building. |
 | **ImmediatePhysicalContactExploitation** | ext.cac.cacontology-educational-exploitation | Class | Sexual exploitation involving immediate physical contact without prior grooming or relationship b... |
 | **InterventionType** | ext.cac.cacontology-synthesis | Class | A category of TF-CSEA intervention (e.g., technological tools and protocols). |
+| **KeywordIndexingConfiguration** | ext.solveit.solveit-observable | Class | Configuration settings used for keyword indexing during forensic analysis. |
 | **Library** | uco.observable | Class | A library is a suite of data and programming code that is used to develop software programs and a... |
 | **LibraryFacet** | uco.observable | Facet | A library facet is a grouping of characteristics unique to a suite of data and programming code t... |
 | **LibraryType** | uco.tool | Class | A library type is a grouping of characteristics unique to a collection of resources incorporated ... |
@@ -4434,6 +5161,7 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **MediumPriorityModule** | ext.cac.cacontology-integration-patterns | Class | CAC module requiring gUFO integration in second wave, building on high-priority foundation. |
 | **MemoryForensicTool** | ext.cac.cacontology-forensics | Class | A tool specialized for analyzing volatile memory dumps (e.g., Volatility, Rekall, MAGNET RAM Capt... |
 | **MetadataAnalysisTool** | ext.cac.cacontology-ai-csam | Class | Tool for analyzing metadata patterns that may indicate AI generation or manipulation. Enhanced as... |
+| **MitigationCapability** | ext.solveit.solveit-tool-profile | Class | A declared capability that a specific mitigation is provided by a tool, optionally subject to con... |
 | **MobileForensicTool** | ext.cac.cacontology-forensics | Class | A tool specialized for mobile device forensics including logical and physical extraction (e.g., C... |
 | **Module** | ext.toolcap.capability | Class | A module is a discrete, potentially reusable component of a larger software system. In forensic t... |
 | **NetworkAppliance** | uco.observable | Class | A network appliance is a purpose-built computer with software or firmware that is designed to pro... |
@@ -4450,11 +5178,14 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **ProsecutionPreparationPhase** | ext.cac.cacontology-case-management | Class | Phase involving preparation for prosecution including legal review and case building. Anti-rigid ... |
 | **RapidEscalationGrooming** | ext.cac.cacontology-grooming | Class | Grooming with accelerated timeline from initial contact to exploitation attempt, bypassing tradit... |
 | **RiskAssessmentTool** | ext.cac.cacontology-prevention | Class | Tool for assessing risks to child safety. |
+| **SQLiteWALFrame** | ext.solveit.solveit-observable | Class | A single frame within a SQLite WAL, containing a version of a database page. |
 | **SecurityAppliance** | uco.observable | Class | A security appliance is a purpose-built computer with software or firmware that is designed to pr... |
 | **Situation** | ext.cac.cac-core | Class | A context, state, or configuration that holds at a time and may involve multiple participants. Al... |
 | **SkippedGroomingPhases** | ext.cac.cacontology-grooming | Class | Grooming that bypasses traditional phases like trust building, isolation, and normalization. |
+| **SmartHomeAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a smart home or IoT control application, including device registries, autom... |
 | **Software** | uco.observable | Class | Software is a definitely scoped instance of a collection of data or computer instructions that te... |
 | **SoftwareFacet** | uco.observable | Facet | A software facet is a grouping of characteristics unique to a software program (a definitively sc... |
+| **SolveitAwareInstrument** | ext.solveit.solveit-tool-profile | Class | A specialised tool that has been evaluated against SOLVE-IT tool capability profiles. Adds the co... |
 | **SyntheticImageDetector** | ext.cac.cacontology-ai-csam | Class | Tool for detecting synthetically generated images using machine learning classifiers. Enhanced as... |
 | **T1016** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: Windows, Linux, macOS. Adversaries look for details about the netwo... |
 | **T1027.002** | ext.attack-technique.attack | Class | Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries perform software packing t... |
@@ -4463,6 +5194,7 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **TechnologySharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of technology resources including software, databases, communication systems, and analyti... |
 | **Tool** | uco.tool | Class | A tool is an element of hardware and/or software utilized to carry out a particular function. |
 | **ToolCapability** | ext.toolcap.toolcap | Class | DEPRECATED in 0.4.0. Use capability:Capability (proposed uco-capability:Capability) instead, link... |
+| **ToolCapabilityProfile** | ext.solveit.solveit-tool-profile | Class | A declaration of what techniques a specific version of a tool can perform and what mitigations it... |
 | **ToolDevelopment** | ext.cac.cacontology-partnerships | Class | Joint development of investigative tools and technologies for law enforcement use. Modeled as gUF... |
 | **TrustBuildingBehavior** | ext.cac.cacontology-grooming | Class | Early grooming stage focused on establishing emotional connection with the child victim. |
 | **TrustBuildingPhase** | ext.cac.cacontology-grooming | Class | Phase focused on building emotional connection and trust with victim. |
@@ -4470,8 +5202,22 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **TrustBuildingProcess** | ext.cac.cacontology-extremist-enterprises | Class | Process of building trust with vulnerable victims before exploitation begins. |
 | **TrustThroughAnonymity** | ext.cac.cacontology-grooming | Class | Building trust by appearing less threatening through anonymous contact. |
 | **USConferenceCommittee** | ext.cac.cacontology-usa-legislative | Class | Bicameral reconciliation process between House and Senate versions. |
+| **VirtualizedDevice** | ext.solveit.solveit-observable | Class | A device or system that exists as a virtual machine, defined by virtualization configuration and ... |
 | **WindowsComputerSpecification** | uco.observable | Class | A Windows computer specification is the hardware ans software of a programmable electronic device... |
 | **WindowsComputerSpecificationFacet** | uco.observable | Facet | A Windows computer specification facet is a grouping of characteristics unique to the hardware an... |
+| **WriteProtectedDeviceInterface** | ext.solveit.solveit-observable | Class | A logical interface to a storage device that has been interfaced with in a write-protected manner... |
+| **techniqueDFT-1013** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1013: Write protect storage media using a software write blocker. Objectiv... |
+| **techniqueDFT-1021** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1021: Extract artifacts from a configuration file. Objective(s): Extract s... |
+| **techniqueDFT-1046** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1046: Redact digital forensic tool results to protect privileged material.... |
+| **techniqueDFT-1089** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1089: Review source code of software. Objective(s): Conduct research. See ... |
+| **techniqueDFT-1090** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1090: Experiment with software to ascertain forensic artifacts. Objective(... |
+| **techniqueDFT-1095** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1095: Instrument a piece of running software. Objective(s): Conduct resear... |
+| **techniqueDFT-1097** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1097: Extract operating system artifacts indicating installed software. Ob... |
+| **techniqueDFT-1143** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1143: Extract browser configuration artifacts. See https://solveit-df.org ... |
+| **techniqueDFT-1149** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1149: Extract artifacts from the file versioning feature. Objective(s): Ex... |
+| **techniqueDFT-1165** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1165: Extract software configuration information. Objective(s): Extract sp... |
+| **techniqueDFT-1190** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1190: Extract operating system version(s) from data source. Objective(s): ... |
+| **techniqueDFT-1192** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1192: Disable connectivity using device configuration settings. Objective(... |
 
 **AIDetectionTool** key properties:
 
@@ -4567,6 +5313,7 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **AIContentGeneration** | ext.cac.cacontology-ai-csam | Class | Process of creating artificial CSAM using machine learning models, neural networks, or other AI t... |
 | **AcademicIntimidation** | ext.cac.cacontology-educational-exploitation | Class | Use of academic authority to intimidate and create vulnerability in students. Enhanced as gUFO Ev... |
 | **AccountMetadata** | ext.cac.cacontology-platforms | Class | Account-level metadata including creation date, profile information, and activity patterns. |
+| **AcquisitionErrorRecord** | ext.solveit.solveit-observable | Class | A record of an error encountered during data acquisition such as a bad sector, read timeout, I/O ... |
 | **Age** | ext.cac.cacontology-temporal | Class | Age of a person modeled as a gUFO Quality whose concrete value is attributed in time-bounded situ... |
 | **AgeAtTimeSituation** | ext.cac.cacontology-temporal | Class | gUFO QualityValueAttributionSituation specializing in attribution of an Age quality value to a sp... |
 | **AnnualRegistrationReview** | ext.cac.cacontology-sex-offender-registry | Class | Annual review and update of sex offender registration information. |
@@ -4582,6 +5329,8 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **CaseWorkflow** | ext.cac.cacontology-case-management | Class | Structured workflow stages and processes for managing case progression from intake to disposition... |
 | **ChildSexualAbuseEvent** | ext.cac.cacontology | Class | A class representing any event involving child sexual abuse or exploitation. This is the base cla... |
 | **ChildVictim** | ext.cac.cacontology-grooming | Class | Minor child who is the target of grooming behavior. When analysis depends on the victim’s exact a... |
+| **ClockOffsetCapture** | ext.solveit.solveit-observable | Class | The acquisition of a clock offset measurement from a device. Contains the ClockOffsetMeasurement ... |
+| **ClockOffsetMeasurement** | ext.solveit.solveit-observable | Class | The measured difference between a device clock and a reference time source. Records what was comp... |
 | **ColdCaseManagement** | ext.cac.cacontology-case-management | Class | Management protocols for cold cases including periodic review and new evidence integration. Subcl... |
 | **CommunityEmailList** | ext.cac.cacontology-prevention | Class | Organized email communication system for ongoing safety updates to parents and community members. |
 | **CommunityNewsletterSystem** | ext.cac.cacontology-prevention | Class | Regular newsletter communication system for ongoing community engagement and safety updates. |
@@ -4593,6 +5342,8 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **CoordinationSituationPattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling multi-jurisdiction coordination situations with participating organizat... |
 | **CryptocurrencyWalletFacet** | ext.cryptoinv.cryptoinv | Facet | A cryptocurrency wallet facet is a grouping of characteristics unique to a wallet: software, a de... |
 | **CustodyArrangement** | ext.cac.cacontology-custodial | Class | Formal or informal arrangement for child custody or care. Modeled as gUFO Object with temporal ar... |
+| **DateTimeRange** | ext.solveit.solveit-observable | Class | A time interval with start and end boundaries. Exactly one start property (inclusive or exclusive... |
+| **DateTimeStamp** | ext.solveit.solveit-observable | Class | A timestamp observed in forensic analysis. |
 | **Deploy** | ext.aeo.engagement | Class | A Deploy action involves instantiating some deception objects prior or during an operation. |
 | **Dictionary** | uco.types | Class | A dictionary is list of (term/key, value) pairs with each term/key having an expectation to exist... |
 | **DoxxingThreat** | ext.cac.cacontology-sextortion | Class | Threat mechanism involving doxxing (threatened release of identifying/personal information) to in... |
@@ -4610,10 +5361,13 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **FailureToRegisterOffense** | ext.cac.cacontology-sex-offender-registry | Class | Criminal offense for failing to register or update required information in a sex offender registr... |
 | **FederalInvestigation** | ext.cac.cacontology-usa-federal-law | Class | Federal investigation of child exploitation crimes. Modeled as gUFO Event with temporal boundarie... |
 | **FederalProsecution** | ext.cac.cacontology-usa-federal-law | Class | Federal legal prosecution process for child exploitation crimes. Modeled as gUFO Event with tempo... |
+| **FilteredFileSet** | ext.solveit.solveit-observable | Class | A subset of files selected from a larger collection by some filtering criteria, such as file type... |
+| **ForensicImageContainer** | ext.solveit.solveit-observable | Class | A forensic image in a container format that encapsulates acquired data, potentially compressed or... |
 | **GlobalTakedownCoordination** | ext.cac.cacontology-international | Class | Real-time coordination for simultaneous takedown operations across multiple countries. |
 | **GroomingPhase** | ext.cac.cacontology-grooming | Class | A temporal phase within the grooming process. |
 | **HighVolumeDigitalExploitation** | ext.cac.cacontology-sex-offender-registry | Class | Digital exploitation involving thousands of messages or communications over extended period. |
 | **HotlineAction** | ext.cac.cacontology-hotlines | Class | An action taken as part of processing a hotline report. Enhanced as gUFO Event for comprehensive ... |
+| **ImplicitTimingInformation** | ext.solveit.solveit-observable | Class | A relative or implicit temporal indicator such as a sequence number, counter value, or ordering i... |
 | **InfrastructureMaintenancePhase** | ext.cac.cacontology-platform-infrastructure | Class | Phase during which infrastructure undergoes maintenance and updates (gUFO Phase - anti-rigid). |
 | **InstantAlertSystem** | ext.cac.cacontology-international | Class | System for instant notification of threats, discoveries, and urgent coordination needs across int... |
 | **InstantMessagingAddress** | uco.observable | Class |  |
@@ -4625,6 +5379,7 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **LegalEventPattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling legal events (hearings, sentencing, appeals) with temporal boundaries a... |
 | **LifeImprisonmentSentence** | ext.cac.cacontology-legal-outcomes | Class | Prison sentence of life imprisonment (typically without a fixed term duration). Modeled as gUFO O... |
 | **LiveAdvertisementMonitoring** | ext.cac.cacontology-undercover | Class | Real-time monitoring of trafficking advertisements to identify and respond to active postings. |
+| **LiveDataCapture** | ext.solveit.solveit-observable | Class | Volatile or transient data captured from a running system at a specific point in time. Includes r... |
 | **LiveIntelligenceFeed** | ext.cac.cacontology-international | Class | Continuous feed of intelligence updates shared in real-time between international law enforcement... |
 | **LiveProductionEvent** | ext.cac.cacontology-production | Class | Real-time production of child sexual abuse material involving live victims. |
 | **LiveStreamContent** | ext.cac.cacontology-production | Class | Content transmitted in real-time during live production events. |
@@ -4658,6 +5413,7 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **RecruitmentTiming** | ext.cac.cacontology-recruitment-networks | Class | Temporal patterns and timing of recruitment activities within educational environments. |
 | **RegistrationReviewArrest** | ext.cac.cacontology-sex-offender-registry | Class | Arrest executed when offender arrives for scheduled registration review or update. |
 | **RegistrationUpdate** | ext.cac.cacontology-sex-offender-registry | Class | Update to sex offender registration information. |
+| **RemindersAppFiles** | ext.solveit.solveit-observable | Class | Files associated with a reminders or to-do list application, including task lists, due dates, rec... |
 | **RepeatedCrossBorderTravel** | ext.cac.cacontology-institutional-exploitation | Class | Pattern of repeated travel to foreign country for exploitation over extended period. |
 | **ReportReviewAction** | ext.cac.cacontology-hotlines | Class | The action of reviewing and triaging a hotline report. Enhanced as gUFO Event with comprehensive ... |
 | **ReporterRole** | ext.cac.cacontology-hotlines | Class | The role of a person or organization submitting a report to a hotline. Enhanced as anti-rigid gUF... |
@@ -4666,6 +5422,8 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **Situation** | ext.cac.cac-core | Class | A context, state, or configuration that holds at a time and may involve multiple participants. Al... |
 | **Snapshot** | uco.observable | Class | A snapshot is a file system object representing a snapshot of the contents of a part of a file sy... |
 | **SocialMediaPost** | ext.cac.cacontology-platforms | Class | Individual posts, updates, or content shared on social media platforms. |
+| **SortedTimeline** | ext.solveit.solveit-observable | Class | A timeline whose entries have been ordered by position, as determined by a sorting process. Multi... |
+| **SortedTimelineEntry** | ext.solveit.solveit-observable | Class | An intermediary node that associates a TimelineEntry with its ordinal position within a SortedTim... |
 | **SupervisedRelease** | ext.cac.cacontology-legal-outcomes | Class | Period of supervision following completion of prison sentence. Modeled as gUFO Object. |
 | **SuspendedSituation** | ext.cac.cacontology-temporal | Class | Situation where investigation is temporarily suspended pending resources, legal decisions, or ext... |
 | **SwattingThreat** | ext.cac.cacontology-sextortion | Class | Threat mechanism involving swatting (threatened or induced false emergency report leading to arme... |
@@ -4674,7 +5432,10 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **TemporalPatternAnalysis** | ext.cac.cacontology-forensics | Class | Analysis of temporal patterns and timing correlations across different pieces of evidence. |
 | **TemporaryCustody** | ext.cac.cacontology-custodial | Class | Short-term custody arrangement or supervision of a child. Modeled as anti-rigid gUFO Phase with t... |
 | **ThreatAssessmentSharing** | ext.cac.cacontology-international | Class | Real-time sharing of threat assessments and risk evaluations between international partners. |
+| **Timeline** | ext.solveit.solveit-observable | Class | A set of timeline entries extracted during forensic analysis. |
 | **TimelineAnalysisAction** | ext.cac.cacontology-forensics | Class | The action of creating chronological sequences of digital artifacts and events for investigation ... |
+| **TimelineEntry** | ext.solveit.solveit-observable | Class | A single entry in a forensic timeline. |
+| **TimestampOffset** | ext.solveit.solveit-observable | Class | The computed difference between two timestamps, expressed in seconds. Positive values indicate th... |
 | **TraumatizedVictim** | ext.cac.cacontology-victim-impact | Class | Role of a child victim experiencing psychological trauma. Where age at time of victimization or a... |
 | **TrustViolation** | ext.cac.cacontology-custodial | Class | Action that violates a position of trust or custodial responsibility. Modeled as gUFO Event with ... |
 | **UrgentRescueLifecycle** | ext.cac.cacontology-temporal | Class | Accelerated investigation lifecycle for urgent child rescue situations. Compressed phase duration... |
@@ -4685,11 +5446,21 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **VirtualAssetHoldingFacet** | ext.cryptoinv.cryptoinv | Facet | A virtual asset holding facet is a grouping of characteristics describing a point-in-time quantit... |
 | **VisaFacet** | uco.identity | Facet | Visa is a grouping of characteristics unique to information related to a person's ability to ente... |
 | **VisitationArrangement** | ext.cac.cacontology-custodial | Class | Scheduled visitation or contact arrangement with child. Modeled as gUFO SubKind with temporal sch... |
+| **WeaknessEvaluationSet** | ext.solveit.solveit-wa | Class | A collection of weakness evaluations scoped to a technique or context, with authorship and date m... |
 | **WeaponBasedCoercion** | ext.cac.cacontology-stranger-abduction | Class | Use of weapons to threaten, intimidate, and control victims during abduction and exploitation. |
 | **WeaponDisplayIntimidation** | ext.cac.cacontology-stranger-abduction | Class | Display of weapon to intimidate victim into compliance without direct threats. |
 | **WindowsCriticalSection** | uco.observable | Class | A Windows critical section is a Windows object that provides synchronization similar to that prov... |
 | **WindowsSystemRestore** | uco.observable | Class | A Windows system restore is a capture of a Windows computer's state (including system files, inst... |
 | **WindowsWaitableTime** | uco.observable | Class | A Windows waitable timer is a synchronization object within the Windows operating system whose st... |
+| **Wordlist** | ext.solveit.solveit-observable | Class | A list of words or terms used as input to techniques such as keyword searching or dictionary-base... |
+| **techniqueDFT-1052** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1052: Generate timeline. Objective(s): Extract specific artifact types. Se... |
+| **techniqueDFT-1086** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1086: Analyze timeline. Objective(s): Locate potentially relevant content.... |
+| **techniqueDFT-1117** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1117: Reconstruct the time that an event may have occurred. Objective(s): ... |
+| **techniqueDFT-1119** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1119: Automatically scan for artifact changes caused by app updates. Objec... |
+| **techniqueDFT-1134** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1134: Use time anchors to estimate clock offset. See https://solveit-df.or... |
+| **techniqueDFT-1153** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1153: Apply offset to a timestamp. See https://solveit-df.org for weakness... |
+| **techniqueDFT-1182** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1182: Filter a timeline for relevant entries. See https://solveit-df.org f... |
+| **techniqueDFT-1184** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1184: Sort a timeline so entries are ordered chronologically. See https://... |
 
 **AIContentGeneration** key properties:
 
@@ -4773,6 +5544,7 @@ Classes for marking data with handling restrictions, classification levels, TLP 
 | **AssessmentResult** | ext.cac.cac-core | Class | An output or conclusion of some evaluative, analytic, classification, or decision-making process.... |
 | **AutomatedContentAnalysis** | ext.cac.cacontology-forensics | Class | Automated analysis of large volumes of content using machine learning and AI for rapid classifica... |
 | **BenchmarkObservation** | ext.toolcap.toolcap | Class | A benchmark observation is a single point-in-time record of testing a forensic tool's capability.... |
+| **BitstreamRandomAccessed** | ext.solveit.solveit-observable | Class | Random access to sector-level data, whether from a live device or a decoded forensic image contai... |
 | **BlockDeviceNode** | uco.observable | Class | A block device node is a UNIX filesystem special file that serves as a conduit to communicate wit... |
 | **BrowserBookmark** | uco.observable | Class | A browser bookmark is a saved shortcut that directs a WWW (World Wide Web) browser software progr... |
 | **BrowserBookmarkFacet** | uco.observable | Facet | A browser bookmark facet is a grouping of characteristics unique to a saved shortcut that directs... |
@@ -4786,6 +5558,7 @@ Classes for marking data with handling restrictions, classification levels, TLP 
 | **ContentCurrencySystem** | ext.cac.cacontology-extremist-enterprises | Class | System using exploitative content as valuable currency within criminal enterprise for advancement... |
 | **ContentIdentification** | ext.cac.cacontology-us-ncmec | Class | Identification and classification of illegal content in NCMEC tips. |
 | **ContentModerationQueue** | ext.cac.cacontology-platforms | Class | A queue/backlog of content items awaiting moderation review and operational handling at scale (e.... |
+| **ContentQueryData** | ext.solveit.solveit-observable | Class | Data obtained from an Android device by querying content providers via an ADB shell connection (e... |
 | **Credential** | uco.observable | Class | A credential is a single specific login and password combination for authorization of access to a... |
 | **CredentialDump** | uco.observable | Class | A credential dump is a collection (typically forcibly extracted from a system) of specific login ... |
 | **CustodyDocument** | ext.cac.cacontology-forensics | Class | Documentation recording the handling and transfer of evidence maintaining chain of custody. |
@@ -4807,9 +5580,11 @@ Classes for marking data with handling restrictions, classification levels, TLP 
 | **FileFacet** | uco.observable | Facet | A file facet is a grouping of characteristics unique to the storage of a file (computer resource ... |
 | **FilePermissionsFacet** | uco.observable | Facet | A file permissions facet is a grouping of characteristics unique to the access rights (e.g., view... |
 | **FileSystem** | uco.observable | Class | A file system is the process that manages how and where data on a storage medium is stored, acces... |
+| **FileSystemExtraction** | ext.solveit.solveit-observable | Class | Data obtained through direct access to a file system structure. Represents the files and folders ... |
 | **FileSystemFacet** | uco.observable | Facet | A file system facet is a grouping of characteristics unique to the process that manages how and w... |
 | **GeographicRestriction** | ext.cac.cacontology-sex-offender-registry | Class | Geographic area where offender is restricted from being. |
 | **GranularMarking** | uco.marking | Class | A granular marking is a grouping of characteristics unique to specification of marking definition... |
+| **HashSetEntry** | ext.solveit.solveit-observable | Class | A single entry within a hash set. At minimum it carries a hash value; further details (e.g. file ... |
 | **HoneyToken** | ext.aeo.engagement | Class | A honey token gives an adversary direct access to a honeypot. |
 | **InnerCore** | ext.cac.cacontology-extremist-enterprises | Class | Elite inner core of enterprise members with access to restricted channels and advanced activities. |
 | **InnerCoreMemberRole** | ext.cac.cacontology-extremist-enterprises | Class | Role of member within enterprise inner core with access to restricted channels and advanced opera... |
@@ -4820,6 +5595,7 @@ Classes for marking data with handling restrictions, classification levels, TLP 
 | **K9Officer** | ext.cac.cacontology-specialized-units | Class | Law enforcement officer handling and working with detection dogs. Modeled as anti-rigid gUFO Role. |
 | **LegalLiaison** | ext.cac.cacontology-investigation-coordination | Class | Legal liaison officer handling legal aspects of inter-agency coordination and agreements. |
 | **LicenseMarking** | uco.marking | Class | A license marking is a grouping of characteristics unique to the expression of data marking defin... |
+| **LiveOSDeviceInterface** | ext.solveit.solveit-observable | Class | Access to a block device via the operating system on a live, running system. Provides sector-leve... |
 | **MACAddress** | uco.observable | Class | A MAC address is a media access control standards conformant identifier assigned to a network int... |
 | **MACAddressFacet** | uco.observable | Facet | A MAC address facet is a grouping of characteristics unique to a media access control standards c... |
 | **ManualClassificationAction** | ext.cac.cacontology-detection | Class | The action of human review and classification of suspected CSAM content. Modeled as gUFO Event. |
@@ -4846,6 +5622,8 @@ Classes for marking data with handling restrictions, classification levels, TLP 
 | **PhaseTransitionEvent** | ext.cac.cacontology-temporal | Class | Event marking transition between investigation phases. Modeled as gUFO Event with temporal bounda... |
 | **PhysicalEvidenceProvenanceRecord** | ext.cac.cacontology-physical-evidence | Class | Provenance record tracking chain of custody and handling of physical evidence. Extends investigat... |
 | **PositionOfTrust** | ext.cac.cacontology-custodial | Class | Role or position that grants special access to or authority over children. Modeled as anti-rigid ... |
+| **PrioritizedDeviceEntry** | ext.solveit.solveit-observable | Class | An entry pairing a device with its triage priority classification. |
+| **PrioritizedDeviceSet** | ext.solveit.solveit-observable | Class | A device set where each device has been triaged and assigned a priority classification. Contains ... |
 | **PrivateGroupManagement** | ext.cac.cacontology-extremist-enterprises | Class | Management of private groups and channels with restricted access for enterprise operations. |
 | **ProfessionalLicense** | ext.cac.cacontology-sex-offender-registry | Class | Professional license held by registered sex offender. |
 | **ProfessionalLicenseSurrenderCondition** | ext.cac.cacontology-legal-outcomes | Class | Condition associated with a plea agreement or sentencing outcome requiring the defendant to surre... |
@@ -4857,6 +5635,7 @@ Classes for marking data with handling restrictions, classification levels, TLP 
 | **ReparsePoint** | uco.observable | Class | A reparse point is a type of NTFS (New Technology File System) object which is an optional attrib... |
 | **ReviewPhase** | ext.cac.cacontology-hotlines | Class | The phase during which reports undergo detailed analysis and classification. |
 | **Semaphore** | uco.observable | Class | A semaphore is a variable or abstract data type used to control access to a common resource by mu... |
+| **ServiceBasedExtractionData** | ext.solveit.solveit-observable | Class | Data obtained by interacting with services provided by a device rather than direct storage access. |
 | **StatementMarking** | uco.marking | Class | A statement marking is a grouping of characteristics unique to the expression of data marking def... |
 | **SubscriptionManagement** | ext.cac.cacontology-platform-infrastructure | Class | Systems managing user subscriptions, access levels, and recurring payment processing (gUFO Functi... |
 | **T1539** | ext.attack-technique.attack | Class | Tactic: Credential Access. Platforms: Windows, Linux, macOS. Adversaries steal web application or... |
@@ -4885,6 +5664,22 @@ Classes for marking data with handling restrictions, classification levels, TLP 
 | **WindowsNetworkShare** | uco.observable | Class | A Windows network share is a Windows computer resource made available from one host to other host... |
 | **WindowsVolumeFacet** | uco.observable | Facet | A Windows volume facet is a grouping of characteristics unique to a single accessible storage are... |
 | **WriteBlocker** | uco.observable | Class | A write blocker is a device that allows read-only access to storage mediums in order to preserve ... |
+| **techniqueDFT-1028** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1028: Physically remove a storage chip from a device (chip-off). Objective... |
+| **techniqueDFT-1029** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1029: Read data from a desoldered eMMC via a chip reader. Objective(s): Ac... |
+| **techniqueDFT-1033** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1033: Extract credential(s) from an accessible device to attempt access to... |
+| **techniqueDFT-1040** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1040: Exploit a mobile device to facilitate privileged access for data ext... |
+| **techniqueDFT-1041** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1041: Gain access to a device via a Pin2Pwn approach. Objective(s): Overco... |
+| **techniqueDFT-1059** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1059: Identify partitions. Objective(s): Access partitions, volumes and fi... |
+| **techniqueDFT-1060** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1060: Enumerate allocated files and folders. Objective(s): Access partitio... |
+| **techniqueDFT-1061** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1061: Recover non-allocated files. Objective(s): Access partitions, volume... |
+| **techniqueDFT-1062** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1062: Decrypt encrypted file systems/volumes. Objective(s): Access partiti... |
+| **techniqueDFT-1063** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1063: Identify file types. Objective(s): Access partitions, volumes and fi... |
+| **techniqueDFT-1070** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1070: Extract artifacts from email client(s) or webmail access. Objective(... |
+| **techniqueDFT-1112** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1112: Locate and remove physical disks from a device. Objective(s): Access... |
+| **techniqueDFT-1113** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1113: Access internal storage via bootable environment. Objective(s): Acce... |
+| **techniqueDFT-1166** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1166: Connect directly to storage media. Objective(s): Access device data ... |
+| **techniqueDFT-1168** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1168: Identify volumes. Objective(s): Access partitions, volumes and file ... |
+| **techniqueDFT-1171** | ext.solveit.solveit-data | Class | SOLVE-IT technique DFT-1171: Access a file system via live operating system. Objective(s): Access... |
 
 **Access** key properties:
 
@@ -7352,6 +8147,332 @@ Extension ontologies add domain-specific classes beyond the core CASE/UCO specif
 |-------|------|-------------|
 | **EnterpriseRole** | Class | An enterprise role is a functional position or division-of-labor responsibility that a member or ... |
 | **RacketeeringEnterprise** | Class | A racketeering enterprise is an 'enterprise' as defined in 18 U.S.C. § 1961(4) (https://www.law.c... |
+
+### solveit.solveit-analysis
+
+| Class | Type | Description |
+|-------|------|-------------|
+| **ForensicToolTagBasedReport** | Class | A report generated by a forensic tool based on tags added during analysis. |
+| **Hypothesis** | Class | A proposition or explanation put forward for consideration during forensic analysis, which may be... |
+| **HypothesisSet** | Class | A collection of competing alternative hypotheses considered together, for example the mutually ex... |
+| **HypothesisedCommunication** | Class | A communication that is hypothesised to have occurred between parties, potentially inferred from ... |
+| **HypothesisedDevice** | Class | A device that is hypothesised to have been involved, such as a device inferred from artifacts but... |
+| **HypothesisedEvent** | Class | An event that is hypothesised to have occurred. |
+| **HypothesisedRelationship** | Class | A relationship between entities that is hypothesised to exist, such as an inferred association be... |
+| **HypothesisedUserAccount** | Class | A user account that is hypothesised to have existed, for example inferred from recovered deleted ... |
+| **HypothesisedWebSearch** | Class | A web search that is hypothesised to have been performed, potentially inferred from browser histo... |
+
+### solveit.solveit-core
+
+| Class | Type | Description |
+|-------|------|-------------|
+| **ASTMErrorCategory** | Class | An error category from ASTM E3016-18 used to classify weakness impacts. |
+| **Mitigation** | Class | An action that can be performed to prevent a weakness from occurring or to minimize its impact. |
+| **Objective** | Class | A goal or objective in a digital forensic investigation that can be achieved through one or more ... |
+| **SolveitInvestigativeAction** | Class | A SOLVE-IT aware InvestigativeAction that links an investigative action to the SOLVE-IT technique... |
+| **Technique** | Class | A digital forensic technique representing how one might achieve an objective by performing an act... |
+| **Weakness** | Class | A potential problem resulting from using a technique, classified according to ASTM E3016-18 error... |
+
+### solveit.solveit-data
+
+| Class | Type | Description |
+|-------|------|-------------|
+| **techniqueDFT-1001** | Class | SOLVE-IT technique DFT-1001: Triage devices or media. Objective(s): Prioritize digital evidence s... |
+| **techniqueDFT-1002** | Class | SOLVE-IT technique DFT-1002: Copy sectors from storage media. Objective(s): Acquire data. See htt... |
+| **techniqueDFT-1003** | Class | SOLVE-IT technique DFT-1003: Copy pages from physical memory. Objective(s): Acquire data. See htt... |
+| **techniqueDFT-1004** | Class | SOLVE-IT technique DFT-1004: Collect logical files selectively. Objective(s): Acquire data. See h... |
+| **techniqueDFT-1005** | Class | SOLVE-IT technique DFT-1005: Search a crime scene for relevant physical evidence. Objective(s): F... |
+| **techniqueDFT-1006** | Class | SOLVE-IT technique DFT-1006: Search a crime scene using digital sniffer dogs. Objective(s): Find ... |
+| **techniqueDFT-1007** | Class | SOLVE-IT technique DFT-1007: Detect the potential existence of digital devices using a SyncTriage... |
+| **techniqueDFT-1008** | Class | SOLVE-IT technique DFT-1008: Detect the potential existence of digital devices by profiling netwo... |
+| **techniqueDFT-1009** | Class | SOLVE-IT technique DFT-1009: Locate potential digital evidence sources via cloud account identifi... |
+| **techniqueDFT-1010** | Class | SOLVE-IT technique DFT-1010: Place device in a faraday environment. Objective(s): Preserve digita... |
+| **techniqueDFT-1011** | Class | SOLVE-IT technique DFT-1011: Store seized devices or media in evidence bags. Objective(s): Preser... |
+| **techniqueDFT-1012** | Class | SOLVE-IT technique DFT-1012: Write protect storage media using a hardware write blocker. Objectiv... |
+| **techniqueDFT-1013** | Class | SOLVE-IT technique DFT-1013: Write protect storage media using a software write blocker. Objectiv... |
+| **techniqueDFT-1014** | Class | SOLVE-IT technique DFT-1014: Document the chain of custody. Objective(s): Document digital forens... |
+| **techniqueDFT-1015** | Class | SOLVE-IT technique DFT-1015: Collect logical files selectively based on privacy preserving criter... |
+| **techniqueDFT-1016** | Class | SOLVE-IT technique DFT-1016: Collect specific pieces of information from a live running device. O... |
+| **techniqueDFT-1017** | Class | SOLVE-IT technique DFT-1017: Capture network packets. Objective(s): Acquire data. See https://sol... |
+| **techniqueDFT-1018** | Class | SOLVE-IT technique DFT-1018: Collect data from a remote networked device. Objective(s): Acquire d... |
+| **techniqueDFT-1019** | Class | SOLVE-IT technique DFT-1019: Extract a backup from a mobile device. See https://solveit-df.org fo... |
+| **techniqueDFT-1020** | Class | SOLVE-IT technique DFT-1020: Extract the file system from a mobile device. Objective(s): Acquire ... |
+| **techniqueDFT-1021** | Class | SOLVE-IT technique DFT-1021: Extract artifacts from a configuration file. Objective(s): Extract s... |
+| **techniqueDFT-1022** | Class | SOLVE-IT technique DFT-1022: Capture mobile device screenshots (manually). Objective(s): Acquire ... |
+| **techniqueDFT-1023** | Class | SOLVE-IT technique DFT-1023: Collect data from cloud service via a live web page using credential... |
+| **techniqueDFT-1024** | Class | SOLVE-IT technique DFT-1024: Collect data from cloud service via submission of request to service... |
+| **techniqueDFT-1025** | Class | SOLVE-IT technique DFT-1025: Store bitstream data in a forensic image format. Objective(s): Store... |
+| **techniqueDFT-1026** | Class | SOLVE-IT technique DFT-1026: Store data in standard archive format. Objective(s): Store acquired ... |
+| **techniqueDFT-1027** | Class | SOLVE-IT technique DFT-1027: Read data from a device using JTAG. See https://solveit-df.org for w... |
+| **techniqueDFT-1028** | Class | SOLVE-IT technique DFT-1028: Physically remove a storage chip from a device (chip-off). Objective... |
+| **techniqueDFT-1029** | Class | SOLVE-IT technique DFT-1029: Read data from a desoldered eMMC via a chip reader. Objective(s): Ac... |
+| **techniqueDFT-1030** | Class | SOLVE-IT technique DFT-1030: Read data from unmanaged NAND. Objective(s): Acquire data. See https... |
+| **techniqueDFT-1031** | Class | SOLVE-IT technique DFT-1031: Recover encryption/decryption key from memory. Objective(s): Overcom... |
+| **techniqueDFT-1032** | Class | SOLVE-IT technique DFT-1032: Recover encryption/decryption key information using side channel att... |
+| **techniqueDFT-1033** | Class | SOLVE-IT technique DFT-1033: Extract credential(s) from an accessible device to attempt access to... |
+| **techniqueDFT-1034** | Class | SOLVE-IT technique DFT-1034: Attack a stored credential or device using a brute force approach. O... |
+| **techniqueDFT-1035** | Class | SOLVE-IT technique DFT-1035: Attack a stored credential or device using a dictionary-based approa... |
+| **techniqueDFT-1036** | Class | SOLVE-IT technique DFT-1036: Recover information about a potential device PIN or pattern lock usi... |
+| **techniqueDFT-1037** | Class | SOLVE-IT technique DFT-1037: Obtain password from the device's owner. Objective(s): Overcome prot... |
+| **techniqueDFT-1038** | Class | SOLVE-IT technique DFT-1038: Attack a stored credential or device using a rainbow table-based app... |
+| **techniqueDFT-1039** | Class | SOLVE-IT technique DFT-1039: Downgrade apps to facilitate data extraction. Objective(s): Overcome... |
+| **techniqueDFT-1040** | Class | SOLVE-IT technique DFT-1040: Exploit a mobile device to facilitate privileged access for data ext... |
+| **techniqueDFT-1041** | Class | SOLVE-IT technique DFT-1041: Gain access to a device via a Pin2Pwn approach. Objective(s): Overco... |
+| **techniqueDFT-1042** | Class | SOLVE-IT technique DFT-1042: Verify hash of imaged data matches the hash of the source device. Ob... |
+| **techniqueDFT-1043** | Class | SOLVE-IT technique DFT-1043: Read bitstream from forensic image container file(s). Objective(s): ... |
+| **techniqueDFT-1044** | Class | SOLVE-IT technique DFT-1044: Decode data stored in a mobile backup format. Objective(s): Read dat... |
+| **techniqueDFT-1045** | Class | SOLVE-IT technique DFT-1045: Read contents from standard archive file(s). Objective(s): Read data... |
+| **techniqueDFT-1046** | Class | SOLVE-IT technique DFT-1046: Redact digital forensic tool results to protect privileged material.... |
+| **techniqueDFT-1047** | Class | SOLVE-IT technique DFT-1047: Filter files using a hashset to reduce files examined. Objective(s):... |
+| **techniqueDFT-1048** | Class | SOLVE-IT technique DFT-1048: Protect privacy by only partially processing data from a source. Obj... |
+| **techniqueDFT-1049** | Class | SOLVE-IT technique DFT-1049: Keyword search. Objective(s): Locate potentially relevant content. S... |
+| **techniqueDFT-1050** | Class | SOLVE-IT technique DFT-1050: Locate relevant files using a hashset to identify files of interest.... |
+| **techniqueDFT-1051** | Class | SOLVE-IT technique DFT-1051: Locate potentially relevant files using fuzzy hash matching. Objecti... |
+| **techniqueDFT-1052** | Class | SOLVE-IT technique DFT-1052: Generate timeline. Objective(s): Extract specific artifact types. Se... |
+| **techniqueDFT-1053** | Class | SOLVE-IT technique DFT-1053: Extract 'entities' from a data source. Objective(s): Extract specifi... |
+| **techniqueDFT-1054** | Class | SOLVE-IT technique DFT-1054: Review artifacts or content manually for relevant material. Objectiv... |
+| **techniqueDFT-1055** | Class | SOLVE-IT technique DFT-1055: Examine file and folder structure. Objective(s): Review content for ... |
+| **techniqueDFT-1056** | Class | SOLVE-IT technique DFT-1056: Enumerate connections between artifacts. Objective(s): Extract speci... |
+| **techniqueDFT-1057** | Class | SOLVE-IT technique DFT-1057: Search for indicators of steganography. Objective(s): Detect anti-fo... |
+| **techniqueDFT-1058** | Class | SOLVE-IT technique DFT-1058: Search for mismatched file extensions. Objective(s): Detect anti-for... |
+| **techniqueDFT-1059** | Class | SOLVE-IT technique DFT-1059: Identify partitions. Objective(s): Access partitions, volumes and fi... |
+| **techniqueDFT-1060** | Class | SOLVE-IT technique DFT-1060: Enumerate allocated files and folders. Objective(s): Access partitio... |
+| **techniqueDFT-1061** | Class | SOLVE-IT technique DFT-1061: Recover non-allocated files. Objective(s): Access partitions, volume... |
+| **techniqueDFT-1062** | Class | SOLVE-IT technique DFT-1062: Decrypt encrypted file systems/volumes. Objective(s): Access partiti... |
+| **techniqueDFT-1063** | Class | SOLVE-IT technique DFT-1063: Identify file types. Objective(s): Access partitions, volumes and fi... |
+| **techniqueDFT-1064** | Class | SOLVE-IT technique DFT-1064: Carve non-allocated files. See https://solveit-df.org for weaknesses... |
+| **techniqueDFT-1065** | Class | SOLVE-IT technique DFT-1065: Extract artifacts from operating system-level content indexer(s). Ob... |
+| **techniqueDFT-1066** | Class | SOLVE-IT technique DFT-1066: Extract artifacts from operating system log files. Objective(s): Ext... |
+| **techniqueDFT-1067** | Class | SOLVE-IT technique DFT-1067: Extract artifacts from operating system cloud synchronization featur... |
+| **techniqueDFT-1068** | Class | SOLVE-IT technique DFT-1068: Extract operating system artifacts indicating recently used files. O... |
+| **techniqueDFT-1069** | Class | SOLVE-IT technique DFT-1069: Extract artifacts from a web browser. Objective(s): Extract artifact... |
+| **techniqueDFT-1070** | Class | SOLVE-IT technique DFT-1070: Extract artifacts from email client(s) or webmail access. Objective(... |
+| **techniqueDFT-1071** | Class | SOLVE-IT technique DFT-1071: Extract data from SQLite database(s). Objective(s): Extract data fro... |
+| **techniqueDFT-1072** | Class | SOLVE-IT technique DFT-1072: Extract artifacts from chat app(s). Objective(s): Extract artifacts ... |
+| **techniqueDFT-1073** | Class | SOLVE-IT technique DFT-1073: Extract artifacts from calendar app(s). Objective(s): Extract artifa... |
+| **techniqueDFT-1074** | Class | SOLVE-IT technique DFT-1074: Extract artifacts from social network app(s). Objective(s): Extract ... |
+| **techniqueDFT-1075** | Class | SOLVE-IT technique DFT-1075: Extract artifacts from maps/travel app(s). Objective(s): Extract art... |
+| **techniqueDFT-1076** | Class | SOLVE-IT technique DFT-1076: Extract artifacts from log files. Objective(s): Extract specific art... |
+| **techniqueDFT-1077** | Class | SOLVE-IT technique DFT-1077: Extract artifacts from photo management app(s). Objective(s): Extrac... |
+| **techniqueDFT-1078** | Class | SOLVE-IT technique DFT-1078: Extract artifacts from cloud synchronization app(s). Objective(s): E... |
+| **techniqueDFT-1079** | Class | SOLVE-IT technique DFT-1079: Examine audio content. Objective(s): Review content for relevance. S... |
+| **techniqueDFT-1080** | Class | SOLVE-IT technique DFT-1080: Examine video content. Objective(s): Review content for relevance. S... |
+| **techniqueDFT-1081** | Class | SOLVE-IT technique DFT-1081: Examine image/picture content. Objective(s): Review content for rele... |
+| **techniqueDFT-1082** | Class | SOLVE-IT technique DFT-1082: Examine document content. Objective(s): Review content for relevance... |
+| **techniqueDFT-1083** | Class | SOLVE-IT technique DFT-1083: Extract artifacts from operating system memory structures. Objective... |
+| **techniqueDFT-1084** | Class | SOLVE-IT technique DFT-1084: Extract potentially user-identifying content from account informatio... |
+| **techniqueDFT-1085** | Class | SOLVE-IT technique DFT-1085: Conflate specific account identifiers to a single user identity. Obj... |
+| **techniqueDFT-1086** | Class | SOLVE-IT technique DFT-1086: Analyze timeline. Objective(s): Locate potentially relevant content.... |
+| **techniqueDFT-1087** | Class | SOLVE-IT technique DFT-1087: Reconstruct the location-based properties of an event. Objective(s):... |
+| **techniqueDFT-1088** | Class | SOLVE-IT technique DFT-1088: Reconstruct an relations between events properties of events. Object... |
+| **techniqueDFT-1089** | Class | SOLVE-IT technique DFT-1089: Review source code of software. Objective(s): Conduct research. See ... |
+| **techniqueDFT-1090** | Class | SOLVE-IT technique DFT-1090: Experiment with software to ascertain forensic artifacts. Objective(... |
+| **techniqueDFT-1091** | Class | SOLVE-IT technique DFT-1091: Tag artifacts. Objective(s): Document digital forensic activities. S... |
+| **techniqueDFT-1092** | Class | SOLVE-IT technique DFT-1092: Generate tag-based automated report. Objective(s): Document digital ... |
+| **techniqueDFT-1093** | Class | SOLVE-IT technique DFT-1093: Write expert report. Objective(s): Document digital forensic activit... |
+| **techniqueDFT-1094** | Class | SOLVE-IT technique DFT-1094: Disclose investigation material to an authorized legal authority. Ob... |
+| **techniqueDFT-1095** | Class | SOLVE-IT technique DFT-1095: Instrument a piece of running software. Objective(s): Conduct resear... |
+| **techniqueDFT-1096** | Class | SOLVE-IT technique DFT-1096: Extract operating system artifacts indicating program execution. Obj... |
+| **techniqueDFT-1097** | Class | SOLVE-IT technique DFT-1097: Extract operating system artifacts indicating installed software. Ob... |
+| **techniqueDFT-1098** | Class | SOLVE-IT technique DFT-1098: Enumerate operating system user accounts. Objective(s): Extract arti... |
+| **techniqueDFT-1099** | Class | SOLVE-IT technique DFT-1099: Repair a damaged or incomplete file using `grafting`. Objective(s): ... |
+| **techniqueDFT-1100** | Class | SOLVE-IT technique DFT-1100: Extract metadata from within images. Objective(s): Extract data from... |
+| **techniqueDFT-1101** | Class | SOLVE-IT technique DFT-1101: Conduct cell site survey. Objective(s): Conduct research. See https:... |
+| **techniqueDFT-1102** | Class | SOLVE-IT technique DFT-1102: Decode data extracted from unmanaged NAND. Objective(s): Read data f... |
+| **techniqueDFT-1103** | Class | SOLVE-IT technique DFT-1103: Virtualize suspect system for previewing. Objective(s): Create visua... |
+| **techniqueDFT-1104** | Class | SOLVE-IT technique DFT-1104: Collect data using open source intelligence. Objective(s): Acquire d... |
+| **techniqueDFT-1105** | Class | SOLVE-IT technique DFT-1105: Examine memory dump from an application. Objective(s): Extract artif... |
+| **techniqueDFT-1106** | Class | SOLVE-IT technique DFT-1106: Classify if a video is potentially synthetically generated. See http... |
+| **techniqueDFT-1107** | Class | SOLVE-IT technique DFT-1107: Extract artifacts from health/fitness app(s). Objective(s): Extract ... |
+| **techniqueDFT-1108** | Class | SOLVE-IT technique DFT-1108: Extract artifacts from reminders app(s). Objective(s): Extract artif... |
+| **techniqueDFT-1109** | Class | SOLVE-IT technique DFT-1109: Extract artifacts from payment app(s). Objective(s): Extract artifac... |
+| **techniqueDFT-1110** | Class | SOLVE-IT technique DFT-1110: Preserve reference data. Objective(s): Prepare for a digital investi... |
+| **techniqueDFT-1111** | Class | SOLVE-IT technique DFT-1111: Record system clock offset. Objective(s): Acquire data. See https://... |
+| **techniqueDFT-1112** | Class | SOLVE-IT technique DFT-1112: Locate and remove physical disks from a device. Objective(s): Access... |
+| **techniqueDFT-1113** | Class | SOLVE-IT technique DFT-1113: Access internal storage via bootable environment. Objective(s): Acce... |
+| **techniqueDFT-1114** | Class | SOLVE-IT technique DFT-1114: Preserve memory contents via Cold Boot Attack. Objective(s): Preserv... |
+| **techniqueDFT-1115** | Class | SOLVE-IT technique DFT-1115: Visualize geolocation information. Objective(s): Create visualizatio... |
+| **techniqueDFT-1116** | Class | SOLVE-IT technique DFT-1116: Extract references to connected devices. Objective(s): Extract artif... |
+| **techniqueDFT-1117** | Class | SOLVE-IT technique DFT-1117: Reconstruct the time that an event may have occurred. Objective(s): ... |
+| **techniqueDFT-1118** | Class | SOLVE-IT technique DFT-1118: Locate relevant files by path. Objective(s): Locate potentially rele... |
+| **techniqueDFT-1119** | Class | SOLVE-IT technique DFT-1119: Automatically scan for artifact changes caused by app updates. Objec... |
+| **techniqueDFT-1120** | Class | SOLVE-IT technique DFT-1120: Extract artifacts from app data automatically. Objective(s): Extract... |
+| **techniqueDFT-1121** | Class | SOLVE-IT technique DFT-1121: Index a data source for keyword searching. Objective(s): Extract spe... |
+| **techniqueDFT-1122** | Class | SOLVE-IT technique DFT-1122: Keyword search (case-type wordlists). See https://solveit-df.org for... |
+| **techniqueDFT-1123** | Class | SOLVE-IT technique DFT-1123: Keyword search (case-specific wordlists). See https://solveit-df.org... |
+| **techniqueDFT-1124** | Class | SOLVE-IT technique DFT-1124: Keyword search (indexed). See https://solveit-df.org for weaknesses ... |
+| **techniqueDFT-1125** | Class | SOLVE-IT technique DFT-1125: Keyword search (live). See https://solveit-df.org for weaknesses and... |
+| **techniqueDFT-1126** | Class | SOLVE-IT technique DFT-1126: Keyword search (live) (physical). See https://solveit-df.org for wea... |
+| **techniqueDFT-1127** | Class | SOLVE-IT technique DFT-1127: Keyword search (live) (logical). See https://solveit-df.org for weak... |
+| **techniqueDFT-1128** | Class | SOLVE-IT technique DFT-1128: Search for indicators of malware. Objective(s): Detect anti-forensic... |
+| **techniqueDFT-1129** | Class | SOLVE-IT technique DFT-1129: Search for indicators of clock tampering. Objective(s): Detect anti-... |
+| **techniqueDFT-1130** | Class | SOLVE-IT technique DFT-1130: Search for indicators of encrypted data. Objective(s): Detect anti-f... |
+| **techniqueDFT-1131** | Class | SOLVE-IT technique DFT-1131: Search for indicators of trail obfuscation. Objective(s): Detect ant... |
+| **techniqueDFT-1132** | Class | SOLVE-IT technique DFT-1132: Search for indicators of artifact wiping. Objective(s): Detect anti-... |
+| **techniqueDFT-1133** | Class | SOLVE-IT technique DFT-1133: Extract artifacts from AI companion app(s). Objective(s): Extract ar... |
+| **techniqueDFT-1134** | Class | SOLVE-IT technique DFT-1134: Use time anchors to estimate clock offset. See https://solveit-df.or... |
+| **techniqueDFT-1137** | Class | SOLVE-IT technique DFT-1137: Extract browser history artifacts. See https://solveit-df.org for we... |
+| **techniqueDFT-1138** | Class | SOLVE-IT technique DFT-1138: Extract browser cache artifacts. See https://solveit-df.org for weak... |
+| **techniqueDFT-1139** | Class | SOLVE-IT technique DFT-1139: Extract browser session artifacts. See https://solveit-df.org for we... |
+| **techniqueDFT-1140** | Class | SOLVE-IT technique DFT-1140: Extract browser autofill artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1141** | Class | SOLVE-IT technique DFT-1141: Extract browser bookmark artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1142** | Class | SOLVE-IT technique DFT-1142: Extract browser download artifacts. See https://solveit-df.org for w... |
+| **techniqueDFT-1143** | Class | SOLVE-IT technique DFT-1143: Extract browser configuration artifacts. See https://solveit-df.org ... |
+| **techniqueDFT-1144** | Class | SOLVE-IT technique DFT-1144: Enumerate browser profiles. See https://solveit-df.org for weaknesse... |
+| **techniqueDFT-1145** | Class | SOLVE-IT technique DFT-1145: Extract browser extensions artifacts. See https://solveit-df.org for... |
+| **techniqueDFT-1146** | Class | SOLVE-IT technique DFT-1146: Extract browser synchronization artifacts. See https://solveit-df.or... |
+| **techniqueDFT-1147** | Class | SOLVE-IT technique DFT-1147: Extract browser cookie artifacts. See https://solveit-df.org for wea... |
+| **techniqueDFT-1148** | Class | SOLVE-IT technique DFT-1148: Extract browser web storage artifacts. See https://solveit-df.org fo... |
+| **techniqueDFT-1149** | Class | SOLVE-IT technique DFT-1149: Extract artifacts from the file versioning feature. Objective(s): Ex... |
+| **techniqueDFT-1150** | Class | SOLVE-IT technique DFT-1150: Recover non-allocated files using residual file metadata. See https:... |
+| **techniqueDFT-1151** | Class | SOLVE-IT technique DFT-1151: Keyword search (over extracted artifacts). See https://solveit-df.or... |
+| **techniqueDFT-1153** | Class | SOLVE-IT technique DFT-1153: Apply offset to a timestamp. See https://solveit-df.org for weakness... |
+| **techniqueDFT-1154** | Class | SOLVE-IT technique DFT-1154: Reconstruct an identity associated with an event. Objective(s): Reco... |
+| **techniqueDFT-1155** | Class | SOLVE-IT technique DFT-1155: Reconstruct that a specific event may have occurred. Objective(s): R... |
+| **techniqueDFT-1156** | Class | SOLVE-IT technique DFT-1156: Reconstruct if an event could have functionally occurred on a system... |
+| **techniqueDFT-1157** | Class | SOLVE-IT technique DFT-1157: Extract device data using exposed service. Objective(s): Acquire dat... |
+| **techniqueDFT-1158** | Class | SOLVE-IT technique DFT-1158: Configure device to enable a service needed for data extraction. Obj... |
+| **techniqueDFT-1159** | Class | SOLVE-IT technique DFT-1159: Extract mobile data via deployed agent. Objective(s): Acquire data. ... |
+| **techniqueDFT-1160** | Class | SOLVE-IT technique DFT-1160: Collect data with 'cloud backup restore' approach. Objective(s): Acq... |
+| **techniqueDFT-1161** | Class | SOLVE-IT technique DFT-1161: Collect data from cloud service via API using credentials. Objective... |
+| **techniqueDFT-1162** | Class | SOLVE-IT technique DFT-1162: Read data from a device via In-System Programming (ISP). Objective(s... |
+| **techniqueDFT-1163** | Class | SOLVE-IT technique DFT-1163: Capture mobile device screenshots (automatically). Objective(s): Acq... |
+| **techniqueDFT-1164** | Class | SOLVE-IT technique DFT-1164: Read data directly from a block device. Objective(s): Acquire data. ... |
+| **techniqueDFT-1165** | Class | SOLVE-IT technique DFT-1165: Extract software configuration information. Objective(s): Extract sp... |
+| **techniqueDFT-1166** | Class | SOLVE-IT technique DFT-1166: Connect directly to storage media. Objective(s): Access device data ... |
+| **techniqueDFT-1167** | Class | SOLVE-IT technique DFT-1167: Extract search terms from URLs. Objective(s): Extract data from spec... |
+| **techniqueDFT-1168** | Class | SOLVE-IT technique DFT-1168: Identify volumes. Objective(s): Access partitions, volumes and file ... |
+| **techniqueDFT-1169** | Class | SOLVE-IT technique DFT-1169: Filter files related to an application. Objective(s): Extract specif... |
+| **techniqueDFT-1170** | Class | SOLVE-IT technique DFT-1170: Read contents from logical forensic container file(s). Objective(s):... |
+| **techniqueDFT-1171** | Class | SOLVE-IT technique DFT-1171: Access a file system via live operating system. Objective(s): Access... |
+| **techniqueDFT-1172** | Class | SOLVE-IT technique DFT-1172: Read bitstream from raw image file(s). Objective(s): Read data from ... |
+| **techniqueDFT-1173** | Class | SOLVE-IT technique DFT-1173: Extract data from captured screenshots. Objective(s): Read data from... |
+| **techniqueDFT-1174** | Class | SOLVE-IT technique DFT-1174: Read evidential files stored directly on local file system. Objectiv... |
+| **techniqueDFT-1175** | Class | SOLVE-IT technique DFT-1175: Extract data from an Android device using content queries. Objective... |
+| **techniqueDFT-1176** | Class | SOLVE-IT technique DFT-1176: Classify if an image is potentially synthetically generated. See htt... |
+| **techniqueDFT-1177** | Class | SOLVE-IT technique DFT-1177: Extract artifacts from multiplayer game app(s). Objective(s): Extrac... |
+| **techniqueDFT-1178** | Class | SOLVE-IT technique DFT-1178: Store bitstream data in a raw image format. Objective(s): Store acqu... |
+| **techniqueDFT-1179** | Class | SOLVE-IT technique DFT-1179: Extract artifacts from drone/UAV app(s). Objective(s): Extract artif... |
+| **techniqueDFT-1180** | Class | SOLVE-IT technique DFT-1180: Extract file(s) from a pre-deletion container. Objective(s): Extract... |
+| **techniqueDFT-1181** | Class | SOLVE-IT technique DFT-1181: Extract artifacts from smart home app(s). Objective(s): Extract arti... |
+| **techniqueDFT-1182** | Class | SOLVE-IT technique DFT-1182: Filter a timeline for relevant entries. See https://solveit-df.org f... |
+| **techniqueDFT-1184** | Class | SOLVE-IT technique DFT-1184: Sort a timeline so entries are ordered chronologically. See https://... |
+| **techniqueDFT-1185** | Class | SOLVE-IT technique DFT-1185: Extract data from operating system notifications. Objective(s): Extr... |
+| **techniqueDFT-1186** | Class | SOLVE-IT technique DFT-1186: Compute per-file hash values. Objective(s): Extract specific artifac... |
+| **techniqueDFT-1187** | Class | SOLVE-IT technique DFT-1187: Extract content from compound files. Objective(s): Extract data from... |
+| **techniqueDFT-1190** | Class | SOLVE-IT technique DFT-1190: Extract operating system version(s) from data source. Objective(s): ... |
+| **techniqueDFT-1191** | Class | SOLVE-IT technique DFT-1191: Parse allocated structures in Windows HIVE files. Objective(s): Extr... |
+| **techniqueDFT-1192** | Class | SOLVE-IT technique DFT-1192: Disable connectivity using device configuration settings. Objective(... |
+| **techniqueDFT-1193** | Class | SOLVE-IT technique DFT-1193: Read metadata from within a forensic image container. Objective(s): ... |
+
+### solveit.solveit-observable
+
+| Class | Type | Description |
+|-------|------|-------------|
+| **ADBPullData** | Class | Data obtained via Android Debug Bridge (ADB) pull operations. |
+| **AFCExtractionData** | Class | Data obtained via Apple File Conduit (AFC) service from iOS devices. |
+| **AcquiredData** | Class | Data that has been forensically collected from a source device or system. This is the parent clas... |
+| **AcquisitionErrorRecord** | Class | A record of an error encountered during data acquisition such as a bad sector, read timeout, I/O ... |
+| **AcquisitionRecordFile** | Class | A file containing records generated during a data acquisition process, such as error logs or acqu... |
+| **AiChatAppFiles** | Class | Files associated with an AI chatbot or assistant application, including conversation histories, p... |
+| **AndroidDeviceGeneratedBackup** | Class | Data produced by Android's backup mechanism (e.g., adb backup). Potentially contains application ... |
+| **AppleUnifiedLogArchive** | Class | Data obtained by collecting Apple Unified Logs from a macOS or iOS device. |
+| **ApplicationFiles** | Class | A contextual compilation of files associated with a specific application version. Groups the file... |
+| **ArtifactSet** | Class | A contextual compilation of forensic artifacts grouped together for some purpose, such as filteri... |
+| **AudioFile** | Class | A file whose primary content is audio data (e.g. MP3, WAV, AAC, FLAC). |
+| **Bitstream** | Class | A sequential, complete bit-for-bit copy of a storage medium (LBA0 to LBAmax). Represents data in ... |
+| **BitstreamRandomAccessed** | Class | Random access to sector-level data, whether from a live device or a decoded forensic image contai... |
+| **BrowserAppFiles** | Class | Files associated with a web browser application, including browsing history, bookmarks, cookies, ... |
+| **BrowserCacheData** | Class | The locally cached data stored by a web browser to improve performance. This may include cached w... |
+| **CalendarAppFiles** | Class | Files associated with a calendar application, including events, appointments, invitations, recurr... |
+| **ChatAppFiles** | Class | Files associated with a messaging or chat application, including message databases, media attachm... |
+| **ClockOffsetCapture** | Class | The acquisition of a clock offset measurement from a device. Contains the ClockOffsetMeasurement ... |
+| **ClockOffsetMeasurement** | Class | The measured difference between a device clock and a reference time source. Records what was comp... |
+| **ClusterRun** | Class | A contiguous run of clusters allocated to a file in a cluster-based file system (e.g., FAT, NTFS,... |
+| **ContentQueryData** | Class | Data obtained from an Android device by querying content providers via an ADB shell connection (e... |
+| **DateTimeRange** | Class | A time interval with start and end boundaries. Exactly one start property (inclusive or exclusive... |
+| **DateTimeStamp** | Class | A timestamp observed in forensic analysis. |
+| **DecryptionKey** | Class | A cryptographic key intended for decryption. |
+| **DeviceGeneratedBackup** | Class | Data produced by a device's built-in backup mechanism. Content is determined by the device's back... |
+| **DeviceInterface** | Class | A logical interface representing a direct connection to a storage device, such as a USB, SATA. |
+| **DeviceScreenshotCapture** | Class | The acquisition of a screenshot from a device screen. Contains the captured image (RasterPicture). |
+| **DeviceSet** | Class | A contextual compilation of devices that are associated in some way, such as devices belonging to... |
+| **EmailAppFiles** | Class | Files associated with an email client application, including message stores, mailbox databases, a... |
+| **FileSet** | Class | A contextual compilation of files grouped together for some purpose, such as filtering, extractio... |
+| **FileSystemExtraction** | Class | Data obtained through direct access to a file system structure. Represents the files and folders ... |
+| **FilteredFileSet** | Class | A subset of files selected from a larger collection by some filtering criteria, such as file type... |
+| **ForensicImageContainer** | Class | A forensic image in a container format that encapsulates acquired data, potentially compressed or... |
+| **GamingAppFiles** | Class | Files associated with a gaming application, including save data, player profiles, in-app purchase... |
+| **HashSet** | Class | A reference set of known file hashes used to match against files under examination, in order to r... |
+| **HashSetEntry** | Class | A single entry within a hash set. At minimum it carries a hash value; further details (e.g. file ... |
+| **HashVerificationResult** | Class | The result of comparing hash values to verify data integrity, typically comparing a source hash a... |
+| **HealthAppFiles** | Class | Files associated with a health or fitness tracking application, including activity logs, heart ra... |
+| **ImplicitTimingInformation** | Class | A relative or implicit temporal indicator such as a sequence number, counter value, or ordering i... |
+| **KeywordIndex** | Class | An index of keywords created during forensic analysis. |
+| **KeywordIndexingConfiguration** | Class | Configuration settings used for keyword indexing during forensic analysis. |
+| **KeywordSearchResult** | Class | A result from a keyword search operation during forensic analysis. |
+| **KeywordSearchResultSet** | Class | A collection of keyword search results from a search operation. Subsequent techniques may filter ... |
+| **LiveDataCapture** | Class | Volatile or transient data captured from a running system at a specific point in time. Includes r... |
+| **LiveOSDeviceInterface** | Class | Access to a block device via the operating system on a live, running system. Provides sector-leve... |
+| **LogicalImageContainer** | Class | A forensic image container that encapsulates a logical collection of files rather than a bitstrea... |
+| **MapsAppFiles** | Class | Files associated with a mapping application, including search history, saved locations, offline m... |
+| **NavigationAppFiles** | Class | Files associated with a turn-by-turn navigation application, including route history, recent dest... |
+| **NetworkPacketCapture** | Class | A network packet capture file. |
+| **PaymentAppFiles** | Class | Files associated with a mobile payment or digital wallet application, including transaction histo... |
+| **PhotosAppFiles** | Class | Files associated with a photos or gallery management application, including image and video datab... |
+| **PhysicalImageContainer** | Class | A forensic image container that encapsulates a bitstream (bit-for-bit) copy of a source medium, s... |
+| **PrioritizedDeviceEntry** | Class | An entry pairing a device with its triage priority classification. |
+| **PrioritizedDeviceSet** | Class | A device set where each device has been triaged and assigned a priority classification. Contains ... |
+| **RawImage** | Class | A raw forensic image containing a bitstream without container metadata. Unlike a ForensicImageCon... |
+| **RawImageInfoFile** | Class | A sidecar file containing metadata for a raw/dd forensic image, including hash values, case infor... |
+| **ReadWriteDeviceInterface** | Class | A logical interface to a storage device that has been interfaced with in a read-write manner, as ... |
+| **RedactedArtifactSet** | Class | A collection of artifacts reduced by a redaction process to remove sensitive or privileged conten... |
+| **RedactedFileSet** | Class | A subset of files reduced by a redaction process to remove sensitive or privileged content before... |
+| **RemindersAppFiles** | Class | Files associated with a reminders or to-do list application, including task lists, due dates, rec... |
+| **SQLiteDatabase** | Class | A SQLite database file stored on disk. |
+| **SQLiteField** | Class | A field (cell) within a SQLite record. |
+| **SQLiteFieldDefinition** | Class | A column definition within a SQLite schema. |
+| **SQLiteJournal** | Class | A rollback journal file associated with a SQLite database, containing pre-modification page images. |
+| **SQLiteJournalPageImage** | Class | A stored copy of a database page as it existed before modification, held in the rollback journal. |
+| **SQLitePage** | Class | A physical storage page within a SQLite database file. |
+| **SQLiteRecord** | Class | A record (row) within a SQLite table. |
+| **SQLiteSchema** | Class | The schema definition for a SQLite table. |
+| **SQLiteTable** | Class | A table within a SQLite database. |
+| **SQLiteWAL** | Class | A Write-Ahead Log file associated with a SQLite database. |
+| **SQLiteWALFrame** | Class | A single frame within a SQLite WAL, containing a version of a database page. |
+| **ServiceBasedExtractionData** | Class | Data obtained by interacting with services provided by a device rather than direct storage access. |
+| **SmartHomeAppFiles** | Class | Files associated with a smart home or IoT control application, including device registries, autom... |
+| **SocialMediaAppFiles** | Class | Files associated with a social media application, including posts, direct messages, friend/follow... |
+| **SortedTimeline** | Class | A timeline whose entries have been ordered by position, as determined by a sorting process. Multi... |
+| **SortedTimelineEntry** | Class | An intermediary node that associates a TimelineEntry with its ordinal position within a SortedTim... |
+| **Timeline** | Class | A set of timeline entries extracted during forensic analysis. |
+| **TimelineEntry** | Class | A single entry in a forensic timeline. |
+| **TimestampOffset** | Class | The computed difference between two timestamps, expressed in seconds. Positive values indicate th... |
+| **UnlockPattern** | Class | A pattern used to unlock a device, i.e. screen lock pattern. |
+| **VideoFile** | Class | A file whose primary content is video data (e.g. MP4, MOV, AVI, MKV). |
+| **VideoFrame** | Class | A single frame extracted from a video file during forensic analysis. |
+| **VirtualizedComputer** | Class | A computer (desktop, laptop, or server) that exists as a virtual machine rather than running on p... |
+| **VirtualizedDevice** | Class | A device or system that exists as a virtual machine, defined by virtualization configuration and ... |
+| **Wordlist** | Class | A list of words or terms used as input to techniques such as keyword searching or dictionary-base... |
+| **WriteProtectedDeviceInterface** | Class | A logical interface to a storage device that has been interfaced with in a write-protected manner... |
+| **httpResponseHeader** | Class | An HTTP response header containing multiple header fields from an HTTP server response. |
+| **iOSDeviceGeneratedBackup** | Class | Data produced by the iOS backup mechanism via iTunes, Finder, or libimobiledevice. Contains a man... |
+
+### solveit.solveit-tool-profile
+
+| Class | Type | Description |
+|-------|------|-------------|
+| **ConditionTargetType** | Class | Enumeration of action components that conditions can evaluate against. |
+| **MitigationCapability** | Class | A declared capability that a specific mitigation is provided by a tool, optionally subject to con... |
+| **SolveitAwareInstrument** | Class | A specialised tool that has been evaluated against SOLVE-IT tool capability profiles. Adds the co... |
+| **ToolCapabilityProfile** | Class | A declaration of what techniques a specific version of a tool can perform and what mitigations it... |
+
+### solveit.solveit-wa
+
+| Class | Type | Description |
+|-------|------|-------------|
+| **WeaknessEvaluation** | Class | A risk assessment of a single SOLVE-IT weakness, capturing likelihood, impact, and optionally det... |
+| **WeaknessEvaluationSet** | Class | A collection of weakness evaluations scoped to a technique or context, with authorship and date m... |
 
 ### toolcap.capability
 
