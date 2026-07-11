@@ -10,13 +10,12 @@ import json
 import sys
 from pathlib import Path
 
-import pytest
-
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-import document_processor
 from document_processor import (
+    ANNOTATIONS_FILENAME,
     CONTENT_TRUST_LABEL,
+    EXTRACTED_CONTENT_FILENAME,
     detect_injection_warnings,
     process_document_file,
 )
@@ -82,8 +81,8 @@ def test_injection_text_produces_warnings_without_behavior_change(tmp_path):
     assert written == sorted(
         n for n in [
             "graph.jsonld",
-            document_processor.EXTRACTED_CONTENT_FILENAME,
-            document_processor.ANNOTATIONS_FILENAME,
+            EXTRACTED_CONTENT_FILENAME,
+            ANNOTATIONS_FILENAME,
         ]
         if (out_dir / n).exists()
     )

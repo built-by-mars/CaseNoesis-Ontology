@@ -12,4 +12,4 @@ dependencies = [
 ]
 
 [project.entry-points."case_uco.extensions"]
-legalproc = "case_uco_legalproc:_REGISTRY_PATH"
+legalproc = "case_uco_legalproc:REGISTRY_PATH"

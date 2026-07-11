@@ -12,4 +12,4 @@ dependencies = [
 ]
 
 [project.entry-points."case_uco.extensions"]
-cryptoinv = "case_uco_cryptoinv:_REGISTRY_PATH"
+cryptoinv = "case_uco_cryptoinv:REGISTRY_PATH"

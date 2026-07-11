@@ -1387,7 +1387,7 @@ def build_graph() -> dict:
             ]
         },
     )
-    act_v4_icloud = action(
+    action(
         "action-victim4-icloud-monitoring",
         "Monitor Victim-4's location in real time through his Apple iCloud account",
         "In or around July 2024, Lam accessed Victim-4's Apple iCloud "
@@ -1416,7 +1416,7 @@ def build_graph() -> dict:
         start=eastern_midnight("2024-07-08"),
         end=eastern_midnight("2024-07-08"),
     )
-    act_hesby = action(
+    action(
         "action-hesby-house-rental",
         "Procure the Hesby House for Serrano under the fake 'Sean McGarry' identity",
         "Tangeman procured the Los Angeles 'Hesby House' rental for "
@@ -1453,7 +1453,7 @@ def build_graph() -> dict:
         end=eastern_midnight("2024-08-26"),
         extra={"cryptoinv:launderingTechnique": ["crypto-to-cash", "unlicensed-money-transmission"]},
     )
-    act_xmr = action(
+    action(
         "action-xmr-exchange",
         "Exchange $196,880 through a 'cash guy' Monero address for a rental deposit",
         "In July 2024, arranging another rental home for Lam, Tangeman "
@@ -1468,7 +1468,7 @@ def build_graph() -> dict:
         end=eastern_midnight("2024-07-31"),
         extra={"cryptoinv:launderingTechnique": ["crypto-to-cash", "privacy-coin-conversion"]},
     )
-    act_nightclubs = action(
+    action(
         "action-nightclub-spending",
         "Spend over $4,000,000 in stolen virtual currency at Los Angeles nightclubs",
         "Between 2024-08-19 and 2024-09-10, Lam and his associates "
@@ -1478,7 +1478,7 @@ def build_graph() -> dict:
         start=eastern_midnight("2024-08-19"),
         end=eastern_midnight("2024-09-10"),
     )
-    act_phone_toss = action(
+    action(
         "action-phone-toss",
         "Toss mobile telephone into Biscayne Bay ahead of arrest",
         "On or about 2024-09-18, after obtaining information from an "
@@ -1493,7 +1493,7 @@ def build_graph() -> dict:
         start=eastern_midnight("2024-09-18"),
         end=eastern_midnight("2024-09-18"),
     )
-    act_camera = action(
+    action(
         "action-camera-surveillance",
         "Watch the FBI searches through remote security-camera access",
         "On or about 2024-09-18, while in Los Angeles, Tangeman used "

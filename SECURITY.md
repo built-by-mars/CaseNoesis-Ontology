@@ -4,8 +4,8 @@
 
 | Version | Supported          |
 |---------|--------------------|
-| 1.16.x  | Yes (current)      |
-| < 1.16  | No                 |
+| 1.17.x  | Yes (current)      |
+| < 1.17  | No                 |
 
 Only the latest SDK release line receives security updates. This project
 tracks the CASE 1.4.0 and UCO 1.4.0 ontology releases; profiled upper
@@ -97,6 +97,16 @@ symlink escapes are rejected with typed, non-sensitive errors
 access beyond those roots. See `mcp_server/README.md` for the recommended
 configuration.
 
+Since v1.17.0 the policy is enforceable via deployment profiles
+(`CASE_UCO_MCP_PROFILE`: `development`, `offline-investigation`,
+`production-authoring`, `production-review`) or `CASE_UCO_MCP_SECURE_MODE=1`.
+In secure mode the server refuses to start on a misconfigured policy
+(missing/nonexistent/dangerously-broad roots, write roots inside evidence
+roots), unconfigured roots fail closed at runtime instead of falling back to
+unrestricted access, and unknown profile names are treated as secure. The
+`get_security_profile` tool reports the active posture without exposing
+paths or environment contents.
+
 ### Indirect prompt injection (untrusted evidence content)
 
 Documents processed by this server are **evidence, not instructions**. A
@@ -123,12 +133,19 @@ Learned artifacts follow a staged lifecycle (`mcp_server/knowledge_lifecycle.py`
 `docs/recipes/recipe-authoring.md`): **candidate → validated → operational →
 deprecated/rolled back**. Candidate recipes and candidate extensions are
 excluded from routing until validation gates pass and a human promotes them;
-promotion records provenance (reviewer, timestamp, gate results) in the
-manifest. Emergency revocation (`make deprecate-extension`) and git-based
-rollback (`make rollback-extension EXT=... REF=...`) restore a previous
-approved knowledge generation. Security review of a promotion should treat
-new routing keywords, recipe guidance, and ontology terms as code review:
-they steer future automated behavior.
+promotion records provenance (reviewer, timestamp, git commit, deployment
+profile, gate results) in the manifest. As of v1.17.0 the promotion gates
+require manifest-schema validity, parseable ontologies, subclass anchoring to
+*declared* classes, at least one conforming exemplar, failing negative
+fixtures whenever SHACL shapes ship, and passing competency queries when
+declared; recipes are promoted with the same transactional rigor
+(`make promote-recipe` / `make deprecate-recipe`). Promotion authority is
+profile-scoped: denied in `offline-investigation`, reviewer-identity-required
+in `production-review`. Emergency revocation (`make deprecate-extension`) and
+git-based rollback (`make rollback-extension EXT=... REF=...`) restore a
+previous approved knowledge generation. Security review of a promotion should
+treat new routing keywords, recipe guidance, and ontology terms as code
+review: they steer future automated behavior.
 
 ### Validation integrity
 
@@ -139,7 +156,12 @@ registry — fabricated terms (including inside profiled namespaces such as
 flagged, and the declared-term cache invalidates automatically when ontology
 files change. Validation never fabricates a passing result: when the
 validator or coverage check cannot run, results are reported as unavailable
-or unverified.
+or unverified. As of v1.17.0 strict validation **fails closed**: a missing,
+malformed, or provenance-invalid upper-ontology registry makes any graph
+using profiled upper-ontology terms non-conforming
+(`verification_status: could_not_verify`); malformed extension manifests,
+unknown lifecycle statuses, missing dependencies, and dependency cycles are
+typed errors instead of silent skips.
 
 ## Security Measures
 

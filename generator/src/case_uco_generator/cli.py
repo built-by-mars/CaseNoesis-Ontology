@@ -406,7 +406,9 @@ def _gen_python_extension(ext_schema, full_schema, output_dir, ext_name, ext_ver
         f'"""{display_name} — CASE/UCO SDK extension bindings."""\n\n'
         f'__version__ = "{ext_version}"\n\n'
         f"NAMESPACES: dict[str, str] = {{\n{ns_lines}\n}}\n\n"
-        f'_REGISTRY_PATH = __file__.replace("__init__.py", "_registry.json")\n'
+        f'# Public so the case_uco.extensions entry point (and static analysis)\n'
+        f'# can reference it: the SDK registry loader resolves this at runtime.\n'
+        f'REGISTRY_PATH = __file__.replace("__init__.py", "_registry.json")\n'
     )
     (py_dir / "__init__.py").write_text(init_content, encoding="utf-8")
     count += 1
@@ -465,7 +467,7 @@ def _gen_python_extension(ext_schema, full_schema, output_dir, ext_name, ext_ver
         f'    "case-uco{uco_dep}",\n'
         "]\n\n"
         '[project.entry-points."case_uco.extensions"]\n'
-        f'{ext_name} = "{py_pkg}:_REGISTRY_PATH"\n'
+        f'{ext_name} = "{py_pkg}:REGISTRY_PATH"\n'
     )
     (output_dir / "python" / "pyproject.toml").write_text(pyproject, encoding="utf-8")
     count += 1

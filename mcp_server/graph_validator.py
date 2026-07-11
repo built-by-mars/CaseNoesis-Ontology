@@ -36,7 +36,14 @@ _WARNING_MARKER = "NonExistentCDOConceptWarning"
 
 @dataclass(frozen=True)
 class GraphValidationReport:
-    """Structured, redaction-safe validation result."""
+    """Structured, redaction-safe validation result.
+
+    ``verification_status`` is ``"complete"`` only when every required
+    stage (SHACL plus, when enabled, strict concept coverage including the
+    pinned upper-ontology registry) actually ran; otherwise it is
+    ``"could_not_verify"`` and ``conforms`` is never ``True`` (fail-closed,
+    issue #55).
+    """
 
     conforms: bool | None
     warning_count: int
@@ -48,6 +55,8 @@ class GraphValidationReport:
     concept_guidance: str = ""
     unknown_upper_ontology_terms: tuple[str, ...] = ()
     role_mismatches: tuple[tuple[str, str, str], ...] = ()
+    verification_status: str = "complete"
+    verification_errors: tuple[str, ...] = ()
 
 
 def validator_available() -> bool:
@@ -103,28 +112,46 @@ def resolve_extension_dependencies(
     ``rico`` builds on ``legalproc``) declares ``"depends_on": [...]`` in its
     manifest; callers then only need to name the top-level extension. The
     ``:full`` suffix on a requested name is preserved; dependencies load in
-    their default (subset-preferred) mode. Cycles are tolerated.
+    their default (subset-preferred) mode.
+
+    Fail-closed (issue #55) — typed ``ValueError`` instead of a silently
+    partial extension set: ``extension_unknown`` (a requested extension has
+    no manifest), ``extension_dependency_missing`` (a ``depends_on`` entry
+    has no manifest), ``extension_manifest_malformed`` (unparseable
+    manifest), ``extension_dependency_cycle`` (circular ``depends_on``).
     """
+
+    def _manifest_for(clean: str) -> dict | None:
+        manifest_path = project_root / "extensions" / clean / "manifest.json"
+        if not manifest_path.is_file():
+            return None
+        try:
+            return json.loads(manifest_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ValueError("extension_manifest_malformed") from exc
 
     resolved: list[str] = []
     seen: set[str] = set()
-    queue = list(extension_names)
+    # (name, dependency chain from the requested root, requested directly?)
+    queue: list[tuple[str, tuple[str, ...], bool]] = [
+        (name, (), True) for name in extension_names
+    ]
     while queue:
-        name = queue.pop(0)
+        name, chain, requested = queue.pop(0)
         clean = name.removesuffix(":full")
+        if clean in chain:
+            raise ValueError("extension_dependency_cycle")
         if clean in seen:
             continue
+        manifest = _manifest_for(clean)
+        if manifest is None:
+            raise ValueError(
+                "extension_unknown" if requested else "extension_dependency_missing"
+            )
         seen.add(clean)
         resolved.append(name)
-        manifest_path = project_root / "extensions" / clean / "manifest.json"
-        if manifest_path.is_file():
-            try:
-                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
-                continue
-            for dep in manifest.get("depends_on", []):
-                if dep not in seen:
-                    queue.append(dep)
+        for dep in manifest.get("depends_on", []):
+            queue.append((str(dep), chain + (clean,), False))
     return resolved
 
 
@@ -258,6 +285,8 @@ def validate_graph_file(
     concept_guidance = ""
     unknown_upper: tuple[str, ...] = ()
     role_mismatches: tuple[tuple[str, str, str], ...] = ()
+    verification_status = "complete"
+    verification_errors: tuple[str, ...] = ()
     if strict_concepts:
         try:
             from concept_coverage import check_graph_concepts
@@ -267,12 +296,20 @@ def validate_graph_file(
             )
         except Exception as exc:  # honest failure: never fake coverage
             conforms = None
+            verification_status = "could_not_verify"
+            verification_errors = (f"concept_coverage_failed:{type(exc).__name__}",)
             summary = (
                 f"{summary} Additionally, the concept coverage check could "
                 f"not run ({type(exc).__name__}); treat the result as "
                 "unverified."
             )
         else:
+            verification_status = coverage.verification_status
+            verification_errors = coverage.verification_errors
+            if coverage.verification_status != "complete":
+                # Fail closed: a required stage (e.g. the pinned
+                # upper-ontology registry) could not run.
+                conforms = False
             if not coverage.ok:
                 undeclared = coverage.undeclared_classes + coverage.undeclared_properties
                 unknown_upper = coverage.unknown_upper_ontology_terms
@@ -304,10 +341,17 @@ def validate_graph_file(
                         f"Graph uses {len(role_mismatches)} declared term(s) in the "
                         f"wrong RDF role: {shown}."
                     )
-                parts.append(
-                    "Draft a change proposal or add the concept(s) to an extension "
-                    "ontology, then re-validate."
-                )
+                if verification_errors:
+                    parts.append(
+                        f"Required verification stage(s) could not run "
+                        f"({', '.join(verification_errors)}); the result is "
+                        "unverified, not conformant."
+                    )
+                else:
+                    parts.append(
+                        "Draft a change proposal or add the concept(s) to an extension "
+                        "ontology, then re-validate."
+                    )
                 concept_summary = " ".join(parts)
                 summary = concept_summary if shacl_passed else f"{summary} {concept_summary}"
 
@@ -322,6 +366,8 @@ def validate_graph_file(
         concept_guidance=concept_guidance,
         unknown_upper_ontology_terms=unknown_upper,
         role_mismatches=role_mismatches,
+        verification_status=verification_status,
+        verification_errors=verification_errors,
     )
 
 
@@ -335,7 +381,10 @@ def report_to_dict(report: GraphValidationReport) -> dict[str, Any]:
         "exit_code": report.exit_code,
         "validator_name": report.validator_name,
         "safe_summary": report.safe_summary,
+        "verification_status": report.verification_status,
     }
+    if report.verification_errors:
+        payload["verification_errors"] = list(report.verification_errors)
     if report.undeclared_concepts:
         payload["undeclared_concepts"] = list(report.undeclared_concepts)
     if report.unknown_upper_ontology_terms:

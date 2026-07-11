@@ -91,6 +91,9 @@ ONTOLOGY_SOURCES: dict[str, dict] = {
         "source_url": "http://xmlns.com/foaf/spec/index.rdf",
         "local_file": "foaf.rdf",
         "format": "xml",
+        # FOAF's RDF carries no owl:versionIRI/versionInfo; pin the spec
+        # version manually so the fail-closed provenance check passes.
+        "version_info": "0.99 (Paddington Edition, 2014-01-14)",
     },
     "org": {
         "title": "W3C Organization Ontology (ORG)",
@@ -218,12 +221,17 @@ def build_registry(source_dir: Path | None) -> dict:
             data = _fetch(spec["source_url"], spec.get("accept"))
         graph.parse(data=data, format=spec["format"])
         terms = _extract_terms(graph, prefixes)
+        version_meta = _version_metadata(graph)
+        # Manual pin for ontologies whose RDF omits version metadata
+        # (fail-closed provenance check requires version_iri or version_info).
+        if "version_info" in spec and "version_info" not in version_meta:
+            version_meta["version_info"] = spec["version_info"]
         entry = {
             "title": spec["title"],
             "profile": spec["profile"],
             "namespace_prefixes": spec["namespace_prefixes"],
             "source_url": spec["source_url"],
-            **_version_metadata(graph),
+            **version_meta,
             "term_counts": {k: len(v) for k, v in terms.items()},
             **terms,
         }

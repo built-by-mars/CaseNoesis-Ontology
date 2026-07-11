@@ -6,4 +6,4 @@ NAMESPACES: dict[str, str] = {
     "rico": "http://example.org/ontology/rico/",
 }
 
-_REGISTRY_PATH = __file__.replace("__init__.py", "_registry.json")
+REGISTRY_PATH = __file__.replace("__init__.py", "_registry.json")

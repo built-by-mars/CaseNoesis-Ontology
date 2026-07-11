@@ -16,7 +16,7 @@ strict concept coverage afterward.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -564,13 +564,18 @@ UPPER_PROFILE_HINTS = {
 }
 
 
-def _installed_extensions(project_root: Path) -> dict[str, dict[str, Any]]:
+def _installed_extensions(
+    project_root: Path,
+    integrity_failures: list[dict[str, str]] | None = None,
+) -> dict[str, dict[str, Any]]:
     """Discover extension manifests bundled with the SDK.
 
     Only *operational* extensions are advertised (knowledge_lifecycle):
     candidate and deprecated extensions stay invisible to routing until
     promoted, although explicit loading by name still works for the
-    investigation that is authoring them.
+    investigation that is authoring them. Malformed manifests and invalid
+    lifecycle statuses are excluded fail-closed; pass ``integrity_failures``
+    to collect a typed record of each exclusion (issue #55).
     """
 
     from knowledge_lifecycle import extension_status, is_routable
@@ -580,18 +585,30 @@ def _installed_extensions(project_root: Path) -> dict[str, dict[str, Any]]:
     if not ext_root.is_dir():
         return found
     for manifest_path in sorted(ext_root.glob("*/manifest.json")):
+        ext_dir_name = manifest_path.parent.name
         try:
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
+            if integrity_failures is not None:
+                integrity_failures.append({
+                    "extension": ext_dir_name,
+                    "error": "extension_manifest_malformed",
+                })
             continue
+        status = extension_status(manifest)
+        if status == "invalid" and integrity_failures is not None:
+            integrity_failures.append({
+                "extension": ext_dir_name,
+                "error": "extension_status_invalid",
+            })
         if not is_routable(manifest):
             continue
-        name = manifest.get("name") or manifest_path.parent.name
+        name = manifest.get("name") or ext_dir_name
         found[name] = {
             "name": name,
             "display_name": manifest.get("display_name", name),
             "version": manifest.get("version"),
-            "status": extension_status(manifest),
+            "status": status,
             "namespaces": manifest.get("namespaces", {}),
             "path": str(manifest_path.parent.relative_to(project_root)),
         }
@@ -715,28 +732,28 @@ def build_extension_gap_guidance() -> dict[str, Any]:
         ),
         "workflow": [
             "1. Search for existing coverage: search_classes(keyword) and "
-            "find_classes_for_domain(task) across scope='all' (core + extensions).",
+            + "find_classes_for_domain(task) across scope='all' (core + extensions).",
             "2. Check upper ontologies: get_uco_profiles(query) — terms from "
-            "profiled ontologies (BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, "
-            "FOAF, ORG) pass strict validation directly.",
+            + "profiled ontologies (BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, "
+            + "FOAF, ORG) pass strict validation directly.",
             "3. Model what fits with core CASE/UCO: most evidence reduces to "
-            "ObservableObject+Facets, Actions, Identities, Roles, and "
-            "Relationships even in novel domains.",
+            + "ObservableObject+Facets, Actions, Identities, Roles, and "
+            + "Relationships even in novel domains.",
             "4. For genuinely missing concepts: check_existing_proposals(concept) "
-            "to find prior UCO/CASE/CAC issues, then draft_change_proposal(...) "
-            "to file the gap upstream.",
+            + "to find prior UCO/CASE/CAC issues, then draft_change_proposal(...) "
+            + "to file the gap upstream.",
             "5. Unblock immediately with a local extension ontology "
-            "(docs/recipes/extensions.md): OWL + SHACL files subclassing "
-            "UCO/CASE classes, a manifest.json, and dcterms:source links to "
-            "the filed proposals. Pattern to copy: extensions/legalproc/.",
+            + "(docs/recipes/extensions.md): OWL + SHACL files subclassing "
+            + "UCO/CASE classes, a manifest.json, and dcterms:source links to "
+            + "the filed proposals. Pattern to copy: extensions/legalproc/.",
             "6. Validate with validate_graph(graph_path, extensions=[...]) "
-            "until Conforms: True with zero undeclared concepts.",
+            + "until Conforms: True with zero undeclared concepts.",
             "7. Once the graph validates, capture the pattern as a new "
-            "recipe — or fold it into the nearest existing recipe — per "
-            "docs/recipes/recipe-authoring.md, and register/refresh the "
-            "recipe indexes so the next agent is routed instead of "
-            "rediscovering. This is how the catalog grows with the "
-            "investigator.",
+            + "recipe — or fold it into the nearest existing recipe — per "
+            + "docs/recipes/recipe-authoring.md, and register/refresh the "
+            + "recipe indexes so the next agent is routed instead of "
+            + "rediscovering. This is how the catalog grows with the "
+            + "investigator.",
         ],
         "recipes": [
             "docs/recipes/extensions.md",
@@ -771,34 +788,34 @@ def build_general_workflow(matches: list[dict[str, Any]], installed: dict[str, d
         )
     steps.extend([
         "Process binary source files with process_document_file (keeps "
-        "SHA-256 provenance; OCR fallback for scanned pages); keep one "
-        "investigation graph per case, partitioned only at natural forensic "
-        "boundaries.",
+        + "SHA-256 provenance; OCR fallback for scanned pages); keep one "
+        + "investigation graph per case, partitioned only at natural forensic "
+        + "boundaries.",
         "Model observable evidence first (documents, messages, devices, "
-        "accounts, transactions), then investigative actions with "
-        "performers and authorizations, then domain interpretation "
-        "(charges, events, roles) — never collapse evidence and "
-        "interpretation into one node.",
+        + "accounts, transactions), then investigative actions with "
+        + "performers and authorizations, then domain interpretation "
+        + "(charges, events, roles) — never collapse evidence and "
+        + "interpretation into one node.",
         "Follow each matched recipe; use guide_mapping(evidence_source) for "
-        "per-source field mapping, get_recipes(scenario) for ranked recipe "
-        "matches across the whole catalog (60+ recipes — family routing "
-        "surfaces anchors, not the full list), and "
-        "get_recipes(..., include_content=True) for full recipe text.",
+        + "per-source field mapping, get_recipes(scenario) for ranked recipe "
+        + "matches across the whole catalog (60+ recipes — family routing "
+        + "surfaces anchors, not the full list), and "
+        + "get_recipes(..., include_content=True) for full recipe text.",
         "The family recipes cover the domain interpretation layer; the "
-        "underlying evidence still uses the per-artifact recipes (devices, "
-        "files, messages, call logs, locations, accounts, EXIF, databases) "
-        "— query get_recipes for each evidence type you actually hold.",
+        + "underlying evidence still uses the per-artifact recipes (devices, "
+        + "files, messages, call logs, locations, accounts, EXIF, databases) "
+        + "— query get_recipes for each evidence type you actually hold.",
         "Validate with validate_graph(...) — SHACL plus strict concept "
-        "coverage. If undeclared concepts are reported, follow the "
-        "extension-gap workflow instead of renaming terms to force a pass.",
+        + "coverage. If undeclared concepts are reported, follow the "
+        + "extension-gap workflow instead of renaming terms to force a pass.",
         "Close the self-improvement loop (docs/recipes/recipe-authoring.md): "
-        "if you worked out a pattern no recipe covers, write and register a "
-        "new recipe; if a recipe you followed was wrong, incomplete, or "
-        "missed by routing, improve that recipe (or its index keywords) in "
-        "place and re-validate its snippets — the catalog is how this "
-        "deployment accumulates modeling judgment for non-technical "
-        "investigators while every published pattern stays verifiable "
-        "against the public ontology specifications.",
+        + "if you worked out a pattern no recipe covers, write and register a "
+        + "new recipe; if a recipe you followed was wrong, incomplete, or "
+        + "missed by routing, improve that recipe (or its index keywords) in "
+        + "place and re-validate its snippets — the catalog is how this "
+        + "deployment accumulates modeling judgment for non-technical "
+        + "investigators while every published pattern stays verifiable "
+        + "against the public ontology specifications.",
     ])
     return steps
 
@@ -820,7 +837,8 @@ def route_investigation_content(
     extraction_quality = assess_extraction_quality(text)
     matches, deterministic_baseline = detect_families_hybrid(text)
     matches = matches[: max(1, max_families)]
-    installed = _installed_extensions(project_root)
+    integrity_failures: list[dict[str, str]] = []
+    installed = _installed_extensions(project_root, integrity_failures)
 
     cac_domains = _cac_specific_signals(text)
     cac_detected = bool(cac_domains) or bool(input_metadata.get("graph_has_cac_signals"))
@@ -913,6 +931,8 @@ def route_investigation_content(
         },
         **input_metadata,
     }
+    if integrity_failures:
+        payload["extension_integrity_failures"] = integrity_failures
     if extraction_quality.get("noisy_extraction"):
         payload["extraction_quality"] = extraction_quality
 

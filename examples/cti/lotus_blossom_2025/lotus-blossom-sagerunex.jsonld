@@ -2809,26 +2809,26 @@
       "uco-core:description": "Modified from HTran"
     },
     {
-      "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269",
+      "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac",
       "@type": "uco-observable:ObservableObject",
-      "uco-core:name": "tapisrv (hijacked service)",
-      "uco-core:description": "Windows service 'tapisrv' abused for Sagerunex persistence; Start=2 configures automatic start (svchost service DLL loading).",
+      "uco-core:name": "appmgmt (hijacked service)",
+      "uco-core:description": "Windows service 'appmgmt' abused for Sagerunex persistence; Start=2 configures automatic start (svchost service DLL loading).",
       "uco-core:hasFacet": [
         {
-          "@id": "urn:uuid:5c38afc5-ce80-55cd-bb88-0f8ea4406dcf",
+          "@id": "urn:uuid:311b9b7b-c880-5c89-8bef-bcdc47bbc9a2",
           "@type": "uco-observable:WindowsServiceFacet",
-          "uco-observable:serviceName": "tapisrv",
+          "uco-observable:serviceName": "appmgmt",
           "uco-observable:startType": "service_auto_start",
           "uco-observable:serviceType": "service_win32_share_process"
         }
       ]
     },
     {
-      "@id": "urn:uuid:0c5d846f-03a3-591e-a107-ba03370a945f",
+      "@id": "urn:uuid:a82fceac-3763-52d6-959a-7c8c05abbc73",
       "@type": "uco-core:Relationship",
       "uco-core:source": [
         {
-          "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269"
+          "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac"
         }
       ],
       "uco-core:target": [
@@ -2877,26 +2877,26 @@
       }
     },
     {
-      "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac",
+      "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269",
       "@type": "uco-observable:ObservableObject",
-      "uco-core:name": "appmgmt (hijacked service)",
-      "uco-core:description": "Windows service 'appmgmt' abused for Sagerunex persistence; Start=2 configures automatic start (svchost service DLL loading).",
+      "uco-core:name": "tapisrv (hijacked service)",
+      "uco-core:description": "Windows service 'tapisrv' abused for Sagerunex persistence; Start=2 configures automatic start (svchost service DLL loading).",
       "uco-core:hasFacet": [
         {
-          "@id": "urn:uuid:311b9b7b-c880-5c89-8bef-bcdc47bbc9a2",
+          "@id": "urn:uuid:5c38afc5-ce80-55cd-bb88-0f8ea4406dcf",
           "@type": "uco-observable:WindowsServiceFacet",
-          "uco-observable:serviceName": "appmgmt",
+          "uco-observable:serviceName": "tapisrv",
           "uco-observable:startType": "service_auto_start",
           "uco-observable:serviceType": "service_win32_share_process"
         }
       ]
     },
     {
-      "@id": "urn:uuid:a82fceac-3763-52d6-959a-7c8c05abbc73",
+      "@id": "urn:uuid:0c5d846f-03a3-591e-a107-ba03370a945f",
       "@type": "uco-core:Relationship",
       "uco-core:source": [
         {
-          "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac"
+          "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269"
         }
       ],
       "uco-core:target": [
@@ -3415,13 +3415,13 @@
       ],
       "uco-action:result": [
         {
-          "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269"
+          "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac"
         },
         {
           "@id": "urn:uuid:42a36a61-786b-52c4-bedc-78491db140ca"
         },
         {
-          "@id": "urn:uuid:d8f53608-fbc7-5cfb-88e0-7d8807f34fac"
+          "@id": "urn:uuid:fe13c761-5363-5e92-8bc0-6abffee15269"
         }
       ]
     },

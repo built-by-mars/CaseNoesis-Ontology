@@ -147,14 +147,26 @@ silently influence future investigations:
 2. **Validated** — every embedded graph snippet conforms (`validate_graph`
    with zero undeclared concepts); catalog integrity tests pass.
 3. **Operational** — a human reviews and intentionally promotes:
-   - recipes: move into `docs/recipes/` and register per the steps below;
+   - recipes: `make promote-recipe RECIPE=<slug> REVIEWER="..."` —
+     transactionally moves the candidate into `docs/recipes/`, validates
+     recipe structure (title, Scenario/Pattern/Validation sections, code
+     fence, metadata block), registers it in `INDEX.md` and `RECIPE_INDEX`,
+     and records provenance in `docs/recipes/promotion-log.json`. A
+     structurally invalid candidate is rejected untouched.
    - extensions: `make promote-extension EXT=<name> REVIEWER="..."` — runs
-     validation gates (ontology parse, class anchoring, exemplar
-     conformance) and records provenance (`promotion` block in the
-     manifest). A failed gate leaves the candidate untouched.
+     validation gates (manifest schema, ontology parse, class anchoring to
+     declared parents, at least one conforming exemplar, failing negative
+     fixtures when SHACL shapes ship, competency queries when declared) and
+     records provenance (`promotion` block in the manifest, including git
+     commit and deployment profile). A failed gate leaves the candidate
+     untouched. Promotion authority follows the deployment profile:
+     `offline-investigation` denies promotion; `production-review` requires
+     a named reviewer.
 4. **Deprecated / rolled back** — emergency revocation keeps provenance but
    removes the artifact from routing:
    - `make deprecate-extension EXT=<name> REASON="..."`;
+   - `make deprecate-recipe RECIPE=<slug> REASON="..."` — moves the recipe
+     back to `docs/recipes/candidates/` and removes its index entries;
    - one-command rollback to a previous approved generation:
      `make rollback-extension EXT=<name> REF=<tag-or-commit>` (git-based —
      all knowledge artifacts are version-controlled files). Recipes roll
@@ -166,7 +178,10 @@ promotion gates run entirely offline (`case_validate` + rdflib).
 
 ## Registering the recipe (required — an unregistered recipe is invisible)
 
-The MCP server routes agents by index, so a new file alone does nothing:
+The MCP server routes agents by index, so a new file alone does nothing.
+`make promote-recipe` performs steps 1–3 automatically for candidates; when
+authoring a recipe directly (not via the candidate lifecycle) do them by
+hand:
 
 1. Save as `docs/recipes/<kebab-case-slug>.md` (promote out of
    `docs/recipes/candidates/` only after validation).

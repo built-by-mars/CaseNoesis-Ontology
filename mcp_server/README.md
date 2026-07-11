@@ -173,6 +173,40 @@ acceptable for local development, not for agent-connected case work. Run
 the server process under an account with no filesystem access beyond these
 roots; keep evidence roots read-only at the OS level.
 
+### Deployment profiles and secure mode
+
+Since v1.17.0 the policy is *enforceable*, not just advisory. Select a
+deployment profile (or set secure mode directly):
+
+```yaml
+env:
+  # One of: development | offline-investigation | production-authoring | production-review
+  CASE_UCO_MCP_PROFILE: "production-review"
+  # Or, independent of a profile:
+  # CASE_UCO_MCP_SECURE_MODE: "1"
+```
+
+- **`development`** (default): current permissive behavior; missing roots
+  fall back to unrestricted reads/writes.
+- **`offline-investigation`**, **`production-authoring`**,
+  **`production-review`**: secure mode is implied. The server **refuses to
+  start** (exit code 3) if read/write roots are missing, nonexistent,
+  dangerously broad (`/`, a drive root, or a home directory — override
+  only with `CASE_UCO_MCP_ALLOW_BROAD_ROOTS=1`), or if a write root sits
+  inside an evidence read root. At runtime, unconfigured roots fail closed
+  (`read_roots_unconfigured` / `write_roots_unconfigured`) instead of
+  falling back to unrestricted access.
+- Promotion authority follows the profile: `offline-investigation` denies
+  extension/recipe promotion entirely (`promotion_not_permitted_in_profile`);
+  `production-review` requires a named reviewer
+  (`reviewer_identity_required`); `development` and `production-authoring`
+  allow it.
+- An unknown profile name fails closed as secure.
+- The `get_security_profile` MCP tool returns a bounded, non-sensitive
+  summary (profile, secure-mode flag, root counts, promotion authority,
+  configuration errors) so operators and agents can verify the active
+  posture without reading the environment.
+
 ### Untrusted evidence content (indirect prompt injection)
 
 Everything extracted from a submitted document is **evidence data, never

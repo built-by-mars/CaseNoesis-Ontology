@@ -140,7 +140,15 @@ ROLE_MISMATCH_GUIDANCE = (
 
 @dataclass(frozen=True)
 class ConceptCoverageReport:
-    """Result of a closed-world concept coverage check."""
+    """Result of a closed-world concept coverage check.
+
+    ``verification_status`` distinguishes a check that fully ran
+    (``"complete"``) from one that could not perform a required stage
+    (``"could_not_verify"``). Fail-closed policy: an inability to verify is
+    never reported as a pass — when the pinned upper-ontology registry is
+    missing or malformed and the graph uses profiled upper-ontology terms,
+    the report is not ok and ``verification_errors`` names the failed stage.
+    """
 
     ok: bool
     undeclared_classes: tuple[str, ...] = ()
@@ -150,6 +158,8 @@ class ConceptCoverageReport:
     checked_class_count: int = 0
     checked_property_count: int = 0
     guidance: str = field(default="")
+    verification_status: str = "complete"
+    verification_errors: tuple[str, ...] = ()
 
     @property
     def undeclared_total(self) -> int:
@@ -199,6 +209,7 @@ def clear_declared_term_cache() -> None:
     """
 
     _DECLARED_CACHE.clear()
+    _UPPER_REGISTRY_CACHE.clear()
 
 
 def _core_ontology_paths(project_root: Path) -> list[Path]:
@@ -369,38 +380,60 @@ def load_declared_terms(
     return result
 
 
-def _load_upper_registry() -> dict | None:
+def _load_upper_registry() -> tuple[dict | None, str | None]:
     """Load the pinned upper-ontology term registry (role-aware).
 
-    Returns ``{"classes": frozenset, "properties": frozenset,
-    "individuals": frozenset, "datatypes": frozenset}`` unioned across all
-    profiled ontologies, or ``None`` when the registry file is unavailable
-    (in which case coverage degrades to namespace-prefix acceptance, the
-    pre-registry behavior).
+    Returns ``(registry, error)``. ``registry`` is ``{"classes": frozenset,
+    "properties": frozenset, "individuals": frozenset, "datatypes":
+    frozenset}`` unioned across all profiled ontologies. ``error`` is a typed
+    code when the registry is unusable: ``upper_ontology_registry_missing``,
+    ``upper_ontology_registry_malformed``, or
+    ``upper_ontology_registry_provenance_invalid``.
+
+    Fail-closed policy (issue #55): an unusable registry never degrades to
+    whole-namespace acceptance. ``check_graph_concepts`` reports
+    ``could_not_verify`` for any graph that uses profiled upper-ontology
+    terms while the registry is unavailable.
     """
 
-    cache_key = str(UPPER_ONTOLOGY_REGISTRY_PATH)
+    if not UPPER_ONTOLOGY_REGISTRY_PATH.is_file():
+        return None, "upper_ontology_registry_missing"
+    try:
+        stat = UPPER_ONTOLOGY_REGISTRY_PATH.stat()
+    except OSError:
+        return None, "upper_ontology_registry_missing"
+    cache_key = f"{UPPER_ONTOLOGY_REGISTRY_PATH}:{stat.st_mtime_ns}:{stat.st_size}"
     cached = _UPPER_REGISTRY_CACHE.get(cache_key)
     if cached is not None:
-        return cached
-    if not UPPER_ONTOLOGY_REGISTRY_PATH.is_file():
-        return None
+        return cached, None
     try:
         raw = json.loads(UPPER_ONTOLOGY_REGISTRY_PATH.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return None
+        return None, "upper_ontology_registry_malformed"
+    ontologies = raw.get("ontologies")
+    if not isinstance(ontologies, dict) or not ontologies:
+        return None, "upper_ontology_registry_malformed"
     merged: dict[str, set[str]] = {
         "classes": set(),
         "properties": set(),
         "individuals": set(),
         "datatypes": set(),
     }
-    for entry in raw.get("ontologies", {}).values():
+    for entry in ontologies.values():
+        # Provenance requirement: every pinned ontology entry must record
+        # where it came from and which release it pins.
+        if not isinstance(entry, dict) or not entry.get("source_url") or not (
+            entry.get("version_iri") or entry.get("version_info")
+        ):
+            return None, "upper_ontology_registry_provenance_invalid"
         for role in merged:
             merged[role].update(entry.get(role, []))
+    if not any(merged.values()):
+        return None, "upper_ontology_registry_malformed"
     result = {role: frozenset(values) for role, values in merged.items()}
+    _UPPER_REGISTRY_CACHE.clear()  # single registry file; drop stale versions
     _UPPER_REGISTRY_CACHE[cache_key] = result
-    return result
+    return result, None
 
 
 def _is_standard(iri: str) -> bool:
@@ -447,19 +480,22 @@ def check_graph_concepts(
     used_properties = {str(pred) for pred in graph.predicates()}
 
     declared = load_declared_terms(project_root=project_root, extensions=extensions)
-    upper = _load_upper_registry()
+    upper, upper_error = _load_upper_registry()
 
     undeclared_classes: list[str] = []
     undeclared_properties: list[str] = []
     unknown_upper: set[str] = set()
     role_mismatches: list[tuple[str, str, str]] = []
+    verification_errors: list[str] = []
+    upper_terms_used = False
 
     for iri in sorted(used_classes):
         if _is_standard(iri):
             continue
         if _is_upper_namespace(iri):
+            upper_terms_used = True
             if upper is None:
-                continue  # degraded mode: registry unavailable
+                continue  # reported once as a verification failure below
             if iri in upper["classes"] or iri in upper["datatypes"]:
                 continue
             if iri in upper["properties"]:
@@ -480,6 +516,7 @@ def check_graph_concepts(
         if _is_standard(iri):
             continue
         if _is_upper_namespace(iri):
+            upper_terms_used = True
             if upper is None:
                 continue
             if iri in upper["properties"]:
@@ -498,11 +535,18 @@ def check_graph_concepts(
         else:
             undeclared_properties.append(iri)
 
+    # Fail closed (issue #55): when the graph uses profiled upper-ontology
+    # terms and the pinned registry is unusable, the required exact-term
+    # verification stage did not run — never report a pass.
+    if upper_terms_used and upper_error is not None:
+        verification_errors.append(upper_error)
+
     ok = (
         not undeclared_classes
         and not undeclared_properties
         and not unknown_upper
         and not role_mismatches
+        and not verification_errors
     )
     guidance_parts: list[str] = []
     if undeclared_classes or undeclared_properties:
@@ -511,6 +555,16 @@ def check_graph_concepts(
         guidance_parts.append(UPPER_TERM_GUIDANCE)
     if role_mismatches:
         guidance_parts.append(ROLE_MISMATCH_GUIDANCE)
+    if verification_errors:
+        guidance_parts.append(
+            "A required verification stage could not run "
+            f"({', '.join(verification_errors)}): the pinned upper-ontology "
+            "term registry (mcp_server/upper_ontology_registry.json) is "
+            "missing, malformed, or lacks release provenance while the graph "
+            "uses profiled upper-ontology terms. Restore or regenerate the "
+            "registry (mcp_server/tools/build_upper_ontology_registry.py); "
+            "an unverifiable graph is never reported as conformant."
+        )
 
     return ConceptCoverageReport(
         ok=ok,
@@ -521,6 +575,8 @@ def check_graph_concepts(
         checked_class_count=len(used_classes),
         checked_property_count=len(used_properties),
         guidance=" ".join(guidance_parts),
+        verification_status="could_not_verify" if verification_errors else "complete",
+        verification_errors=tuple(verification_errors),
     )
 
 
@@ -531,6 +587,7 @@ def coverage_report_to_dict(report: ConceptCoverageReport) -> dict:
         "ok": report.ok,
         "checked_class_count": report.checked_class_count,
         "checked_property_count": report.checked_property_count,
+        "verification_status": report.verification_status,
     }
     if not report.ok:
         payload["undeclared_classes"] = list(report.undeclared_classes)
@@ -544,5 +601,7 @@ def coverage_report_to_dict(report: ConceptCoverageReport) -> dict:
                 {"iri": iri, "declared_role": declared_role, "used_as": used_as}
                 for iri, declared_role, used_as in report.role_mismatches
             ]
+        if report.verification_errors:
+            payload["verification_errors"] = list(report.verification_errors)
         payload["guidance"] = report.guidance
     return payload

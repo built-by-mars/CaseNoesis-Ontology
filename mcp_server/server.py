@@ -88,8 +88,32 @@ from graph_validator import (
 )
 from cac_content_router import route_cac_content as _route_cac_content, search_recipes as _search_recipes
 from investigation_router import route_investigation_content as _route_investigation_content
+import workspace_policy
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+
+def enforce_secure_startup() -> None:
+    """Fail-closed startup check for secure production mode (issue #57).
+
+    When ``CASE_UCO_MCP_SECURE_MODE=1`` (or a production profile in
+    ``CASE_UCO_MCP_PROFILE``) is set and the workspace policy is missing or
+    invalid, the server refuses to start with typed error codes instead of
+    silently running unrestricted. Development deployments (no secure mode)
+    are unaffected.
+    """
+
+    errors = workspace_policy.validate_security_configuration()
+    if errors:
+        print(
+            "[MCP] SECURE MODE STARTUP REFUSED — configuration errors: "
+            + ", ".join(errors)
+            + ". Set CASE_UCO_MCP_READ_ROOTS / CASE_UCO_MCP_WRITE_ROOTS to "
+            "existing, sufficiently narrow directories (see "
+            "mcp_server/README.md and SECURITY.md).",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
 
 # ---------------------------------------------------------------------------
 # Extension registry loading
@@ -1653,6 +1677,27 @@ def get_patterns() -> str:
         lines.append(f"\n```python\n{p['python_example']}\n```\n")
     return "\n".join(lines)
 
+
+@mcp.tool
+def get_security_profile() -> dict:
+    """Machine-readable deployment security profile (issue #57).
+
+    Reports the active deployment profile (development,
+    offline-investigation, production-authoring, production-review),
+    whether secure mode and the filesystem workspace policy are active,
+    root counts (never full paths), overwrite policy, promotion authority,
+    and any configuration errors. Trusted local operators and calling
+    agents use this to understand which capabilities the deployment
+    permits before attempting persistent changes.
+    """
+    return workspace_policy.security_profile()
+
+
+# fastmcp dev / import-based runners execute the module body, so the
+# secure-mode startup gate runs at import time whenever secure mode is
+# configured; development deployments (no secure mode) are unaffected.
+if workspace_policy.secure_mode_active():
+    enforce_secure_startup()
 
 if __name__ == "__main__":
     mcp.run()

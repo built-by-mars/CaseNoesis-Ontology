@@ -7,6 +7,131 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.17.0] - 2026-07-10
+
+Fail-closed validation, enforceable secure deployment, hardened knowledge
+promotion, and an external routing evaluation harness — addressing the four
+follow-on review issues [#55](https://github.com/vulnmaster/CASE-UCO-SDK/issues/55)–[#58](https://github.com/vulnmaster/CASE-UCO-SDK/issues/58)
+plus all 35 open CodeQL code-scanning alerts.
+
+### Added
+
+#### Fail-closed strict validation (issue #55)
+
+- **Upper-ontology registry verification status** (closes [#55](https://github.com/vulnmaster/CASE-UCO-SDK/issues/55)):
+  concept coverage and `validate_graph` reports now carry `verification_status`
+  (`complete` / `could_not_verify`) and `verification_errors`. When a graph
+  uses profiled upper-ontology terms and `upper_ontology_registry.json` is
+  missing, unparseable, or lacks per-ontology provenance (`source_url` plus
+  `version_iri`/`version_info`), the graph is reported **non-conforming**
+  instead of the terms being silently namespace-accepted. Graphs that use no
+  upper terms are unaffected by registry absence. The registry cache key now
+  includes a file fingerprint so registry edits invalidate immediately.
+- **Typed extension-resolution errors**: `resolve_extension_dependencies`
+  raises `extension_unknown`, `extension_dependency_missing`,
+  `extension_manifest_malformed`, and `extension_dependency_cycle` (explicit
+  cycle detection with chain reporting) instead of silently skipping bad
+  inputs; diamond dependencies still resolve once.
+- **Lifecycle status integrity**: an unrecognized manifest `status` is now
+  `invalid` — never routable, never treated as operational — and
+  `route_investigation_content` reports malformed manifests and invalid
+  statuses in a new bounded `integrity_failures` payload field rather than
+  omitting the extension without a trace.
+
+#### Hardened promotion gates and recipe lifecycle (issue #56)
+
+- **Strengthened extension promotion gates** (closes [#56](https://github.com/vulnmaster/CASE-UCO-SDK/issues/56)),
+  all enforced by `make promote-extension`: `manifest_schema` (required
+  fields, listed files exist, status recognized), `ontology_files_parse`,
+  `classes_anchored` (every declared class must subclass a class *explicitly
+  declared* in core, an operational dependency, the pinned upper-ontology
+  registry, or the extension itself — an anchor to a nonexistent parent now
+  fails), `exemplars_validate` (**at least one conforming exemplar is now
+  required**), `negative_fixtures` (extensions shipping SHACL shapes must
+  ship `invalid_exemplar_files` that *fail* validation, proving the shapes
+  actually constrain), and `competency_queries` (declared SPARQL queries must
+  return results against the exemplars). Promotion provenance now records the
+  git commit and active deployment profile alongside reviewer, timestamp, and
+  gate results.
+- **Recipe promotion/deprecation** (`make promote-recipe RECIPE=<slug>
+  REVIEWER=...`, `make deprecate-recipe`): transactionally moves a candidate
+  from `docs/recipes/candidates/` into `docs/recipes/`, validates recipe
+  structure (title, Scenario/Pattern/Validation sections, code fence,
+  metadata block), registers it in `docs/recipes/INDEX.md` and the
+  `RECIPE_INDEX` in `mcp_server/domain_index.py`, and records provenance in
+  `docs/recipes/promotion-log.json`; deprecation reverses all of it. A
+  structurally invalid candidate is rejected untouched.
+
+#### Enforceable MCP secure production mode (issue #57)
+
+- **Deployment profiles** (`CASE_UCO_MCP_PROFILE`, closes [#57](https://github.com/vulnmaster/CASE-UCO-SDK/issues/57)):
+  `development` (permissive, backward compatible), `offline-investigation`,
+  `production-authoring`, and `production-review` — the latter three imply
+  secure mode (also settable directly via `CASE_UCO_MCP_SECURE_MODE=1`);
+  unknown profile names fail closed as secure.
+- **Fail-closed startup validation**: in secure mode the server validates its
+  configuration at startup and **refuses to start** (exit 3) on missing or
+  nonexistent roots, dangerously broad roots (filesystem/drive roots and home
+  directories, override only via `CASE_UCO_MCP_ALLOW_BROAD_ROOTS=1` with the
+  acknowledgement recorded), or write roots nested inside evidence read
+  roots. At runtime, unconfigured roots return `read_roots_unconfigured` /
+  `write_roots_unconfigured` instead of falling back to unrestricted access.
+- **Profile-scoped promotion authority**: `offline-investigation` denies
+  extension/recipe promotion (`promotion_not_permitted_in_profile`);
+  `production-review` requires a named reviewer
+  (`reviewer_identity_required`).
+- **`get_security_profile` MCP tool**: bounded, non-sensitive summary of the
+  active posture (profile, secure-mode flag, root counts, promotion
+  authority, configuration errors) — no paths or environment contents.
+
+#### Held-out routing evaluation harness (issue #58)
+
+- **External evaluation corpus** (`evaluation/routing/heldout-corpus-v1.json`,
+  closes [#58](https://github.com/vulnmaster/CASE-UCO-SDK/issues/58)): 39
+  synthetic held-out cases (paraphrase, multi-domain, negative/abstention,
+  adversarial phrasing) with per-case provenance, kept apart from the
+  development benchmark and governed by a written co-modification rule: a
+  change touching both router logic and the corpus requires the
+  `[eval-governance-approved]` commit tag, enforced by a CI guard.
+- **Evaluation harness** (`evaluation/routing/run_evaluation.py`,
+  `make eval-routing`): reports macro-F1, multi-label exact match and mean
+  Jaccard, paraphrase recall, negative-family rate, abstention accuracy, and
+  hybrid-vs-baseline family recall against thresholds pinned in the corpus
+  file; exits nonzero when any threshold regresses. Runs in CI on every
+  router/corpus change with the report uploaded as an artifact. Because the
+  MCP server is always operated by an LLM host (from small local models to
+  frontier models), the corpus targets the *deterministic routing layer* —
+  the floor every host model inherits — and the README documents how to
+  extend it with host-LLM end-to-end cases.
+
+### Changed
+
+- `SECURITY.md`: supported line is now 1.17.x; documented fail-closed
+  validation semantics, secure deployment profiles, and the hardened
+  promotion gates.
+- `mcp_server/README.md`: new "Deployment profiles and secure mode" section.
+- `docs/recipes/recipe-authoring.md`: recipe promotion now uses
+  `make promote-recipe` / `make deprecate-recipe` instead of manual editing.
+- All language package versions synchronized to **1.17.0**.
+- MCP server test suite grown from 183 to 218 tests (secure mode, fail-closed
+  coverage, typed dependency errors, promotion gates, recipe lifecycle).
+
+### Fixed
+
+- **All 35 open CodeQL code-scanning alerts**: empty exception handlers in
+  `knowledge_lifecycle.py` replaced with specific handling and debug logging;
+  implicit string concatenations in `investigation_router.py` list literals
+  made explicit; unused imports removed (`dataclasses.field`, test-module
+  duplicates, `datetime`/`timezone` in the Lotus Blossom example); unused
+  local variables removed from the Lam, Lindell, and Grayson PACER example
+  builders (side-effecting calls preserved); the generated packages'
+  `_REGISTRY_PATH` module global renamed to the public `REGISTRY_PATH` it
+  actually is (referenced by tool entry points), with the generator template
+  updated to match.
+- FOAF entry in the upper-ontology registry now carries pinned
+  `version_info` (FOAF 0.99 publishes no `owl:versionIRI`), so registry
+  provenance validation passes for all nine profiled ontologies.
+
 ## [1.16.0] - 2026-07-10
 
 Validation-integrity and security-hardening release addressing the eight

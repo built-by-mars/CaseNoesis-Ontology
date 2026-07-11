@@ -557,6 +557,7 @@
         "http://xmlns.com/foaf/0.1/"
       ],
       "source_url": "http://xmlns.com/foaf/spec/index.rdf",
+      "version_info": "0.99 (Paddington Edition, 2014-01-14)",
       "term_counts": {
         "classes": 13,
         "properties": 62,

@@ -81,6 +81,25 @@ rollback-extension:
 lifecycle-status:
 	$(PYTHON) mcp_server/knowledge_lifecycle.py status
 
+# Promote a candidate recipe into the operational catalog (moves the file,
+# registers it in INDEX.md + RECIPE_INDEX, records provenance):
+#   make promote-recipe SLUG=my-recipe DESCRIPTION="..." KEYWORDS="..." REVIEWER="Jane Analyst"
+promote-recipe:
+	$(PYTHON) mcp_server/knowledge_lifecycle.py promote-recipe $(SLUG) \
+		--description "$(DESCRIPTION)" --keywords "$(KEYWORDS)" --reviewed-by "$(REVIEWER)"
+
+# Revoke an operational recipe back to candidates/ (unregisters both indexes):
+#   make deprecate-recipe SLUG=my-recipe REASON="taught an invalid pattern"
+deprecate-recipe:
+	$(PYTHON) mcp_server/knowledge_lifecycle.py deprecate-recipe $(SLUG) --reason "$(REASON)"
+
+# Held-out routing evaluation (issue #58) — runs separately from unit tests:
+#   make eval-routing
+eval-routing:
+	$(PYTHON) evaluation/routing/run_evaluation.py \
+		--corpus evaluation/routing/heldout-corpus-v1.json \
+		--report evaluation/routing/report.json
+
 lint: typecheck-python lint-csharp lint-java lint-rust
 
 typecheck-python:

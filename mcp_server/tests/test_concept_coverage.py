@@ -618,3 +618,162 @@ def test_validate_graph_file_strict_concepts_can_be_disabled(tmp_path):
         graph, project_root=PROJECT_ROOT, strict_concepts=False
     )
     assert report.undeclared_concepts == ()
+
+
+# ---------------------------------------------------------------------------
+# Fail-closed verification (issue #55)
+# ---------------------------------------------------------------------------
+
+
+def _upper_term_graph(tmp_path):
+    return write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:relator-aaaabbbb-8888-4888-8888-888888888888",
+                "@type": "http://purl.org/nemo/gufo#Relator",
+            },
+        ],
+    )
+
+
+def test_missing_registry_fails_closed_for_upper_terms(tmp_path, monkeypatch):
+    graph = _upper_term_graph(tmp_path)
+    monkeypatch.setattr(
+        concept_coverage,
+        "UPPER_ONTOLOGY_REGISTRY_PATH",
+        tmp_path / "no-such-registry.json",
+    )
+    concept_coverage.clear_declared_term_cache()
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    concept_coverage.clear_declared_term_cache()
+    assert report.ok is False
+    assert report.verification_status == "could_not_verify"
+    assert "upper_ontology_registry_missing" in report.verification_errors
+    assert "never reported as conformant" in report.guidance
+
+
+def test_corrupt_registry_fails_closed_for_upper_terms(tmp_path, monkeypatch):
+    graph = _upper_term_graph(tmp_path)
+    bad_registry = tmp_path / "registry.json"
+    bad_registry.write_text("{not json", encoding="utf-8")
+    monkeypatch.setattr(
+        concept_coverage, "UPPER_ONTOLOGY_REGISTRY_PATH", bad_registry
+    )
+    concept_coverage.clear_declared_term_cache()
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    concept_coverage.clear_declared_term_cache()
+    assert report.ok is False
+    assert report.verification_status == "could_not_verify"
+    assert "upper_ontology_registry_malformed" in report.verification_errors
+
+
+def test_provenance_invalid_registry_fails_closed(tmp_path, monkeypatch):
+    graph = _upper_term_graph(tmp_path)
+    bad_registry = tmp_path / "registry.json"
+    bad_registry.write_text(
+        json.dumps({
+            "ontologies": {
+                "gufo": {
+                    "classes": ["http://purl.org/nemo/gufo#Relator"],
+                    "properties": [], "individuals": [], "datatypes": [],
+                }
+            }
+        }),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        concept_coverage, "UPPER_ONTOLOGY_REGISTRY_PATH", bad_registry
+    )
+    concept_coverage.clear_declared_term_cache()
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    concept_coverage.clear_declared_term_cache()
+    assert report.ok is False
+    assert "upper_ontology_registry_provenance_invalid" in report.verification_errors
+
+
+def test_missing_registry_irrelevant_without_upper_terms(tmp_path, monkeypatch):
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:obj-11111111-1111-4111-8111-111111111111",
+                "@type": "uco-core:UcoObject",
+            },
+        ],
+    )
+    monkeypatch.setattr(
+        concept_coverage,
+        "UPPER_ONTOLOGY_REGISTRY_PATH",
+        tmp_path / "no-such-registry.json",
+    )
+    concept_coverage.clear_declared_term_cache()
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    concept_coverage.clear_declared_term_cache()
+    assert report.ok is True
+    assert report.verification_status == "complete"
+
+
+def test_coverage_report_dict_includes_verification_status(tmp_path):
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:obj-11111111-1111-4111-8111-111111111111",
+                "@type": "uco-core:UcoObject",
+            },
+        ],
+    )
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    payload = concept_coverage.coverage_report_to_dict(report)
+    assert payload["verification_status"] == "complete"
+
+
+# ---------------------------------------------------------------------------
+# Typed extension dependency failures (issue #55)
+# ---------------------------------------------------------------------------
+
+
+def _make_ext(root: Path, name: str, depends_on=None, manifest_text=None):
+    ext_dir = root / "extensions" / name
+    ext_dir.mkdir(parents=True)
+    if manifest_text is not None:
+        (ext_dir / "manifest.json").write_text(manifest_text, encoding="utf-8")
+        return
+    manifest = {"name": name, "version": "0.0.1", "owl_files": []}
+    if depends_on:
+        manifest["depends_on"] = depends_on
+    (ext_dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+
+
+def test_unknown_extension_is_typed_error(tmp_path):
+    with pytest.raises(ValueError, match="extension_unknown"):
+        graph_validator.resolve_extension_dependencies(["nope"], tmp_path)
+
+
+def test_missing_dependency_is_typed_error(tmp_path):
+    _make_ext(tmp_path, "a", depends_on=["ghost"])
+    with pytest.raises(ValueError, match="extension_dependency_missing"):
+        graph_validator.resolve_extension_dependencies(["a"], tmp_path)
+
+
+def test_cyclic_dependency_is_typed_error(tmp_path):
+    _make_ext(tmp_path, "a", depends_on=["b"])
+    _make_ext(tmp_path, "b", depends_on=["a"])
+    with pytest.raises(ValueError, match="extension_dependency_cycle"):
+        graph_validator.resolve_extension_dependencies(["a"], tmp_path)
+
+
+def test_malformed_manifest_is_typed_error(tmp_path):
+    _make_ext(tmp_path, "bad", manifest_text="{not json")
+    with pytest.raises(ValueError, match="extension_manifest_malformed"):
+        graph_validator.resolve_extension_dependencies(["bad"], tmp_path)
+
+
+def test_diamond_dependency_resolves_once(tmp_path):
+    _make_ext(tmp_path, "d")
+    _make_ext(tmp_path, "b", depends_on=["d"])
+    _make_ext(tmp_path, "c", depends_on=["d"])
+    _make_ext(tmp_path, "a", depends_on=["b", "c"])
+    resolved = graph_validator.resolve_extension_dependencies(["a"], tmp_path)
+    assert resolved == ["a", "b", "c", "d"]

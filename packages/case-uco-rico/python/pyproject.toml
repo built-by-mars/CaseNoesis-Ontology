@@ -12,4 +12,4 @@ dependencies = [
 ]
 
 [project.entry-points."case_uco.extensions"]
-rico = "case_uco_rico:_REGISTRY_PATH"
+rico = "case_uco_rico:REGISTRY_PATH"

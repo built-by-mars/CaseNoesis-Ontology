@@ -55,4 +55,4 @@ NAMESPACES: dict[str, str] = {
     "cacontology-victim-impact": "https://cacontology.projectvic.org/victim-impact#",
 }
 
-_REGISTRY_PATH = __file__.replace("__init__.py", "_registry.json")
+REGISTRY_PATH = __file__.replace("__init__.py", "_registry.json")

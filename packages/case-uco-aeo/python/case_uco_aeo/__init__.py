@@ -11,4 +11,4 @@ NAMESPACES: dict[str, str] = {
     "vocabulary": "https://ontology.adversaryengagement.org/ae/vocabulary/",
 }
 
-_REGISTRY_PATH = __file__.replace("__init__.py", "_registry.json")
+REGISTRY_PATH = __file__.replace("__init__.py", "_registry.json")

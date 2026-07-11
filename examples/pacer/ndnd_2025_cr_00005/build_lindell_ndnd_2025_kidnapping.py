@@ -222,7 +222,6 @@ def build_graph() -> dict:
     victim_a = uid("person-victim-a")
     mattern = uid("person-mattern")
     judge = uid("person-judge-welte")
-    toay = uid("person-toay")
 
     graph.extend(
         [
@@ -373,7 +372,6 @@ def build_graph() -> dict:
     moorhead = uid("loc-moorhead-residence")
     crash_site = uid("loc-crash-site")
     rrv = uid("loc-red-river-valley")
-    twin_cities = uid("loc-twin-cities")
     graph.extend(
         [
             location(

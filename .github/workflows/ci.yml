@@ -13,6 +13,7 @@ on:
       - "ontology/**"
       - "mcp_server/**"
       - "extensions/**"
+      - "evaluation/**"
       - "Makefile"
   pull_request:
     branches: [main, develop]
@@ -26,6 +27,7 @@ on:
       - "ontology/**"
       - "mcp_server/**"
       - "extensions/**"
+      - "evaluation/**"
       - "Makefile"
 
 jobs:
@@ -49,6 +51,55 @@ jobs:
             echo "::error::Version mismatch: pyproject.toml=$PYPROJECT_VER vs __init__.py=$INIT_VER"
             exit 1
           fi
+
+  routing-evaluation:
+    name: Held-out Routing Evaluation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install rdflib
+
+      # Evaluation governance (issue #58): the held-out corpus must not be
+      # edited in the same change as the router implementation unless the
+      # commit message records an explicit evaluation-governance review.
+      - name: Evaluation governance guard
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+          CHANGED=$(git diff --name-only "$BASE" "$HEAD")
+          echo "$CHANGED"
+          ROUTER_CHANGED=$(echo "$CHANGED" | grep -E '^mcp_server/(semantic_retrieval|investigation_router)\.py$' || true)
+          CORPUS_CHANGED=$(echo "$CHANGED" | grep -E '^evaluation/routing/heldout-corpus-.*\.json$' || true)
+          if [ -n "$ROUTER_CHANGED" ] && [ -n "$CORPUS_CHANGED" ]; then
+            if git log --format=%B "$BASE".."$HEAD" | grep -qF '[eval-governance-approved]'; then
+              echo "Co-modification approved via [eval-governance-approved] commit tag."
+            else
+              echo "::error::Router implementation and held-out corpus changed in the same PR without [eval-governance-approved] review tag."
+              exit 1
+            fi
+          fi
+
+      - name: Run held-out routing evaluation
+        run: |
+          python evaluation/routing/run_evaluation.py \
+            --corpus evaluation/routing/heldout-corpus-v1.json \
+            --report evaluation/routing/report.json
+
+      - name: Upload evaluation report
+        uses: actions/upload-artifact@v7
+        with:
+          name: routing-evaluation-report
+          path: evaluation/routing/report.json
 
   generate:
     name: Generate Libraries

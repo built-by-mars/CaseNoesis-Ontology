@@ -43,8 +43,37 @@ candext:OrphanThing
 
 BROKEN_TTL = "@prefix broken this is not turtle at all {{{"
 
+CORE_TTL = """\
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
+uco-core:UcoObject a owl:Class .
+"""
 
-def make_extension(root: Path, name: str, ttl: str, status: str = "candidate") -> Path:
+EXEMPLAR_TTL = """\
+@prefix candext: <http://example.org/ontology/candext/> .
+@prefix kb: <http://example.org/kb/> .
+kb:thing-11111111-1111-4111-8111-111111111111 a candext:CandidateThing .
+"""
+
+
+def make_core(root: Path) -> None:
+    """Minimal core ontology so the classes_anchored gate can resolve
+    uco-core:UcoObject as a declared parent."""
+
+    core_dir = root / "ontology/UCO/ontology/uco/core"
+    if not core_dir.is_dir():
+        core_dir.mkdir(parents=True)
+        (core_dir / "core.ttl").write_text(CORE_TTL, encoding="utf-8")
+
+
+def make_extension(
+    root: Path,
+    name: str,
+    ttl: str,
+    status: str = "candidate",
+    with_exemplar: bool = True,
+) -> Path:
+    make_core(root)
     ext_dir = root / "extensions" / name
     ext_dir.mkdir(parents=True)
     (ext_dir / f"{name}.ttl").write_text(ttl, encoding="utf-8")
@@ -57,6 +86,9 @@ def make_extension(root: Path, name: str, ttl: str, status: str = "candidate") -
         "shacl_files": [],
         "bridge_files": [],
     }
+    if with_exemplar:
+        (ext_dir / "exemplar.ttl").write_text(EXEMPLAR_TTL, encoding="utf-8")
+        manifest["exemplar_files"] = ["exemplar.ttl"]
     (ext_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     return ext_dir
 
@@ -88,16 +120,6 @@ def test_candidate_extension_still_loadable_explicitly(tmp_path):
     import concept_coverage
 
     make_extension(tmp_path, "candext", VALID_TTL, status="candidate")
-    core_dir = tmp_path / "ontology/UCO/ontology/uco/core"
-    core_dir.mkdir(parents=True)
-    (core_dir / "core.ttl").write_text(
-        """\
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix uco-core: <https://ontology.unifiedcyberontology.org/uco/core/> .
-uco-core:UcoObject a owl:Class .
-""",
-        encoding="utf-8",
-    )
     graph_path = tmp_path / "g.jsonld"
     graph_path.write_text(
         json.dumps({
@@ -220,3 +242,289 @@ def test_cli_status_and_promote(tmp_path, capsys):
     )
     assert rc == 0
     assert "candext: candidate" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------------------
+# Fail-closed status handling (issue #55)
+# ---------------------------------------------------------------------------
+
+
+def test_invalid_status_never_operational():
+    assert knowledge_lifecycle.extension_status({"status": "bogus"}) == "invalid"
+    assert knowledge_lifecycle.is_routable({"status": "bogus"}) is False
+
+
+def test_invalid_status_reported_as_integrity_failure(tmp_path):
+    make_extension(tmp_path, "weirdext", VALID_TTL, status="bogus")
+    failures: list[dict] = []
+    installed = investigation_router._installed_extensions(tmp_path, failures)
+    assert "weirdext" not in installed
+    assert {"extension": "weirdext", "error": "extension_status_invalid"} in failures
+
+
+def test_malformed_manifest_reported_as_integrity_failure(tmp_path):
+    ext_dir = tmp_path / "extensions" / "brokenmanifest"
+    ext_dir.mkdir(parents=True)
+    (ext_dir / "manifest.json").write_text("{not json", encoding="utf-8")
+    failures: list[dict] = []
+    installed = investigation_router._installed_extensions(tmp_path, failures)
+    assert "brokenmanifest" not in installed
+    assert {"extension": "brokenmanifest",
+            "error": "extension_manifest_malformed"} in failures
+
+
+def test_malformed_manifest_is_typed_error_on_load(tmp_path):
+    ext_dir = tmp_path / "extensions" / "brokenmanifest"
+    ext_dir.mkdir(parents=True)
+    (ext_dir / "manifest.json").write_text("{not json", encoding="utf-8")
+    with pytest.raises(ValueError, match="extension_manifest_malformed"):
+        knowledge_lifecycle.promote_extension("brokenmanifest", project_root=tmp_path)
+
+
+# ---------------------------------------------------------------------------
+# Strengthened promotion gates (issue #56)
+# ---------------------------------------------------------------------------
+
+UNANCHORED_TTL = """\
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix candext: <http://example.org/ontology/candext/> .
+@prefix ghost: <http://example.org/ontology/ghost/> .
+
+candext:FloatingThing
+    a owl:Class ;
+    rdfs:subClassOf ghost:UndeclaredParent ;
+    rdfs:label "FloatingThing"@en .
+"""
+
+
+def test_promotion_fails_when_parent_class_undeclared(tmp_path):
+    make_extension(tmp_path, "floatext", UNANCHORED_TTL, status="candidate")
+    result = knowledge_lifecycle.promote_extension(
+        "floatext", project_root=tmp_path, require_validator=False
+    )
+    assert result.ok is False
+    assert result.error == "promotion_gate_failed:classes_anchored"
+
+
+def test_promotion_fails_without_exemplar(tmp_path):
+    make_extension(tmp_path, "noexext", VALID_TTL, status="candidate",
+                   with_exemplar=False)
+    result = knowledge_lifecycle.promote_extension(
+        "noexext", project_root=tmp_path, require_validator=False
+    )
+    assert result.ok is False
+    assert result.error == "promotion_gate_failed:exemplars_validate"
+
+
+def test_promotion_requires_negative_fixture_when_shapes_exist(tmp_path):
+    ext_dir = make_extension(tmp_path, "shapedext", VALID_TTL, status="candidate")
+    manifest = json.loads((ext_dir / "manifest.json").read_text(encoding="utf-8"))
+    (ext_dir / "shapes.ttl").write_text(
+        "@prefix sh: <http://www.w3.org/ns/shacl#> .\n"
+        "@prefix candext: <http://example.org/ontology/candext/> .\n"
+        "candext:CandidateThingShape a sh:NodeShape ; "
+        "sh:targetClass candext:CandidateThing .\n",
+        encoding="utf-8",
+    )
+    manifest["shacl_files"] = ["shapes.ttl"]
+    (ext_dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    result = knowledge_lifecycle.promote_extension(
+        "shapedext", project_root=tmp_path, require_validator=False
+    )
+    assert result.ok is False
+    assert result.error == "promotion_gate_failed:negative_fixtures"
+
+
+def test_promotion_runs_competency_queries(tmp_path):
+    ext_dir = make_extension(tmp_path, "queryext", VALID_TTL, status="candidate")
+    manifest = json.loads((ext_dir / "manifest.json").read_text(encoding="utf-8"))
+    (ext_dir / "q1.sparql").write_text(
+        "SELECT ?s WHERE { ?s a <http://example.org/ontology/candext/CandidateThing> }",
+        encoding="utf-8",
+    )
+    manifest["competency_queries"] = [
+        {"file": "q1.sparql", "against": "exemplar.ttl", "expect": "empty"}
+    ]
+    (ext_dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    result = knowledge_lifecycle.promote_extension(
+        "queryext", project_root=tmp_path, require_validator=False
+    )
+    # The exemplar DOES contain a CandidateThing, so expect=empty must fail.
+    assert result.ok is False
+    assert result.error == "promotion_gate_failed:competency_queries"
+
+    manifest["competency_queries"][0]["expect"] = "nonempty"
+    (ext_dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    result = knowledge_lifecycle.promote_extension(
+        "queryext", project_root=tmp_path, require_validator=False
+    )
+    assert result.ok is True, result.gates
+
+
+def test_promotion_respects_deployment_profile(tmp_path, monkeypatch):
+    import workspace_policy
+
+    make_extension(tmp_path, "candext", VALID_TTL, status="candidate")
+    monkeypatch.setenv(workspace_policy.PROFILE_ENV, "offline-investigation")
+    result = knowledge_lifecycle.promote_extension(
+        "candext", project_root=tmp_path, require_validator=False
+    )
+    assert result.ok is False
+    assert result.error == "promotion_not_permitted_in_profile"
+
+    monkeypatch.setenv(workspace_policy.PROFILE_ENV, "production-review")
+    # Secure mode is implied by the profile; give the validator a policy
+    # that covers the candidate workspace so the gates can read exemplars.
+    work = tmp_path / "case-work"
+    work.mkdir()
+    monkeypatch.setenv(workspace_policy.READ_ROOTS_ENV, str(tmp_path))
+    monkeypatch.setenv(workspace_policy.WRITE_ROOTS_ENV, str(work))
+    result = knowledge_lifecycle.promote_extension(
+        "candext", project_root=tmp_path, require_validator=False
+    )
+    assert result.ok is False
+    assert result.error == "reviewer_identity_required"
+
+    result = knowledge_lifecycle.promote_extension(
+        "candext", project_root=tmp_path, require_validator=False,
+        reviewed_by="Jane Reviewer",
+    )
+    assert result.ok is True, result.gates
+    manifest = json.loads(
+        (tmp_path / "extensions/candext/manifest.json").read_text(encoding="utf-8")
+    )
+    assert manifest["promotion"]["reviewed_by"] == "Jane Reviewer"
+    assert manifest["promotion"]["deployment_profile"] == "production-review"
+
+
+# ---------------------------------------------------------------------------
+# Governed recipe promotion (issue #56)
+# ---------------------------------------------------------------------------
+
+CANDIDATE_RECIPE = """\
+# Synthetic Learned Pattern
+
+One-paragraph scope for a synthetic learned modeling pattern.
+
+**When to use this recipe**
+
+- A synthetic trigger condition.
+
+## Modeling pattern
+
+```json
+{"@id": "kb:x-11111111-1111-4111-8111-111111111111", "@type": "uco-core:UcoObject"}
+```
+
+## Related
+
+- [extensions.md](extensions.md)
+"""
+
+
+def _recipe_workspace(tmp_path: Path) -> Path:
+    recipes = tmp_path / "docs/recipes"
+    candidates = recipes / "candidates"
+    candidates.mkdir(parents=True)
+    (recipes / "extensions.md").write_text("# Extensions\n", encoding="utf-8")
+    (recipes / "INDEX.md").write_text("# CASE/UCO SDK Recipes\n", encoding="utf-8")
+    mcp_dir = tmp_path / "mcp_server"
+    mcp_dir.mkdir()
+    (mcp_dir / "domain_index.py").write_text(
+        'RECIPE_INDEX: list[dict[str, str]] = [\n'
+        '    {\n'
+        '        "title": "Working with Extensions",\n'
+        '        "description": "x",\n'
+        '        "keywords": "x",\n'
+        '        "file": "docs/recipes/extensions.md",\n'
+        '    },\n'
+        ']\n',
+        encoding="utf-8",
+    )
+    (candidates / "synthetic-learned-pattern.md").write_text(
+        CANDIDATE_RECIPE, encoding="utf-8"
+    )
+    return tmp_path
+
+
+def test_promote_recipe_moves_and_registers(tmp_path):
+    root = _recipe_workspace(tmp_path)
+    result = knowledge_lifecycle.promote_recipe(
+        "synthetic-learned-pattern",
+        description="Synthetic learned pattern for lifecycle tests.",
+        keywords="synthetic learned pattern",
+        project_root=root,
+        reviewed_by="Jane Reviewer",
+    )
+    assert result["ok"] is True, result
+    assert (root / "docs/recipes/synthetic-learned-pattern.md").is_file()
+    assert not (root / "docs/recipes/candidates/synthetic-learned-pattern.md").exists()
+    index_md = (root / "docs/recipes/INDEX.md").read_text(encoding="utf-8")
+    assert "synthetic-learned-pattern.md" in index_md
+    domain_index = (root / "mcp_server/domain_index.py").read_text(encoding="utf-8")
+    assert '"file": "docs/recipes/synthetic-learned-pattern.md"' in domain_index
+    log = json.loads((root / "docs/recipes/promotion-log.json").read_text(encoding="utf-8"))
+    assert log[-1]["action"] == "promote"
+    assert log[-1]["reviewed_by"] == "Jane Reviewer"
+    # The edited RECIPE_INDEX must still be valid Python.
+    namespace: dict = {}
+    exec(domain_index, namespace)  # noqa: S102 — test-authored content
+    assert any(
+        e["file"] == "docs/recipes/synthetic-learned-pattern.md"
+        for e in namespace["RECIPE_INDEX"]
+    )
+
+
+def test_promote_recipe_rejects_bad_structure(tmp_path):
+    root = _recipe_workspace(tmp_path)
+    bad = root / "docs/recipes/candidates/bad-recipe.md"
+    bad.write_text("just some text with no structure\n", encoding="utf-8")
+    result = knowledge_lifecycle.promote_recipe(
+        "bad-recipe", description="d", keywords="k", project_root=root
+    )
+    assert result["ok"] is False
+    assert result["error"] == "recipe_structure_invalid"
+    # Failed promotion leaves every operational file unchanged.
+    assert bad.is_file()
+    assert "bad-recipe" not in (root / "docs/recipes/INDEX.md").read_text(encoding="utf-8")
+    assert "bad-recipe" not in (root / "mcp_server/domain_index.py").read_text(encoding="utf-8")
+
+
+def test_promote_recipe_requires_metadata(tmp_path):
+    root = _recipe_workspace(tmp_path)
+    result = knowledge_lifecycle.promote_recipe(
+        "synthetic-learned-pattern", description="", keywords="",
+        project_root=root,
+    )
+    assert result["ok"] is False
+    assert result["error"] == "recipe_metadata_required"
+
+
+def test_deprecate_recipe_roundtrip(tmp_path):
+    root = _recipe_workspace(tmp_path)
+    knowledge_lifecycle.promote_recipe(
+        "synthetic-learned-pattern",
+        description="Synthetic learned pattern for lifecycle tests.",
+        keywords="synthetic learned pattern",
+        project_root=root,
+    )
+    result = knowledge_lifecycle.deprecate_recipe(
+        "synthetic-learned-pattern", reason="taught an invalid pattern",
+        project_root=root, deprecated_by="Jane Reviewer",
+    )
+    assert result["ok"] is True
+    assert (root / "docs/recipes/candidates/synthetic-learned-pattern.md").is_file()
+    assert not (root / "docs/recipes/synthetic-learned-pattern.md").exists()
+    index_md = (root / "docs/recipes/INDEX.md").read_text(encoding="utf-8")
+    assert "(synthetic-learned-pattern.md)" not in index_md
+    domain_index = (root / "mcp_server/domain_index.py").read_text(encoding="utf-8")
+    assert "synthetic-learned-pattern" not in domain_index
+    namespace: dict = {}
+    exec(domain_index, namespace)  # noqa: S102 — test-authored content
+    assert all(
+        e["file"] != "docs/recipes/synthetic-learned-pattern.md"
+        for e in namespace["RECIPE_INDEX"]
+    )
+    log = json.loads((root / "docs/recipes/promotion-log.json").read_text(encoding="utf-8"))
+    assert log[-1]["action"] == "deprecate"

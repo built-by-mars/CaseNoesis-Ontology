@@ -166,3 +166,130 @@ def test_multiple_roots_and_comma_separation(tmp_path, monkeypatch):
     roots = workspace_policy.read_roots()
     assert a.resolve() in roots and b.resolve() in roots
     assert workspace_policy.check_read_path(_write_csv(b)) == (b / "records.csv").resolve()
+
+
+# ---------------------------------------------------------------------------
+# Secure production mode (issue #57)
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture()
+def clean_env(monkeypatch):
+    for env in (
+        workspace_policy.READ_ROOTS_ENV,
+        workspace_policy.WRITE_ROOTS_ENV,
+        workspace_policy.ALLOW_OVERWRITE_ENV,
+        workspace_policy.SECURE_MODE_ENV,
+        workspace_policy.PROFILE_ENV,
+        workspace_policy.ALLOW_BROAD_ROOTS_ENV,
+    ):
+        monkeypatch.delenv(env, raising=False)
+    return monkeypatch
+
+
+def test_secure_mode_requires_both_root_sets(clean_env, tmp_path):
+    clean_env.setenv(workspace_policy.SECURE_MODE_ENV, "1")
+    errors = workspace_policy.validate_security_configuration()
+    assert "read_roots_unconfigured" in errors
+    assert "write_roots_unconfigured" in errors
+
+
+def test_secure_mode_rejects_broad_and_missing_roots(clean_env, tmp_path):
+    clean_env.setenv(workspace_policy.SECURE_MODE_ENV, "1")
+    clean_env.setenv(workspace_policy.READ_ROOTS_ENV, "/")
+    clean_env.setenv(workspace_policy.WRITE_ROOTS_ENV, str(tmp_path / "missing"))
+    errors = workspace_policy.validate_security_configuration()
+    assert "read_root_too_broad" in errors
+    assert "write_root_not_directory" in errors
+
+
+def test_secure_mode_broad_root_acknowledgement(clean_env, tmp_path):
+    (tmp_path / "w").mkdir()
+    clean_env.setenv(workspace_policy.SECURE_MODE_ENV, "1")
+    clean_env.setenv(workspace_policy.READ_ROOTS_ENV, "/")
+    clean_env.setenv(workspace_policy.WRITE_ROOTS_ENV, str(tmp_path / "w"))
+    clean_env.setenv(workspace_policy.ALLOW_BROAD_ROOTS_ENV, "1")
+    assert workspace_policy.validate_security_configuration() == []
+
+
+def test_secure_mode_rejects_writable_evidence_roots(clean_env, tmp_path):
+    evidence = tmp_path / "evidence"
+    evidence.mkdir()
+    clean_env.setenv(workspace_policy.SECURE_MODE_ENV, "1")
+    clean_env.setenv(workspace_policy.READ_ROOTS_ENV, str(evidence))
+    clean_env.setenv(workspace_policy.WRITE_ROOTS_ENV, str(evidence))
+    assert "write_root_inside_read_root" in workspace_policy.validate_security_configuration()
+
+
+def test_secure_mode_read_fails_closed_without_read_roots(clean_env, tmp_path):
+    clean_env.setenv(workspace_policy.SECURE_MODE_ENV, "1")
+    with pytest.raises(ValueError, match="read_roots_unconfigured"):
+        workspace_policy.check_read_path(tmp_path / "anything.csv")
+
+
+def test_secure_mode_write_fails_closed_without_write_roots(clean_env, tmp_path):
+    clean_env.setenv(workspace_policy.SECURE_MODE_ENV, "1")
+    with pytest.raises(ValueError, match="write_roots_unconfigured"):
+        workspace_policy.check_write_path(tmp_path / "out.jsonld")
+
+
+def test_development_mode_stays_backward_compatible(clean_env, tmp_path):
+    assert workspace_policy.secure_mode_active() is False
+    assert workspace_policy.validate_security_configuration() == []
+    # No roots configured: reads and writes remain unrestricted.
+    workspace_policy.check_read_path(tmp_path / "anything.csv")
+    workspace_policy.check_write_path(tmp_path / "out.jsonld")
+
+
+def test_production_profiles_imply_secure_mode(clean_env):
+    for profile in ("offline-investigation", "production-authoring", "production-review"):
+        clean_env.setenv(workspace_policy.PROFILE_ENV, profile)
+        assert workspace_policy.secure_mode_active() is True
+    clean_env.setenv(workspace_policy.PROFILE_ENV, "development")
+    assert workspace_policy.secure_mode_active() is False
+
+
+def test_unknown_profile_fails_closed(clean_env):
+    clean_env.setenv(workspace_policy.PROFILE_ENV, "yolo-mode")
+    assert workspace_policy.secure_mode_active() is True
+    assert workspace_policy.validate_security_configuration() == ["unknown_deployment_profile"]
+    assert workspace_policy.promotion_allowed() == (False, "")
+
+
+def test_promotion_authority_by_profile(clean_env):
+    assert workspace_policy.promotion_allowed() == (True, "")
+    clean_env.setenv(workspace_policy.PROFILE_ENV, "offline-investigation")
+    assert workspace_policy.promotion_allowed() == (False, "")
+    clean_env.setenv(workspace_policy.PROFILE_ENV, "production-authoring")
+    assert workspace_policy.promotion_allowed() == (False, "")
+    clean_env.setenv(workspace_policy.PROFILE_ENV, "production-review")
+    assert workspace_policy.promotion_allowed() == (True, "reviewer_identity")
+
+
+def test_security_profile_is_bounded(clean_env, tmp_path):
+    evidence = tmp_path / "evidence"
+    work = tmp_path / "work"
+    evidence.mkdir()
+    work.mkdir()
+    clean_env.setenv(workspace_policy.PROFILE_ENV, "production-review")
+    clean_env.setenv(workspace_policy.READ_ROOTS_ENV, str(evidence))
+    clean_env.setenv(workspace_policy.WRITE_ROOTS_ENV, str(work))
+    profile = workspace_policy.security_profile()
+    assert profile["profile"] == "production-review"
+    assert profile["secure_mode"] is True
+    assert profile["read_root_count"] == 1
+    assert profile["write_root_count"] == 1
+    assert profile["promotion_allowed"] is True
+    assert profile["promotion_requirement"] == "reviewer_identity"
+    assert profile["configuration_errors"] == []
+    # Bounded: no full paths anywhere in the payload.
+    assert str(tmp_path) not in json.dumps(profile)
+
+
+def test_secure_startup_refused_on_invalid_configuration(clean_env):
+    pytest.importorskip("fastmcp")
+    import server  # import first (development env), then flip to secure
+
+    clean_env.setenv(workspace_policy.SECURE_MODE_ENV, "1")
+    with pytest.raises(SystemExit):
+        server.enforce_secure_startup()

@@ -222,7 +222,6 @@ def build_graph() -> dict:
     texas_woman = uid("person-texas-woman")
     judge_mccalla = uid("person-judge-mccalla")
     judge_parker = uid("person-judge-parker")
-    judge_pham = uid("person-judge-pham")
     agent_hosafros = uid("person-agent-hosafros")
 
     graph.extend(
@@ -397,7 +396,6 @@ def build_graph() -> dict:
     # ------------------------------------------------------------------
     dallas = uid("loc-dallas")
     memphis = uid("loc-memphis")
-    southaven = uid("loc-southaven")
     graph.extend(
         [
             location(
