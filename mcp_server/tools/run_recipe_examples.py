@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import logging
 import os
 import shutil
 import subprocess
@@ -29,6 +30,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "docs/recipes/recipe-execution.json"
 SCHEMA = ROOT / "docs/recipes/recipe-execution.schema.json"
 DEFAULT_TIMEOUT_SECONDS = 120
+_logger = logging.getLogger(__name__)
 
 
 def _package_version(dist_name: str) -> str | None:
@@ -603,7 +605,8 @@ def write_report_atomic(report_path: Path, summary: dict) -> None:
         try:
             os.unlink(tmp_name)
         except OSError:
-            pass
+            # Temp file may already be gone; ignore cleanup race.
+            _logger.debug("Could not unlink temp report %s", tmp_name, exc_info=True)
         raise
 
 
@@ -636,7 +639,6 @@ def main() -> int:
         "python_executable": sys.executable,
         "python_version": sys.version.split()[0],
     }
-    exit_code = 1
     try:
         try:
             manifest = load_manifest()
@@ -651,8 +653,7 @@ def main() -> int:
                 "python_version": sys.version.split()[0],
             }
             print(json.dumps(summary, indent=2))
-            exit_code = 1
-            return exit_code
+            return 1
 
         entries = manifest["recipes"]
         if args.id:
@@ -667,8 +668,7 @@ def main() -> int:
             keep_generated=args.keep_generated,
         )
         print(json.dumps(summary, indent=2))
-        exit_code = 1 if summary["failed"] else 0
-        return exit_code
+        return 1 if summary["failed"] else 0
     except Exception as exc:
         summary = {
             "total": 0,
@@ -680,8 +680,7 @@ def main() -> int:
             "python_version": sys.version.split()[0],
         }
         print(json.dumps(summary, indent=2))
-        exit_code = 1
-        return exit_code
+        return 1
     finally:
         # CQ-02 / CQ-03: always write the aggregate report when requested.
         if args.report:

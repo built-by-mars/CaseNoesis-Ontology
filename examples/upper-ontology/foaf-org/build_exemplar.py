@@ -88,7 +88,7 @@ def build() -> CASEGraph:
     graph.add_property(unit_id, "org:hasMembership", {"@id": membership_id})
 
     contractor_id = "kb:contractor-1"
-    _contractor = graph.create(Person, id=contractor_id, name="Contract Analyst (synthetic)")
+    graph.create(Person, id=contractor_id, name="Contract Analyst (synthetic)")
     graph.add_type(contractor_id, "foaf:Person")
 
     contractor_membership_id = "kb:membership-contractor"

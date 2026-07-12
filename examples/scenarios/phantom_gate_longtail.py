@@ -37,33 +37,49 @@ def add_longtail(ctx: dict[str, Any]) -> list[str]:
     inv_cac = uid("inv-cac-alaska")
     inv_cti = uid("inv-cti-gaterunner")
 
-    _leo_marking = ctx["leo_marking"]  # retained for context parity; unused in longtail
+    # Ensure longtail context carries the markings / refs expected by the
+    # scenario contract (read values so CodeQL does not flag unused locals).
+    required_ctx_keys = (
+        "leo_marking",
+        "corp_marking",
+        "art_002_source_macbook",
+        "ai_001",
+        "ai_002",
+        "msg_003",
+        "msg_006_facet",
+        "victor_lam",
+        "victim_7",
+        "loc_004",
+        "loc_009",
+        "examiner_keel",
+        "streamvault",
+        "coc_action_ids",
+        "solveit_v7_acquire",
+    )
+    for key in required_ctx_keys:
+        if key not in ctx or ctx[key] is None:
+            raise KeyError(f"phantom_gate_longtail missing required ctx key: {key}")
+
     ts_marking = ctx["ts_marking"]
     cac_marking = ctx["cac_marking"]
     juvenile_marking = ctx["juvenile_marking"]
     fincen_marking = ctx["fincen_marking"]
     malware_marking = ctx["malware_marking"]
-    _corp_marking = ctx["corp_marking"]  # retained for context parity; unused in longtail
 
     # --- refs from main graph ---
     art_001 = ctx["art_001"]
     art_001_image = ctx["art_001_image"]
     art_002 = ctx["art_002"]
-    _art_002_source_macbook = ctx["art_002_source_macbook"]  # retained for context parity; unused in longtail
     art_003 = ctx["art_003"]
     gatehelper = ctx["gatehelper"]
     mlar_csv = ctx["mlar_csv"]
     crypto_trace_action = ctx["crypto_trace_action"]
     cybertip_images = ctx["cybertip_images"]
     photodna_detection = ctx["photodna_detection"]
-    _ai_001 = ctx["ai_001"]  # retained for context parity; unused in longtail
-    _ai_002 = ctx["ai_002"]  # retained for context parity; unused in longtail
     img_0042 = ctx["img_0042"]
     msg_001 = ctx["msg_001"]
-    _msg_003 = ctx["msg_003"]  # retained for context parity; unused in longtail
     msg_004 = ctx["msg_004"]
     msg_006 = ctx["msg_006"]
-    _msg_006_facet = ctx["msg_006_facet"]  # retained for context parity; unused in longtail
     grooming = ctx["grooming"]
     juvenile_j1 = ctx["juvenile_j1"]
     juvenile_ce_auth = ctx["juvenile_ce_auth"]
@@ -81,8 +97,6 @@ def add_longtail(ctx: dict[str, Any]) -> list[str]:
     mei_chen_wechat = ctx["mei_chen_wechat"]
     authorize_action = ctx["authorize_action"]
     register_auth = ctx["register_auth"]
-    _victor_lam = ctx["victor_lam"]  # retained for context parity; unused in longtail
-    _victim_7 = ctx["victim_7"]  # retained for context parity; unused in longtail
     novablade = ctx["novablade"]
     streamvault_nova = ctx["streamvault_nova"]
     evt_003 = ctx["evt_003"]
@@ -91,27 +105,21 @@ def add_longtail(ctx: dict[str, Any]) -> list[str]:
     call_003 = ctx["call_003"]
     call_002 = ctx["call_002"]
     loc_003 = ctx["loc_003"]
-    _loc_004 = ctx["loc_004"]  # retained for context parity; unused in longtail
     loc_007 = ctx["loc_007"]
-    _loc_009 = ctx["loc_009"]  # retained for context parity; unused in longtail
     loc_010 = ctx["loc_010"]
     instrument_edla = ctx["instrument_edla"]
     instrument_ddc = ctx["instrument_ddc"]
     charge_edla = ctx["charge_edla"]
     charge_rico = ctx["charge_rico"]
-    _examiner_keel = ctx["examiner_keel"]  # retained for context parity; unused in longtail
     examiner_v7 = ctx["examiner_v7"]
     ufed_tool = ctx["ufed_tool"]
     fs_001 = ctx["fs_001"]
     reg_key = ctx["reg_key"]
     enterprise = ctx["enterprise"]
-    _streamvault = ctx["streamvault"]  # retained for context parity; unused in longtail
     email_001 = ctx["email_001"]
     email_002 = ctx["email_002"]
-    _coc_action_ids = ctx["coc_action_ids"]  # retained for context parity; unused in longtail
     coc_002_imaging = ctx["coc_002_imaging"]
     solveit_keel = ctx["solveit_keel"]
-    _solveit_v7_acquire = ctx["solveit_v7_acquire"]  # retained for context parity; unused in longtail
     crypto_victim_wallet = ctx["crypto_victim_wallet"]
     title_iii_auth = ctx["title_iii_auth"]
 

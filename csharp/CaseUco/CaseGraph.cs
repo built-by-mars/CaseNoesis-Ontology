@@ -331,14 +331,11 @@ namespace CaseUco
                 return null;
             }
 
-            var matched = new List<Type>();
-            foreach (var typeStr in typeStrings)
-            {
-                var expandedIri = ExpandCompactIri(typeStr, context);
-                var found = FindTypeByClassIri(expandedIri);
-                if (found != null && !matched.Contains(found))
-                    matched.Add(found);
-            }
+            var matched = typeStrings
+                .Select(typeStr => FindTypeByClassIri(ExpandCompactIri(typeStr, context)))
+                .Where(found => found != null)
+                .Distinct()
+                .ToList();
 
             var selected = SelectMostSpecificType(matched);
             if (selected == null)
@@ -734,15 +731,14 @@ namespace CaseUco
             }
             if (policy == "merge_identical")
             {
-                foreach (var kv in raw)
+                foreach (var kv in raw.Where(kv => kv.Key != "@id"))
                 {
-                    if (kv.Key == "@id") continue;
-                    if (!existing.ContainsKey(kv.Key))
+                    if (!existing.TryGetValue(kv.Key, out var existingVal))
                     {
                         existing[kv.Key] = DeepCopyValue(kv.Value);
                         continue;
                     }
-                    if (!JsonLdValuesEqual(existing[kv.Key], kv.Value))
+                    if (!JsonLdValuesEqual(existingVal, kv.Value))
                         throw new InvalidOperationException(
                             $"Duplicate @id '{nodeId}': merge_identical conflict on '{kv.Key}'");
                 }
@@ -754,10 +750,8 @@ namespace CaseUco
                 object existingTypes = existing.TryGetValue("@type", out var existingType) ? existingType : null;
                 existing["@type"] = NormalizeTypeValue(MergeTypes(existingTypes, rawType));
             }
-            foreach (var kv in raw)
+            foreach (var kv in raw.Where(kv => kv.Key != "@id" && kv.Key != "@type"))
             {
-                if (kv.Key == "@id" || kv.Key == "@type")
-                    continue;
                 ApplyProperty(existing, kv.Key, kv.Value, nodeId, "merge_compatible");
             }
         }
@@ -778,12 +772,11 @@ namespace CaseUco
                 obj[key] = DeepCopyValue(value);
                 return;
             }
-            if (!obj.ContainsKey(key))
+            if (!obj.TryGetValue(key, out var existing))
             {
                 obj[key] = DeepCopyValue(value);
                 return;
             }
-            var existing = obj[key];
             if (JsonLdValuesEqual(existing, value))
                 return;
             if (existing is List<object> list)
@@ -817,10 +810,8 @@ namespace CaseUco
             var items = value is List<object> list ? list
                 : value is IList ilist ? ilist.Cast<object>().ToList()
                 : new List<object> { value };
-            foreach (var item in items)
+            foreach (var item in items.Where(item => !existing.Any(x => JsonLdValuesEqual(x, item))))
             {
-                if (existing.Any(x => JsonLdValuesEqual(x, item)))
-                    continue;
                 existing.Add(DeepCopyValue(item));
             }
         }
@@ -830,13 +821,15 @@ namespace CaseUco
             if (ReferenceEquals(a, b)) return true;
             if (a is Dictionary<string, object> ad && b is Dictionary<string, object> bd)
             {
-                if (ad.ContainsKey("@value") || bd.ContainsKey("@value"))
+                bool hasAv = ad.TryGetValue("@value", out var av);
+                bool hasBv = bd.TryGetValue("@value", out var bv);
+                if (hasAv || hasBv)
                 {
-                    if (!(ad.ContainsKey("@value") && bd.ContainsKey("@value"))) return false;
+                    if (!(hasAv && hasBv)) return false;
                     return NormalizeLiteralType(ad.TryGetValue("@type", out var at) ? at as string : null)
                         == NormalizeLiteralType(bd.TryGetValue("@type", out var bt) ? bt as string : null)
-                        && NormalizeLiteralValue(ad["@value"], ad.TryGetValue("@type", out var at2) ? at2 as string : null)
-                        == NormalizeLiteralValue(bd["@value"], bd.TryGetValue("@type", out var bt2) ? bt2 as string : null);
+                        && NormalizeLiteralValue(av, ad.TryGetValue("@type", out var at2) ? at2 as string : null)
+                        == NormalizeLiteralValue(bv, bd.TryGetValue("@type", out var bt2) ? bt2 as string : null);
                 }
                 if (ad.ContainsKey("@id") || bd.ContainsKey("@id"))
                     return Equals(ad.TryGetValue("@id", out var ai) ? ai : null, bd.TryGetValue("@id", out var bi) ? bi : null);
@@ -922,11 +915,7 @@ namespace CaseUco
         private static object MergeTypes(object existing, object newTypes)
         {
             var merged = AsTypeList(existing);
-            foreach (var typeIri in AsTypeList(newTypes))
-            {
-                if (!merged.Contains(typeIri))
-                    merged.Add(typeIri);
-            }
+            merged.AddRange(AsTypeList(newTypes).Where(t => !merged.Contains(t)));
             return merged;
         }
 

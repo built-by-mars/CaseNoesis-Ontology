@@ -60,7 +60,6 @@ import re
 import shutil
 import subprocess
 import sys
-import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -748,7 +747,12 @@ def _commit_recipe_promotion(
                 try:
                     target_path.unlink()
                 except OSError:
-                    pass
+                    # Best-effort rollback cleanup; primary restore is via backups.
+                    _logger.warning(
+                        "Could not remove partially promoted recipe %s during rollback",
+                        target_path,
+                        exc_info=True,
+                    )
             _logger.exception("Recipe promotion commit failed for %s: %s", slug, exc)
             return "promotion_commit_failed"
         finally:
@@ -758,7 +762,8 @@ def _commit_recipe_promotion(
             try:
                 fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)
             except OSError:
-                pass
+                # Unlock failures are non-fatal; process exit releases the lock.
+                _logger.debug("fcntl unlock failed for promotion lock", exc_info=True)
         lock_fh.close()
 
     return None
