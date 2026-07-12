@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import investigation_router
 import knowledge_lifecycle
+import graph_validator
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
@@ -448,8 +449,28 @@ def _recipe_workspace(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def test_promote_recipe_moves_and_registers(tmp_path):
+def test_promote_recipe_moves_and_registers(tmp_path, monkeypatch):
     root = _recipe_workspace(tmp_path)
+
+    def _fake_gate(_slug, **_kwargs):
+        return [{"id": "synthetic-learned-pattern"}]
+
+    def _fake_run(_entries, **_kwargs):
+        return {"total": 1, "passed": 1, "failed": 0, "results": [{"ok": True}]}
+
+    monkeypatch.setattr(
+        "tools.run_recipe_examples.entries_for_promotion_gate", _fake_gate, raising=False
+    )
+    monkeypatch.setattr(
+        "tools.run_recipe_examples.run_manifest_entries", _fake_run, raising=False
+    )
+    # promote_recipe imports from tools.* after sys.path insert — patch both.
+    import tools.run_recipe_examples as rre
+
+    monkeypatch.setattr(rre, "entries_for_promotion_gate", _fake_gate)
+    monkeypatch.setattr(rre, "run_manifest_entries", _fake_run)
+    monkeypatch.setattr(graph_validator, "validator_available", lambda: True)
+
     result = knowledge_lifecycle.promote_recipe(
         "synthetic-learned-pattern",
         description="Synthetic learned pattern for lifecycle tests.",
@@ -474,6 +495,78 @@ def test_promote_recipe_moves_and_registers(tmp_path):
         e["file"] == "docs/recipes/synthetic-learned-pattern.md"
         for e in namespace["RECIPE_INDEX"]
     )
+
+
+def test_promote_recipe_rejects_missing_execution_metadata(tmp_path, monkeypatch):
+    """Fail closed: no recipe-execution.json entry ⇒ cannot promote (#69)."""
+    root = _recipe_workspace(tmp_path)
+    import tools.run_recipe_examples as rre
+
+    monkeypatch.setattr(rre, "entries_for_promotion_gate", lambda _slug, **_k: [])
+    result = knowledge_lifecycle.promote_recipe(
+        "synthetic-learned-pattern",
+        description="Synthetic learned pattern for lifecycle tests.",
+        keywords="synthetic learned pattern",
+        project_root=root,
+        reviewed_by="Jane Reviewer",
+    )
+    assert result["ok"] is False
+    assert result["error"] == "recipe_execution_metadata_missing"
+    assert (root / "docs/recipes/candidates/synthetic-learned-pattern.md").is_file()
+    assert not (root / "docs/recipes/synthetic-learned-pattern.md").exists()
+
+
+def test_promote_recipe_rejects_when_validator_unavailable(tmp_path, monkeypatch):
+    root = _recipe_workspace(tmp_path)
+    import tools.run_recipe_examples as rre
+
+    monkeypatch.setattr(
+        rre,
+        "entries_for_promotion_gate",
+        lambda _slug, **_k: [{"id": "synthetic-learned-pattern"}],
+    )
+    monkeypatch.setattr(graph_validator, "validator_available", lambda: False)
+    result = knowledge_lifecycle.promote_recipe(
+        "synthetic-learned-pattern",
+        description="Synthetic learned pattern for lifecycle tests.",
+        keywords="synthetic learned pattern",
+        project_root=root,
+        reviewed_by="Jane Reviewer",
+    )
+    assert result["ok"] is False
+    assert result["error"] == "validator_unavailable"
+
+
+def test_promote_recipe_rejects_failing_gate(tmp_path, monkeypatch):
+    root = _recipe_workspace(tmp_path)
+    import tools.run_recipe_examples as rre
+
+    monkeypatch.setattr(
+        rre,
+        "entries_for_promotion_gate",
+        lambda _slug, **_k: [{"id": "synthetic-learned-pattern"}],
+    )
+    monkeypatch.setattr(
+        rre,
+        "run_manifest_entries",
+        lambda *_a, **_k: {
+            "total": 1,
+            "passed": 0,
+            "failed": 1,
+            "results": [{"ok": False, "error": "validation_failed"}],
+        },
+    )
+    monkeypatch.setattr(graph_validator, "validator_available", lambda: True)
+    result = knowledge_lifecycle.promote_recipe(
+        "synthetic-learned-pattern",
+        description="Synthetic learned pattern for lifecycle tests.",
+        keywords="synthetic learned pattern",
+        project_root=root,
+        reviewed_by="Jane Reviewer",
+    )
+    assert result["ok"] is False
+    assert result["error"] == "recipe_execution_gate_failed"
+    assert (root / "docs/recipes/candidates/synthetic-learned-pattern.md").is_file()
 
 
 def test_promote_recipe_rejects_bad_structure(tmp_path):
@@ -501,8 +594,22 @@ def test_promote_recipe_requires_metadata(tmp_path):
     assert result["error"] == "recipe_metadata_required"
 
 
-def test_deprecate_recipe_roundtrip(tmp_path):
+def test_deprecate_recipe_roundtrip(tmp_path, monkeypatch):
     root = _recipe_workspace(tmp_path)
+    import tools.run_recipe_examples as rre
+
+    monkeypatch.setattr(
+        rre,
+        "entries_for_promotion_gate",
+        lambda _slug, **_k: [{"id": "synthetic-learned-pattern"}],
+    )
+    monkeypatch.setattr(
+        rre,
+        "run_manifest_entries",
+        lambda *_a, **_k: {"total": 1, "passed": 1, "failed": 0, "results": [{"ok": True}]},
+    )
+    monkeypatch.setattr(graph_validator, "validator_available", lambda: True)
+
     knowledge_lifecycle.promote_recipe(
         "synthetic-learned-pattern",
         description="Synthetic learned pattern for lifecycle tests.",

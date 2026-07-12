@@ -7,13 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-> **Release target:** **v1.21.0**. Notes below track GitHub issues #59–#73.
-> This section stays under **Unreleased** until the release is tagged.
+## [1.21.0] - 2026-07-12
 
-Cross-ontology composition work in progress: IRI-indexed graph enrichment API,
-profile-aware validation planner, upper-ontology recipes and exemplars, recipe
-execution contract, and experimental performance foundations (streaming write,
-boundary partitioning helpers, class-registry cache, synthetic benchmarks).
+Cross-ontology composition: IRI-indexed graph enrichment API, profile-aware
+validation planner, upper-ontology recipes and exemplars, upper-ontology
+exemplar quality gate, and experimental v1.22 performance foundations
+(streaming write, boundary partitioning helpers, class-registry cache,
+synthetic benchmarks). Tracks GitHub issues #59–#73.
 
 ### Added
 
@@ -58,20 +58,36 @@ boundary partitioning helpers, class-registry cache, synthetic benchmarks).
   supporting recipes, extensions, profile tiers, `validation_bundle_preview`,
   compatibility warnings, and `ontology_gap_workflow` when nothing matches).
 
-#### Recipe execution quality gate (#69)
+#### Relationship kind registry and lint (CQ-40)
 
-- `docs/recipes/recipe-execution.json` + `mcp_server/tools/run_recipe_examples.py`
-  run builders in isolated temp dirs with timeouts, RDFLib parse, profile
-  SHACL + strict coverage, expected-invalid fixtures, optional competency
-  queries, and machine-readable reports.
+- `mcp_server/relationship_kinds.json` machine-readable vocabulary snapshot,
+  `lint_relationship_kinds()` lint API, and recipe-gate invocation in
+  `run_recipe_examples.py` (open-vocabulary warnings by default; strict errors
+  only when `allow_open_vocabulary=False`). Relationship governance is
+  **registry + lint API + recipe-gate invocation**, not a closed enforcement
+  layer.
+
+#### Upper-ontology exemplar quality gate (#69)
+
+- Executable gate for the **nine upper-ontology exemplars** listed in
+  `docs/recipes/recipe-execution.json` (not repository-wide catalog migration —
+  that remains **v1.22**). `mcp_server/tools/run_recipe_examples.py` runs those
+  builders in isolated temp dirs with timeouts, RDFLib parse, profile SHACL +
+  strict coverage, expected-invalid fixtures, optional competency queries, and
+  machine-readable reports (CI uploads the report artifact; do not commit
+  workstation-local paths).
 - CI job `recipe-validation` installs `case-utils`, fails closed without
   `case_validate`, and uploads the report artifact. Path filters include
   `docs/**`, `examples/**`, `benchmarks/**`, `scripts/**`.
-- `promote_recipe` invokes the same executable gate before catalog writes.
+- `promote_recipe` fails closed when `recipe-execution.json` metadata is
+  absent (`recipe_execution_metadata_missing`), when `case_validate` is
+  unavailable, or when the executable gate fails; then invokes the same
+  gate before catalog writes.
 
-#### Performance / scalability foundations (#70–#73) — experimental
+#### Performance / scalability foundations (#70–#73) — experimental v1.22
 
-These are early foundations, not finished production features:
+These are early **experimental v1.22 foundations**, not finished production
+features:
 
 - Process-wide class-registry cache for `from_jsonld` (#70) — experimental.
 - `write_streaming()` incremental JSON-LD writer (#71) — experimental.
@@ -88,20 +104,22 @@ These are early foundations, not finished production features:
   `__init__.py` export of composition types; Rust clippy `unwrap_used`.
 - Recipe gate hardened (CQ-01–CQ-12); literal same-bundle coverage
   (CQ-27–CQ-36); graph deep-copy / named policies / multi-`@id` accumulation
-  (CQ-13–CQ-26); promotion/routing (CQ-37–CQ-40).
-- All 40 open code-scanning alerts dispositioned as fixed (see
+  (CQ-13–CQ-26); promotion/routing (CQ-37–CQ-40, including relationship-kind
+  lint in the recipe gate).
+- Code-scanning quality: **72** findings across two passes (**40** initial +
+  **32** follow-up), all dispositioned as fixed (see
   `artifacts/ci/REVIEW-DISPOSITION.md`).
 
 ### Changed
 
 - Graph composition (#67): default duplicate policy is **reject** in all
   languages; Python adds `merge_identical` / `merge_compatible` / `replace`
-  with scalar-conflict diagnostics; `get()` returns a shallow copy;
+  with scalar-conflict diagnostics; `get()` returns a deep copy;
   `from_jsonld` uses the IRI index; multi-type `@type` rehydration picks the
   most specific unambiguous class; context prefix collisions are rejected.
 - README and CROSS_LANGUAGE_PARITY document the composition and profile APIs
   (RDF-equivalent / deterministic parity, not byte-identical JSON-LD).
-- Package versions bumped to **1.21.0** (tag pending).
+- Package versions bumped to **1.21.0**.
 
 ## [1.20.0] - 2026-07-11
 
@@ -1686,6 +1704,9 @@ digital forensics, cyber-investigation, and cyber-observable data.
 - GitHub Actions workflows: CI, CodeQL, dependency review, release
 - Dependabot configuration for automated dependency updates
 
+[Unreleased]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.21.0...HEAD
+[1.21.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.20.0...v1.21.0
+[1.20.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.19.0...v1.20.0
 [1.8.0]: https://github.com/vulnmaster/CASE-UCO-SDK/releases/tag/v1.8.0
 [1.7.0]: https://github.com/vulnmaster/CASE-UCO-SDK/releases/tag/v1.7.0
 [1.6.0]: https://github.com/vulnmaster/CASE-UCO-SDK/releases/tag/v1.6.0

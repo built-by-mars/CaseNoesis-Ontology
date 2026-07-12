@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Execute recipe exemplar builders and optionally validate (#69 / CQ-01–CQ-12).
+"""Upper-ontology exemplar quality gate (#69 / CQ-01–CQ-12).
 
-Builders run in isolated temporary directories with a subprocess timeout.
-Outputs are RDF-parsed (JSON-LD/Turtle via RDFLib) before validation.
-When ``--validate`` is set, ``case_validate`` must be available (fail-closed).
+Runs the nine v1.21 entries in ``docs/recipes/recipe-execution.json``
+(builders under ``examples/upper-ontology/``). Full operational catalog
+migration is v1.22. Builders run in isolated temporary directories with a
+subprocess timeout. Outputs are RDF-parsed (JSON-LD/Turtle via RDFLib)
+before validation. When ``--validate`` is set, ``case_validate`` must be
+available (fail-closed).
 
 Usage:
   python mcp_server/tools/run_recipe_examples.py --category upper-ontology
@@ -100,6 +103,40 @@ def _rdf_parse(path: Path) -> None:
     g.parse(str(path), format=fmt)
     if len(g) == 0:
         raise ValueError("empty_rdf_graph")
+
+
+def _load_jsonld_graph(path: Path) -> dict[str, Any]:
+    """Load a JSON-LD graph document for auxiliary lint gates."""
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("jsonld_root_must_be_object")
+    return payload
+
+
+def _lint_relationship_kinds_if_present(
+    graph_path: Path, result: dict[str, Any]
+) -> bool:
+    """Run relationship-kind lint when the graph uses kindOfRelationship.
+
+    Returns False when lint reports errors (strict/open per caller policy).
+    """
+    suffix = graph_path.suffix.lower()
+    if suffix not in {".json", ".jsonld", ".json-ld"}:
+        return True
+    from relationship_kinds import graph_uses_relationship_kinds, lint_relationship_kinds
+
+    graph_doc = _load_jsonld_graph(graph_path)
+    if not graph_uses_relationship_kinds(graph_doc):
+        return True
+    lint_report = lint_relationship_kinds(
+        graph_doc,
+        allow_open_vocabulary=True,
+    )
+    result["relationship_kind_lint"] = lint_report
+    if not lint_report.get("ok", True):
+        result["error"] = "relationship_kind_lint_failed"
+        return False
+    return True
 
 
 def _canonicalize_term(term: Any) -> str:
@@ -290,6 +327,10 @@ def _run_entry_body(
             path_parts.append(env["PYTHONPATH"])
         env["PYTHONPATH"] = os.pathsep.join(path_parts)
         result["pythonpath"] = env["PYTHONPATH"]
+        result["pythonpath_components"] = ["repo:python", "repo:mcp_server"]
+        if env.get("PYTHONPATH") and env["PYTHONPATH"].count(os.pathsep) >= 2:
+            # Extra path segments beyond the two repo roots (caller-supplied).
+            result["pythonpath_components"].append("env:PYTHONPATH")
 
         cmd = [python_exe, str(tmp_builder)]
         result["command"] = _sanitize_command(cmd)
@@ -333,6 +374,9 @@ def _run_entry_body(
             _rdf_parse(tmp_output)
         except Exception as exc:
             result["error"] = f"rdf_parse_failed:{type(exc).__name__}:{exc}"
+            return
+
+        if not _lint_relationship_kinds_if_present(tmp_output, result):
             return
 
         result["output_sha256"] = _sha256_file(tmp_output)
@@ -546,11 +590,14 @@ def entries_for_promotion_gate(
 ) -> list[dict]:
     """CQ-38: candidate entries plus every exemplar sharing profiles/extensions.
 
-    Recipes with no ``recipe-execution.json`` entry are structure-only and
-    return an empty gate (same as before CQ-38). When the candidate *is*
-    registered, expand to every operational entry that shares an extension or
-    profile. Pass ``include_full_manifest=True`` to require the entire
-    operational execution catalog before catalog mutation.
+    Returns an empty list when the candidate has no ``recipe-execution.json``
+    entry. Callers (``promote_recipe``) **must** treat an empty result as a
+    fail-closed error (``recipe_execution_metadata_missing``) — promotion
+    without executable metadata is not permitted.
+
+    When the candidate *is* registered, expand to every operational entry that
+    shares an extension or profile. Pass ``include_full_manifest=True`` to
+    require the entire operational execution catalog before catalog mutation.
     """
     manifest = load_manifest()
     all_entries = list(manifest.get("recipes") or [])

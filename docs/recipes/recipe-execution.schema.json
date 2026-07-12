@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/casework/CASE-UCO-Libraries/docs/recipes/recipe-execution.schema.json",
   "title": "CASE/UCO recipe execution manifest",
-  "description": "Executable evidence contract for operational recipes (#69 / CQ-07).",
+  "description": "Upper-ontology exemplar quality gate contract (#69 / CQ-07): nine v1.21 entries. Full operational catalog migration is v1.22.",
   "type": "object",
   "required": ["schema_version", "recipes"],
   "additionalProperties": false,

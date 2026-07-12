@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "description": "Executable evidence contract for operational recipes (#69).",
+  "description": "Upper-ontology exemplar quality gate (#69): nine v1.21 entries under examples/upper-ontology/. Full operational catalog migration is v1.22.",
   "recipes": [
     {
       "id": "foundational-typing-bfo",

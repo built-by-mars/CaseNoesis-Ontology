@@ -586,21 +586,29 @@ def promote_recipe(
         )
 
     gate_entries = entries_for_promotion_gate(slug)
-    if gate_entries:
-        if not graph_validator.validator_available():
-            return {
-                "ok": False,
-                "error": "validator_unavailable",
-                "detail": "case_validate is required to promote recipes with "
-                "executable exemplars (fail-closed).",
-            }
-        gate = run_manifest_entries(gate_entries, validate=True)
-        if gate["failed"]:
-            return {
-                "ok": False,
-                "error": "recipe_execution_gate_failed",
-                "detail": gate,
-            }
+    if not gate_entries:
+        return {
+            "ok": False,
+            "error": "recipe_execution_metadata_missing",
+            "detail": (
+                "Candidate recipes must have a validated entry in "
+                "docs/recipes/recipe-execution.json before promotion."
+            ),
+        }
+    if not graph_validator.validator_available():
+        return {
+            "ok": False,
+            "error": "validator_unavailable",
+            "detail": "case_validate is required to promote recipes with "
+            "executable exemplars (fail-closed).",
+        }
+    gate = run_manifest_entries(gate_entries, validate=True)
+    if gate["failed"]:
+        return {
+            "ok": False,
+            "error": "recipe_execution_gate_failed",
+            "detail": gate,
+        }
 
     title_match = re.search(r"^# (.+)$", text, flags=re.MULTILINE)
     title = title_match.group(1).strip() if title_match else slug

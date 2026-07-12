@@ -27,6 +27,21 @@ def known_relationship_kinds(*, vocab: str | None = None) -> frozenset[str]:
     return frozenset(kinds)
 
 
+def graph_uses_relationship_kinds(graph: dict[str, Any] | list[Any]) -> bool:
+    """Return True when any node carries ``uco-core:kindOfRelationship``."""
+    nodes: list[Any]
+    if isinstance(graph, dict):
+        nodes = list(graph.get("@graph") or [])
+        if not nodes and "uco-core:kindOfRelationship" in graph:
+            return True
+    else:
+        nodes = list(graph)
+    return any(
+        isinstance(node, dict) and node.get("uco-core:kindOfRelationship") is not None
+        for node in nodes
+    )
+
+
 def lint_relationship_kinds(
     graph: dict[str, Any] | list[Any],
     *,

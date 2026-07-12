@@ -1,9 +1,33 @@
-# CI triage and quality disposition (v1.21.0 RC)
+# CI triage and quality disposition (v1.21.0)
 
 **Base commit reviewed:** `ed0c7f9e365d96c6751597d98a6e7490cd77534b`  
-**Status:** v1.21.0 remains **untagged**. Issues #59–#73 stay open.
+**Green verification SHA (CI + CodeQL):** `a269392bee7ffb777748c95f8bb72ad516e03b73`
 
-## Failed Actions (authoritative)
+## Green verification runs (`a269392`)
+
+| Workflow | URL | Conclusion |
+|----------|-----|------------|
+| CI | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29212444014 | success |
+| CodeQL | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29212444012 | success |
+| Rust Security (on `96c322d`) | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211198715 | success |
+
+Rust Security was green on `96c322d` and was **not** re-triggered on `a269392` (path filters; Rust sources unchanged).
+
+Code-scanning snapshot after `a269392`: **0** open alerts
+(`artifacts/ci/code-scanning-open-after-a269392.json`, meta in
+`code-scanning-snapshot-meta.json`). Historical open set before that SHA:
+`code-scanning-open-before-a269392.json`.
+
+**Quality summary:** **72** code-scanning findings across two passes
+(**40** initial + **32** follow-up), all dispositioned as fixed.
+
+Recipe validation: CI job `recipe-validation` uploads
+`recipe-validation-report` as a workflow artifact. Do **not** commit
+workstation-local reports (absolute `/home/...` paths). The gate covers the
+**nine upper-ontology exemplars** in `docs/recipes/recipe-execution.json`
+(#69); full operational catalog migration is **v1.22**.
+
+## Failed Actions (authoritative — initial triage on `ed0c7f9`)
 
 | Run | URL | Conclusion |
 |-----|-----|------------|
@@ -21,9 +45,11 @@
 
 Raw exports: `artifacts/ci/runs.json`, `failed-ci.log`, `failed-rust-security.log`, `check-runs.json`, `code-scanning-alerts.json`, `alerts-table.tsv`.
 
-## Code-scanning alerts (40) — before → after
+## Code-scanning alerts — pass 1 (40) and pass 2 (32)
 
-See `artifacts/ci/alerts-disposition.md` for the full table. Summary: **40 fixed**, 0 false_positive, 0 accepted_debt.
+See `artifacts/ci/alerts-disposition.md` (40) and
+`artifacts/ci/alerts-disposition-32.md` (32). Summary: **72 fixed**,
+0 false_positive, 0 accepted_debt.
 
 | # | Rule | Path | Disposition |
 |---|------|------|-------------|
@@ -58,17 +84,16 @@ See `artifacts/ci/alerts-disposition.md` for the full table. Summary: **40 fixed
 
 ## Deferred to v1.22.0 / keep open
 
-Full original acceptance for issues #59–#73 (breadth of exemplars, dependency-aware partition, multi-language performance harnesses) remains open. Experimental foundations #70–#73 stay experimental.
+Full operational recipe-catalog migration and original breadth for issues
+#59–#73 (dependency-aware partition, multi-language performance harnesses)
+remain open. Experimental foundations #70–#73 stay experimental v1.22 work.
 
+## Intermediate green runs (superseded by `a269392`)
 
-## Green Actions on follow-up commit
-
-**Release-candidate HEAD:** `0e0b5cd32a3131af15770a05ac683b340620deed`
+**Earlier RC HEAD:** `0e0b5cd32a3131af15770a05ac683b340620deed`
 
 | Workflow | URL | Conclusion |
 |----------|-----|------------|
 | CI | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211429925 | success |
 | CodeQL | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211429931 | success |
 | Rust Security (on `96c322d`) | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211198715 | success |
-
-Mypy follow-up (`0e0b5cd`) did not re-trigger Rust Security (path filters); Rust Security was green on the CQ commit `96c322d`.

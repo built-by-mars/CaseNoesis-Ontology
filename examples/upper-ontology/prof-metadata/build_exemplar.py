@@ -51,7 +51,7 @@ def build() -> CASEGraph:
     )
     graph.add_property(profile_id, "prof:hasResource", {"@id": shapes_descriptor_id})
 
-    report_v1_id = "kb:validation-report-1"
+    report_v1_id = "kb:validation-report-11111111-1111-4111-8111-111111111111"
     graph.upsert_node(
         report_v1_id,
         types=["prov:Entity", "uco-core:UcoObject"],
@@ -63,7 +63,7 @@ def build() -> CASEGraph:
         },
     )
 
-    report_v2_id = "kb:validation-report-2"
+    report_v2_id = "kb:validation-report-22222222-2222-4222-8222-222222222222"
     graph.upsert_node(
         report_v2_id,
         types=["prov:Entity", "uco-core:UcoObject"],
@@ -76,7 +76,7 @@ def build() -> CASEGraph:
     )
     graph.link(report_v2_id, "prov:wasRevisionOf", report_v1_id)
 
-    validator_action_id = "kb:action-validate"
+    validator_action_id = "kb:action-validate-33333333-3333-4333-8333-333333333333"
     graph.upsert_node(
         validator_action_id,
         types="prov:Activity",
