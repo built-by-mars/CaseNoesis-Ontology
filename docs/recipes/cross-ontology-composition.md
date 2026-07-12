@@ -10,9 +10,9 @@ Replaces the former [cross-domain-extensions.md](cross-domain-extensions.md) gui
 
 1. **Domain-first.** Every node starts as a CASE/UCO (or extension) type via `graph.create()`. Upper ontology enriches the **same IRI** via `graph.add_type()` / `graph.add_property()`.
 2. **One foundational profile.** BFO **xor** gUFO — never both. CAC requires gUFO alignment; BFO is not recommended with CAC.
-3. **Adopting profiles combine freely.** PROV-O, OWL-Time, GeoSPARQL, FOAF, ORG, and PROF may coexist with each other and with either foundational choice.
+3. **Adopting profiles may be composed when dependencies and constraints are compatible.** PROV-O, OWL-Time, GeoSPARQL, FOAF, ORG, and PROF may coexist with each other and with either foundational choice when their import closures and SHACL constraints do not conflict.
 4. **Extensions declare dependencies.** Use manifest `depends_on` (e.g. `rico` → `legalproc`) — validate with the top-level extension name.
-5. **Public graph API only.** Use `create()`, `upsert_node()`, `add_type()`, `add_property()`, `create_relationship()`, `get()` — not `graph.add_node` or direct `graph._objects` mutation.
+5. **Public graph API only.** Use `create()`, `upsert_node()`, `add_type()`, `add_property()`, `link()` (for `prov:*` and other ontology edges), `create_relationship()` (UCO `Relationship` only), `get()` — not `graph.add_node` or direct `graph._objects` mutation.
 
 ## Composition policy matrix
 
@@ -46,7 +46,7 @@ Follow this order when building a composite graph:
 4. InvestigativeActions / ProvenanceRecords (forensic narrative)
 5. Upper-ontology enrichment (add_type on same IRI)
 6. External resources (time:Interval, geo:Geometry, org:Membership, prov:Plan)
-7. Cross-links (create_relationship, Relationship, prov:wasDerivedFrom)
+7. Cross-links (`link` for prov:*, `create_relationship` for UCO Relationship)
 8. Investigation.object — wire top-level anchors
 9. Optional PROF metadata (profile intent, not validation result)
 ```
@@ -78,19 +78,25 @@ graph.add_type(person_id, "foaf:Person")
 graph.add_type(person_id, "gufo:Object")
 graph.add_type(person_id, "prov:Agent")
 
-evidence_id = "kb:evidence-1"
-evidence = graph.create(ObservableObject, id=evidence_id, name="...")
-graph.add_type(evidence_id, "prov:Entity")
-graph.add_type(evidence_id, "gufo:FunctionalComplex")
+source_id = "kb:source-1"
+source = graph.create(ObservableObject, id=source_id, name="...")
+graph.add_type(source_id, "prov:Entity")
+graph.add_type(source_id, "gufo:FunctionalComplex")
+
+image_id = "kb:image-1"
+image = graph.create(ObservableObject, id=image_id, name="...")
+graph.add_type(image_id, "prov:Entity")
+graph.add_type(image_id, "gufo:FunctionalComplex")
 
 action_id = "kb:action-1"
 action = graph.create(InvestigativeAction, id=action_id, name="...",
-    performer=person, object=[evidence],
+    performer=person, object=[source], result=[image],
 )
 graph.add_type(action_id, "prov:Activity")
-graph.create_relationship(evidence_id, "prov:wasGeneratedBy", action_id)
+graph.link(image_id, "prov:wasGeneratedBy", action_id)
+graph.link(image_id, "prov:wasDerivedFrom", source_id)
 
-graph.create(Investigation, name="...", object=[evidence, action])
+graph.create(Investigation, name="...", object=[source, image, action])
 graph.write("cross-ontology-composite.jsonld")
 ```
 

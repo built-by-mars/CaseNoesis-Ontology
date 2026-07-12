@@ -14,13 +14,24 @@ T = TypeVar("T")
 
 _builtin_id = id
 
+# Duplicate @id policies — all SDK languages must default to ``reject``.
+# Aliases: ``error`` → ``reject``.
+DUPLICATE_POLICIES = frozenset({
+    "reject",
+    "error",
+    "merge_identical",
+    "merge_compatible",
+    "replace",
+})
+
 
 class DuplicateNodeError(ValueError):
     """Raised when a node with the same @id conflicts with an existing node.
 
-    Default policy is reject-on-conflict. Compatible multi-typing should use
-    :meth:`CASEGraph.add_type` / :meth:`CASEGraph.upsert_node` instead of
-    appending a second top-level object with the same IRI.
+    Default policy is reject-on-conflict (all languages). Compatible
+    multi-typing should use :meth:`CASEGraph.add_type` /
+    :meth:`CASEGraph.upsert_node` instead of appending a second top-level
+    object with the same IRI.
     """
 
     def __init__(self, node_id: str, detail: str = ""):
@@ -92,7 +103,9 @@ class CASEGraph:
         # Compact form and expanded form both index to the same slot.
         self._iri_aliases: dict[str, str] = {}
         self._used_prefix_set: set[str] = set()
-        self.on_duplicate: str = "reject"  # reject | merge_compatible
+        # Default ``reject`` is required cross-language parity (C#/Java/Rust match).
+        # Policies: reject|error, merge_identical, merge_compatible, replace.
+        self.on_duplicate: str = "reject"
 
     def create(self, cls: Type[T], *, id: str | None = None, **kwargs: Any) -> T:
         """Create an instance of a CASE/UCO class and add it to the graph.
@@ -144,8 +157,17 @@ class CASEGraph:
         return self._find_object(node_id) is not None
 
     def get(self, node_id: str) -> dict[str, Any] | None:
-        """Return the JSON-LD dict for a node by compact or expanded ``@id``."""
-        return self._find_object(node_id)
+        """Return a shallow copy of the JSON-LD dict for a node by ``@id``.
+
+        The copy protects the IRI index: mutating ``@id`` on the returned
+        dict does not corrupt graph lookup. Persist changes via
+        :meth:`add_type`, :meth:`add_property`, :meth:`upsert_node`, or
+        :meth:`link`.
+        """
+        obj = self._find_object(node_id)
+        if obj is None:
+            return None
+        return dict(obj)
 
     def upsert_node(
         self,
@@ -316,16 +338,18 @@ class CASEGraph:
         """Load a JSON-LD string, merging context and upserting objects.
 
         Duplicate ``@id`` handling follows ``on_duplicate`` or
-        ``self.on_duplicate`` (default ``reject``). Compatible merges use
-        ``merge_compatible``.
+        ``self.on_duplicate`` (default ``reject`` — all languages). Other
+        policies: ``merge_identical``, ``merge_compatible``, ``replace``
+        (``error`` is an alias for ``reject``).
         """
-        policy = on_duplicate or self.on_duplicate
+        policy = self._normalize_duplicate_policy(on_duplicate or self.on_duplicate)
         doc = json.loads(json_str)
         if "@context" in doc and isinstance(doc["@context"], dict):
             self._merge_context(doc["@context"])
         if "@graph" in doc and isinstance(doc["@graph"], list):
             for raw in doc["@graph"]:
-                self._ingest_raw_node(raw, policy=policy)
+                if isinstance(raw, dict):
+                    self._ingest_raw_node(dict(raw), policy=policy)
 
     def load_file(self, path: str, *, on_duplicate: str | None = None) -> None:
         """Read and load a JSON-LD file into this graph."""
@@ -407,11 +431,13 @@ class CASEGraph:
 
         .. warning::
             Object-count splitting is only safe for independent catalog-style
-            graphs. For investigation graphs use :meth:`partition_by` instead.
+            graphs. For investigation graphs prefer a natural boundary
+            partition (see :meth:`partition_by`) rather than arbitrary chunks.
         """
         warnings.warn(
             "CASEGraph.split() partitions by object count and can break "
-            "investigative relationships; prefer partition_by() for CASE graphs.",
+            "investigative relationships; prefer partition_by() / "
+            "partition_by_label() for CASE graphs (experimental).",
             UserWarning,
             stacklevel=2,
         )
@@ -431,7 +457,16 @@ class CASEGraph:
         shared_ids: set[str] | None = None,
         include_dangling_relationships: bool = True,
     ) -> dict[str, CASEGraph]:
-        """Partition by a natural forensic/security boundary.
+        """Partition by a caller-supplied label (experimental).
+
+        .. warning::
+            **Experimental / not dependency-aware.** This method groups nodes
+            by ``boundary_key`` and heuristically copies cross-partition
+            ``uco-core:Relationship`` endpoints. It does **not** compute a
+            full dependency closure over arbitrary predicates, blank nodes,
+            or nested references. Prefer natural forensic boundaries
+            (per-volume, per-app, per-device) and validate partition completeness
+            yourself. Alias: :meth:`partition_by_label`.
 
         ``boundary_key`` maps each top-level node to a partition name (or
         ``None`` to leave it unassigned until referenced). Shared nodes listed
@@ -459,7 +494,7 @@ class CASEGraph:
                 partitions[key].on_duplicate = "merge_compatible"
             partitions[key]._append_object(dict(obj))
 
-        # Copy shared + cross-partition relationship endpoints.
+        # Copy shared + cross-partition relationship endpoints (heuristic only).
         by_id = {o.get("@id"): o for o in self._objects if o.get("@id")}
         for obj in self._objects:
             types = obj.get("@type", [])
@@ -503,6 +538,20 @@ class CASEGraph:
                     pass
 
         return partitions
+
+    def partition_by_label(
+        self,
+        boundary_key: Callable[[dict[str, Any]], str | None],
+        *,
+        shared_ids: set[str] | None = None,
+        include_dangling_relationships: bool = True,
+    ) -> dict[str, CASEGraph]:
+        """Alias for :meth:`partition_by` (experimental label partitioning)."""
+        return self.partition_by(
+            boundary_key,
+            shared_ids=shared_ids,
+            include_dangling_relationships=include_dangling_relationships,
+        )
 
     @classmethod
     def merge_files(cls, paths: list[str], kb_prefix: str = "http://example.org/kb/") -> CASEGraph:
@@ -590,7 +639,20 @@ class CASEGraph:
                 )
             self._context[prefix] = ns
 
+    @staticmethod
+    def _normalize_duplicate_policy(policy: str) -> str:
+        if policy == "error":
+            policy = "reject"
+        if policy not in ("reject", "merge_identical", "merge_compatible", "replace"):
+            raise ValueError(
+                f"Unknown duplicate policy: {policy!r}. "
+                f"Expected one of: reject, merge_identical, merge_compatible, replace "
+                f"(error is an alias for reject)"
+            )
+        return policy
+
     def _ingest_raw_node(self, raw: dict[str, Any], *, policy: str) -> None:
+        policy = self._normalize_duplicate_policy(policy)
         node_id = raw.get("@id")
         if not node_id:
             self._objects.append(raw)
@@ -602,6 +664,17 @@ class CASEGraph:
             return
         if policy == "reject":
             raise DuplicateNodeError(node_id, "conflicting duplicate during load")
+        if policy == "replace":
+            preserved_id = existing.get("@id", node_id)
+            existing.clear()
+            existing.update(raw)
+            existing["@id"] = preserved_id
+            self._track_prefixes_for(existing)
+            return
+        if policy == "merge_identical":
+            self._merge_identical_node(existing, raw, node_id)
+            self._track_prefixes_for(raw)
+            return
         if policy == "merge_compatible":
             if "@type" in raw:
                 existing["@type"] = self._normalize_type_value(
@@ -610,10 +683,67 @@ class CASEGraph:
             for key, value in raw.items():
                 if key in ("@id", "@type"):
                     continue
-                self._set_property(existing, key, value)
+                self._merge_compatible_property(existing, key, value, node_id)
             self._track_prefixes_for(raw)
             return
         raise ValueError(f"Unknown duplicate policy: {policy!r}")
+
+    def _merge_identical_node(
+        self, existing: dict[str, Any], raw: dict[str, Any], node_id: str
+    ) -> None:
+        for key, value in raw.items():
+            if key == "@id":
+                continue
+            if key not in existing:
+                existing[key] = value
+                continue
+            if not _jsonld_values_equal(existing[key], value):
+                raise DuplicateNodeError(
+                    node_id,
+                    f"merge_identical conflict on {key!r}: "
+                    f"existing={existing[key]!r} incoming={value!r}",
+                )
+
+    def _merge_compatible_property(
+        self, obj: dict[str, Any], key: str, value: Any, node_id: str
+    ) -> None:
+        if key not in obj:
+            obj[key] = value
+            return
+        existing = obj[key]
+        if _jsonld_values_equal(existing, value):
+            return
+        # List-like accumulation when at least one side is already multi-valued.
+        if isinstance(existing, list):
+            self._accumulate_list_value(existing, value)
+            return
+        if isinstance(value, list):
+            merged = [existing]
+            self._accumulate_list_value(merged, value)
+            obj[key] = merged
+            return
+        if isinstance(existing, dict) and isinstance(value, dict):
+            if existing.get("@id") and existing.get("@id") == value.get("@id"):
+                return
+        raise DuplicateNodeError(
+            node_id,
+            f"merge_compatible scalar conflict on {key!r}: "
+            f"existing={existing!r} incoming={value!r}",
+        )
+
+    @staticmethod
+    def _accumulate_list_value(existing: list[Any], value: Any) -> None:
+        items = value if isinstance(value, list) else [value]
+        for item in items:
+            if item in existing:
+                continue
+            if isinstance(item, dict) and "@id" in item:
+                if any(
+                    isinstance(x, dict) and x.get("@id") == item["@id"]
+                    for x in existing
+                ):
+                    continue
+            existing.append(item)
 
     def _track_prefixes_for(self, node: Any) -> None:
         self._collect_prefixes(node, set(self._context.keys()), self._used_prefix_set)
@@ -799,19 +929,25 @@ class CASEGraph:
         *,
         extra_classes: list[type] | None = None,
         kb_prefix: str = "http://example.org/kb/",
+        on_duplicate: str | None = None,
     ) -> tuple[CASEGraph, list[Any]]:
         """Deserialize a JSON-LD string into typed Python objects.
 
         Returns a tuple of (CASEGraph, list_of_typed_objects). Each object in
         the ``@graph`` array is matched to a generated Python class by its
-        ``@type`` IRI.  Objects whose type cannot be resolved are returned as
-        plain dicts and still added to the graph.
+        ``@type`` IRI(s).  Objects whose type cannot be resolved (or whose
+        multi-type set is ambiguous) are returned as plain dicts and still
+        added to the graph via the IRI index.
+
+        Duplicate ``@id`` handling defaults to ``reject`` (same as
+        :meth:`load` / other languages).
 
         Args:
             json_str: A JSON-LD string containing ``@context`` and ``@graph``.
             extra_classes: Additional classes (e.g. extension dataclasses)
                 to include in the type registry alongside the built-in ones.
             kb_prefix: Knowledge-base prefix for the returned graph.
+            on_duplicate: Duplicate policy (default ``reject``).
         """
         iri_to_class = _build_class_registry(extra_classes)
 
@@ -819,19 +955,36 @@ class CASEGraph:
         context = doc.get("@context", {})
         graph_items = doc.get("@graph", [])
 
-        graph = cls(kb_prefix=kb_prefix, extra_context=context if isinstance(context, dict) else None)
+        graph = cls(kb_prefix=kb_prefix)
+        if isinstance(context, dict):
+            graph._merge_context(context)
+
+        policy = graph._normalize_duplicate_policy(
+            on_duplicate or graph.on_duplicate
+        )
+        ctx = context if isinstance(context, dict) else {}
 
         typed_objects: list[Any] = []
         for raw in graph_items:
-            obj = _rehydrate(raw, iri_to_class, context if isinstance(context, dict) else {})
+            if not isinstance(raw, dict):
+                continue
+            node = dict(raw)
+            if isinstance(node.get("@type"), list):
+                node["@type"] = list(node["@type"])
+            graph._ingest_raw_node(node, policy=policy)
+            # Rehydrate from the indexed node so multi-type @type is preserved.
+            source = node
+            node_id = node.get("@id")
+            if node_id:
+                stored = graph._find_object(node_id)
+                if stored is not None:
+                    source = stored
+            obj = _rehydrate(source, iri_to_class, ctx)
             typed_objects.append(obj)
 
             if is_dataclass(obj) and not isinstance(obj, type):
-                obj_id = raw.get("@id", graph._mint_id(obj))
+                obj_id = source.get("@id", graph._mint_id(obj))
                 graph._id_map[_builtin_id(obj)] = obj_id
-                graph._objects.append(raw)
-            else:
-                graph._objects.append(raw)
 
         return graph, typed_objects
 
@@ -963,18 +1116,58 @@ def _expand_iri(compact: str, context: dict[str, str]) -> str:
     return compact
 
 
+def _jsonld_values_equal(a: Any, b: Any) -> bool:
+    """Equality for JSON-LD property values (order-sensitive for lists)."""
+    return a == b
+
+
+def _select_most_specific_class(classes: list[type]) -> type | None:
+    """Pick the unique deepest subclass among registered matches, if any."""
+    if not classes:
+        return None
+    if len(classes) == 1:
+        return classes[0]
+    # Keep classes that are not a superclass of another match.
+    specific = [
+        c
+        for c in classes
+        if not any(o is not c and issubclass(o, c) for o in classes)
+    ]
+    if len(specific) == 1:
+        return specific[0]
+    return None
+
+
 def _rehydrate(
     raw: dict[str, Any],
     iri_to_class: dict[str, type],
     context: dict[str, str],
 ) -> Any:
-    """Convert a JSON-LD dict back to a typed Python dataclass instance."""
+    """Convert a JSON-LD dict back to a typed Python dataclass instance.
+
+    When ``@type`` is a list, every type is expanded and matched against the
+    registry. The most specific unambiguous registered domain class is chosen
+    (deepest subclass when determinable; sole registered match otherwise).
+    If multiple incomparable registered classes match, returns the raw dict.
+    All ``@type`` values remain on the graph node unchanged.
+    """
     type_value = raw.get("@type")
     if not type_value:
         return raw
 
-    type_iri = _expand_iri(type_value, context)
-    cls = iri_to_class.get(type_iri)
+    type_list = type_value if isinstance(type_value, list) else [type_value]
+    matched: list[type] = []
+    seen: set[type] = set()
+    for type_token in type_list:
+        if not isinstance(type_token, str):
+            continue
+        type_iri = _expand_iri(type_token, context)
+        cls = iri_to_class.get(type_iri)
+        if cls is not None and cls not in seen:
+            matched.append(cls)
+            seen.add(cls)
+
+    cls = _select_most_specific_class(matched)
     if cls is None:
         return raw
 

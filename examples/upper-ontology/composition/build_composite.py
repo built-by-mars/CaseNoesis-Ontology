@@ -8,9 +8,15 @@ from pathlib import Path
 
 from case_uco import CASEGraph
 from case_uco.case.investigation import Investigation, InvestigativeAction, ProvenanceRecord
-from case_uco.uco.identity import Identity, Person
+from case_uco.uco.identity import Organization, Person
 from case_uco.uco.location import Location, LatLongCoordinatesFacet
-from case_uco.uco.observable import ContentDataFacet, ObservableObject, FileFacet
+from case_uco.uco.observable import (
+    ContentDataFacet,
+    DeviceFacet,
+    FileFacet,
+    MobileDeviceFacet,
+    ObservableObject,
+)
 from case_uco.uco.tool import Tool
 from case_uco.uco.types import Hash
 
@@ -25,6 +31,7 @@ EXTRA_CONTEXT = {
     "sf": "http://www.opengis.net/ont/sf#",
     "foaf": "http://xmlns.com/foaf/0.1/",
     "org": "http://www.w3.org/ns/org#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
 }
 
@@ -34,8 +41,15 @@ def build() -> CASEGraph:
     graph = CASEGraph(extra_context=EXTRA_CONTEXT)
     tz = timezone.utc
 
+    role_id = "kb:role-examiner"
+    graph.upsert_node(
+        role_id,
+        types=["org:Role", "skos:Concept"],
+        properties={"skos:prefLabel": "Mobile forensic examiner"},
+    )
+
     org_id = "kb:taskforce"
-    org = graph.create(Identity, id=org_id, name="Metro ICAC Task Force (synthetic)")
+    org = graph.create(Organization, id=org_id, name="Metro ICAC Task Force (synthetic)")
     graph.add_type(org_id, "org:Organization")
     graph.add_type(org_id, "foaf:Organization")
 
@@ -45,6 +59,18 @@ def build() -> CASEGraph:
     graph.add_type(person_id, "gufo:Object")
     graph.add_type(person_id, "prov:Agent")
 
+    membership_id = "kb:membership-1"
+    graph.upsert_node(
+        membership_id,
+        types="org:Membership",
+        properties={
+            "org:member": {"@id": person_id},
+            "org:organization": {"@id": org_id},
+            "org:role": {"@id": role_id},
+        },
+    )
+    graph.add_property(org_id, "org:hasMembership", {"@id": membership_id})
+
     site_id = "kb:seizure-site"
     site = graph.create(
         Location,
@@ -53,6 +79,7 @@ def build() -> CASEGraph:
         has_facet=[LatLongCoordinatesFacet(latitude=39.7817, longitude=-89.6501)],
     )
     graph.add_type(site_id, "geo:Feature")
+    graph.add_type(site_id, "gufo:Object")
     geom_id = "kb:site-point"
     graph.upsert_node(
         geom_id,
@@ -63,23 +90,38 @@ def build() -> CASEGraph:
     )
     graph.add_property(site_id, "geo:hasGeometry", {"@id": geom_id})
 
-    evidence_id = "kb:evidence-phone"
-    evidence = graph.create(
+    source_id = "kb:source-phone"
+    source = graph.create(
         ObservableObject,
-        id=evidence_id,
-        name="Seized mobile device image (synthetic)",
+        id=source_id,
+        name="Seized mobile device (source storage, synthetic)",
+        has_facet=[
+            DeviceFacet(device_type="mobile phone", model="Synthetic Phone X", serial_number="SYN-PHONE-001"),
+            MobileDeviceFacet(imei=["990000862471854"], storage_capacity_in_bytes=128_000_000_000),
+        ],
+    )
+    graph.add_type(source_id, "prov:Entity")
+    graph.add_type(source_id, "gufo:FunctionalComplex")
+
+    image_id = "kb:evidence-phone-image"
+    image = graph.create(
+        ObservableObject,
+        id=image_id,
+        name="Mobile device forensic image (acquisition result, synthetic)",
         has_facet=[
             FileFacet(file_name="phone.ufd", size_in_bytes=64_000_000_000),
             ContentDataFacet(hash=[Hash(hash_method="SHA256", hash_value="b" * 64)]),
         ],
     )
-    graph.add_type(evidence_id, "prov:Entity")
-    graph.add_type(evidence_id, "gufo:FunctionalComplex")
+    graph.add_type(image_id, "prov:Entity")
+    graph.add_type(image_id, "gufo:FunctionalComplex")
 
     tool_id = "kb:imager"
     tool = graph.create(Tool, id=tool_id, name="Mobile imager", version="5.2")
     graph.add_type(tool_id, "prov:Entity")
 
+    # Acquisition chain: source device → InvestigativeAction → forensic image
+    # (never reuse the same ObservableObject as both input and generated result).
     action_id = "kb:action-acquire"
     action = graph.create(
         InvestigativeAction,
@@ -88,13 +130,17 @@ def build() -> CASEGraph:
         start_time=datetime(2026, 3, 15, 10, 0, tzinfo=tz),
         end_time=datetime(2026, 3, 15, 11, 30, tzinfo=tz),
         performer=person,
-        object=[evidence],
+        object=[source],
+        result=[image],
         instrument=[tool],
         location=[site],
     )
     graph.add_type(action_id, "prov:Activity")
     graph.add_type(action_id, "gufo:Event")
-    graph.link(evidence_id, "prov:wasGeneratedBy", action_id)
+    graph.link(image_id, "prov:wasGeneratedBy", action_id)
+    graph.link(image_id, "prov:wasDerivedFrom", source_id)
+    graph.link(action_id, "prov:used", tool_id)
+    graph.link(action_id, "prov:wasAssociatedWith", person_id)
 
     interval_id = "kb:interval-custody"
     graph.upsert_node(
@@ -125,13 +171,13 @@ def build() -> CASEGraph:
             },
         },
     )
-    graph.add_property(evidence_id, "time:hasTime", {"@id": interval_id})
+    graph.add_property(image_id, "time:hasTime", {"@id": interval_id})
 
     provenance = graph.create(
         ProvenanceRecord,
         name="Exhibit 1 provenance",
         exhibit_number="EX-001",
-        object=[evidence, action],
+        object=[source, image, action],
     )
 
     graph.create(
@@ -139,9 +185,10 @@ def build() -> CASEGraph:
         name="Synthetic composite case 2026-COMP-001",
         description=[
             "Cross-ontology composition: gUFO + PROV-O + OWL-Time + GeoSPARQL + FOAF/ORG on one graph.",
+            "Acquisition chain: source device/storage → acquisition activity → forensic image (distinct IRIs).",
             "BFO deliberately omitted — never combine BFO and gUFO on the same graph.",
         ],
-        object=[evidence, provenance, org],
+        object=[source, image, provenance, org],
     )
     return graph
 

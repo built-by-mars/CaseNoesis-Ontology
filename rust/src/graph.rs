@@ -50,6 +50,8 @@ impl std::error::Error for GraphError {}
 pub enum LoadError {
     Json(serde_json::Error),
     Duplicate(DuplicateNodeError),
+    Context(String),
+    Merge(String),
 }
 
 impl std::fmt::Display for LoadError {
@@ -57,6 +59,8 @@ impl std::fmt::Display for LoadError {
         match self {
             LoadError::Json(e) => write!(f, "{e}"),
             LoadError::Duplicate(e) => write!(f, "{e}"),
+            LoadError::Context(msg) => write!(f, "{msg}"),
+            LoadError::Merge(msg) => write!(f, "{msg}"),
         }
     }
 }
@@ -66,6 +70,7 @@ impl std::error::Error for LoadError {
         match self {
             LoadError::Json(e) => Some(e),
             LoadError::Duplicate(e) => Some(e),
+            LoadError::Context(_) | LoadError::Merge(_) => None,
         }
     }
 }
@@ -101,12 +106,13 @@ impl CaseGraph {
             context,
             objects: Vec::new(),
             iri_index: HashMap::new(),
-            reject_duplicates: false,
+            // Default reject matches Python on_duplicate="reject" / other languages.
+            reject_duplicates: true,
         }
     }
 
     /// When true, [`load`](Self::load) raises on duplicate `@id` instead of merging.
-    /// Default is false (merge-compatible) for backward compatibility with merge workflows.
+    /// Default is `true` (reject) for cross-language parity with Python.
     pub fn reject_duplicates(&self) -> bool {
         self.reject_duplicates
     }
@@ -185,6 +191,10 @@ impl CaseGraph {
     }
 
     /// Return the JSON-LD object for a node by compact or expanded `@id`.
+    ///
+    /// Returns an immutable borrow. There is no `get_mut`; mutating `@id` through
+    /// interior mutation is unsupported — use [`add_type`](Self::add_type) /
+    /// [`add_property`](Self::add_property) / [`upsert_node`](Self::upsert_node).
     pub fn get(&self, node_id: &str) -> Option<&Map<String, Value>> {
         self.find_object_index(node_id)
             .and_then(|idx| self.objects[idx].as_object())
@@ -205,7 +215,7 @@ impl CaseGraph {
             }
             if let Some(props) = properties {
                 for (key, value) in props {
-                    set_property(obj, &key, value);
+                    set_property(obj, &key, value).map_err(GraphError::InvalidArgument)?;
                 }
             }
             return Ok(self.objects[idx].as_object_mut().unwrap());
@@ -218,7 +228,7 @@ impl CaseGraph {
         }
         if let Some(props) = properties {
             for (key, value) in props {
-                set_property(&mut obj, &key, value);
+                set_property(&mut obj, &key, value).map_err(GraphError::InvalidArgument)?;
             }
         }
         self.append_object(Value::Object(obj)).map_err(GraphError::Duplicate)?;
@@ -252,7 +262,7 @@ impl CaseGraph {
             .find_object_index(node_id)
             .ok_or_else(|| GraphError::NotFound(node_id.to_string()))?;
         let obj = self.objects[idx].as_object_mut().unwrap();
-        set_property(obj, key, value);
+        set_property(obj, key, value).map_err(GraphError::InvalidArgument)?;
         Ok(())
     }
 
@@ -346,19 +356,30 @@ impl CaseGraph {
         let doc: Value = serde_json::from_str(json).map_err(LoadError::Json)?;
         if let Some(ctx) = doc.get("@context") {
             if let Some(ctx_map) = ctx.as_object() {
-                for (k, v) in ctx_map {
-                    if let Some(s) = v.as_str() {
-                        self.context.insert(k.clone(), s.to_string());
-                    }
-                }
+                self.merge_context(ctx_map)?;
             }
         }
         if let Some(graph) = doc.get("@graph") {
             if let Some(arr) = graph.as_array() {
                 for obj in arr {
-                    self.ingest_raw_node(obj.clone())
-                        .map_err(LoadError::Duplicate)?;
+                    self.ingest_raw_node(obj.clone())?;
                 }
+            }
+        }
+        Ok(())
+    }
+
+    fn merge_context(&mut self, incoming: &Map<String, Value>) -> Result<(), LoadError> {
+        for (k, v) in incoming {
+            if let Some(s) = v.as_str() {
+                if let Some(existing) = self.context.get(k) {
+                    if existing != s {
+                        return Err(LoadError::Context(format!(
+                            "Context prefix collision for '{k}': existing '{existing}' vs incoming '{s}'"
+                        )));
+                    }
+                }
+                self.context.insert(k.clone(), s.to_string());
             }
         }
         Ok(())
@@ -374,8 +395,9 @@ impl CaseGraph {
     /// Parse a JSON-LD string and return the graph with its objects.
     ///
     /// Since Rust lacks runtime reflection, objects are returned as raw
-    /// `serde_json::Value` items rather than typed structs. Consumers can
-    /// match on `@type` fields manually to downcast.
+    /// `serde_json::Value` items rather than typed structs. Multi-type `@type`
+    /// arrays are preserved on graph nodes. Consumers can match on `@type`
+    /// fields manually to downcast.
     pub fn from_jsonld(json: &str) -> Result<(CaseGraph, Vec<Value>), String> {
         let doc: Value =
             serde_json::from_str(json).map_err(|e| format!("Failed to parse JSON: {e}"))?;
@@ -383,19 +405,17 @@ impl CaseGraph {
         let mut graph = CaseGraph::new("http://example.org/kb/");
 
         if let Some(ctx) = doc.get("@context").and_then(|c| c.as_object()) {
-            for (k, v) in ctx {
-                if let Some(s) = v.as_str() {
-                    graph.context.insert(k.clone(), s.to_string());
-                }
-            }
+            graph
+                .merge_context(ctx)
+                .map_err(|e| e.to_string())?;
         }
 
         let mut objects = Vec::new();
         if let Some(arr) = doc.get("@graph").and_then(|g| g.as_array()) {
             for obj in arr {
                 graph
-                    .append_object(obj.clone())
-                    .unwrap_or_else(|e| panic!("failed to index parsed object: {e}"));
+                    .ingest_raw_node(obj.clone())
+                    .map_err(|e| e.to_string())?;
                 objects.push(obj.clone());
             }
         }
@@ -556,7 +576,7 @@ impl CaseGraph {
         None
     }
 
-    fn ingest_raw_node(&mut self, raw: Value) -> Result<(), DuplicateNodeError> {
+    fn ingest_raw_node(&mut self, raw: Value) -> Result<(), LoadError> {
         let node_id = raw
             .as_object()
             .and_then(|map| map.get("@id"))
@@ -570,10 +590,10 @@ impl CaseGraph {
 
         if let Some(idx) = self.find_object_index(&node_id) {
             if self.reject_duplicates {
-                return Err(DuplicateNodeError {
+                return Err(LoadError::Duplicate(DuplicateNodeError {
                     node_id,
                     detail: "conflicting duplicate during load".into(),
-                });
+                }));
             }
 
             let existing = self.objects[idx].as_object_mut().unwrap();
@@ -586,13 +606,13 @@ impl CaseGraph {
                     if key == "@id" || key == "@type" {
                         continue;
                     }
-                    set_property(existing, key, value.clone());
+                    set_property(existing, key, value.clone()).map_err(LoadError::Merge)?;
                 }
             }
             return Ok(());
         }
 
-        self.append_object(raw)
+        self.append_object(raw).map_err(LoadError::Duplicate)
     }
 
     fn deterministic_relationship_id(&self, source_id: &str, target_id: &str, kind: &str) -> String {
@@ -690,17 +710,18 @@ fn merge_types(existing: Option<&Value>, new_types: Option<Value>) -> Value {
     }
 }
 
-fn set_property(obj: &mut Map<String, Value>, key: &str, value: Value) {
+fn set_property(obj: &mut Map<String, Value>, key: &str, value: Value) -> Result<(), String> {
     use serde_json::map::Entry;
 
     match obj.entry(key.to_string()) {
         Entry::Vacant(entry) => {
             entry.insert(value);
+            Ok(())
         }
         Entry::Occupied(mut entry) => {
             let existing = entry.get().clone();
             if existing == value {
-                return;
+                return Ok(());
             }
 
             if let Value::Array(mut list) = existing {
@@ -711,14 +732,14 @@ fn set_property(obj: &mut Map<String, Value>, key: &str, value: Value) {
                             .map(|id| id == ref_id)
                             .unwrap_or(false)
                     }) {
-                        return;
+                        return Ok(());
                     }
                 }
                 if !list.iter().any(|item| item == &value) {
                     list.push(value);
                 }
                 entry.insert(Value::Array(list));
-                return;
+                return Ok(());
             }
 
             if let (Some(existing_id), Some(value_id)) = (
@@ -726,11 +747,13 @@ fn set_property(obj: &mut Map<String, Value>, key: &str, value: Value) {
                 value.get("@id").and_then(|v| v.as_str()),
             ) {
                 if existing_id == value_id {
-                    return;
+                    return Ok(());
                 }
             }
 
-            entry.insert(Value::Array(vec![existing, value]));
+            Err(format!(
+                "merge_compatible scalar conflict on '{key}': existing and incoming values differ"
+            ))
         }
     }
 }

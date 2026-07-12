@@ -10,11 +10,11 @@
     },
     "@graph": [
         {
-            "@id": "kb:ObservableObject-f2204026-dc27-47c3-81ed-e996e2af8bc3",
+            "@id": "kb:ObservableObject-0b1c40cb-f934-4d7a-8079-bacc61276139",
             "@type": "uco-observable:ObservableObject",
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:FileFacet-a25e6282-91bd-4994-a176-e7e16ce8ae53",
+                    "@id": "kb:FileFacet-de9e166b-592c-4912-a8ff-6efa274a7e66",
                     "@type": "uco-observable:FileFacet",
                     "uco-observable:fileName": "messages.json",
                     "uco-observable:sizeInBytes": {
@@ -38,7 +38,7 @@
             },
             "uco-action:object": [
                 {
-                    "@id": "kb:ObservableObject-f2204026-dc27-47c3-81ed-e996e2af8bc3"
+                    "@id": "kb:ObservableObject-0b1c40cb-f934-4d7a-8079-bacc61276139"
                 }
             ],
             "uco-action:startTime": {
@@ -91,7 +91,7 @@
             }
         },
         {
-            "@id": "kb:Investigation-81257980-602c-4937-94f2-e19f123321b6",
+            "@id": "kb:Investigation-f212659f-0487-4f9a-b838-7f88d224295a",
             "@type": "case-investigation:Investigation",
             "uco-core:description": [
                 "Native Action timestamps plus OWL-Time Interval/Instant resources.",
@@ -100,7 +100,7 @@
             "uco-core:name": "Synthetic case 2026-TIME-001",
             "uco-core:object": [
                 {
-                    "@id": "kb:ObservableObject-f2204026-dc27-47c3-81ed-e996e2af8bc3"
+                    "@id": "kb:ObservableObject-0b1c40cb-f934-4d7a-8079-bacc61276139"
                 },
                 {
                     "@id": "kb:action-parse"

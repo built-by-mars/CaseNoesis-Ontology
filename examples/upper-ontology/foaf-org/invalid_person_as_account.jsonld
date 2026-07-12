@@ -1,0 +1,30 @@
+{
+    "@context": {
+        "kb": "http://example.org/kb/",
+        "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+        "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+        "foaf": "http://xmlns.com/foaf/0.1/",
+        "org": "http://www.w3.org/ns/org#"
+    },
+    "@graph": [
+        {
+            "@id": "kb:membership-bad-role",
+            "@type": "org:Membership",
+            "org:member": {"@id": "kb:person-1"},
+            "org:organization": {"@id": "kb:org-1"},
+            "org:role": "Digital forensic examiner",
+            "_comment": "ANTI-PATTERN: org:role must be {\"@id\": \"...\"} referencing an org:Role node, not a string literal."
+        },
+        {
+            "@id": "kb:account-mistake",
+            "@type": [
+                "uco-identity:Person",
+                "foaf:Person",
+                "foaf:OnlineAccount"
+            ],
+            "uco-core:name": "Signal +15551234567 (synthetic)",
+            "foaf:accountName": "+15551234567",
+            "_comment": "ANTI-PATTERN: a platform account must not be typed as foaf:Person. Use ObservableObject + AccountFacet + foaf:OnlineAccount on the account IRI."
+        }
+    ]
+}

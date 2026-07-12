@@ -31,6 +31,10 @@ from cac_content_router import (
 
 MIN_FAMILY_SCORE = 2
 
+# Primary composition recipe for multi-domain / cross-ontology graphs (#66).
+# Prefer this over the legacy cross-domain-extensions.md redirect stub.
+COMPOSITION_RECIPE = "docs/recipes/cross-ontology-composition.md"
+
 # CAC domain families that are specific to child exploitation. The other CAC
 # router domains (federal prosecution, PACER ingestion, task force, ...) match
 # generic legal/investigative text and must not imply CAC by themselves.
@@ -60,7 +64,7 @@ def _cac_specific_signals(text: str) -> list[dict[str, Any]]:
     if not generic_hit and child_tokens < 2:
         return []
     if generic_hit:
-        return detect_cac_domains(text) or [{"domain_id": "cac-general", "score": 1, "recipe_file": "docs/recipes/cross-domain-extensions.md"}]
+        return detect_cac_domains(text) or [{"domain_id": "cac-general", "score": 1, "recipe_file": COMPOSITION_RECIPE}]
     return [d for d in detect_cac_domains(text) if d["domain_id"] in CAC_SPECIFIC_DOMAIN_IDS]
 
 
@@ -600,6 +604,69 @@ UPPER_PROFILE_HINTS = {
     "FOAF": "social-network and account-holder structures (foaf:knows, foaf:account)",
     "ORG": "organizational structure (org:Organization, org:memberOf, org:reportsTo)",
     "BFO": "Basic Formal Ontology alignment for formal upper-level typing",
+    "PROF": "validation-profile metadata (prof:Profile) — intent and resource descriptors, not SHACL results",
+}
+
+# Display names used on InvestigationFamily.upper_profiles → validation_bundle IDs.
+PROFILE_DISPLAY_TO_ID: dict[str, str] = {
+    "BFO": "bfo",
+    "gUFO": "gufo",
+    "PROV-O": "prov-o",
+    "OWL-Time": "time",
+    "GeoSPARQL": "geosparql",
+    "FOAF": "foaf",
+    "ORG": "org",
+    "PROF": "prof",
+}
+
+# Extension → profile policy from docs/recipes/cross-ontology-composition.md.
+EXTENSION_PROFILE_POLICY: dict[str, dict[str, tuple[str, ...]]] = {
+    "cac": {
+        "recommended": ("gufo", "prov-o", "time", "foaf", "org"),
+        "optional": ("geosparql", "prof"),
+        "not_recommended": ("bfo",),
+    },
+    "aeo": {
+        "recommended": ("prov-o", "time", "foaf"),
+        "optional": ("gufo", "org", "geosparql", "prof"),
+        "not_recommended": (),
+    },
+    "solveit": {
+        "recommended": ("prov-o", "gufo"),
+        "optional": ("time", "foaf", "org", "prof"),
+        "not_recommended": (),
+    },
+    "legalproc": {
+        "recommended": ("prov-o", "org", "gufo"),
+        "optional": ("time", "foaf", "prof"),
+        "not_recommended": (),
+    },
+    "rico": {
+        "recommended": ("prov-o", "org", "gufo"),
+        "optional": ("time", "foaf", "prof"),
+        "not_recommended": (),
+    },
+    "cryptoinv": {
+        "recommended": ("prov-o", "time", "geosparql"),
+        "optional": ("foaf", "org", "gufo", "prof"),
+        "not_recommended": (),
+    },
+    "weapons": {
+        "recommended": ("prov-o", "time"),
+        "optional": ("geosparql", "foaf", "gufo", "prof"),
+        "not_recommended": (),
+    },
+    "drugs": {
+        "recommended": ("prov-o", "time"),
+        "optional": ("geosparql", "foaf", "gufo", "prof"),
+        "not_recommended": (),
+    },
+}
+
+_CORE_FORENSIC_PROFILES = {
+    "recommended": ("prov-o", "time", "geosparql", "foaf"),
+    "optional": ("org", "gufo", "prof"),
+    "not_recommended": (),
 }
 
 
@@ -774,7 +841,7 @@ def build_extension_gap_guidance() -> dict[str, Any]:
             + "find_classes_for_domain(task) across scope='all' (core + extensions).",
             "2. Check upper ontologies: get_uco_profiles(query) — terms from "
             + "profiled ontologies (BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, "
-            + "FOAF, ORG) pass strict validation directly.",
+            + "FOAF, ORG, PROF) pass strict validation directly.",
             "3. Model what fits with core CASE/UCO: most evidence reduces to "
             + "ObservableObject+Facets, Actions, Identities, Roles, and "
             + "Relationships even in novel domains.",
@@ -785,8 +852,8 @@ def build_extension_gap_guidance() -> dict[str, Any]:
             + "(docs/recipes/extensions.md): OWL + SHACL files subclassing "
             + "UCO/CASE classes, a manifest.json, and dcterms:source links to "
             + "the filed proposals. Pattern to copy: extensions/legalproc/.",
-            "6. Validate with validate_graph(graph_path, extensions=[...]) "
-            + "until Conforms: True with zero undeclared concepts.",
+            "6. Validate with validate_graph(graph_path, extensions=[...], "
+            + "profiles=[...]) until Conforms: True with zero undeclared concepts.",
             "7. Once the graph validates, capture the pattern as a new "
             + "recipe — or fold it into the nearest existing recipe — per "
             + "docs/recipes/recipe-authoring.md, and register/refresh the "
@@ -797,9 +864,184 @@ def build_extension_gap_guidance() -> dict[str, Any]:
         "recipes": [
             "docs/recipes/extensions.md",
             "docs/recipes/change-proposal.md",
-            "docs/recipes/cross-domain-extensions.md",
+            COMPOSITION_RECIPE,
             "docs/recipes/recipe-authoring.md",
         ],
+    }
+
+
+def _profile_ids_from_display(names: list[str] | tuple[str, ...]) -> list[str]:
+    ids: list[str] = []
+    seen: set[str] = set()
+    for name in names:
+        pid = PROFILE_DISPLAY_TO_ID.get(name, name.lower().replace("_", "-"))
+        if pid not in seen:
+            seen.add(pid)
+            ids.append(pid)
+    return ids
+
+
+def build_ordered_recommendations(
+    matches: list[dict[str, Any]],
+    installed: dict[str, dict[str, Any]],
+    *,
+    project_root: Path | None = None,
+) -> dict[str, Any]:
+    """Ordered composition guidance for multi-domain / cross-ontology routing (#66)."""
+
+    gap = build_extension_gap_guidance()
+    if not matches:
+        return {
+            "primary_composition_recipe": None,
+            "supporting_domain_recipes": [],
+            "required_extensions": [],
+            "recommended_profiles": [],
+            "optional_profiles": [],
+            "not_recommended_profiles": [],
+            "validation_bundle_preview": None,
+            "compatibility_warnings": [
+                "No investigation family matched — follow ontology_gap_workflow "
+                "before inventing terms."
+            ],
+            "ontology_gap_workflow": gap,
+        }
+
+    required_extensions = sorted({
+        ext for m in matches for ext in m.get("extensions", [])
+    })
+    supporting: list[str] = []
+    seen_recipes: set[str] = set()
+    for m in matches:
+        for recipe in m.get("recipes", []):
+            if recipe == COMPOSITION_RECIPE or recipe in seen_recipes:
+                continue
+            seen_recipes.add(recipe)
+            supporting.append(recipe)
+
+    multi_domain = len(matches) > 1
+    family_profiles = [
+        p for m in matches for p in m.get("upper_profiles", [])
+    ]
+    needs_composition = (
+        multi_domain
+        or bool(family_profiles)
+        or len(required_extensions) > 1
+    )
+    primary = COMPOSITION_RECIPE if needs_composition else (
+        supporting[0] if supporting else COMPOSITION_RECIPE
+    )
+    if primary in supporting:
+        supporting = [r for r in supporting if r != primary]
+
+    recommended: list[str] = []
+    optional: list[str] = []
+    not_recommended: list[str] = []
+    seen_rec: set[str] = set()
+    seen_opt: set[str] = set()
+    seen_not: set[str] = set()
+
+    def _add(target: list[str], seen: set[str], pid: str) -> None:
+        if pid not in seen:
+            seen.add(pid)
+            target.append(pid)
+
+    for pid in _profile_ids_from_display(family_profiles):
+        _add(recommended, seen_rec, pid)
+
+    policies = [
+        EXTENSION_PROFILE_POLICY[ext]
+        for ext in required_extensions
+        if ext in EXTENSION_PROFILE_POLICY
+    ]
+    if not policies and not family_profiles:
+        policies = [_CORE_FORENSIC_PROFILES]
+
+    for policy in policies:
+        for pid in policy.get("recommended", ()):
+            _add(recommended, seen_rec, pid)
+        for pid in policy.get("optional", ()):
+            _add(optional, seen_opt, pid)
+        for pid in policy.get("not_recommended", ()):
+            _add(not_recommended, seen_not, pid)
+
+    # Optional profiles must not duplicate recommended/not_recommended.
+    optional = [
+        p for p in optional
+        if p not in seen_rec and p not in seen_not
+    ]
+
+    warnings: list[str] = []
+    if multi_domain:
+        titles = ", ".join(m["title"] for m in matches)
+        warnings.append(
+            f"Multiple families matched ({titles}): build ONE investigation "
+            f"graph composing every matched family's recipes — see {COMPOSITION_RECIPE}."
+        )
+    if "cac" in required_extensions and "bfo" in recommended:
+        recommended = [p for p in recommended if p != "bfo"]
+        _add(not_recommended, seen_not, "bfo")
+        warnings.append(
+            "CAC is aligned with gUFO; BFO is not recommended on the same graph."
+        )
+    if "bfo" in recommended and "gufo" in recommended:
+        # Prefer gUFO when both appear; keep BFO as not_recommended.
+        recommended = [p for p in recommended if p != "bfo"]
+        _add(not_recommended, seen_not, "bfo")
+        warnings.append(
+            "BFO and gUFO are mutually exclusive foundational profiles — "
+            "select one (gUFO preferred when CAC or gUFO family hints are present)."
+        )
+    missing_ext = [e for e in required_extensions if e not in installed]
+    if missing_ext:
+        warnings.append(
+            "Required extensions not found as installed operational packages: "
+            + ", ".join(missing_ext)
+        )
+
+    preview: dict[str, Any] | None = None
+    try:
+        from validation_bundle import resolve_validation_bundle
+
+        root = project_root or Path(__file__).resolve().parents[1]
+        # Preview recommended profiles only (optional stay advisory).
+        bundle = resolve_validation_bundle(
+            extensions=required_extensions or None,
+            profiles=recommended or None,
+            project_root=root,
+        )
+        preview = {
+            "extensions": list(bundle.extensions),
+            "profiles": list(bundle.profiles),
+            "inference": bundle.inference,
+            "compatibility_notes": list(bundle.compatibility_notes),
+            "fingerprint": bundle.fingerprint,
+            "resource_count": len(bundle.resources),
+            "resources": [
+                {"role": r.role, "path": r.path, "profile_id": r.profile_id, "extension": r.extension}
+                for r in bundle.resources
+            ],
+        }
+        warnings.extend(bundle.compatibility_notes)
+    except Exception as exc:  # noqa: BLE001 — preview must never break routing
+        code = getattr(exc, "code", type(exc).__name__)
+        warnings.append(f"validation_bundle_preview unavailable ({code}): {exc}")
+        preview = {
+            "ok": False,
+            "error": str(exc),
+            "requested_extensions": required_extensions,
+            "requested_profiles": recommended,
+        }
+
+    return {
+        "primary_composition_recipe": primary,
+        "supporting_domain_recipes": supporting,
+        "required_extensions": required_extensions,
+        "recommended_profiles": recommended,
+        "optional_profiles": optional,
+        "not_recommended_profiles": not_recommended,
+        "validation_bundle_preview": preview,
+        "compatibility_warnings": warnings,
+        "ontology_gap_workflow": None,
     }
 
 
@@ -821,9 +1063,10 @@ def build_general_workflow(matches: list[dict[str, Any]], installed: dict[str, d
             "investigation spanning several domains, not several "
             "investigations. Build a single graph, compose the recipes from "
             "every matched family on it, and enable the union of their "
-            "extensions — see docs/recipes/cross-domain-extensions.md. Do "
+            f"extensions — see {COMPOSITION_RECIPE}. Do "
             "not split the case per family or model only the top-scoring "
-            "one."
+            "one. Prefer ordered_recommendations for the primary composition "
+            "recipe, supporting domain recipes, profiles, and validation bundle preview."
         )
     steps.extend([
         "Process binary source files with process_document_file (keeps "
@@ -844,9 +1087,10 @@ def build_general_workflow(matches: list[dict[str, Any]], installed: dict[str, d
         + "underlying evidence still uses the per-artifact recipes (devices, "
         + "files, messages, call logs, locations, accounts, EXIF, databases) "
         + "— query get_recipes for each evidence type you actually hold.",
-        "Validate with validate_graph(...) — SHACL plus strict concept "
-        + "coverage. If undeclared concepts are reported, follow the "
-        + "extension-gap workflow instead of renaming terms to force a pass.",
+        "Validate with validate_graph(..., extensions=[...], profiles=[...]) "
+        + "— SHACL plus strict concept coverage. If undeclared concepts are "
+        + "reported, follow the ontology-gap workflow instead of renaming "
+        + "terms to force a pass.",
         "Close the self-improvement loop (docs/recipes/recipe-authoring.md): "
         + "if you worked out a pattern no recipe covers, write and register a "
         + "new recipe; if a recipe you followed was wrong, incomplete, or "
@@ -977,8 +1221,13 @@ def route_investigation_content(
 
     if matches:
         payload["recommended_workflow"] = build_general_workflow(matches, installed)
+        payload["ordered_recommendations"] = build_ordered_recommendations(
+            matches, installed, project_root=project_root
+        )
         if confidence_level == "low":
-            payload["extension_gap_guidance"] = build_extension_gap_guidance()
+            gap = build_extension_gap_guidance()
+            payload["extension_gap_guidance"] = gap
+            payload["ordered_recommendations"]["ontology_gap_workflow"] = gap
             payload["message"] = (
                 "Weak family match — treat the routing below as a hint and "
                 "confirm coverage with search_classes before modeling; the "
@@ -989,11 +1238,16 @@ def route_investigation_content(
         payload["matched_families"] = []
         if abstained_candidates:
             payload["abstained_candidates"] = abstained_candidates
-        payload["extension_gap_guidance"] = build_extension_gap_guidance()
+        gap = build_extension_gap_guidance()
+        payload["extension_gap_guidance"] = gap
+        payload["ordered_recommendations"] = build_ordered_recommendations(
+            [], installed, project_root=project_root
+        )
         payload["message"] = (
             "No known investigation family matched. This looks like a "
-            "previously unseen data type — follow extension_gap_guidance to "
-            "confirm coverage, file change proposals, and (if needed) build "
-            "a local extension ontology before modeling."
+            "previously unseen data type — follow ontology_gap_workflow / "
+            "extension_gap_guidance to confirm coverage, file change "
+            "proposals, and (if needed) build a local extension ontology "
+            "before modeling."
         )
     return payload

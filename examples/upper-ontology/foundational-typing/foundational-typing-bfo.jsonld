@@ -5,7 +5,10 @@
         "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
         "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
         "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+        "uco-location": "https://ontology.unifiedcyberontology.org/uco/location/",
         "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+        "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+        "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
         "xsd": "http://www.w3.org/2001/XMLSchema#",
         "obo": "http://purl.obolibrary.org/obo/"
     },
@@ -19,14 +22,60 @@
             "uco-core:name": "Examiner One (synthetic)"
         },
         {
-            "@id": "kb:evidence-1",
+            "@id": "kb:lab-org",
+            "@type": [
+                "uco-identity:Organization",
+                "obo:BFO_0000027"
+            ],
+            "uco-core:name": "Regional DF Lab (synthetic)"
+        },
+        {
+            "@id": "kb:seizure-site",
+            "@type": [
+                "uco-location:Location",
+                "obo:BFO_0000006"
+            ],
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:SimpleAddressFacet-a62445cf-2bdc-46d6-adc6-4ecbffebd67c",
+                    "@type": "uco-location:SimpleAddressFacet",
+                    "uco-location:country": "US",
+                    "uco-location:locality": "Springfield",
+                    "uco-location:postalCode": "62701",
+                    "uco-location:region": "IL",
+                    "uco-location:street": "100 Main St"
+                }
+            ],
+            "uco-core:name": "Seizure address (synthetic)"
+        },
+        {
+            "@id": "kb:storage-medium",
             "@type": [
                 "uco-observable:ObservableObject",
                 "obo:BFO_0000040"
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:FileFacet-8f5182fa-6caa-4473-ab12-8a641f307b09",
+                    "@id": "kb:FileFacet-c7ddd46d-6faa-4ae4-b975-95afac15e745",
+                    "@type": "uco-observable:FileFacet",
+                    "uco-observable:fileName": "\\\\.\\PhysicalDrive0",
+                    "uco-observable:sizeInBytes": {
+                        "@type": "xsd:integer",
+                        "@value": "500000000000"
+                    }
+                }
+            ],
+            "uco-core:name": "Seized workstation HDD (physical storage medium)"
+        },
+        {
+            "@id": "kb:e01-carrier",
+            "@type": [
+                "uco-observable:ObservableObject",
+                "obo:BFO_0000040"
+            ],
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:FileFacet-2daedaf3-46a5-407d-8127-ec6b9eccc2fb",
                     "@type": "uco-observable:FileFacet",
                     "uco-observable:fileName": "workstation.e01",
                     "uco-observable:sizeInBytes": {
@@ -35,45 +84,107 @@
                     }
                 }
             ],
-            "uco-core:name": "Seized workstation drive image (synthetic)"
+            "uco-core:name": "E01 forensic container file (physical carrier)"
+        },
+        {
+            "@id": "kb:disk-content",
+            "@type": [
+                "uco-observable:ObservableObject",
+                "obo:BFO_0000031"
+            ],
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:ContentDataFacet-c237e40d-ef9a-4dfb-9077-1e25efb77fcb",
+                    "@type": "uco-observable:ContentDataFacet",
+                    "uco-observable:hash": [
+                        {
+                            "@id": "kb:Hash-27b0abef-f728-44e9-8ace-b9ea1d11f74b",
+                            "@type": "uco-types:Hash",
+                            "uco-types:hashMethod": "SHA256",
+                            "uco-types:hashValue": {
+                                "@type": "xsd:hexBinary",
+                                "@value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "uco-core:name": "Recovered disk information content (logical artifact)"
+        },
+        {
+            "@id": "kb:imager",
+            "@type": [
+                "uco-tool:Tool",
+                "obo:BFO_0000040"
+            ],
+            "uco-core:name": "Forensic imager",
+            "uco-tool:version": "4.21.0"
         },
         {
             "@id": "kb:action-image",
             "@type": [
                 "case-investigation:InvestigativeAction",
-                "obo:BFO_0000011"
+                "obo:BFO_0000015"
             ],
             "uco-core:name": "Forensic imaging",
             "uco-action:endTime": {
                 "@type": "xsd:dateTime",
                 "@value": "2026-03-15T12:30:00+00:00"
             },
+            "uco-action:instrument": [
+                {
+                    "@id": "kb:imager"
+                }
+            ],
+            "uco-action:location": [
+                {
+                    "@id": "kb:seizure-site"
+                }
+            ],
             "uco-action:object": [
                 {
-                    "@id": "kb:evidence-1"
+                    "@id": "kb:storage-medium"
                 }
             ],
             "uco-action:performer": {
                 "@id": "kb:examiner-1"
             },
+            "uco-action:result": [
+                {
+                    "@id": "kb:e01-carrier"
+                },
+                {
+                    "@id": "kb:disk-content"
+                }
+            ],
             "uco-action:startTime": {
                 "@type": "xsd:dateTime",
                 "@value": "2026-03-15T10:00:00+00:00"
             }
         },
         {
-            "@id": "kb:Investigation-256bc229-0404-4291-b3c2-f4c4caa556b7",
+            "@id": "kb:Investigation-f2bcd1aa-4c12-4a6f-8409-141325034c47",
             "@type": "case-investigation:Investigation",
             "uco-core:description": [
-                "BFO enrichment on CASE/UCO domain types (same IRI)."
+                "BFO enrichment on CASE/UCO domain types (same IRI).",
+                "Storage medium, E01 carrier, and information content are distinct nodes."
             ],
             "uco-core:name": "Synthetic case 2026-BFO-001",
             "uco-core:object": [
                 {
-                    "@id": "kb:evidence-1"
+                    "@id": "kb:storage-medium"
+                },
+                {
+                    "@id": "kb:e01-carrier"
+                },
+                {
+                    "@id": "kb:disk-content"
                 },
                 {
                     "@id": "kb:action-image"
+                },
+                {
+                    "@id": "kb:lab-org"
                 }
             ]
         }

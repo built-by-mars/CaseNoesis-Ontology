@@ -27,7 +27,7 @@ public class CaseGraph {
     private final List<Map<String, Object>> objects;
     private final Map<Object, String> idMap;
     private final Map<String, Integer> iriIndex = new LinkedHashMap<>();
-    private boolean rejectDuplicates;
+    private boolean rejectDuplicates = true;
 
     public CaseGraph() {
         this("http://example.org/kb/");
@@ -42,7 +42,8 @@ public class CaseGraph {
 
     /**
      * When true, {@link #load(String)} raises on duplicate {@code @id} instead of merging.
-     * Default is false (merge-compatible) for backward compatibility with merge workflows.
+     * Default is {@code true} (reject) to match Python {@code on_duplicate="reject"}.
+     * Set to {@code false} for merge-compatible load behavior.
      */
     public boolean isRejectDuplicates() {
         return rejectDuplicates;
@@ -104,10 +105,16 @@ public class CaseGraph {
     }
 
     /**
-     * Return the JSON-LD map for a node by compact or expanded {@code @id}.
+     * Return a shallow copy of the JSON-LD map for a node by compact or expanded {@code @id}.
+     * Mutating {@code @id} on the returned map does not update the graph index;
+     * use {@link #addType}, {@link #addProperty}, or {@link #upsertNode}.
      */
     public Map<String, Object> get(String id) {
-        return findObject(id);
+        Map<String, Object> obj = findObject(id);
+        if (obj == null) {
+            return null;
+        }
+        return new LinkedHashMap<>(obj);
     }
 
     /**
@@ -381,12 +388,7 @@ public class CaseGraph {
     public void load(String json) {
         Map<String, Object> doc = (Map<String, Object>) parseJsonValue(json.trim(), new int[]{0});
         if (doc.containsKey("@context") && doc.get("@context") instanceof Map) {
-            Map<String, Object> ctx = (Map<String, Object>) doc.get("@context");
-            for (Map.Entry<String, Object> entry : ctx.entrySet()) {
-                if (entry.getValue() instanceof String) {
-                    context.put(entry.getKey(), (String) entry.getValue());
-                }
-            }
+            mergeContext((Map<String, Object>) doc.get("@context"));
         }
         if (doc.containsKey("@graph") && doc.get("@graph") instanceof List) {
             List<Object> graphList = (List<Object>) doc.get("@graph");
@@ -425,7 +427,8 @@ public class CaseGraph {
     /**
      * Parse a JSON-LD string into typed objects where possible.
      * Types are matched by scanning for classes with CLASS_IRI static fields
-     * in the org.caseontology packages.
+     * in the org.caseontology packages. When {@code @type} is an array, the
+     * most specific unambiguous registered class is chosen.
      */
     @SuppressWarnings("unchecked")
     public static FromJsonLdResult fromJsonLd(String json) {
@@ -433,12 +436,7 @@ public class CaseGraph {
         CaseGraph graph = new CaseGraph();
 
         if (doc.containsKey("@context") && doc.get("@context") instanceof Map) {
-            Map<String, Object> ctx = (Map<String, Object>) doc.get("@context");
-            for (Map.Entry<String, Object> entry : ctx.entrySet()) {
-                if (entry.getValue() instanceof String) {
-                    graph.context.put(entry.getKey(), (String) entry.getValue());
-                }
-            }
+            graph.mergeContext((Map<String, Object>) doc.get("@context"));
         }
 
         List<Object> typedObjects = new ArrayList<>();
@@ -448,7 +446,7 @@ public class CaseGraph {
             for (Object item : graphList) {
                 if (item instanceof Map) {
                     Map<String, Object> mapItem = (Map<String, Object>) item;
-                    graph.appendObject(mapItem);
+                    graph.ingestRawNode(mapItem, graph.rejectDuplicates);
                     Object typed = tryInstantiate(mapItem, graph.context);
                     typedObjects.add(typed != null ? typed : mapItem);
                 }
@@ -456,6 +454,22 @@ public class CaseGraph {
         }
 
         return new FromJsonLdResult(graph, typedObjects);
+    }
+
+    private void mergeContext(Map<String, Object> incoming) {
+        for (Map.Entry<String, Object> entry : incoming.entrySet()) {
+            if (!(entry.getValue() instanceof String)) {
+                continue;
+            }
+            String ns = (String) entry.getValue();
+            String existing = context.get(entry.getKey());
+            if (existing != null && !existing.equals(ns)) {
+                throw new IllegalArgumentException(
+                    "Context prefix collision for '" + entry.getKey() +
+                    "': existing '" + existing + "' vs incoming '" + ns + "'");
+            }
+            context.put(entry.getKey(), ns);
+        }
     }
 
     private static String expandCompactIri(String value, Map<String, String> context) {
@@ -471,9 +485,37 @@ public class CaseGraph {
 
     private static Object tryInstantiate(Map<String, Object> obj, Map<String, String> context) {
         Object typeObj = obj.get("@type");
-        if (!(typeObj instanceof String)) return null;
+        if (typeObj == null) {
+            return null;
+        }
 
-        String expandedIri = expandCompactIri((String) typeObj, context);
+        List<String> typeStrings = asTypeList(typeObj);
+        List<Class<?>> matched = new ArrayList<>();
+        for (String typeStr : typeStrings) {
+            Class<?> found = findClassByIri(expandCompactIri(typeStr, context));
+            if (found != null && !matched.contains(found)) {
+                matched.add(found);
+            }
+        }
+
+        Class<?> selected = selectMostSpecificClass(matched);
+        if (selected == null) {
+            return null;
+        }
+
+        try {
+            Object instance = selected.getDeclaredConstructor().newInstance();
+            setFieldsFromJsonLd(instance, obj);
+            return instance;
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    private static Class<?> findClassByIri(String expandedIri) {
+        if (expandedIri == null) {
+            return null;
+        }
         String localName = expandedIri.substring(expandedIri.lastIndexOf('/') + 1);
 
         List<String> candidates = new ArrayList<>();
@@ -492,15 +534,36 @@ public class CaseGraph {
             try {
                 Class<?> cls = Class.forName(className);
                 Field classIriField = cls.getDeclaredField("CLASS_IRI");
-                if (!expandedIri.equals(classIriField.get(null))) continue;
-
-                Object instance = cls.getDeclaredConstructor().newInstance();
-                setFieldsFromJsonLd(instance, obj);
-                return instance;
+                if (!expandedIri.equals(classIriField.get(null))) {
+                    continue;
+                }
+                return cls;
             } catch (Exception ignored) {}
         }
-
         return null;
+    }
+
+    private static Class<?> selectMostSpecificClass(List<Class<?>> classes) {
+        if (classes == null || classes.isEmpty()) {
+            return null;
+        }
+        if (classes.size() == 1) {
+            return classes.get(0);
+        }
+        List<Class<?>> specific = new ArrayList<>();
+        for (Class<?> c : classes) {
+            boolean shadowed = false;
+            for (Class<?> o : classes) {
+                if (o != c && c.isAssignableFrom(o)) {
+                    shadowed = true;
+                    break;
+                }
+            }
+            if (!shadowed) {
+                specific.add(c);
+            }
+        }
+        return specific.size() == 1 ? specific.get(0) : null;
     }
 
     private static void setFieldsFromJsonLd(Object instance, Map<String, Object> obj) {
@@ -798,10 +861,9 @@ public class CaseGraph {
             }
         }
 
-        List<Object> merged = new ArrayList<>();
-        merged.add(existing);
-        merged.add(value);
-        obj.put(key, merged);
+        // Do not silently convert differing scalars into lists (parity with Python merge_compatible).
+        throw new IllegalStateException(
+            "merge_compatible scalar conflict on '" + key + "': existing and incoming values differ");
     }
 
     private String deterministicRelationshipId(String sourceId, String targetId, String kind) {

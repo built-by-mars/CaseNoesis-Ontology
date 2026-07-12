@@ -1,4 +1,6 @@
 // Tests for CaseGraph builder and JSON-LD serialization.
+using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using CaseUco;
 using CaseUco.Uco.Tool;
@@ -156,6 +158,51 @@ namespace CaseUco.Tests
             graph.Load(@"{ ""@context"": { ""kb"": ""http://example.org/kb/"" }, ""@graph"": [ { ""@id"": ""kb:Tool-loaded"", ""@type"": ""uco-tool:Tool"" } ] }");
             graph.Add(new Tool { Name = "New Tool" });
             Assert.Equal(2, graph.Count);
+        }
+
+        [Fact]
+        public void Get_ReturnsShallowCopy()
+        {
+            var graph = new CaseGraph();
+            graph.UpsertNode("kb:n1", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:name"] = "N",
+            });
+            var view = graph.Get("kb:n1");
+            view["@id"] = "kb:mutated";
+            Assert.True(graph.Contains("kb:n1"));
+            Assert.False(graph.Contains("kb:mutated"));
+            Assert.Equal("N", graph.Get("kb:n1")["uco-core:name"]);
+        }
+
+        [Fact]
+        public void Load_RejectsDuplicateByDefault()
+        {
+            var graph = new CaseGraph();
+            graph.UpsertNode("kb:x", "uco-core:UcoObject");
+            Assert.Throws<InvalidOperationException>(() =>
+                graph.Load(@"{ ""@context"": { ""kb"": ""http://example.org/kb/"" }, ""@graph"": [ { ""@id"": ""kb:x"", ""@type"": ""uco-core:UcoObject"" } ] }"));
+        }
+
+        [Fact]
+        public void Load_RejectsContextCollision()
+        {
+            var graph = new CaseGraph();
+            Assert.Throws<ArgumentException>(() =>
+                graph.Load(@"{ ""@context"": { ""kb"": ""http://example.org/kb/"", ""uco-core"": ""https://evil.example.org/uco/core/"" }, ""@graph"": [] }"));
+        }
+
+        [Fact]
+        public void Load_MergeCompatible_ScalarConflictRaises()
+        {
+            var graph = new CaseGraph();
+            graph.RejectDuplicates = false;
+            graph.UpsertNode("kb:x", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:name"] = "A",
+            });
+            Assert.Throws<InvalidOperationException>(() =>
+                graph.Load(@"{ ""@context"": { ""kb"": ""http://example.org/kb/"" }, ""@graph"": [ { ""@id"": ""kb:x"", ""@type"": ""uco-core:UcoObject"", ""uco-core:name"": ""B"" } ] }"));
         }
     }
 }

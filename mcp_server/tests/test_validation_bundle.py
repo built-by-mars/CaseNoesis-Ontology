@@ -70,3 +70,105 @@ def test_bundle_fingerprint_stable():
 def test_owl_time_alias():
     bundle = resolve_validation_bundle(profiles=["owl-time"])
     assert bundle.profiles == ("time",)
+
+
+def test_uco_profiles_ids_match_profile_registry():
+    """Discovery catalog and validation registry must stay in sync (#68)."""
+    from domain_index import UCO_PROFILES
+    from validation_bundle import list_profile_ids, PROFILE_REGISTRY
+
+    catalog_ids = {p["id"] for p in UCO_PROFILES}
+    assert catalog_ids == set(list_profile_ids())
+    for profile in UCO_PROFILES:
+        reg = PROFILE_REGISTRY[profile["id"]]
+        sources = reg.get("sources") or []
+        if sources and isinstance(profile.get("local_source"), str):
+            assert profile["local_source"] in sources
+
+
+def test_org_resolves_foaf_and_prov_dependencies():
+    bundle = resolve_validation_bundle(profiles=["org"])
+    assert "org" in bundle.profiles
+    assert "foaf" in bundle.profiles
+    assert "prov-o" in bundle.profiles
+    paths = " ".join(r.path for r in bundle.resources)
+    assert "org.ttl" in paths
+    assert "foaf" in paths.lower() or "foaf.rdf" in paths
+    assert "prov-o.ttl" in paths
+    assert any("depends_on" in n for n in bundle.compatibility_notes)
+
+
+def test_portable_manifest_omits_absolute_paths():
+    bundle = resolve_validation_bundle(profiles=["time"])
+    portable = bundle.to_manifest(portable=True)
+    for resource in portable["resources"]:
+        assert "absolute_path" not in resource
+        assert "sha256" in resource
+        assert not str(resource["path"]).startswith("/")
+
+
+def test_cache_invalidates_when_resource_file_changes(tmp_path, monkeypatch):
+    from pathlib import Path
+    import validation_bundle as vb
+
+    # Build a tiny fake profile registry rooted at tmp_path.
+    ont = tmp_path / "ontology" / "upper"
+    shapes = ont / "shapes"
+    shapes.mkdir(parents=True)
+    ont_file = ont / "toy.ttl"
+    shape_file = shapes / "sh-toy.ttl"
+    ont_file.write_text("@prefix : <http://example.org/> .\n:A a owl:Class .\n", encoding="utf-8")
+    shape_file.write_text("@prefix sh: <http://www.w3.org/ns/shacl#> .\n", encoding="utf-8")
+
+    monkeypatch.setitem(
+        vb.PROFILE_REGISTRY,
+        "toy",
+        {
+            "canonical_id": "https://example.org/profiles/toy",
+            "sources": ["ontology/upper/toy.ttl"],
+            "shapes": ["ontology/upper/shapes/sh-toy.ttl"],
+            "depends_on": [],
+            "incompatible_with": [],
+            "extension_policy": {},
+            "inference": "rdfs",
+        },
+    )
+    first = vb.resolve_validation_bundle(profiles=["toy"], project_root=tmp_path)
+    cached = vb.resolve_validation_bundle(profiles=["toy"], project_root=tmp_path)
+    assert cached.fingerprint == first.fingerprint
+    ont_file.write_text(
+        "@prefix : <http://example.org/> .\n:A a owl:Class .\n:B a owl:Class .\n",
+        encoding="utf-8",
+    )
+    second = vb.resolve_validation_bundle(profiles=["toy"], project_root=tmp_path)
+    assert second.fingerprint != first.fingerprint
+
+
+def test_cache_invalidates_when_resource_file_missing(tmp_path, monkeypatch):
+    import validation_bundle as vb
+
+    ont = tmp_path / "ontology" / "upper"
+    shapes = ont / "shapes"
+    shapes.mkdir(parents=True)
+    ont_file = ont / "toy.ttl"
+    shape_file = shapes / "sh-toy.ttl"
+    ont_file.write_text(":A a owl:Class .\n", encoding="utf-8")
+    shape_file.write_text("\n", encoding="utf-8")
+    monkeypatch.setitem(
+        vb.PROFILE_REGISTRY,
+        "toy",
+        {
+            "canonical_id": "https://example.org/profiles/toy",
+            "sources": ["ontology/upper/toy.ttl"],
+            "shapes": ["ontology/upper/shapes/sh-toy.ttl"],
+            "depends_on": [],
+            "incompatible_with": [],
+            "extension_policy": {},
+            "inference": "rdfs",
+        },
+    )
+    vb.resolve_validation_bundle(profiles=["toy"], project_root=tmp_path)
+    ont_file.unlink()
+    with pytest.raises(vb.ValidationBundleError) as exc:
+        vb.resolve_validation_bundle(profiles=["toy"], project_root=tmp_path)
+    assert exc.value.code == "missing_resource"

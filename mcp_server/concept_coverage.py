@@ -77,27 +77,22 @@ STANDARD_NAMESPACE_PREFIXES: tuple[str, ...] = (
 # Discover the profiles with the get_uco_profiles() MCP tool. See
 # docs/recipes/extensions.md. Regenerate the registry with
 # mcp_server/tools/build_upper_ontology_registry.py.
-UCO_PROFILE_NAMESPACE_PREFIXES: tuple[str, ...] = (
-    # CDO-Shapes-BFO — Basic Formal Ontology 2020 (top-level)
-    "http://purl.obolibrary.org/obo/BFO_",
-    # CDO-Shapes-gufo — gentle Unified Foundational Ontology (top-level)
-    "http://purl.org/nemo/gufo#",
-    # CDO-Shapes-PROV-O — W3C Provenance Ontology
-    "http://www.w3.org/ns/prov#",
-    # CDO-Shapes-Time — W3C OWL-Time
-    "http://www.w3.org/2006/time#",
-    # CDO-Shapes-GeoSPARQL — OGC GeoSPARQL 1.1 (core + Simple Features geometries)
-    "http://www.opengis.net/ont/geosparql#",
-    "http://www.opengis.net/ont/sf#",
-    # CDO-Shapes-FOAF — Friend-of-a-Friend
-    "http://xmlns.com/foaf/0.1/",
-    # CDO-Shapes-ORG — W3C Organization Ontology
-    "http://www.w3.org/ns/org#",
-    # CDO-Shapes-PROF — W3C Profiles Vocabulary
-    "http://www.w3.org/ns/dx/prof/",
-    # CDO-Shapes-SKOS and CDO-Shapes-OWL namespaces are already covered by
-    # STANDARD_NAMESPACE_PREFIXES above.
-)
+# Map stable profile IDs to the namespace prefixes they authorize for
+# profile-selective concept coverage (issue #68).
+PROFILE_ID_TO_NAMESPACE_PREFIXES: dict[str, tuple[str, ...]] = {
+    "bfo": ("http://purl.obolibrary.org/obo/BFO_",),
+    "gufo": ("http://purl.org/nemo/gufo#",),
+    "prov-o": ("http://www.w3.org/ns/prov#",),
+    "time": ("http://www.w3.org/2006/time#",),
+    "owl-time": ("http://www.w3.org/2006/time#",),
+    "geosparql": (
+        "http://www.opengis.net/ont/geosparql#",
+        "http://www.opengis.net/ont/sf#",
+    ),
+    "foaf": ("http://xmlns.com/foaf/0.1/",),
+    "org": ("http://www.w3.org/ns/org#",),
+    "prof": ("http://www.w3.org/ns/dx/prof/",),
+}
 
 CORE_ONTOLOGY_GLOBS: tuple[str, ...] = (
     "ontology/UCO/ontology/uco/*/*.ttl",
@@ -442,14 +437,58 @@ def _is_standard(iri: str) -> bool:
     return iri.startswith(STANDARD_NAMESPACE_PREFIXES)
 
 
+UCO_PROFILE_NAMESPACE_PREFIXES: tuple[str, ...] = tuple(
+    sorted({prefix for prefixes in PROFILE_ID_TO_NAMESPACE_PREFIXES.values() for prefix in prefixes})
+)
+
+
 def _is_upper_namespace(iri: str) -> bool:
     return iri.startswith(UCO_PROFILE_NAMESPACE_PREFIXES)
+
+
+def _selected_upper_prefixes(selected_profiles: list[str] | None) -> frozenset[str] | None:
+    """Return allowed upper-namespace prefixes when profiles are selected.
+
+    ``None`` means all profiled upper namespaces remain eligible (legacy
+    behavior when no profile filter is supplied). An empty frozenset means
+    profiles were selected but authorize no upper namespaces.
+    """
+    if selected_profiles is None:
+        return None
+    allowed: set[str] = set()
+    for pid in selected_profiles:
+        allowed.update(PROFILE_ID_TO_NAMESPACE_PREFIXES.get(pid, ()))
+    return frozenset(allowed)
+
+
+def _profile_for_upper_iri(iri: str) -> str | None:
+    # Prefer canonical ids (time over owl-time alias) for diagnostics.
+    preferred_order = (
+        "bfo",
+        "gufo",
+        "prov-o",
+        "time",
+        "geosparql",
+        "foaf",
+        "org",
+        "prof",
+        "owl-time",
+    )
+    for pid in preferred_order:
+        prefixes = PROFILE_ID_TO_NAMESPACE_PREFIXES.get(pid, ())
+        if prefixes and iri.startswith(prefixes):
+            return "time" if pid == "owl-time" else pid
+    for pid, prefixes in PROFILE_ID_TO_NAMESPACE_PREFIXES.items():
+        if iri.startswith(prefixes):
+            return pid
+    return None
 
 
 def check_graph_concepts(
     graph_path: str | Path,
     project_root: Path = PROJECT_ROOT,
     extensions: list[str] | None = None,
+    selected_profiles: list[str] | None = None,
 ) -> ConceptCoverageReport:
     """Check that every class and property in a graph file is declared.
 
@@ -457,11 +496,10 @@ def check_graph_concepts(
     all predicates. Instance IRIs (kb:, urn:uuid:, …) never appear in either
     position, so no instance-namespace whitelist is needed.
 
-    Beyond membership, terms are checked in their RDF role: profiled
-    upper-ontology terms must be exact declared terms of the pinned release,
-    ``rdf:type`` objects must be declared classes, and predicates must be
-    declared properties (terms with undetermined roles are accepted
-    anywhere).
+    When ``selected_profiles`` is provided, upper-ontology terms are accepted
+    only from those profiles (and their declared namespace prefixes). A term
+    from an unselected profile is reported as undeclared with guidance that
+    the profile was not selected — not as an unknown registry term.
     """
 
     import rdflib
@@ -481,27 +519,48 @@ def check_graph_concepts(
 
     declared = load_declared_terms(project_root=project_root, extensions=extensions)
     upper, upper_error = _load_upper_registry()
+    allowed_prefixes = _selected_upper_prefixes(selected_profiles)
 
     undeclared_classes: list[str] = []
     undeclared_properties: list[str] = []
     unknown_upper: set[str] = set()
+    unselected_profile_terms: list[str] = []
     role_mismatches: list[tuple[str, str, str]] = []
     verification_errors: list[str] = []
     upper_terms_used = False
 
-    for iri in sorted(used_classes):
-        if _is_standard(iri):
-            continue
-        if _is_upper_namespace(iri):
-            upper_terms_used = True
-            if upper is None:
-                continue  # reported once as a verification failure below
+    def _handle_upper(iri: str, *, as_class: bool) -> bool:
+        """Return True if the IRI was handled as an upper-ontology term."""
+        nonlocal upper_terms_used
+        if not _is_upper_namespace(iri):
+            return False
+        upper_terms_used = True
+        if allowed_prefixes is not None and not iri.startswith(tuple(allowed_prefixes)):
+            pid = _profile_for_upper_iri(iri) or "unknown"
+            unselected_profile_terms.append(f"{iri} (profile_not_selected:{pid})")
+            return True
+        if upper is None:
+            return True
+        if as_class:
             if iri in upper["classes"] or iri in upper["datatypes"]:
-                continue
+                return True
             if iri in upper["properties"]:
                 role_mismatches.append((iri, "upper-ontology property", "class (rdf:type object)"))
             else:
                 unknown_upper.add(iri)
+        else:
+            if iri in upper["properties"]:
+                return True
+            if iri in upper["classes"]:
+                role_mismatches.append((iri, "upper-ontology class", "property (predicate)"))
+            else:
+                unknown_upper.add(iri)
+        return True
+
+    for iri in sorted(used_classes):
+        if _is_standard(iri):
+            continue
+        if _handle_upper(iri, as_class=True):
             continue
         if iri in declared.classes or iri in declared.unknown_role:
             continue
@@ -515,16 +574,7 @@ def check_graph_concepts(
     for iri in sorted(used_properties):
         if _is_standard(iri):
             continue
-        if _is_upper_namespace(iri):
-            upper_terms_used = True
-            if upper is None:
-                continue
-            if iri in upper["properties"]:
-                continue
-            if iri in upper["classes"]:
-                role_mismatches.append((iri, "upper-ontology class", "property (predicate)"))
-            else:
-                unknown_upper.add(iri)
+        if _handle_upper(iri, as_class=False):
             continue
         if iri in declared.properties or iri in declared.unknown_role:
             continue
@@ -535,16 +585,14 @@ def check_graph_concepts(
         else:
             undeclared_properties.append(iri)
 
-    # Fail closed (issue #55): when the graph uses profiled upper-ontology
-    # terms and the pinned registry is unusable, the required exact-term
-    # verification stage did not run — never report a pass.
-    if upper_terms_used and upper_error is not None:
+    if upper_terms_used and upper_error is not None and allowed_prefixes != frozenset():
         verification_errors.append(upper_error)
 
     ok = (
         not undeclared_classes
         and not undeclared_properties
         and not unknown_upper
+        and not unselected_profile_terms
         and not role_mismatches
         and not verification_errors
     )
@@ -553,6 +601,12 @@ def check_graph_concepts(
         guidance_parts.append(GUIDANCE)
     if unknown_upper:
         guidance_parts.append(UPPER_TERM_GUIDANCE)
+    if unselected_profile_terms:
+        guidance_parts.append(
+            "Terms flagged as profile_not_selected are declared by a profiled "
+            "upper ontology that was not included in this validation bundle. "
+            "Add the required profile to profiles=[...] or remove the term."
+        )
     if role_mismatches:
         guidance_parts.append(ROLE_MISMATCH_GUIDANCE)
     if verification_errors:
@@ -568,7 +622,7 @@ def check_graph_concepts(
 
     return ConceptCoverageReport(
         ok=ok,
-        undeclared_classes=tuple(undeclared_classes),
+        undeclared_classes=tuple(undeclared_classes) + tuple(unselected_profile_terms),
         undeclared_properties=tuple(undeclared_properties),
         unknown_upper_ontology_terms=tuple(sorted(unknown_upper)),
         role_mismatches=tuple(role_mismatches),

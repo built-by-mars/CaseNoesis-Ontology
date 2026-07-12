@@ -14,6 +14,10 @@ on:
       - "mcp_server/**"
       - "extensions/**"
       - "evaluation/**"
+      - "docs/**"
+      - "examples/**"
+      - "benchmarks/**"
+      - "scripts/**"
       - "Makefile"
   pull_request:
     branches: [main, develop]
@@ -28,6 +32,10 @@ on:
       - "mcp_server/**"
       - "extensions/**"
       - "evaluation/**"
+      - "docs/**"
+      - "examples/**"
+      - "benchmarks/**"
+      - "scripts/**"
       - "Makefile"
 
 jobs:
@@ -41,16 +49,49 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Verify __version__ matches pyproject.toml
+      - name: Verify package versions match across languages
         run: |
+          set -euo pipefail
           PYPROJECT_VER=$(python -c "import tomllib; print(tomllib.load(open('python/pyproject.toml','rb'))['project']['version'])")
           INIT_VER=$(python -c "import re, pathlib; m=re.search(r'__version__\s*=\s*\"([^\"]+)\"', pathlib.Path('python/case_uco/__init__.py').read_text()); print(m.group(1))")
-          echo "pyproject.toml: $PYPROJECT_VER"
-          echo "__init__.py:    $INIT_VER"
-          if [ "$PYPROJECT_VER" != "$INIT_VER" ]; then
-            echo "::error::Version mismatch: pyproject.toml=$PYPROJECT_VER vs __init__.py=$INIT_VER"
+          CSPROJ_VER=$(python -c "import re, pathlib; m=re.search(r'<Version>([^<]+)</Version>', pathlib.Path('csharp/CaseUco/CaseUco.csproj').read_text()); print(m.group(1))")
+          POM_VER=$(python -c "import re, pathlib; m=re.search(r'<artifactId>case-uco</artifactId>\s*<version>([^<]+)</version>', pathlib.Path('java/pom.xml').read_text(), re.S); print(m.group(1) if m else '')")
+          if [ -z "$POM_VER" ]; then
+            POM_VER=$(python -c "import re, pathlib; m=re.search(r'<version>([^<]+)</version>', pathlib.Path('java/pom.xml').read_text()); print(m.group(1))")
+          fi
+          CARGO_TOML_VER=$(python -c "import re, pathlib; m=re.search(r'^version\s*=\s*\"([^\"]+)\"', pathlib.Path('rust/Cargo.toml').read_text(), re.M); print(m.group(1))")
+          CARGO_LOCK_VER=$(python -c "
+          import pathlib, re
+          text = pathlib.Path('rust/Cargo.lock').read_text()
+          m = re.search(r'name = \"case-uco\"\nversion = \"([^\"]+)\"', text)
+          print(m.group(1) if m else '')
+          ")
+          echo "python/pyproject.toml:     $PYPROJECT_VER"
+          echo "python/__init__.py:       $INIT_VER"
+          echo "csharp CaseUco.csproj:    $CSPROJ_VER"
+          echo "java/pom.xml:             $POM_VER"
+          echo "rust/Cargo.toml:          $CARGO_TOML_VER"
+          echo "rust/Cargo.lock case-uco: $CARGO_LOCK_VER"
+          FAIL=0
+          for pair in \
+            "pyproject.toml:$PYPROJECT_VER" \
+            "__init__.py:$INIT_VER" \
+            "CaseUco.csproj:$CSPROJ_VER" \
+            "pom.xml:$POM_VER" \
+            "Cargo.toml:$CARGO_TOML_VER" \
+            "Cargo.lock:$CARGO_LOCK_VER"
+          do
+            name="${pair%%:*}"
+            ver="${pair#*:}"
+            if [ "$ver" != "$PYPROJECT_VER" ]; then
+              echo "::error::Version mismatch: $name=$ver vs pyproject.toml=$PYPROJECT_VER"
+              FAIL=1
+            fi
+          done
+          if [ "$FAIL" -ne 0 ]; then
             exit 1
           fi
+          echo "All language package versions and Cargo.lock agree on $PYPROJECT_VER"
 
   routing-evaluation:
     name: Held-out Routing Evaluation
@@ -266,3 +307,46 @@ jobs:
 
       - name: Test documentation snippets
         run: python scripts/test_doc_snippets.py
+
+  recipe-validation:
+    name: Recipe Exemplar Validation
+    needs: generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Download generated sources
+        uses: actions/download-artifact@v8
+        with:
+          name: generated-sources
+          path: .
+
+      - name: Install Python SDK, RDFLib, and case-utils
+        run: |
+          pip install -e python/ rdflib case-utils
+
+      - name: Fail closed if case_validate missing
+        run: |
+          command -v case_validate
+          case_validate --help >/dev/null
+
+      - name: Run upper-ontology recipe gate
+        run: |
+          python mcp_server/tools/run_recipe_examples.py \
+            --category upper-ontology \
+            --validate \
+            --timeout 180 \
+            --report recipe-validation-report.json
+
+      - name: Upload recipe validation report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: recipe-validation-report
+          path: recipe-validation-report.json

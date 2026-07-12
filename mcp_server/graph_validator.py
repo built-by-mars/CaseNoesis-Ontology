@@ -60,6 +60,13 @@ class GraphValidationReport:
     role_mismatches: tuple[tuple[str, str, str], ...] = ()
     verification_status: str = "complete"
     verification_errors: tuple[str, ...] = ()
+    selected_profiles: tuple[str, ...] = ()
+    selected_extensions: tuple[str, ...] = ()
+    bundle_fingerprint: str | None = None
+    bundle_resources: tuple[dict[str, Any], ...] = ()
+    compatibility_notes: tuple[str, ...] = ()
+    bundle_cache_status: str | None = None
+    stage_status: tuple[tuple[str, str], ...] = ()
 
 
 def validator_available() -> bool:
@@ -338,7 +345,12 @@ def validate_graph_file(
             from concept_coverage import check_graph_concepts
 
             coverage = check_graph_concepts(
-                graph, project_root=project_root, extensions=extensions
+                graph,
+                project_root=project_root,
+                extensions=extensions,
+                selected_profiles=(
+                    list(resolved_bundle.profiles) if resolved_bundle is not None else None
+                ),
             )
         except Exception as exc:  # honest failure: never fake coverage
             conforms = None
@@ -401,6 +413,12 @@ def validate_graph_file(
                 concept_summary = " ".join(parts)
                 summary = concept_summary if shacl_passed else f"{summary} {concept_summary}"
 
+    stage_status: list[tuple[str, str]] = [("shacl", "complete" if conforms is not None else "failed")]
+    if strict_concepts:
+        stage_status.append(("concept_coverage", verification_status))
+    if resolved_bundle is not None:
+        stage_status.insert(0, ("bundle_resolution", "complete"))
+
     return GraphValidationReport(
         conforms=conforms,
         warning_count=warning_count,
@@ -414,6 +432,15 @@ def validate_graph_file(
         role_mismatches=role_mismatches,
         verification_status=verification_status,
         verification_errors=verification_errors,
+        selected_profiles=tuple(resolved_bundle.profiles) if resolved_bundle else (),
+        selected_extensions=tuple(resolved_bundle.extensions) if resolved_bundle else tuple(extensions or ()),
+        bundle_fingerprint=resolved_bundle.fingerprint if resolved_bundle else None,
+        bundle_resources=tuple(resolved_bundle.to_manifest(portable=True)["resources"])
+        if resolved_bundle
+        else (),
+        compatibility_notes=tuple(resolved_bundle.compatibility_notes) if resolved_bundle else (),
+        bundle_cache_status="resolved" if resolved_bundle else None,
+        stage_status=tuple(stage_status),
     )
 
 
@@ -444,6 +471,22 @@ def report_to_dict(report: GraphValidationReport) -> dict[str, Any]:
         ]
     if report.concept_guidance:
         payload["concept_guidance"] = report.concept_guidance
+    if report.selected_profiles:
+        payload["selected_profiles"] = list(report.selected_profiles)
+    if report.selected_extensions:
+        payload["selected_extensions"] = list(report.selected_extensions)
+    if report.bundle_fingerprint:
+        payload["bundle_fingerprint"] = report.bundle_fingerprint
+    if report.bundle_resources:
+        payload["bundle_resources"] = list(report.bundle_resources)
+    if report.compatibility_notes:
+        payload["compatibility_notes"] = list(report.compatibility_notes)
+    if report.bundle_cache_status:
+        payload["bundle_cache_status"] = report.bundle_cache_status
+    if report.stage_status:
+        payload["stage_status"] = [
+            {"stage": stage, "status": status} for stage, status in report.stage_status
+        ]
     return payload
 
 

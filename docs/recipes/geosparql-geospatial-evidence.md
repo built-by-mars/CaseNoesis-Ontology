@@ -18,7 +18,7 @@ Issue: [#62](https://github.com/vulnmaster/CASE-UCO-SDK/issues/62)
 1. **Domain first:** `graph.create(Location, id=..., has_facet=[...])` then `graph.add_type(id, "geo:Feature")`.
 2. **Geometry is its own node** — never embed WKT only in `description`.
 3. **CRS in WKT literal** — use `geo:asWKT` with `geo:wktLiteral` (or `geo:asGeoJSON` when source is GeoJSON).
-4. **Derived geometries** (geofences, buffers, cell-sector cones) are separate `geo:Geometry` nodes with `prov:wasDerivedFrom` and `prov:wasGeneratedBy` pointing to the generating `InvestigativeAction`.
+4. **Derived geometries** (analyst-defined bounding polygons, warrant areas, cell-sector cones, routes) are separate `geo:Geometry` nodes with `prov:wasDerivedFrom` and `prov:wasGeneratedBy` pointing to the generating `InvestigativeAction`.
 5. **Keep address facets** — `SimpleAddressFacet` / `LatLongCoordinatesFacet` complement GeoSPARQL; do not remove UCO facets when adding `geo:Feature`.
 
 ## Pattern
@@ -48,15 +48,15 @@ graph.upsert_node(geom_id, types=["geo:Geometry", "sf:Point"], properties={
 })
 graph.add_property(site_id, "geo:hasGeometry", {"@id": geom_id})
 
-# Derived geofence
-buffer_id = "kb:buffer-1"
-graph.upsert_node(buffer_id, types=["geo:Geometry", "sf:Polygon"], properties={
+# Analyst-defined bounding polygon (not a fixed-radius buffer)
+bounding_id = "kb:bounding-polygon-1"
+graph.upsert_node(bounding_id, types=["geo:Geometry", "sf:Polygon"], properties={
     "geo:asWKT": {"@type": "geo:wktLiteral", "@value": "POLYGON((...))"},
 })
 action_id = "kb:action-geofence"
-action = graph.create(InvestigativeAction, id=action_id, name="Derive geofence", ...)
-graph.create_relationship(buffer_id, "prov:wasDerivedFrom", geom_id)
-graph.create_relationship(buffer_id, "prov:wasGeneratedBy", action_id)
+action = graph.create(InvestigativeAction, id=action_id, name="Derive analyst bounding polygon", ...)
+graph.link(bounding_id, "prov:wasDerivedFrom", geom_id)
+graph.link(bounding_id, "prov:wasGeneratedBy", action_id)
 graph.write("geosparql-geospatial.jsonld")
 ```
 

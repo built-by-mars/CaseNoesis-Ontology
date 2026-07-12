@@ -26,7 +26,7 @@ Issue: [#60](https://github.com/vulnmaster/CASE-UCO-SDK/issues/60)
 ## Multi-typing rules
 
 1. **Create domain object first** with `graph.create()`, then `graph.add_type(id, "prov:…")`.
-2. **Lineage edges** use `graph.create_relationship(source_id, "prov:wasDerivedFrom", target_id)` and `prov:wasGeneratedBy`.
+2. **Lineage edges** use `graph.link(source_id, "prov:wasDerivedFrom", target_id)` and `prov:wasGeneratedBy` — never `create_relationship` for `prov:*` predicates.
 3. **Association:** `prov:wasAssociatedWith` from Activity to Agent; `prov:used` from Activity to Entity (tool or input).
 4. **One activity per forensic step.** Do not collapse imaging + hashing + verification into one Activity if the source distinguishes them.
 5. **ProvenanceRecord ≠ Activity.** The record is a narrative index (`object` list); each custody/imaging step is its own `InvestigativeAction` / `prov:Activity`.
@@ -70,16 +70,16 @@ graph.add_type(source_id, "prov:Entity")
 image_id = "kb:image-1"
 image = graph.create(ObservableObject, id=image_id, name="...")
 graph.add_type(image_id, "prov:Entity")
-graph.create_relationship(image_id, "prov:wasDerivedFrom", source_id)
+graph.link(image_id, "prov:wasDerivedFrom", source_id)
 
 action_id = "kb:action-image"
 action = graph.create(InvestigativeAction, id=action_id, name="...",
     performer=examiner, object=[source], result=[image], instrument=[tool],
 )
 graph.add_type(action_id, "prov:Activity")
-graph.create_relationship(image_id, "prov:wasGeneratedBy", action_id)
-graph.create_relationship(action_id, "prov:used", tool_id)
-graph.create_relationship(action_id, "prov:wasAssociatedWith", examiner_id)
+graph.link(image_id, "prov:wasGeneratedBy", action_id)
+graph.link(action_id, "prov:used", tool_id)
+graph.link(action_id, "prov:wasAssociatedWith", examiner_id)
 
 provenance = graph.create(ProvenanceRecord, name="...", object=[source, image, action])
 graph.write("prov-o-lineage.jsonld")

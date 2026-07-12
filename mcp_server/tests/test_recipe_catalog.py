@@ -98,10 +98,31 @@ def test_multi_domain_submission_routes_to_multiple_families() -> None:
     assert {"cac-child-exploitation", "violent-crime", "financial-crime-crypto", "legal-filings-docket"} <= family_ids
     workflow = " ".join(result["recommended_workflow"])
     assert "ONE investigation" in workflow
-    assert "cross-domain-extensions.md" in workflow
+    assert "cross-ontology-composition.md" in workflow
+    ordered = result["ordered_recommendations"]
+    assert ordered["primary_composition_recipe"] == "docs/recipes/cross-ontology-composition.md"
+    assert ordered["supporting_domain_recipes"]
+    assert "cac" in ordered["required_extensions"]
+    assert "gufo" in ordered["recommended_profiles"]
+    assert "bfo" in ordered["not_recommended_profiles"]
+    assert ordered["validation_bundle_preview"] is not None
+    assert ordered["ontology_gap_workflow"] is None
 
 
 def test_gap_guidance_points_to_recipe_authoring() -> None:
     guidance = build_extension_gap_guidance()
     assert "docs/recipes/recipe-authoring.md" in guidance["recipes"]
+    assert "docs/recipes/cross-ontology-composition.md" in guidance["recipes"]
     assert any("recipe-authoring" in step for step in guidance["workflow"])
+
+
+def test_gap_routing_exposes_ontology_gap_workflow() -> None:
+    result = route_investigation_content(
+        PROJECT_ROOT,
+        content_text="Quarterly pump lubrication schedule for the water plant.",
+    )
+    assert result["matched_families"] == []
+    ordered = result["ordered_recommendations"]
+    assert ordered["ontology_gap_workflow"] is not None
+    assert "docs/recipes/cross-ontology-composition.md" in ordered["ontology_gap_workflow"]["recipes"]
+    assert result["extension_gap_guidance"] == ordered["ontology_gap_workflow"]

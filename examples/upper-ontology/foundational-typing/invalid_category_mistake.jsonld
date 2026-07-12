@@ -3,22 +3,18 @@
         "kb": "http://example.org/kb/",
         "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
         "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
-        "gufo": "http://purl.org/nemo/gufo#",
-        "xsd": "http://www.w3.org/2001/XMLSchema#"
+        "obo": "http://purl.obolibrary.org/obo/"
     },
     "@graph": [
         {
             "@id": "kb:suspect-1",
             "@type": [
                 "uco-identity:Person",
-                "gufo:Event"
+                "obo:BFO_0000002",
+                "obo:BFO_0000015"
             ],
             "uco-core:name": "Jane Doe (synthetic)",
-            "gufo:hasTimestamp": {
-                "@type": "xsd:dateTime",
-                "@value": "2026-03-15T10:00:00Z"
-            },
-            "_comment": "ANTI-PATTERN: a Person must not be typed as gufo:Event. Model events as InvestigativeAction/uco-action:Action with gufo:Event on the action IRI."
+            "_comment": "ANTI-PATTERN: a Person is a continuant (BFO_0000002) and must not also be typed as obo:BFO_0000015 (process). Model processes as InvestigativeAction with BFO process typing on the action IRI."
         }
     ]
 }

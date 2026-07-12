@@ -20,7 +20,7 @@
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:SimpleAddressFacet-7d449335-3681-46c8-86ef-ff8199d1c3ba",
+                    "@id": "kb:SimpleAddressFacet-16b1ac2f-338a-41c3-8f55-ba9476937cca",
                     "@type": "uco-location:SimpleAddressFacet",
                     "uco-location:country": "US",
                     "uco-location:locality": "Springfield",
@@ -46,7 +46,55 @@
             }
         },
         {
-            "@id": "kb:geofence-buffer",
+            "@id": "kb:warrant-polygon",
+            "@type": [
+                "geo:Geometry",
+                "sf:Polygon"
+            ],
+            "geo:asWKT": {
+                "@type": "geo:wktLiteral",
+                "@value": "POLYGON((-89.655 39.776,-89.645 39.776,-89.645 39.787,-89.655 39.787,-89.655 39.776))"
+            },
+            "uco-core:description": [
+                "Search warrant authorized area (synthetic)."
+            ]
+        },
+        {
+            "@id": "kb:cell-sector-polygon",
+            "@type": [
+                "geo:Geometry",
+                "sf:Polygon"
+            ],
+            "geo:asWKT": {
+                "@type": "geo:wktLiteral",
+                "@value": "POLYGON((-89.660 39.770,-89.640 39.770,-89.635 39.790,-89.665 39.790,-89.660 39.770))"
+            },
+            "uco-core:description": [
+                "Cell-sector coverage polygon from tower dump (synthetic)."
+            ]
+        },
+        {
+            "@id": "kb:vehicle-route",
+            "@type": [
+                "geo:Geometry",
+                "sf:LineString"
+            ],
+            "geo:asWKT": {
+                "@type": "geo:wktLiteral",
+                "@value": "LINESTRING(-89.6501 39.7817,-89.6480 39.7830,-89.6450 39.7850)"
+            },
+            "uco-core:description": [
+                "Suspect vehicle route reconstructed from ALPR hits (synthetic)."
+            ],
+            "prov:wasDerivedFrom": {
+                "@id": "kb:seizure-point"
+            },
+            "prov:wasGeneratedBy": {
+                "@id": "kb:action-geofence"
+            }
+        },
+        {
+            "@id": "kb:analyst-bounding-polygon",
             "@type": [
                 "geo:Geometry",
                 "sf:Polygon"
@@ -55,9 +103,20 @@
                 "@type": "geo:wktLiteral",
                 "@value": "POLYGON((-89.66 39.77,-89.64 39.77,-89.64 39.79,-89.66 39.79,-89.66 39.77))"
             },
-            "prov:wasDerivedFrom": {
-                "@id": "kb:seizure-point"
-            },
+            "uco-core:description": [
+                "Analyst-defined bounding polygon intersecting warrant and cell-sector areas \u2014 not a fixed-radius buffer."
+            ],
+            "prov:wasDerivedFrom": [
+                {
+                    "@id": "kb:seizure-point"
+                },
+                {
+                    "@id": "kb:warrant-polygon"
+                },
+                {
+                    "@id": "kb:cell-sector-polygon"
+                }
+            ],
             "prov:wasGeneratedBy": {
                 "@id": "kb:action-geofence"
             }
@@ -73,7 +132,7 @@
                 "case-investigation:InvestigativeAction",
                 "prov:Activity"
             ],
-            "uco-core:name": "Derive 500m geofence buffer",
+            "uco-core:name": "Derive analyst-defined bounding polygon",
             "uco-action:endTime": {
                 "@type": "xsd:dateTime",
                 "@value": "2026-03-16T09:15:00+00:00"
@@ -92,10 +151,10 @@
             }
         },
         {
-            "@id": "kb:Investigation-5aa7b8a3-360b-4fe9-9e9c-483f48830679",
+            "@id": "kb:Investigation-750475d1-0d73-4feb-b117-dd146e7a8cc5",
             "@type": "case-investigation:Investigation",
             "uco-core:description": [
-                "Location as geo:Feature; geometry separate; derived analytic geometry with provenance."
+                "Location as geo:Feature; geometry separate; warrant, cell-sector, route, and analyst bounding polygon with provenance."
             ],
             "uco-core:name": "Synthetic case 2026-GEO-001",
             "uco-core:object": [

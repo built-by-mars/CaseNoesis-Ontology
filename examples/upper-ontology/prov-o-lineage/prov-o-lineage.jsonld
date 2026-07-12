@@ -37,7 +37,7 @@
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:FileFacet-61db37da-a359-4291-b09f-1e7f41351a29",
+                    "@id": "kb:FileFacet-ac3f18c0-e6f1-4627-b16c-11bdc46a0e2f",
                     "@type": "uco-observable:FileFacet",
                     "uco-observable:fileName": "\\\\.\\PhysicalDrive1"
                 }
@@ -52,7 +52,7 @@
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:FileFacet-5dff6577-015f-4ada-bf34-4842234a037b",
+                    "@id": "kb:FileFacet-451bd43e-5e4f-43a2-912c-286ede6335f2",
                     "@type": "uco-observable:FileFacet",
                     "uco-observable:fileName": "workstation.e01",
                     "uco-observable:sizeInBytes": {
@@ -61,11 +61,11 @@
                     }
                 },
                 {
-                    "@id": "kb:ContentDataFacet-ddc51411-b4fe-4507-8521-f10d6b154447",
+                    "@id": "kb:ContentDataFacet-5c262c60-6bc4-4664-bf7d-a56a30b2d6ab",
                     "@type": "uco-observable:ContentDataFacet",
                     "uco-observable:hash": [
                         {
-                            "@id": "kb:Hash-35fc4ea9-575d-4f78-95bb-3905eee0d1b7",
+                            "@id": "kb:Hash-188f466e-4f89-45f6-82f3-1a1b2cb7c16b",
                             "@type": "uco-types:Hash",
                             "uco-types:hashMethod": "SHA256",
                             "uco-types:hashValue": {
@@ -125,7 +125,7 @@
             }
         },
         {
-            "@id": "kb:ProvenanceRecord-c0c2039c-8f6a-4bac-9906-9ca41171c735",
+            "@id": "kb:ProvenanceRecord-207aa073-336b-49d2-a169-9057bd1a01bb",
             "@type": [
                 "case-investigation:ProvenanceRecord",
                 "prov:Entity"
@@ -145,7 +145,7 @@
             "case-investigation:exhibitNumber": "EX-001"
         },
         {
-            "@id": "kb:Investigation-1ba41789-a281-48ac-89db-8712b7d390f6",
+            "@id": "kb:Investigation-1a9583a5-959e-4358-a5b3-1d242ca6fd94",
             "@type": "case-investigation:Investigation",
             "uco-core:description": [
                 "PROV-O lineage on acquisition \u2014 Tool is instrument (Entity), not Agent."
@@ -159,7 +159,7 @@
                     "@id": "kb:disk-image"
                 },
                 {
-                    "@id": "kb:ProvenanceRecord-c0c2039c-8f6a-4bac-9906-9ca41171c735"
+                    "@id": "kb:ProvenanceRecord-207aa073-336b-49d2-a169-9057bd1a01bb"
                 }
             ]
         }

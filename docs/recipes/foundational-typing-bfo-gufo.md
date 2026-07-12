@@ -30,7 +30,7 @@ Issue: [#59](https://github.com/vulnmaster/CASE-UCO-SDK/issues/59)
 1. **Domain type first.** Always `graph.create(Person, …)` / `graph.create(InvestigativeAction, …)` before enrichment.
 2. **Same IRI.** Use `graph.add_type(node_id, "gufo:Object")` on the `id=` passed to `create()` — not a second node.
 3. **CAC → gUFO only.** If the graph uses CAC classes, use gUFO enrichment or skip foundational typing entirely.
-4. **Actions are occurrents.** Type `InvestigativeAction` as `gufo:Event` or `obo:BFO_0000011` (spatiotemporal/process), never the performer.
+4. **Actions are occurrents.** Type `InvestigativeAction` as `gufo:Event` or `obo:BFO_0000015` (process), never the performer.
 5. **Evidence is endurant.** Type `ObservableObject` as `gufo:Object` / `gufo:FunctionalComplex` or BFO material entity — not `gufo:Event`.
 6. **Never both.** If you need BFO interop, do not add any `gufo:` types to the same graph.
 
@@ -40,7 +40,7 @@ Issue: [#59](https://github.com/vulnmaster/CASE-UCO-SDK/issues/59)
 |---|---|---|
 | `uco-identity:Person` | `gufo:Object` | `obo:BFO_0000002` (Continuant) |
 | `uco-observable:ObservableObject` (device/media) | `gufo:FunctionalComplex` | `obo:BFO_0000040` (Material entity) |
-| `case-investigation:InvestigativeAction` | `gufo:Event` | `obo:BFO_0000011` (Spatiotemporal region) |
+| `case-investigation:InvestigativeAction` | `gufo:Event` | `obo:BFO_0000015` (Process) |
 | `uco-identity:Identity` (organization) | `gufo:Collection` | `obo:BFO_0000027` (Object aggregate) |
 | `uco-location:Location` | `gufo:Object` | `obo:BFO_0000006` (Spatial region) |
 | Role held over a period | `gufo:Situation` (separate node) | BFO temporal region (separate node) |
@@ -90,7 +90,7 @@ python examples/upper-ontology/foundational-typing/build_gufo_variant.py
 python examples/upper-ontology/foundational-typing/build_bfo_variant.py
 ```
 
-Anti-pattern reference: `examples/upper-ontology/foundational-typing/invalid_category_mistake.jsonld` (Person typed as `gufo:Event`).
+Anti-pattern reference: `examples/upper-ontology/foundational-typing/invalid_category_mistake.jsonld` (Person typed as `obo:BFO_0000015` process).
 
 ## Validation
 

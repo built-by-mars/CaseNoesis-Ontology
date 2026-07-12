@@ -695,7 +695,17 @@ def get_uco_profiles(query: str = "") -> dict:
 
     results = []
     for p in matches:
+        # PROFILE_REGISTRY is authoritative for offline paths and dependencies;
+        # UCO_PROFILES retains discovery metadata (descriptions, keywords).
+        from validation_bundle import PROFILE_REGISTRY
+
+        reg = PROFILE_REGISTRY.get(p["id"], {})
+        if "alias_of" in reg:
+            reg = PROFILE_REGISTRY.get(reg["alias_of"], {})
+        local_sources = list(reg.get("sources") or [])
+        local_shapes = list(reg.get("shapes") or [])
         entry: dict[str, Any] = {
+            "id": p["id"],
             "name": p["name"],
             "full_name": p["full_name"],
             "profile_type": p["profile_type"],
@@ -704,10 +714,12 @@ def get_uco_profiles(query: str = "") -> dict:
             "repo_url": p["repo_url"],
             "ontology_url": p["ontology_url"],
             "ontology_file": p["ontology_file"],
-            # Vendored offline copies (v1.19.0): upper-ontology source and
-            # CDO-Shapes SHACL profile, usable without network access.
-            "local_source": p.get("local_source"),
-            "local_shapes": p.get("local_shapes"),
+            # Vendored offline copies: prefer PROFILE_REGISTRY paths (#68).
+            "local_source": local_sources[0] if len(local_sources) == 1 else (local_sources or p.get("local_source")),
+            "local_shapes": local_shapes[0] if len(local_shapes) == 1 else (local_shapes or p.get("local_shapes")),
+            "local_sources": local_sources or None,
+            "local_shape_files": local_shapes or None,
+            "depends_on": list(reg.get("depends_on") or []),
             "related_recipes": p.get("related_recipes", []),
         }
         ext_compat = p.get("extension_compatibility", {})
@@ -990,14 +1002,19 @@ def route_investigation_content(
     When CAC content is detected it also points to route_cac_content for the
     deep CAC domain routing and modeling checklists. When SEVERAL families
     match — real investigations are often CAC + violent crime + fraud at
-    once — the workflow says to build ONE graph composing every matched
-    family's recipes (docs/recipes/cross-domain-extensions.md), never one
-    graph per family. Family recipes are anchors, not the whole catalog:
-    follow up with get_recipes(scenario) for ranked matches across all 60+
-    recipes and guide_mapping(evidence_source) per evidence type.
+    once — the response includes ordered_recommendations with
+    primary_composition_recipe set to
+    docs/recipes/cross-ontology-composition.md, supporting domain recipes,
+    required extensions, recommended/optional/not_recommended profiles, a
+    validation_bundle_preview, and compatibility_warnings. Build ONE graph
+    composing every matched family's recipes, never one graph per family.
+    Family recipes are anchors, not the whole catalog: follow up with
+    get_recipes(scenario) for ranked matches across all 60+ recipes and
+    guide_mapping(evidence_source) per evidence type.
 
     When NOTHING matches — a previously unseen data type — it returns
-    extension_gap_guidance: the search_classes → get_uco_profiles →
+    ordered_recommendations.ontology_gap_workflow (and extension_gap_guidance):
+    the search_classes → get_uco_profiles →
     check_existing_proposals → draft_change_proposal → local-extension
     workflow that keeps strict concept coverage green instead of inventing
     terms, ending with docs/recipes/recipe-authoring.md so the solved

@@ -10,7 +10,10 @@
       "output": "examples/upper-ontology/foundational-typing/foundational-typing-bfo.jsonld",
       "profiles": ["bfo"],
       "extensions": null,
-      "strict_concepts": true
+      "strict_concepts": true,
+      "expect_invalid": [
+        "examples/upper-ontology/foundational-typing/invalid_category_mistake.jsonld"
+      ]
     },
     {
       "id": "foundational-typing-gufo",
@@ -48,7 +51,7 @@
       "recipe": "docs/recipes/geosparql-geospatial-evidence.md",
       "builder": "examples/upper-ontology/geosparql/build_exemplar.py",
       "output": "examples/upper-ontology/geosparql/geosparql-geospatial.jsonld",
-      "profiles": ["geosparql"],
+      "profiles": ["geosparql", "prov-o"],
       "extensions": null,
       "strict_concepts": true
     },
@@ -58,9 +61,12 @@
       "recipe": "docs/recipes/foaf-org-identity-roles.md",
       "builder": "examples/upper-ontology/foaf-org/build_exemplar.py",
       "output": "examples/upper-ontology/foaf-org/foaf-org-identity.jsonld",
-      "profiles": ["foaf", "org"],
+      "profiles": ["foaf", "org", "time"],
       "extensions": null,
-      "strict_concepts": true
+      "strict_concepts": true,
+      "expect_invalid": [
+        "examples/upper-ontology/foaf-org/invalid_person_as_account.jsonld"
+      ]
     },
     {
       "id": "prof-metadata",
@@ -68,7 +74,7 @@
       "recipe": "docs/recipes/prof-validation-profile-metadata.md",
       "builder": "examples/upper-ontology/prof-metadata/build_exemplar.py",
       "output": "examples/upper-ontology/prof-metadata/prof-metadata.jsonld",
-      "profiles": ["prof"],
+      "profiles": ["prof", "prov-o"],
       "extensions": null,
       "strict_concepts": true
     },
@@ -88,7 +94,7 @@
       "recipe": "docs/recipes/cross-ontology-composition.md",
       "builder": "examples/upper-ontology/composition/build_composite.py",
       "output": "examples/upper-ontology/composition/cross-ontology-composite.jsonld",
-      "profiles": ["gufo", "prov-o", "time"],
+      "profiles": ["gufo", "prov-o", "time", "geosparql", "foaf", "org"],
       "extensions": null,
       "strict_concepts": true
     }

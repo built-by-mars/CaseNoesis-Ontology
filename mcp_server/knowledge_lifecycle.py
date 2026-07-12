@@ -567,6 +567,34 @@ def promote_recipe(
         return {"ok": False, "error": "recipe_structure_invalid",
                 "detail": "; ".join(structure_errors)}
 
+    # Executable gate (#69): when the recipe is registered in
+    # recipe-execution.json, run the same builder/RDF/SHACL gate used by CI
+    # before any catalog write.
+    try:
+        from tools.run_recipe_examples import entries_for_recipe_slug, run_manifest_entries
+    except ImportError:
+        sys.path.insert(0, str(project_root / "mcp_server"))
+        from tools.run_recipe_examples import entries_for_recipe_slug, run_manifest_entries
+
+    gate_entries = entries_for_recipe_slug(slug)
+    if gate_entries:
+        from graph_validator import validator_available
+
+        if not validator_available():
+            return {
+                "ok": False,
+                "error": "validator_unavailable",
+                "detail": "case_validate is required to promote recipes with "
+                "executable exemplars (fail-closed).",
+            }
+        gate = run_manifest_entries(gate_entries, validate=True)
+        if gate["failed"]:
+            return {
+                "ok": False,
+                "error": "recipe_execution_gate_failed",
+                "detail": gate,
+            }
+
     title_match = re.search(r"^# (.+)$", text, flags=re.MULTILINE)
     title = title_match.group(1).strip() if title_match else slug
 

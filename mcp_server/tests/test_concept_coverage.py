@@ -729,6 +729,65 @@ def test_coverage_report_dict_includes_verification_status(tmp_path):
     assert payload["verification_status"] == "complete"
 
 
+def test_selected_profiles_reject_unselected_upper_terms(tmp_path):
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:activity-1",
+                "@type": "http://www.w3.org/ns/prov#Activity",
+            },
+            {
+                "@id": "kb:geom-1",
+                "@type": "http://www.opengis.net/ont/geosparql#Geometry",
+            },
+        ],
+    )
+    only_geo = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, selected_profiles=["geosparql"]
+    )
+    assert only_geo.ok is False
+    assert any("profile_not_selected:prov-o" in t for t in only_geo.undeclared_classes)
+
+    both = concept_coverage.check_graph_concepts(
+        graph,
+        project_root=PROJECT_ROOT,
+        selected_profiles=["geosparql", "prov-o"],
+    )
+    assert both.ok is True
+    assert both.undeclared_classes == ()
+
+
+def test_org_selected_profiles_include_dependency_namespaces(tmp_path):
+    # Coverage itself does not expand depends_on; callers must pass the
+    # resolved bundle profile list (org → foaf, prov-o).
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:person-1",
+                "@type": "http://xmlns.com/foaf/0.1/Person",
+            },
+            {
+                "@id": "kb:org-1",
+                "@type": "http://www.w3.org/ns/org#Organization",
+            },
+        ],
+    )
+    org_only = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, selected_profiles=["org"]
+    )
+    assert org_only.ok is False
+    assert any("profile_not_selected:foaf" in t for t in org_only.undeclared_classes)
+
+    with_deps = concept_coverage.check_graph_concepts(
+        graph,
+        project_root=PROJECT_ROOT,
+        selected_profiles=["org", "foaf", "prov-o"],
+    )
+    assert with_deps.ok is True
+
+
 # ---------------------------------------------------------------------------
 # Typed extension dependency failures (issue #55)
 # ---------------------------------------------------------------------------

@@ -26,7 +26,7 @@
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:FileFacet-946673d7-53a5-4b66-9143-8925a94dc90a",
+                    "@id": "kb:FileFacet-71624687-6443-4acd-ba88-2a044d428449",
                     "@type": "uco-observable:FileFacet",
                     "uco-observable:fileName": "workstation.e01",
                     "uco-observable:sizeInBytes": {
@@ -62,7 +62,7 @@
             }
         },
         {
-            "@id": "kb:Investigation-89c3d199-91f8-4cac-b2b0-ba707d0597ef",
+            "@id": "kb:Investigation-59448e2c-16d7-4d04-8f28-80e104bc9d98",
             "@type": "case-investigation:Investigation",
             "uco-core:description": [
                 "gUFO enrichment on CASE/UCO domain types (same IRI)."

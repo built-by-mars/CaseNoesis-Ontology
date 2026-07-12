@@ -2,11 +2,11 @@
 
 # CASE/UCO SDK
 
-**v1.21.0** *(unreleased — see [Unreleased](CHANGELOG.md#unreleased) / [1.21.0](CHANGELOG.md#1210---2026-07-12))* · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md)
+**v1.21.0** *(unreleased — see [Unreleased](CHANGELOG.md#unreleased))* · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md)
 
 A multi-language data modeling library for digital forensics, cyber-investigation, and cyber-observable data. If your software produces or consumes forensic evidence, this SDK gives you typed, validated builders in **Python**, **C#**, **Java**, and **Rust** — so you can model investigation data in your language and produce interoperable [CASE/UCO](https://caseontology.org/) JSON-LD output.
 
-The SDK is more than the four language bindings. It ships with a growing family of [extension ontologies](#bundled-extension-ontologies) (crimes against children, adversary engagement, cryptocurrency and financial crime, legal process, racketeering, weapons, controlled substances, MITRE ATT&CK techniques, the SOLVE-IT digital forensics knowledge base, forensic tool capabilities), a [recipe cookbook](docs/recipes/INDEX.md) of 69 validated modeling patterns, and an [MCP server](#ai-assisted-development) that gives AI agents a working knowledge of the Linux Foundation [Cyber Domain Ontology](https://cyberdomainontology.org/) ecosystem — the ontologies themselves, the upper-ontology profiles (BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, FOAF), the [CDO Community Playground](https://docs.google.com/document/d/1EiXQiAeUGk-629xdKx7HZHVn927k891LGkPcQzNLLr8/edit?usp=sharing), and the change-proposal process. Together these let an agent model **any concept adjacent to the cyber domain — or work done on, in, or through it** — and route any investigation submission to validated modeling patterns, drafting upstream ontology proposals when a concept doesn't exist yet.
+The SDK is more than the four language bindings. It ships with a growing family of [extension ontologies](#bundled-extension-ontologies) (crimes against children, adversary engagement, cryptocurrency and financial crime, legal process, racketeering, weapons, controlled substances, MITRE ATT&CK techniques, the SOLVE-IT digital forensics knowledge base, forensic tool capabilities), a [recipe cookbook](docs/recipes/INDEX.md) of 77 modeling patterns, and an [MCP server](#ai-assisted-development) that gives AI agents a working knowledge of the Linux Foundation [Cyber Domain Ontology](https://cyberdomainontology.org/) ecosystem — the ontologies themselves, the upper-ontology profiles (BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, FOAF, ORG, PROF), the [CDO Community Playground](https://docs.google.com/document/d/1EiXQiAeUGk-629xdKx7HZHVn927k891LGkPcQzNLLr8/edit?usp=sharing), and the change-proposal process. Together these let an agent model **any concept adjacent to the cyber domain — or work done on, in, or through it** — and route any investigation submission to validated modeling patterns, drafting upstream ontology proposals when a concept doesn't exist yet.
 
 The SDK works with AI coding assistants (Cursor, Claude Code, Hermes, etc.) — see [AI-Assisted Development](#ai-assisted-development) below.
 
@@ -24,7 +24,7 @@ The SDK is auto-generated from the official CASE 1.4.0 and UCO 1.4.0 ontology so
 Beyond the generated code, the repository provides:
 
 - **Bundled extension ontologies** — queryable through the same registry and MCP tools as core CASE/UCO (see [Bundled Extension Ontologies](#bundled-extension-ontologies))
-- **68 validated recipes** — end-to-end modeling patterns for forensic workflows and whole investigation types, each grounded in real validated graphs ([docs/recipes/](docs/recipes/INDEX.md))
+- **77 modeling recipes** — end-to-end modeling patterns for forensic workflows and whole investigation types, each grounded in example graphs ([docs/recipes/](docs/recipes/INDEX.md))
 - **An MCP server for AI agents** — ontology discovery, investigation routing, document processing, SHACL + concept-coverage validation, and change-proposal drafting ([AI-Assisted Development](#ai-assisted-development))
 - **A change-proposal pipeline** — when a concept is missing, the tooling searches the UCO, CASE, and CAC issue trackers, drafts a filled-in proposal with tested example data, and supports local extension declarations so work is never blocked on upstream adoption ([change_proposals/](change_proposals/README.md))
 
@@ -47,7 +47,7 @@ For Java, add to your `pom.xml`:
 <dependency>
     <groupId>org.caseontology</groupId>
     <artifactId>case-uco</artifactId>
-    <version>1.20.0</version>
+    <version>1.21.0</version>
 </dependency>
 ```
 
@@ -269,7 +269,7 @@ Core CASE/UCO covers cyber-observables and investigation management, but real in
 | [`drugs`](extensions/drugs/) | 0.1.0 | Controlled-substance evidence — ChEBI identity, CSA schedules, mass and purity |
 | [`toolcap`](extensions/toolcap/) | 0.4.0 | Forensic tool capability benchmarking — decomposed Tool → Module → Capability model with IR metrics and AutoDFBench provenance |
 
-Extensions compose: a single graph can combine core observables with CAC victim identification, `legalproc` charges, and `cryptoinv` blockchain traces. See the [cross-domain extensions recipe](docs/recipes/cross-domain-extensions.md).
+Extensions compose: a single graph can combine core observables with CAC victim identification, `legalproc` charges, and `cryptoinv` blockchain traces. See the [cross-ontology composition recipe](docs/recipes/cross-ontology-composition.md).
 
 ## Extending the Ontology
 
@@ -462,7 +462,7 @@ Switching between languages? The parity contract documents what is identical vs.
 
 ### Recipes
 
-68 step-by-step patterns, each grounded in validated example graphs. Coverage spans classic forensic workflows (disk imaging, file systems, network artifacts, chain of custody, mobile forensics) and whole investigation types: fraud and cryptocurrency laundering, elder fraud, espionage and classified disclosure, export control and sanctions evasion, cyber threat intelligence and APT reporting, insider threat and trade secrets, racketeering, weapons and drug evidence, cargo theft, and a 16-recipe Crimes Against Children series (trafficking networks, CSAM provenance, sextortion, hotline intake, task force operations, federal prosecution, PACER document ingestion):
+77 step-by-step patterns, each grounded in example graphs. Coverage spans classic forensic workflows (disk imaging, file systems, network artifacts, chain of custody, mobile forensics) and whole investigation types: fraud and cryptocurrency laundering, elder fraud, espionage and classified disclosure, export control and sanctions evasion, cyber threat intelligence and APT reporting, insider threat and trade secrets, racketeering, weapons and drug evidence, cargo theft, upper-ontology composition, and a 16-recipe Crimes Against Children series (trafficking networks, CSAM provenance, sextortion, hotline intake, task force operations, federal prosecution, PACER document ingestion):
 
 - **[docs/recipes/](docs/recipes/INDEX.md)** — practical cookbook with copy-paste examples (one file per recipe)
 
@@ -518,7 +518,7 @@ CASE-UCO-SDK/
 │       ├── forensic-tool.md
 │       ├── starter-*.md     End-to-end mapping starter kits (4 recipes)
 │       ├── cac-*.md         Crimes Against Children recipe series (16 recipes)
-│       └── ...              (68 recipes total)
+│       └── ...              (77 recipes total)
 ├── ONTOLOGY_REFERENCE.md   Complete class reference (auto-generated)
 ├── SECURITY.md             Vulnerability reporting policy
 ├── .github/workflows/      CI, CodeQL, Rust security, dependency review, release workflows

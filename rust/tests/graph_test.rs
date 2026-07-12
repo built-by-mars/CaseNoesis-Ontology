@@ -159,3 +159,45 @@ fn test_load_json_ld() {
     let output = graph.serialize().expect("serialization should succeed");
     assert!(output.contains("kb:Tool-existing-001"));
 }
+
+#[test]
+fn test_load_rejects_duplicate_by_default() {
+    let mut graph = CaseGraph::new("http://example.org/kb/");
+    graph
+        .upsert_node(
+            "kb:x",
+            Some(serde_json::json!("uco-core:UcoObject")),
+            None,
+        )
+        .expect("upsert");
+    let err = graph
+        .load(r#"{"@context":{"kb":"http://example.org/kb/"},"@graph":[{"@id":"kb:x","@type":"uco-core:UcoObject"}]}"#)
+        .expect_err("duplicate should fail");
+    assert!(err.to_string().contains("Duplicate"));
+}
+
+#[test]
+fn test_load_rejects_context_collision() {
+    let mut graph = CaseGraph::new("http://example.org/kb/");
+    let err = graph
+        .load(r#"{"@context":{"kb":"http://example.org/kb/","uco-core":"https://evil.example.org/uco/core/"},"@graph":[]}"#)
+        .expect_err("context collision should fail");
+    assert!(err.to_string().contains("Context prefix collision"));
+}
+
+#[test]
+fn test_get_is_immutable_view() {
+    let mut graph = CaseGraph::new("http://example.org/kb/");
+    graph
+        .upsert_node(
+            "kb:n1",
+            Some(serde_json::json!("uco-core:UcoObject")),
+            Some(serde_json::json!({"uco-core:name": "N"}).as_object().unwrap().clone()),
+        )
+        .expect("upsert");
+    assert!(graph.contains("kb:n1"));
+    assert_eq!(
+        graph.get("kb:n1").unwrap().get("uco-core:name").unwrap(),
+        "N"
+    );
+}

@@ -37,9 +37,9 @@ These operations exist in every language with parallel naming (adjusted only for
 | Add property | `graph.add_property(id, k, v)` | `graph.AddProperty(id, k, v)` | `graph.addProperty(id, k, v)` | `graph.add_property(id, k, v)` |
 | Link (property edge) | `graph.link(src, pred, tgt)` | `graph.Link(src, pred, tgt)` | `graph.link(src, pred, tgt)` | `graph.link(src, pred, tgt)` |
 | Create Relationship | `graph.create_relationship(...)` | `graph.CreateRelationship(...)` | `graph.createRelationship(...)` | `graph.create_relationship(...)` |
-| Reject duplicates on load | `graph.on_duplicate = "reject"` | `graph.RejectDuplicates = true` | `graph.setRejectDuplicates(true)` | `graph.set_reject_duplicates(true)` |
-| Merge on load (default) | `on_duplicate="merge_compatible"` | `RejectDuplicates = false` | `rejectDuplicates = false` | `reject_duplicates = false` |
-| Duplicate node error | `DuplicateNodeError` | `InvalidOperationException` | `IllegalStateException` | `DuplicateNodeError` / `GraphError` |
+| Reject duplicates on load (**default**) | `on_duplicate="reject"` (default) | `RejectDuplicates = true` (default) | `rejectDuplicates = true` (default) | `reject_duplicates = true` (default) |
+| Merge on load (opt-in) | `on_duplicate="merge_compatible"` | `RejectDuplicates = false` | `setRejectDuplicates(false)` | `set_reject_duplicates(false)` |
+| Duplicate node error | `DuplicateNodeError` | `InvalidOperationException` | `IllegalStateException` | `DuplicateNodeError` / `GraphError` / `LoadError` |
 | Validate | `graph.validate()` | `graph.ValidateGraph()` | `graph.validate()` | `graph.validate()` |
 
 ### Registry / Discovery
@@ -65,11 +65,16 @@ Every language exposes the ontology versions used to generate the SDK:
 
 ### JSON-LD Output
 
-All four languages produce byte-identical JSON-LD output for the same input. This includes:
-- The same 18 namespace prefixes in the `@context`
+All four languages produce **RDF-equivalent / deterministic** JSON-LD for the
+same logical input where the feature is implemented. Parity is **not**
+byte-identical serialization across languages (key order, whitespace, and
+UUID `@id` minting may differ). Shared contracts include:
+
+- The same namespace prefixes in the `@context` (pruned to used prefixes)
 - The same `@type` IRIs
 - The same property names (JSON-LD key names are ontology IRIs, not language-native names)
-- The same `@id` format (`kb:TypeName-UUID`)
+- The same `@id` format pattern (`kb:TypeName-UUID`) when IDs are auto-minted
+- Default duplicate `@id` policy of **reject** on load / typed deserialize
 
 ### Validation Behavior
 

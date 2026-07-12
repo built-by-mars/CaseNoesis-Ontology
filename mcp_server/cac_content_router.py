@@ -1099,10 +1099,10 @@ def route_cac_content(
     if not matched_domains and generic_hit:
         matched_domains = [{
             "domain_id": "cac-general",
-            "title": "CAC General Investigation (cross-domain-extensions)",
+            "title": "CAC General Investigation (cross-ontology-composition)",
             "score": 1,
             "layer": 2,
-            "recipe_file": "docs/recipes/cross-domain-extensions.md",
+            "recipe_file": "docs/recipes/cross-ontology-composition.md",
             "mapping_source": None,
             "related_core_recipes": ["docs/recipes/cac-grooming-chat-modeling.md"],
         }]

@@ -16,17 +16,29 @@
         "geo": "http://www.opengis.net/ont/geosparql#",
         "sf": "http://www.opengis.net/ont/sf#",
         "foaf": "http://xmlns.com/foaf/0.1/",
-        "org": "http://www.w3.org/ns/org#"
+        "org": "http://www.w3.org/ns/org#",
+        "skos": "http://www.w3.org/2004/02/skos/core#"
     },
     "@graph": [
         {
+            "@id": "kb:role-examiner",
+            "@type": [
+                "org:Role",
+                "skos:Concept"
+            ],
+            "skos:prefLabel": "Mobile forensic examiner"
+        },
+        {
             "@id": "kb:taskforce",
             "@type": [
-                "uco-identity:Identity",
+                "uco-identity:Organization",
                 "org:Organization",
                 "foaf:Organization"
             ],
-            "uco-core:name": "Metro ICAC Task Force (synthetic)"
+            "uco-core:name": "Metro ICAC Task Force (synthetic)",
+            "org:hasMembership": {
+                "@id": "kb:membership-1"
+            }
         },
         {
             "@id": "kb:examiner-1",
@@ -39,14 +51,28 @@
             "uco-core:name": "Examiner One (synthetic)"
         },
         {
+            "@id": "kb:membership-1",
+            "@type": "org:Membership",
+            "org:member": {
+                "@id": "kb:examiner-1"
+            },
+            "org:organization": {
+                "@id": "kb:taskforce"
+            },
+            "org:role": {
+                "@id": "kb:role-examiner"
+            }
+        },
+        {
             "@id": "kb:seizure-site",
             "@type": [
                 "uco-location:Location",
-                "geo:Feature"
+                "geo:Feature",
+                "gufo:Object"
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:LatLongCoordinatesFacet-2feedc9e-28de-4fcc-ab22-df9e7ee3a9a1",
+                    "@id": "kb:LatLongCoordinatesFacet-e95716dd-c3b9-412a-b0e0-61117cdb5590",
                     "@type": "uco-location:LatLongCoordinatesFacet",
                     "uco-location:latitude": {
                         "@type": "xsd:decimal",
@@ -75,7 +101,7 @@
             }
         },
         {
-            "@id": "kb:evidence-phone",
+            "@id": "kb:source-phone",
             "@type": [
                 "uco-observable:ObservableObject",
                 "prov:Entity",
@@ -83,7 +109,36 @@
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:FileFacet-66b618ae-1262-49bd-946e-bd9bce7c54fc",
+                    "@id": "kb:DeviceFacet-7ae3050e-35bd-41d5-9db7-fd6ae0c71994",
+                    "@type": "uco-observable:DeviceFacet",
+                    "uco-observable:deviceType": "mobile phone",
+                    "uco-observable:model": "Synthetic Phone X",
+                    "uco-observable:serialNumber": "SYN-PHONE-001"
+                },
+                {
+                    "@id": "kb:MobileDeviceFacet-458883e5-fddc-4b02-bb3c-1cfd8b2a8d6b",
+                    "@type": "uco-observable:MobileDeviceFacet",
+                    "uco-observable:IMEI": [
+                        "990000862471854"
+                    ],
+                    "uco-observable:storageCapacityInBytes": {
+                        "@type": "xsd:integer",
+                        "@value": "128000000000"
+                    }
+                }
+            ],
+            "uco-core:name": "Seized mobile device (source storage, synthetic)"
+        },
+        {
+            "@id": "kb:evidence-phone-image",
+            "@type": [
+                "uco-observable:ObservableObject",
+                "prov:Entity",
+                "gufo:FunctionalComplex"
+            ],
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:FileFacet-a7fda8cb-1682-4f25-820a-229e13b365de",
                     "@type": "uco-observable:FileFacet",
                     "uco-observable:fileName": "phone.ufd",
                     "uco-observable:sizeInBytes": {
@@ -92,11 +147,11 @@
                     }
                 },
                 {
-                    "@id": "kb:ContentDataFacet-2d8f55ee-a746-44f8-a846-486f0c9336c4",
+                    "@id": "kb:ContentDataFacet-c326e101-dd30-444d-a9fd-3ac755d3796f",
                     "@type": "uco-observable:ContentDataFacet",
                     "uco-observable:hash": [
                         {
-                            "@id": "kb:Hash-7fd9d553-0219-48da-9f1d-0672ecdc3a1d",
+                            "@id": "kb:Hash-a49cedee-ce51-4def-8bf4-cc1d537f284d",
                             "@type": "uco-types:Hash",
                             "uco-types:hashMethod": "SHA256",
                             "uco-types:hashValue": {
@@ -107,9 +162,12 @@
                     ]
                 }
             ],
-            "uco-core:name": "Seized mobile device image (synthetic)",
+            "uco-core:name": "Mobile device forensic image (acquisition result, synthetic)",
             "prov:wasGeneratedBy": {
                 "@id": "kb:action-acquire"
+            },
+            "prov:wasDerivedFrom": {
+                "@id": "kb:source-phone"
             },
             "time:hasTime": {
                 "@id": "kb:interval-custody"
@@ -148,15 +206,26 @@
             ],
             "uco-action:object": [
                 {
-                    "@id": "kb:evidence-phone"
+                    "@id": "kb:source-phone"
                 }
             ],
             "uco-action:performer": {
                 "@id": "kb:examiner-1"
             },
+            "uco-action:result": [
+                {
+                    "@id": "kb:evidence-phone-image"
+                }
+            ],
             "uco-action:startTime": {
                 "@type": "xsd:dateTime",
                 "@value": "2026-03-15T10:00:00+00:00"
+            },
+            "prov:used": {
+                "@id": "kb:imager"
+            },
+            "prov:wasAssociatedWith": {
+                "@id": "kb:examiner-1"
             }
         },
         {
@@ -186,12 +255,15 @@
             }
         },
         {
-            "@id": "kb:ProvenanceRecord-186faff3-c6fd-48e0-827e-3fe24494384c",
+            "@id": "kb:ProvenanceRecord-c60fe797-8c87-4696-af13-dfb4905ff5e6",
             "@type": "case-investigation:ProvenanceRecord",
             "uco-core:name": "Exhibit 1 provenance",
             "uco-core:object": [
                 {
-                    "@id": "kb:evidence-phone"
+                    "@id": "kb:source-phone"
+                },
+                {
+                    "@id": "kb:evidence-phone-image"
                 },
                 {
                     "@id": "kb:action-acquire"
@@ -200,19 +272,23 @@
             "case-investigation:exhibitNumber": "EX-001"
         },
         {
-            "@id": "kb:Investigation-153289a0-f0a1-42ba-9454-72d3e61415aa",
+            "@id": "kb:Investigation-1ce15760-1a60-44e4-ae96-f73bbefa7f49",
             "@type": "case-investigation:Investigation",
             "uco-core:description": [
                 "Cross-ontology composition: gUFO + PROV-O + OWL-Time + GeoSPARQL + FOAF/ORG on one graph.",
+                "Acquisition chain: source device/storage \u2192 acquisition activity \u2192 forensic image (distinct IRIs).",
                 "BFO deliberately omitted \u2014 never combine BFO and gUFO on the same graph."
             ],
             "uco-core:name": "Synthetic composite case 2026-COMP-001",
             "uco-core:object": [
                 {
-                    "@id": "kb:evidence-phone"
+                    "@id": "kb:source-phone"
                 },
                 {
-                    "@id": "kb:ProvenanceRecord-186faff3-c6fd-48e0-827e-3fe24494384c"
+                    "@id": "kb:evidence-phone-image"
+                },
+                {
+                    "@id": "kb:ProvenanceRecord-c60fe797-8c87-4696-af13-dfb4905ff5e6"
                 },
                 {
                     "@id": "kb:taskforce"

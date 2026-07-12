@@ -19,9 +19,11 @@ Pair with [solve-it-investigation-planning.md](solve-it-investigation-planning.m
 | Node | Types | Role |
 |---|---|---|
 | Acquisition plan | `prov:Plan` | What was **intended** before execution |
-| Planned step | `solveit-core:SolveitInvestigativeAction` | Method selection without timestamps |
+| Plan | `prov:Plan` + `uco-core:UcoObject` | What was **intended** — not an `InvestigativeAction` |
 | Executed step | `solveit-core:SolveitInvestigativeAction` + `prov:Activity` | What **happened** — with `usedTechnique`, `appliedMitigation`, times |
-| Re-execution | `solveit-core:SolveitInvestigativeAction` | `prov:wasRevisionOf` prior partial execution |
+| Plan linkage | `prov:Association` + `prov:qualifiedAssociation` | Agent + `prov:hadPlan` on Association; Activity references it |
+| Partial / corrected results | `prov:Entity` observables | `prov:wasRevisionOf` between results; `prov:wasInvalidatedBy` on partial |
+| Re-execution | `solveit-core:SolveitInvestigativeAction` | Document in `uco-core:description`; link corrected Entity with `prov:wasRevisionOf` partial result |
 
 ## Decision rules
 
@@ -45,9 +47,15 @@ graph = CASEGraph(extra_context={
 })
 
 plan_id = "kb:plan-1"
-graph.upsert_node(plan_id, types="prov:Plan", properties={
+graph.upsert_node(plan_id, types=["prov:Plan", "uco-core:UcoObject"], properties={
     "uco-core:name": "Acquisition plan",
     "uco-core:description": ["Planned: write-block, DFT-1002, DFT-1042."],
+})
+
+association_id = "kb:association-1"
+graph.upsert_node(association_id, types="prov:Association", properties={
+    "prov:agent": {"@id": examiner_id},
+    "prov:hadPlan": {"@id": plan_id},
 })
 
 executed_id = "kb:action-executed"
@@ -59,8 +67,9 @@ graph.upsert_node(executed_id, types=[
     "uco-core:name": "Acquire image (partial)",
     "solveit-core:usedTechnique": [{"@id": "solveit-data:techniqueDFT-1002"}],
     "solveit-core:appliedMitigation": [{"@id": "solveit-data:mitigationDFM-1003"}],
-    "prov:hadPlan": {"@id": plan_id},
+    "prov:qualifiedAssociation": {"@id": association_id},
 })
+graph.link(partial_image_id, "prov:wasGeneratedBy", executed_id)
 
 reexec_id = "kb:action-reexec"
 graph.upsert_node(reexec_id, types=[
@@ -70,9 +79,10 @@ graph.upsert_node(reexec_id, types=[
 ], properties={
     "uco-core:name": "Re-execute imaging",
     "solveit-core:usedTechnique": [{"@id": "solveit-data:techniqueDFT-1002"}],
-    "prov:hadPlan": {"@id": plan_id},
+    "prov:qualifiedAssociation": {"@id": association_id},
 })
-graph.create_relationship(reexec_id, "prov:wasRevisionOf", executed_id)
+graph.link(corrected_image_id, "prov:wasRevisionOf", partial_image_id)
+graph.link(partial_image_id, "prov:wasInvalidatedBy", reexec_action_id)
 graph.write("solveit-plan-execution.jsonld")
 ```
 

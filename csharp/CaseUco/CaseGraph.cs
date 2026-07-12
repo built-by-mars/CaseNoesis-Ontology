@@ -23,9 +23,10 @@ namespace CaseUco
 
         /// <summary>
         /// When true, <see cref="Load"/> raises on duplicate <c>@id</c> instead of merging.
-        /// Default is false (merge-compatible) for backward compatibility with merge workflows.
+        /// Default is <c>true</c> (reject) to match Python <c>on_duplicate="reject"</c>.
+        /// Set to <c>false</c> for merge-compatible load behavior.
         /// </summary>
-        public bool RejectDuplicates { get; set; }
+        public bool RejectDuplicates { get; set; } = true;
 
         public CaseGraph(string kbPrefix = "http://example.org/kb/")
         {
@@ -81,10 +82,17 @@ namespace CaseUco
             return _idMap.TryGetValue(instance, out var id) ? id : null;
         }
 
-        /// <summary>Return the JSON-LD dict for a node by compact or expanded @id.</summary>
+        /// <summary>
+        /// Return a shallow copy of the JSON-LD dict for a node by compact or expanded @id.
+        /// Mutating <c>@id</c> on the returned dictionary does not update the graph index;
+        /// use <see cref="AddType"/> / <see cref="AddProperty"/> / <see cref="UpsertNode"/>.
+        /// </summary>
         public Dictionary<string, object> Get(string id)
         {
-            return FindObject(id);
+            var obj = FindObject(id);
+            if (obj == null)
+                return null;
+            return new Dictionary<string, object>(obj);
         }
 
         /// <summary>Return true if a node with this @id (compact or expanded) exists.</summary>
@@ -194,10 +202,7 @@ namespace CaseUco
             var doc = ParseJson(json);
             if (doc.TryGetValue("@context", out var ctxObj) && ctxObj is Dictionary<string, object> ctx)
             {
-                foreach (var kv in ctx.Where(kv => kv.Value is string))
-                {
-                    _context[kv.Key] = (string)kv.Value;
-                }
+                MergeContext(ctx);
             }
             if (doc.TryGetValue("@graph", out var graphObj) && graphObj is List<object> graphList)
             {
@@ -209,7 +214,9 @@ namespace CaseUco
         }
 
         /// <summary>Parse a JSON-LD string into typed objects where possible.
-        /// Types are matched by scanning loaded assemblies for classes with a static ClassIri field.</summary>
+        /// Types are matched by scanning loaded assemblies for classes with a static ClassIri field.
+        /// When <c>@type</c> is an array, the most specific unambiguous registered class is chosen.
+        /// </summary>
         public static FromJsonLdResult FromJsonLd(string json)
         {
             var doc = ParseJson(json);
@@ -217,8 +224,7 @@ namespace CaseUco
 
             if (doc.TryGetValue("@context", out var ctxObj) && ctxObj is Dictionary<string, object> ctx)
             {
-                foreach (var kv in ctx.Where(kv => kv.Value is string))
-                    graph._context[kv.Key] = (string)kv.Value;
+                graph.MergeContext(ctx);
             }
 
             var objects = new List<object>();
@@ -227,13 +233,27 @@ namespace CaseUco
             {
                 foreach (var item in graphList.OfType<Dictionary<string, object>>())
                 {
-                    graph.AppendObject(item);
+                    graph.IngestRawNode(item, graph.RejectDuplicates);
                     var typed = TryInstantiate(item, graph._context);
                     objects.Add(typed ?? (object)item);
                 }
             }
 
             return new FromJsonLdResult { Graph = graph, Objects = objects };
+        }
+
+        private void MergeContext(Dictionary<string, object> incoming)
+        {
+            foreach (var kv in incoming.Where(kv => kv.Value is string))
+            {
+                var ns = (string)kv.Value;
+                if (_context.TryGetValue(kv.Key, out var existing) && existing != ns)
+                {
+                    throw new ArgumentException(
+                        $"Context prefix collision for '{kv.Key}': existing '{existing}' vs incoming '{ns}'");
+                }
+                _context[kv.Key] = ns;
+            }
         }
 
         private static string ExpandCompactIri(string value, Dictionary<string, string> context)
@@ -251,11 +271,38 @@ namespace CaseUco
 
         private static object TryInstantiate(Dictionary<string, object> obj, Dictionary<string, string> context)
         {
-            if (!obj.TryGetValue("@type", out var typeObj) || !(typeObj is string typeStr))
+            if (!obj.TryGetValue("@type", out var typeObj) || typeObj == null)
                 return null;
 
-            var expandedIri = ExpandCompactIri(typeStr, context);
+            var typeStrings = AsTypeList(typeObj);
+            if (typeStrings.Count == 0)
+                return null;
 
+            var matched = new List<Type>();
+            foreach (var typeStr in typeStrings)
+            {
+                var expandedIri = ExpandCompactIri(typeStr, context);
+                var found = FindTypeByClassIri(expandedIri);
+                if (found != null && !matched.Contains(found))
+                    matched.Add(found);
+            }
+
+            var selected = SelectMostSpecificType(matched);
+            if (selected == null)
+                return null;
+
+            try
+            {
+                var instance = Activator.CreateInstance(selected);
+                SetPropertiesFromJsonLd(instance, obj, context);
+                return instance;
+            }
+            catch (MemberAccessException) { return null; }
+            catch (TargetInvocationException) { return null; }
+        }
+
+        private static Type FindTypeByClassIri(string expandedIri)
+        {
             foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
             {
                 Type[] types;
@@ -269,19 +316,20 @@ namespace CaseUco
                     var field = type.GetField("ClassIri", BindingFlags.Public | BindingFlags.Static);
                     if (field == null || (string)field.GetValue(null) != expandedIri)
                         continue;
-
-                    try
-                    {
-                        var instance = Activator.CreateInstance(type);
-                        SetPropertiesFromJsonLd(instance, obj, context);
-                        return instance;
-                    }
-                    catch (MemberAccessException) { return null; }
-                    catch (TargetInvocationException) { return null; }
+                    return type;
                 }
             }
-
             return null;
+        }
+
+        private static Type SelectMostSpecificType(List<Type> types)
+        {
+            if (types == null || types.Count == 0)
+                return null;
+            if (types.Count == 1)
+                return types[0];
+            var specific = types.Where(c => !types.Any(o => o != c && o.IsSubclassOf(c))).ToList();
+            return specific.Count == 1 ? specific[0] : null;
         }
 
         private static void SetPropertiesFromJsonLd(object instance, Dictionary<string, object> obj, Dictionary<string, string> context)
@@ -688,7 +736,9 @@ namespace CaseUco
                 return;
             }
 
-            obj[key] = new List<object> { existing, value };
+            // Do not silently convert differing scalars into lists (parity with Python merge_compatible).
+            throw new InvalidOperationException(
+                $"merge_compatible scalar conflict on '{key}': existing and incoming values differ");
         }
 
         private string DeterministicRelationshipId(string sourceId, string targetId, string kind)

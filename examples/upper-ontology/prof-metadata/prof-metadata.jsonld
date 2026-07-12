@@ -3,42 +3,84 @@
         "case-investigation": "https://ontology.caseontology.org/case/investigation/",
         "kb": "http://example.org/kb/",
         "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
         "prof": "http://www.w3.org/ns/dx/prof/",
-        "dcterms": "http://purl.org/dc/terms/"
+        "dcterms": "http://purl.org/dc/terms/",
+        "prov": "http://www.w3.org/ns/prov#"
     },
     "@graph": [
         {
             "@id": "kb:profile-case-uco-1.4",
             "@type": "prof:Profile",
             "dcterms:title": "CASE/UCO 1.4.0 investigation graph",
-            "prof:isProfileOf": "https://ontology.unifiedcyberontology.org/uco/",
+            "prof:isProfileOf": {
+                "@id": "https://ontology.unifiedcyberontology.org/uco/"
+            },
             "prof:hasResource": {
                 "@id": "kb:descriptor-shacl"
-            },
-            "prof:hasArtifact": {
-                "@id": "kb:validation-report-1"
             }
         },
         {
             "@id": "kb:descriptor-shacl",
             "@type": "prof:ResourceDescriptor",
-            "prof:hasRole": "http://www.w3.org/ns/dx/prof/ValidationRole",
-            "dcterms:format": "text/turtle",
-            "dcterms:description": "CASE/UCO SHACL shapes bundle used for conformance checking."
+            "prof:hasRole": {
+                "@id": "http://www.w3.org/ns/dx/prof/role/ValidationRole"
+            },
+            "dcterms:format": {
+                "@id": "https://www.iana.org/assignments/media-types/text/turtle"
+            },
+            "dcterms:description": "CASE/UCO SHACL shapes bundle used for conformance checking.",
+            "prof:hasArtifact": {
+                "@id": "https://github.com/casework/CASE-UCO/releases/download/case-1.4.0/case-shapes.ttl"
+            }
         },
         {
             "@id": "kb:validation-report-1",
-            "@type": "uco-core:UcoObject",
-            "uco-core:name": "Validation run 2026-03-15",
+            "@type": [
+                "prov:Entity",
+                "uco-core:UcoObject"
+            ],
+            "uco-core:name": "Validation run 2026-03-15 (initial)",
             "uco-core:description": [
                 "SHACL conformance result for synthetic exemplar \u2014 distinct from profile intent metadata."
             ]
         },
         {
-            "@id": "kb:Investigation-335d9c13-9cae-46f1-a8d8-3ac1f2b9129b",
+            "@id": "kb:validation-report-2",
+            "@type": [
+                "prov:Entity",
+                "uco-core:UcoObject"
+            ],
+            "uco-core:name": "Validation run 2026-03-16 (re-run)",
+            "uco-core:description": [
+                "Re-validated after graph update; supersedes the initial report."
+            ],
+            "prov:wasRevisionOf": {
+                "@id": "kb:validation-report-1"
+            },
+            "prov:wasGeneratedBy": {
+                "@id": "kb:action-validate"
+            }
+        },
+        {
+            "@id": "kb:action-validate",
+            "@type": "prov:Activity",
+            "uco-core:name": "case_validate SHACL run",
+            "prov:startedAtTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2026-03-16T14:00:00+00:00"
+            },
+            "prov:endedAtTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2026-03-16T14:05:00+00:00"
+            }
+        },
+        {
+            "@id": "kb:Investigation-ff1d5233-595e-4820-ab3f-553a83a30881",
             "@type": "case-investigation:Investigation",
             "uco-core:description": [
-                "Graph carries PROF profile intent; validation results are separate resources."
+                "Graph carries PROF profile intent; validation results are separate prov:Entity resources.",
+                "prof:hasResource links Profile to ResourceDescriptor; hasArtifact on descriptor points to shapes/report."
             ],
             "uco-core:name": "Synthetic case 2026-PROF-001"
         }

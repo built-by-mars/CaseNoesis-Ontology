@@ -83,7 +83,9 @@ PROFILE_REGISTRY: dict[str, dict[str, Any]] = {
         "canonical_id": "https://ontology.unifiedcyberontology.org/profiles/org",
         "sources": ["ontology/upper/org.ttl"],
         "shapes": ["ontology/upper/shapes/sh-org.ttl"],
-        "depends_on": [],
+        # Offline import closure from sh-org.ttl (FOAF + PROV-O shapes;
+        # SKOS is covered by standard RDF namespaces).
+        "depends_on": ["foaf", "prov-o"],
         "incompatible_with": [],
         "extension_policy": {},
         "inference": "rdfs",
@@ -134,19 +136,33 @@ class ResolvedValidationBundle:
     compatibility_notes: tuple[str, ...]
     fingerprint: str
     built_version: str = "case-1.4.0"
+    requested_profiles: tuple[str, ...] = ()
 
     def ontology_graph_paths(self) -> list[Path]:
         return [Path(r.absolute_path) for r in self.resources]
 
-    def to_manifest(self) -> dict[str, Any]:
+    def to_manifest(self, *, portable: bool = True) -> dict[str, Any]:
+        resources = []
+        for r in self.resources:
+            entry = {
+                "role": r.role,
+                "path": r.path,
+                "sha256": r.sha256,
+                "profile_id": r.profile_id,
+                "extension": r.extension,
+            }
+            if not portable:
+                entry["absolute_path"] = r.absolute_path
+            resources.append(entry)
         return {
             "built_version": self.built_version,
+            "requested_profiles": list(self.requested_profiles),
             "extensions": list(self.extensions),
             "profiles": list(self.profiles),
             "inference": self.inference,
             "compatibility_notes": list(self.compatibility_notes),
             "fingerprint": self.fingerprint,
-            "resources": [asdict(r) for r in self.resources],
+            "resources": resources,
         }
 
     def write_manifest(self, path: str | Path) -> None:
@@ -201,19 +217,53 @@ def resolve_validation_bundle(
         sort_keys=True,
     )
     if use_cache and cache_key in _BUNDLE_CACHE:
-        return _BUNDLE_CACHE[cache_key]
+        cached = _BUNDLE_CACHE[cache_key]
+        # Re-verify fingerprints; never return a stale bundle after a file change.
+        try:
+            for resource in cached.resources:
+                path = Path(resource.absolute_path)
+                if not path.exists() or _sha256_file(path) != resource.sha256:
+                    del _BUNDLE_CACHE[cache_key]
+                    break
+            else:
+                return cached
+        except KeyError:
+            pass
 
     notes: list[str] = []
-    normalized_profiles: list[str] = []
-    for pid in profiles:
-        normalized_profiles.append(_normalize_profile_id(pid))
+    requested_profiles = [_normalize_profile_id(pid) for pid in profiles]
+    normalized_profiles: list[str] = list(requested_profiles)
+
+    # Resolve profile depends_on transitively (e.g. ORG → FOAF + PROV-O).
+    resolved: list[str] = []
+    seen_prof: set[str] = set()
+    queue = list(normalized_profiles)
+    while queue:
+        pid = queue.pop(0)
+        if pid in seen_prof:
+            continue
+        seen_prof.add(pid)
+        resolved.append(pid)
+        meta = PROFILE_REGISTRY[pid]
+        for dep in meta.get("depends_on", []):
+            dep_norm = _normalize_profile_id(dep)
+            if dep_norm not in seen_prof:
+                queue.append(dep_norm)
+                notes.append(f"Profile {pid!r} depends_on {dep_norm!r}")
+    normalized_profiles = resolved
 
     foundational = [p for p in normalized_profiles if p in FOUNDATIONAL_EXCLUSIVE]
     if len(set(foundational)) > 1 and not allow_foundational_pair:
         raise ValidationBundleError(
             "incompatible_profiles",
             "BFO and gUFO are alternative foundational profiles; select one, "
-            "or pass allow_foundational_pair=True with an explicit rationale.",
+            "or pass allow_foundational_pair=True with an explicit rationale "
+            "and a dedicated compatibility fixture.",
+        )
+    if len(set(foundational)) > 1 and allow_foundational_pair:
+        notes.append(
+            "allow_foundational_pair=True: BFO and gUFO co-selected; "
+            "caller must supply a compatibility fixture."
         )
 
     expanded_ext = resolve_extension_dependencies(extensions, project_root) if extensions else []
@@ -311,6 +361,7 @@ def resolve_validation_bundle(
         inference=inference,
         compatibility_notes=tuple(notes),
         fingerprint=fingerprint,
+        requested_profiles=tuple(requested_profiles),
     )
 
     if use_cache:

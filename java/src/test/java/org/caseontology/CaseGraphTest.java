@@ -7,6 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.Map;
 import java.util.List;
+import java.util.LinkedHashMap;
 
 public class CaseGraphTest {
 
@@ -169,5 +170,41 @@ public class CaseGraphTest {
         graph.load("{\"@context\":{\"kb\":\"http://example.org/kb/\"},\"@graph\":[{\"@id\":\"kb:Tool-loaded\",\"@type\":\"uco-tool:Tool\"}]}");
         graph.add(new Tool());
         assertEquals(2, graph.size());
+    }
+
+    @Test
+    public void testGetReturnsShallowCopy() {
+        CaseGraph graph = new CaseGraph();
+        Map<String, Object> props = new LinkedHashMap<>();
+        props.put("uco-core:name", "N");
+        graph.upsertNode("kb:n1", "uco-core:UcoObject", props);
+        Map<String, Object> view = graph.get("kb:n1");
+        view.put("@id", "kb:mutated");
+        assertTrue(graph.contains("kb:n1"));
+        assertFalse(graph.contains("kb:mutated"));
+        assertEquals("N", graph.get("kb:n1").get("uco-core:name"));
+    }
+
+    @Test
+    public void testLoadRejectsDuplicateByDefault() {
+        CaseGraph graph = new CaseGraph();
+        graph.upsertNode("kb:x", "uco-core:UcoObject", null);
+        try {
+            graph.load("{\"@context\":{\"kb\":\"http://example.org/kb/\"},\"@graph\":[{\"@id\":\"kb:x\",\"@type\":\"uco-core:UcoObject\"}]}");
+            fail("expected IllegalStateException");
+        } catch (IllegalStateException expected) {
+            assertTrue(expected.getMessage().contains("Duplicate"));
+        }
+    }
+
+    @Test
+    public void testLoadRejectsContextCollision() {
+        CaseGraph graph = new CaseGraph();
+        try {
+            graph.load("{\"@context\":{\"kb\":\"http://example.org/kb/\",\"uco-core\":\"https://evil.example.org/uco/core/\"},\"@graph\":[]}");
+            fail("expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+            assertTrue(expected.getMessage().contains("Context prefix collision"));
+        }
     }
 }
