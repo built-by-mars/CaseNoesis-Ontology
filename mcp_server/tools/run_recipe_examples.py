@@ -123,6 +123,9 @@ def _lint_relationship_kinds_if_present(
     suffix = graph_path.suffix.lower()
     if suffix not in {".json", ".jsonld", ".json-ld"}:
         return True
+    mcp_root = str(ROOT / "mcp_server")
+    if mcp_root not in sys.path:
+        sys.path.insert(0, mcp_root)
     from relationship_kinds import graph_uses_relationship_kinds, lint_relationship_kinds
 
     graph_doc = _load_jsonld_graph(graph_path)
