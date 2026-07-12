@@ -30,13 +30,18 @@ boundary partitioning helpers, class-registry cache, synthetic benchmarks).
 - `mcp_server/validation_bundle.py` — `resolve_validation_bundle(extensions,
   profiles)` with offline fingerprinting, BFO/gUFO exclusivity, CAC↔BFO
   fail-closed policy, GeoSPARQL→Simple Features dependency, ORG→FOAF/PROV-O
-  `depends_on` closure, fingerprint-checked cache invalidation, and portable
-  manifests (no absolute paths).
+  `depends_on` closure (with cycle errors), `incompatible_with` enforcement,
+  content-addressed lock-guarded cache (`hit`/`miss`/`stale`/`disabled`), and
+  portable atomic manifests (`resolver_schema_version`, no absolute paths).
 - `validate_graph_file(..., profiles=[...])` and MCP `validate_graph(profiles=...)`
-  share one resolved bundle between SHACL and strict concept coverage;
-  unselected upper-profile terms fail as `profile_not_selected`.
-- `GraphValidationReport` exposes selected profiles, bundle fingerprint,
-  resources, compatibility notes, and per-stage status.
+  share one `ResolvedValidationBundle` object between SHACL and strict concept
+  coverage (exact resources + fingerprint); coverage accepts only bundle
+  subset/full terms; unselected upper-profile terms fail as structured
+  `profile_not_selected`. `profiles=None` authorizes zero upper profiles.
+- `GraphValidationReport` exposes selected/requested profiles, bundle
+  fingerprint, resources, compatibility notes, validator version, cache
+  status, and independent stage statuses (bundle / SHACL execution /
+  SHACL conformance / coverage execution / coverage conformance).
 - ORG and PROF added to `get_uco_profiles` / `UCO_PROFILES` (paths/deps synced
   from `PROFILE_REGISTRY`).
 
@@ -76,6 +81,16 @@ These are early foundations, not finished production features:
   graphs (#72).
 - `benchmarks/run_python_bench.py` small-tier synthetic harness (#73) —
   experimental.
+
+### Fixed (ChatGPT Pro second review)
+
+- CI root causes on `ed0c7f9`: geosparql recipe snippet syntax; generator
+  `__init__.py` export of composition types; Rust clippy `unwrap_used`.
+- Recipe gate hardened (CQ-01–CQ-12); literal same-bundle coverage
+  (CQ-27–CQ-36); graph deep-copy / named policies / multi-`@id` accumulation
+  (CQ-13–CQ-26); promotion/routing (CQ-37–CQ-40).
+- All 40 open code-scanning alerts dispositioned as fixed (see
+  `artifacts/ci/REVIEW-DISPOSITION.md`).
 
 ### Changed
 

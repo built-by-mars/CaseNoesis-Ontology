@@ -3,6 +3,7 @@
 use case_uco::graph::CaseGraph;
 use case_uco::uco::observable::ObservableObject;
 use case_uco::uco::tool::Tool;
+use serde_json::Value;
 
 #[test]
 fn test_create_tool() {
@@ -186,18 +187,89 @@ fn test_load_rejects_context_collision() {
 }
 
 #[test]
-fn test_get_is_immutable_view() {
+fn test_get_is_owned_deep_copy() {
     let mut graph = CaseGraph::new("http://example.org/kb/");
+    let props = serde_json::json!({
+        "uco-core:name": "N",
+        "uco-core:tag": ["a", "b"],
+        "uco-core:hasFacet": [{"@id": "kb:f1"}]
+    });
     graph
         .upsert_node(
             "kb:n1",
             Some(serde_json::json!("uco-core:UcoObject")),
-            Some(serde_json::json!({"uco-core:name": "N"}).as_object().unwrap().clone()),
+            Some(props.as_object().cloned().expect("object")),
         )
         .expect("upsert");
-    assert!(graph.contains("kb:n1"));
+    let mut view = graph.get("kb:n1").expect("get");
+    if let Some(Value::Array(tags)) = view.get_mut("uco-core:tag") {
+        tags.push(Value::String("c".into()));
+    }
+    if let Some(Value::Array(facets)) = view.get_mut("uco-core:hasFacet") {
+        if let Some(Value::Object(f0)) = facets.get_mut(0) {
+            f0.insert("@id".into(), Value::String("kb:mutated".into()));
+        }
+    }
+    let stored = graph.get("kb:n1").expect("get again");
+    assert_eq!(stored.get("uco-core:name").and_then(|v| v.as_str()), Some("N"));
     assert_eq!(
-        graph.get("kb:n1").unwrap().get("uco-core:name").unwrap(),
-        "N"
+        stored.get("uco-core:tag"),
+        Some(&serde_json::json!(["a", "b"]))
     );
+    assert_eq!(
+        stored["uco-core:hasFacet"][0]["@id"],
+        serde_json::json!("kb:f1")
+    );
+}
+
+#[test]
+fn test_named_duplicate_policies_and_split() {
+    use case_uco::graph::DuplicatePolicy;
+    let mut graph = CaseGraph::new("http://example.org/kb/");
+    graph.on_duplicate = DuplicatePolicy::MergeCompatible;
+    graph
+        .upsert_node(
+            "kb:x",
+            Some(serde_json::json!("uco-core:UcoObject")),
+            Some(
+                serde_json::json!({"uco-core:name": "A"})
+                    .as_object()
+                    .cloned()
+                    .expect("object"),
+            ),
+        )
+        .expect("upsert");
+    graph
+        .load_with_policy(
+            r#"{"@context":{"kb":"http://example.org/kb/"},"@graph":[{"@id":"kb:x","@type":"uco-core:UcoObject","uco-core:description":"d"}]}"#,
+            DuplicatePolicy::MergeCompatible,
+        )
+        .expect("merge");
+    assert!(graph.get("kb:x").unwrap().contains_key("uco-core:description"));
+    assert!(matches!(
+        graph.split(0),
+        Err(case_uco::graph::GraphError::InvalidSplitSize(0))
+    ));
+}
+
+#[test]
+fn test_set_property_and_relationship_id() {
+    let mut graph = CaseGraph::new("http://example.org/kb/");
+    graph
+        .upsert_node("kb:src", Some(serde_json::json!("uco-core:UcoObject")), None)
+        .expect("src");
+    graph
+        .upsert_node("kb:tgt", Some(serde_json::json!("uco-core:UcoObject")), None)
+        .expect("tgt");
+    graph
+        .set_property("kb:src", "uco-core:name", serde_json::json!("S"))
+        .expect("set");
+    let r1 = graph
+        .create_relationship("kb:src", "kb:tgt", "Derived_From", true, None, Some("kb:rel-a"))
+        .expect("rel a");
+    let r2 = graph
+        .create_relationship("kb:src", "kb:tgt", "Derived_From", true, None, Some("kb:rel-b"))
+        .expect("rel b");
+    assert_ne!(r1.get("@id"), r2.get("@id"));
+    assert_eq!(graph.len(), 4);
 }

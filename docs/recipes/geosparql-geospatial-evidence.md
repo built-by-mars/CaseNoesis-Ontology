@@ -54,7 +54,11 @@ graph.upsert_node(bounding_id, types=["geo:Geometry", "sf:Polygon"], properties=
     "geo:asWKT": {"@type": "geo:wktLiteral", "@value": "POLYGON((...))"},
 })
 action_id = "kb:action-geofence"
-action = graph.create(InvestigativeAction, id=action_id, name="Derive analyst bounding polygon", ...)
+action = graph.create(
+    InvestigativeAction,
+    id=action_id,
+    name="Derive analyst bounding polygon",
+)
 graph.link(bounding_id, "prov:wasDerivedFrom", geom_id)
 graph.link(bounding_id, "prov:wasGeneratedBy", action_id)
 graph.write("geosparql-geospatial.jsonld")

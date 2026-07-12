@@ -2,3 +2,5 @@ fastmcp
 # PDF text extraction fallback for the document processor (used when the
 # poppler `pdftotext` CLI is not installed). Pure-Python; offline-safe.
 pypdf
+# Recipe-execution manifest validation (CQ-07).
+jsonschema>=4.0.0

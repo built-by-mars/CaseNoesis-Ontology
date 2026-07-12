@@ -1,0 +1,152 @@
+Clippy security lints	Run clippy with security-focused lints	﻿2026-07-12T21:25:40.3955323Z ##[group]Run cargo clippy -- \
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.3955682Z [36;1mcargo clippy -- \[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.3955984Z [36;1m  -D warnings \[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.3956220Z [36;1m  -W clippy::unwrap_used \[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.3956492Z [36;1m  -W clippy::expect_used[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.3992682Z shell: /usr/bin/bash -e {0}
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.3992952Z env:
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.3993163Z   CARGO_HOME: /home/runner/.cargo
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.3993420Z   CARGO_INCREMENTAL: 0
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.3993646Z   CARGO_TERM_COLOR: always
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.3993883Z ##[endgroup]
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.4592786Z [1m[92m    Updating[0m crates.io index
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.5789853Z [1m[92m Downloading[0m crates ...
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6007882Z [1m[92m  Downloaded[0m crypto-common v0.1.7
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6077322Z [1m[92m  Downloaded[0m memchr v2.8.3
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6141613Z [1m[92m  Downloaded[0m block-buffer v0.10.4
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6167906Z [1m[92m  Downloaded[0m errno v0.3.14
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6189598Z [1m[92m  Downloaded[0m bitflags v2.13.0
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6270176Z [1m[92m  Downloaded[0m fastrand v2.4.1
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6307896Z [1m[92m  Downloaded[0m proc-macro2 v1.0.106
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6337765Z [1m[92m  Downloaded[0m tempfile v3.27.0
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6363231Z [1m[92m  Downloaded[0m version_check v0.9.5
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6387921Z [1m[92m  Downloaded[0m itoa v1.0.18
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6398131Z [1m[92m  Downloaded[0m digest v0.10.7
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6410966Z [1m[92m  Downloaded[0m quote v1.0.46
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6440292Z [1m[92m  Downloaded[0m zmij v1.0.22
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6459404Z [1m[92m  Downloaded[0m getrandom v0.4.3
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6501978Z [1m[92m  Downloaded[0m once_cell v1.21.4
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6527159Z [1m[92m  Downloaded[0m serde_json v1.0.150
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6604488Z [1m[92m  Downloaded[0m uuid v1.23.5
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6635934Z [1m[92m  Downloaded[0m cpufeatures v0.2.17
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6651885Z [1m[92m  Downloaded[0m generic-array v0.14.7
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6667480Z [1m[92m  Downloaded[0m serde_core v1.0.228
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6696622Z [1m[92m  Downloaded[0m unicode-ident v1.0.24
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.6726462Z [1m[92m  Downloaded[0m rustix v1.1.4
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.7014879Z [1m[92m  Downloaded[0m cfg-if v1.0.4
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.7029616Z [1m[92m  Downloaded[0m serde v1.0.228
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.7066017Z [1m[92m  Downloaded[0m syn v2.0.118
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.7184169Z [1m[92m  Downloaded[0m serde_derive v1.0.228
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.7217504Z [1m[92m  Downloaded[0m sha2 v0.10.9
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.7244868Z [1m[92m  Downloaded[0m typenum v1.20.1
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.7281498Z [1m[92m  Downloaded[0m libc v0.2.186
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.7693848Z [1m[92m  Downloaded[0m linux-raw-sys v0.12.1
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.8535388Z [1m[92m   Compiling[0m version_check v0.9.5
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.8536250Z [1m[92m   Compiling[0m proc-macro2 v1.0.106
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.8539240Z [1m[92m   Compiling[0m unicode-ident v1.0.24
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.8539684Z [1m[92m   Compiling[0m libc v0.2.186
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:40.9148090Z [1m[92m    Checking[0m typenum v1.20.1
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:41.0778836Z [1m[92m   Compiling[0m generic-array v0.14.7
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:41.1066089Z [1m[92m   Compiling[0m quote v1.0.46
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:41.2129791Z [1m[92m    Checking[0m cfg-if v1.0.4
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:41.2351056Z [1m[92m   Compiling[0m serde_core v1.0.228
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:41.3356036Z [1m[92m   Compiling[0m getrandom v0.4.3
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:41.4658376Z [1m[92m   Compiling[0m rustix v1.1.4
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:41.7958686Z [1m[92m   Compiling[0m zmij v1.0.22
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:41.8606606Z [1m[92m   Compiling[0m syn v2.0.118
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:42.1338237Z [1m[92m    Checking[0m crypto-common v0.1.7
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:42.1798218Z [1m[92m    Checking[0m block-buffer v0.10.4
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:42.2308215Z [1m[92m    Checking[0m bitflags v2.13.0
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:42.3228234Z [1m[92m    Checking[0m linux-raw-sys v0.12.1
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:42.3598634Z [1m[92m   Compiling[0m serde_json v1.0.150
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:42.4602451Z [1m[92m   Compiling[0m serde v1.0.228
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:42.6418065Z [1m[92m    Checking[0m digest v0.10.7
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:42.9883494Z [1m[92m    Checking[0m memchr v2.8.3
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:43.3595463Z [1m[92m    Checking[0m cpufeatures v0.2.17
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:43.3859996Z [1m[92m    Checking[0m once_cell v1.21.4
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:43.4984214Z [1m[92m    Checking[0m fastrand v2.4.1
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:43.6138590Z [1m[92m    Checking[0m itoa v1.0.18
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:43.7000368Z [1m[92m    Checking[0m sha2 v0.10.9
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:43.9368611Z [1m[92m    Checking[0m uuid v1.23.5
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:44.1168005Z [1m[92m    Checking[0m tempfile v3.27.0
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:44.2001007Z [1m[92m   Compiling[0m serde_derive v1.0.228
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:45.8000020Z [1m[92m    Checking[0m case-uco v1.21.0 (/home/runner/work/CASE-UCO-SDK/CASE-UCO-SDK/rust)
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4114773Z [1m[91merror[0m[1m: used `expect()` on an `Option` value[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4115689Z    [1m[94m--> [0msrc/graph.rs:211:23
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4116241Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4117520Z [1m[94m211[0m [1m[94m|[0m             let obj = self.objects[idx].as_object_mut().expect("indexed node must be object");
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4118805Z     [1m[94m|[0m                       [1m[91m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4119581Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4120245Z     [1m[94m= [0m[1mnote[0m: if this value is `None`, it will panic
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4121809Z     [1m[94m= [0m[1mhelp[0m: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.97.0/index.html#expect_used
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4127640Z     [1m[94m= [0m[1mnote[0m: `-D clippy::expect-used` implied by `-D warnings`
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4128367Z     [1m[94m= [0m[1mhelp[0m: to override `-D warnings` add `#[allow(clippy::expect_used)]`
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4128716Z 
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4128938Z [1m[91merror[0m[1m: used `unwrap()` on an `Option` value[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4129317Z    [1m[94m--> [0msrc/graph.rs:221:23
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4129591Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4130325Z [1m[94m221[0m [1m[94m|[0m             return Ok(self.objects[idx].as_object_mut().unwrap());
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4131333Z     [1m[94m|[0m                       [1m[91m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4131949Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4132475Z     [1m[94m= [0m[1mnote[0m: if this value is `None`, it will panic
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4133232Z     [1m[94m= [0m[1mhelp[0m: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.97.0/index.html#unwrap_used
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4134001Z     [1m[94m= [0m[1mnote[0m: `-D clippy::unwrap-used` implied by `-D warnings`
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4134661Z     [1m[94m= [0m[1mhelp[0m: to override `-D warnings` add `#[allow(clippy::unwrap_used)]`
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4134983Z 
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4135192Z [1m[91merror[0m[1m: used `unwrap()` on an `Option` value[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4135556Z    [1m[94m--> [0msrc/graph.rs:235:12
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4135825Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4136084Z [1m[94m235[0m [1m[94m|[0m           Ok(self
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4136571Z     [1m[94m|[0m [1m[91m ____________^[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4137506Z [1m[94m236[0m [1m[94m|[0m [1m[91m|[0m             .objects
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4138275Z [1m[94m237[0m [1m[94m|[0m [1m[91m|[0m             .last_mut()
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4138955Z [1m[94m238[0m [1m[94m|[0m [1m[91m|[0m             .unwrap()
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4139390Z [1m[94m239[0m [1m[94m|[0m [1m[91m|[0m             .as_object_mut()
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4139822Z [1m[94m240[0m [1m[94m|[0m [1m[91m|[0m             .unwrap())
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4140196Z     [1m[94m|[0m [1m[91m|_____________________^[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4140645Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4140957Z     [1m[94m= [0m[1mnote[0m: if this value is `None`, it will panic
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4141707Z     [1m[94m= [0m[1mhelp[0m: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.97.0/index.html#unwrap_used
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4142192Z 
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4142397Z [1m[91merror[0m[1m: used `unwrap()` on an `Option` value[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4142764Z    [1m[94m--> [0msrc/graph.rs:235:12
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4143035Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4143291Z [1m[94m235[0m [1m[94m|[0m           Ok(self
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4143700Z     [1m[94m|[0m [1m[91m ____________^[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4144356Z [1m[94m236[0m [1m[94m|[0m [1m[91m|[0m             .objects
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4145147Z [1m[94m237[0m [1m[94m|[0m [1m[91m|[0m             .last_mut()
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4145633Z [1m[94m238[0m [1m[94m|[0m [1m[91m|[0m             .unwrap()
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4146019Z     [1m[94m|[0m [1m[91m|_____________________^[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4146306Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4146609Z     [1m[94m= [0m[1mnote[0m: if this value is `None`, it will panic
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4147516Z     [1m[94m= [0m[1mhelp[0m: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.97.0/index.html#unwrap_used
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4147997Z 
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4148212Z [1m[91merror[0m[1m: used `unwrap()` on an `Option` value[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4148575Z    [1m[94m--> [0msrc/graph.rs:248:19
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4148836Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4149213Z [1m[94m248[0m [1m[94m|[0m         let obj = self.objects[idx].as_object_mut().unwrap();
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4149722Z     [1m[94m|[0m                   [1m[91m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4150061Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4150366Z     [1m[94m= [0m[1mnote[0m: if this value is `None`, it will panic
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4151070Z     [1m[94m= [0m[1mhelp[0m: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.97.0/index.html#unwrap_used
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4151537Z 
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4151726Z [1m[91merror[0m[1m: used `unwrap()` on an `Option` value[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4152084Z    [1m[94m--> [0msrc/graph.rs:264:19
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4152341Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4152706Z [1m[94m264[0m [1m[94m|[0m         let obj = self.objects[idx].as_object_mut().unwrap();
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4153200Z     [1m[94m|[0m                   [1m[91m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4153545Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4153839Z     [1m[94m= [0m[1mnote[0m: if this value is `None`, it will panic
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4154524Z     [1m[94m= [0m[1mhelp[0m: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.97.0/index.html#unwrap_used
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4154989Z 
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4306458Z [1m[91merror[0m[1m: used `unwrap()` on an `Option` value[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4307314Z    [1m[94m--> [0msrc/graph.rs:599:28
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4307670Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4308179Z [1m[94m599[0m [1m[94m|[0m             let existing = self.objects[idx].as_object_mut().unwrap();
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4308868Z     [1m[94m|[0m                            [1m[91m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4309324Z     [1m[94m|[0m
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4309731Z     [1m[94m= [0m[1mnote[0m: if this value is `None`, it will panic
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4310636Z     [1m[94m= [0m[1mhelp[0m: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.97.0/index.html#unwrap_used
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:47.4311441Z 
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:48.4798302Z [1m[91merror[0m: could not compile `case-uco` (lib) due to 7 previous errors
+Clippy security lints	Run clippy with security-focused lints	2026-07-12T21:25:48.4972099Z ##[error]Process completed with exit code 101.

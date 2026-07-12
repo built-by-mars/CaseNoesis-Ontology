@@ -20,25 +20,42 @@ namespace CaseUco
         private readonly List<Dictionary<string, object>> _objects;
         private readonly Dictionary<object, string> _idMap;
         private readonly Dictionary<string, int> _iriIndex = new Dictionary<string, int>();
+        private readonly List<DeserializationWarning> _deserializationWarnings = new List<DeserializationWarning>();
 
         /// <summary>
-        /// When true, <see cref="Load"/> raises on duplicate <c>@id</c> instead of merging.
-        /// Default is <c>true</c> (reject) to match Python <c>on_duplicate="reject"</c>.
-        /// Set to <c>false</c> for merge-compatible load behavior.
+        /// Named duplicate policy: reject | merge_identical | merge_compatible | replace.
+        /// Alias <c>error</c> maps to <c>reject</c>. Default is <c>reject</c>.
         /// </summary>
-        public bool RejectDuplicates { get; set; } = true;
+        public string OnDuplicate { get; set; } = "reject";
 
-        public CaseGraph(string kbPrefix = "http://example.org/kb/")
+        /// <summary>
+        /// Backward-compatible boolean view of <see cref="OnDuplicate"/>.
+        /// Prefer named policies for cross-language parity.
+        /// </summary>
+        public bool RejectDuplicates
+        {
+            get => NormalizeDuplicatePolicy(OnDuplicate) == "reject";
+            set => OnDuplicate = value ? "reject" : "merge_compatible";
+        }
+
+        public IReadOnlyList<DeserializationWarning> DeserializationWarnings => _deserializationWarnings;
+
+        public CaseGraph(string kbPrefix = "http://example.org/kb/", IDictionary<string, string> extraContext = null)
         {
             _context = new Dictionary<string, string>(DefaultContext);
             _context["kb"] = kbPrefix;
             _objects = new List<Dictionary<string, object>>();
             _idMap = new Dictionary<object, string>(new ReferenceEqualityComparer());
+            if (extraContext != null)
+            {
+                foreach (var kv in extraContext)
+                    MergeContextEntry(kv.Key, kv.Value);
+            }
         }
 
         public void AddContext(string prefix, string iri)
         {
-            _context[prefix] = iri;
+            MergeContextEntry(prefix, iri);
         }
 
         /// <summary>Add an object to the graph with an auto-generated UUID @id.</summary>
@@ -83,16 +100,15 @@ namespace CaseUco
         }
 
         /// <summary>
-        /// Return a shallow copy of the JSON-LD dict for a node by compact or expanded @id.
-        /// Mutating <c>@id</c> on the returned dictionary does not update the graph index;
-        /// use <see cref="AddType"/> / <see cref="AddProperty"/> / <see cref="UpsertNode"/>.
+        /// Return a deep copy of the JSON-LD dict for a node by compact or expanded @id.
+        /// Nested lists/maps are not shared with the graph.
         /// </summary>
         public Dictionary<string, object> Get(string id)
         {
             var obj = FindObject(id);
             if (obj == null)
                 return null;
-            return new Dictionary<string, object>(obj);
+            return DeepCopyDict(obj);
         }
 
         /// <summary>Return true if a node with this @id (compact or expanded) exists.</summary>
@@ -107,7 +123,7 @@ namespace CaseUco
             return ExpandCompactIri(id, _context);
         }
 
-        /// <summary>Create or update a JSON-LD node by @id.</summary>
+        /// <summary>Create or update a JSON-LD node by @id. Returns a deep copy.</summary>
         public Dictionary<string, object> UpsertNode(
             string id,
             object types = null,
@@ -122,34 +138,45 @@ namespace CaseUco
                 if (properties != null)
                 {
                     foreach (var kv in properties)
-                        SetProperty(obj, kv.Key, kv.Value);
+                        ApplyProperty(obj, kv.Key, kv.Value, id, "merge_compatible");
                 }
                 AppendObject(obj);
-                return obj;
+                return DeepCopyDict(obj);
             }
 
             if (types != null)
-                obj["@type"] = NormalizeTypeValue(MergeTypes(obj.ContainsKey("@type") ? obj["@type"] : null, types));
+            {
+                object existingTypes = obj.TryGetValue("@type", out var typeVal) ? typeVal : null;
+                obj["@type"] = NormalizeTypeValue(MergeTypes(existingTypes, types));
+            }
             if (properties != null)
             {
                 foreach (var kv in properties)
-                    SetProperty(obj, kv.Key, kv.Value);
+                    ApplyProperty(obj, kv.Key, kv.Value, id, "merge_compatible");
             }
-            return obj;
+            return DeepCopyDict(obj);
         }
 
         /// <summary>Add an rdf:type to an existing node (same @id).</summary>
         public void AddType(string id, string typeIri)
         {
             var obj = RequireObject(id);
-            obj["@type"] = NormalizeTypeValue(MergeTypes(obj.ContainsKey("@type") ? obj["@type"] : null, typeIri));
+            object existingTypes = obj.TryGetValue("@type", out var typeVal) ? typeVal : null;
+            obj["@type"] = NormalizeTypeValue(MergeTypes(existingTypes, typeIri));
         }
 
-        /// <summary>Add or merge a property on an existing node.</summary>
+        /// <summary>Add or merge a property on an existing node (merge_compatible).</summary>
         public void AddProperty(string id, string key, object value)
         {
             var obj = RequireObject(id);
-            SetProperty(obj, key, value);
+            ApplyProperty(obj, key, value, id, "merge_compatible");
+        }
+
+        /// <summary>Replace a property value (replace / scalar overwrite mode).</summary>
+        public void SetPropertyValue(string id, string key, object value)
+        {
+            var obj = RequireObject(id);
+            ApplyProperty(obj, key, value, id, "replace");
         }
 
         /// <summary>Add a direct property edge source --predicate--> target.</summary>
@@ -164,7 +191,8 @@ namespace CaseUco
             string targetId,
             string kind,
             bool directional = true,
-            string description = null)
+            string description = null,
+            string relationshipId = null)
         {
             if (!Contains(sourceId))
                 throw new KeyNotFoundException($"Relationship source not in graph: {sourceId}");
@@ -173,7 +201,7 @@ namespace CaseUco
             if (string.IsNullOrEmpty(kind))
                 throw new ArgumentException("kindOfRelationship is required", nameof(kind));
 
-            var relId = DeterministicRelationshipId(sourceId, targetId, kind);
+            var relId = relationshipId ?? DeterministicRelationshipId(sourceId, targetId, kind);
             var props = new Dictionary<string, object>
             {
                 ["uco-core:source"] = new List<object>
@@ -196,20 +224,33 @@ namespace CaseUco
         /// <summary>Return the number of objects in the graph.</summary>
         public int Count => _objects.Count;
 
-        /// <summary>Load a JSON-LD string into this graph, merging context and appending objects.</summary>
-        public void Load(string json)
+        /// <summary>Load a JSON-LD string into this graph (transactional; named OnDuplicate policy).</summary>
+        public void Load(string json, string onDuplicate = null)
         {
+            var policy = NormalizeDuplicatePolicy(onDuplicate ?? OnDuplicate);
             var doc = ParseJson(json);
-            if (doc.TryGetValue("@context", out var ctxObj) && ctxObj is Dictionary<string, object> ctx)
+            var snapCtx = new Dictionary<string, string>(_context);
+            var snapObjects = _objects.Select(DeepCopyDict).ToList();
+            var snapIndex = new Dictionary<string, int>(_iriIndex);
+            try
             {
-                MergeContext(ctx);
-            }
-            if (doc.TryGetValue("@graph", out var graphObj) && graphObj is List<object> graphList)
-            {
-                foreach (var item in graphList.OfType<Dictionary<string, object>>())
+                if (doc.TryGetValue("@context", out var ctxObj) && ctxObj is Dictionary<string, object> ctx)
+                    MergeContext(ctx);
+                if (doc.TryGetValue("@graph", out var graphObj) && graphObj is List<object> graphList)
                 {
-                    IngestRawNode(item, RejectDuplicates);
+                    foreach (var item in graphList.OfType<Dictionary<string, object>>())
+                        IngestRawNode(DeepCopyDict(item), policy);
                 }
+            }
+            catch
+            {
+                _context.Clear();
+                foreach (var kv in snapCtx) _context[kv.Key] = kv.Value;
+                _objects.Clear();
+                _objects.AddRange(snapObjects);
+                _iriIndex.Clear();
+                foreach (var kv in snapIndex) _iriIndex[kv.Key] = kv.Value;
+                throw;
             }
         }
 
@@ -233,8 +274,10 @@ namespace CaseUco
             {
                 foreach (var item in graphList.OfType<Dictionary<string, object>>())
                 {
-                    graph.IngestRawNode(item, graph.RejectDuplicates);
-                    var typed = TryInstantiate(item, graph._context);
+                    graph.IngestRawNode(DeepCopyDict(item), graph.OnDuplicate);
+                    var typed = TryInstantiate(item, graph._context, out var warn);
+                    if (warn != null)
+                        graph._deserializationWarnings.Add(warn);
                     objects.Add(typed ?? (object)item);
                 }
             }
@@ -245,15 +288,17 @@ namespace CaseUco
         private void MergeContext(Dictionary<string, object> incoming)
         {
             foreach (var kv in incoming.Where(kv => kv.Value is string))
+                MergeContextEntry(kv.Key, (string)kv.Value);
+        }
+
+        private void MergeContextEntry(string prefix, string ns)
+        {
+            if (_context.TryGetValue(prefix, out var existing) && existing != ns)
             {
-                var ns = (string)kv.Value;
-                if (_context.TryGetValue(kv.Key, out var existing) && existing != ns)
-                {
-                    throw new ArgumentException(
-                        $"Context prefix collision for '{kv.Key}': existing '{existing}' vs incoming '{ns}'");
-                }
-                _context[kv.Key] = ns;
+                throw new ArgumentException(
+                    $"Context prefix collision for '{prefix}': existing '{existing}' vs incoming '{ns}'");
             }
+            _context[prefix] = ns;
         }
 
         private static string ExpandCompactIri(string value, Dictionary<string, string> context)
@@ -269,14 +314,22 @@ namespace CaseUco
             return value;
         }
 
-        private static object TryInstantiate(Dictionary<string, object> obj, Dictionary<string, string> context)
+        private static object TryInstantiate(Dictionary<string, object> obj, Dictionary<string, string> context, out DeserializationWarning warning)
         {
+            warning = null;
+            string nodeId = obj.TryGetValue("@id", out var idObj) ? idObj as string : null;
             if (!obj.TryGetValue("@type", out var typeObj) || typeObj == null)
+            {
+                warning = new DeserializationWarning(nodeId, "missing_type", "node has no @type");
                 return null;
+            }
 
             var typeStrings = AsTypeList(typeObj);
             if (typeStrings.Count == 0)
+            {
+                warning = new DeserializationWarning(nodeId, "missing_type", "empty @type");
                 return null;
+            }
 
             var matched = new List<Type>();
             foreach (var typeStr in typeStrings)
@@ -289,7 +342,12 @@ namespace CaseUco
 
             var selected = SelectMostSpecificType(matched);
             if (selected == null)
+            {
+                warning = matched.Count == 0
+                    ? new DeserializationWarning(nodeId, "unregistered_type", "no registered class for @type")
+                    : new DeserializationWarning(nodeId, "ambiguous_type", "multiple incomparable types matched");
                 return null;
+            }
 
             try
             {
@@ -297,8 +355,11 @@ namespace CaseUco
                 SetPropertiesFromJsonLd(instance, obj, context);
                 return instance;
             }
-            catch (MemberAccessException) { return null; }
-            catch (TargetInvocationException) { return null; }
+            catch (Exception ex) when (ex is MemberAccessException || ex is TargetInvocationException || ex is ArgumentException)
+            {
+                warning = new DeserializationWarning(nodeId, "constructor_failed", ex.Message);
+                return null;
+            }
         }
 
         private static Type FindTypeByClassIri(string expandedIri)
@@ -533,7 +594,12 @@ namespace CaseUco
             int count = 0;
             foreach (var kv in obj.Where(kv => kv.Key != "@id"))
             {
-                if (kv.Key == "@type") { count++; continue; }
+                if (kv.Key == "@type")
+                {
+                    if (kv.Value is IList typeList) count += typeList.Count;
+                    else count++;
+                    continue;
+                }
                 if (kv.Value is List<object> list)
                 {
                     foreach (var item in list)
@@ -562,6 +628,8 @@ namespace CaseUco
         /// <summary>Split the graph into smaller chunks of at most maxObjects each.</summary>
         public List<CaseGraph> Split(int maxObjects = 10000)
         {
+            if (maxObjects <= 0)
+                throw new ArgumentOutOfRangeException(nameof(maxObjects), maxObjects, "split maxObjects must be a positive integer");
             var chunks = new List<CaseGraph>();
             for (int i = 0; i < _objects.Count; i += maxObjects)
             {
@@ -570,7 +638,7 @@ namespace CaseUco
                     chunk._context[kv.Key] = kv.Value;
                 int end = Math.Min(i + maxObjects, _objects.Count);
                 for (int j = i; j < end; j++)
-                    chunk.AppendObject(new Dictionary<string, object>(_objects[j]));
+                    chunk.AppendObject(DeepCopyDict(_objects[j]));
                 chunks.Add(chunk);
             }
             return chunks;
@@ -609,11 +677,8 @@ namespace CaseUco
         private Dictionary<string, object> FindObject(string nodeId)
         {
             var expanded = ExpandIri(nodeId);
-            if (_iriIndex.TryGetValue(expanded, out var idx))
-            {
-                if (idx < _objects.Count)
-                    return _objects[idx];
-            }
+            if (_iriIndex.TryGetValue(expanded, out var idx) && idx < _objects.Count)
+                return _objects[idx];
             for (var i = 0; i < _objects.Count; i++)
             {
                 var obj = _objects[i];
@@ -636,8 +701,10 @@ namespace CaseUco
             return obj;
         }
 
-        private void IngestRawNode(Dictionary<string, object> raw, bool rejectDuplicates)
+        
+        private void IngestRawNode(Dictionary<string, object> raw, string policy)
         {
+            policy = NormalizeDuplicatePolicy(policy);
             if (!raw.TryGetValue("@id", out var idObj) || !(idObj is string nodeId))
             {
                 _objects.Add(raw);
@@ -651,24 +718,185 @@ namespace CaseUco
                 return;
             }
 
-            if (rejectDuplicates)
+            if (policy == "reject")
             {
                 throw new InvalidOperationException(
                     $"Duplicate @id '{nodeId}': conflicting duplicate during load");
             }
-
-            if (raw.ContainsKey("@type"))
+            if (policy == "replace")
             {
-                existing["@type"] = NormalizeTypeValue(
-                    MergeTypes(existing.ContainsKey("@type") ? existing["@type"] : null, raw["@type"]));
+                var preserved = existing.TryGetValue("@id", out var pid) ? pid : nodeId;
+                existing.Clear();
+                foreach (var kv in raw)
+                    existing[kv.Key] = DeepCopyValue(kv.Value);
+                existing["@id"] = preserved;
+                return;
+            }
+            if (policy == "merge_identical")
+            {
+                foreach (var kv in raw)
+                {
+                    if (kv.Key == "@id") continue;
+                    if (!existing.ContainsKey(kv.Key))
+                    {
+                        existing[kv.Key] = DeepCopyValue(kv.Value);
+                        continue;
+                    }
+                    if (!JsonLdValuesEqual(existing[kv.Key], kv.Value))
+                        throw new InvalidOperationException(
+                            $"Duplicate @id '{nodeId}': merge_identical conflict on '{kv.Key}'");
+                }
+                return;
+            }
+            // merge_compatible
+            if (raw.TryGetValue("@type", out var rawType))
+            {
+                object existingTypes = existing.TryGetValue("@type", out var existingType) ? existingType : null;
+                existing["@type"] = NormalizeTypeValue(MergeTypes(existingTypes, rawType));
             }
             foreach (var kv in raw)
             {
                 if (kv.Key == "@id" || kv.Key == "@type")
                     continue;
-                SetProperty(existing, kv.Key, kv.Value);
+                ApplyProperty(existing, kv.Key, kv.Value, nodeId, "merge_compatible");
             }
         }
+
+        private static string NormalizeDuplicatePolicy(string policy)
+        {
+            if (policy == "error") policy = "reject";
+            if (policy != "reject" && policy != "merge_identical" && policy != "merge_compatible" && policy != "replace")
+                throw new ArgumentException(
+                    $"Unknown duplicate policy: '{policy}'. Expected one of: reject, merge_identical, merge_compatible, replace");
+            return policy;
+        }
+
+        private static void ApplyProperty(Dictionary<string, object> obj, string key, object value, string nodeId, string mode)
+        {
+            if (mode == "replace")
+            {
+                obj[key] = DeepCopyValue(value);
+                return;
+            }
+            if (!obj.ContainsKey(key))
+            {
+                obj[key] = DeepCopyValue(value);
+                return;
+            }
+            var existing = obj[key];
+            if (JsonLdValuesEqual(existing, value))
+                return;
+            if (existing is List<object> list)
+            {
+                AccumulateListValue(list, value);
+                return;
+            }
+            if (value is List<object> || value is IList)
+            {
+                var merged = new List<object> { DeepCopyValue(existing) };
+                AccumulateListValue(merged, value);
+                obj[key] = merged;
+                return;
+            }
+            // Distinct JSON-LD node references are multi-valued, not scalar conflicts.
+            if (existing is Dictionary<string, object> ed
+                && value is Dictionary<string, object> vd
+                && ed.ContainsKey("@id") && vd.ContainsKey("@id"))
+            {
+                if (JsonLdValuesEqual(existing, value))
+                    return;
+                obj[key] = new List<object> { DeepCopyValue(existing), DeepCopyValue(value) };
+                return;
+            }
+            throw new InvalidOperationException(
+                $"merge_compatible scalar conflict on '{key}': existing and incoming values differ");
+        }
+
+        private static void AccumulateListValue(List<object> existing, object value)
+        {
+            var items = value is List<object> list ? list
+                : value is IList ilist ? ilist.Cast<object>().ToList()
+                : new List<object> { value };
+            foreach (var item in items)
+            {
+                if (existing.Any(x => JsonLdValuesEqual(x, item)))
+                    continue;
+                existing.Add(DeepCopyValue(item));
+            }
+        }
+
+        private static bool JsonLdValuesEqual(object a, object b)
+        {
+            if (ReferenceEquals(a, b)) return true;
+            if (a is Dictionary<string, object> ad && b is Dictionary<string, object> bd)
+            {
+                if (ad.ContainsKey("@value") || bd.ContainsKey("@value"))
+                {
+                    if (!(ad.ContainsKey("@value") && bd.ContainsKey("@value"))) return false;
+                    return NormalizeLiteralType(ad.TryGetValue("@type", out var at) ? at as string : null)
+                        == NormalizeLiteralType(bd.TryGetValue("@type", out var bt) ? bt as string : null)
+                        && NormalizeLiteralValue(ad["@value"], ad.TryGetValue("@type", out var at2) ? at2 as string : null)
+                        == NormalizeLiteralValue(bd["@value"], bd.TryGetValue("@type", out var bt2) ? bt2 as string : null);
+                }
+                if (ad.ContainsKey("@id") || bd.ContainsKey("@id"))
+                    return Equals(ad.TryGetValue("@id", out var ai) ? ai : null, bd.TryGetValue("@id", out var bi) ? bi : null);
+            }
+            if (a is List<object> al && b is List<object> bl)
+            {
+                if (IsIdRefList(al) && IsIdRefList(bl))
+                {
+                    var asort = al.Select(IdOf).OrderBy(x => x).ToList();
+                    var bsort = bl.Select(IdOf).OrderBy(x => x).ToList();
+                    return asort.SequenceEqual(bsort);
+                }
+                if (al.Count != bl.Count) return false;
+                return al.Zip(bl, JsonLdValuesEqual).All(x => x);
+            }
+            return Equals(a, b);
+        }
+
+        private static string NormalizeLiteralType(string typeIri)
+        {
+            if (string.IsNullOrEmpty(typeIri)) return "";
+            if (typeIri.StartsWith("xsd:")) return typeIri;
+            if (typeIri.StartsWith("http://www.w3.org/2001/XMLSchema#"))
+                return "xsd:" + typeIri.Substring(typeIri.LastIndexOf('#') + 1);
+            return typeIri;
+        }
+
+        private static string NormalizeLiteralValue(object value, string typeIri)
+        {
+            if (value is bool b) return b ? "true" : "false";
+            if (value is string s && NormalizeLiteralType(typeIri).Contains("boolean"))
+                return s.ToLowerInvariant();
+            return Convert.ToString(value, CultureInfo.InvariantCulture) ?? "";
+        }
+
+        private static bool IsIdRefList(List<object> items)
+            => items.Count > 0 && items.All(x => x is Dictionary<string, object> d && d.ContainsKey("@id"));
+
+        private static string IdOf(object item)
+            => item is Dictionary<string, object> d && d.TryGetValue("@id", out var id) ? id?.ToString() ?? "" : item?.ToString() ?? "";
+
+        private static Dictionary<string, object> DeepCopyDict(Dictionary<string, object> src)
+        {
+            var copy = new Dictionary<string, object>();
+            foreach (var kv in src)
+                copy[kv.Key] = DeepCopyValue(kv.Value);
+            return copy;
+        }
+
+        private static object DeepCopyValue(object value)
+        {
+            if (value is Dictionary<string, object> dict)
+                return DeepCopyDict(dict);
+            if (value is List<object> list)
+                return list.Select(DeepCopyValue).ToList();
+            if (value is IList ilist && !(value is string))
+                return ilist.Cast<object>().Select(DeepCopyValue).ToList();
+            return value;
+        }
+
 
         private static List<string> AsTypeList(object types)
         {
@@ -702,43 +930,24 @@ namespace CaseUco
             return merged;
         }
 
-        private static void SetProperty(Dictionary<string, object> obj, string key, object value)
+        private static string SafeKindSlug(string kind, int maxLen = 64)
         {
-            if (!obj.ContainsKey(key))
+            var sb = new StringBuilder();
+            foreach (var ch in (kind ?? "").Trim())
             {
-                obj[key] = value;
-                return;
+                if (char.IsLetterOrDigit(ch) || ch == '.' || ch == '_' || ch == '-')
+                    sb.Append(ch);
+                else
+                    sb.Append('_');
             }
-
-            var existing = obj[key];
-            if (Equals(existing, value))
-                return;
-
-            if (existing is List<object> list)
+            var slug = sb.ToString().Trim('.', '_', '-');
+            if (string.IsNullOrEmpty(slug)) slug = "rel";
+            if (slug.Length > maxLen)
             {
-                if (value is Dictionary<string, object> dictVal && dictVal.TryGetValue("@id", out var refId))
-                {
-                    if (list.OfType<Dictionary<string, object>>()
-                        .Any(item => item.TryGetValue("@id", out var itemId) && Equals(itemId, refId)))
-                        return;
-                }
-                if (!list.Contains(value))
-                    list.Add(value);
-                return;
+                slug = slug.Substring(0, maxLen).TrimEnd('.', '_', '-');
+                if (string.IsNullOrEmpty(slug)) slug = "rel";
             }
-
-            if (existing is Dictionary<string, object> existingDict &&
-                value is Dictionary<string, object> valueDict &&
-                existingDict.TryGetValue("@id", out var existingRef) &&
-                valueDict.TryGetValue("@id", out var valueRef) &&
-                Equals(existingRef, valueRef))
-            {
-                return;
-            }
-
-            // Do not silently convert differing scalars into lists (parity with Python merge_compatible).
-            throw new InvalidOperationException(
-                $"merge_compatible scalar conflict on '{key}': existing and incoming values differ");
+            return slug;
         }
 
         private string DeterministicRelationshipId(string sourceId, string targetId, string kind)
@@ -749,7 +958,7 @@ namespace CaseUco
                 .Replace("-", "")
                 .Substring(0, 12)
                 .ToLowerInvariant();
-            var safeKind = kind.Replace(" ", "_");
+            var safeKind = SafeKindSlug(kind);
             return $"kb:rel-{safeKind}-{digest}";
         }
 
@@ -1046,6 +1255,20 @@ namespace CaseUco
             }
             end = pos + 1; // skip closing '"'
             return sb.ToString();
+        }
+    }
+
+    /// <summary>Typed diagnostic when a JSON-LD node falls back to a raw dictionary.</summary>
+    public class DeserializationWarning
+    {
+        public string NodeId { get; }
+        public string Reason { get; }
+        public string Detail { get; }
+        public DeserializationWarning(string nodeId, string reason, string detail = "")
+        {
+            NodeId = nodeId;
+            Reason = reason;
+            Detail = detail ?? "";
         }
     }
 

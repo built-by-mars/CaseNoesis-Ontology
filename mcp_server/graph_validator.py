@@ -46,6 +46,10 @@ class GraphValidationReport:
     pinned upper-ontology registry) actually ran; otherwise it is
     ``"could_not_verify"`` and ``conforms`` is never ``True`` (fail-closed,
     issue #55).
+
+    Independent stage reporting (CQ-36): ``stage_status`` lists
+    ``bundle_resolution``, ``shacl_execution``, ``shacl_conformance``,
+    ``coverage_execution``, and ``coverage_conformance`` separately.
     """
 
     conforms: bool | None
@@ -58,21 +62,36 @@ class GraphValidationReport:
     concept_guidance: str = ""
     unknown_upper_ontology_terms: tuple[str, ...] = ()
     role_mismatches: tuple[tuple[str, str, str], ...] = ()
+    profile_not_selected: tuple[dict[str, Any], ...] = ()
     verification_status: str = "complete"
     verification_errors: tuple[str, ...] = ()
     selected_profiles: tuple[str, ...] = ()
+    requested_profiles: tuple[str, ...] = ()
     selected_extensions: tuple[str, ...] = ()
     bundle_fingerprint: str | None = None
     bundle_resources: tuple[dict[str, Any], ...] = ()
     compatibility_notes: tuple[str, ...] = ()
     bundle_cache_status: str | None = None
     stage_status: tuple[tuple[str, str], ...] = ()
+    validator_version: str | None = None
+    # Truncated case_validate stdout/stderr for negative-fixture matching
+    # (expected violation / constraint identifiers). Empty when unavailable.
+    validator_diagnostics: str = ""
 
 
 def validator_available() -> bool:
     """Return True when the case_validate CLI is on PATH."""
 
     return shutil.which(VALIDATOR_NAME) is not None
+
+
+def _validator_package_version() -> str | None:
+    try:
+        import importlib.metadata as metadata
+
+        return metadata.version("case-utils")
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def load_extension_ontology_paths(
@@ -221,15 +240,15 @@ def validate_graph_file(
 ) -> GraphValidationReport:
     """Validate a CASE/UCO graph file with the local case_validate tool.
 
-    When ``profiles`` is set, resolution goes through
-    ``validation_bundle.resolve_validation_bundle`` so SHACL and (when enabled)
-    strict concept coverage share one fingerprinted ontology set.
+    When ``profiles`` **or** ``extensions`` are set (and ``strict_concepts``
+    is True), resolution goes through ``resolve_validation_bundle`` so SHACL
+    and concept coverage share one fingerprinted ontology set (CQ-27/CQ-28).
+    Upper-ontology terms require explicit ``profiles=[...]`` (CQ-29); recipe
+    validation always supplies them.
 
-    When ``strict_concepts`` is True (the default), the SHACL pass is followed
-    by a closed-world concept coverage check: every class and property IRI in
-    the graph must be declared in CASE/UCO or a supported extension ontology.
-    Undeclared concepts force ``conforms=False`` with guidance to draft a
-    change proposal or add the concept to an extension ontology.
+    Independent stages are reported separately (CQ-36): bundle resolution,
+    SHACL execution, SHACL conformance, coverage execution, coverage
+    conformance.
 
     Raises ValueError with a typed message for every honest-failure path:
     ``validator_unavailable``, ``graph_missing``, ``unsupported_graph_extension``,
@@ -250,12 +269,18 @@ def validate_graph_file(
     if graph.stat().st_size > MAX_GRAPH_BYTES:
         raise ValueError("graph_oversized")
 
+    validator_version = _validator_package_version()
     args = [VALIDATOR_NAME]
     if allow_warning:
         args.append("--allow-warning")
 
     resolved_bundle = None
-    if profiles:
+    bundle_resolution_status = "skipped"
+    # Construct one shared bundle whenever profiles or extensions need the
+    # same resource set for SHACL + strict coverage (CQ-27/CQ-28).
+    if profiles or (extensions and strict_concepts) or (
+        extra_ontology_graphs and (profiles or extensions)
+    ):
         from validation_bundle import ValidationBundleError, resolve_validation_bundle
 
         try:
@@ -266,6 +291,7 @@ def validate_graph_file(
                 allow_foundational_pair=allow_foundational_pair,
                 extra_ontology_graphs=extra_ontology_graphs,
             )
+            bundle_resolution_status = "complete"
         except ValidationBundleError as exc:
             raise ValueError(str(exc)) from exc
         if bundle_manifest_path:
@@ -290,6 +316,7 @@ def validate_graph_file(
             args.extend(["--inference", "rdfs"])
 
     args.append(str(graph))
+    shacl_execution_status = "complete"
     try:
         completed = subprocess.run(
             args,
@@ -306,6 +333,14 @@ def validate_graph_file(
     violation_count = combined.count(_VIOLATION_MARKER)
     warning_count = combined.count(_WARNING_MARKER)
     exit_code = completed.returncode
+
+    if conforms is True and violation_count == 0:
+        shacl_conformance_status = "conforms"
+    elif conforms is False or violation_count > 0:
+        shacl_conformance_status = "nonconformant"
+    else:
+        shacl_conformance_status = "unknown"
+        shacl_execution_status = "failed"
 
     if exit_code == 0 and conforms is not False and violation_count == 0:
         if warning_count > 0:
@@ -338,24 +373,32 @@ def validate_graph_file(
     concept_guidance = ""
     unknown_upper: tuple[str, ...] = ()
     role_mismatches: tuple[tuple[str, str, str], ...] = ()
+    profile_not_selected: tuple[dict[str, Any], ...] = ()
     verification_status = "complete"
     verification_errors: tuple[str, ...] = ()
+    coverage_execution_status = "skipped"
+    coverage_conformance_status = "skipped"
+
     if strict_concepts:
+        coverage_execution_status = "complete"
         try:
             from concept_coverage import check_graph_concepts
 
             coverage = check_graph_concepts(
                 graph,
                 project_root=project_root,
-                extensions=extensions,
+                extensions=extensions if resolved_bundle is None else None,
                 selected_profiles=(
-                    list(resolved_bundle.profiles) if resolved_bundle is not None else None
+                    list(resolved_bundle.profiles) if resolved_bundle is not None else []
                 ),
+                bundle=resolved_bundle,
             )
         except Exception as exc:  # honest failure: never fake coverage
             conforms = None
             verification_status = "could_not_verify"
             verification_errors = (f"concept_coverage_failed:{type(exc).__name__}",)
+            coverage_execution_status = "failed"
+            coverage_conformance_status = "could_not_verify"
             summary = (
                 f"{summary} Additionally, the concept coverage check could "
                 f"not run ({type(exc).__name__}); treat the result as "
@@ -365,13 +408,25 @@ def validate_graph_file(
             verification_status = coverage.verification_status
             verification_errors = coverage.verification_errors
             if coverage.verification_status != "complete":
-                # Fail closed: a required stage (e.g. the pinned
-                # upper-ontology registry) could not run.
                 conforms = False
+                coverage_conformance_status = "could_not_verify"
+            elif coverage.ok:
+                coverage_conformance_status = "ok"
+            else:
+                coverage_conformance_status = "failed"
             if not coverage.ok:
                 undeclared = coverage.undeclared_classes + coverage.undeclared_properties
                 unknown_upper = coverage.unknown_upper_ontology_terms
                 role_mismatches = coverage.role_mismatches
+                profile_not_selected = tuple(
+                    {
+                        "iri": item.iri,
+                        "required_profile": item.required_profile,
+                        "used_as": item.used_as,
+                        "selected_profiles": list(item.selected_profiles),
+                    }
+                    for item in coverage.profile_not_selected
+                )
                 concept_guidance = coverage.guidance
                 shacl_passed = conforms is not False and violation_count == 0
                 conforms = False
@@ -389,6 +444,15 @@ def validate_graph_file(
                         f"Graph uses {len(unknown_upper)} term(s) inside profiled "
                         f"upper-ontology namespaces that the pinned ontology releases "
                         f"do not declare: {shown}."
+                    )
+                if profile_not_selected:
+                    shown = ", ".join(
+                        f"{p['iri']} (needs {p['required_profile']})"
+                        for p in profile_not_selected[:4]
+                    )
+                    parts.append(
+                        f"Graph uses {len(profile_not_selected)} upper-ontology "
+                        f"term(s) whose profile was not selected: {shown}."
                     )
                 if role_mismatches:
                     shown = "; ".join(
@@ -413,11 +477,21 @@ def validate_graph_file(
                 concept_summary = " ".join(parts)
                 summary = concept_summary if shacl_passed else f"{summary} {concept_summary}"
 
-    stage_status: list[tuple[str, str]] = [("shacl", "complete" if conforms is not None else "failed")]
-    if strict_concepts:
-        stage_status.append(("concept_coverage", verification_status))
-    if resolved_bundle is not None:
-        stage_status.insert(0, ("bundle_resolution", "complete"))
+    # CQ-36: independent stage reporting.
+    stage_status: list[tuple[str, str]] = [
+        ("bundle_resolution", bundle_resolution_status),
+        ("shacl_execution", shacl_execution_status),
+        ("shacl_conformance", shacl_conformance_status),
+        ("coverage_execution", coverage_execution_status),
+        ("coverage_conformance", coverage_conformance_status),
+    ]
+
+    # Cap diagnostics so reports stay bounded while still exposing SHACL
+    # Source Shape / Constraint Component identifiers for negative fixtures.
+    _diag_limit = 16_384
+    diagnostics = combined.strip()
+    if len(diagnostics) > _diag_limit:
+        diagnostics = diagnostics[:_diag_limit] + "\n…[truncated]"
 
     return GraphValidationReport(
         conforms=conforms,
@@ -430,17 +504,25 @@ def validate_graph_file(
         concept_guidance=concept_guidance,
         unknown_upper_ontology_terms=unknown_upper,
         role_mismatches=role_mismatches,
+        profile_not_selected=profile_not_selected,
         verification_status=verification_status,
         verification_errors=verification_errors,
         selected_profiles=tuple(resolved_bundle.profiles) if resolved_bundle else (),
-        selected_extensions=tuple(resolved_bundle.extensions) if resolved_bundle else tuple(extensions or ()),
+        requested_profiles=(
+            tuple(resolved_bundle.requested_profiles) if resolved_bundle else tuple(profiles or ())
+        ),
+        selected_extensions=(
+            tuple(resolved_bundle.extensions) if resolved_bundle else tuple(extensions or ())
+        ),
         bundle_fingerprint=resolved_bundle.fingerprint if resolved_bundle else None,
         bundle_resources=tuple(resolved_bundle.to_manifest(portable=True)["resources"])
         if resolved_bundle
         else (),
         compatibility_notes=tuple(resolved_bundle.compatibility_notes) if resolved_bundle else (),
-        bundle_cache_status="resolved" if resolved_bundle else None,
+        bundle_cache_status=resolved_bundle.cache_status if resolved_bundle else None,
         stage_status=tuple(stage_status),
+        validator_version=validator_version,
+        validator_diagnostics=diagnostics,
     )
 
 
@@ -456,6 +538,8 @@ def report_to_dict(report: GraphValidationReport) -> dict[str, Any]:
         "safe_summary": report.safe_summary,
         "verification_status": report.verification_status,
     }
+    if report.validator_version:
+        payload["validator_version"] = report.validator_version
     if report.verification_errors:
         payload["verification_errors"] = list(report.verification_errors)
     if report.undeclared_concepts:
@@ -464,6 +548,8 @@ def report_to_dict(report: GraphValidationReport) -> dict[str, Any]:
         payload["unknown_upper_ontology_terms"] = list(
             report.unknown_upper_ontology_terms
         )
+    if report.profile_not_selected:
+        payload["profile_not_selected"] = list(report.profile_not_selected)
     if report.role_mismatches:
         payload["role_mismatches"] = [
             {"iri": iri, "declared_role": declared_role, "used_as": used_as}
@@ -473,6 +559,8 @@ def report_to_dict(report: GraphValidationReport) -> dict[str, Any]:
         payload["concept_guidance"] = report.concept_guidance
     if report.selected_profiles:
         payload["selected_profiles"] = list(report.selected_profiles)
+    if report.requested_profiles:
+        payload["requested_profiles"] = list(report.requested_profiles)
     if report.selected_extensions:
         payload["selected_extensions"] = list(report.selected_extensions)
     if report.bundle_fingerprint:

@@ -112,7 +112,7 @@ def build() -> CASEGraph:
     analyst = graph.create(Person, id=analyst_id, name="GIS Analyst (synthetic)")
 
     derive_action_id = "kb:action-geofence"
-    derive_action = graph.create(
+    _derive_action = graph.create(
         InvestigativeAction,
         id=derive_action_id,
         name="Derive analyst-defined bounding polygon",

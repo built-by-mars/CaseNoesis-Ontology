@@ -47,7 +47,13 @@ class CodegenBackend(ABC):
 
     @staticmethod
     def safe_identifier(name: str, lang: str) -> str:
-        """Make a name safe as a language identifier, avoiding reserved words."""
+        """Make a name safe as a language identifier, avoiding reserved words.
+
+        Hyphens and other non-identifier characters become underscores so OWL
+        local names like ``techniqueDFT-1001`` compile as Python/C#/Java/Rust.
+        """
+        name = name.replace("-", "_").replace(" ", "_")
+        name = "".join(c if (c.isalnum() or c == "_") else "_" for c in name)
         python_reserved = {
             "False", "None", "True", "and", "as", "assert", "async", "await",
             "break", "class", "continue", "def", "del", "elif", "else", "except",

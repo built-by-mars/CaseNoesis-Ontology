@@ -196,9 +196,10 @@ class RustBackend(CodegenBackend):
         lines: list[str] = []
         desc = cls.description[:200] if cls.description else cls.name
 
+        class_name = self.safe_identifier(cls.name, "rust")
         lines.append(f"/// {desc}")
         lines.append("#[derive(Debug, Clone, Serialize)]")
-        lines.append(f"pub struct {cls.name} {{")
+        lines.append(f"pub struct {class_name} {{")
         lines.append("    #[serde(skip_serializing)]")
         lines.append(f"    pub class_iri: &'static str,")
 
@@ -213,7 +214,7 @@ class RustBackend(CodegenBackend):
         lines.append("")
 
         # Builder impl
-        lines.append(f"impl {cls.name} {{")
+        lines.append(f"impl {class_name} {{")
         lines.append(f'    pub const CLASS_IRI: &\'static str = "{cls.iri}";')
         lines.append(f'    pub const NAMESPACE_PREFIX: &\'static str = "{cls.namespace_prefix}";')
         lines.append("")

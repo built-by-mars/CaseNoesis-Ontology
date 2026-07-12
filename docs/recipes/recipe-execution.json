@@ -12,7 +12,11 @@
       "extensions": null,
       "strict_concepts": true,
       "expect_invalid": [
-        "examples/upper-ontology/foundational-typing/invalid_category_mistake.jsonld"
+        {
+          "path": "examples/upper-ontology/foundational-typing/invalid_category_mistake.jsonld",
+          "expected_constraint": "NotConstraintComponent",
+          "expected_violation": "BFO_0000002-disjointWith-BFO_0000003-shape"
+        }
       ]
     },
     {
@@ -65,7 +69,11 @@
       "extensions": null,
       "strict_concepts": true,
       "expect_invalid": [
-        "examples/upper-ontology/foaf-org/invalid_person_as_account.jsonld"
+        {
+          "path": "examples/upper-ontology/foaf-org/invalid_person_as_account.jsonld",
+          "expected_constraint": "ClassConstraintComponent",
+          "expected_violation": "role-subjects-role-shape"
+        }
       ]
     },
     {

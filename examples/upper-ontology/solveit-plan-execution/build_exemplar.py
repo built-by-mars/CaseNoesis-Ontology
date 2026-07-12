@@ -43,7 +43,7 @@ def build() -> CASEGraph:
     )
 
     examiner_id = "kb:examiner-1"
-    examiner = graph.create(Person, id=examiner_id, name="Examiner One (synthetic)")
+    _examiner = graph.create(Person, id=examiner_id, name="Examiner One (synthetic)")
     graph.add_type(examiner_id, "prov:Agent")
 
     tool = graph.create(Tool, name="Hardware write blocker + imager", version="2026.1")

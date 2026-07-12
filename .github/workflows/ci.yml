@@ -193,7 +193,7 @@ jobs:
           path: .
 
       - name: Install dependencies
-        run: pip install rdflib jinja2 pytest mypy
+        run: pip install rdflib jinja2 pytest mypy jsonschema
 
       - name: Run tests
         run: PYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v
@@ -329,7 +329,7 @@ jobs:
 
       - name: Install Python SDK, RDFLib, and case-utils
         run: |
-          pip install -e python/ rdflib case-utils
+          pip install -e python/ rdflib case-utils jsonschema
 
       - name: Fail closed if case_validate missing
         run: |

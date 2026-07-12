@@ -179,10 +179,11 @@ def test_standard_namespaces_are_never_flagged(tmp_path):
     assert report.ok is True
 
 
-def test_uco_profile_namespaces_are_never_flagged(tmp_path):
-    """Terms from upper/external ontologies with UCO profiles (CDO-Shapes-*,
-    https://github.com/Cyber-Domain-Ontology) are usable without an extension:
-    PROV-O, OWL-Time, GeoSPARQL/Simple Features, FOAF, ORG, BFO, gUFO."""
+def test_uco_profile_namespaces_pass_when_profiles_selected(tmp_path):
+    """CQ-29: upper/external ontology terms require explicit profile selection.
+    Exact declared terms from PROV-O, OWL-Time, GeoSPARQL, FOAF, ORG, BFO,
+    and gUFO pass when those profiles are selected.
+    """
     graph = write_graph(
         tmp_path,
         [
@@ -218,8 +219,25 @@ def test_uco_profile_namespaces_are_never_flagged(tmp_path):
             },
         ],
     )
-    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
-    assert report.ok is True, (report.undeclared_classes, report.undeclared_properties)
+    report = concept_coverage.check_graph_concepts(
+        graph,
+        project_root=PROJECT_ROOT,
+        selected_profiles=[
+            "prov-o",
+            "foaf",
+            "time",
+            "geosparql",
+            "org",
+            "bfo",
+            "gufo",
+        ],
+    )
+    assert report.ok is True, (
+        report.undeclared_classes,
+        report.undeclared_properties,
+        report.profile_not_selected,
+        report.unknown_upper_ontology_terms,
+    )
 
 
 @pytest.mark.skipif(
@@ -253,6 +271,12 @@ def test_validate_graph_file_rejects_undeclared_concepts(tmp_path):
 # ---------------------------------------------------------------------------
 
 UPPER_REGISTRY_AVAILABLE = concept_coverage.UPPER_ONTOLOGY_REGISTRY_PATH.is_file()
+
+
+def _profile_for_iri(iri: str) -> str:
+    pid = concept_coverage._profile_for_upper_iri(iri)
+    assert pid is not None, iri
+    return pid
 
 
 @pytest.mark.skipif(not UPPER_REGISTRY_AVAILABLE, reason="upper ontology registry missing")
@@ -292,9 +316,14 @@ def test_known_upper_ontology_terms_pass(tmp_path, iri, position):
             iri: {"@id": "kb:u-22222222-2222-4222-8222-222222222222"},
         }
     graph = write_graph(tmp_path, [node])
-    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    report = concept_coverage.check_graph_concepts(
+        graph,
+        project_root=PROJECT_ROOT,
+        selected_profiles=[_profile_for_iri(iri)],
+    )
     assert report.ok is True, (
         report.unknown_upper_ontology_terms,
+        report.profile_not_selected,
         report.role_mismatches,
     )
 
@@ -330,7 +359,11 @@ def test_fabricated_upper_ontology_terms_fail(tmp_path, iri, position):
             iri: "value",
         }
     graph = write_graph(tmp_path, [node])
-    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    report = concept_coverage.check_graph_concepts(
+        graph,
+        project_root=PROJECT_ROOT,
+        selected_profiles=[_profile_for_iri(iri)],
+    )
     assert report.ok is False
     assert iri in report.unknown_upper_ontology_terms
     # Unknown upper-ontology terms are reported distinctly from unknown
@@ -394,7 +427,9 @@ def test_upper_ontology_class_used_as_predicate_is_role_mismatch(tmp_path):
             }
         ],
     )
-    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    report = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, selected_profiles=["prov-o"]
+    )
     assert report.ok is False
     assert (
         "http://www.w3.org/ns/prov#Activity",
@@ -447,7 +482,9 @@ def test_coverage_report_dict_distinguishes_categories(tmp_path):
             }
         ],
     )
-    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    report = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, selected_profiles=["prov-o"]
+    )
     payload = concept_coverage.coverage_report_to_dict(report)
     assert payload["ok"] is False
     if UPPER_REGISTRY_AVAILABLE:
@@ -645,7 +682,9 @@ def test_missing_registry_fails_closed_for_upper_terms(tmp_path, monkeypatch):
         tmp_path / "no-such-registry.json",
     )
     concept_coverage.clear_declared_term_cache()
-    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    report = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, selected_profiles=["gufo"]
+    )
     concept_coverage.clear_declared_term_cache()
     assert report.ok is False
     assert report.verification_status == "could_not_verify"
@@ -661,7 +700,9 @@ def test_corrupt_registry_fails_closed_for_upper_terms(tmp_path, monkeypatch):
         concept_coverage, "UPPER_ONTOLOGY_REGISTRY_PATH", bad_registry
     )
     concept_coverage.clear_declared_term_cache()
-    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    report = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, selected_profiles=["gufo"]
+    )
     concept_coverage.clear_declared_term_cache()
     assert report.ok is False
     assert report.verification_status == "could_not_verify"
@@ -686,7 +727,9 @@ def test_provenance_invalid_registry_fails_closed(tmp_path, monkeypatch):
         concept_coverage, "UPPER_ONTOLOGY_REGISTRY_PATH", bad_registry
     )
     concept_coverage.clear_declared_term_cache()
-    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    report = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, selected_profiles=["gufo"]
+    )
     concept_coverage.clear_declared_term_cache()
     assert report.ok is False
     assert "upper_ontology_registry_provenance_invalid" in report.verification_errors
@@ -747,7 +790,12 @@ def test_selected_profiles_reject_unselected_upper_terms(tmp_path):
         graph, project_root=PROJECT_ROOT, selected_profiles=["geosparql"]
     )
     assert only_geo.ok is False
-    assert any("profile_not_selected:prov-o" in t for t in only_geo.undeclared_classes)
+    assert any(
+        p.required_profile == "prov-o"
+        and p.iri == "http://www.w3.org/ns/prov#Activity"
+        for p in only_geo.profile_not_selected
+    )
+    assert not any("profile_not_selected" in t for t in only_geo.undeclared_classes)
 
     both = concept_coverage.check_graph_concepts(
         graph,
@@ -756,6 +804,24 @@ def test_selected_profiles_reject_unselected_upper_terms(tmp_path):
     )
     assert both.ok is True
     assert both.undeclared_classes == ()
+    assert both.profile_not_selected == ()
+
+
+def test_profiles_none_fail_closed_for_upper_terms(tmp_path):
+    """CQ-29: profiles=None/empty authorizes zero upper profiles."""
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:activity-1",
+                "@type": "http://www.w3.org/ns/prov#Activity",
+            },
+        ],
+    )
+    report = concept_coverage.check_graph_concepts(graph, project_root=PROJECT_ROOT)
+    assert report.ok is False
+    assert any(p.required_profile == "prov-o" for p in report.profile_not_selected)
+    assert report.unknown_upper_ontology_terms == ()
 
 
 def test_org_selected_profiles_include_dependency_namespaces(tmp_path):
@@ -778,7 +844,7 @@ def test_org_selected_profiles_include_dependency_namespaces(tmp_path):
         graph, project_root=PROJECT_ROOT, selected_profiles=["org"]
     )
     assert org_only.ok is False
-    assert any("profile_not_selected:foaf" in t for t in org_only.undeclared_classes)
+    assert any(p.required_profile == "foaf" for p in org_only.profile_not_selected)
 
     with_deps = concept_coverage.check_graph_concepts(
         graph,
@@ -836,3 +902,182 @@ def test_diamond_dependency_resolves_once(tmp_path):
     _make_ext(tmp_path, "a", depends_on=["b", "c"])
     resolved = graph_validator.resolve_extension_dependencies(["a"], tmp_path)
     assert resolved == ["a", "b", "c", "d"]
+
+
+# ---------------------------------------------------------------------------
+# Literal same-bundle SHACL + coverage (CQ-27–CQ-36)
+# ---------------------------------------------------------------------------
+
+
+def test_coverage_fingerprint_matches_bundle(tmp_path):
+    from validation_bundle import resolve_validation_bundle
+
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:activity-1",
+                "@type": "http://www.w3.org/ns/prov#Activity",
+            },
+        ],
+    )
+    bundle = resolve_validation_bundle(profiles=["prov-o"], project_root=PROJECT_ROOT)
+    report = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, bundle=bundle
+    )
+    assert report.ok is True
+    assert report.bundle_fingerprint == bundle.fingerprint
+
+
+def test_geosparql_profile_not_selected_is_structured(tmp_path):
+    """CQ-30: profiles=['geosparql'] + prov:Activity → structured field."""
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:activity-1",
+                "@type": "http://www.w3.org/ns/prov#Activity",
+            },
+        ],
+    )
+    from validation_bundle import resolve_validation_bundle
+
+    bundle = resolve_validation_bundle(profiles=["geosparql"], project_root=PROJECT_ROOT)
+    report = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, bundle=bundle
+    )
+    assert report.ok is False
+    assert report.undeclared_classes == ()
+    assert len(report.profile_not_selected) == 1
+    item = report.profile_not_selected[0]
+    assert item.iri == "http://www.w3.org/ns/prov#Activity"
+    assert item.required_profile == "prov-o"
+    assert item.used_as == "class"
+    assert "geosparql" in item.selected_profiles
+    payload = concept_coverage.coverage_report_to_dict(report)
+    assert payload["profile_not_selected"][0]["required_profile"] == "prov-o"
+
+
+def test_extension_subset_mode_consistency(tmp_path):
+    """CQ-28: coverage must not accept full-manifest-only terms under subset."""
+    from validation_bundle import resolve_validation_bundle
+
+    ext = tmp_path / "extensions" / "toyext"
+    ext.mkdir(parents=True)
+    subset_ttl = ext / "subset.ttl"
+    full_only_ttl = ext / "full_only.ttl"
+    subset_ttl.write_text(
+        "@prefix ex: <https://example.org/toyext#> .\n"
+        "@prefix owl: <http://www.w3.org/2002/07/owl#> .\n"
+        "ex:SubsetClass a owl:Class .\n",
+        encoding="utf-8",
+    )
+    full_only_ttl.write_text(
+        "@prefix ex: <https://example.org/toyext#> .\n"
+        "@prefix owl: <http://www.w3.org/2002/07/owl#> .\n"
+        "ex:FullOnlyClass a owl:Class .\n",
+        encoding="utf-8",
+    )
+    (ext / "manifest.json").write_text(
+        json.dumps(
+            {
+                "name": "toyext",
+                "version": "0.0.1",
+                "owl_files": ["subset.ttl", "full_only.ttl"],
+                "shacl_files": [],
+                "bridge_files": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (ext / "validation-subset.json").write_text(
+        json.dumps({"ontology_files": ["subset.ttl"]}),
+        encoding="utf-8",
+    )
+
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:full-only-1",
+                "@type": "https://example.org/toyext#FullOnlyClass",
+            },
+            {
+                "@id": "kb:subset-1",
+                "@type": "https://example.org/toyext#SubsetClass",
+            },
+        ],
+    )
+
+    subset_bundle = resolve_validation_bundle(
+        extensions=["toyext"], project_root=tmp_path
+    )
+    subset_paths = {r.path for r in subset_bundle.resources}
+    assert any(p.endswith("subset.ttl") for p in subset_paths)
+    assert not any(p.endswith("full_only.ttl") for p in subset_paths)
+
+    subset_report = concept_coverage.check_graph_concepts(
+        graph, project_root=tmp_path, bundle=subset_bundle
+    )
+    assert subset_report.bundle_fingerprint == subset_bundle.fingerprint
+    assert any(
+        "FullOnlyClass" in iri for iri in subset_report.undeclared_classes
+    ), subset_report.undeclared_classes
+    assert not any(
+        "SubsetClass" in iri for iri in subset_report.undeclared_classes
+    )
+
+    full_bundle = resolve_validation_bundle(
+        extensions=["toyext:full"], project_root=tmp_path
+    )
+    full_report = concept_coverage.check_graph_concepts(
+        graph, project_root=tmp_path, bundle=full_bundle
+    )
+    assert full_report.ok is True
+    assert full_report.bundle_fingerprint == full_bundle.fingerprint
+    assert full_bundle.fingerprint != subset_bundle.fingerprint
+
+
+def test_ontology_parse_error_fails_closed(tmp_path):
+    """CQ-31: unparseable ontology resources are reported, not skipped."""
+    from validation_bundle import resolve_validation_bundle
+
+    ext = tmp_path / "extensions" / "badparse"
+    ext.mkdir(parents=True)
+    bad = ext / "broken.ttl"
+    bad.write_text("this is not valid turtle @@@\n", encoding="utf-8")
+    (ext / "manifest.json").write_text(
+        json.dumps(
+            {
+                "name": "badparse",
+                "version": "0.0.1",
+                "owl_files": ["broken.ttl"],
+                "shacl_files": [],
+                "bridge_files": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    graph = write_graph(
+        tmp_path,
+        [
+            {
+                "@id": "kb:obj-1",
+                "@type": "uco-core:UcoObject",
+            }
+        ],
+    )
+    # Core may still be missing under tmp_path; use PROJECT_ROOT for core and
+    # an auxiliary broken file via extra_ontology_graphs on the real root.
+    bundle = resolve_validation_bundle(
+        project_root=PROJECT_ROOT,
+        extra_ontology_graphs=[bad],
+    )
+    report = concept_coverage.check_graph_concepts(
+        graph, project_root=PROJECT_ROOT, bundle=bundle
+    )
+    assert report.ok is False
+    assert report.verification_status == "could_not_verify"
+    assert report.ontology_parse_errors
+    assert any("broken.ttl" in e.path for e in report.ontology_parse_errors)
+    assert any(e.role == "auxiliary" for e in report.ontology_parse_errors)

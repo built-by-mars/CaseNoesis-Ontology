@@ -16,7 +16,7 @@ strict concept coverage afterward.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
@@ -80,6 +80,24 @@ class InvestigationFamily:
     core_namespaces: tuple[str, ...] = ()
     upper_profiles: tuple[str, ...] = ()
     notes: str = ""
+
+
+@dataclass
+class OrderedRoutingRecommendations:
+    """Typed ordered-routing payload (CQ-40)."""
+
+    primary_composition_recipe: str | None
+    supporting_domain_recipes: list[str]
+    required_extensions: list[str]
+    recommended_profiles: list[str]
+    optional_profiles: list[str]
+    not_recommended_profiles: list[str]
+    validation_bundle_preview: dict[str, Any] | None
+    compatibility_warnings: list[str]
+    ontology_gap_workflow: dict[str, Any] | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
 
 INVESTIGATION_FAMILIES: tuple[InvestigationFamily, ...] = (
@@ -608,16 +626,62 @@ UPPER_PROFILE_HINTS = {
 }
 
 # Display names used on InvestigationFamily.upper_profiles → validation_bundle IDs.
-PROFILE_DISPLAY_TO_ID: dict[str, str] = {
-    "BFO": "bfo",
-    "gUFO": "gufo",
-    "PROV-O": "prov-o",
-    "OWL-Time": "time",
-    "GeoSPARQL": "geosparql",
-    "FOAF": "foaf",
-    "ORG": "org",
-    "PROF": "prof",
-}
+# Built from PROFILE_REGISTRY (+ UCO_PROFILES labels); not a hard-coded parallel map (CQ-39).
+def _build_profile_display_to_id() -> dict[str, str]:
+    from validation_bundle import PROFILE_REGISTRY
+
+    mapping: dict[str, str] = {}
+    for pid, meta in PROFILE_REGISTRY.items():
+        canonical = meta.get("alias_of", pid)
+        mapping[pid] = canonical
+        mapping[pid.upper()] = canonical
+        mapping[pid.replace("-", "_")] = canonical
+        # Common display tokens used in family hints.
+        if pid == "prov-o":
+            mapping["PROV-O"] = canonical
+            mapping["PROV"] = canonical
+        elif pid == "time":
+            mapping["OWL-Time"] = canonical
+            mapping["OWL_TIME"] = canonical
+        elif pid == "geosparql":
+            mapping["GeoSPARQL"] = canonical
+        elif pid == "gufo":
+            mapping["gUFO"] = canonical
+            mapping["GUFO"] = canonical
+        elif pid == "bfo":
+            mapping["BFO"] = canonical
+        elif pid == "foaf":
+            mapping["FOAF"] = canonical
+        elif pid == "org":
+            mapping["ORG"] = canonical
+        elif pid == "prof":
+            mapping["PROF"] = canonical
+        elif pid == "owl-time":
+            mapping["OWL-Time"] = canonical
+    try:
+        from domain_index import UCO_PROFILES
+
+        for profile in UCO_PROFILES:
+            pid = profile["id"]
+            if pid not in PROFILE_REGISTRY:
+                continue
+            canonical = PROFILE_REGISTRY[pid].get("alias_of", pid)
+            mapping[profile.get("name", "")] = canonical
+            full = profile.get("full_name") or ""
+            if full:
+                mapping[full] = canonical
+                # Parenthetical short name, e.g. "… (gUFO)" / "… (BFO 2020)"
+                if "(" in full and ")" in full:
+                    inner = full.split("(", 1)[1].split(")", 1)[0].strip()
+                    if inner:
+                        mapping[inner] = canonical
+                        mapping[inner.split()[0]] = canonical
+    except Exception:  # noqa: BLE001 — discovery catalog optional at import time
+        pass
+    return {k: v for k, v in mapping.items() if k}
+
+
+PROFILE_DISPLAY_TO_ID: dict[str, str] = _build_profile_display_to_id()
 
 # Extension → profile policy from docs/recipes/cross-ontology-composition.md.
 EXTENSION_PROFILE_POLICY: dict[str, dict[str, tuple[str, ...]]] = {
@@ -871,10 +935,22 @@ def build_extension_gap_guidance() -> dict[str, Any]:
 
 
 def _profile_ids_from_display(names: list[str] | tuple[str, ...]) -> list[str]:
+    """Resolve family profile hints through PROFILE_REGISTRY (CQ-39)."""
+    from validation_bundle import PROFILE_REGISTRY, _normalize_profile_id
+
     ids: list[str] = []
     seen: set[str] = set()
     for name in names:
-        pid = PROFILE_DISPLAY_TO_ID.get(name, name.lower().replace("_", "-"))
+        raw = PROFILE_DISPLAY_TO_ID.get(name, name.lower().replace("_", "-"))
+        try:
+            if raw in PROFILE_REGISTRY:
+                pid = _normalize_profile_id(raw)
+            elif name in PROFILE_REGISTRY:
+                pid = _normalize_profile_id(name)
+            else:
+                pid = raw
+        except Exception:  # noqa: BLE001 — keep token for fail-closed preview
+            pid = raw
         if pid not in seen:
             seen.add(pid)
             ids.append(pid)
@@ -887,24 +963,41 @@ def build_ordered_recommendations(
     *,
     project_root: Path | None = None,
 ) -> dict[str, Any]:
-    """Ordered composition guidance for multi-domain / cross-ontology routing (#66)."""
+    """Ordered composition guidance for multi-domain / cross-ontology routing (#66).
+
+    Builds a typed :class:`OrderedRoutingRecommendations` then returns its
+    dict form for JSON/MCP payload compatibility (CQ-40).
+    """
+
+    return _build_ordered_recommendations_model(
+        matches, installed, project_root=project_root
+    ).to_dict()
+
+
+def _build_ordered_recommendations_model(
+    matches: list[dict[str, Any]],
+    installed: dict[str, dict[str, Any]],
+    *,
+    project_root: Path | None = None,
+) -> OrderedRoutingRecommendations:
+    """Typed builder used by tests and :func:`build_ordered_recommendations`."""
 
     gap = build_extension_gap_guidance()
     if not matches:
-        return {
-            "primary_composition_recipe": None,
-            "supporting_domain_recipes": [],
-            "required_extensions": [],
-            "recommended_profiles": [],
-            "optional_profiles": [],
-            "not_recommended_profiles": [],
-            "validation_bundle_preview": None,
-            "compatibility_warnings": [
+        return OrderedRoutingRecommendations(
+            primary_composition_recipe=None,
+            supporting_domain_recipes=[],
+            required_extensions=[],
+            recommended_profiles=[],
+            optional_profiles=[],
+            not_recommended_profiles=[],
+            validation_bundle_preview=None,
+            compatibility_warnings=[
                 "No investigation family matched — follow ontology_gap_workflow "
                 "before inventing terms."
             ],
-            "ontology_gap_workflow": gap,
-        }
+            ontology_gap_workflow=gap,
+        )
 
     required_extensions = sorted({
         ext for m in matches for ext in m.get("extensions", [])
@@ -964,7 +1057,6 @@ def build_ordered_recommendations(
         for pid in policy.get("not_recommended", ()):
             _add(not_recommended, seen_not, pid)
 
-    # Optional profiles must not duplicate recommended/not_recommended.
     optional = [
         p for p in optional
         if p not in seen_rec and p not in seen_not
@@ -984,7 +1076,6 @@ def build_ordered_recommendations(
             "CAC is aligned with gUFO; BFO is not recommended on the same graph."
         )
     if "bfo" in recommended and "gufo" in recommended:
-        # Prefer gUFO when both appear; keep BFO as not_recommended.
         recommended = [p for p in recommended if p != "bfo"]
         _add(not_recommended, seen_not, "bfo")
         warnings.append(
@@ -999,55 +1090,77 @@ def build_ordered_recommendations(
         )
 
     preview: dict[str, Any] | None = None
-    try:
-        from validation_bundle import resolve_validation_bundle
-
-        root = project_root or Path(__file__).resolve().parents[1]
-        # Preview recommended profiles only (optional stay advisory).
-        bundle = resolve_validation_bundle(
-            extensions=required_extensions or None,
-            profiles=recommended or None,
-            project_root=root,
-        )
-        preview = {
-            "extensions": list(bundle.extensions),
-            "profiles": list(bundle.profiles),
-            "inference": bundle.inference,
-            "compatibility_notes": list(bundle.compatibility_notes),
-            "fingerprint": bundle.fingerprint,
-            "resource_count": len(bundle.resources),
-            "resources": [
-                {"role": r.role, "path": r.path, "profile_id": r.profile_id, "extension": r.extension}
-                for r in bundle.resources
-            ],
-        }
-        warnings.extend(bundle.compatibility_notes)
-    except Exception as exc:  # noqa: BLE001 — preview must never break routing
-        code = getattr(exc, "code", type(exc).__name__)
-        warnings.append(f"validation_bundle_preview unavailable ({code}): {exc}")
+    if missing_ext:
+        # CQ-39: never silently drop missing extensions from the preview.
         preview = {
             "ok": False,
-            "error": str(exc),
+            "error": "required_extensions_missing",
+            "missing_extensions": missing_ext,
             "requested_extensions": required_extensions,
             "requested_profiles": recommended,
+            "unavailable": True,
         }
+        warnings.append(
+            "validation_bundle_preview unavailable: required extensions missing "
+            f"({', '.join(missing_ext)}); install/promote them before validating."
+        )
+    else:
+        try:
+            from validation_bundle import resolve_validation_bundle
 
-    return {
-        "primary_composition_recipe": primary,
-        "supporting_domain_recipes": supporting,
-        "required_extensions": required_extensions,
-        "recommended_profiles": recommended,
-        "optional_profiles": optional,
-        "not_recommended_profiles": not_recommended,
-        "validation_bundle_preview": preview,
-        "compatibility_warnings": warnings,
-        "ontology_gap_workflow": None,
-    }
+            root = project_root or Path(__file__).resolve().parents[1]
+            bundle = resolve_validation_bundle(
+                extensions=required_extensions or None,
+                profiles=recommended or None,
+                project_root=root,
+            )
+            preview = {
+                "ok": True,
+                "extensions": list(bundle.extensions),
+                "profiles": list(bundle.profiles),
+                "inference": bundle.inference,
+                "compatibility_notes": list(bundle.compatibility_notes),
+                "fingerprint": bundle.fingerprint,
+                "resource_count": len(bundle.resources),
+                "resources": [
+                    {
+                        "role": r.role,
+                        "path": r.path,
+                        "profile_id": r.profile_id,
+                        "extension": r.extension,
+                    }
+                    for r in bundle.resources
+                ],
+            }
+            warnings.extend(bundle.compatibility_notes)
+        except Exception as exc:  # noqa: BLE001 — preview must never break routing
+            code = getattr(exc, "code", type(exc).__name__)
+            warnings.append(f"validation_bundle_preview unavailable ({code}): {exc}")
+            preview = {
+                "ok": False,
+                "error": str(exc),
+                "requested_extensions": required_extensions,
+                "requested_profiles": recommended,
+                "unavailable": True,
+            }
+
+    return OrderedRoutingRecommendations(
+        primary_composition_recipe=primary,
+        supporting_domain_recipes=supporting,
+        required_extensions=required_extensions,
+        recommended_profiles=recommended,
+        optional_profiles=optional,
+        not_recommended_profiles=not_recommended,
+        validation_bundle_preview=preview,
+        compatibility_warnings=warnings,
+        ontology_gap_workflow=None,
+    )
 
 
 def build_general_workflow(matches: list[dict[str, Any]], installed: dict[str, dict[str, Any]]) -> list[str]:
     steps: list[str] = []
     extensions_needed = sorted({ext for m in matches for ext in m["extensions"] if ext in installed})
+    missing_ext = sorted({ext for m in matches for ext in m["extensions"] if ext not in installed})
     if extensions_needed:
         steps.append(
             "Enable extensions: set CASE_UCO_EXTENSIONS="
@@ -1055,6 +1168,12 @@ def build_general_workflow(matches: list[dict[str, Any]], installed: dict[str, d
             + " (server) and pass extensions="
             + json.dumps(extensions_needed)
             + " to validate_graph."
+        )
+    if missing_ext:
+        steps.append(
+            "Required extensions are not installed as operational packages: "
+            + ", ".join(missing_ext)
+            + ". Promote/install them before relying on validation_bundle_preview."
         )
     if len(matches) > 1:
         titles = ", ".join(m["title"] for m in matches)

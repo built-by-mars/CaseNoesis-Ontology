@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/casework/CASE-UCO-Libraries/docs/recipes/recipe-execution.schema.json",
+  "title": "CASE/UCO recipe execution manifest",
+  "description": "Executable evidence contract for operational recipes (#69 / CQ-07).",
+  "type": "object",
+  "required": ["schema_version", "recipes"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recipes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/recipeEntry" }
+    }
+  },
+  "$defs": {
+    "repoRelativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/|~|[A-Za-z]:)(?!.*\\\\).+$",
+      "description": "Repository-relative POSIX path (no absolute / drive / tilde paths)."
+    },
+    "profileName": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "extensionName": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(:(subset|full))?$"
+    },
+    "expectInvalid": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "$ref": "#/$defs/repoRelativePath" },
+        "expected_violation": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Substring that must appear in validator diagnostics (e.g. Source Shape id)."
+        },
+        "expected_constraint": {
+          "type": "string",
+          "minLength": 1,
+          "description": "SHACL constraint component identifier substring (e.g. NotConstraintComponent)."
+        },
+        "expected_failure_code": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Typed failure code or diagnostic substring required for the negative fixture."
+        }
+      },
+      "anyOf": [
+        { "required": ["expected_violation"] },
+        { "required": ["expected_constraint"] },
+        { "required": ["expected_failure_code"] }
+      ]
+    },
+    "competencyQuery": {
+      "type": "object",
+      "required": ["query", "expected_bindings"],
+      "additionalProperties": false,
+      "properties": {
+        "query": { "$ref": "#/$defs/repoRelativePath" },
+        "expected_bindings": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": ["string", "number", "boolean", "null"]
+            }
+          },
+          "description": "Canonical expected SELECT bindings; required even when empty (count alone is insufficient)."
+        },
+        "expected_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "min_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "recipeEntry": {
+      "type": "object",
+      "required": ["id", "category", "recipe", "builder", "output"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recipe": { "$ref": "#/$defs/repoRelativePath" },
+        "builder": { "$ref": "#/$defs/repoRelativePath" },
+        "output": { "$ref": "#/$defs/repoRelativePath" },
+        "profiles": {
+          "type": ["array", "null"],
+          "items": { "$ref": "#/$defs/profileName" },
+          "uniqueItems": true
+        },
+        "extensions": {
+          "type": ["array", "null"],
+          "items": { "$ref": "#/$defs/extensionName" },
+          "uniqueItems": true
+        },
+        "strict_concepts": { "type": "boolean" },
+        "allow_foundational_pair": { "type": "boolean" },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600
+        },
+        "support_files": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/repoRelativePath" },
+          "uniqueItems": true
+        },
+        "support_dirs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/repoRelativePath" },
+          "uniqueItems": true
+        },
+        "expect_invalid": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/expectInvalid" }
+        },
+        "competency_queries": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/competencyQuery" }
+        }
+      }
+    }
+  }
+}

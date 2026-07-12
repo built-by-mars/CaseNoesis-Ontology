@@ -1,0 +1,49 @@
+Test Doc Snippets	Test documentation snippets	﻿2026-07-12T21:30:09.8799638Z ##[group]Run python scripts/test_doc_snippets.py
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.8800071Z [36;1mpython scripts/test_doc_snippets.py[0m
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.8834340Z shell: /usr/bin/bash -e {0}
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.8834607Z env:
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.8834878Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.8835337Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.8835947Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.8836321Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.8836696Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.8837102Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.8837427Z ##[endgroup]
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.9579609Z FAIL  docs/recipes/geosparql-geospatial-evidence.md:29: positional argument follows keyword argument (line 29)
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.9580619Z 
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.9580781Z 110 passed, 1 failed, 0 skipped
+Test Doc Snippets	Test documentation snippets	2026-07-12T21:30:09.9641365Z ##[error]Process completed with exit code 1.
+Test Python	Run tests	﻿2026-07-12T21:30:18.3190667Z ##[group]Run PYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v
+Test Python	Run tests	2026-07-12T21:30:18.3191484Z [36;1mPYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v[0m
+Test Python	Run tests	2026-07-12T21:30:18.3215482Z shell: /usr/bin/bash -e {0}
+Test Python	Run tests	2026-07-12T21:30:18.3215798Z env:
+Test Python	Run tests	2026-07-12T21:30:18.3216124Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.13/x64
+Test Python	Run tests	2026-07-12T21:30:18.3216634Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib/pkgconfig
+Test Python	Run tests	2026-07-12T21:30:18.3217129Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+Test Python	Run tests	2026-07-12T21:30:18.3217705Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+Test Python	Run tests	2026-07-12T21:30:18.3218149Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.13/x64
+Test Python	Run tests	2026-07-12T21:30:18.3218592Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.13/x64/lib
+Test Python	Run tests	2026-07-12T21:30:18.3218966Z ##[endgroup]
+Test Python	Run tests	2026-07-12T21:30:18.5781925Z ============================= test session starts ==============================
+Test Python	Run tests	2026-07-12T21:30:18.5783023Z platform linux -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0 -- /opt/hostedtoolcache/Python/3.12.13/x64/bin/python
+Test Python	Run tests	2026-07-12T21:30:18.5783810Z cachedir: .pytest_cache
+Test Python	Run tests	2026-07-12T21:30:18.5784269Z rootdir: /home/runner/work/CASE-UCO-SDK/CASE-UCO-SDK/generator
+Test Python	Run tests	2026-07-12T21:30:18.5789282Z configfile: pyproject.toml
+Test Python	Run tests	2026-07-12T21:30:19.2002875Z collecting ... collected 69 items / 1 error
+Test Python	Run tests	2026-07-12T21:30:19.2003396Z 
+Test Python	Run tests	2026-07-12T21:30:19.2003647Z ==================================== ERRORS ====================================
+Test Python	Run tests	2026-07-12T21:30:19.2004467Z __________________ ERROR collecting test_graph_composition.py __________________
+Test Python	Run tests	2026-07-12T21:30:19.2005295Z ImportError while importing test module '/home/runner/work/CASE-UCO-SDK/CASE-UCO-SDK/python/tests/test_graph_composition.py'.
+Test Python	Run tests	2026-07-12T21:30:19.2005935Z Hint: make sure your test modules/packages have valid Python names.
+Test Python	Run tests	2026-07-12T21:30:19.2006286Z Traceback:
+Test Python	Run tests	2026-07-12T21:30:19.2006679Z /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/importlib/__init__.py:90: in import_module
+Test Python	Run tests	2026-07-12T21:30:19.2007222Z     return _bootstrap._gcd_import(name[level:], package, level)
+Test Python	Run tests	2026-07-12T21:30:19.2007592Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Test Python	Run tests	2026-07-12T21:30:19.2007925Z python/tests/test_graph_composition.py:10: in <module>
+Test Python	Run tests	2026-07-12T21:30:19.2008288Z     from case_uco import CASEGraph, DuplicateNodeError
+Test Python	Run tests	2026-07-12T21:30:19.2008927Z E   ImportError: cannot import name 'DuplicateNodeError' from 'case_uco' (/home/runner/work/CASE-UCO-SDK/CASE-UCO-SDK/python/case_uco/__init__.py)
+Test Python	Run tests	2026-07-12T21:30:19.2009573Z =========================== short test summary info ============================
+Test Python	Run tests	2026-07-12T21:30:19.2009943Z ERROR generator/test_graph_composition.py
+Test Python	Run tests	2026-07-12T21:30:19.2010616Z !!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+Test Python	Run tests	2026-07-12T21:30:19.2011027Z =============================== 1 error in 0.59s ===============================
+Test Python	Run tests	2026-07-12T21:30:19.2491385Z ##[error]Process completed with exit code 2.

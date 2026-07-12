@@ -64,8 +64,20 @@ class PythonBackend(CodegenBackend):
         top_init = self.output_dir / "__init__.py"
         top_init.write_text(
             '"""CASE/UCO Standard Library — construct and serialize CASE/UCO ontology graphs."""\n\n'
-            "from case_uco.graph import CASEGraph\n\n"
-            '__all__ = ["CASEGraph"]\n'
+            "from case_uco.graph import (\n"
+            "    CASEGraph,\n"
+            "    DeserializationWarning,\n"
+            "    DuplicateNodeError,\n"
+            "    InvalidSplitSizeError,\n"
+            "    clear_class_registry_cache,\n"
+            ")\n\n"
+            "__all__ = [\n"
+            '    "CASEGraph",\n'
+            '    "DeserializationWarning",\n'
+            '    "DuplicateNodeError",\n'
+            '    "InvalidSplitSizeError",\n'
+            '    "clear_class_registry_cache",\n'
+            "]\n"
             f'__version__ = "{self._package_version()}"\n',
             encoding="utf-8",
         )
@@ -370,15 +382,16 @@ class PythonBackend(CodegenBackend):
         lines: list[str] = []
 
         parent_name = cls.all_parent_names[0] if cls.all_parent_names else None
-        base = parent_name if parent_name else ""
+        class_name = self.safe_identifier(cls.name, "python")
+        base = self.safe_identifier(parent_name, "python") if parent_name else ""
         decorator = "@dataclass"
 
         if base:
             lines.append(decorator)
-            lines.append(f"class {cls.name}({base}):")
+            lines.append(f"class {class_name}({base}):")
         else:
             lines.append(decorator)
-            lines.append(f"class {cls.name}:")
+            lines.append(f"class {class_name}:")
 
         # Docstring
         desc = cls.description[:200] if cls.description else cls.name

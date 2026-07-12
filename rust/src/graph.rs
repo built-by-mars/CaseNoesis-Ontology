@@ -6,6 +6,41 @@ use sha2::{Digest, Sha256};
 use std::collections::HashMap;
 use uuid::Uuid;
 
+const KIND_SLUG_MAX_LEN: usize = 64;
+
+/// Named duplicate `@id` policies (parity with Python / C# / Java).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum DuplicatePolicy {
+    #[default]
+    Reject,
+    MergeIdentical,
+    MergeCompatible,
+    Replace,
+}
+
+impl DuplicatePolicy {
+    pub fn parse(name: &str) -> Result<Self, String> {
+        match name {
+            "reject" | "error" => Ok(Self::Reject),
+            "merge_identical" => Ok(Self::MergeIdentical),
+            "merge_compatible" => Ok(Self::MergeCompatible),
+            "replace" => Ok(Self::Replace),
+            other => Err(format!(
+                "Unknown duplicate policy: '{other}'. Expected one of: reject, merge_identical, merge_compatible, replace (error is an alias for reject)"
+            )),
+        }
+    }
+
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Reject => "reject",
+            Self::MergeIdentical => "merge_identical",
+            Self::MergeCompatible => "merge_compatible",
+            Self::Replace => "replace",
+        }
+    }
+}
+
 /// Raised when a node with the same `@id` conflicts with an existing node.
 #[derive(Debug, Clone)]
 pub struct DuplicateNodeError {
@@ -31,6 +66,7 @@ pub enum GraphError {
     Duplicate(DuplicateNodeError),
     NotFound(String),
     InvalidArgument(String),
+    InvalidSplitSize(isize),
 }
 
 impl std::fmt::Display for GraphError {
@@ -39,6 +75,9 @@ impl std::fmt::Display for GraphError {
             GraphError::Duplicate(e) => write!(f, "{e}"),
             GraphError::NotFound(id) => write!(f, "No node with @id '{id}'"),
             GraphError::InvalidArgument(msg) => write!(f, "{msg}"),
+            GraphError::InvalidSplitSize(n) => {
+                write!(f, "split max_objects must be a positive integer, got {n}")
+            }
         }
     }
 }
@@ -52,6 +91,7 @@ pub enum LoadError {
     Duplicate(DuplicateNodeError),
     Context(String),
     Merge(String),
+    Policy(String),
 }
 
 impl std::fmt::Display for LoadError {
@@ -59,8 +99,9 @@ impl std::fmt::Display for LoadError {
         match self {
             LoadError::Json(e) => write!(f, "{e}"),
             LoadError::Duplicate(e) => write!(f, "{e}"),
-            LoadError::Context(msg) => write!(f, "{msg}"),
-            LoadError::Merge(msg) => write!(f, "{msg}"),
+            LoadError::Context(msg) | LoadError::Merge(msg) | LoadError::Policy(msg) => {
+                write!(f, "{msg}")
+            }
         }
     }
 }
@@ -70,7 +111,7 @@ impl std::error::Error for LoadError {
         match self {
             LoadError::Json(e) => Some(e),
             LoadError::Duplicate(e) => Some(e),
-            LoadError::Context(_) | LoadError::Merge(_) => None,
+            LoadError::Context(_) | LoadError::Merge(_) | LoadError::Policy(_) => None,
         }
     }
 }
@@ -93,8 +134,8 @@ pub struct CaseGraph {
     context: HashMap<String, String>,
     objects: Vec<Value>,
     iri_index: HashMap<String, usize>,
-    /// When true, [`CaseGraph::load`] rejects duplicate `@id` instead of merging.
-    reject_duplicates: bool,
+    /// Named duplicate policy (default [`DuplicatePolicy::Reject`]).
+    pub on_duplicate: DuplicatePolicy,
 }
 
 impl CaseGraph {
@@ -106,32 +147,43 @@ impl CaseGraph {
             context,
             objects: Vec::new(),
             iri_index: HashMap::new(),
-            // Default reject matches Python on_duplicate="reject" / other languages.
-            reject_duplicates: true,
+            on_duplicate: DuplicatePolicy::Reject,
         }
     }
 
+    /// Construct with extra context prefixes (rejects collisions with defaults).
+    pub fn with_extra_context(
+        kb_prefix: &str,
+        extra: &HashMap<String, String>,
+    ) -> Result<Self, LoadError> {
+        let mut g = Self::new(kb_prefix);
+        for (k, v) in extra {
+            g.merge_context_entry(k, v)?;
+        }
+        Ok(g)
+    }
+
     /// When true, [`load`](Self::load) raises on duplicate `@id` instead of merging.
-    /// Default is `true` (reject) for cross-language parity with Python.
+    /// Prefer [`on_duplicate`](Self::on_duplicate) for full policy parity.
     pub fn reject_duplicates(&self) -> bool {
-        self.reject_duplicates
+        matches!(self.on_duplicate, DuplicatePolicy::Reject)
     }
 
     pub fn set_reject_duplicates(&mut self, reject: bool) {
-        self.reject_duplicates = reject;
+        self.on_duplicate = if reject {
+            DuplicatePolicy::Reject
+        } else {
+            DuplicatePolicy::MergeCompatible
+        };
     }
 
-    pub fn add_context(&mut self, prefix: &str, iri: &str) {
-        self.context.insert(prefix.to_string(), iri.to_string());
+    pub fn add_context(&mut self, prefix: &str, iri: &str) -> Result<(), LoadError> {
+        self.merge_context_entry(prefix, iri)
     }
 
     /// Add a generated CASE/UCO object to the graph, auto-generating a UUID-based @id.
     ///
-    /// This is the preferred API — the type name and class IRI are read from
-    /// the [`CaseObject`] trait that the code generator implements on every
-    /// generated struct. Returns the assigned @id.
-    ///
-    /// Panics if any ontology-required field is missing.
+    /// Panics if any ontology-required field is missing or serialization fails.
     pub fn create<T: CaseObject + Serialize>(&mut self, instance: &T) -> String {
         if let Err(msg) = instance.validate() {
             panic!("{}", msg);
@@ -141,11 +193,6 @@ impl CaseGraph {
     }
 
     /// Add a generated CASE/UCO object with a user-supplied @id.
-    ///
-    /// Use this when you need deterministic or externally-controlled IRIs
-    /// instead of auto-generated UUIDs.
-    ///
-    /// Panics if any ontology-required field is missing.
     pub fn create_with_id<T: CaseObject + Serialize>(&mut self, id: &str, instance: &T) -> String {
         if let Err(msg) = instance.validate() {
             panic!("{}", msg);
@@ -154,7 +201,6 @@ impl CaseGraph {
     }
 
     /// Add a serializable object to the graph with explicit type info.
-    /// Returns the assigned @id.
     pub fn add<T: Serialize>(&mut self, type_name: &str, class_iri: &str, instance: &T) -> String {
         let id = format!("kb:{}-{}", type_name, Uuid::new_v4());
         self.add_with_id(&id, class_iri, instance)
@@ -175,8 +221,9 @@ impl CaseGraph {
             map.remove("class_iri");
         }
 
-        self.append_object(obj_value)
-            .unwrap_or_else(|e| panic!("failed to add object: {e}"));
+        if let Err(e) = self.append_object(obj_value) {
+            panic!("failed to add object: {e}");
+        }
         id.to_string()
     }
 
@@ -190,35 +237,36 @@ impl CaseGraph {
         self.find_object_index(node_id).is_some()
     }
 
-    /// Return the JSON-LD object for a node by compact or expanded `@id`.
-    ///
-    /// Returns an immutable borrow. There is no `get_mut`; mutating `@id` through
-    /// interior mutation is unsupported — use [`add_type`](Self::add_type) /
-    /// [`add_property`](Self::add_property) / [`upsert_node`](Self::upsert_node).
-    pub fn get(&self, node_id: &str) -> Option<&Map<String, Value>> {
+    /// Return an owned deep clone of the JSON-LD object for a node.
+    pub fn get(&self, node_id: &str) -> Option<Map<String, Value>> {
         self.find_object_index(node_id)
-            .and_then(|idx| self.objects[idx].as_object())
+            .and_then(|idx| self.objects[idx].as_object().cloned())
     }
 
     /// Create or update a JSON-LD node by `@id`.
+    ///
+    /// Returns an owned JSON [`Value`] clone (not a live internal map).
     pub fn upsert_node(
         &mut self,
         node_id: &str,
         types: Option<Value>,
         properties: Option<Map<String, Value>>,
-    ) -> Result<&mut Map<String, Value>, GraphError> {
+    ) -> Result<Value, GraphError> {
         if let Some(idx) = self.find_object_index(node_id) {
-            let obj = self.objects[idx].as_object_mut().expect("indexed node must be object");
+            let obj = self.objects[idx]
+                .as_object_mut()
+                .ok_or_else(|| GraphError::InvalidArgument("indexed node must be object".into()))?;
             if let Some(types_val) = types {
                 let merged = merge_types(obj.get("@type"), Some(types_val));
                 obj.insert("@type".to_string(), normalize_type_value(merged));
             }
             if let Some(props) = properties {
                 for (key, value) in props {
-                    set_property(obj, &key, value).map_err(GraphError::InvalidArgument)?;
+                    apply_property(obj, &key, value, node_id, PropertyMode::MergeCompatible)
+                        .map_err(|ApplyError::Duplicate(d)| GraphError::Duplicate(d))?;
                 }
             }
-            return Ok(self.objects[idx].as_object_mut().unwrap());
+            return Ok(self.objects[idx].clone());
         }
 
         let mut obj = Map::new();
@@ -228,16 +276,17 @@ impl CaseGraph {
         }
         if let Some(props) = properties {
             for (key, value) in props {
-                set_property(&mut obj, &key, value).map_err(GraphError::InvalidArgument)?;
+                apply_property(&mut obj, &key, value, node_id, PropertyMode::MergeCompatible)
+                    .map_err(|ApplyError::Duplicate(d)| GraphError::Duplicate(d))?;
             }
         }
-        self.append_object(Value::Object(obj)).map_err(GraphError::Duplicate)?;
-        Ok(self
+        self.append_object(Value::Object(obj))
+            .map_err(GraphError::Duplicate)?;
+        let last = self
             .objects
-            .last_mut()
-            .unwrap()
-            .as_object_mut()
-            .unwrap())
+            .last()
+            .ok_or_else(|| GraphError::InvalidArgument("append produced empty graph".into()))?;
+        Ok(last.clone())
     }
 
     /// Add an `rdf:type` to an existing node (same `@id`).
@@ -245,13 +294,15 @@ impl CaseGraph {
         let idx = self
             .find_object_index(node_id)
             .ok_or_else(|| GraphError::NotFound(node_id.to_string()))?;
-        let obj = self.objects[idx].as_object_mut().unwrap();
+        let obj = self.objects[idx]
+            .as_object_mut()
+            .ok_or_else(|| GraphError::InvalidArgument("indexed node must be object".into()))?;
         let merged = merge_types(obj.get("@type"), Some(Value::String(type_iri.to_string())));
         obj.insert("@type".to_string(), normalize_type_value(merged));
         Ok(())
     }
 
-    /// Add or merge a property on an existing node.
+    /// Add or merge a property on an existing node (`merge_compatible`).
     pub fn add_property(
         &mut self,
         node_id: &str,
@@ -261,9 +312,28 @@ impl CaseGraph {
         let idx = self
             .find_object_index(node_id)
             .ok_or_else(|| GraphError::NotFound(node_id.to_string()))?;
-        let obj = self.objects[idx].as_object_mut().unwrap();
-        set_property(obj, key, value).map_err(GraphError::InvalidArgument)?;
-        Ok(())
+        let obj = self.objects[idx]
+            .as_object_mut()
+            .ok_or_else(|| GraphError::InvalidArgument("indexed node must be object".into()))?;
+        apply_property(obj, key, value, node_id, PropertyMode::MergeCompatible)
+            .map_err(|ApplyError::Duplicate(d)| GraphError::Duplicate(d))
+    }
+
+    /// Replace a property value (`replace` mode / scalar overwrite).
+    pub fn set_property(
+        &mut self,
+        node_id: &str,
+        key: &str,
+        value: Value,
+    ) -> Result<(), GraphError> {
+        let idx = self
+            .find_object_index(node_id)
+            .ok_or_else(|| GraphError::NotFound(node_id.to_string()))?;
+        let obj = self.objects[idx]
+            .as_object_mut()
+            .ok_or_else(|| GraphError::InvalidArgument("indexed node must be object".into()))?;
+        apply_property(obj, key, value, node_id, PropertyMode::Replace)
+            .map_err(|ApplyError::Duplicate(d)| GraphError::Duplicate(d))
     }
 
     /// Add a direct property edge source --predicate--> target.
@@ -273,14 +343,13 @@ impl CaseGraph {
         predicate: &str,
         target_id: &str,
     ) -> Result<(), GraphError> {
-        self.add_property(
-            source_id,
-            predicate,
-            json!({ "@id": target_id }),
-        )
+        self.add_property(source_id, predicate, json!({ "@id": target_id }))
     }
 
     /// Create a `uco-core:Relationship` node with deterministic `@id`.
+    ///
+    /// Pass `relationship_id` (assertion discriminator) so identical
+    /// source/target/kind assertions can coexist.
     pub fn create_relationship(
         &mut self,
         source_id: &str,
@@ -288,7 +357,8 @@ impl CaseGraph {
         kind: &str,
         directional: bool,
         description: Option<&str>,
-    ) -> Result<Map<String, Value>, GraphError> {
+        relationship_id: Option<&str>,
+    ) -> Result<Value, GraphError> {
         if !self.contains(source_id) {
             return Err(GraphError::InvalidArgument(format!(
                 "Relationship source not in graph: {source_id}"
@@ -305,7 +375,10 @@ impl CaseGraph {
             ));
         }
 
-        let rel_id = self.deterministic_relationship_id(source_id, target_id, kind);
+        let rel_id = match relationship_id {
+            Some(id) => id.to_string(),
+            None => self.deterministic_relationship_id(source_id, target_id, kind),
+        };
         let mut props = Map::new();
         props.insert(
             "uco-core:source".to_string(),
@@ -333,12 +406,11 @@ impl CaseGraph {
             );
         }
 
-        let rel = self.upsert_node(
+        self.upsert_node(
             &rel_id,
             Some(Value::String("uco-core:Relationship".to_string())),
             Some(props),
-        )?;
-        Ok(rel.clone())
+        )
     }
 
     /// Return the number of objects in the graph.
@@ -351,37 +423,67 @@ impl CaseGraph {
         self.objects.is_empty()
     }
 
-    /// Load a JSON-LD string into this graph, merging context and upserting objects.
+    /// Load a JSON-LD string into this graph (transactional).
     pub fn load(&mut self, json: &str) -> Result<(), LoadError> {
+        self.load_with_policy(json, self.on_duplicate)
+    }
+
+    pub fn load_with_policy(
+        &mut self,
+        json: &str,
+        policy: DuplicatePolicy,
+    ) -> Result<(), LoadError> {
         let doc: Value = serde_json::from_str(json).map_err(LoadError::Json)?;
-        if let Some(ctx) = doc.get("@context") {
-            if let Some(ctx_map) = ctx.as_object() {
-                self.merge_context(ctx_map)?;
+        let snapshot = self.snapshot();
+        let result = (|| -> Result<(), LoadError> {
+            if let Some(ctx) = doc.get("@context").and_then(|c| c.as_object()) {
+                self.merge_context(ctx)?;
             }
-        }
-        if let Some(graph) = doc.get("@graph") {
-            if let Some(arr) = graph.as_array() {
+            if let Some(arr) = doc.get("@graph").and_then(|g| g.as_array()) {
                 for obj in arr {
-                    self.ingest_raw_node(obj.clone())?;
+                    self.ingest_raw_node(obj.clone(), policy)?;
                 }
             }
+            Ok(())
+        })();
+        if result.is_err() {
+            self.restore(snapshot);
         }
-        Ok(())
+        result
+    }
+
+    fn snapshot(&self) -> GraphSnapshot {
+        GraphSnapshot {
+            context: self.context.clone(),
+            objects: self.objects.clone(),
+            iri_index: self.iri_index.clone(),
+        }
+    }
+
+    fn restore(&mut self, snap: GraphSnapshot) {
+        self.context = snap.context;
+        self.objects = snap.objects;
+        self.iri_index = snap.iri_index;
     }
 
     fn merge_context(&mut self, incoming: &Map<String, Value>) -> Result<(), LoadError> {
         for (k, v) in incoming {
             if let Some(s) = v.as_str() {
-                if let Some(existing) = self.context.get(k) {
-                    if existing != s {
-                        return Err(LoadError::Context(format!(
-                            "Context prefix collision for '{k}': existing '{existing}' vs incoming '{s}'"
-                        )));
-                    }
-                }
-                self.context.insert(k.clone(), s.to_string());
+                self.merge_context_entry(k, s)?;
             }
         }
+        Ok(())
+    }
+
+    fn merge_context_entry(&mut self, prefix: &str, ns: &str) -> Result<(), LoadError> {
+        if let Some(existing) = self.context.get(prefix) {
+            if existing != ns {
+                return Err(LoadError::Context(format!(
+                    "Context prefix collision for '{prefix}': existing '{existing}' vs incoming '{ns}'"
+                )));
+            }
+        }
+        self.context.insert(prefix.to_string(), ns.to_string());
         Ok(())
     }
 
@@ -395,9 +497,7 @@ impl CaseGraph {
     /// Parse a JSON-LD string and return the graph with its objects.
     ///
     /// Since Rust lacks runtime reflection, objects are returned as raw
-    /// `serde_json::Value` items rather than typed structs. Multi-type `@type`
-    /// arrays are preserved on graph nodes. Consumers can match on `@type`
-    /// fields manually to downcast.
+    /// `serde_json::Value` items. Multi-type `@type` arrays are preserved.
     pub fn from_jsonld(json: &str) -> Result<(CaseGraph, Vec<Value>), String> {
         let doc: Value =
             serde_json::from_str(json).map_err(|e| format!("Failed to parse JSON: {e}"))?;
@@ -405,16 +505,14 @@ impl CaseGraph {
         let mut graph = CaseGraph::new("http://example.org/kb/");
 
         if let Some(ctx) = doc.get("@context").and_then(|c| c.as_object()) {
-            graph
-                .merge_context(ctx)
-                .map_err(|e| e.to_string())?;
+            graph.merge_context(ctx).map_err(|e| e.to_string())?;
         }
 
         let mut objects = Vec::new();
         if let Some(arr) = doc.get("@graph").and_then(|g| g.as_array()) {
             for obj in arr {
                 graph
-                    .ingest_raw_node(obj.clone())
+                    .ingest_raw_node(obj.clone(), graph.on_duplicate)
                     .map_err(|e| e.to_string())?;
                 objects.push(obj.clone());
             }
@@ -424,9 +522,6 @@ impl CaseGraph {
     }
 
     /// Serialize the graph to a JSON-LD string.
-    ///
-    /// Returns `Err` if the internal structure cannot be serialized
-    /// (should not happen under normal use).
     pub fn serialize(&self) -> Result<String, serde_json::Error> {
         let used = self.used_prefixes();
         let context_value: Map<String, Value> = self
@@ -461,12 +556,11 @@ impl CaseGraph {
     }
 
     /// Validate this graph against CASE/UCO SHACL constraints using `case_validate`.
-    ///
-    /// Requires `case-utils` (`pip install case-utils`) and `case_validate` on PATH.
-    /// Returns the validation output on success, or an error message on failure.
     pub fn validate(&self, case_version: &str) -> Result<String, String> {
         use std::io::Write;
-        let json = self.serialize().map_err(|e| format!("Serialization failed: {e}"))?;
+        let json = self
+            .serialize()
+            .map_err(|e| format!("Serialization failed: {e}"))?;
         let mut tmp = tempfile::NamedTempFile::new()
             .map_err(|e| format!("Failed to create temp file: {e}"))?;
         tmp.write_all(json.as_bytes())
@@ -476,7 +570,9 @@ impl CaseGraph {
             .arg(case_version)
             .arg(tmp.path())
             .output()
-            .map_err(|e| format!("case_validate not found on PATH (pip install case-utils): {e}"))?;
+            .map_err(|e| {
+                format!("case_validate not found on PATH (pip install case-utils): {e}")
+            })?;
         if !output.status.success() {
             let stderr = String::from_utf8_lossy(&output.stderr);
             let stdout = String::from_utf8_lossy(&output.stdout);
@@ -492,29 +588,32 @@ impl CaseGraph {
     }
 
     /// Split the graph into smaller chunks of at most `max_objects` each.
-    ///
-    /// Each chunk gets a clone of the context. The original graph is not modified.
-    pub fn split(&self, max_objects: usize) -> Vec<CaseGraph> {
-        self.objects
-            .chunks(max_objects)
-            .map(|chunk| {
-                let mut part = CaseGraph {
-                    context: self.context.clone(),
-                    objects: Vec::new(),
-                    iri_index: HashMap::new(),
-                    reject_duplicates: self.reject_duplicates,
-                };
-                for obj in chunk {
-                    part.append_object(obj.clone())
-                        .unwrap_or_else(|e| panic!("failed to split graph: {e}"));
-                }
-                part
-            })
-            .collect()
+    pub fn split(&self, max_objects: usize) -> Result<Vec<CaseGraph>, GraphError> {
+        if max_objects == 0 {
+            return Err(GraphError::InvalidSplitSize(0));
+        }
+        let mut parts = Vec::new();
+        for chunk in self.objects.chunks(max_objects) {
+            let mut part = CaseGraph {
+                context: self.context.clone(),
+                objects: Vec::new(),
+                iri_index: HashMap::new(),
+                on_duplicate: self.on_duplicate,
+            };
+            for obj in chunk {
+                part.append_object(obj.clone())
+                    .map_err(GraphError::Duplicate)?;
+            }
+            parts.push(part);
+        }
+        Ok(parts)
     }
 
     /// Load and merge multiple JSON-LD files into a single graph.
-    pub fn merge_files(paths: &[&str], kb_prefix: &str) -> Result<CaseGraph, Box<dyn std::error::Error>> {
+    pub fn merge_files(
+        paths: &[&str],
+        kb_prefix: &str,
+    ) -> Result<CaseGraph, Box<dyn std::error::Error>> {
         let mut merged = CaseGraph::new(kb_prefix);
         for path in paths {
             merged.load_file(path)?;
@@ -576,7 +675,7 @@ impl CaseGraph {
         None
     }
 
-    fn ingest_raw_node(&mut self, raw: Value) -> Result<(), LoadError> {
+    fn ingest_raw_node(&mut self, raw: Value, policy: DuplicatePolicy) -> Result<(), LoadError> {
         let node_id = raw
             .as_object()
             .and_then(|map| map.get("@id"))
@@ -589,27 +688,81 @@ impl CaseGraph {
         };
 
         if let Some(idx) = self.find_object_index(&node_id) {
-            if self.reject_duplicates {
-                return Err(LoadError::Duplicate(DuplicateNodeError {
-                    node_id,
-                    detail: "conflicting duplicate during load".into(),
-                }));
-            }
-
-            let existing = self.objects[idx].as_object_mut().unwrap();
-            if let Some(types) = raw.get("@type") {
-                let merged = merge_types(existing.get("@type"), Some(types.clone()));
-                existing.insert("@type".to_string(), normalize_type_value(merged));
-            }
-            if let Some(raw_map) = raw.as_object() {
-                for (key, value) in raw_map {
-                    if key == "@id" || key == "@type" {
-                        continue;
+            match policy {
+                DuplicatePolicy::Reject => {
+                    return Err(LoadError::Duplicate(DuplicateNodeError {
+                        node_id,
+                        detail: "conflicting duplicate during load".into(),
+                    }));
+                }
+                DuplicatePolicy::Replace => {
+                    let existing = self.objects[idx].as_object_mut().ok_or_else(|| {
+                        LoadError::Merge("indexed node must be object".into())
+                    })?;
+                    let preserved = existing
+                        .get("@id")
+                        .cloned()
+                        .unwrap_or_else(|| Value::String(node_id.clone()));
+                    existing.clear();
+                    if let Some(raw_map) = raw.as_object() {
+                        for (k, v) in raw_map {
+                            existing.insert(k.clone(), v.clone());
+                        }
                     }
-                    set_property(existing, key, value.clone()).map_err(LoadError::Merge)?;
+                    existing.insert("@id".to_string(), preserved);
+                    return Ok(());
+                }
+                DuplicatePolicy::MergeIdentical => {
+                    let existing = self.objects[idx].as_object_mut().ok_or_else(|| {
+                        LoadError::Merge("indexed node must be object".into())
+                    })?;
+                    if let Some(raw_map) = raw.as_object() {
+                        for (key, value) in raw_map {
+                            if key == "@id" {
+                                continue;
+                            }
+                            if !existing.contains_key(key) {
+                                existing.insert(key.clone(), value.clone());
+                                continue;
+                            }
+                            if !jsonld_values_equal(existing.get(key), Some(value)) {
+                                return Err(LoadError::Duplicate(DuplicateNodeError {
+                                    node_id,
+                                    detail: format!(
+                                        "merge_identical conflict on '{key}': existing and incoming values differ"
+                                    ),
+                                }));
+                            }
+                        }
+                    }
+                    return Ok(());
+                }
+                DuplicatePolicy::MergeCompatible => {
+                    let existing = self.objects[idx].as_object_mut().ok_or_else(|| {
+                        LoadError::Merge("indexed node must be object".into())
+                    })?;
+                    if let Some(types) = raw.get("@type") {
+                        let merged = merge_types(existing.get("@type"), Some(types.clone()));
+                        existing.insert("@type".to_string(), normalize_type_value(merged));
+                    }
+                    if let Some(raw_map) = raw.as_object() {
+                        for (key, value) in raw_map {
+                            if key == "@id" || key == "@type" {
+                                continue;
+                            }
+                            apply_property(
+                                existing,
+                                key,
+                                value.clone(),
+                                &node_id,
+                                PropertyMode::MergeCompatible,
+                            )
+                            .map_err(|ApplyError::Duplicate(d)| LoadError::Duplicate(d))?;
+                        }
+                    }
+                    return Ok(());
                 }
             }
-            return Ok(());
         }
 
         self.append_object(raw).map_err(LoadError::Duplicate)
@@ -624,7 +777,7 @@ impl CaseGraph {
         );
         let digest = Sha256::digest(payload.as_bytes());
         let hex: String = digest.iter().take(6).map(|b| format!("{b:02x}")).collect();
-        let safe_kind = kind.replace(' ', "_");
+        let safe_kind = safe_kind_slug(kind);
         format!("kb:rel-{safe_kind}-{hex}")
     }
 
@@ -662,6 +815,216 @@ impl CaseGraph {
     }
 }
 
+struct GraphSnapshot {
+    context: HashMap<String, String>,
+    objects: Vec<Value>,
+    iri_index: HashMap<String, usize>,
+}
+
+#[derive(Clone, Copy)]
+enum PropertyMode {
+    MergeCompatible,
+    Replace,
+}
+
+enum ApplyError {
+    Duplicate(DuplicateNodeError),
+}
+
+fn apply_property(
+    obj: &mut Map<String, Value>,
+    key: &str,
+    value: Value,
+    node_id: &str,
+    mode: PropertyMode,
+) -> Result<(), ApplyError> {
+    match mode {
+        PropertyMode::Replace => {
+            obj.insert(key.to_string(), value);
+            Ok(())
+        }
+        PropertyMode::MergeCompatible => {
+            if !obj.contains_key(key) {
+                obj.insert(key.to_string(), value);
+                return Ok(());
+            }
+            let existing = match obj.get(key) {
+                Some(v) => v.clone(),
+                None => Value::Null,
+            };
+            if jsonld_values_equal(Some(&existing), Some(&value)) {
+                return Ok(());
+            }
+            if let Value::Array(mut list) = existing.clone() {
+                accumulate_list_value(&mut list, value);
+                obj.insert(key.to_string(), Value::Array(list));
+                return Ok(());
+            }
+            if let Value::Array(_) = &value {
+                let mut merged = vec![existing];
+                accumulate_list_value(&mut merged, value);
+                obj.insert(key.to_string(), Value::Array(merged));
+                return Ok(());
+            }
+            // Distinct JSON-LD node references are multi-valued, not scalar conflicts.
+            if let (Value::Object(eo), Value::Object(vo)) = (&existing, &value) {
+                if eo.contains_key("@id") && vo.contains_key("@id") {
+                    if jsonld_values_equal(Some(&existing), Some(&value)) {
+                        return Ok(());
+                    }
+                    obj.insert(
+                        key.to_string(),
+                        Value::Array(vec![existing, value]),
+                    );
+                    return Ok(());
+                }
+            }
+            Err(ApplyError::Duplicate(DuplicateNodeError {
+                node_id: node_id.to_string(),
+                detail: format!(
+                    "merge_compatible scalar conflict on '{key}': existing and incoming values differ"
+                ),
+            }))
+        }
+    }
+}
+
+fn accumulate_list_value(existing: &mut Vec<Value>, value: Value) {
+    let items = match value {
+        Value::Array(arr) => arr,
+        other => vec![other],
+    };
+    for item in items {
+        if existing.iter().any(|x| jsonld_values_equal(Some(x), Some(&item))) {
+            continue;
+        }
+        existing.push(item);
+    }
+}
+
+fn jsonld_values_equal(a: Option<&Value>, b: Option<&Value>) -> bool {
+    match (a, b) {
+        (None, None) => true,
+        (Some(a), Some(b)) => values_equal(a, b),
+        _ => false,
+    }
+}
+
+fn values_equal(a: &Value, b: &Value) -> bool {
+    match (a, b) {
+        (Value::Object(ao), Value::Object(bo)) => {
+            if ao.contains_key("@value") || bo.contains_key("@value") {
+                if !(ao.contains_key("@value") && bo.contains_key("@value")) {
+                    return false;
+                }
+                let at = normalize_literal_type(ao.get("@type").and_then(|v| v.as_str()));
+                let bt = normalize_literal_type(bo.get("@type").and_then(|v| v.as_str()));
+                let av = normalize_literal_value(
+                    ao.get("@value"),
+                    ao.get("@type").and_then(|v| v.as_str()),
+                );
+                let bv = normalize_literal_value(
+                    bo.get("@value"),
+                    bo.get("@type").and_then(|v| v.as_str()),
+                );
+                return at == bt && av == bv;
+            }
+            if ao.contains_key("@id") || bo.contains_key("@id") {
+                return ao.get("@id") == bo.get("@id");
+            }
+            if ao.len() != bo.len() {
+                return false;
+            }
+            ao.iter()
+                .all(|(k, v)| bo.get(k).is_some_and(|bv| values_equal(v, bv)))
+        }
+        (Value::Array(aa), Value::Array(ba)) => {
+            if is_id_ref_list(aa) && is_id_ref_list(ba) {
+                let mut asort: Vec<&str> = aa
+                    .iter()
+                    .filter_map(|v| v.get("@id").and_then(|i| i.as_str()))
+                    .collect();
+                let mut bsort: Vec<&str> = ba
+                    .iter()
+                    .filter_map(|v| v.get("@id").and_then(|i| i.as_str()))
+                    .collect();
+                asort.sort_unstable();
+                bsort.sort_unstable();
+                return asort == bsort;
+            }
+            if aa.len() != ba.len() {
+                return false;
+            }
+            aa.iter().zip(ba.iter()).all(|(x, y)| values_equal(x, y))
+        }
+        _ => a == b,
+    }
+}
+
+fn normalize_literal_type(type_iri: Option<&str>) -> String {
+    match type_iri {
+        None => String::new(),
+        Some(t) if t.starts_with("xsd:") => t.to_string(),
+        Some(t) if t.starts_with("http://www.w3.org/2001/XMLSchema#") => {
+            format!("xsd:{}", t.rsplit('#').next().unwrap_or(""))
+        }
+        Some(t) => t.to_string(),
+    }
+}
+
+fn normalize_literal_value(value: Option<&Value>, type_iri: Option<&str>) -> String {
+    match value {
+        Some(Value::Bool(b)) => {
+            if *b {
+                "true".into()
+            } else {
+                "false".into()
+            }
+        }
+        Some(Value::String(s)) => {
+            let t = normalize_literal_type(type_iri);
+            if t.contains("boolean") {
+                s.to_lowercase()
+            } else {
+                s.clone()
+            }
+        }
+        Some(other) => other.to_string(),
+        None => String::new(),
+    }
+}
+
+fn is_id_ref_list(items: &[Value]) -> bool {
+    !items.is_empty() && items.iter().all(|v| v.get("@id").is_some())
+}
+
+fn safe_kind_slug(kind: &str) -> String {
+    let mut slug = String::new();
+    for ch in kind.trim().chars() {
+        if ch.is_ascii_alphanumeric() || ch == '.' || ch == '_' || ch == '-' {
+            slug.push(ch);
+        } else {
+            slug.push('_');
+        }
+    }
+    let slug = slug.trim_matches(|c| c == '.' || c == '_' || c == '-').to_string();
+    let mut slug = if slug.is_empty() {
+        "rel".to_string()
+    } else {
+        slug
+    };
+    if slug.len() > KIND_SLUG_MAX_LEN {
+        slug.truncate(KIND_SLUG_MAX_LEN);
+        while slug.ends_with(['.', '_', '-']) {
+            slug.pop();
+        }
+        if slug.is_empty() {
+            slug = "rel".into();
+        }
+    }
+    slug
+}
+
 fn expand_compact_iri(compact: &str, context: &HashMap<String, String>) -> String {
     if compact.contains("://") {
         return compact.to_string();
@@ -691,7 +1054,10 @@ fn as_type_list(types: Option<&Value>) -> Vec<String> {
 
 fn normalize_type_value(types: Value) -> Value {
     match types {
-        Value::Array(arr) if arr.len() == 1 => arr[0].clone(),
+        Value::Array(arr) if arr.len() == 1 => arr
+            .into_iter()
+            .next()
+            .unwrap_or(Value::Null),
         other => other,
     }
 }
@@ -710,54 +1076,6 @@ fn merge_types(existing: Option<&Value>, new_types: Option<Value>) -> Value {
     }
 }
 
-fn set_property(obj: &mut Map<String, Value>, key: &str, value: Value) -> Result<(), String> {
-    use serde_json::map::Entry;
-
-    match obj.entry(key.to_string()) {
-        Entry::Vacant(entry) => {
-            entry.insert(value);
-            Ok(())
-        }
-        Entry::Occupied(mut entry) => {
-            let existing = entry.get().clone();
-            if existing == value {
-                return Ok(());
-            }
-
-            if let Value::Array(mut list) = existing {
-                if let Some(ref_id) = value.get("@id").and_then(|v| v.as_str()) {
-                    if list.iter().any(|item| {
-                        item.get("@id")
-                            .and_then(|v| v.as_str())
-                            .map(|id| id == ref_id)
-                            .unwrap_or(false)
-                    }) {
-                        return Ok(());
-                    }
-                }
-                if !list.iter().any(|item| item == &value) {
-                    list.push(value);
-                }
-                entry.insert(Value::Array(list));
-                return Ok(());
-            }
-
-            if let (Some(existing_id), Some(value_id)) = (
-                existing.get("@id").and_then(|v| v.as_str()),
-                value.get("@id").and_then(|v| v.as_str()),
-            ) {
-                if existing_id == value_id {
-                    return Ok(());
-                }
-            }
-
-            Err(format!(
-                "merge_compatible scalar conflict on '{key}': existing and incoming values differ"
-            ))
-        }
-    }
-}
-
 fn count_triples(value: &Value) -> usize {
     match value {
         Value::Object(map) => {
@@ -767,21 +1085,35 @@ fn count_triples(value: &Value) -> usize {
                     continue;
                 }
                 if key == "@type" {
-                    count += 1;
+                    count += match val {
+                        Value::Array(items) => items.len(),
+                        _ => 1,
+                    };
                     continue;
                 }
                 match val {
                     Value::Array(items) => {
                         for item in items {
                             if item.is_object() {
-                                count += 1 + count_triples(item);
+                                let obj = item.as_object();
+                                let is_ref_or_literal = obj.is_some_and(|m| {
+                                    m.contains_key("@value")
+                                        || (m.contains_key("@id") && m.len() == 1)
+                                });
+                                if is_ref_or_literal {
+                                    count += 1;
+                                } else {
+                                    count += 1 + count_triples(item);
+                                }
                             } else {
                                 count += 1;
                             }
                         }
                     }
                     Value::Object(inner) => {
-                        if inner.contains_key("@value") {
+                        if inner.contains_key("@value")
+                            || (inner.contains_key("@id") && inner.len() == 1)
+                        {
                             count += 1;
                         } else {
                             count += 1 + count_triples(val);
@@ -853,23 +1185,71 @@ fn collect_prefixes(
 
 fn default_context() -> HashMap<String, String> {
     let mut ctx = HashMap::new();
-    ctx.insert("case-investigation".into(), "https://ontology.caseontology.org/case/investigation/".into());
+    ctx.insert(
+        "case-investigation".into(),
+        "https://ontology.caseontology.org/case/investigation/".into(),
+    );
     ctx.insert("kb".into(), "http://example.org/kb/".into());
-    ctx.insert("uco-action".into(), "https://ontology.unifiedcyberontology.org/uco/action/".into());
-    ctx.insert("uco-analysis".into(), "https://ontology.unifiedcyberontology.org/uco/analysis/".into());
-    ctx.insert("uco-configuration".into(), "https://ontology.unifiedcyberontology.org/uco/configuration/".into());
-    ctx.insert("uco-core".into(), "https://ontology.unifiedcyberontology.org/uco/core/".into());
-    ctx.insert("uco-identity".into(), "https://ontology.unifiedcyberontology.org/uco/identity/".into());
-    ctx.insert("uco-location".into(), "https://ontology.unifiedcyberontology.org/uco/location/".into());
-    ctx.insert("uco-marking".into(), "https://ontology.unifiedcyberontology.org/uco/marking/".into());
-    ctx.insert("uco-observable".into(), "https://ontology.unifiedcyberontology.org/uco/observable/".into());
-    ctx.insert("uco-pattern".into(), "https://ontology.unifiedcyberontology.org/uco/pattern/".into());
-    ctx.insert("uco-role".into(), "https://ontology.unifiedcyberontology.org/uco/role/".into());
-    ctx.insert("uco-time".into(), "https://ontology.unifiedcyberontology.org/uco/time/".into());
-    ctx.insert("uco-tool".into(), "https://ontology.unifiedcyberontology.org/uco/tool/".into());
-    ctx.insert("uco-types".into(), "https://ontology.unifiedcyberontology.org/uco/types/".into());
-    ctx.insert("uco-victim".into(), "https://ontology.unifiedcyberontology.org/uco/victim/".into());
-    ctx.insert("uco-vocabulary".into(), "https://ontology.unifiedcyberontology.org/uco/vocabulary/".into());
+    ctx.insert(
+        "uco-action".into(),
+        "https://ontology.unifiedcyberontology.org/uco/action/".into(),
+    );
+    ctx.insert(
+        "uco-analysis".into(),
+        "https://ontology.unifiedcyberontology.org/uco/analysis/".into(),
+    );
+    ctx.insert(
+        "uco-configuration".into(),
+        "https://ontology.unifiedcyberontology.org/uco/configuration/".into(),
+    );
+    ctx.insert(
+        "uco-core".into(),
+        "https://ontology.unifiedcyberontology.org/uco/core/".into(),
+    );
+    ctx.insert(
+        "uco-identity".into(),
+        "https://ontology.unifiedcyberontology.org/uco/identity/".into(),
+    );
+    ctx.insert(
+        "uco-location".into(),
+        "https://ontology.unifiedcyberontology.org/uco/location/".into(),
+    );
+    ctx.insert(
+        "uco-marking".into(),
+        "https://ontology.unifiedcyberontology.org/uco/marking/".into(),
+    );
+    ctx.insert(
+        "uco-observable".into(),
+        "https://ontology.unifiedcyberontology.org/uco/observable/".into(),
+    );
+    ctx.insert(
+        "uco-pattern".into(),
+        "https://ontology.unifiedcyberontology.org/uco/pattern/".into(),
+    );
+    ctx.insert(
+        "uco-role".into(),
+        "https://ontology.unifiedcyberontology.org/uco/role/".into(),
+    );
+    ctx.insert(
+        "uco-time".into(),
+        "https://ontology.unifiedcyberontology.org/uco/time/".into(),
+    );
+    ctx.insert(
+        "uco-tool".into(),
+        "https://ontology.unifiedcyberontology.org/uco/tool/".into(),
+    );
+    ctx.insert(
+        "uco-types".into(),
+        "https://ontology.unifiedcyberontology.org/uco/types/".into(),
+    );
+    ctx.insert(
+        "uco-victim".into(),
+        "https://ontology.unifiedcyberontology.org/uco/victim/".into(),
+    );
+    ctx.insert(
+        "uco-vocabulary".into(),
+        "https://ontology.unifiedcyberontology.org/uco/vocabulary/".into(),
+    );
     ctx.insert("xsd".into(), "http://www.w3.org/2001/XMLSchema#".into());
     ctx
 }

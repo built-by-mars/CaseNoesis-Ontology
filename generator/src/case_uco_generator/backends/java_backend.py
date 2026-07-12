@@ -124,11 +124,13 @@ class JavaBackend(CodegenBackend):
         lines.append("")
 
         parent_name = cls.all_parent_names[0] if cls.all_parent_names else None
-        extends = f" extends {parent_name}" if parent_name else ""
+        class_name = self.safe_identifier(cls.name, "java")
+        parent_safe = self.safe_identifier(parent_name, "java") if parent_name else None
+        extends = f" extends {parent_safe}" if parent_safe else ""
         desc = cls.description[:200] if cls.description else cls.name
 
         lines.append(f"/** {desc} */")
-        lines.append(f"public class {cls.name}{extends} {{")
+        lines.append(f"public class {class_name}{extends} {{")
         lines.append(f'    public static final String CLASS_IRI = "{cls.iri}";')
         lines.append(f'    public static final String NAMESPACE_PREFIX = "{cls.namespace_prefix}";')
         lines.append("")
@@ -144,7 +146,7 @@ class JavaBackend(CodegenBackend):
         lines.append("")
 
         # Constructor
-        lines.append(f"    public {cls.name}() {{")
+        lines.append(f"    public {class_name}() {{")
         for prop in cls.properties:
             if prop.cardinality.is_list:
                 field_name = self.to_camel_case(prop.name)

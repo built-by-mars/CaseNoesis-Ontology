@@ -2,23 +2,28 @@
 
 Resolves a deterministic, offline ontology/profile bundle from stable
 extension names and upper-ontology profile IDs. SHACL validation and
-strict concept coverage must consume the same resolved paths.
+strict concept coverage must consume the **same** resolved resources and
+fingerprint (CQ-27–CQ-36).
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass, field
+import os
+import tempfile
+import threading
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from extension_paths import extension_dir as _extension_dir
 from graph_validator import (
     PROJECT_ROOT,
     load_extension_ontology_paths,
     resolve_extension_dependencies,
 )
+
+RESOLVER_SCHEMA_VERSION = "1.0"
 
 # Stable profile IDs → vendored source + CDO-Shapes paths.
 PROFILE_REGISTRY: dict[str, dict[str, Any]] = {
@@ -27,7 +32,7 @@ PROFILE_REGISTRY: dict[str, dict[str, Any]] = {
         "sources": ["ontology/upper/bfo.owl"],
         "shapes": ["ontology/upper/shapes/sh-bfo.ttl"],
         "depends_on": [],
-        "incompatible_with": [],
+        "incompatible_with": ["gufo"],
         "extension_policy": {"cac": "not_recommended"},
         "inference": "rdfs",
     },
@@ -36,7 +41,7 @@ PROFILE_REGISTRY: dict[str, dict[str, Any]] = {
         "sources": ["ontology/upper/gufo.ttl"],
         "shapes": ["ontology/upper/shapes/sh-gufo.ttl"],
         "depends_on": [],
-        "incompatible_with": [],
+        "incompatible_with": ["bfo"],
         "extension_policy": {"cac": "included"},
         "inference": "rdfs",
     },
@@ -105,8 +110,12 @@ PROFILE_REGISTRY: dict[str, dict[str, Any]] = {
 # explicit allow_foundational_pair=True override.
 FOUNDATIONAL_EXCLUSIVE = frozenset({"bfo", "gufo"})
 
+# Inference escalation order (deterministic combine across profiles).
+_INFERENCE_RANK = {None: 0, "none": 0, "rdfs": 1, "owlrl": 2, "both": 3}
+
 _BUNDLE_CACHE: dict[str, "ResolvedValidationBundle"] = {}
 _CACHE_MAX = 32
+_BUNDLE_CACHE_LOCK = threading.RLock()
 
 
 class ValidationBundleError(ValueError):
@@ -130,16 +139,26 @@ class BundleResource:
 @dataclass(frozen=True)
 class ResolvedValidationBundle:
     extensions: tuple[str, ...]
-    profiles: tuple[str, ...]
+    profiles: tuple[str, ...]  # normalized (aliases resolved + depends_on closure)
     resources: tuple[BundleResource, ...]
     inference: str | None
     compatibility_notes: tuple[str, ...]
     fingerprint: str
     built_version: str = "case-1.4.0"
-    requested_profiles: tuple[str, ...] = ()
+    requested_profiles: tuple[str, ...] = ()  # as supplied by the caller (pre-normalize)
+    cache_status: str = "miss"  # hit | miss | stale | disabled
+    resolver_schema_version: str = RESOLVER_SCHEMA_VERSION
 
     def ontology_graph_paths(self) -> list[Path]:
         return [Path(r.absolute_path) for r in self.resources]
+
+    def declared_term_paths(self) -> list[Path]:
+        """Ontology/shapes/bridge/auxiliary paths used for concept coverage."""
+        return [
+            Path(r.absolute_path)
+            for r in self.resources
+            if r.role in {"ontology", "shapes", "bridge", "auxiliary"}
+        ]
 
     def to_manifest(self, *, portable: bool = True) -> dict[str, Any]:
         resources = []
@@ -155,6 +174,7 @@ class ResolvedValidationBundle:
                 entry["absolute_path"] = r.absolute_path
             resources.append(entry)
         return {
+            "resolver_schema_version": self.resolver_schema_version,
             "built_version": self.built_version,
             "requested_profiles": list(self.requested_profiles),
             "extensions": list(self.extensions),
@@ -166,10 +186,28 @@ class ResolvedValidationBundle:
         }
 
     def write_manifest(self, path: str | Path) -> None:
-        Path(path).write_text(
-            json.dumps(self.to_manifest(), indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
+        """Atomically write a portable JSON manifest (no absolute paths)."""
+        target = Path(path)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        payload = json.dumps(self.to_manifest(portable=True), indent=2, sort_keys=True) + "\n"
+        fd, tmp_name = tempfile.mkstemp(
+            dir=str(target.parent),
+            prefix=f".{target.name}.",
+            suffix=".tmp",
         )
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as handle:
+                handle.write(payload)
+                handle.flush()
+                os.fsync(handle.fileno())
+            Path(tmp_name).replace(target)
+        except Exception:
+            try:
+                os.unlink(tmp_name)
+            except OSError:
+                # Best-effort cleanup of the staging file after a failed write.
+                pass
+            raise
 
 
 def _sha256_file(path: Path) -> str:
@@ -193,6 +231,128 @@ def list_profile_ids() -> list[str]:
     return sorted(pid for pid, meta in PROFILE_REGISTRY.items() if "alias_of" not in meta)
 
 
+def _canonical_cache_key(
+    extensions: list[str],
+    profiles: list[str],
+    *,
+    allow_foundational_pair: bool,
+    extra_ontology_graphs: list[str | Path] | None,
+    project_root: Path,
+) -> str:
+    """Normalize aliases and sort set-like inputs for stable cache keys (CQ-33)."""
+    norm_profiles = sorted({_normalize_profile_id(p) for p in profiles})
+    # Preserve :full suffix; sort by clean name for stability.
+    norm_ext = sorted(extensions, key=lambda e: (e.removesuffix(":full"), e.endswith(":full")))
+    extras = sorted(str(Path(p).resolve()) for p in (extra_ontology_graphs or []))
+    return json.dumps(
+        {
+            "ext": norm_ext,
+            "prof": norm_profiles,
+            "pair": allow_foundational_pair,
+            "extra": extras,
+            "root": str(project_root.resolve()),
+            "schema": RESOLVER_SCHEMA_VERSION,
+        },
+        sort_keys=True,
+    )
+
+
+def _expand_profile_dependencies(
+    seed_profiles: list[str],
+) -> tuple[list[str], list[str]]:
+    """Transitive depends_on with cycle detection (CQ-34).
+
+    Returns ``(ordered_profiles, notes)``. Order is deterministic: BFS from
+    the seed list (already sorted by the caller for cache stability) with
+    dependencies appended in registry declaration order.
+    """
+    notes: list[str] = []
+    resolved: list[str] = []
+    seen: set[str] = set()
+    # (profile_id, dependency chain from the requesting root)
+    queue: list[tuple[str, tuple[str, ...]]] = [(pid, ()) for pid in seed_profiles]
+    while queue:
+        pid, chain = queue.pop(0)
+        if pid in chain:
+            cycle = " → ".join(chain + (pid,))
+            raise ValidationBundleError(
+                "profile_dependency_cycle",
+                f"Circular profile depends_on: {cycle}",
+            )
+        if pid in seen:
+            continue
+        seen.add(pid)
+        resolved.append(pid)
+        meta = PROFILE_REGISTRY[pid]
+        for dep in meta.get("depends_on", []):
+            dep_norm = _normalize_profile_id(dep)
+            next_chain = chain + (pid,)
+            if dep_norm in next_chain:
+                cycle = " → ".join(next_chain + (dep_norm,))
+                raise ValidationBundleError(
+                    "profile_dependency_cycle",
+                    f"Circular profile depends_on: {cycle}",
+                )
+            notes.append(f"Profile {pid!r} depends_on {dep_norm!r}")
+            if dep_norm not in seen:
+                queue.append((dep_norm, next_chain))
+    return resolved, notes
+
+
+def _enforce_incompatible_with(profiles: list[str]) -> None:
+    selected = set(profiles)
+    for pid in profiles:
+        meta = PROFILE_REGISTRY[pid]
+        for other in meta.get("incompatible_with", []):
+            other_norm = _normalize_profile_id(other)
+            if other_norm in selected:
+                raise ValidationBundleError(
+                    "incompatible_profiles",
+                    f"Profile {pid!r} is incompatible_with {other_norm!r}",
+                )
+
+
+def _combine_inference(
+    profiles: list[str],
+    expanded_ext: list[str],
+    *,
+    project_root: Path = PROJECT_ROOT,
+) -> str | None:
+    """Deterministically combine per-profile inference requirements (CQ-34).
+
+    Matches ``extension_ontology_args``: skip rdfs only when at least one
+    extension actually loads via ``validation-subset.json``. A ``:full``
+    root with subset-mode dependencies still gets rdfs.
+    """
+    from graph_validator import extension_has_validation_subset
+
+    rank = 0
+    chosen: str | None = None
+    for pid in profiles:
+        meta = PROFILE_REGISTRY[pid]
+        inf = meta.get("inference")
+        if inf is None:
+            continue
+        r = _INFERENCE_RANK.get(inf, 0)
+        if r > rank:
+            rank = r
+            chosen = None if inf in (None, "none") else inf
+    if profiles:
+        return chosen or "rdfs"
+    used_subset = False
+    for ext_name in expanded_ext:
+        mode = "full" if ext_name.endswith(":full") else "subset"
+        clean = ext_name.removesuffix(":full")
+        if mode == "subset" and extension_has_validation_subset(clean, project_root):
+            used_subset = True
+            break
+    if used_subset:
+        return None
+    if expanded_ext:
+        return "rdfs"
+    return None
+
+
 def resolve_validation_bundle(
     extensions: list[str] | None = None,
     profiles: list[str] | None = None,
@@ -206,51 +366,101 @@ def resolve_validation_bundle(
 
     extensions = list(extensions or [])
     profiles = list(profiles or [])
-    cache_key = json.dumps(
-        {
-            "ext": extensions,
-            "prof": profiles,
-            "pair": allow_foundational_pair,
-            "extra": [str(p) for p in (extra_ontology_graphs or [])],
-            "root": str(project_root),
-        },
-        sort_keys=True,
+    requested_profiles = tuple(profiles)
+
+    if not use_cache:
+        bundle = _build_bundle(
+            extensions=extensions,
+            profiles=profiles,
+            requested_profiles=requested_profiles,
+            project_root=project_root,
+            allow_foundational_pair=allow_foundational_pair,
+            extra_ontology_graphs=extra_ontology_graphs,
+            cache_status="disabled",
+        )
+        return bundle
+
+    cache_key = _canonical_cache_key(
+        extensions,
+        profiles,
+        allow_foundational_pair=allow_foundational_pair,
+        extra_ontology_graphs=extra_ontology_graphs,
+        project_root=project_root,
     )
-    if use_cache and cache_key in _BUNDLE_CACHE:
-        cached = _BUNDLE_CACHE[cache_key]
-        # Re-verify fingerprints; never return a stale bundle after a file change.
-        try:
-            for resource in cached.resources:
-                path = Path(resource.absolute_path)
-                if not path.exists() or _sha256_file(path) != resource.sha256:
-                    del _BUNDLE_CACHE[cache_key]
-                    break
-            else:
-                return cached
-        except KeyError:
-            pass
 
+    with _BUNDLE_CACHE_LOCK:
+        cached = _BUNDLE_CACHE.get(cache_key)
+        if cached is not None:
+            try:
+                for resource in cached.resources:
+                    path = Path(resource.absolute_path)
+                    if not path.exists() or _sha256_file(path) != resource.sha256:
+                        del _BUNDLE_CACHE[cache_key]
+                        # Fall through to rebuild; mark stale.
+                        break
+                else:
+                    return ResolvedValidationBundle(
+                        extensions=cached.extensions,
+                        profiles=cached.profiles,
+                        resources=cached.resources,
+                        inference=cached.inference,
+                        compatibility_notes=cached.compatibility_notes,
+                        fingerprint=cached.fingerprint,
+                        built_version=cached.built_version,
+                        requested_profiles=cached.requested_profiles,
+                        cache_status="hit",
+                        resolver_schema_version=cached.resolver_schema_version,
+                    )
+            except KeyError:
+                # Cache entry shape drifted (partial/corrupt); rebuild below.
+                pass
+            # Reaching here means stale invalidation occurred.
+            stale_rebuild = True
+        else:
+            stale_rebuild = False
+
+        bundle = _build_bundle(
+            extensions=extensions,
+            profiles=profiles,
+            requested_profiles=requested_profiles,
+            project_root=project_root,
+            allow_foundational_pair=allow_foundational_pair,
+            extra_ontology_graphs=extra_ontology_graphs,
+            cache_status="stale" if stale_rebuild else "miss",
+        )
+        if len(_BUNDLE_CACHE) >= _CACHE_MAX:
+            _BUNDLE_CACHE.pop(next(iter(_BUNDLE_CACHE)))
+        # Store without ephemeral cache_status so hits re-stamp cleanly.
+        _BUNDLE_CACHE[cache_key] = ResolvedValidationBundle(
+            extensions=bundle.extensions,
+            profiles=bundle.profiles,
+            resources=bundle.resources,
+            inference=bundle.inference,
+            compatibility_notes=bundle.compatibility_notes,
+            fingerprint=bundle.fingerprint,
+            built_version=bundle.built_version,
+            requested_profiles=bundle.requested_profiles,
+            cache_status="miss",
+            resolver_schema_version=bundle.resolver_schema_version,
+        )
+        return bundle
+
+
+def _build_bundle(
+    *,
+    extensions: list[str],
+    profiles: list[str],
+    requested_profiles: tuple[str, ...],
+    project_root: Path,
+    allow_foundational_pair: bool,
+    extra_ontology_graphs: list[str | Path] | None,
+    cache_status: str,
+) -> ResolvedValidationBundle:
     notes: list[str] = []
-    requested_profiles = [_normalize_profile_id(pid) for pid in profiles]
-    normalized_profiles: list[str] = list(requested_profiles)
-
-    # Resolve profile depends_on transitively (e.g. ORG → FOAF + PROV-O).
-    resolved: list[str] = []
-    seen_prof: set[str] = set()
-    queue = list(normalized_profiles)
-    while queue:
-        pid = queue.pop(0)
-        if pid in seen_prof:
-            continue
-        seen_prof.add(pid)
-        resolved.append(pid)
-        meta = PROFILE_REGISTRY[pid]
-        for dep in meta.get("depends_on", []):
-            dep_norm = _normalize_profile_id(dep)
-            if dep_norm not in seen_prof:
-                queue.append(dep_norm)
-                notes.append(f"Profile {pid!r} depends_on {dep_norm!r}")
-    normalized_profiles = resolved
+    # Normalize aliases first; sort for deterministic depends_on expansion.
+    seed = sorted({_normalize_profile_id(pid) for pid in profiles})
+    normalized_profiles, dep_notes = _expand_profile_dependencies(seed)
+    notes.extend(dep_notes)
 
     foundational = [p for p in normalized_profiles if p in FOUNDATIONAL_EXCLUSIVE]
     if len(set(foundational)) > 1 and not allow_foundational_pair:
@@ -265,6 +475,8 @@ def resolve_validation_bundle(
             "allow_foundational_pair=True: BFO and gUFO co-selected; "
             "caller must supply a compatibility fixture."
         )
+    else:
+        _enforce_incompatible_with(normalized_profiles)
 
     expanded_ext = resolve_extension_dependencies(extensions, project_root) if extensions else []
 
@@ -288,7 +500,13 @@ def resolve_validation_bundle(
     resources: list[BundleResource] = []
     seen_abs: set[str] = set()
 
-    def _add(path: Path, role: str, *, profile_id: str | None = None, extension: str | None = None) -> None:
+    def _add(
+        path: Path,
+        role: str,
+        *,
+        profile_id: str | None = None,
+        extension: str | None = None,
+    ) -> None:
         if not path.exists():
             raise ValidationBundleError(
                 "missing_resource",
@@ -301,7 +519,9 @@ def resolve_validation_bundle(
         try:
             rel = str(path.resolve().relative_to(project_root.resolve()))
         except ValueError:
-            rel = abs_s
+            # Non-portable absolute fallback only for out-of-tree extras;
+            # portable manifests still omit absolute_path.
+            rel = path.name
         resources.append(
             BundleResource(
                 role=role,
@@ -318,6 +538,8 @@ def resolve_validation_bundle(
         clean = ext_name.removesuffix(":full")
         for full in load_extension_ontology_paths(clean, mode=mode, project_root=project_root):
             role = "shapes" if "shape" in full.name.lower() else "ontology"
+            if "bridge" in full.name.lower():
+                role = "bridge"
             _add(full, role, extension=clean)
 
     for pid in normalized_profiles:
@@ -330,14 +552,9 @@ def resolve_validation_bundle(
     for extra in extra_ontology_graphs or []:
         _add(Path(extra), "auxiliary")
 
-    inference: str | None = None
-    if normalized_profiles:
-        inference = "rdfs"
-    elif any(not e.endswith(":full") for e in expanded_ext):
-        # validation-subset extensions historically skip rdfs; profiles force it
-        inference = None
-    elif expanded_ext:
-        inference = "rdfs"
+    inference = _combine_inference(
+        normalized_profiles, expanded_ext, project_root=project_root
+    )
 
     fingerprint_material = json.dumps(
         [
@@ -354,22 +571,19 @@ def resolve_validation_bundle(
     ).encode()
     fingerprint = hashlib.sha256(fingerprint_material).hexdigest()
 
-    bundle = ResolvedValidationBundle(
+    return ResolvedValidationBundle(
         extensions=tuple(expanded_ext),
         profiles=tuple(normalized_profiles),
         resources=tuple(resources),
         inference=inference,
         compatibility_notes=tuple(notes),
         fingerprint=fingerprint,
-        requested_profiles=tuple(requested_profiles),
+        requested_profiles=requested_profiles,
+        cache_status=cache_status,
+        resolver_schema_version=RESOLVER_SCHEMA_VERSION,
     )
-
-    if use_cache:
-        if len(_BUNDLE_CACHE) >= _CACHE_MAX:
-            _BUNDLE_CACHE.pop(next(iter(_BUNDLE_CACHE)))
-        _BUNDLE_CACHE[cache_key] = bundle
-    return bundle
 
 
 def clear_bundle_cache() -> None:
-    _BUNDLE_CACHE.clear()
+    with _BUNDLE_CACHE_LOCK:
+        _BUNDLE_CACHE.clear()

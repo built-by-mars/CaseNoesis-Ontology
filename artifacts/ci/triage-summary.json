@@ -1,0 +1,63 @@
+{
+  "commit": "ed0c7f9e365d96c6751597d98a6e7490cd77534b",
+  "failed_runs": [
+    {
+      "name": "CI",
+      "url": "https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29209600022",
+      "conclusion": "failure",
+      "failed_jobs": [
+        {
+          "name": "Test Doc Snippets",
+          "failed_steps": [
+            "Test documentation snippets"
+          ]
+        },
+        {
+          "name": "Test Python",
+          "failed_steps": [
+            "Run tests"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Rust Security",
+      "url": "https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29209599985",
+      "conclusion": "failure",
+      "failed_jobs": [
+        {
+          "name": "Clippy security lints"
+        }
+      ]
+    }
+  ],
+  "first_causal_errors": [
+    {
+      "job": "Test Doc Snippets",
+      "command": "python scripts/test_doc_snippets.py",
+      "error": "docs/recipes/geosparql-geospatial-evidence.md:29: positional argument follows keyword argument"
+    },
+    {
+      "job": "Test Python",
+      "command": "PYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v",
+      "error": "ImportError: cannot import name 'DuplicateNodeError' from 'case_uco' \u2014 likely generate job overwrites python/case_uco/__init__.py"
+    },
+    {
+      "job": "Clippy security lints",
+      "command": "cargo clippy with -D clippy::unwrap_used",
+      "error": "7 unwrap/expect in rust/src/graph.rs (lines 211,221,235,248,264,599)"
+    }
+  ],
+  "code_scanning_alert_count": 40,
+  "alert_rule_counts": {
+    "py/unused-local-variable": 18,
+    "py/unused-import": 4,
+    "py/import-and-import-from": 4,
+    "py/empty-except": 3,
+    "cs/linq/missed-select": 1,
+    "cs/nested-if-statements": 2,
+    "cs/inefficient-containskey": 5,
+    "cs/linq/missed-where": 2,
+    "py/syntax-error": 1
+  }
+}

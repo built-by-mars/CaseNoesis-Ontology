@@ -17,7 +17,11 @@ Three layers of checking:
    PROV-O, OWL-Time, GeoSPARQL, FOAF, ORG, PROF) are validated against the
    pinned term registry (``upper_ontology_registry.json``) instead of
    whole-namespace acceptance, so fabricated terms inside a profiled
-   namespace fail.
+   namespace fail. **Strict mode requires an explicit profile selection**
+   (CQ-29): ``profiles=None`` / empty authorizes *zero* upper profiles —
+   upper-namespace terms fail as ``profile_not_selected`` rather than
+   silently accepting the full registry. Recipe validation always passes
+   ``profiles=[...]`` so exemplars keep working.
 3. **RDF role awareness** — declarations are tracked by role (class,
    property, shape, individual). A declared class used as a predicate, or a
    declared property used as an ``rdf:type`` class, is reported as a role
@@ -25,6 +29,12 @@ Three layers of checking:
    ``uco-action:Technique`` metaclass pattern where a term is both an
    ``owl:Class`` and an individual) is supported: any term declared as a
    class may be used as an ``rdf:type`` object.
+
+**Same-bundle coverage (CQ-27/CQ-28):** when a ``ResolvedValidationBundle``
+is passed via ``bundle=...``, declared extension/profile terms are loaded
+*only* from that bundle's exact resources (same subset/full mode and
+fingerprint as SHACL). Coverage must not accept terms from full-manifest
+files that SHACL never loaded.
 
 Foundational W3C vocabulary policy: terms in RDF, RDFS, OWL, XSD, SHACL,
 SKOS, Dublin Core, and Web Annotation namespaces are accepted by namespace
@@ -42,8 +52,13 @@ from __future__ import annotations
 
 import hashlib
 import json
+import threading
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from validation_bundle import ResolvedValidationBundle
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -72,8 +87,8 @@ STANDARD_NAMESPACE_PREFIXES: tuple[str, ...] = (
 # profiles for, published by the CDO project as CDO-Shapes-* repositories
 # (https://github.com/Cyber-Domain-Ontology). Because a UCO profile exists,
 # graphs may use these ontologies' terms directly — but only *exact declared
-# terms* from the pinned releases recorded in upper_ontology_registry.json.
-# Fabricated terms inside these namespaces fail strict concept coverage.
+# terms* from the pinned releases recorded in upper_ontology_registry.json,
+# and only when the corresponding profile is explicitly selected (CQ-29).
 # Discover the profiles with the get_uco_profiles() MCP tool. See
 # docs/recipes/extensions.md. Regenerate the registry with
 # mcp_server/tools/build_upper_ontology_registry.py.
@@ -109,9 +124,9 @@ GUIDANCE = (
     "it in the extension manifest / validation subset; (3) if the concept "
     "exists in an external/upper ontology, check get_uco_profiles() — exact "
     "declared terms from ontologies with a UCO profile (BFO, gUFO, PROV-O, "
-    "OWL-Time, GeoSPARQL, FOAF, ORG, PROF) are accepted directly. Re-run "
-    "validate_graph afterwards — the check passes as soon as the concept is "
-    "declared."
+    "OWL-Time, GeoSPARQL, FOAF, ORG, PROF) are accepted when that profile is "
+    "explicitly selected via profiles=[...]. Re-run validate_graph afterwards "
+    "— the check passes as soon as the concept is declared."
 )
 
 UPPER_TERM_GUIDANCE = (
@@ -132,6 +147,39 @@ ROLE_MISMATCH_GUIDANCE = (
     "is valid as an rdf:type object."
 )
 
+PROFILE_NOT_SELECTED_GUIDANCE = (
+    "Terms flagged as profile_not_selected are declared by a profiled "
+    "upper ontology that was not included in this validation bundle. "
+    "Add the required profile to profiles=[...] or remove the term. "
+    "When profiles is omitted or empty, zero upper profiles are authorized "
+    "(strict fail-closed mode)."
+)
+
+PARSE_ERROR_GUIDANCE = (
+    "One or more ontology resources failed to parse while loading declared "
+    "terms. Restore or fix the listed files; an unverifiable graph is never "
+    "reported as conformant."
+)
+
+
+@dataclass(frozen=True)
+class ProfileNotSelected:
+    """Structured report for an upper-ontology term whose profile was not selected."""
+
+    iri: str
+    required_profile: str
+    used_as: str  # "class" | "property"
+    selected_profiles: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class OntologyParseError:
+    path: str
+    role: str
+    error: str
+    profile_id: str | None = None
+    extension: str | None = None
+
 
 @dataclass(frozen=True)
 class ConceptCoverageReport:
@@ -150,11 +198,14 @@ class ConceptCoverageReport:
     undeclared_properties: tuple[str, ...] = ()
     unknown_upper_ontology_terms: tuple[str, ...] = ()
     role_mismatches: tuple[tuple[str, str, str], ...] = ()  # (iri, declared_role, used_as)
+    profile_not_selected: tuple[ProfileNotSelected, ...] = ()
     checked_class_count: int = 0
     checked_property_count: int = 0
     guidance: str = field(default="")
     verification_status: str = "complete"
     verification_errors: tuple[str, ...] = ()
+    bundle_fingerprint: str | None = None
+    ontology_parse_errors: tuple[OntologyParseError, ...] = ()
 
     @property
     def undeclared_total(self) -> int:
@@ -163,6 +214,7 @@ class ConceptCoverageReport:
             + len(self.undeclared_properties)
             + len(self.unknown_upper_ontology_terms)
             + len(self.role_mismatches)
+            + len(self.profile_not_selected)
         )
 
 
@@ -179,6 +231,7 @@ class DeclaredTerms:
     properties: frozenset[str]
     shapes: frozenset[str]
     unknown_role: frozenset[str]
+    parse_errors: tuple[OntologyParseError, ...] = ()
 
     def __contains__(self, iri: str) -> bool:
         return (
@@ -191,7 +244,9 @@ class DeclaredTerms:
 
 _DECLARED_CACHE: dict[tuple, DeclaredTerms] = {}
 _DECLARED_CACHE_MAX_ENTRIES = 16
+_DECLARED_CACHE_LOCK = threading.RLock()
 _UPPER_REGISTRY_CACHE: dict[str, dict] = {}
+_UPPER_REGISTRY_LOCK = threading.RLock()
 
 
 def clear_declared_term_cache() -> None:
@@ -203,8 +258,10 @@ def clear_declared_term_cache() -> None:
     additions, removals, and modifications automatically.
     """
 
-    _DECLARED_CACHE.clear()
-    _UPPER_REGISTRY_CACHE.clear()
+    with _DECLARED_CACHE_LOCK:
+        _DECLARED_CACHE.clear()
+    with _UPPER_REGISTRY_LOCK:
+        _UPPER_REGISTRY_CACHE.clear()
 
 
 def _core_ontology_paths(project_root: Path) -> list[Path]:
@@ -218,7 +275,12 @@ def _core_ontology_paths(project_root: Path) -> list[Path]:
 
 
 def _extension_ontology_paths(project_root: Path, extensions: list[str]) -> list[Path]:
-    # Import here to avoid a cycle at module load time.
+    """Load extension ontology paths in the same mode SHACL uses (CQ-28).
+
+    Default (no ``:full`` suffix) prefers ``validation-subset.json``; the
+    ``:full`` suffix loads the full manifest. Callers that need literal
+    same-bundle semantics should pass ``bundle=`` instead.
+    """
     from graph_validator import (
         load_extension_ontology_paths,
         resolve_extension_dependencies,
@@ -226,67 +288,62 @@ def _extension_ontology_paths(project_root: Path, extensions: list[str]) -> list
 
     paths: list[Path] = []
     for ext_name in resolve_extension_dependencies(extensions, project_root):
+        mode = "full" if ext_name.endswith(":full") else "subset"
         clean_name = ext_name.removesuffix(":full")
-        # Full manifest, not subset: a concept declared in any module of a
-        # supported extension counts as declared.
         paths.extend(
-            load_extension_ontology_paths(clean_name, mode="full", project_root=project_root)
+            load_extension_ontology_paths(clean_name, mode=mode, project_root=project_root)
         )
     return paths
 
 
 def _ontology_fingerprint(paths: list[Path]) -> str:
-    """Cheap content fingerprint: path + mtime + size of every ontology file.
-
-    Any file added, removed, renamed, or modified changes the fingerprint,
-    which invalidates the declared-term cache entry without requiring an
-    explicit clear. Stat calls keep repeated validation of unchanged graphs
-    fast (no re-parsing).
-    """
+    """Content-addressed fingerprint: path + sha256 of every ontology file (CQ-32)."""
 
     hasher = hashlib.sha256()
     for path in paths:
         try:
-            stat = path.stat()
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
         except OSError:
             hasher.update(f"{path}:missing;".encode())
             continue
-        hasher.update(f"{path}:{stat.st_mtime_ns}:{stat.st_size};".encode())
+        hasher.update(f"{path}:{digest};".encode())
     return hasher.hexdigest()
 
 
-def load_declared_terms(
-    project_root: Path = PROJECT_ROOT,
-    extensions: list[str] | None = None,
+def _parse_ontology_file(
+    path: Path,
+    *,
+    role: str = "ontology",
+    profile_id: str | None = None,
+    extension: str | None = None,
+) -> tuple[Any | None, OntologyParseError | None]:
+    """Parse one ontology file; fail closed on errors (CQ-31)."""
+    import rdflib
+
+    graph = rdflib.Graph()
+    suffix = path.suffix.lower()
+    if suffix in {".owl", ".rdf", ".xml"}:
+        fmt = "xml"
+    elif suffix in {".jsonld", ".json-ld", ".json"}:
+        fmt = "json-ld"
+    else:
+        fmt = "turtle"
+    try:
+        graph.parse(str(path), format=fmt)
+    except Exception as exc:  # noqa: BLE001 — surface every parse failure
+        return None, OntologyParseError(
+            path=str(path),
+            role=role,
+            error=f"{type(exc).__name__}: {exc}",
+            profile_id=profile_id,
+            extension=extension,
+        )
+    return graph, None
+
+
+def _collect_declared_from_graphs(
+    parsed: list[tuple[Path, Any, str, str | None, str | None]],
 ) -> DeclaredTerms:
-    """Return every IRI declared in supported ontologies, tracked by role.
-
-    Roles are derived from explicit typing (``owl:Class``,
-    ``owl:ObjectProperty``, ``sh:NodeShape``, …) plus structural inference
-    (``rdfs:subClassOf`` subjects/objects are classes, ``rdfs:domain`` /
-    ``rdfs:range`` subjects are properties, ``sh:targetClass`` objects are
-    classes, ``sh:path`` IRIs are properties). Subjects whose role cannot be
-    determined land in ``unknown_role`` and are accepted anywhere. Parse
-    failures in individual files are skipped (some extension files use
-    cross-file prefixes).
-
-    Results are cached; the cache key includes a fingerprint of every
-    ontology file (mtime + size), so ontology edits during a long-running
-    server process are picked up automatically.
-    """
-
-    paths = _core_ontology_paths(project_root)
-    paths.extend(_extension_ontology_paths(project_root, extensions or []))
-
-    key = (
-        str(project_root),
-        tuple(sorted(extensions or [])),
-        _ontology_fingerprint(paths),
-    )
-    cached = _DECLARED_CACHE.get(key)
-    if cached is not None:
-        return cached
-
     import rdflib
     from rdflib import OWL, RDF, RDFS, URIRef
     from rdflib.namespace import SH
@@ -308,14 +365,11 @@ def load_declared_terms(
     properties: set[str] = set()
     shapes: set[str] = set()
     subjects_seen: set[str] = set()
+    parse_errors: list[OntologyParseError] = []
 
-    for path in paths:
-        graph = rdflib.Graph()
-        try:
-            graph.parse(str(path), format="turtle")
-        except Exception:
+    for path, graph, role, profile_id, extension in parsed:
+        if graph is None:
             continue
-
         for subject in graph.subjects():
             if isinstance(subject, URIRef):
                 subjects_seen.add(str(subject))
@@ -331,7 +385,6 @@ def load_declared_terms(
             elif rdf_type in shape_types:
                 shapes.add(iri)
 
-        # Structural role inference for terms declared without explicit typing.
         for subject in graph.subjects(RDFS.subClassOf):
             if isinstance(subject, URIRef):
                 classes.add(str(subject))
@@ -357,21 +410,104 @@ def load_declared_terms(
             if isinstance(obj, URIRef):
                 classes.add(str(obj))
 
-    # Punning support: a term declared as both class and property keeps both
-    # roles. A shape IRI that is also a class (the CDO pattern where SHACL
-    # shapes pun ontology classes) is primarily a class.
     shapes -= classes | properties
     unknown_role = subjects_seen - classes - properties - shapes
 
-    result = DeclaredTerms(
+    return DeclaredTerms(
         classes=frozenset(classes),
         properties=frozenset(properties),
         shapes=frozenset(shapes),
         unknown_role=frozenset(unknown_role),
+        parse_errors=tuple(parse_errors),
     )
-    if len(_DECLARED_CACHE) >= _DECLARED_CACHE_MAX_ENTRIES:
-        _DECLARED_CACHE.pop(next(iter(_DECLARED_CACHE)))
-    _DECLARED_CACHE[key] = result
+
+
+def load_declared_terms(
+    project_root: Path = PROJECT_ROOT,
+    extensions: list[str] | None = None,
+    *,
+    bundle: ResolvedValidationBundle | None = None,
+    fail_on_parse_error: bool = True,
+) -> DeclaredTerms:
+    """Return every IRI declared in supported ontologies, tracked by role.
+
+    When ``bundle`` is provided, extension/profile terms come **only** from
+    that bundle's resources (CQ-27/CQ-28). Core CASE/UCO ontologies are always
+    included. Parse failures are reported (and fail closed when
+    ``fail_on_parse_error`` is True) rather than silently skipped (CQ-31).
+
+    Results are cached under a content-addressed fingerprint (CQ-32).
+    """
+
+    path_meta: list[tuple[Path, str, str | None, str | None]] = []
+    for path in _core_ontology_paths(project_root):
+        path_meta.append((path, "ontology", None, None))
+
+    if bundle is not None:
+        for resource in bundle.resources:
+            path_meta.append(
+                (
+                    Path(resource.absolute_path),
+                    resource.role,
+                    resource.profile_id,
+                    resource.extension,
+                )
+            )
+    else:
+        for path in _extension_ontology_paths(project_root, extensions or []):
+            path_meta.append((path, "ontology", None, None))
+
+    # Deduplicate while preserving order.
+    seen: set[str] = set()
+    unique_meta: list[tuple[Path, str, str | None, str | None]] = []
+    for path, role, profile_id, extension in path_meta:
+        key = str(path.resolve()) if path.exists() else str(path)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique_meta.append((path, role, profile_id, extension))
+
+    paths_only = [p for p, *_ in unique_meta]
+    cache_key = (
+        str(project_root.resolve()),
+        bundle.fingerprint if bundle is not None else None,
+        tuple(sorted(extensions or [])) if bundle is None else (),
+        _ontology_fingerprint(paths_only),
+    )
+
+    with _DECLARED_CACHE_LOCK:
+        cached = _DECLARED_CACHE.get(cache_key)
+        if cached is not None:
+            if fail_on_parse_error and cached.parse_errors:
+                return cached
+            if not cached.parse_errors or not fail_on_parse_error:
+                return cached
+
+    parsed: list[tuple[Path, Any, str, str | None, str | None]] = []
+    parse_errors: list[OntologyParseError] = []
+    for path, role, profile_id, extension in unique_meta:
+        graph, err = _parse_ontology_file(
+            path, role=role, profile_id=profile_id, extension=extension
+        )
+        if err is not None:
+            parse_errors.append(err)
+            continue
+        parsed.append((path, graph, role, profile_id, extension))
+
+    result = _collect_declared_from_graphs(parsed)
+    if parse_errors:
+        result = DeclaredTerms(
+            classes=result.classes,
+            properties=result.properties,
+            shapes=result.shapes,
+            unknown_role=result.unknown_role,
+            parse_errors=tuple(parse_errors),
+        )
+
+    with _DECLARED_CACHE_LOCK:
+        if len(_DECLARED_CACHE) >= _DECLARED_CACHE_MAX_ENTRIES:
+            _DECLARED_CACHE.pop(next(iter(_DECLARED_CACHE)))
+        _DECLARED_CACHE[cache_key] = result
     return result
 
 
@@ -394,16 +530,18 @@ def _load_upper_registry() -> tuple[dict | None, str | None]:
     if not UPPER_ONTOLOGY_REGISTRY_PATH.is_file():
         return None, "upper_ontology_registry_missing"
     try:
-        stat = UPPER_ONTOLOGY_REGISTRY_PATH.stat()
+        raw_bytes = UPPER_ONTOLOGY_REGISTRY_PATH.read_bytes()
     except OSError:
         return None, "upper_ontology_registry_missing"
-    cache_key = f"{UPPER_ONTOLOGY_REGISTRY_PATH}:{stat.st_mtime_ns}:{stat.st_size}"
-    cached = _UPPER_REGISTRY_CACHE.get(cache_key)
-    if cached is not None:
-        return cached, None
+    content_hash = hashlib.sha256(raw_bytes).hexdigest()
+    cache_key = f"{UPPER_ONTOLOGY_REGISTRY_PATH}:{content_hash}"
+    with _UPPER_REGISTRY_LOCK:
+        cached = _UPPER_REGISTRY_CACHE.get(cache_key)
+        if cached is not None:
+            return cached, None
     try:
-        raw = json.loads(UPPER_ONTOLOGY_REGISTRY_PATH.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+        raw = json.loads(raw_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
         return None, "upper_ontology_registry_malformed"
     ontologies = raw.get("ontologies")
     if not isinstance(ontologies, dict) or not ontologies:
@@ -426,8 +564,9 @@ def _load_upper_registry() -> tuple[dict | None, str | None]:
     if not any(merged.values()):
         return None, "upper_ontology_registry_malformed"
     result = {role: frozenset(values) for role, values in merged.items()}
-    _UPPER_REGISTRY_CACHE.clear()  # single registry file; drop stale versions
-    _UPPER_REGISTRY_CACHE[cache_key] = result
+    with _UPPER_REGISTRY_LOCK:
+        _UPPER_REGISTRY_CACHE.clear()  # single registry file; drop stale versions
+        _UPPER_REGISTRY_CACHE[cache_key] = result
     return result, None
 
 
@@ -446,15 +585,14 @@ def _is_upper_namespace(iri: str) -> bool:
     return iri.startswith(UCO_PROFILE_NAMESPACE_PREFIXES)
 
 
-def _selected_upper_prefixes(selected_profiles: list[str] | None) -> frozenset[str] | None:
-    """Return allowed upper-namespace prefixes when profiles are selected.
+def _selected_upper_prefixes(selected_profiles: list[str] | None) -> frozenset[str]:
+    """Return allowed upper-namespace prefixes for the selected profiles.
 
-    ``None`` means all profiled upper namespaces remain eligible (legacy
-    behavior when no profile filter is supplied). An empty frozenset means
-    profiles were selected but authorize no upper namespaces.
+    CQ-29: ``None`` or empty authorizes **zero** upper profiles (fail closed).
+    Recipe validation always passes explicit ``profiles=[...]``.
     """
-    if selected_profiles is None:
-        return None
+    if not selected_profiles:
+        return frozenset()
     allowed: set[str] = set()
     for pid in selected_profiles:
         allowed.update(PROFILE_ID_TO_NAMESPACE_PREFIXES.get(pid, ()))
@@ -489,6 +627,8 @@ def check_graph_concepts(
     project_root: Path = PROJECT_ROOT,
     extensions: list[str] | None = None,
     selected_profiles: list[str] | None = None,
+    *,
+    bundle: ResolvedValidationBundle | None = None,
 ) -> ConceptCoverageReport:
     """Check that every class and property in a graph file is declared.
 
@@ -496,10 +636,14 @@ def check_graph_concepts(
     all predicates. Instance IRIs (kb:, urn:uuid:, …) never appear in either
     position, so no instance-namespace whitelist is needed.
 
-    When ``selected_profiles`` is provided, upper-ontology terms are accepted
-    only from those profiles (and their declared namespace prefixes). A term
-    from an unselected profile is reported as undeclared with guidance that
-    the profile was not selected — not as an unknown registry term.
+    When ``bundle`` is provided (preferred, CQ-27), extension/profile declared
+    terms come from that bundle's exact resources and fingerprint; profile
+    selection is taken from ``bundle.profiles`` unless ``selected_profiles``
+    is also supplied.
+
+    When ``selected_profiles`` / bundle profiles are empty or omitted, upper
+    ontology terms fail closed as ``profile_not_selected`` (CQ-29) — they are
+    never silently accepted from the global registry.
     """
 
     import rdflib
@@ -517,27 +661,53 @@ def check_graph_concepts(
     }
     used_properties = {str(pred) for pred in graph.predicates()}
 
-    declared = load_declared_terms(project_root=project_root, extensions=extensions)
+    if bundle is not None:
+        declared = load_declared_terms(project_root=project_root, bundle=bundle)
+        profiles_for_check = (
+            list(selected_profiles)
+            if selected_profiles is not None
+            else list(bundle.profiles)
+        )
+        bundle_fingerprint = bundle.fingerprint
+    else:
+        declared = load_declared_terms(project_root=project_root, extensions=extensions)
+        profiles_for_check = list(selected_profiles) if selected_profiles is not None else []
+        bundle_fingerprint = None
+
     upper, upper_error = _load_upper_registry()
-    allowed_prefixes = _selected_upper_prefixes(selected_profiles)
+    allowed_prefixes = _selected_upper_prefixes(profiles_for_check)
+    selected_tuple = tuple(profiles_for_check)
 
     undeclared_classes: list[str] = []
     undeclared_properties: list[str] = []
     unknown_upper: set[str] = set()
-    unselected_profile_terms: list[str] = []
+    unselected: list[ProfileNotSelected] = []
     role_mismatches: list[tuple[str, str, str]] = []
     verification_errors: list[str] = []
-    upper_terms_used = False
+
+    if declared.parse_errors:
+        verification_errors.append("ontology_parse_error")
+        for err in declared.parse_errors:
+            verification_errors.append(
+                f"ontology_parse_error:{err.path}:{err.role}:{err.error}"
+            )
 
     def _handle_upper(iri: str, *, as_class: bool) -> bool:
         """Return True if the IRI was handled as an upper-ontology term."""
-        nonlocal upper_terms_used
         if not _is_upper_namespace(iri):
             return False
-        upper_terms_used = True
-        if allowed_prefixes is not None and not iri.startswith(tuple(allowed_prefixes)):
+        used_as = "class" if as_class else "property"
+        # CQ-29: empty/None profiles authorize zero upper namespaces.
+        if not allowed_prefixes or not iri.startswith(tuple(allowed_prefixes)):
             pid = _profile_for_upper_iri(iri) or "unknown"
-            unselected_profile_terms.append(f"{iri} (profile_not_selected:{pid})")
+            unselected.append(
+                ProfileNotSelected(
+                    iri=iri,
+                    required_profile=pid,
+                    used_as=used_as,
+                    selected_profiles=selected_tuple,
+                )
+            )
             return True
         if upper is None:
             return True
@@ -585,52 +755,69 @@ def check_graph_concepts(
         else:
             undeclared_properties.append(iri)
 
-    if upper_terms_used and upper_error is not None and allowed_prefixes != frozenset():
+    # Registry is required only when at least one *selected* upper term was
+    # accepted into the registry-check path (not profile_not_selected).
+    upper_terms_needing_registry = bool(unknown_upper) or any(
+        m[1].startswith("upper-ontology") for m in role_mismatches
+    )
+    # Also: selected upper terms that passed (ok path) — detect via used ∩ selected.
+    selected_upper_used = False
+    if allowed_prefixes:
+        for iri in used_classes | used_properties:
+            if _is_upper_namespace(iri) and iri.startswith(tuple(allowed_prefixes)):
+                selected_upper_used = True
+                break
+    if selected_upper_used and upper_error is not None:
+        verification_errors.append(upper_error)
+    elif upper_terms_needing_registry and upper_error is not None:
         verification_errors.append(upper_error)
 
     ok = (
         not undeclared_classes
         and not undeclared_properties
         and not unknown_upper
-        and not unselected_profile_terms
+        and not unselected
         and not role_mismatches
         and not verification_errors
+        and not declared.parse_errors
     )
     guidance_parts: list[str] = []
     if undeclared_classes or undeclared_properties:
         guidance_parts.append(GUIDANCE)
     if unknown_upper:
         guidance_parts.append(UPPER_TERM_GUIDANCE)
-    if unselected_profile_terms:
-        guidance_parts.append(
-            "Terms flagged as profile_not_selected are declared by a profiled "
-            "upper ontology that was not included in this validation bundle. "
-            "Add the required profile to profiles=[...] or remove the term."
-        )
+    if unselected:
+        guidance_parts.append(PROFILE_NOT_SELECTED_GUIDANCE)
     if role_mismatches:
         guidance_parts.append(ROLE_MISMATCH_GUIDANCE)
-    if verification_errors:
+    if declared.parse_errors:
+        guidance_parts.append(PARSE_ERROR_GUIDANCE)
+    if any(e.startswith("upper_ontology_registry") for e in verification_errors):
         guidance_parts.append(
             "A required verification stage could not run "
-            f"({', '.join(verification_errors)}): the pinned upper-ontology "
-            "term registry (mcp_server/upper_ontology_registry.json) is "
-            "missing, malformed, or lacks release provenance while the graph "
-            "uses profiled upper-ontology terms. Restore or regenerate the "
+            f"({', '.join(e for e in verification_errors if e.startswith('upper_ontology_registry'))}): "
+            "the pinned upper-ontology term registry "
+            "(mcp_server/upper_ontology_registry.json) is missing, malformed, "
+            "or lacks release provenance while the graph uses selected "
+            "profiled upper-ontology terms. Restore or regenerate the "
             "registry (mcp_server/tools/build_upper_ontology_registry.py); "
             "an unverifiable graph is never reported as conformant."
         )
 
     return ConceptCoverageReport(
         ok=ok,
-        undeclared_classes=tuple(undeclared_classes) + tuple(unselected_profile_terms),
+        undeclared_classes=tuple(undeclared_classes),
         undeclared_properties=tuple(undeclared_properties),
         unknown_upper_ontology_terms=tuple(sorted(unknown_upper)),
         role_mismatches=tuple(role_mismatches),
+        profile_not_selected=tuple(unselected),
         checked_class_count=len(used_classes),
         checked_property_count=len(used_properties),
         guidance=" ".join(guidance_parts),
         verification_status="could_not_verify" if verification_errors else "complete",
         verification_errors=tuple(verification_errors),
+        bundle_fingerprint=bundle_fingerprint,
+        ontology_parse_errors=declared.parse_errors,
     )
 
 
@@ -643,6 +830,8 @@ def coverage_report_to_dict(report: ConceptCoverageReport) -> dict:
         "checked_property_count": report.checked_property_count,
         "verification_status": report.verification_status,
     }
+    if report.bundle_fingerprint:
+        payload["bundle_fingerprint"] = report.bundle_fingerprint
     if not report.ok:
         payload["undeclared_classes"] = list(report.undeclared_classes)
         payload["undeclared_properties"] = list(report.undeclared_properties)
@@ -650,6 +839,16 @@ def coverage_report_to_dict(report: ConceptCoverageReport) -> dict:
             payload["unknown_upper_ontology_terms"] = list(
                 report.unknown_upper_ontology_terms
             )
+        if report.profile_not_selected:
+            payload["profile_not_selected"] = [
+                {
+                    "iri": item.iri,
+                    "required_profile": item.required_profile,
+                    "used_as": item.used_as,
+                    "selected_profiles": list(item.selected_profiles),
+                }
+                for item in report.profile_not_selected
+            ]
         if report.role_mismatches:
             payload["role_mismatches"] = [
                 {"iri": iri, "declared_role": declared_role, "used_as": used_as}
@@ -657,5 +856,16 @@ def coverage_report_to_dict(report: ConceptCoverageReport) -> dict:
             ]
         if report.verification_errors:
             payload["verification_errors"] = list(report.verification_errors)
+        if report.ontology_parse_errors:
+            payload["ontology_parse_errors"] = [
+                {
+                    "path": e.path,
+                    "role": e.role,
+                    "error": e.error,
+                    "profile_id": e.profile_id,
+                    "extension": e.extension,
+                }
+                for e in report.ontology_parse_errors
+            ]
         payload["guidance"] = report.guidance
     return payload

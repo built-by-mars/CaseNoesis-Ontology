@@ -133,12 +133,13 @@ class CSharpBackend(CodegenBackend):
         lines: list[str] = []
 
         parent = self.schema.resolve_class(cls.parent_iris[0]) if cls.parent_iris else None
+        class_name = self.safe_identifier(cls.name, "csharp")
         base = f" : {self._qualified_csharp_type_for_class(parent)}" if parent else ""
         const_prefix = "new " if parent else ""
         inherited_names = self._inherited_property_names(cls)
 
         lines.append(f"{pad}/// <summary>{cls.description[:200] if cls.description else cls.name}</summary>")
-        lines.append(f"{pad}public class {cls.name}{base}")
+        lines.append(f"{pad}public class {class_name}{base}")
         lines.append(f"{pad}{{")
         lines.append(f'{pad}    public {const_prefix}const string ClassIri = "{cls.iri}";')
         lines.append(f'{pad}    public {const_prefix}const string NamespacePrefix = "{cls.namespace_prefix}";')
@@ -206,7 +207,8 @@ class CSharpBackend(CodegenBackend):
     def _qualified_csharp_type_for_class(self, cls: OntologyClass | None) -> str:
         if cls is None:
             return "object"
-        return f"{self._namespace_for_module(cls.module)}.{cls.name}"
+        safe = self.safe_identifier(cls.name, "csharp")
+        return f"{self._namespace_for_module(cls.module)}.{safe}"
 
     def _inherited_property_names(self, cls: OntologyClass) -> set[str]:
         names: set[str] = set()

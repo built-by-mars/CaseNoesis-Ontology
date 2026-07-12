@@ -33,7 +33,7 @@
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:SimpleNameFacet-c1b6f23a-5b74-4988-9afa-3729f5131e67",
+                    "@id": "kb:SimpleNameFacet-8f39064c-53fe-4d2e-a50f-e6f7a4584371",
                     "@type": "uco-identity:SimpleNameFacet",
                     "uco-identity:familyName": [
                         "Morgan"
@@ -55,7 +55,7 @@
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:SimpleNameFacet-86ce9224-05f5-4bc5-96e4-4a0c57bfa28a",
+                    "@id": "kb:SimpleNameFacet-ed72ceb9-2cbd-45f4-ab80-401b6a5c8ca3",
                     "@type": "uco-identity:SimpleNameFacet",
                     "uco-identity:familyName": [
                         "Lee"
@@ -247,7 +247,7 @@
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:AccountFacet-91f21d60-4f1b-4632-9c8f-1e6f2534e93e",
+                    "@id": "kb:AccountFacet-04d5f341-cb3c-42e7-81e1-9a59d9a6ebf4",
                     "@type": "uco-observable:AccountFacet",
                     "uco-observable:accountIdentifier": "+15551234567",
                     "uco-observable:isActive": {
@@ -260,7 +260,7 @@
             "foaf:accountName": "+15551234567"
         },
         {
-            "@id": "kb:Relationship-8e4207c4-89ee-4b3b-b92b-4b600383dd48",
+            "@id": "kb:Relationship-1004ede7-5d93-4e78-a408-c8734361f0c6",
             "@type": "uco-core:Relationship",
             "uco-core:description": [
                 "Investigative hypothesis: Alex controlled the shared account (medium confidence)."
@@ -280,7 +280,7 @@
             }
         },
         {
-            "@id": "kb:Relationship-82f0b1b5-1146-4399-a9a5-d684f0c75295",
+            "@id": "kb:Relationship-9c65abe8-bd60-4d2b-b225-99a4154832e1",
             "@type": "uco-core:Relationship",
             "uco-core:description": [
                 "Investigative hypothesis: Jordan also controlled the shared account (medium confidence)."
@@ -300,7 +300,7 @@
             }
         },
         {
-            "@id": "kb:Investigation-4019186d-3fe4-4a17-98fe-8b76ea827997",
+            "@id": "kb:Investigation-e93d0bb6-45f2-4ca5-b117-b34ddb302712",
             "@type": "case-investigation:Investigation",
             "uco-core:description": [
                 "Person, organization, unit, post, membership, and account kept distinct.",

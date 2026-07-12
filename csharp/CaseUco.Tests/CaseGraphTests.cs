@@ -161,18 +161,35 @@ namespace CaseUco.Tests
         }
 
         [Fact]
-        public void Get_ReturnsShallowCopy()
+        public void Get_ReturnsDeepCopy()
         {
             var graph = new CaseGraph();
             graph.UpsertNode("kb:n1", "uco-core:UcoObject", new Dictionary<string, object>
             {
                 ["uco-core:name"] = "N",
+                ["uco-core:tag"] = new List<object> { "a", "b" },
+                ["uco-core:hasFacet"] = new List<object>
+                {
+                    new Dictionary<string, object> { ["@id"] = "kb:f1" },
+                },
             });
             var view = graph.Get("kb:n1");
             view["@id"] = "kb:mutated";
+            ((List<object>)view["uco-core:tag"]).Add("c");
+            ((Dictionary<string, object>)((List<object>)view["uco-core:hasFacet"])[0])["@id"] = "kb:mutated-facet";
             Assert.True(graph.Contains("kb:n1"));
             Assert.False(graph.Contains("kb:mutated"));
             Assert.Equal("N", graph.Get("kb:n1")["uco-core:name"]);
+            Assert.Equal(2, ((List<object>)graph.Get("kb:n1")["uco-core:tag"]).Count);
+            Assert.Equal("kb:f1", ((Dictionary<string, object>)((List<object>)graph.Get("kb:n1")["uco-core:hasFacet"])[0])["@id"]);
+        }
+
+        [Fact]
+        public void Split_RejectsNonPositive()
+        {
+            var graph = new CaseGraph();
+            graph.UpsertNode("kb:x", "uco-core:UcoObject");
+            Assert.Throws<ArgumentOutOfRangeException>(() => graph.Split(0));
         }
 
         [Fact]

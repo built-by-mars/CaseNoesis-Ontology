@@ -55,14 +55,23 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 
 import extension_paths
+import graph_validator
+
+try:
+    import fcntl
+except ImportError:  # pragma: no cover — non-POSIX
+    fcntl = None  # type: ignore[assignment]
 
 _logger = logging.getLogger(__name__)
 
@@ -276,8 +285,6 @@ def _gate_exemplars_validate(
     must pass case_validate with the extension's own ontology files loaded
     (issue #56 — an extension with no exemplars no longer passes)."""
 
-    import graph_validator
-
     ext_dir = extension_paths.extension_dir(name, project_root)
     exemplars = manifest.get("exemplar_files", [])
     if not exemplars:
@@ -320,8 +327,6 @@ def _gate_negative_fixtures(
     (otherwise there is nothing to constrain and the gate passes with an
     advisory detail). A listed fixture that unexpectedly conforms is always
     a hard failure."""
-
-    import graph_validator
 
     ext_dir = extension_paths.extension_dir(name, project_root)
     fixtures = manifest.get("invalid_exemplar_files", [])
@@ -567,20 +572,23 @@ def promote_recipe(
         return {"ok": False, "error": "recipe_structure_invalid",
                 "detail": "; ".join(structure_errors)}
 
-    # Executable gate (#69): when the recipe is registered in
-    # recipe-execution.json, run the same builder/RDF/SHACL gate used by CI
-    # before any catalog write.
+    # Executable gate (#69 / CQ-38): candidate plus every affected shared
+    # profile/extension exemplar (and preferably the full operational set).
     try:
-        from tools.run_recipe_examples import entries_for_recipe_slug, run_manifest_entries
+        from tools.run_recipe_examples import (
+            entries_for_promotion_gate,
+            run_manifest_entries,
+        )
     except ImportError:
         sys.path.insert(0, str(project_root / "mcp_server"))
-        from tools.run_recipe_examples import entries_for_recipe_slug, run_manifest_entries
+        from tools.run_recipe_examples import (
+            entries_for_promotion_gate,
+            run_manifest_entries,
+        )
 
-    gate_entries = entries_for_recipe_slug(slug)
+    gate_entries = entries_for_promotion_gate(slug)
     if gate_entries:
-        from graph_validator import validator_available
-
-        if not validator_available():
+        if not graph_validator.validator_available():
             return {
                 "ok": False,
                 "error": "validator_unavailable",
@@ -649,15 +657,111 @@ def promote_recipe(
         "commit": _git_commit_sha(project_root),
     })
 
-    # Commit all writes (the file move last, so a crash mid-way never
-    # leaves the catalog pointing at a missing file).
-    index_md_path.write_text(index_md, encoding="utf-8")
-    domain_index_path.write_text(domain_index_src, encoding="utf-8")
-    log_path.write_text(json.dumps(log_entries, indent=2) + "\n", encoding="utf-8")
-    target_path.write_text(text, encoding="utf-8")
-    candidate_path.unlink()
+    # CQ-37: OS lock + staging directory; commit with os.replace or roll back.
+    commit_error = _commit_recipe_promotion(
+        project_root=project_root,
+        slug=slug,
+        recipe_text=text,
+        index_md=index_md,
+        domain_index_src=domain_index_src,
+        log_entries=log_entries,
+        candidate_path=candidate_path,
+        target_path=target_path,
+        index_md_path=index_md_path,
+        domain_index_path=domain_index_path,
+        log_path=log_path,
+    )
+    if commit_error:
+        return {"ok": False, "error": commit_error}
 
     return {"ok": True, "recipe": f"{RECIPE_DIR}/{slug}.md", "title": title}
+
+
+def _commit_recipe_promotion(
+    *,
+    project_root: Path,
+    slug: str,
+    recipe_text: str,
+    index_md: str,
+    domain_index_src: str,
+    log_entries: list,
+    candidate_path: Path,
+    target_path: Path,
+    index_md_path: Path,
+    domain_index_path: Path,
+    log_path: Path,
+) -> str | None:
+    """Atomically commit promotion artifacts under an exclusive lock (CQ-37).
+
+    Returns an error code string on failure, or ``None`` on success. On any
+    failure after staging, previously-written finals are restored from
+    backups when available so operational files are not left half-updated.
+    """
+
+    recipes_dir = project_root / RECIPE_DIR
+    lock_path = recipes_dir / ".promotion.lock"
+    staging_root = recipes_dir / ".promotion-staging" / slug
+    backups: dict[Path, Path] = {}
+
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    lock_fh = open(lock_path, "a+", encoding="utf-8")
+    try:
+        if fcntl is not None:
+            fcntl.flock(lock_fh.fileno(), fcntl.LOCK_EX)
+
+        if staging_root.exists():
+            shutil.rmtree(staging_root)
+        staging_root.mkdir(parents=True)
+
+        staged = {
+            "recipe.md": recipe_text,
+            "INDEX.md": index_md,
+            "domain_index.py": domain_index_src,
+            "promotion-log.json": json.dumps(log_entries, indent=2) + "\n",
+        }
+        for name, content in staged.items():
+            (staging_root / name).write_text(content, encoding="utf-8")
+
+        finals = {
+            staging_root / "INDEX.md": index_md_path,
+            staging_root / "domain_index.py": domain_index_path,
+            staging_root / "promotion-log.json": log_path,
+            staging_root / "recipe.md": target_path,
+        }
+
+        try:
+            for staged_path, final_path in finals.items():
+                final_path.parent.mkdir(parents=True, exist_ok=True)
+                if final_path.exists():
+                    backup = staging_root / f"backup-{final_path.name}"
+                    shutil.copy2(final_path, backup)
+                    backups[final_path] = backup
+                os.replace(staged_path, final_path)
+            candidate_path.unlink(missing_ok=True)
+        except OSError as exc:
+            for final_path, backup in backups.items():
+                try:
+                    os.replace(backup, final_path)
+                except OSError:
+                    _logger.exception("Failed to restore %s after promotion error", final_path)
+            if target_path.exists() and target_path not in backups:
+                try:
+                    target_path.unlink()
+                except OSError:
+                    pass
+            _logger.exception("Recipe promotion commit failed for %s: %s", slug, exc)
+            return "promotion_commit_failed"
+        finally:
+            shutil.rmtree(staging_root, ignore_errors=True)
+    finally:
+        if fcntl is not None:
+            try:
+                fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)
+            except OSError:
+                pass
+        lock_fh.close()
+
+    return None
 
 
 def deprecate_recipe(

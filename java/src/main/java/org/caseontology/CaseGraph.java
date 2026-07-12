@@ -1,19 +1,23 @@
 // CaseGraph — main entry point for building and serializing CASE/UCO graphs in Java.
 package org.caseontology;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
@@ -27,34 +31,50 @@ public class CaseGraph {
     private final List<Map<String, Object>> objects;
     private final Map<Object, String> idMap;
     private final Map<String, Integer> iriIndex = new LinkedHashMap<>();
-    private boolean rejectDuplicates = true;
+    private String onDuplicate = "reject";
+    private final List<DeserializationWarning> deserializationWarnings = new ArrayList<>();
 
     public CaseGraph() {
         this("http://example.org/kb/");
     }
 
     public CaseGraph(String kbPrefix) {
+        this(kbPrefix, null);
+    }
+
+    public CaseGraph(String kbPrefix, Map<String, String> extraContext) {
         this.context = new LinkedHashMap<>(defaultContext());
         this.context.put("kb", kbPrefix);
         this.objects = new ArrayList<>();
         this.idMap = new IdentityHashMap<>();
+        if (extraContext != null) {
+            for (Map.Entry<String, String> e : extraContext.entrySet()) {
+                mergeContextEntry(e.getKey(), e.getValue());
+            }
+        }
     }
 
-    /**
-     * When true, {@link #load(String)} raises on duplicate {@code @id} instead of merging.
-     * Default is {@code true} (reject) to match Python {@code on_duplicate="reject"}.
-     * Set to {@code false} for merge-compatible load behavior.
-     */
+    /** Named duplicate policy: reject | merge_identical | merge_compatible | replace. */
+    public String getOnDuplicate() { return onDuplicate; }
+    public void setOnDuplicate(String onDuplicate) {
+        this.onDuplicate = normalizeDuplicatePolicy(onDuplicate);
+    }
+
+    /** Backward-compatible boolean view of {@link #getOnDuplicate()}. */
     public boolean isRejectDuplicates() {
-        return rejectDuplicates;
+        return "reject".equals(normalizeDuplicatePolicy(onDuplicate));
     }
 
     public void setRejectDuplicates(boolean rejectDuplicates) {
-        this.rejectDuplicates = rejectDuplicates;
+        this.onDuplicate = rejectDuplicates ? "reject" : "merge_compatible";
+    }
+
+    public List<DeserializationWarning> getDeserializationWarnings() {
+        return Collections.unmodifiableList(deserializationWarnings);
     }
 
     public void addContext(String prefix, String iri) {
-        context.put(prefix, iri);
+        mergeContextEntry(prefix, iri);
     }
 
     /**
@@ -105,16 +125,15 @@ public class CaseGraph {
     }
 
     /**
-     * Return a shallow copy of the JSON-LD map for a node by compact or expanded {@code @id}.
-     * Mutating {@code @id} on the returned map does not update the graph index;
-     * use {@link #addType}, {@link #addProperty}, or {@link #upsertNode}.
+     * Return a deep copy of the JSON-LD map for a node by compact or expanded {@code @id}.
+     * Nested lists/maps are not shared with the graph.
      */
     public Map<String, Object> get(String id) {
         Map<String, Object> obj = findObject(id);
         if (obj == null) {
             return null;
         }
-        return new LinkedHashMap<>(obj);
+        return deepCopyMap(obj);
     }
 
     /**
@@ -132,7 +151,7 @@ public class CaseGraph {
     }
 
     /**
-     * Create or update a JSON-LD node by {@code @id}.
+     * Create or update a JSON-LD node by {@code @id}. Returns a deep copy.
      */
     public Map<String, Object> upsertNode(String id, Object types, Map<String, Object> properties) {
         Map<String, Object> obj = findObject(id);
@@ -144,11 +163,11 @@ public class CaseGraph {
             }
             if (properties != null) {
                 for (Map.Entry<String, Object> entry : properties.entrySet()) {
-                    setProperty(obj, entry.getKey(), entry.getValue());
+                    applyProperty(obj, entry.getKey(), entry.getValue(), id, "merge_compatible");
                 }
             }
             appendObject(obj);
-            return obj;
+            return deepCopyMap(obj);
         }
 
         if (types != null) {
@@ -156,10 +175,10 @@ public class CaseGraph {
         }
         if (properties != null) {
             for (Map.Entry<String, Object> entry : properties.entrySet()) {
-                setProperty(obj, entry.getKey(), entry.getValue());
+                applyProperty(obj, entry.getKey(), entry.getValue(), id, "merge_compatible");
             }
         }
-        return obj;
+        return deepCopyMap(obj);
     }
 
     public Map<String, Object> upsertNode(String id) {
@@ -175,11 +194,17 @@ public class CaseGraph {
     }
 
     /**
-     * Add or merge a property on an existing node.
+     * Add or merge a property on an existing node (merge_compatible).
      */
     public void addProperty(String id, String key, Object value) {
         Map<String, Object> obj = requireObject(id);
-        setProperty(obj, key, value);
+        applyProperty(obj, key, value, id, "merge_compatible");
+    }
+
+    /** Replace a property value (replace / scalar overwrite mode). */
+    public void setPropertyValue(String id, String key, Object value) {
+        Map<String, Object> obj = requireObject(id);
+        applyProperty(obj, key, value, id, "replace");
     }
 
     /**
@@ -199,7 +224,8 @@ public class CaseGraph {
             String targetId,
             String kind,
             boolean directional,
-            String description) {
+            String description,
+            String relationshipId) {
         if (!contains(sourceId)) {
             throw new IllegalArgumentException("Relationship source not in graph: " + sourceId);
         }
@@ -210,7 +236,7 @@ public class CaseGraph {
             throw new IllegalArgumentException("kindOfRelationship is required");
         }
 
-        String relId = deterministicRelationshipId(sourceId, targetId, kind);
+        String relId = relationshipId != null ? relationshipId : deterministicRelationshipId(sourceId, targetId, kind);
         Map<String, Object> props = new LinkedHashMap<>();
         List<Map<String, Object>> sources = new ArrayList<>();
         Map<String, Object> sourceRef = new LinkedHashMap<>();
@@ -233,8 +259,17 @@ public class CaseGraph {
         return upsertNode(relId, "uco-core:Relationship", props);
     }
 
+    public Map<String, Object> createRelationship(
+            String sourceId,
+            String targetId,
+            String kind,
+            boolean directional,
+            String description) {
+        return createRelationship(sourceId, targetId, kind, directional, description, null);
+    }
+
     public Map<String, Object> createRelationship(String sourceId, String targetId, String kind) {
-        return createRelationship(sourceId, targetId, kind, true, null);
+        return createRelationship(sourceId, targetId, kind, true, null, null);
     }
 
     /**
@@ -321,7 +356,7 @@ public class CaseGraph {
      * Write the graph as JSON-LD to a file.
      */
     public void write(String path) throws IOException {
-        try (Writer writer = new FileWriter(path)) {
+        try (Writer writer = new OutputStreamWriter(Files.newOutputStream(Paths.get(path)), StandardCharsets.UTF_8)) {
             writer.write(serialize());
         }
     }
@@ -344,8 +379,8 @@ public class CaseGraph {
                 caseValidateBin, "--built-version", caseVersion, tmp.toAbsolutePath().toString());
             pb.redirectErrorStream(false);
             Process proc = pb.start();
-            String stdout = new String(proc.getInputStream().readAllBytes());
-            String stderr = new String(proc.getErrorStream().readAllBytes());
+            String stdout = new String(proc.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            String stderr = new String(proc.getErrorStream().readAllBytes(), StandardCharsets.UTF_8);
             int exitCode = proc.waitFor();
             if (exitCode != 0) {
                 String msg = stderr.isBlank() ? stdout : stderr;
@@ -384,19 +419,38 @@ public class CaseGraph {
     /**
      * Load a JSON-LD string into this graph, merging context and appending objects.
      */
-    @SuppressWarnings("unchecked")
     public void load(String json) {
+        load(json, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void load(String json, String onDuplicatePolicy) {
+        String policy = normalizeDuplicatePolicy(onDuplicatePolicy != null ? onDuplicatePolicy : onDuplicate);
         Map<String, Object> doc = (Map<String, Object>) parseJsonValue(json.trim(), new int[]{0});
-        if (doc.containsKey("@context") && doc.get("@context") instanceof Map) {
-            mergeContext((Map<String, Object>) doc.get("@context"));
-        }
-        if (doc.containsKey("@graph") && doc.get("@graph") instanceof List) {
-            List<Object> graphList = (List<Object>) doc.get("@graph");
-            for (Object item : graphList) {
-                if (item instanceof Map) {
-                    ingestRawNode((Map<String, Object>) item, rejectDuplicates);
+        Map<String, String> snapCtx = new LinkedHashMap<>(context);
+        List<Map<String, Object>> snapObjects = new ArrayList<>();
+        for (Map<String, Object> o : objects) snapObjects.add(deepCopyMap(o));
+        Map<String, Integer> snapIndex = new LinkedHashMap<>(iriIndex);
+        try {
+            if (doc.containsKey("@context") && doc.get("@context") instanceof Map) {
+                mergeContext((Map<String, Object>) doc.get("@context"));
+            }
+            if (doc.containsKey("@graph") && doc.get("@graph") instanceof List) {
+                List<Object> graphList = (List<Object>) doc.get("@graph");
+                for (Object item : graphList) {
+                    if (item instanceof Map) {
+                        ingestRawNode(deepCopyMap((Map<String, Object>) item), policy);
+                    }
                 }
             }
+        } catch (RuntimeException ex) {
+            context.clear();
+            context.putAll(snapCtx);
+            objects.clear();
+            objects.addAll(snapObjects);
+            iriIndex.clear();
+            iriIndex.putAll(snapIndex);
+            throw ex;
         }
     }
 
@@ -404,13 +458,28 @@ public class CaseGraph {
      * Read and load a JSON-LD file into this graph.
      */
     public void loadFile(String path) throws IOException {
-        String json = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(path)));
+        String json = Files.readString(Paths.get(path), StandardCharsets.UTF_8);
         load(json);
     }
 
     /**
      * Result of parsing a JSON-LD string into typed objects.
      */
+    /** Typed diagnostic when a JSON-LD node falls back to a raw map. */
+    public static class DeserializationWarning {
+        private final String nodeId;
+        private final String reason;
+        private final String detail;
+        public DeserializationWarning(String nodeId, String reason, String detail) {
+            this.nodeId = nodeId;
+            this.reason = reason;
+            this.detail = detail == null ? "" : detail;
+        }
+        public String getNodeId() { return nodeId; }
+        public String getReason() { return reason; }
+        public String getDetail() { return detail; }
+    }
+
     public static class FromJsonLdResult {
         private final CaseGraph graph;
         private final List<Object> objects;
@@ -446,8 +515,12 @@ public class CaseGraph {
             for (Object item : graphList) {
                 if (item instanceof Map) {
                     Map<String, Object> mapItem = (Map<String, Object>) item;
-                    graph.ingestRawNode(mapItem, graph.rejectDuplicates);
-                    Object typed = tryInstantiate(mapItem, graph.context);
+                    graph.ingestRawNode(deepCopyMap(mapItem), graph.onDuplicate);
+                    DeserializationWarning[] warnOut = new DeserializationWarning[1];
+                    Object typed = tryInstantiate(mapItem, graph.context, warnOut);
+                    if (warnOut[0] != null) {
+                        graph.deserializationWarnings.add(warnOut[0]);
+                    }
                     typedObjects.add(typed != null ? typed : mapItem);
                 }
             }
@@ -461,15 +534,18 @@ public class CaseGraph {
             if (!(entry.getValue() instanceof String)) {
                 continue;
             }
-            String ns = (String) entry.getValue();
-            String existing = context.get(entry.getKey());
-            if (existing != null && !existing.equals(ns)) {
-                throw new IllegalArgumentException(
-                    "Context prefix collision for '" + entry.getKey() +
-                    "': existing '" + existing + "' vs incoming '" + ns + "'");
-            }
-            context.put(entry.getKey(), ns);
+            mergeContextEntry(entry.getKey(), (String) entry.getValue());
         }
+    }
+
+    private void mergeContextEntry(String prefix, String ns) {
+        String existing = context.get(prefix);
+        if (existing != null && !existing.equals(ns)) {
+            throw new IllegalArgumentException(
+                "Context prefix collision for '" + prefix +
+                "': existing '" + existing + "' vs incoming '" + ns + "'");
+        }
+        context.put(prefix, ns);
     }
 
     private static String expandCompactIri(String value, Map<String, String> context) {
@@ -483,9 +559,13 @@ public class CaseGraph {
         return value;
     }
 
-    private static Object tryInstantiate(Map<String, Object> obj, Map<String, String> context) {
+    private static Object tryInstantiate(Map<String, Object> obj, Map<String, String> context, DeserializationWarning[] warningOut) {
+        String nodeId = obj.get("@id") instanceof String ? (String) obj.get("@id") : null;
         Object typeObj = obj.get("@type");
         if (typeObj == null) {
+            if (warningOut != null && warningOut.length > 0) {
+                warningOut[0] = new DeserializationWarning(nodeId, "missing_type", "node has no @type");
+            }
             return null;
         }
 
@@ -500,6 +580,11 @@ public class CaseGraph {
 
         Class<?> selected = selectMostSpecificClass(matched);
         if (selected == null) {
+            if (warningOut != null && warningOut.length > 0) {
+                warningOut[0] = matched.isEmpty()
+                    ? new DeserializationWarning(nodeId, "unregistered_type", "no registered class for @type")
+                    : new DeserializationWarning(nodeId, "ambiguous_type", "multiple incomparable types matched");
+            }
             return null;
         }
 
@@ -507,7 +592,10 @@ public class CaseGraph {
             Object instance = selected.getDeclaredConstructor().newInstance();
             setFieldsFromJsonLd(instance, obj);
             return instance;
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            if (warningOut != null && warningOut.length > 0) {
+                warningOut[0] = new DeserializationWarning(nodeId, "constructor_failed", ex.getMessage());
+            }
             return null;
         }
     }
@@ -643,7 +731,11 @@ public class CaseGraph {
             String key = entry.getKey();
             Object value = entry.getValue();
             if ("@id".equals(key)) continue;
-            if ("@type".equals(key)) { count++; continue; }
+            if ("@type".equals(key)) {
+                if (value instanceof List) count += ((List<?>) value).size();
+                else count++;
+                continue;
+            }
             if (value instanceof List) {
                 for (Object item : (List<Object>) value) {
                     if (item instanceof Map) {
@@ -670,13 +762,16 @@ public class CaseGraph {
      * Split the graph into smaller chunks of at most maxObjects each.
      */
     public List<CaseGraph> split(int maxObjects) {
+        if (maxObjects <= 0) {
+            throw new IllegalArgumentException("split maxObjects must be a positive integer, got " + maxObjects);
+        }
         List<CaseGraph> chunks = new ArrayList<>();
         for (int i = 0; i < objects.size(); i += maxObjects) {
             CaseGraph chunk = new CaseGraph(context.get("kb"));
             chunk.context.putAll(context);
             int end = Math.min(i + maxObjects, objects.size());
             for (int j = i; j < end; j++) {
-                chunk.appendObject(new LinkedHashMap<>(objects.get(j)));
+                chunk.appendObject(deepCopyMap(objects.get(j)));
             }
             chunks.add(chunk);
         }
@@ -749,8 +844,10 @@ public class CaseGraph {
         return obj;
     }
 
+
     @SuppressWarnings("unchecked")
-    private void ingestRawNode(Map<String, Object> raw, boolean rejectDuplicates) {
+    private void ingestRawNode(Map<String, Object> raw, String policy) {
+        policy = normalizeDuplicatePolicy(policy);
         Object idObj = raw.get("@id");
         if (!(idObj instanceof String)) {
             objects.add(raw);
@@ -764,10 +861,33 @@ public class CaseGraph {
             return;
         }
 
-        if (rejectDuplicates) {
+        if ("reject".equals(policy)) {
             throw new IllegalStateException("Duplicate @id '" + nodeId + "': conflicting duplicate during load");
         }
-
+        if ("replace".equals(policy)) {
+            Object preserved = existing.containsKey("@id") ? existing.get("@id") : nodeId;
+            existing.clear();
+            for (Map.Entry<String, Object> e : raw.entrySet()) {
+                existing.put(e.getKey(), deepCopyValue(e.getValue()));
+            }
+            existing.put("@id", preserved);
+            return;
+        }
+        if ("merge_identical".equals(policy)) {
+            for (Map.Entry<String, Object> e : raw.entrySet()) {
+                if ("@id".equals(e.getKey())) continue;
+                if (!existing.containsKey(e.getKey())) {
+                    existing.put(e.getKey(), deepCopyValue(e.getValue()));
+                    continue;
+                }
+                if (!jsonLdValuesEqual(existing.get(e.getKey()), e.getValue())) {
+                    throw new IllegalStateException(
+                        "Duplicate @id '" + nodeId + "': merge_identical conflict on '" + e.getKey() + "'");
+                }
+            }
+            return;
+        }
+        // merge_compatible
         if (raw.containsKey("@type")) {
             existing.put("@type", normalizeTypeValue(mergeTypes(existing.get("@type"), raw.get("@type"))));
         }
@@ -776,9 +896,174 @@ public class CaseGraph {
             if ("@id".equals(key) || "@type".equals(key)) {
                 continue;
             }
-            setProperty(existing, key, entry.getValue());
+            applyProperty(existing, key, entry.getValue(), nodeId, "merge_compatible");
         }
     }
+
+    private static String normalizeDuplicatePolicy(String policy) {
+        if ("error".equals(policy)) policy = "reject";
+        if (!("reject".equals(policy) || "merge_identical".equals(policy)
+                || "merge_compatible".equals(policy) || "replace".equals(policy))) {
+            throw new IllegalArgumentException(
+                "Unknown duplicate policy: '" + policy +
+                "'. Expected one of: reject, merge_identical, merge_compatible, replace");
+        }
+        return policy;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void applyProperty(Map<String, Object> obj, String key, Object value, String nodeId, String mode) {
+        if ("replace".equals(mode)) {
+            obj.put(key, deepCopyValue(value));
+            return;
+        }
+        if (!obj.containsKey(key)) {
+            obj.put(key, deepCopyValue(value));
+            return;
+        }
+        Object existing = obj.get(key);
+        if (jsonLdValuesEqual(existing, value)) {
+            return;
+        }
+        if (existing instanceof List) {
+            accumulateListValue((List<Object>) existing, value);
+            return;
+        }
+        if (value instanceof List) {
+            List<Object> merged = new ArrayList<>();
+            merged.add(deepCopyValue(existing));
+            accumulateListValue(merged, value);
+            obj.put(key, merged);
+            return;
+        }
+        // Distinct JSON-LD node references are multi-valued, not scalar conflicts.
+        if (existing instanceof Map && value instanceof Map) {
+            Map<String, Object> ed = (Map<String, Object>) existing;
+            Map<String, Object> vd = (Map<String, Object>) value;
+            if (ed.containsKey("@id") && vd.containsKey("@id")) {
+                if (jsonLdValuesEqual(existing, value)) {
+                    return;
+                }
+                List<Object> multi = new ArrayList<>();
+                multi.add(deepCopyValue(existing));
+                multi.add(deepCopyValue(value));
+                obj.put(key, multi);
+                return;
+            }
+        }
+        throw new IllegalStateException(
+            "merge_compatible scalar conflict on '" + key + "': existing and incoming values differ");
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void accumulateListValue(List<Object> existing, Object value) {
+        List<Object> items = value instanceof List ? (List<Object>) value : List.of(value);
+        for (Object item : items) {
+            boolean found = false;
+            for (Object x : existing) {
+                if (jsonLdValuesEqual(x, item)) { found = true; break; }
+            }
+            if (!found) existing.add(deepCopyValue(item));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static boolean jsonLdValuesEqual(Object a, Object b) {
+        if (a == b) return true;
+        if (a instanceof Map && b instanceof Map) {
+            Map<String, Object> ad = (Map<String, Object>) a;
+            Map<String, Object> bd = (Map<String, Object>) b;
+            if (ad.containsKey("@value") || bd.containsKey("@value")) {
+                if (!(ad.containsKey("@value") && bd.containsKey("@value"))) return false;
+                return normalizeLiteralType(stringOrNull(ad.get("@type")))
+                        .equals(normalizeLiteralType(stringOrNull(bd.get("@type"))))
+                    && normalizeLiteralValue(ad.get("@value"), stringOrNull(ad.get("@type")))
+                        .equals(normalizeLiteralValue(bd.get("@value"), stringOrNull(bd.get("@type"))));
+            }
+            if (ad.containsKey("@id") || bd.containsKey("@id")) {
+                return Objects.equals(ad.get("@id"), bd.get("@id"));
+            }
+        }
+        if (a instanceof List && b instanceof List) {
+            List<Object> al = (List<Object>) a;
+            List<Object> bl = (List<Object>) b;
+            if (isIdRefList(al) && isIdRefList(bl)) {
+                List<String> asort = new ArrayList<>();
+                List<String> bsort = new ArrayList<>();
+                for (Object x : al) asort.add(idOf(x));
+                for (Object x : bl) bsort.add(idOf(x));
+                Collections.sort(asort);
+                Collections.sort(bsort);
+                return asort.equals(bsort);
+            }
+            if (al.size() != bl.size()) return false;
+            for (int i = 0; i < al.size(); i++) {
+                if (!jsonLdValuesEqual(al.get(i), bl.get(i))) return false;
+            }
+            return true;
+        }
+        return Objects.equals(a, b);
+    }
+
+    private static String stringOrNull(Object o) { return o instanceof String ? (String) o : null; }
+
+    private static String normalizeLiteralType(String typeIri) {
+        if (typeIri == null) return "";
+        if (typeIri.startsWith("xsd:")) return typeIri;
+        if (typeIri.startsWith("http://www.w3.org/2001/XMLSchema#")) {
+            return "xsd:" + typeIri.substring(typeIri.lastIndexOf('#') + 1);
+        }
+        return typeIri;
+    }
+
+    private static String normalizeLiteralValue(Object value, String typeIri) {
+        if (value instanceof Boolean) return ((Boolean) value) ? "true" : "false";
+        if (value instanceof String && normalizeLiteralType(typeIri).contains("boolean")) {
+            return ((String) value).toLowerCase();
+        }
+        return String.valueOf(value);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static boolean isIdRefList(List<Object> items) {
+        if (items.isEmpty()) return false;
+        for (Object x : items) {
+            if (!(x instanceof Map) || !((Map<?, ?>) x).containsKey("@id")) return false;
+        }
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static String idOf(Object item) {
+        if (item instanceof Map) {
+            Object id = ((Map<String, Object>) item).get("@id");
+            return id == null ? "" : String.valueOf(id);
+        }
+        return String.valueOf(item);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> deepCopyMap(Map<String, Object> src) {
+        Map<String, Object> copy = new LinkedHashMap<>();
+        for (Map.Entry<String, Object> e : src.entrySet()) {
+            copy.put(e.getKey(), deepCopyValue(e.getValue()));
+        }
+        return copy;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Object deepCopyValue(Object value) {
+        if (value instanceof Map) {
+            return deepCopyMap((Map<String, Object>) value);
+        }
+        if (value instanceof List) {
+            List<Object> out = new ArrayList<>();
+            for (Object item : (List<Object>) value) out.add(deepCopyValue(item));
+            return out;
+        }
+        return value;
+    }
+
 
     @SuppressWarnings("unchecked")
     private static List<String> asTypeList(Object types) {
@@ -820,50 +1105,29 @@ public class CaseGraph {
         return merged;
     }
 
-    @SuppressWarnings("unchecked")
-    private static void setProperty(Map<String, Object> obj, String key, Object value) {
-        if (!obj.containsKey(key)) {
-            obj.put(key, value);
-            return;
-        }
-
-        Object existing = obj.get(key);
-        if (existing == null ? value == null : existing.equals(value)) {
-            return;
-        }
-
-        if (existing instanceof List) {
-            List<Object> list = (List<Object>) existing;
-            if (value instanceof Map) {
-                Object refId = ((Map<String, Object>) value).get("@id");
-                if (refId != null) {
-                    for (Object item : list) {
-                        if (item instanceof Map) {
-                            Object itemId = ((Map<String, Object>) item).get("@id");
-                            if (refId.equals(itemId)) {
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-            if (!list.contains(value)) {
-                list.add(value);
-            }
-            return;
-        }
-
-        if (existing instanceof Map && value instanceof Map) {
-            Object existingRef = ((Map<String, Object>) existing).get("@id");
-            Object valueRef = ((Map<String, Object>) value).get("@id");
-            if (existingRef != null && existingRef.equals(valueRef)) {
-                return;
+    private static String safeKindSlug(String kind) {
+        int maxLen = 64;
+        StringBuilder sb = new StringBuilder();
+        String trimmed = kind == null ? "" : kind.trim();
+        for (int i = 0; i < trimmed.length(); i++) {
+            char ch = trimmed.charAt(i);
+            if (Character.isLetterOrDigit(ch) || ch == '.' || ch == '_' || ch == '-') {
+                sb.append(ch);
+            } else {
+                sb.append('_');
             }
         }
-
-        // Do not silently convert differing scalars into lists (parity with Python merge_compatible).
-        throw new IllegalStateException(
-            "merge_compatible scalar conflict on '" + key + "': existing and incoming values differ");
+        String slug = sb.toString().replaceAll("^[._-]+|[._-]+$", "");
+        if (slug.isEmpty()) {
+            slug = "rel";
+        }
+        if (slug.length() > maxLen) {
+            slug = slug.substring(0, maxLen).replaceAll("[._-]+$", "");
+            if (slug.isEmpty()) {
+                slug = "rel";
+            }
+        }
+        return slug;
     }
 
     private String deterministicRelationshipId(String sourceId, String targetId, String kind) {
@@ -875,7 +1139,7 @@ public class CaseGraph {
             for (int i = 0; i < 6; i++) {
                 digest.append(String.format("%02x", hash[i]));
             }
-            String safeKind = kind.replace(" ", "_");
+            String safeKind = safeKindSlug(kind);
             return "kb:rel-" + safeKind + "-" + digest;
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("SHA-256 not available", e);

@@ -20,7 +20,7 @@
             ],
             "uco-core:hasFacet": [
                 {
-                    "@id": "kb:SimpleAddressFacet-16b1ac2f-338a-41c3-8f55-ba9476937cca",
+                    "@id": "kb:SimpleAddressFacet-746c9f30-2254-4d10-b84d-7396b2597334",
                     "@type": "uco-location:SimpleAddressFacet",
                     "uco-location:country": "US",
                     "uco-location:locality": "Springfield",
@@ -151,7 +151,7 @@
             }
         },
         {
-            "@id": "kb:Investigation-750475d1-0d73-4feb-b117-dd146e7a8cc5",
+            "@id": "kb:Investigation-10141816-1ca2-4f3a-a989-836d9375bd33",
             "@type": "case-investigation:Investigation",
             "uco-core:description": [
                 "Location as geo:Feature; geometry separate; warrant, cell-sector, route, and analyst bounding polygon with provenance."

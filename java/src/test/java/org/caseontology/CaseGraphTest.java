@@ -5,6 +5,7 @@ import org.caseontology.uco.tool.Tool;
 import org.caseontology.uco.observable.ObservableObject;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 import java.util.LinkedHashMap;
@@ -173,16 +174,37 @@ public class CaseGraphTest {
     }
 
     @Test
-    public void testGetReturnsShallowCopy() {
+    @SuppressWarnings("unchecked")
+    public void testGetReturnsDeepCopy() {
         CaseGraph graph = new CaseGraph();
         Map<String, Object> props = new LinkedHashMap<>();
         props.put("uco-core:name", "N");
+        props.put("uco-core:tag", new ArrayList<>(List.of("a", "b")));
+        Map<String, Object> facet = new LinkedHashMap<>();
+        facet.put("@id", "kb:f1");
+        props.put("uco-core:hasFacet", new ArrayList<>(List.of(facet)));
         graph.upsertNode("kb:n1", "uco-core:UcoObject", props);
         Map<String, Object> view = graph.get("kb:n1");
         view.put("@id", "kb:mutated");
+        ((List<Object>) view.get("uco-core:tag")).add("c");
+        ((Map<String, Object>) ((List<Object>) view.get("uco-core:hasFacet")).get(0)).put("@id", "kb:mutated-facet");
         assertTrue(graph.contains("kb:n1"));
         assertFalse(graph.contains("kb:mutated"));
         assertEquals("N", graph.get("kb:n1").get("uco-core:name"));
+        assertEquals(2, ((List<?>) graph.get("kb:n1").get("uco-core:tag")).size());
+        assertEquals("kb:f1", ((Map<?, ?>) ((List<?>) graph.get("kb:n1").get("uco-core:hasFacet")).get(0)).get("@id"));
+    }
+
+    @Test
+    public void testSplitRejectsNonPositive() {
+        CaseGraph graph = new CaseGraph();
+        graph.upsertNode("kb:x", "uco-core:UcoObject", null);
+        try {
+            graph.split(0);
+            fail("expected IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+            assertTrue(expected.getMessage().contains("positive"));
+        }
     }
 
     @Test
