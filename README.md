@@ -2,7 +2,7 @@
 
 # CASE/UCO SDK
 
-**v1.20.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md)
+**v1.21.0** *(unreleased — see [Unreleased](CHANGELOG.md#unreleased) / [1.21.0](CHANGELOG.md#1210---2026-07-12))* · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md)
 
 A multi-language data modeling library for digital forensics, cyber-investigation, and cyber-observable data. If your software produces or consumes forensic evidence, this SDK gives you typed, validated builders in **Python**, **C#**, **Java**, and **Rust** — so you can model investigation data in your language and produce interoperable [CASE/UCO](https://caseontology.org/) JSON-LD output.
 
@@ -705,6 +705,17 @@ The `examples/agent-outputs/` directory contains four complete worked examples p
 Each example includes both the Python source that builds the graph and the validated JSON-LD output.
 
 The `examples/` directory goes further, with validated end-to-end investigation graphs built from real public-record sources: PACER federal case dockets processed through `process_document_file` (`examples/pacer/` — trafficking, CSAM production, cryptocurrency, and racketeering cases), a cyber threat intelligence exemplar (`examples/cti/`), ICAC arrest and CyberTip workflows, and document-processing outputs.
+
+### Cross-ontology profiles (v1.21.0)
+
+Use the public composition API (`upsert_node` / `add_type` / `link` / `create_relationship`) to enrich a CASE/UCO node with compatible upper-ontology types on the **same IRI**. Validate with named profiles:
+
+```python
+from graph_validator import validate_graph_file
+validate_graph_file("graph.jsonld", profiles=["prov-o", "time"])
+```
+
+Recipes and exemplars live under [`docs/recipes/`](docs/recipes/) (see Cross-Ontology Composition) and [`examples/upper-ontology/`](examples/upper-ontology/). Profile discovery: MCP `get_uco_profiles` (includes ORG and PROF).
 
 ### Operation PHANTOM GATE — fictitious scenario stress test
 

@@ -1,0 +1,167 @@
+{
+    "@context": {
+        "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+        "kb": "http://example.org/kb/",
+        "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+        "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+        "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+        "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+        "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+        "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "prov": "http://www.w3.org/ns/prov#"
+    },
+    "@graph": [
+        {
+            "@id": "kb:examiner-1",
+            "@type": [
+                "uco-identity:Person",
+                "prov:Agent"
+            ],
+            "uco-core:name": "Examiner One (synthetic)"
+        },
+        {
+            "@id": "kb:hash-tool",
+            "@type": [
+                "uco-tool:Tool",
+                "prov:Entity"
+            ],
+            "uco-core:name": "HashCalc",
+            "uco-tool:version": "2.1.0"
+        },
+        {
+            "@id": "kb:source-drive",
+            "@type": [
+                "uco-observable:ObservableObject",
+                "prov:Entity"
+            ],
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:FileFacet-61db37da-a359-4291-b09f-1e7f41351a29",
+                    "@type": "uco-observable:FileFacet",
+                    "uco-observable:fileName": "\\\\.\\PhysicalDrive1"
+                }
+            ],
+            "uco-core:name": "Seized workstation drive (synthetic)"
+        },
+        {
+            "@id": "kb:disk-image",
+            "@type": [
+                "uco-observable:ObservableObject",
+                "prov:Entity"
+            ],
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:FileFacet-5dff6577-015f-4ada-bf34-4842234a037b",
+                    "@type": "uco-observable:FileFacet",
+                    "uco-observable:fileName": "workstation.e01",
+                    "uco-observable:sizeInBytes": {
+                        "@type": "xsd:integer",
+                        "@value": "500000000000"
+                    }
+                },
+                {
+                    "@id": "kb:ContentDataFacet-ddc51411-b4fe-4507-8521-f10d6b154447",
+                    "@type": "uco-observable:ContentDataFacet",
+                    "uco-observable:hash": [
+                        {
+                            "@id": "kb:Hash-35fc4ea9-575d-4f78-95bb-3905eee0d1b7",
+                            "@type": "uco-types:Hash",
+                            "uco-types:hashMethod": "SHA256",
+                            "uco-types:hashValue": {
+                                "@type": "xsd:hexBinary",
+                                "@value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "uco-core:name": "Forensic E01 image",
+            "prov:wasDerivedFrom": {
+                "@id": "kb:source-drive"
+            },
+            "prov:wasGeneratedBy": {
+                "@id": "kb:action-image"
+            }
+        },
+        {
+            "@id": "kb:action-image",
+            "@type": [
+                "case-investigation:InvestigativeAction",
+                "prov:Activity"
+            ],
+            "uco-core:name": "Forensic imaging and hashing",
+            "uco-action:endTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2026-03-15T12:30:00+00:00"
+            },
+            "uco-action:instrument": [
+                {
+                    "@id": "kb:hash-tool"
+                }
+            ],
+            "uco-action:object": [
+                {
+                    "@id": "kb:source-drive"
+                }
+            ],
+            "uco-action:performer": {
+                "@id": "kb:examiner-1"
+            },
+            "uco-action:result": [
+                {
+                    "@id": "kb:disk-image"
+                }
+            ],
+            "uco-action:startTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2026-03-15T10:00:00+00:00"
+            },
+            "prov:used": {
+                "@id": "kb:hash-tool"
+            },
+            "prov:wasAssociatedWith": {
+                "@id": "kb:examiner-1"
+            }
+        },
+        {
+            "@id": "kb:ProvenanceRecord-c0c2039c-8f6a-4bac-9906-9ca41171c735",
+            "@type": [
+                "case-investigation:ProvenanceRecord",
+                "prov:Entity"
+            ],
+            "uco-core:name": "Exhibit 1 digital lineage",
+            "uco-core:object": [
+                {
+                    "@id": "kb:source-drive"
+                },
+                {
+                    "@id": "kb:disk-image"
+                },
+                {
+                    "@id": "kb:action-image"
+                }
+            ],
+            "case-investigation:exhibitNumber": "EX-001"
+        },
+        {
+            "@id": "kb:Investigation-1ba41789-a281-48ac-89db-8712b7d390f6",
+            "@type": "case-investigation:Investigation",
+            "uco-core:description": [
+                "PROV-O lineage on acquisition \u2014 Tool is instrument (Entity), not Agent."
+            ],
+            "uco-core:name": "Synthetic case 2026-PROV-001",
+            "uco-core:object": [
+                {
+                    "@id": "kb:source-drive"
+                },
+                {
+                    "@id": "kb:disk-image"
+                },
+                {
+                    "@id": "kb:ProvenanceRecord-c0c2039c-8f6a-4bac-9906-9ca41171c735"
+                }
+            ]
+        }
+    ]
+}

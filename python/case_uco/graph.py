@@ -2,15 +2,33 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import uuid
+import warnings
 from dataclasses import Field, fields, is_dataclass
 from datetime import date, datetime
-from typing import Any, TypeVar, Type
+from typing import Any, Callable, Iterator, TypeVar, Type
 
 T = TypeVar("T")
 
 _builtin_id = id
+
+
+class DuplicateNodeError(ValueError):
+    """Raised when a node with the same @id conflicts with an existing node.
+
+    Default policy is reject-on-conflict. Compatible multi-typing should use
+    :meth:`CASEGraph.add_type` / :meth:`CASEGraph.upsert_node` instead of
+    appending a second top-level object with the same IRI.
+    """
+
+    def __init__(self, node_id: str, detail: str = ""):
+        self.node_id = node_id
+        msg = f"Duplicate @id {node_id!r}"
+        if detail:
+            msg = f"{msg}: {detail}"
+        super().__init__(msg)
 
 # Standard CASE/UCO JSON-LD context prefixes
 DEFAULT_CONTEXT: dict[str, str] = {
@@ -69,6 +87,12 @@ class CASEGraph:
         self._objects: list[dict[str, Any]] = []
         self._id_map: dict[int, str] = {}
         self._instances: list[Any] = []
+        # Expanded IRI → index into _objects (O(1) lookup).
+        self._iri_index: dict[str, int] = {}
+        # Compact form and expanded form both index to the same slot.
+        self._iri_aliases: dict[str, str] = {}
+        self._used_prefix_set: set[str] = set()
+        self.on_duplicate: str = "reject"  # reject | merge_compatible
 
     def create(self, cls: Type[T], *, id: str | None = None, **kwargs: Any) -> T:
         """Create an instance of a CASE/UCO class and add it to the graph.
@@ -87,7 +111,7 @@ class CASEGraph:
         self._id_map[_builtin_id(instance)] = obj_id
         self._instances.append(instance)
         json_obj = self._to_jsonld(instance, obj_id)
-        self._objects.append(json_obj)
+        self._append_object(json_obj)
         return instance
 
     def add(self, instance: Any, *, id: str | None = None) -> str:
@@ -104,12 +128,134 @@ class CASEGraph:
         self._id_map[_builtin_id(instance)] = obj_id
         self._instances.append(instance)
         json_obj = self._to_jsonld(instance, obj_id)
-        self._objects.append(json_obj)
+        self._append_object(json_obj)
         return obj_id
 
     def get_id(self, instance: Any) -> str | None:
         """Get the @id for a previously added instance."""
         return self._id_map.get(_builtin_id(instance))
+
+    def expand_iri(self, node_id: str) -> str:
+        """Expand a compact IRI using this graph's context."""
+        return _expand_iri(node_id, self._context)
+
+    def contains(self, node_id: str) -> bool:
+        """Return True if a node with this @id (compact or expanded) exists."""
+        return self._find_object(node_id) is not None
+
+    def get(self, node_id: str) -> dict[str, Any] | None:
+        """Return the JSON-LD dict for a node by compact or expanded ``@id``."""
+        return self._find_object(node_id)
+
+    def upsert_node(
+        self,
+        node_id: str,
+        *,
+        types: list[str] | str | None = None,
+        properties: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Create or update a JSON-LD node by ``@id``.
+
+        Use for external ontology terms and multi-typed enrichment on the
+        same IRI as a ``create()`` object. Does not replace SDK dataclass
+        instances — call ``add_type`` / ``add_property`` after ``create()``
+        when enriching typed CASE/UCO objects.
+        """
+        obj = self._find_object(node_id)
+        if obj is None:
+            obj = {"@id": node_id}
+            if types is not None:
+                obj["@type"] = self._normalize_type_value(types)
+            if properties:
+                for key, value in properties.items():
+                    self._set_property(obj, key, value)
+            self._append_object(obj)
+            return obj
+
+        if types is not None:
+            merged = self._merge_types(obj.get("@type"), types)
+            obj["@type"] = self._normalize_type_value(merged)
+        if properties:
+            for key, value in properties.items():
+                self._set_property(obj, key, value)
+        self._track_prefixes_for(obj)
+        return obj
+
+    def add_type(self, node_id: str, type_iri: str) -> None:
+        """Add an ``rdf:type`` to an existing node (same ``@id``)."""
+        obj = self._require_object(node_id)
+        merged = self._merge_types(obj.get("@type"), type_iri)
+        obj["@type"] = self._normalize_type_value(merged)
+        self._track_prefixes_for({"@type": type_iri})
+
+    def add_property(self, node_id: str, key: str, value: Any) -> None:
+        """Add or merge a property on an existing node."""
+        obj = self._require_object(node_id)
+        self._set_property(obj, key, value)
+        self._track_prefixes_for({key: value})
+
+    def link(
+        self,
+        source_id: str,
+        predicate: str,
+        target_id: str | dict[str, Any],
+    ) -> None:
+        """Add a direct property edge ``source --predicate--> target``.
+
+        Prefer :meth:`create_relationship` for ``uco-core:Relationship`` nodes.
+        Use ``link`` for ontology properties such as ``prov:wasDerivedFrom``.
+        """
+        target_ref: dict[str, Any]
+        if isinstance(target_id, str):
+            target_ref = {"@id": target_id}
+        else:
+            target_ref = target_id
+        self.add_property(source_id, predicate, target_ref)
+
+    def create_relationship(
+        self,
+        source_id: str,
+        target_id: str,
+        kind: str,
+        *,
+        directional: bool = True,
+        description: str | None = None,
+        relationship_id: str | None = None,
+        extra_types: list[str] | str | None = None,
+        properties: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Create a ``uco-core:Relationship`` node with deterministic ``@id``.
+
+        Validates that source and target nodes exist. Relationship IDs are
+        derived from source, target, and kind unless ``relationship_id`` is set.
+        """
+        if not self.contains(source_id):
+            raise KeyError(f"Relationship source not in graph: {source_id!r}")
+        if not self.contains(target_id):
+            raise KeyError(f"Relationship target not in graph: {target_id!r}")
+        if not kind:
+            raise ValueError("kindOfRelationship is required")
+
+        rel_id = relationship_id or self._deterministic_relationship_id(
+            source_id, target_id, kind
+        )
+        types: list[str] = ["uco-core:Relationship"]
+        if extra_types:
+            types = self._merge_types(types, extra_types)
+        props: dict[str, Any] = {
+            "uco-core:source": [{"@id": source_id}],
+            "uco-core:target": [{"@id": target_id}],
+            "uco-core:kindOfRelationship": kind,
+            "uco-core:isDirectional": {
+                "@type": "xsd:boolean",
+                "@value": "true" if directional else "false",
+            },
+        }
+        if description:
+            props["uco-core:description"] = description
+        if properties:
+            props.update(properties)
+        return self.upsert_node(rel_id, types=types, properties=props)
 
     def __len__(self) -> int:
         """Return the number of objects in the graph."""
@@ -126,23 +272,65 @@ class CASEGraph:
         return json.dumps(doc, indent=indent, default=str)
 
     def write(self, path: str, format: str = "json-ld", indent: int = 4) -> None:
-        """Write the graph to a file."""
+        """Write the graph to a file (materializes full string then writes)."""
         content = self.serialize(format=format, indent=indent)
         with open(path, "w", encoding="utf-8") as f:
             f.write(content)
 
-    def load(self, json_str: str) -> None:
-        """Load a JSON-LD string into this graph, merging context and appending objects."""
+    def write_streaming(
+        self,
+        path: str,
+        *,
+        format: str = "json-ld",
+        indent: int = 2,
+    ) -> None:
+        """Stream JSON-LD to disk without building a second full document string.
+
+        Emits ``@context`` then each ``@graph`` element incrementally. Peak
+        memory is dominated by the in-memory graph itself rather than a
+        duplicate serialized buffer. Retains :meth:`serialize` for callers
+        that need a complete string.
+        """
+        if format != "json-ld":
+            raise ValueError(f"Unsupported format: {format}. Only 'json-ld' is supported.")
+        ctx = self._pruned_context()
+        pad = " " * indent
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("{\n")
+            f.write(f'{pad}"@context": ')
+            f.write(json.dumps(ctx, indent=indent, default=str))
+            f.write(",\n")
+            f.write(f'{pad}"@graph": [\n')
+            for i, obj in enumerate(self._objects):
+                chunk = json.dumps(obj, indent=indent, default=str)
+                indented = "\n".join(pad + pad + line for line in chunk.splitlines())
+                f.write(indented)
+                if i + 1 < len(self._objects):
+                    f.write(",\n")
+                else:
+                    f.write("\n")
+            f.write(f"{pad}]\n")
+            f.write("}\n")
+
+    def load(self, json_str: str, *, on_duplicate: str | None = None) -> None:
+        """Load a JSON-LD string, merging context and upserting objects.
+
+        Duplicate ``@id`` handling follows ``on_duplicate`` or
+        ``self.on_duplicate`` (default ``reject``). Compatible merges use
+        ``merge_compatible``.
+        """
+        policy = on_duplicate or self.on_duplicate
         doc = json.loads(json_str)
         if "@context" in doc and isinstance(doc["@context"], dict):
-            self._context.update(doc["@context"])
+            self._merge_context(doc["@context"])
         if "@graph" in doc and isinstance(doc["@graph"], list):
-            self._objects.extend(doc["@graph"])
+            for raw in doc["@graph"]:
+                self._ingest_raw_node(raw, policy=policy)
 
-    def load_file(self, path: str) -> None:
+    def load_file(self, path: str, *, on_duplicate: str | None = None) -> None:
         """Read and load a JSON-LD file into this graph."""
         with open(path, "r", encoding="utf-8") as f:
-            self.load(f.read())
+            self.load(f.read(), on_duplicate=on_duplicate)
 
     def validate(self, *, case_version: str = "case-1.4.0") -> str:
         """Validate this graph against CASE/UCO SHACL constraints.
@@ -217,15 +405,104 @@ class CASEGraph:
     def split(self, max_objects: int = 10000) -> list[CASEGraph]:
         """Split this graph into smaller chunks of at most max_objects each.
 
-        Each chunk gets a copy of the context. The original graph is not modified.
+        .. warning::
+            Object-count splitting is only safe for independent catalog-style
+            graphs. For investigation graphs use :meth:`partition_by` instead.
         """
+        warnings.warn(
+            "CASEGraph.split() partitions by object count and can break "
+            "investigative relationships; prefer partition_by() for CASE graphs.",
+            UserWarning,
+            stacklevel=2,
+        )
         chunks: list[CASEGraph] = []
         for i in range(0, len(self._objects), max_objects):
             chunk = CASEGraph(kb_prefix=self.kb_prefix)
             chunk._context = dict(self._context)
-            chunk._objects = list(self._objects[i:i + max_objects])
+            for obj in self._objects[i:i + max_objects]:
+                chunk._append_object(dict(obj))
             chunks.append(chunk)
         return chunks
+
+    def partition_by(
+        self,
+        boundary_key: Callable[[dict[str, Any]], str | None],
+        *,
+        shared_ids: set[str] | None = None,
+        include_dangling_relationships: bool = True,
+    ) -> dict[str, CASEGraph]:
+        """Partition by a natural forensic/security boundary.
+
+        ``boundary_key`` maps each top-level node to a partition name (or
+        ``None`` to leave it unassigned until referenced). Shared nodes listed
+        in ``shared_ids`` are copied into every partition that needs them.
+        Relationships whose source and target fall in different partitions are
+        either duplicated into both (default) or dropped.
+        """
+        shared_ids = shared_ids or set()
+        partitions: dict[str, CASEGraph] = {}
+        membership: dict[str, str] = {}
+
+        for obj in self._objects:
+            oid = obj.get("@id")
+            if not oid:
+                continue
+            key = boundary_key(obj)
+            if key is None:
+                continue
+            membership[oid] = key
+            if key not in partitions:
+                partitions[key] = CASEGraph(
+                    kb_prefix=self.kb_prefix,
+                    extra_context=dict(self._context),
+                )
+                partitions[key].on_duplicate = "merge_compatible"
+            partitions[key]._append_object(dict(obj))
+
+        # Copy shared + cross-partition relationship endpoints.
+        by_id = {o.get("@id"): o for o in self._objects if o.get("@id")}
+        for obj in self._objects:
+            types = obj.get("@type", [])
+            if isinstance(types, str):
+                types = [types]
+            if "uco-core:Relationship" not in types:
+                continue
+            sources = obj.get("uco-core:source") or []
+            targets = obj.get("uco-core:target") or []
+            if not sources or not targets:
+                continue
+            sid = sources[0]["@id"] if isinstance(sources[0], dict) else sources[0]
+            tid = targets[0]["@id"] if isinstance(targets[0], dict) else targets[0]
+            s_part = membership.get(sid)
+            t_part = membership.get(tid)
+            if s_part and t_part and s_part == t_part:
+                continue
+            if not include_dangling_relationships and s_part != t_part:
+                continue
+            for part_name in {s_part, t_part} - {None}:
+                pg = partitions.setdefault(
+                    part_name,  # type: ignore[arg-type]
+                    CASEGraph(kb_prefix=self.kb_prefix, extra_context=dict(self._context)),
+                )
+                pg.on_duplicate = "merge_compatible"
+                for nid in (sid, tid, obj.get("@id")):
+                    if nid and nid in by_id:
+                        try:
+                            pg._ingest_raw_node(dict(by_id[nid]), policy="merge_compatible")
+                        except DuplicateNodeError:
+                            pass
+
+        for sid in shared_ids:
+            node = by_id.get(sid)
+            if not node:
+                continue
+            for pg in partitions.values():
+                try:
+                    pg._ingest_raw_node(dict(node), policy="merge_compatible")
+                except DuplicateNodeError:
+                    pass
+
+        return partitions
 
     @classmethod
     def merge_files(cls, paths: list[str], kb_prefix: str = "http://example.org/kb/") -> CASEGraph:
@@ -245,6 +522,152 @@ class CASEGraph:
         # Convert PascalCase to kebab-case for the IRI local name
         prefix = self._get_prefix(instance)
         return f"{prefix}:{cls_name}-{uuid.uuid4()}"
+
+    def _mint_relationship_id(self, source_id: str, predicate: str) -> str:
+        local = predicate.split(":", 1)[-1] if ":" in predicate else predicate
+        return f"{source_id}/{local}-{uuid.uuid4()}"
+
+    def _deterministic_relationship_id(
+        self, source_id: str, target_id: str, kind: str
+    ) -> str:
+        digest = hashlib.sha256(
+            f"{self.expand_iri(source_id)}|{self.expand_iri(target_id)}|{kind}".encode()
+        ).hexdigest()[:12]
+        safe_kind = kind.replace(" ", "_")
+        return f"kb:rel-{safe_kind}-{digest}"
+
+    def _append_object(self, obj: dict[str, Any]) -> None:
+        node_id = obj.get("@id")
+        if node_id and self._find_object(node_id) is not None:
+            raise DuplicateNodeError(
+                node_id,
+                "use add_type/upsert_node/merge_compatible instead of appending a second node",
+            )
+        self._objects.append(obj)
+        if node_id:
+            self._index_node(node_id, len(self._objects) - 1)
+        self._track_prefixes_for(obj)
+
+    def _index_node(self, node_id: str, index: int) -> None:
+        expanded = self.expand_iri(node_id)
+        self._iri_index[expanded] = index
+        self._iri_aliases[node_id] = expanded
+        if expanded != node_id:
+            self._iri_aliases[expanded] = expanded
+
+    def _find_object(self, node_id: str) -> dict[str, Any] | None:
+        expanded = self.expand_iri(node_id)
+        idx = self._iri_index.get(expanded)
+        if idx is None:
+            # Fallback linear scan then rebuild index (legacy graphs / tests).
+            for i, obj in enumerate(self._objects):
+                oid = obj.get("@id")
+                if oid is None:
+                    continue
+                if oid == node_id or self.expand_iri(oid) == expanded:
+                    self._index_node(oid, i)
+                    return obj
+            return None
+        if idx >= len(self._objects):
+            return None
+        return self._objects[idx]
+
+    def _require_object(self, node_id: str) -> dict[str, Any]:
+        obj = self._find_object(node_id)
+        if obj is None:
+            raise KeyError(f"No node with @id {node_id!r}")
+        return obj
+
+    def _merge_context(self, incoming: dict[str, Any]) -> None:
+        for prefix, ns in incoming.items():
+            if not isinstance(ns, str):
+                continue
+            existing = self._context.get(prefix)
+            if existing is not None and existing != ns:
+                raise ValueError(
+                    f"Context prefix collision for {prefix!r}: "
+                    f"existing {existing!r} vs incoming {ns!r}"
+                )
+            self._context[prefix] = ns
+
+    def _ingest_raw_node(self, raw: dict[str, Any], *, policy: str) -> None:
+        node_id = raw.get("@id")
+        if not node_id:
+            self._objects.append(raw)
+            self._track_prefixes_for(raw)
+            return
+        existing = self._find_object(node_id)
+        if existing is None:
+            self._append_object(raw)
+            return
+        if policy == "reject":
+            raise DuplicateNodeError(node_id, "conflicting duplicate during load")
+        if policy == "merge_compatible":
+            if "@type" in raw:
+                existing["@type"] = self._normalize_type_value(
+                    self._merge_types(existing.get("@type"), raw["@type"])
+                )
+            for key, value in raw.items():
+                if key in ("@id", "@type"):
+                    continue
+                self._set_property(existing, key, value)
+            self._track_prefixes_for(raw)
+            return
+        raise ValueError(f"Unknown duplicate policy: {policy!r}")
+
+    def _track_prefixes_for(self, node: Any) -> None:
+        self._collect_prefixes(node, set(self._context.keys()), self._used_prefix_set)
+
+    @staticmethod
+    def _as_type_list(types: list[str] | str | None) -> list[str]:
+        if types is None:
+            return []
+        if isinstance(types, str):
+            return [types]
+        return list(types)
+
+    @staticmethod
+    def _normalize_type_value(types: list[str] | str) -> list[str] | str:
+        type_list = CASEGraph._as_type_list(types)
+        if len(type_list) == 1:
+            return type_list[0]
+        return type_list
+
+    def _merge_types(
+        self,
+        existing: list[str] | str | None,
+        new_types: list[str] | str,
+    ) -> list[str]:
+        merged = self._as_type_list(existing)
+        for type_iri in self._as_type_list(new_types):
+            if type_iri not in merged:
+                merged.append(type_iri)
+        return merged
+
+    def _set_property(self, obj: dict[str, Any], key: str, value: Any) -> None:
+        if key not in obj:
+            obj[key] = value
+            return
+        existing = obj[key]
+        if existing == value:
+            return
+        if isinstance(existing, list):
+            if value not in existing and (
+                not isinstance(value, dict) or value not in existing
+            ):
+                # Avoid duplicate @id refs
+                if isinstance(value, dict) and "@id" in value:
+                    if any(
+                        isinstance(item, dict) and item.get("@id") == value["@id"]
+                        for item in existing
+                    ):
+                        return
+                existing.append(value)
+            return
+        if isinstance(existing, dict) and isinstance(value, dict):
+            if existing.get("@id") and existing.get("@id") == value.get("@id"):
+                return
+        obj[key] = [existing, value]
 
     def _get_prefix(self, instance: Any) -> str:
         """Get the namespace prefix for an instance (defaults to kb)."""
@@ -414,7 +837,9 @@ class CASEGraph:
 
     def _pruned_context(self) -> dict[str, str]:
         """Return a copy of the context containing only prefixes used in the graph."""
-        used = self._used_prefixes()
+        used = self._used_prefix_set or self._used_prefixes()
+        if not used:
+            used = self._used_prefixes()
         return {k: v for k, v in self._context.items() if k in used}
 
     def _used_prefixes(self) -> set[str]:
@@ -470,44 +895,60 @@ class CASEGraph:
 
 
 def _build_class_registry(extra_classes: list[type] | None = None) -> dict[str, type]:
-    """Build a mapping from CLASS_IRI -> Python dataclass for all generated classes."""
-    registry: dict[str, type] = {}
+    """Build a mapping from CLASS_IRI -> Python dataclass for all generated classes.
 
-    import importlib
-    module_names = [
-        "case_uco.case.investigation",
-        "case_uco.uco.action",
-        "case_uco.uco.analysis",
-        "case_uco.uco.configuration",
-        "case_uco.uco.core",
-        "case_uco.uco.identity",
-        "case_uco.uco.location",
-        "case_uco.uco.marking",
-        "case_uco.uco.observable",
-        "case_uco.uco.pattern",
-        "case_uco.uco.role",
-        "case_uco.uco.time",
-        "case_uco.uco.tool",
-        "case_uco.uco.types",
-        "case_uco.uco.victim",
-    ]
+    The core registry is cached process-wide (#70). Extension classes from
+    ``extra_classes`` are layered on a shallow copy so callers cannot mutate
+    the shared cache.
+    """
+    global _CLASS_REGISTRY_CACHE
+    if _CLASS_REGISTRY_CACHE is None:
+        registry: dict[str, type] = {}
+        import importlib
+        module_names = [
+            "case_uco.case.investigation",
+            "case_uco.uco.action",
+            "case_uco.uco.analysis",
+            "case_uco.uco.configuration",
+            "case_uco.uco.core",
+            "case_uco.uco.identity",
+            "case_uco.uco.location",
+            "case_uco.uco.marking",
+            "case_uco.uco.observable",
+            "case_uco.uco.pattern",
+            "case_uco.uco.role",
+            "case_uco.uco.time",
+            "case_uco.uco.tool",
+            "case_uco.uco.types",
+            "case_uco.uco.victim",
+        ]
 
-    for mod_name in module_names:
-        try:
-            mod = importlib.import_module(mod_name)
-        except ImportError:
-            continue
-        for attr_name in dir(mod):
-            attr = getattr(mod, attr_name)
-            if isinstance(attr, type) and is_dataclass(attr) and hasattr(attr, "CLASS_IRI"):
-                registry[attr.CLASS_IRI] = attr
+        for mod_name in module_names:
+            try:
+                mod = importlib.import_module(mod_name)
+            except ImportError:
+                continue
+            for attr_name in dir(mod):
+                attr = getattr(mod, attr_name)
+                if isinstance(attr, type) and is_dataclass(attr) and hasattr(attr, "CLASS_IRI"):
+                    registry[attr.CLASS_IRI] = attr
+        _CLASS_REGISTRY_CACHE = registry
 
+    result = dict(_CLASS_REGISTRY_CACHE)
     if extra_classes:
         for cls in extra_classes:
             if hasattr(cls, "CLASS_IRI"):
-                registry[cls.CLASS_IRI] = cls
+                result[cls.CLASS_IRI] = cls
+    return result
 
-    return registry
+
+_CLASS_REGISTRY_CACHE: dict[str, type] | None = None
+
+
+def clear_class_registry_cache() -> None:
+    """Invalidate the process-wide deserialization class registry (#70)."""
+    global _CLASS_REGISTRY_CACHE
+    _CLASS_REGISTRY_CACHE = None
 
 
 def _expand_iri(compact: str, context: dict[str, str]) -> str:

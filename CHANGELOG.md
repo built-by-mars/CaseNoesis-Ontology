@@ -7,6 +7,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+> **Release target:** **v1.21.0**. Notes below track GitHub issues #59–#73.
+
+Cross-ontology composition: IRI-indexed graph enrichment API, profile-aware
+validation planner, upper-ontology recipes and exemplars, recipe execution
+contract, and performance foundations (streaming write, partition_by,
+class-registry cache, synthetic benchmarks).
+
+### Added
+
+#### Graph composition API (#67)
+
+- Public IRI-indexed methods on `CASEGraph` / `CaseGraph` in **Python, C#,
+  Java, and Rust**: `get`/`contains`/`expand_iri`, `upsert_node`, `add_type`,
+  `add_property`, `link`, `create_relationship` (deterministic UCO
+  Relationship IDs), plus `DuplicateNodeError` / reject-duplicates policy.
+- Domain-first multi-typing on the **same IRI** without proxy duplicates.
+
+#### Profile-aware validation planner (#68)
+
+- `mcp_server/validation_bundle.py` — `resolve_validation_bundle(extensions,
+  profiles)` with offline fingerprinting, BFO/gUFO exclusivity, CAC↔BFO
+  fail-closed policy, GeoSPARQL→Simple Features dependency, and bounded cache.
+- `validate_graph_file(..., profiles=[...])` and MCP `validate_graph(profiles=...)`.
+- ORG and PROF added to `get_uco_profiles` / `UCO_PROFILES`.
+
+#### Upper-ontology recipes and exemplars (#59–#66)
+
+- Recipes: foundational BFO/gUFO, PROV-O lineage, OWL-Time, GeoSPARQL, FOAF/ORG,
+  PROF metadata, SOLVE-IT plan vs execution, and **cross-ontology-composition**
+  (replaces competing cross-domain guidance; legacy file redirects).
+- Builders and JSON-LD under `examples/upper-ontology/` (validated with
+  `profiles=`).
+
+#### Recipe execution quality gate (#69)
+
+- `docs/recipes/recipe-execution.json` + `mcp_server/tools/run_recipe_examples.py`
+  for builder/parse/(optional) profile validation of operational exemplars.
+
+#### Performance / scalability foundations (#70–#73)
+
+- Process-wide class-registry cache for `from_jsonld` (#70).
+- `write_streaming()` incremental JSON-LD writer (#71).
+- `partition_by()` dependency-aware partitioning; `split()` warns (#72).
+- `benchmarks/run_python_bench.py` small-tier synthetic harness (#73).
+
+### Changed
+
+- README and CROSS_LANGUAGE_PARITY document the composition and profile APIs.
+- Package versions bumped to **1.21.0** (tag pending).
+
 ## [1.20.0] - 2026-07-11
 
 Add **Operation PHANTOM GATE** — a fictitious, multipart investigation stress-test

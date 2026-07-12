@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CaseUco
 {
@@ -17,6 +19,13 @@ namespace CaseUco
         private readonly Dictionary<string, string> _context;
         private readonly List<Dictionary<string, object>> _objects;
         private readonly Dictionary<object, string> _idMap;
+        private readonly Dictionary<string, int> _iriIndex = new Dictionary<string, int>();
+
+        /// <summary>
+        /// When true, <see cref="Load"/> raises on duplicate <c>@id</c> instead of merging.
+        /// Default is false (merge-compatible) for backward compatibility with merge workflows.
+        /// </summary>
+        public bool RejectDuplicates { get; set; }
 
         public CaseGraph(string kbPrefix = "http://example.org/kb/")
         {
@@ -44,7 +53,7 @@ namespace CaseUco
             Validate(instance);
             _idMap[instance] = id;
             var jsonObj = ToJsonLd(instance, id);
-            _objects.Add(jsonObj);
+            AppendObject(jsonObj);
             return id;
         }
 
@@ -72,6 +81,110 @@ namespace CaseUco
             return _idMap.TryGetValue(instance, out var id) ? id : null;
         }
 
+        /// <summary>Return the JSON-LD dict for a node by compact or expanded @id.</summary>
+        public Dictionary<string, object> Get(string id)
+        {
+            return FindObject(id);
+        }
+
+        /// <summary>Return true if a node with this @id (compact or expanded) exists.</summary>
+        public bool Contains(string id)
+        {
+            return FindObject(id) != null;
+        }
+
+        /// <summary>Expand a compact IRI using this graph's context.</summary>
+        public string ExpandIri(string id)
+        {
+            return ExpandCompactIri(id, _context);
+        }
+
+        /// <summary>Create or update a JSON-LD node by @id.</summary>
+        public Dictionary<string, object> UpsertNode(
+            string id,
+            object types = null,
+            Dictionary<string, object> properties = null)
+        {
+            var obj = FindObject(id);
+            if (obj == null)
+            {
+                obj = new Dictionary<string, object> { ["@id"] = id };
+                if (types != null)
+                    obj["@type"] = NormalizeTypeValue(types);
+                if (properties != null)
+                {
+                    foreach (var kv in properties)
+                        SetProperty(obj, kv.Key, kv.Value);
+                }
+                AppendObject(obj);
+                return obj;
+            }
+
+            if (types != null)
+                obj["@type"] = NormalizeTypeValue(MergeTypes(obj.ContainsKey("@type") ? obj["@type"] : null, types));
+            if (properties != null)
+            {
+                foreach (var kv in properties)
+                    SetProperty(obj, kv.Key, kv.Value);
+            }
+            return obj;
+        }
+
+        /// <summary>Add an rdf:type to an existing node (same @id).</summary>
+        public void AddType(string id, string typeIri)
+        {
+            var obj = RequireObject(id);
+            obj["@type"] = NormalizeTypeValue(MergeTypes(obj.ContainsKey("@type") ? obj["@type"] : null, typeIri));
+        }
+
+        /// <summary>Add or merge a property on an existing node.</summary>
+        public void AddProperty(string id, string key, object value)
+        {
+            var obj = RequireObject(id);
+            SetProperty(obj, key, value);
+        }
+
+        /// <summary>Add a direct property edge source --predicate--> target.</summary>
+        public void Link(string sourceId, string predicate, string targetId)
+        {
+            AddProperty(sourceId, predicate, new Dictionary<string, object> { ["@id"] = targetId });
+        }
+
+        /// <summary>Create a uco-core:Relationship node with deterministic @id.</summary>
+        public Dictionary<string, object> CreateRelationship(
+            string sourceId,
+            string targetId,
+            string kind,
+            bool directional = true,
+            string description = null)
+        {
+            if (!Contains(sourceId))
+                throw new KeyNotFoundException($"Relationship source not in graph: {sourceId}");
+            if (!Contains(targetId))
+                throw new KeyNotFoundException($"Relationship target not in graph: {targetId}");
+            if (string.IsNullOrEmpty(kind))
+                throw new ArgumentException("kindOfRelationship is required", nameof(kind));
+
+            var relId = DeterministicRelationshipId(sourceId, targetId, kind);
+            var props = new Dictionary<string, object>
+            {
+                ["uco-core:source"] = new List<object>
+                {
+                    new Dictionary<string, object> { ["@id"] = sourceId },
+                },
+                ["uco-core:target"] = new List<object>
+                {
+                    new Dictionary<string, object> { ["@id"] = targetId },
+                },
+                ["uco-core:kindOfRelationship"] = kind,
+                ["uco-core:isDirectional"] = TypedLiteral("xsd:boolean", directional ? "true" : "false"),
+            };
+            if (description != null)
+                props["uco-core:description"] = description;
+
+            return UpsertNode(relId, "uco-core:Relationship", props);
+        }
+
         /// <summary>Return the number of objects in the graph.</summary>
         public int Count => _objects.Count;
 
@@ -90,7 +203,7 @@ namespace CaseUco
             {
                 foreach (var item in graphList.OfType<Dictionary<string, object>>())
                 {
-                    _objects.Add(item);
+                    IngestRawNode(item, RejectDuplicates);
                 }
             }
         }
@@ -114,7 +227,7 @@ namespace CaseUco
             {
                 foreach (var item in graphList.OfType<Dictionary<string, object>>())
                 {
-                    graph._objects.Add(item);
+                    graph.AppendObject(item);
                     var typed = TryInstantiate(item, graph._context);
                     objects.Add(typed ?? (object)item);
                 }
@@ -123,7 +236,7 @@ namespace CaseUco
             return new FromJsonLdResult { Graph = graph, Objects = objects };
         }
 
-        private static string ExpandIri(string value, Dictionary<string, string> context)
+        private static string ExpandCompactIri(string value, Dictionary<string, string> context)
         {
             if (value == null) return null;
             var colonIdx = value.IndexOf(':');
@@ -141,7 +254,7 @@ namespace CaseUco
             if (!obj.TryGetValue("@type", out var typeObj) || !(typeObj is string typeStr))
                 return null;
 
-            var expandedIri = ExpandIri(typeStr, context);
+            var expandedIri = ExpandCompactIri(typeStr, context);
 
             foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
             {
@@ -409,7 +522,7 @@ namespace CaseUco
                     chunk._context[kv.Key] = kv.Value;
                 int end = Math.Min(i + maxObjects, _objects.Count);
                 for (int j = i; j < end; j++)
-                    chunk._objects.Add(_objects[j]);
+                    chunk.AppendObject(new Dictionary<string, object>(_objects[j]));
                 chunks.Add(chunk);
             }
             return chunks;
@@ -424,6 +537,170 @@ namespace CaseUco
                 merged.Load(System.IO.File.ReadAllText(path));
             }
             return merged;
+        }
+
+        private void AppendObject(Dictionary<string, object> obj)
+        {
+            var nodeId = obj.TryGetValue("@id", out var idObj) ? idObj as string : null;
+            if (nodeId != null && FindObject(nodeId) != null)
+            {
+                throw new InvalidOperationException(
+                    $"Duplicate @id '{nodeId}': use AddType/UpsertNode or merge-compatible Load instead of appending a second node");
+            }
+            _objects.Add(obj);
+            if (nodeId != null)
+                IndexNode(nodeId, _objects.Count - 1);
+        }
+
+        private void IndexNode(string nodeId, int index)
+        {
+            var expanded = ExpandIri(nodeId);
+            _iriIndex[expanded] = index;
+        }
+
+        private Dictionary<string, object> FindObject(string nodeId)
+        {
+            var expanded = ExpandIri(nodeId);
+            if (_iriIndex.TryGetValue(expanded, out var idx))
+            {
+                if (idx < _objects.Count)
+                    return _objects[idx];
+            }
+            for (var i = 0; i < _objects.Count; i++)
+            {
+                var obj = _objects[i];
+                if (!obj.TryGetValue("@id", out var oidObj) || !(oidObj is string oid))
+                    continue;
+                if (oid == nodeId || ExpandIri(oid) == expanded)
+                {
+                    IndexNode(oid, i);
+                    return obj;
+                }
+            }
+            return null;
+        }
+
+        private Dictionary<string, object> RequireObject(string nodeId)
+        {
+            var obj = FindObject(nodeId);
+            if (obj == null)
+                throw new KeyNotFoundException($"No node with @id '{nodeId}'");
+            return obj;
+        }
+
+        private void IngestRawNode(Dictionary<string, object> raw, bool rejectDuplicates)
+        {
+            if (!raw.TryGetValue("@id", out var idObj) || !(idObj is string nodeId))
+            {
+                _objects.Add(raw);
+                return;
+            }
+
+            var existing = FindObject(nodeId);
+            if (existing == null)
+            {
+                AppendObject(raw);
+                return;
+            }
+
+            if (rejectDuplicates)
+            {
+                throw new InvalidOperationException(
+                    $"Duplicate @id '{nodeId}': conflicting duplicate during load");
+            }
+
+            if (raw.ContainsKey("@type"))
+            {
+                existing["@type"] = NormalizeTypeValue(
+                    MergeTypes(existing.ContainsKey("@type") ? existing["@type"] : null, raw["@type"]));
+            }
+            foreach (var kv in raw)
+            {
+                if (kv.Key == "@id" || kv.Key == "@type")
+                    continue;
+                SetProperty(existing, kv.Key, kv.Value);
+            }
+        }
+
+        private static List<string> AsTypeList(object types)
+        {
+            if (types == null)
+                return new List<string>();
+            if (types is string s)
+                return new List<string> { s };
+            if (types is IEnumerable<string> seq)
+                return seq.ToList();
+            if (types is IEnumerable<object> objSeq)
+                return objSeq.Select(o => o?.ToString()).Where(o => o != null).ToList();
+            return new List<string> { types.ToString() };
+        }
+
+        private static object NormalizeTypeValue(object types)
+        {
+            var list = AsTypeList(types);
+            if (list.Count == 1)
+                return list[0];
+            return list;
+        }
+
+        private static object MergeTypes(object existing, object newTypes)
+        {
+            var merged = AsTypeList(existing);
+            foreach (var typeIri in AsTypeList(newTypes))
+            {
+                if (!merged.Contains(typeIri))
+                    merged.Add(typeIri);
+            }
+            return merged;
+        }
+
+        private static void SetProperty(Dictionary<string, object> obj, string key, object value)
+        {
+            if (!obj.ContainsKey(key))
+            {
+                obj[key] = value;
+                return;
+            }
+
+            var existing = obj[key];
+            if (Equals(existing, value))
+                return;
+
+            if (existing is List<object> list)
+            {
+                if (value is Dictionary<string, object> dictVal && dictVal.TryGetValue("@id", out var refId))
+                {
+                    if (list.OfType<Dictionary<string, object>>()
+                        .Any(item => item.TryGetValue("@id", out var itemId) && Equals(itemId, refId)))
+                        return;
+                }
+                if (!list.Contains(value))
+                    list.Add(value);
+                return;
+            }
+
+            if (existing is Dictionary<string, object> existingDict &&
+                value is Dictionary<string, object> valueDict &&
+                existingDict.TryGetValue("@id", out var existingRef) &&
+                valueDict.TryGetValue("@id", out var valueRef) &&
+                Equals(existingRef, valueRef))
+            {
+                return;
+            }
+
+            obj[key] = new List<object> { existing, value };
+        }
+
+        private string DeterministicRelationshipId(string sourceId, string targetId, string kind)
+        {
+            var payload = $"{ExpandIri(sourceId)}|{ExpandIri(targetId)}|{kind}";
+            using var sha = SHA256.Create();
+            var digest = BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(payload)))
+                .Replace("-", "")
+                .Substring(0, 12)
+                .ToLowerInvariant();
+            var safeKind = kind.Replace(" ", "_");
+            return $"kb:rel-{safeKind}-{digest}";
         }
 
         private string MintId(object instance)

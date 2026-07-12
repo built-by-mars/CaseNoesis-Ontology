@@ -29,6 +29,17 @@ These operations exist in every language with parallel naming (adjusted only for
 | Estimate triples | `graph.estimate_triples()` | `graph.EstimateTriples()` | `graph.estimateTriples()` | `graph.estimate_triples()` |
 | Split graph | `graph.split(n)` | `graph.Split(n)` | `graph.split(n)` | `graph.split(n)` |
 | Merge files | `CASEGraph.merge_files(paths)` | `CaseGraph.MergeFiles(paths)` | `CaseGraph.mergeFiles(paths)` | `CaseGraph::merge_files(paths)` |
+| Get node by @id | `graph.get(id)` | `graph.Get(id)` | `graph.get(id)` | `graph.get(id)` |
+| Contains node | `graph.contains(id)` | `graph.Contains(id)` | `graph.contains(id)` | `graph.contains(id)` |
+| Expand IRI | `graph.expand_iri(id)` | `graph.ExpandIri(id)` | `graph.expandIri(id)` | `graph.expand_iri(id)` |
+| Upsert node | `graph.upsert_node(id, ...)` | `graph.UpsertNode(id, ...)` | `graph.upsertNode(id, ...)` | `graph.upsert_node(id, ...)` |
+| Add type | `graph.add_type(id, type)` | `graph.AddType(id, type)` | `graph.addType(id, type)` | `graph.add_type(id, type)` |
+| Add property | `graph.add_property(id, k, v)` | `graph.AddProperty(id, k, v)` | `graph.addProperty(id, k, v)` | `graph.add_property(id, k, v)` |
+| Link (property edge) | `graph.link(src, pred, tgt)` | `graph.Link(src, pred, tgt)` | `graph.link(src, pred, tgt)` | `graph.link(src, pred, tgt)` |
+| Create Relationship | `graph.create_relationship(...)` | `graph.CreateRelationship(...)` | `graph.createRelationship(...)` | `graph.create_relationship(...)` |
+| Reject duplicates on load | `graph.on_duplicate = "reject"` | `graph.RejectDuplicates = true` | `graph.setRejectDuplicates(true)` | `graph.set_reject_duplicates(true)` |
+| Merge on load (default) | `on_duplicate="merge_compatible"` | `RejectDuplicates = false` | `rejectDuplicates = false` | `reject_duplicates = false` |
+| Duplicate node error | `DuplicateNodeError` | `InvalidOperationException` | `IllegalStateException` | `DuplicateNodeError` / `GraphError` |
 | Validate | `graph.validate()` | `graph.ValidateGraph()` | `graph.validate()` | `graph.validate()` |
 
 ### Registry / Discovery

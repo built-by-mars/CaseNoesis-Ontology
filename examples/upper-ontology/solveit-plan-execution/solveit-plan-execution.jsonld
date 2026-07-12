@@ -1,0 +1,192 @@
+{
+    "@context": {
+        "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+        "kb": "http://example.org/kb/",
+        "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+        "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+        "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+        "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+        "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "prov": "http://www.w3.org/ns/prov#",
+        "solveit-core": "https://ontology.solveit-df.org/solveit/core/",
+        "solveit-data": "https://ontology.solveit-df.org/solveit/data/"
+    },
+    "@graph": [
+        {
+            "@id": "kb:acquisition-plan",
+            "@type": "prov:Plan",
+            "uco-core:name": "Laptop acquisition plan (synthetic)",
+            "uco-core:description": [
+                "Planned steps: write-block, sector copy (DFT-1002), hash verify (DFT-1042)."
+            ]
+        },
+        {
+            "@id": "kb:examiner-1",
+            "@type": "uco-identity:Person",
+            "uco-core:name": "Examiner One (synthetic)"
+        },
+        {
+            "@id": "kb:Tool-a06dc198-cb85-4b7d-8f2e-46c6632c95f1",
+            "@type": "uco-tool:Tool",
+            "uco-core:name": "Hardware write blocker + imager",
+            "uco-tool:version": "2026.1"
+        },
+        {
+            "@id": "kb:laptop-ssd",
+            "@type": "uco-observable:ObservableObject",
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:FileFacet-e40fcdcf-f802-4f9c-b7db-f3206629363b",
+                    "@type": "uco-observable:FileFacet",
+                    "uco-observable:fileName": "\\\\.\\PhysicalDrive2"
+                }
+            ],
+            "uco-core:name": "Seized laptop SSD (synthetic)"
+        },
+        {
+            "@id": "kb:disk-image",
+            "@type": "uco-observable:ObservableObject",
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:FileFacet-268dd234-08ca-45f5-ad3e-df87f73fd868",
+                    "@type": "uco-observable:FileFacet",
+                    "uco-observable:fileName": "laptop.e01",
+                    "uco-observable:sizeInBytes": {
+                        "@type": "xsd:integer",
+                        "@value": "256000000000"
+                    }
+                }
+            ],
+            "uco-core:name": "E01 physical image"
+        },
+        {
+            "@id": "kb:action-planned-image",
+            "@type": [
+                "case-investigation:InvestigativeAction",
+                "solveit-core:SolveitInvestigativeAction",
+                "prov:Activity"
+            ],
+            "uco-core:name": "Acquire laptop image (planned)",
+            "solveit-core:usedTechnique": [
+                {
+                    "@id": "solveit-data:techniqueDFT-1002"
+                }
+            ],
+            "uco-action:performer": {
+                "@id": "kb:examiner-1"
+            },
+            "uco-action:object": [
+                {
+                    "@id": "kb:laptop-ssd"
+                }
+            ],
+            "uco-action:instrument": [
+                {
+                    "@id": "kb:Tool-a06dc198-cb85-4b7d-8f2e-46c6632c95f1"
+                }
+            ],
+            "prov:hadPlan": {
+                "@id": "kb:acquisition-plan"
+            }
+        },
+        {
+            "@id": "kb:action-executed-image",
+            "@type": [
+                "case-investigation:InvestigativeAction",
+                "solveit-core:SolveitInvestigativeAction",
+                "prov:Activity"
+            ],
+            "uco-core:name": "Acquire laptop image (executed \u2014 partial sectors)",
+            "uco-core:description": [
+                "Deviation: imaging stopped at 40% due to bad sector cluster; re-execution scheduled."
+            ],
+            "solveit-core:usedTechnique": [
+                {
+                    "@id": "solveit-data:techniqueDFT-1002"
+                }
+            ],
+            "solveit-core:appliedMitigation": [
+                {
+                    "@id": "solveit-data:mitigationDFM-1003"
+                }
+            ],
+            "uco-action:startTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2026-03-15T10:00:00+00:00"
+            },
+            "uco-action:endTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2026-03-15T11:20:00+00:00"
+            },
+            "uco-action:performer": {
+                "@id": "kb:examiner-1"
+            },
+            "uco-action:object": [
+                {
+                    "@id": "kb:laptop-ssd"
+                }
+            ],
+            "uco-action:result": [
+                {
+                    "@id": "kb:disk-image"
+                }
+            ],
+            "prov:hadPlan": {
+                "@id": "kb:acquisition-plan"
+            }
+        },
+        {
+            "@id": "kb:action-reexecute-image",
+            "@type": [
+                "case-investigation:InvestigativeAction",
+                "solveit-core:SolveitInvestigativeAction",
+                "prov:Activity"
+            ],
+            "uco-core:name": "Re-execute imaging after bad-sector remediation",
+            "solveit-core:usedTechnique": [
+                {
+                    "@id": "solveit-data:techniqueDFT-1002"
+                }
+            ],
+            "solveit-core:appliedMitigation": [
+                {
+                    "@id": "solveit-data:mitigationDFM-1003"
+                },
+                {
+                    "@id": "solveit-data:mitigationDFM-1004"
+                }
+            ],
+            "uco-action:performer": {
+                "@id": "kb:examiner-1"
+            },
+            "uco-action:object": [
+                {
+                    "@id": "kb:laptop-ssd"
+                }
+            ],
+            "prov:hadPlan": {
+                "@id": "kb:acquisition-plan"
+            },
+            "prov:wasRevisionOf": {
+                "@id": "kb:action-executed-image"
+            }
+        },
+        {
+            "@id": "kb:Investigation-b211602a-0133-45b5-a31b-2e055dfb6e65",
+            "@type": "case-investigation:Investigation",
+            "uco-core:description": [
+                "prov:Plan vs SolveitInvestigativeAction execution with deviation and re-execution."
+            ],
+            "uco-core:name": "Synthetic case 2026-SOLVEIT-PLAN-001",
+            "uco-core:object": [
+                {
+                    "@id": "kb:laptop-ssd"
+                },
+                {
+                    "@id": "kb:disk-image"
+                }
+            ]
+        }
+    ]
+}

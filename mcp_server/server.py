@@ -340,6 +340,7 @@ def validate_graph(
     allow_warning: bool = True,
     extensions: list[str] | None = None,
     strict_concepts: bool = True,
+    profiles: list[str] | None = None,
 ) -> dict:
     """Validate a CASE/UCO graph file with the local case_validate SHACL tool.
 
@@ -357,6 +358,11 @@ def validate_graph(
     with conspiracy/attempt/derivative offense forms, pleas, verdicts,
     sentences, forfeiture, restitution — extensions/legalproc/, usable by
     any investigation type).
+
+    Pass profiles=['prov-o','time'] (etc.) to include vendored upper-ontology
+    sources and CDO-Shapes via the profile-aware validation planner
+    (see get_uco_profiles / resolve_validation_bundle). BFO and gUFO are
+    mutually exclusive foundational profiles unless explicitly overridden.
 
     After the SHACL pass, a closed-world concept coverage check runs by
     default (strict_concepts=True): every class and property IRI in the
@@ -393,6 +399,7 @@ def validate_graph(
             extensions=extensions,
             project_root=PROJECT_ROOT,
             strict_concepts=strict_concepts,
+            profiles=profiles,
         )
     except ValueError as exc:
         return {
@@ -403,6 +410,8 @@ def validate_graph(
     result: dict[str, Any] = {"ok": True}
     if extensions:
         result["extensions"] = extensions
+    if profiles:
+        result["profiles"] = profiles
     result.update(_validation_report_to_dict(report))
     return result
 

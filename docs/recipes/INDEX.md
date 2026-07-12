@@ -129,7 +129,15 @@ Requires `CASE_UCO_EXTENSIONS=cac`. Use `route_cac_content` via the MCP server t
 |---|---|---|---|
 | Discovering Classes at Runtime | [runtime-discovery.md](runtime-discovery.md) | Use the registry API to search for classes and inspect properties | — |
 | Working with Extensions | [extensions.md](extensions.md) | Use extension ontology classes alongside the core SDK | — |
-| Cross-Domain Extensions | [cross-domain-extensions.md](cross-domain-extensions.md) | Use CAC, AEO, and other extension packages with cross-domain composition | — |
+| Cross-Ontology Composition | [cross-ontology-composition.md](cross-ontology-composition.md) | Compose CASE/UCO, extensions, and upper-ontology profiles (BFO/gUFO, PROV-O, Time, GeoSPARQL, FOAF, ORG, PROF) | — |
+| Cross-Domain Extensions (redirect) | [cross-domain-extensions.md](cross-domain-extensions.md) | Legacy title; redirects to Cross-Ontology Composition | — |
+| Foundational Typing (BFO / gUFO) | [foundational-typing-bfo-gufo.md](foundational-typing-bfo-gufo.md) | Domain-first multi-typing with one foundational profile per graph; CAC prefers gUFO | — |
+| PROV-O Evidence Lineage | [prov-o-evidence-lineage.md](prov-o-evidence-lineage.md) | Entity/Activity/Agent enrichment; Tool as instrument; provenance vs acquisition | — |
+| OWL-Time Temporal Evidence | [owl-time-temporal-evidence.md](owl-time-temporal-evidence.md) | Native timestamps vs OWL-Time Instant/Interval; open intervals; clock correction | — |
+| GeoSPARQL Geospatial Evidence | [geosparql-geospatial-evidence.md](geosparql-geospatial-evidence.md) | Location as geo:Feature; separate Geometry; derived analytics with provenance | — |
+| FOAF / ORG Identity and Roles | [foaf-org-identity-roles.md](foaf-org-identity-roles.md) | Person, account, org, membership; no owl:sameAs for uncertain attribution | — |
+| PROF Profile Metadata | [prof-validation-profile-metadata.md](prof-validation-profile-metadata.md) | Profile intent vs validation result; serialize bundle metadata | — |
+| SOLVE-IT Plan vs Execution | [solveit-plan-execution-provenance.md](solveit-plan-execution-provenance.md) | prov:Plan vs SolveitInvestigativeAction; deviation and re-execution | — |
 | Round-Trip: Serialize and Deserialize | [round-trip.md](round-trip.md) | Write a graph to JSON-LD and load it back with typed deserialization | — |
 | Managing Large Datasets | [large-datasets.md](large-datasets.md) | Partition large evidence sets by forensic boundary | — |
 | Existence Intervals and Temporal Modeling | [existence-intervals.md](existence-intervals.md) | OWL-Time, gUFO, and BFO temporal patterns | [existence_intervals](https://github.com/casework/CASE-Examples/tree/master/examples/illustrations/existence_intervals) |

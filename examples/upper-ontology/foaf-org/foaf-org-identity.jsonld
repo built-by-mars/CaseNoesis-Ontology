@@ -1,0 +1,124 @@
+{
+    "@context": {
+        "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+        "kb": "http://example.org/kb/",
+        "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+        "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+        "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "foaf": "http://xmlns.com/foaf/0.1/",
+        "org": "http://www.w3.org/ns/org#"
+    },
+    "@graph": [
+        {
+            "@id": "kb:person-1",
+            "@type": [
+                "uco-identity:Person",
+                "foaf:Person"
+            ],
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:SimpleNameFacet-aa8427d0-739f-43e4-a9d1-05a2dca82828",
+                    "@type": "uco-identity:SimpleNameFacet",
+                    "uco-identity:familyName": [
+                        "Morgan"
+                    ],
+                    "uco-identity:givenName": [
+                        "Alex"
+                    ]
+                }
+            ],
+            "uco-core:name": "Alex Morgan (synthetic)",
+            "foaf:mbox": "mailto:alex.morgan@example.org",
+            "foaf:holdsAccount": {
+                "@id": "kb:account-signal"
+            }
+        },
+        {
+            "@id": "kb:org-taskforce",
+            "@type": [
+                "uco-identity:Identity",
+                "org:Organization",
+                "foaf:Organization"
+            ],
+            "uco-core:name": "Regional ICAC Task Force (synthetic)",
+            "org:hasMembership": {
+                "@id": "kb:membership-1"
+            }
+        },
+        {
+            "@id": "kb:membership-1",
+            "@type": "org:Membership",
+            "org:member": {
+                "@id": "kb:person-1"
+            },
+            "org:organization": {
+                "@id": "kb:org-taskforce"
+            },
+            "org:role": "Digital forensic examiner"
+        },
+        {
+            "@id": "kb:account-signal",
+            "@type": [
+                "uco-observable:ObservableObject",
+                "foaf:OnlineAccount"
+            ],
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:AccountFacet-36810df0-63a1-41ed-8458-010200f70f52",
+                    "@type": "uco-observable:AccountFacet",
+                    "uco-observable:accountIdentifier": "+15551234567",
+                    "uco-observable:isActive": {
+                        "@type": "xsd:boolean",
+                        "@value": "true"
+                    }
+                }
+            ],
+            "uco-core:name": "Signal account (synthetic)",
+            "foaf:accountName": "+15551234567"
+        },
+        {
+            "@id": "kb:Relationship-bb62bd97-078a-4cdd-968e-64fc2b4daf34",
+            "@type": "uco-core:Relationship",
+            "uco-core:isDirectional": {
+                "@type": "xsd:boolean",
+                "@value": "true"
+            },
+            "uco-core:kindOfRelationship": "member-of",
+            "uco-core:source": [
+                {
+                    "@id": "kb:person-1"
+                }
+            ],
+            "uco-core:startTime": [
+                {
+                    "@type": "xsd:dateTime",
+                    "@value": "2024-01-01T00:00:00+00:00"
+                }
+            ],
+            "uco-core:target": {
+                "@id": "kb:org-taskforce"
+            }
+        },
+        {
+            "@id": "kb:Investigation-833d7d7e-5d24-4cc4-bff5-24d6959e2cbf",
+            "@type": "case-investigation:Investigation",
+            "uco-core:description": [
+                "Person, organization, membership, and account kept distinct.",
+                "No owl:sameAs \u2014 uncertain attribution uses Relationship, not identity collapse."
+            ],
+            "uco-core:name": "Synthetic case 2026-FOAF-001",
+            "uco-core:object": [
+                {
+                    "@id": "kb:person-1"
+                },
+                {
+                    "@id": "kb:org-taskforce"
+                },
+                {
+                    "@id": "kb:account-signal"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "description": "Executable evidence contract for operational recipes (#69).",
+  "recipes": [
+    {
+      "id": "foundational-typing-bfo",
+      "category": "upper-ontology",
+      "recipe": "docs/recipes/foundational-typing-bfo-gufo.md",
+      "builder": "examples/upper-ontology/foundational-typing/build_bfo_variant.py",
+      "output": "examples/upper-ontology/foundational-typing/foundational-typing-bfo.jsonld",
+      "profiles": ["bfo"],
+      "extensions": null,
+      "strict_concepts": true
+    },
+    {
+      "id": "foundational-typing-gufo",
+      "category": "upper-ontology",
+      "recipe": "docs/recipes/foundational-typing-bfo-gufo.md",
+      "builder": "examples/upper-ontology/foundational-typing/build_gufo_variant.py",
+      "output": "examples/upper-ontology/foundational-typing/foundational-typing-gufo.jsonld",
+      "profiles": ["gufo"],
+      "extensions": null,
+      "strict_concepts": true
+    },
+    {
+      "id": "prov-o-lineage",
+      "category": "upper-ontology",
+      "recipe": "docs/recipes/prov-o-evidence-lineage.md",
+      "builder": "examples/upper-ontology/prov-o-lineage/build_exemplar.py",
+      "output": "examples/upper-ontology/prov-o-lineage/prov-o-lineage.jsonld",
+      "profiles": ["prov-o"],
+      "extensions": null,
+      "strict_concepts": true
+    },
+    {
+      "id": "owl-time",
+      "category": "upper-ontology",
+      "recipe": "docs/recipes/owl-time-temporal-evidence.md",
+      "builder": "examples/upper-ontology/owl-time/build_exemplar.py",
+      "output": "examples/upper-ontology/owl-time/owl-time-temporal.jsonld",
+      "profiles": ["time"],
+      "extensions": null,
+      "strict_concepts": true
+    },
+    {
+      "id": "geosparql",
+      "category": "upper-ontology",
+      "recipe": "docs/recipes/geosparql-geospatial-evidence.md",
+      "builder": "examples/upper-ontology/geosparql/build_exemplar.py",
+      "output": "examples/upper-ontology/geosparql/geosparql-geospatial.jsonld",
+      "profiles": ["geosparql"],
+      "extensions": null,
+      "strict_concepts": true
+    },
+    {
+      "id": "foaf-org",
+      "category": "upper-ontology",
+      "recipe": "docs/recipes/foaf-org-identity-roles.md",
+      "builder": "examples/upper-ontology/foaf-org/build_exemplar.py",
+      "output": "examples/upper-ontology/foaf-org/foaf-org-identity.jsonld",
+      "profiles": ["foaf", "org"],
+      "extensions": null,
+      "strict_concepts": true
+    },
+    {
+      "id": "prof-metadata",
+      "category": "upper-ontology",
+      "recipe": "docs/recipes/prof-validation-profile-metadata.md",
+      "builder": "examples/upper-ontology/prof-metadata/build_exemplar.py",
+      "output": "examples/upper-ontology/prof-metadata/prof-metadata.jsonld",
+      "profiles": ["prof"],
+      "extensions": null,
+      "strict_concepts": true
+    },
+    {
+      "id": "solveit-plan-execution",
+      "category": "upper-ontology",
+      "recipe": "docs/recipes/solveit-plan-execution-provenance.md",
+      "builder": "examples/upper-ontology/solveit-plan-execution/build_exemplar.py",
+      "output": "examples/upper-ontology/solveit-plan-execution/solveit-plan-execution.jsonld",
+      "profiles": ["prov-o", "time"],
+      "extensions": ["solveit"],
+      "strict_concepts": true
+    },
+    {
+      "id": "cross-ontology-composition",
+      "category": "upper-ontology",
+      "recipe": "docs/recipes/cross-ontology-composition.md",
+      "builder": "examples/upper-ontology/composition/build_composite.py",
+      "output": "examples/upper-ontology/composition/cross-ontology-composite.jsonld",
+      "profiles": ["gufo", "prov-o", "time"],
+      "extensions": null,
+      "strict_concepts": true
+    }
+  ]
+}

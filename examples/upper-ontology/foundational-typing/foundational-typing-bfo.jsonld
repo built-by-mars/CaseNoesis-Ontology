@@ -1,0 +1,81 @@
+{
+    "@context": {
+        "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+        "kb": "http://example.org/kb/",
+        "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+        "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+        "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+        "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "obo": "http://purl.obolibrary.org/obo/"
+    },
+    "@graph": [
+        {
+            "@id": "kb:examiner-1",
+            "@type": [
+                "uco-identity:Person",
+                "obo:BFO_0000002"
+            ],
+            "uco-core:name": "Examiner One (synthetic)"
+        },
+        {
+            "@id": "kb:evidence-1",
+            "@type": [
+                "uco-observable:ObservableObject",
+                "obo:BFO_0000040"
+            ],
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:FileFacet-8f5182fa-6caa-4473-ab12-8a641f307b09",
+                    "@type": "uco-observable:FileFacet",
+                    "uco-observable:fileName": "workstation.e01",
+                    "uco-observable:sizeInBytes": {
+                        "@type": "xsd:integer",
+                        "@value": "500000000000"
+                    }
+                }
+            ],
+            "uco-core:name": "Seized workstation drive image (synthetic)"
+        },
+        {
+            "@id": "kb:action-image",
+            "@type": [
+                "case-investigation:InvestigativeAction",
+                "obo:BFO_0000011"
+            ],
+            "uco-core:name": "Forensic imaging",
+            "uco-action:endTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2026-03-15T12:30:00+00:00"
+            },
+            "uco-action:object": [
+                {
+                    "@id": "kb:evidence-1"
+                }
+            ],
+            "uco-action:performer": {
+                "@id": "kb:examiner-1"
+            },
+            "uco-action:startTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2026-03-15T10:00:00+00:00"
+            }
+        },
+        {
+            "@id": "kb:Investigation-256bc229-0404-4291-b3c2-f4c4caa556b7",
+            "@type": "case-investigation:Investigation",
+            "uco-core:description": [
+                "BFO enrichment on CASE/UCO domain types (same IRI)."
+            ],
+            "uco-core:name": "Synthetic case 2026-BFO-001",
+            "uco-core:object": [
+                {
+                    "@id": "kb:evidence-1"
+                },
+                {
+                    "@id": "kb:action-image"
+                }
+            ]
+        }
+    ]
+}

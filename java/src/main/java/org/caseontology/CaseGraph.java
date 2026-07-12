@@ -13,6 +13,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 /**
@@ -23,6 +26,8 @@ public class CaseGraph {
     private final Map<String, String> context;
     private final List<Map<String, Object>> objects;
     private final Map<Object, String> idMap;
+    private final Map<String, Integer> iriIndex = new LinkedHashMap<>();
+    private boolean rejectDuplicates;
 
     public CaseGraph() {
         this("http://example.org/kb/");
@@ -33,6 +38,18 @@ public class CaseGraph {
         this.context.put("kb", kbPrefix);
         this.objects = new ArrayList<>();
         this.idMap = new IdentityHashMap<>();
+    }
+
+    /**
+     * When true, {@link #load(String)} raises on duplicate {@code @id} instead of merging.
+     * Default is false (merge-compatible) for backward compatibility with merge workflows.
+     */
+    public boolean isRejectDuplicates() {
+        return rejectDuplicates;
+    }
+
+    public void setRejectDuplicates(boolean rejectDuplicates) {
+        this.rejectDuplicates = rejectDuplicates;
     }
 
     public void addContext(String prefix, String iri) {
@@ -54,7 +71,7 @@ public class CaseGraph {
         validateRequiredFields(instance);
         idMap.put(instance, id);
         Map<String, Object> jsonObj = toJsonLd(instance, id);
-        objects.add(jsonObj);
+        appendObject(jsonObj);
         return id;
     }
 
@@ -84,6 +101,133 @@ public class CaseGraph {
      */
     public String getId(Object instance) {
         return idMap.get(instance);
+    }
+
+    /**
+     * Return the JSON-LD map for a node by compact or expanded {@code @id}.
+     */
+    public Map<String, Object> get(String id) {
+        return findObject(id);
+    }
+
+    /**
+     * Return true if a node with this {@code @id} (compact or expanded) exists.
+     */
+    public boolean contains(String id) {
+        return findObject(id) != null;
+    }
+
+    /**
+     * Expand a compact IRI using this graph's context.
+     */
+    public String expandIri(String id) {
+        return expandCompactIri(id, context);
+    }
+
+    /**
+     * Create or update a JSON-LD node by {@code @id}.
+     */
+    public Map<String, Object> upsertNode(String id, Object types, Map<String, Object> properties) {
+        Map<String, Object> obj = findObject(id);
+        if (obj == null) {
+            obj = new LinkedHashMap<>();
+            obj.put("@id", id);
+            if (types != null) {
+                obj.put("@type", normalizeTypeValue(types));
+            }
+            if (properties != null) {
+                for (Map.Entry<String, Object> entry : properties.entrySet()) {
+                    setProperty(obj, entry.getKey(), entry.getValue());
+                }
+            }
+            appendObject(obj);
+            return obj;
+        }
+
+        if (types != null) {
+            obj.put("@type", normalizeTypeValue(mergeTypes(obj.get("@type"), types)));
+        }
+        if (properties != null) {
+            for (Map.Entry<String, Object> entry : properties.entrySet()) {
+                setProperty(obj, entry.getKey(), entry.getValue());
+            }
+        }
+        return obj;
+    }
+
+    public Map<String, Object> upsertNode(String id) {
+        return upsertNode(id, null, null);
+    }
+
+    /**
+     * Add an {@code rdf:type} to an existing node (same {@code @id}).
+     */
+    public void addType(String id, String typeIri) {
+        Map<String, Object> obj = requireObject(id);
+        obj.put("@type", normalizeTypeValue(mergeTypes(obj.get("@type"), typeIri)));
+    }
+
+    /**
+     * Add or merge a property on an existing node.
+     */
+    public void addProperty(String id, String key, Object value) {
+        Map<String, Object> obj = requireObject(id);
+        setProperty(obj, key, value);
+    }
+
+    /**
+     * Add a direct property edge source --predicate--> target.
+     */
+    public void link(String sourceId, String predicate, String targetId) {
+        Map<String, Object> targetRef = new LinkedHashMap<>();
+        targetRef.put("@id", targetId);
+        addProperty(sourceId, predicate, targetRef);
+    }
+
+    /**
+     * Create a uco-core:Relationship node with deterministic {@code @id}.
+     */
+    public Map<String, Object> createRelationship(
+            String sourceId,
+            String targetId,
+            String kind,
+            boolean directional,
+            String description) {
+        if (!contains(sourceId)) {
+            throw new IllegalArgumentException("Relationship source not in graph: " + sourceId);
+        }
+        if (!contains(targetId)) {
+            throw new IllegalArgumentException("Relationship target not in graph: " + targetId);
+        }
+        if (kind == null || kind.isEmpty()) {
+            throw new IllegalArgumentException("kindOfRelationship is required");
+        }
+
+        String relId = deterministicRelationshipId(sourceId, targetId, kind);
+        Map<String, Object> props = new LinkedHashMap<>();
+        List<Map<String, Object>> sources = new ArrayList<>();
+        Map<String, Object> sourceRef = new LinkedHashMap<>();
+        sourceRef.put("@id", sourceId);
+        sources.add(sourceRef);
+        props.put("uco-core:source", sources);
+
+        List<Map<String, Object>> targets = new ArrayList<>();
+        Map<String, Object> targetRef = new LinkedHashMap<>();
+        targetRef.put("@id", targetId);
+        targets.add(targetRef);
+        props.put("uco-core:target", targets);
+
+        props.put("uco-core:kindOfRelationship", kind);
+        props.put("uco-core:isDirectional", typedLiteral("xsd:boolean", directional ? "true" : "false"));
+        if (description != null) {
+            props.put("uco-core:description", description);
+        }
+
+        return upsertNode(relId, "uco-core:Relationship", props);
+    }
+
+    public Map<String, Object> createRelationship(String sourceId, String targetId, String kind) {
+        return createRelationship(sourceId, targetId, kind, true, null);
     }
 
     /**
@@ -248,7 +392,7 @@ public class CaseGraph {
             List<Object> graphList = (List<Object>) doc.get("@graph");
             for (Object item : graphList) {
                 if (item instanceof Map) {
-                    objects.add((Map<String, Object>) item);
+                    ingestRawNode((Map<String, Object>) item, rejectDuplicates);
                 }
             }
         }
@@ -304,7 +448,7 @@ public class CaseGraph {
             for (Object item : graphList) {
                 if (item instanceof Map) {
                     Map<String, Object> mapItem = (Map<String, Object>) item;
-                    graph.objects.add(mapItem);
+                    graph.appendObject(mapItem);
                     Object typed = tryInstantiate(mapItem, graph.context);
                     typedObjects.add(typed != null ? typed : mapItem);
                 }
@@ -314,7 +458,7 @@ public class CaseGraph {
         return new FromJsonLdResult(graph, typedObjects);
     }
 
-    private static String expandIri(String value, Map<String, String> context) {
+    private static String expandCompactIri(String value, Map<String, String> context) {
         if (value == null) return null;
         int colonIdx = value.indexOf(':');
         if (colonIdx > 0) {
@@ -329,7 +473,7 @@ public class CaseGraph {
         Object typeObj = obj.get("@type");
         if (!(typeObj instanceof String)) return null;
 
-        String expandedIri = expandIri((String) typeObj, context);
+        String expandedIri = expandCompactIri((String) typeObj, context);
         String localName = expandedIri.substring(expandedIri.lastIndexOf('/') + 1);
 
         List<String> candidates = new ArrayList<>();
@@ -469,7 +613,7 @@ public class CaseGraph {
             chunk.context.putAll(context);
             int end = Math.min(i + maxObjects, objects.size());
             for (int j = i; j < end; j++) {
-                chunk.objects.add(objects.get(j));
+                chunk.appendObject(new LinkedHashMap<>(objects.get(j)));
             }
             chunks.add(chunk);
         }
@@ -492,6 +636,188 @@ public class CaseGraph {
             merged.loadFile(path);
         }
         return merged;
+    }
+
+    private void appendObject(Map<String, Object> obj) {
+        Object idObj = obj.get("@id");
+        String nodeId = idObj instanceof String ? (String) idObj : null;
+        if (nodeId != null && findObject(nodeId) != null) {
+            throw new IllegalStateException(
+                "Duplicate @id '" + nodeId + "': use addType/upsertNode or merge-compatible load instead of appending a second node");
+        }
+        objects.add(obj);
+        if (nodeId != null) {
+            indexNode(nodeId, objects.size() - 1);
+        }
+    }
+
+    private void indexNode(String nodeId, int index) {
+        String expanded = expandIri(nodeId);
+        iriIndex.put(expanded, index);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> findObject(String nodeId) {
+        String expanded = expandIri(nodeId);
+        Integer idx = iriIndex.get(expanded);
+        if (idx != null && idx < objects.size()) {
+            return objects.get(idx);
+        }
+        for (int i = 0; i < objects.size(); i++) {
+            Map<String, Object> obj = objects.get(i);
+            Object oidObj = obj.get("@id");
+            if (!(oidObj instanceof String)) {
+                continue;
+            }
+            String oid = (String) oidObj;
+            if (oid.equals(nodeId) || expandIri(oid).equals(expanded)) {
+                indexNode(oid, i);
+                return obj;
+            }
+        }
+        return null;
+    }
+
+    private Map<String, Object> requireObject(String nodeId) {
+        Map<String, Object> obj = findObject(nodeId);
+        if (obj == null) {
+            throw new IllegalArgumentException("No node with @id '" + nodeId + "'");
+        }
+        return obj;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void ingestRawNode(Map<String, Object> raw, boolean rejectDuplicates) {
+        Object idObj = raw.get("@id");
+        if (!(idObj instanceof String)) {
+            objects.add(raw);
+            return;
+        }
+        String nodeId = (String) idObj;
+
+        Map<String, Object> existing = findObject(nodeId);
+        if (existing == null) {
+            appendObject(raw);
+            return;
+        }
+
+        if (rejectDuplicates) {
+            throw new IllegalStateException("Duplicate @id '" + nodeId + "': conflicting duplicate during load");
+        }
+
+        if (raw.containsKey("@type")) {
+            existing.put("@type", normalizeTypeValue(mergeTypes(existing.get("@type"), raw.get("@type"))));
+        }
+        for (Map.Entry<String, Object> entry : raw.entrySet()) {
+            String key = entry.getKey();
+            if ("@id".equals(key) || "@type".equals(key)) {
+                continue;
+            }
+            setProperty(existing, key, entry.getValue());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<String> asTypeList(Object types) {
+        List<String> result = new ArrayList<>();
+        if (types == null) {
+            return result;
+        }
+        if (types instanceof String) {
+            result.add((String) types);
+            return result;
+        }
+        if (types instanceof List) {
+            for (Object item : (List<Object>) types) {
+                if (item != null) {
+                    result.add(item.toString());
+                }
+            }
+            return result;
+        }
+        result.add(types.toString());
+        return result;
+    }
+
+    private static Object normalizeTypeValue(Object types) {
+        List<String> list = asTypeList(types);
+        if (list.size() == 1) {
+            return list.get(0);
+        }
+        return list;
+    }
+
+    private static Object mergeTypes(Object existing, Object newTypes) {
+        List<String> merged = asTypeList(existing);
+        for (String typeIri : asTypeList(newTypes)) {
+            if (!merged.contains(typeIri)) {
+                merged.add(typeIri);
+            }
+        }
+        return merged;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void setProperty(Map<String, Object> obj, String key, Object value) {
+        if (!obj.containsKey(key)) {
+            obj.put(key, value);
+            return;
+        }
+
+        Object existing = obj.get(key);
+        if (existing == null ? value == null : existing.equals(value)) {
+            return;
+        }
+
+        if (existing instanceof List) {
+            List<Object> list = (List<Object>) existing;
+            if (value instanceof Map) {
+                Object refId = ((Map<String, Object>) value).get("@id");
+                if (refId != null) {
+                    for (Object item : list) {
+                        if (item instanceof Map) {
+                            Object itemId = ((Map<String, Object>) item).get("@id");
+                            if (refId.equals(itemId)) {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!list.contains(value)) {
+                list.add(value);
+            }
+            return;
+        }
+
+        if (existing instanceof Map && value instanceof Map) {
+            Object existingRef = ((Map<String, Object>) existing).get("@id");
+            Object valueRef = ((Map<String, Object>) value).get("@id");
+            if (existingRef != null && existingRef.equals(valueRef)) {
+                return;
+            }
+        }
+
+        List<Object> merged = new ArrayList<>();
+        merged.add(existing);
+        merged.add(value);
+        obj.put(key, merged);
+    }
+
+    private String deterministicRelationshipId(String sourceId, String targetId, String kind) {
+        String payload = expandIri(sourceId) + "|" + expandIri(targetId) + "|" + kind;
+        try {
+            MessageDigest sha = MessageDigest.getInstance("SHA-256");
+            byte[] hash = sha.digest(payload.getBytes(StandardCharsets.UTF_8));
+            StringBuilder digest = new StringBuilder();
+            for (int i = 0; i < 6; i++) {
+                digest.append(String.format("%02x", hash[i]));
+            }
+            String safeKind = kind.replace(" ", "_");
+            return "kb:rel-" + safeKind + "-" + digest;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 not available", e);
+        }
     }
 
     private String mintId(Object instance) {

@@ -1,0 +1,111 @@
+{
+    "@context": {
+        "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+        "kb": "http://example.org/kb/",
+        "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+        "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+        "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "time": "http://www.w3.org/2006/time#"
+    },
+    "@graph": [
+        {
+            "@id": "kb:ObservableObject-f2204026-dc27-47c3-81ed-e996e2af8bc3",
+            "@type": "uco-observable:ObservableObject",
+            "uco-core:hasFacet": [
+                {
+                    "@id": "kb:FileFacet-a25e6282-91bd-4994-a176-e7e16ce8ae53",
+                    "@type": "uco-observable:FileFacet",
+                    "uco-observable:fileName": "messages.json",
+                    "uco-observable:sizeInBytes": {
+                        "@type": "xsd:integer",
+                        "@value": "4096"
+                    }
+                }
+            ],
+            "uco-core:name": "Chat export (synthetic)",
+            "time:hasTime": {
+                "@id": "kb:interval-open-custody"
+            }
+        },
+        {
+            "@id": "kb:action-parse",
+            "@type": "case-investigation:InvestigativeAction",
+            "uco-core:name": "Parse chat export",
+            "uco-action:endTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2026-03-15T14:45:00+00:00"
+            },
+            "uco-action:object": [
+                {
+                    "@id": "kb:ObservableObject-f2204026-dc27-47c3-81ed-e996e2af8bc3"
+                }
+            ],
+            "uco-action:startTime": {
+                "@type": "xsd:dateTime",
+                "@value": "2026-03-15T14:00:00+00:00"
+            },
+            "time:hasTime": {
+                "@id": "kb:interval-examination"
+            }
+        },
+        {
+            "@id": "kb:interval-examination",
+            "@type": "time:Interval",
+            "time:hasBeginning": {
+                "@id": "kb:instant-start"
+            },
+            "time:hasEnd": {
+                "@id": "kb:instant-end"
+            }
+        },
+        {
+            "@id": "kb:instant-start",
+            "@type": "time:Instant",
+            "time:inXSDDateTimeStamp": {
+                "@type": "xsd:dateTimeStamp",
+                "@value": "2026-03-15T14:00:00Z"
+            }
+        },
+        {
+            "@id": "kb:instant-end",
+            "@type": "time:Instant",
+            "time:inXSDDateTimeStamp": {
+                "@type": "xsd:dateTimeStamp",
+                "@value": "2026-03-15T14:45:00Z"
+            }
+        },
+        {
+            "@id": "kb:interval-open-custody",
+            "@type": "time:Interval",
+            "time:hasBeginning": {
+                "@id": "kb:instant-custody-start"
+            }
+        },
+        {
+            "@id": "kb:instant-custody-start",
+            "@type": "time:Instant",
+            "time:inXSDDateTimeStamp": {
+                "@type": "xsd:dateTimeStamp",
+                "@value": "2026-03-10T09:00:00-05:00"
+            }
+        },
+        {
+            "@id": "kb:Investigation-81257980-602c-4937-94f2-e19f123321b6",
+            "@type": "case-investigation:Investigation",
+            "uco-core:description": [
+                "Native Action timestamps plus OWL-Time Interval/Instant resources.",
+                "Open interval models ongoing custody; clock-corrected instant uses offset."
+            ],
+            "uco-core:name": "Synthetic case 2026-TIME-001",
+            "uco-core:object": [
+                {
+                    "@id": "kb:ObservableObject-f2204026-dc27-47c3-81ed-e996e2af8bc3"
+                },
+                {
+                    "@id": "kb:action-parse"
+                }
+            ]
+        }
+    ]
+}

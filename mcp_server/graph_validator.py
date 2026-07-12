@@ -208,8 +208,15 @@ def validate_graph_file(
     strict_concepts: bool = True,
     extra_ontology_graphs: list[str | Path] | None = None,
     force_rdfs_inference: bool = False,
+    profiles: list[str] | None = None,
+    allow_foundational_pair: bool = False,
+    bundle_manifest_path: str | Path | None = None,
 ) -> GraphValidationReport:
     """Validate a CASE/UCO graph file with the local case_validate tool.
+
+    When ``profiles`` is set, resolution goes through
+    ``validation_bundle.resolve_validation_bundle`` so SHACL and (when enabled)
+    strict concept coverage share one fingerprinted ontology set.
 
     When ``strict_concepts`` is True (the default), the SHACL pass is followed
     by a closed-world concept coverage check: every class and property IRI in
@@ -239,16 +246,42 @@ def validate_graph_file(
     args = [VALIDATOR_NAME]
     if allow_warning:
         args.append("--allow-warning")
-    extension_args = extension_ontology_args(extensions, project_root=project_root)
-    if extension_args:
-        args.extend(extension_args)
-    elif extensions:
-        args.extend(["--built-version", DEFAULT_BUILT_VERSION])
-    if extra_ontology_graphs:
-        for graph_path_extra in extra_ontology_graphs:
-            args.extend(["--ontology-graph", str(graph_path_extra)])
-    if force_rdfs_inference and "--inference" not in args:
-        args.extend(["--inference", "rdfs"])
+
+    resolved_bundle = None
+    if profiles:
+        from validation_bundle import ValidationBundleError, resolve_validation_bundle
+
+        try:
+            resolved_bundle = resolve_validation_bundle(
+                extensions=extensions,
+                profiles=profiles,
+                project_root=project_root,
+                allow_foundational_pair=allow_foundational_pair,
+                extra_ontology_graphs=extra_ontology_graphs,
+            )
+        except ValidationBundleError as exc:
+            raise ValueError(str(exc)) from exc
+        if bundle_manifest_path:
+            resolved_bundle.write_manifest(bundle_manifest_path)
+        args.extend(["--built-version", DEFAULT_BUILT_VERSION, "--allow-info"])
+        for path in resolved_bundle.ontology_graph_paths():
+            args.extend(["--ontology-graph", str(path)])
+        if resolved_bundle.inference:
+            args.extend(["--inference", resolved_bundle.inference])
+        elif force_rdfs_inference:
+            args.extend(["--inference", "rdfs"])
+    else:
+        extension_args = extension_ontology_args(extensions, project_root=project_root)
+        if extension_args:
+            args.extend(extension_args)
+        elif extensions:
+            args.extend(["--built-version", DEFAULT_BUILT_VERSION])
+        if extra_ontology_graphs:
+            for graph_path_extra in extra_ontology_graphs:
+                args.extend(["--ontology-graph", str(graph_path_extra)])
+        if force_rdfs_inference and "--inference" not in args:
+            args.extend(["--inference", "rdfs"])
+
     args.append(str(graph))
     try:
         completed = subprocess.run(
