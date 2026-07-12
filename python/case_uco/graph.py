@@ -1229,17 +1229,17 @@ def _jsonld_values_equal(a: Any, b: Any) -> bool:
         if "@id" in a or "@id" in b:
             if "@id" not in a or "@id" not in b:
                 return False
-            return a["@id"] == b["@id"]
+            return str(a["@id"]) == str(b["@id"])
         if set(a.keys()) != set(b.keys()):
             return False
         return all(_jsonld_values_equal(a[k], b[k]) for k in a)
     if isinstance(a, list) and isinstance(b, list):
         if _is_id_ref_list(a) and _is_id_ref_list(b):
-            return sorted(_id_of(x) for x in a) == sorted(_id_of(x) for x in b)
+            return sorted(str(_id_of(x)) for x in a) == sorted(str(_id_of(x)) for x in b)
         if len(a) != len(b):
             return False
         return all(_jsonld_values_equal(x, y) for x, y in zip(a, b))
-    return a == b
+    return bool(a == b)
 
 
 def _normalize_literal_type(type_iri: Any) -> str:

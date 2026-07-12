@@ -56,7 +56,10 @@ def _discover_extensions() -> None:
     try:
         eps: Iterable[Any] = entry_points(group="case_uco.extensions")
     except TypeError:
-        selected_eps = entry_points().get("case_uco.extensions")
+        # Python <3.10 EntryPoints mapping API.
+        eps_map = entry_points()
+        getter = getattr(eps_map, "get", None)
+        selected_eps = getter("case_uco.extensions") if callable(getter) else None
         eps = selected_eps if selected_eps is not None else ()
 
     for ep in eps:
