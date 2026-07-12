@@ -97,3 +97,16 @@ remain open. Experimental foundations #70–#73 stay experimental v1.22 work.
 | CI | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211429925 | success |
 | CodeQL | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211429931 | success |
 | Rust Security (on `96c322d`) | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211198715 | success |
+
+
+## Final RC SHA (tag not cut)
+
+**HEAD:** `1b22f43818772684b3443165f7bdfc5df7da57bc`
+
+| Workflow | URL | Conclusion |
+|----------|-----|------------|
+| CI | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29214036412 | success |
+| CodeQL | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29214036416 | success |
+| Rust Security | unchanged since `96c322d` (path filters; Rust not modified in RC prep) — https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211198715 | success |
+
+Promotion fail-open fixed; #69 narrowed; issue disposition comments posted on #59–#73.
