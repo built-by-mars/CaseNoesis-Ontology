@@ -59,3 +59,16 @@ See `artifacts/ci/alerts-disposition.md` for the full table. Summary: **40 fixed
 ## Deferred to v1.22.0 / keep open
 
 Full original acceptance for issues #59–#73 (breadth of exemplars, dependency-aware partition, multi-language performance harnesses) remains open. Experimental foundations #70–#73 stay experimental.
+
+
+## Green Actions on follow-up commit
+
+**Release-candidate HEAD:** `0e0b5cd32a3131af15770a05ac683b340620deed`
+
+| Workflow | URL | Conclusion |
+|----------|-----|------------|
+| CI | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211429925 | success |
+| CodeQL | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211429931 | success |
+| Rust Security (on `96c322d`) | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211198715 | success |
+
+Mypy follow-up (`0e0b5cd`) did not re-trigger Rust Security (path filters); Rust Security was green on the CQ commit `96c322d`.
