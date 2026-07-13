@@ -190,8 +190,6 @@ def test_promotion_fails_on_missing_exemplar(tmp_path):
     manifest = json.loads((ext_dir / "manifest.json").read_text(encoding="utf-8"))
     manifest["exemplar_files"] = ["missing-exemplar.ttl"]
     (ext_dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
-    import graph_validator
-
     if not graph_validator.validator_available():
         pytest.skip("case_validate CLI not installed")
     result = knowledge_lifecycle.promote_extension(
