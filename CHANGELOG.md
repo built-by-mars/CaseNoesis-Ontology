@@ -13,7 +13,14 @@ Cross-ontology composition: IRI-indexed graph enrichment API, profile-aware
 validation planner, upper-ontology recipes and exemplars, upper-ontology
 exemplar quality gate, and experimental v1.22 performance foundations
 (streaming write, boundary partitioning helpers, class-registry cache,
-synthetic benchmarks). Tracks GitHub issues #59–#73.
+synthetic benchmarks). Issues #59–#69 closed as scoped-complete for this
+release; #70–#73 remain open on the **v1.22.0** milestone as experimental
+foundations (not completed v1.21 functionality).
+
+Verified executable-code SHA: `d5b6987bce18a2797fd0f53ebedfd438e03e2a9d`
+(CI + CodeQL green; zero open code-scanning alerts). Installable packages
+ship on the GitHub Release; registry publication remains opt-in via
+`PUBLISH_PACKAGES` (disabled for this tag).
 
 ### Added
 

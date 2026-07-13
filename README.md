@@ -33,7 +33,10 @@ Beyond the generated code, the repository provides:
 ### Use the SDK (Consumer Install)
 
 Install the SDK package for your language. No need to clone the repo or run the generator.
-As of this release, the bindings are not pushed to the distro services so you will need to access the bindings locally via the CLI or MCP. I plan to publish the bindings to the distro services soon after more SDK testing.
+
+**v1.21.0** ships installable artifacts on the [GitHub Release](https://github.com/vulnmaster/CASE-UCO-SDK/releases/tag/v1.21.0) (wheel, sdist, NuGet package, Maven JAR, and Rust crate, with checksums and attestations). Registry publication to PyPI, NuGet, Maven Central, and crates.io is opt-in and is **not** enabled for this tag. You can also build from source via the CLI or MCP (see [Getting Started](#getting-started) below).
+
+When registry packages are published in a later release:
 
 ```bash
 pip install case-uco                          # Python (PyPI)
@@ -41,7 +44,7 @@ dotnet add package CaseUco                    # C# (NuGet)
 cargo add case-uco                            # Rust (crates.io)
 ```
 
-For Java, add to your `pom.xml`:
+For Java (once on Maven Central), add to your `pom.xml`:
 
 ```xml
 <dependency>
@@ -56,8 +59,6 @@ For graph validation, also install `case-utils`:
 ```bash
 pip install case-utils    # enables graph.validate() across all languages
 ```
-
-**Alternatively**, install from [GitHub Release](https://github.com/vulnmaster/CASE-UCO-SDK/releases) artifacts — see the release notes for per-language instructions.
 
 ### Prerequisites
 
