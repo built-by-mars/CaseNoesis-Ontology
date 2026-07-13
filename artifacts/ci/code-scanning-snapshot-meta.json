@@ -1,12 +1,15 @@
 {
-  "retrieved_at": "2026-07-12T23:39:39Z",
-  "head_sha": "a269392bee7ffb777748c95f8bb72ad516e03b73",
+  "retrieved_at": "2026-07-13T00:32:55Z",
+  "head_sha": "d5b6987bce18a2797fd0f53ebedfd438e03e2a9d",
+  "prior_verified_executable_sha": "1b22f43818772684b3443165f7bdfc5df7da57bc",
   "open_count": 0,
-  "codeql_run_url": "https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29212444012",
-  "ci_run_url": "https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29212444014",
+  "codeql_run_url": "https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29215329710",
+  "ci_run_url": "https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29215329562",
+  "prior_codeql_run_url_1b22f43": "https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29214036416",
   "findings_across_passes": {
     "first_pass": 40,
     "second_pass": 32,
     "total": 72
-  }
+  },
+  "note": "d5b6987 is the verified executable-code SHA after CodeQL hygiene (repeated-import). Delta from 1b22f43 is one test-file import removal only."
 }

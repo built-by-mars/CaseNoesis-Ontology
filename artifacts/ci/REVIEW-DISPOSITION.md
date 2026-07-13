@@ -110,3 +110,21 @@ remain open. Experimental foundations #70–#73 stay experimental v1.22 work.
 | Rust Security | unchanged since `96c322d` (path filters; Rust not modified in RC prep) — https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29211198715 | success |
 
 Promotion fail-open fixed; #69 narrowed; issue disposition comments posted on #59–#73.
+
+
+## Tag-ready release governance (post ChatGPT final checklist)
+
+**Verified executable-code SHA:** `d5b6987bce18a2797fd0f53ebedfd438e03e2a9d`
+
+| Workflow | URL | Conclusion |
+|----------|-----|------------|
+| CI | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29215329562 | success |
+| CodeQL | https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29215329710 | success |
+| Open code-scanning alerts | API `state=open` after CodeQL above | **0** |
+
+Prior feature verification SHA `1b22f43` remains documented; `d5b6987` is a one-line test import hygiene fix re-verified green.
+
+**Issue tracker:** #59–#69 closed as scoped-complete-v1.21; #70–#73 open on milestone **v1.22.0** with label `v1.22`.
+
+**PUBLISH_PACKAGES:** leave false for GitHub Release with attached packages only unless credentials for PyPI/NuGet/Maven/crates.io are confirmed.
+

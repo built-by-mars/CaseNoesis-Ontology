@@ -2,7 +2,7 @@
 
 # CASE/UCO SDK
 
-**v1.21.0** *(release candidate — tag pending)* · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md#1210---2026-07-12)
+**v1.21.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md#1210---2026-07-12)
 
 A multi-language data modeling library for digital forensics, cyber-investigation, and cyber-observable data. If your software produces or consumes forensic evidence, this SDK gives you typed, validated builders in **Python**, **C#**, **Java**, and **Rust** — so you can model investigation data in your language and produce interoperable [CASE/UCO](https://caseontology.org/) JSON-LD output.
 

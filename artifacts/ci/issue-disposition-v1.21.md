@@ -1,7 +1,14 @@
-# v1.21.0 issue disposition templates (posted to #59–#73)
+# v1.21.0 issue disposition (#59–#73)
 
-Release SHA (update after final push): TBD
-Scope policy: v1.21 ships a deliberately scoped cross-ontology stack; remaining original acceptance breadth moves to v1.22 unless listed completed below.
+**Verified executable-code SHA:** `d5b6987bce18a2797fd0f53ebedfd438e03e2a9d`  
+(CI: https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29215329562 · CodeQL: https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29215329710 · open code-scanning alerts: 0)
+
+Prior green feature SHA: `1b22f43818772684b3443165f7bdfc5df7da57bc` (recipe-gate import fix). `d5b6987` adds only a CodeQL hygiene deletion of a repeated test import.
+
+**Release tag target:** `v1.21.0`  
+The final tag commit may contain documentation/evidence-only changes after this verified code SHA.
+
+**Scope policy:** v1.21 ships a deliberately scoped cross-ontology stack; remaining original acceptance breadth moves to v1.22 unless listed completed below.
 
 ## #59 BFO/gUFO — scoped complete for v1.21
 | Acceptance | Disposition | Evidence |
