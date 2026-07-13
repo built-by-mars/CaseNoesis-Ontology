@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/critic-prompt-package.schema.json",
+  "title": "CASE/UCO Critic Prompt Package",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "system_role",
+    "trust_boundary",
+    "artifact_hashes",
+    "validation_summary",
+    "response_schema"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "system_role": { "type": "string" },
+    "trust_boundary": {
+      "type": "object",
+      "required": ["content_trust", "forbidden_actions"],
+      "properties": {
+        "content_trust": { "type": "string" },
+        "forbidden_actions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "artifact_hashes": { "type": "object" },
+    "validation_summary": { "type": "object" },
+    "deterministic_findings": { "type": "array" },
+    "prior_pass_findings": { "type": "array" },
+    "graph_neighborhoods": { "type": "array" },
+    "serializer_excerpts": { "type": "array" },
+    "source_excerpts": { "type": "array" },
+    "response_schema": { "type": "object" },
+    "byte_size": { "type": "integer" },
+    "truncated": { "type": "boolean" }
+  }
+}

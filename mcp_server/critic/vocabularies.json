@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0.0",
+  "severities": ["critical", "high", "medium", "low", "info"],
+  "finding_statuses": ["new", "persisting", "resolved", "regression", "disputed"],
+  "evidence_kinds": ["deterministic", "source", "critic_inference"],
+  "critic_scopes": ["graph", "serializer", "both"],
+  "categories": [
+    "syntax_integrity",
+    "validation",
+    "relationship_direction",
+    "relationship_vocabulary",
+    "action_grammar",
+    "authorization",
+    "identity_conflation",
+    "provenance",
+    "markings",
+    "custody",
+    "facet_placement",
+    "dictionary_collision",
+    "source_fidelity",
+    "coverage",
+    "serializer_api",
+    "serializer_validation",
+    "serializer_safety",
+    "serializer_performance",
+    "generic_relationship",
+    "investigation_structure"
+  ],
+  "handoff_types": [
+    "recipe_improvement",
+    "routing_gap",
+    "new_recipe_candidate",
+    "ontology_gap",
+    "extension_gap",
+    "sdk_bug"
+  ],
+  "error_codes": [
+    "critic_graph_missing",
+    "critic_serializer_missing",
+    "critic_path_outside_workspace",
+    "critic_graph_parse_failed",
+    "critic_validation_unavailable",
+    "critic_validation_incomplete",
+    "critic_prompt_package_too_large",
+    "critic_response_invalid",
+    "critic_response_schema_mismatch",
+    "critic_artifact_hash_mismatch"
+  ],
+  "score_dimensions": [
+    "schema_concept_conformance",
+    "source_fidelity",
+    "semantic_precision",
+    "provenance_custody",
+    "markings_authorization",
+    "coverage_completeness",
+    "serializer_quality",
+    "maintainability_reproducibility"
+  ],
+  "score_scale": {
+    "min": 0,
+    "max": 5,
+    "anchors": {
+      "0": "Cannot verify or critically broken",
+      "1": "Major defects; not usable without revision",
+      "2": "Significant gaps; revision required",
+      "3": "Usable with medium findings remaining",
+      "4": "Strong; only low/info findings or minor gaps",
+      "5": "Exemplary for the declared scope"
+    }
+  }
+}

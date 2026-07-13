@@ -46,6 +46,8 @@ fastmcp dev mcp_server/server.py
 | `process_document_file` | `source_path, output_path, file_kind?, upload_id?, progress_output?` | Process a supported local synthetic document (receipt image, PDF, Office, CSV/table) into bounded CASE/UCO-shaped JSON-LD |
 | `validate_graph` | `graph_path: str, allow_warning?: bool, extensions?: list[str]` | Run `case_validate` against JSON-LD/Turtle; `extensions=['cac']` uses the press-release subset; `extensions=['cac:full']` uses the full manifest |
 
+Python API (v1.22 / #75): `from critic import analyze_artifact, CriticArtifactRequest` — deterministic graph/serializer critic with bounded prompt packages. MCP session tools arrive in #76.
+
 ## Available Resources
 
 | URI | Description |

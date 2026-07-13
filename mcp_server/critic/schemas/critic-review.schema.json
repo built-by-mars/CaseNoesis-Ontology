@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/critic-review.schema.json",
+  "title": "CASE/UCO CriticReview",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_hashes",
+    "validation",
+    "deterministic_findings",
+    "merged_findings",
+    "scorecard",
+    "status"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "artifact_hashes": {
+      "type": "object",
+      "required": ["graph_sha256"],
+      "properties": {
+        "graph_sha256": { "type": "string", "minLength": 64, "maxLength": 64 },
+        "serializer_sha256": { "type": ["string", "null"] },
+        "source_sha256": { "type": "object" },
+        "coverage_contract_sha256": { "type": ["string", "null"] }
+      }
+    },
+    "validation": { "type": "object" },
+    "deterministic_findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "critic_findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "merged_findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "scorecard": { "type": "object" },
+    "prompt_package": { "type": "object" },
+    "status": { "type": "string" },
+    "errors": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "required": [
+        "finding_id",
+        "severity",
+        "category",
+        "confidence",
+        "status",
+        "target",
+        "evidence_kind",
+        "evidence",
+        "rationale",
+        "recommended_change",
+        "verification_method"
+      ],
+      "properties": {
+        "finding_id": { "type": "string" },
+        "identity_key": { "type": "string" },
+        "severity": {
+          "enum": ["critical", "high", "medium", "low", "info"]
+        },
+        "category": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "status": {
+          "enum": ["new", "persisting", "resolved", "regression", "disputed"]
+        },
+        "target": { "type": "object" },
+        "evidence_kind": {
+          "enum": ["deterministic", "source", "critic_inference"]
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rationale": { "type": "string" },
+        "recommended_change": { "type": "string" },
+        "verification_method": { "type": "string" },
+        "rule_id": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

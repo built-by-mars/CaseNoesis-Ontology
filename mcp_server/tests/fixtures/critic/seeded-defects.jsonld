@@ -1,0 +1,100 @@
+{
+  "@context": {
+    "@vocab": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "kb": "urn:example:critic:"
+  },
+  "@graph": [
+    {
+      "@id": "kb:investigation-1",
+      "@type": "Investigation",
+      "name": "Critic fixture case"
+    },
+    {
+      "@id": "kb:person-1",
+      "@type": "https://ontology.unifiedcyberontology.org/uco/identity/Person",
+      "name": "Alex Example"
+    },
+    {
+      "@id": "kb:charge-1",
+      "@type": "https://ontology.caseontology.org/case/vocabulary/CriminalCharge",
+      "name": "Wire fraud"
+    },
+    {
+      "@id": "kb:charged-with-relationship",
+      "@type": "Relationship",
+      "kindOfRelationship": "Charged_With",
+      "source": { "@id": "kb:charge-1" },
+      "target": { "@id": "kb:person-1" }
+    },
+    {
+      "@id": "kb:obs-1",
+      "@type": "https://ontology.unifiedcyberontology.org/uco/observable/ObservableObject",
+      "uco-observable:fileName": "evil.exe",
+      "uco-core:relevantAuthorization": { "@id": "kb:missing-warrant" }
+    },
+    {
+      "@id": "kb:acquire-1",
+      "@type": "https://ontology.caseontology.org/case/investigation/InvestigativeAction",
+      "name": "Acquire disk image",
+      "uco-action:object": { "@id": "kb:image-1" }
+    },
+    {
+      "@id": "kb:image-1",
+      "@type": "https://ontology.unifiedcyberontology.org/uco/observable/File",
+      "name": "evidence.E01"
+    },
+    {
+      "@id": "kb:dict-a",
+      "@type": "https://ontology.unifiedcyberontology.org/uco/types/Dictionary",
+      "uco-types:entry": { "@id": "kb:shared-entry" }
+    },
+    {
+      "@id": "kb:dict-b",
+      "@type": "https://ontology.unifiedcyberontology.org/uco/types/Dictionary",
+      "uco-types:entry": { "@id": "kb:shared-entry" }
+    },
+    {
+      "@id": "kb:shared-entry",
+      "@type": "https://ontology.unifiedcyberontology.org/uco/types/DictionaryEntry",
+      "name": "shared"
+    },
+    {
+      "@id": "kb:rel-1",
+      "@type": "Relationship",
+      "kindOfRelationship": "Related_To",
+      "source": { "@id": "kb:person-1" },
+      "target": { "@id": "kb:obs-1" }
+    },
+    {
+      "@id": "kb:rel-2",
+      "@type": "Relationship",
+      "kindOfRelationship": "Related_To",
+      "source": { "@id": "kb:person-1" },
+      "target": { "@id": "kb:image-1" }
+    },
+    {
+      "@id": "kb:rel-3",
+      "@type": "Relationship",
+      "kindOfRelationship": "Related_To",
+      "source": { "@id": "kb:obs-1" },
+      "target": { "@id": "kb:image-1" }
+    },
+    {
+      "@id": "kb:rel-4",
+      "@type": "Relationship",
+      "kindOfRelationship": "Related_To",
+      "source": { "@id": "kb:charge-1" },
+      "target": { "@id": "kb:obs-1" }
+    },
+    {
+      "@id": "kb:rel-5",
+      "@type": "Relationship",
+      "kindOfRelationship": "Related_To",
+      "source": { "@id": "kb:acquire-1" },
+      "target": { "@id": "kb:image-1" }
+    }
+  ]
+}

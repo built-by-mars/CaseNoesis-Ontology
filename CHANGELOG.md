@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+#### Critic loop foundation (#75) — v1.22
+
+- `mcp_server/critic/` deterministic critic package: typed findings/review
+  contracts, graph integrity + modeling heuristics, Python AST serializer
+  checks, coverage-contract comparison, bounded prompt packages, finding
+  identity/diff, and JSON Schemas. Public API: `analyze_artifact`.
+  Docs: `docs/critic/RULES.md`. MCP session orchestration remains #76.
+
 ## [1.21.0] - 2026-07-12
 
 Cross-ontology composition: IRI-indexed graph enrichment API, profile-aware
