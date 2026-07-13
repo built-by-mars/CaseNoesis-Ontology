@@ -8,13 +8,13 @@ from typing import Any
 
 from jsonschema import Draft202012Validator
 
-from critic.finding_diff import make_stable_finding_id
 from critic.models import (
     CriticFinding,
     CriticScorecard,
     CriticTarget,
     ScoreDimension,
     load_vocabularies,
+    make_stable_finding_id,
 )
 
 SCHEMA_DIR = Path(__file__).resolve().parent / "schemas"
@@ -56,7 +56,33 @@ MODEL_RESPONSE_SCHEMA = {
                     "severity": {
                         "enum": ["critical", "high", "medium", "low", "info"]
                     },
-                    "category": {"type": "string", "minLength": 1, "maxLength": 64},
+                    "category": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64,
+                        "enum": [
+                            "syntax_integrity",
+                            "validation",
+                            "relationship_direction",
+                            "relationship_vocabulary",
+                            "action_grammar",
+                            "authorization",
+                            "identity_conflation",
+                            "provenance",
+                            "markings",
+                            "custody",
+                            "facet_placement",
+                            "dictionary_collision",
+                            "source_fidelity",
+                            "coverage",
+                            "serializer_api",
+                            "serializer_validation",
+                            "serializer_safety",
+                            "serializer_performance",
+                            "generic_relationship",
+                            "investigation_structure"
+                        ]
+                    },
                     "confidence": {"type": "number", "minimum": 0, "maximum": 1},
                     "target": {
                         "type": "object",
@@ -145,11 +171,24 @@ def parse_critic_model_response(
         raise CriticResponseError("critic_artifact_hash_mismatch", "graph_sha256")
     if payload["prompt_package_hash"] != expected_prompt_package_hash:
         raise CriticResponseError("critic_artifact_hash_mismatch", "prompt_package_hash")
-    if expected_serializer_sha256 and payload.get("serializer_sha256") not in (
-        None,
-        expected_serializer_sha256,
-    ):
-        raise CriticResponseError("critic_artifact_hash_mismatch", "serializer_sha256")
+
+    # Serializer / session / pass bindings: when the caller declares expected
+    # values, the response must echo them exactly (no silent omission).
+    if expected_serializer_sha256 is not None:
+        if payload.get("serializer_sha256") != expected_serializer_sha256:
+            raise CriticResponseError(
+                "critic_artifact_hash_mismatch", "serializer_sha256"
+            )
+    if session_id is not None:
+        if payload.get("session_id") != session_id:
+            raise CriticResponseError(
+                "critic_artifact_hash_mismatch", "session_id"
+            )
+    if pass_number is not None:
+        if payload.get("pass_number") != pass_number:
+            raise CriticResponseError(
+                "critic_artifact_hash_mismatch", "pass_number"
+            )
 
     vocab = load_vocabularies()
     categories = set(vocab["categories"])

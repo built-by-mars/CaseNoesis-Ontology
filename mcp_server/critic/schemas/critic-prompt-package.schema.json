@@ -3,19 +3,26 @@
   "$id": "https://caseontology.org/schemas/critic-prompt-package.schema.json",
   "title": "CASE/UCO Critic Prompt Package",
   "type": "object",
+  "additionalProperties": false,
   "required": [
     "schema_version",
     "system_role",
     "trust_boundary",
     "artifact_hashes",
     "validation_summary",
-    "response_schema"
+    "response_schema",
+    "prompt_package_hash",
+    "byte_size",
+    "truncated"
   ],
   "properties": {
-    "schema_version": { "type": "string" },
-    "system_role": { "type": "string" },
+    "schema_version": { "type": "string", "minLength": 1, "maxLength": 32 },
+    "system_role": { "type": "string", "minLength": 1 },
+    "session_id": { "type": ["string", "null"], "maxLength": 128 },
+    "pass_number": { "type": "integer", "minimum": 1, "maximum": 32 },
     "trust_boundary": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["content_trust", "forbidden_actions"],
       "properties": {
         "content_trust": { "type": "string" },
@@ -25,15 +32,32 @@
         }
       }
     },
-    "artifact_hashes": { "type": "object" },
+    "artifact_hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["graph_sha256"],
+      "properties": {
+        "graph_sha256": { "type": "string", "minLength": 64, "maxLength": 64 },
+        "serializer_sha256": { "type": ["string", "null"] },
+        "source_sha256": { "type": "object" },
+        "coverage_contract_sha256": { "type": ["string", "null"] }
+      }
+    },
     "validation_summary": { "type": "object" },
+    "extensions": { "type": "array", "items": { "type": "string" } },
+    "profiles": { "type": "array", "items": { "type": "string" } },
     "deterministic_findings": { "type": "array" },
     "prior_pass_findings": { "type": "array" },
     "graph_neighborhoods": { "type": "array" },
     "serializer_excerpts": { "type": "array" },
+    "serializer_overview": { "type": "object" },
     "source_excerpts": { "type": "array" },
+    "structural_stats": { "type": "object" },
+    "omissions": { "type": "array", "items": { "type": "string" } },
     "response_schema": { "type": "object" },
-    "byte_size": { "type": "integer" },
+    "prompt_package_hash": { "type": "string", "minLength": 64, "maxLength": 64 },
+    "byte_size": { "type": "integer", "minimum": 1 },
+    "token_estimate": { "type": "integer", "minimum": 1 },
     "truncated": { "type": "boolean" }
   }
 }

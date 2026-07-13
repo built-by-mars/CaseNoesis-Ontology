@@ -259,6 +259,78 @@ def test_model_response_schema_enforcement():
     assert exc.value.code == "critic_response_schema_mismatch"
 
 
+def test_prompt_package_schema_and_reproducible_hash(tmp_path, monkeypatch):
+    import graph_validator
+    from critic.context_builder import compute_prompt_package_hash, validate_prompt_package
+
+    monkeypatch.setattr(graph_validator, "validator_available", lambda: False)
+    g = tmp_path / "gold.jsonld"
+    g.write_text((FIXTURES / "gold-charged-with.jsonld").read_text(encoding="utf-8"))
+    review = analyze_artifact(
+        CriticArtifactRequest(
+            graph_path=str(g),
+            critic_scope="graph",
+            session_id="sess-1",
+            pass_number=1,
+        )
+    )
+    package = review.prompt_package
+    assert "response_schema" in package
+    validate_prompt_package(package)
+    assert package["prompt_package_hash"] == compute_prompt_package_hash(package)
+    # Mutating excluded metadata must not change the content hash.
+    mutated = dict(package)
+    mutated["byte_size"] = package["byte_size"] + 99
+    mutated["token_estimate"] = package["token_estimate"] + 1
+    assert compute_prompt_package_hash(mutated) == package["prompt_package_hash"]
+
+
+def test_model_response_requires_serializer_session_pass_bindings():
+    base = {
+        "schema_version": "1.1.0",
+        "session_id": "sess-1",
+        "pass_number": 2,
+        "graph_sha256": "a" * 64,
+        "serializer_sha256": "c" * 64,
+        "prompt_package_hash": "b" * 64,
+        "findings": [],
+        "scorecard": {},
+    }
+    # Missing serializer when expected
+    with pytest.raises(Exception) as exc:
+        parse_critic_model_response(
+            {**base, "serializer_sha256": None},
+            expected_graph_sha256="a" * 64,
+            expected_prompt_package_hash="b" * 64,
+            expected_serializer_sha256="c" * 64,
+            session_id="sess-1",
+            pass_number=2,
+        )
+    assert exc.value.code == "critic_artifact_hash_mismatch"
+
+    with pytest.raises(Exception) as exc2:
+        parse_critic_model_response(
+            base,
+            expected_graph_sha256="a" * 64,
+            expected_prompt_package_hash="b" * 64,
+            expected_serializer_sha256="c" * 64,
+            session_id="sess-OTHER",
+            pass_number=2,
+        )
+    assert exc2.value.code == "critic_artifact_hash_mismatch"
+
+    ok = parse_critic_model_response(
+        base,
+        expected_graph_sha256="a" * 64,
+        expected_prompt_package_hash="b" * 64,
+        expected_serializer_sha256="c" * 64,
+        session_id="sess-1",
+        pass_number=2,
+    )
+    assert ok["session_id"] == "sess-1"
+    assert ok["pass_number"] == 2
+
+
 def test_model_cannot_override_validation_cap():
     validation = ValidationSummary(
         conforms=False,
@@ -289,9 +361,13 @@ def test_analyze_artifact_offline(tmp_path, monkeypatch):
         CriticArtifactRequest(graph_path=str(g), serializer_path=str(s), critic_scope="both")
     )
     assert review.prompt_package["prompt_package_hash"]
-    assert review.prompt_package["byte_size"] >= len(
-        json.dumps(review.prompt_package, sort_keys=True, separators=(",", ":"))
-    ) - 200  # hash/size fields included
+    assert "response_schema" in review.prompt_package
+    from critic.context_builder import compute_prompt_package_hash, validate_prompt_package
+
+    validate_prompt_package(review.prompt_package)
+    assert review.prompt_package["prompt_package_hash"] == compute_prompt_package_hash(
+        review.prompt_package
+    )
     assert review.rule_executions
     assert "CRIT-H-CHARGED-WITH-REVERSED" in {f.rule_id for f in review.merged_findings}
     assert review.handoff_suggestions == []

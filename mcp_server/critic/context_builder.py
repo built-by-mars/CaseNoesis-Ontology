@@ -1,10 +1,13 @@
-"""Bounded critic prompt/context package builder (Round 2)."""
+"""Bounded critic prompt/context package builder (Round 2 / Round 3)."""
 
 from __future__ import annotations
 
 import hashlib
 import json
+from pathlib import Path
 from typing import Any
+
+from jsonschema import Draft202012Validator
 
 from critic.canonical import (
     IRI_ACTION_OBJECT,
@@ -25,6 +28,14 @@ DEFAULT_MAX_PACKAGE_BYTES = 48_000
 DEFAULT_NEIGHBORHOOD_NODES = 12
 DEFAULT_EXCERPT_CHARS = 1_200
 MAX_NESTED_STR = 160
+SCHEMA_PATH = Path(__file__).resolve().parent / "schemas" / "critic-prompt-package.schema.json"
+
+# Metadata excluded from the independently reproducible content hash.
+HASH_EXCLUDED_FIELDS = frozenset({
+    "prompt_package_hash",
+    "byte_size",
+    "token_estimate",
+})
 
 CRITIC_SYSTEM_ROLE = (
     "You are an independent CASE/UCO knowledge-graph critic. "
@@ -36,6 +47,56 @@ CRITIC_SYSTEM_ROLE = (
     "Distinguish deterministic facts already provided from your judgments. "
     "Never claim validation conforms when the validation summary says otherwise."
 )
+
+# Slim response contract embedded for the critic model / manual fallback host.
+# Full enforcement lives in response_parser.MODEL_RESPONSE_SCHEMA.
+CRITIC_MODEL_RESPONSE_SCHEMA_HINT = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": [
+        "schema_version",
+        "graph_sha256",
+        "prompt_package_hash",
+        "findings",
+        "scorecard",
+    ],
+    "properties": {
+        "schema_version": {"type": "string"},
+        "session_id": {"type": ["string", "null"]},
+        "pass_number": {"type": ["integer", "null"]},
+        "graph_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+        "serializer_sha256": {"type": ["string", "null"]},
+        "prompt_package_hash": {"type": "string", "minLength": 64, "maxLength": 64},
+        "findings": {"type": "array"},
+        "scorecard": {"type": "object"},
+        "notes": {"type": "string"},
+    },
+}
+
+
+def content_hash_payload(package: dict[str, Any]) -> dict[str, Any]:
+    """Return the package fields that participate in prompt_package_hash."""
+
+    return {k: v for k, v in package.items() if k not in HASH_EXCLUDED_FIELDS}
+
+
+def compute_prompt_package_hash(package: dict[str, Any]) -> str:
+    """Independently reproducible SHA-256 over content fields only."""
+
+    return hashlib.sha256(_dumps(content_hash_payload(package))).hexdigest()
+
+
+def validate_prompt_package(package: dict[str, Any]) -> None:
+    schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+    errors = sorted(
+        Draft202012Validator(schema).iter_errors(package),
+        key=lambda e: list(e.path),
+    )
+    if errors:
+        raise ValueError(f"critic_prompt_package_schema_mismatch: {errors[0].message}")
+    expected = compute_prompt_package_hash(package)
+    if package.get("prompt_package_hash") != expected:
+        raise ValueError("critic_prompt_package_hash_mismatch")
 
 
 def build_prompt_package(
@@ -55,9 +116,12 @@ def build_prompt_package(
     pass_number: int = 1,
 ) -> dict[str, Any]:
     neighborhoods = _one_hop_neighborhoods(graph_view, deterministic_findings)
+    ser_excerpts = list(serializer_excerpts)
+    src_excerpts = list(source_excerpts)
+    overview: dict[str, Any] = dict(serializer_overview or {})
 
-    def assemble(*, truncated: bool) -> dict[str, Any]:
-        package: dict[str, Any] = {
+    def assemble(*, truncated: bool, omissions: list[str]) -> dict[str, Any]:
+        return {
             "schema_version": CRITIC_SCHEMA_VERSION,
             "system_role": CRITIC_SYSTEM_ROLE,
             "session_id": session_id,
@@ -83,54 +147,47 @@ def build_prompt_package(
             "prior_pass_findings": [
                 _compact_finding(f) for f in (prior_findings or [])[:40]
             ],
-            "graph_neighborhoods": neighborhoods,
-            "serializer_excerpts": serializer_excerpts[:20],
-            "serializer_overview": serializer_overview or {},
-            "source_excerpts": source_excerpts[:20],
+            "graph_neighborhoods": list(neighborhoods),
+            "serializer_excerpts": list(ser_excerpts[:20]),
+            "serializer_overview": dict(overview),
+            "source_excerpts": list(src_excerpts[:20]),
             "structural_stats": {
                 "node_count": len(graph_view.nodes) if graph_view else 0,
                 "top_level_count": len(graph_view.top_level_order) if graph_view else 0,
             },
-            "omissions": [],
+            "omissions": list(omissions),
+            "response_schema": CRITIC_MODEL_RESPONSE_SCHEMA_HINT,
             "truncated": truncated,
         }
-        return package
 
-    package = assemble(truncated=False)
-    encoded = _dumps(package)
-    if len(encoded) > max_bytes:
+    omissions: list[str] = []
+    package = assemble(truncated=False, omissions=omissions)
+    content_bytes = _dumps(content_hash_payload(package))
+    if len(content_bytes) > max_bytes:
         neighborhoods[:] = neighborhoods[:3]
-        serializer_excerpts[:] = serializer_excerpts[:5]
-        source_excerpts[:] = source_excerpts[:5]
-        package = assemble(truncated=True)
-        package["omissions"].append("truncated_neighborhoods_and_excerpts")
-        encoded = _dumps(package)
-    if len(encoded) > max_bytes:
-        package["graph_neighborhoods"] = []
-        package["serializer_excerpts"] = []
-        package["source_excerpts"] = []
-        package["serializer_overview"] = {}
-        package["omissions"].append("dropped_context_sections")
-        package["truncated"] = True
-        encoded = _dumps(package)
-    if len(encoded) > max_bytes:
+        ser_excerpts[:] = ser_excerpts[:5]
+        src_excerpts[:] = src_excerpts[:5]
+        omissions = ["truncated_neighborhoods_and_excerpts"]
+        package = assemble(truncated=True, omissions=omissions)
+        content_bytes = _dumps(content_hash_payload(package))
+    if len(content_bytes) > max_bytes:
+        neighborhoods.clear()
+        ser_excerpts.clear()
+        src_excerpts.clear()
+        omissions = [
+            "truncated_neighborhoods_and_excerpts",
+            "dropped_context_sections",
+        ]
+        overview = {}
+        package = assemble(truncated=True, omissions=omissions)
+        content_bytes = _dumps(content_hash_payload(package))
+    if len(content_bytes) > max_bytes:
         raise ValueError("critic_prompt_package_too_large")
 
-    # Insert metadata that affects size, then remeasure until stable.
-    for _ in range(4):
-        package["byte_size"] = len(encoded)
-        package["prompt_package_hash"] = hashlib.sha256(encoded).hexdigest()
-        package["token_estimate"] = max(1, len(encoded) // 4)
-        new_encoded = _dumps(package)
-        if len(new_encoded) == len(encoded) or abs(len(new_encoded) - len(encoded)) < 8:
-            encoded = new_encoded
-            package["byte_size"] = len(encoded)
-            package["prompt_package_hash"] = hashlib.sha256(encoded).hexdigest()
-            break
-        encoded = new_encoded
-        if len(encoded) > max_bytes:
-            raise ValueError("critic_prompt_package_too_large")
-
+    package["prompt_package_hash"] = hashlib.sha256(content_bytes).hexdigest()
+    package["token_estimate"] = max(1, len(content_bytes) // 4)
+    package["byte_size"] = len(_dumps(package))
+    validate_prompt_package(package)
     return package
 
 
@@ -183,15 +240,6 @@ def build_serializer_overview(source: str, *, path_name: str, max_chars: int = 2
     return {"path": path_name, "imports_and_defs": text, "line_count": len(lines)}
 
 
-def read_bounded_text(path_text_provider, *, max_chars: int = 800) -> str:
-    """Read at most max_chars from a callable returning text (already bounded preferred)."""
-
-    text = path_text_provider()
-    if len(text) > max_chars:
-        return text[: max_chars - 1] + "…"
-    return text
-
-
 def _dumps(package: dict[str, Any]) -> bytes:
     return json.dumps(package, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
@@ -242,7 +290,9 @@ def _one_hop_neighborhoods(
         for iri in neighbor_iris[:8]:
             n = view.get(iri)
             if n:
-                neighbors.append(_truncate_node_dict(n.raw_json or {"@id": iri, "@type": list(n.types)}))
+                neighbors.append(
+                    _truncate_node_dict(n.raw_json or {"@id": iri, "@type": list(n.types)})
+                )
         neighborhoods.append(
             {
                 "focus": node_id,
@@ -273,8 +323,5 @@ def _truncate_value(value: Any, depth: int) -> Any:
             ["…"] if len(value) > 8 else []
         )
     if isinstance(value, dict):
-        return {
-            k: _truncate_value(v, depth + 1)
-            for k, v in list(value.items())[:20]
-        }
+        return {k: _truncate_value(v, depth + 1) for k, v in list(value.items())[:20]}
     return value
