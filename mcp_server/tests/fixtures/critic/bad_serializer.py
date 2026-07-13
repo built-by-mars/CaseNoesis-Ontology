@@ -11,23 +11,21 @@ def make_id() -> str:
 
 
 def build():
-    graph = {"@graph": []}
+    class FakeGraph:
+        def __init__(self):
+            self._objects = {}
+
+        def bad(self):
+            self._objects["x"] = 1
+
+    g = FakeGraph()
+    g.bad()
     try:
-        graph["_objects"]  # noqa: B018 — private access pattern for fixture
+        raise RuntimeError("boom")
     except Exception:
         pass
 
-    if not validator_available():  # noqa: F821 — intentional for fail-open fixture shape
+    if not validator_available():  # noqa: F821
         return True
 
-    # Pretend public API while dumping raw JSON
-    return json.dumps(graph)
-
-
-# Direct private mutation pattern
-class FakeGraph:
-    def __init__(self):
-        self._objects = {}
-
-    def bad(self):
-        self._objects["x"] = 1
+    return json.dumps({"@graph": []})

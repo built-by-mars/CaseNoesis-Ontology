@@ -1,100 +1,161 @@
 {
   "@context": {
-    "@vocab": "https://ontology.unifiedcyberontology.org/uco/core/",
     "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
     "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
     "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
-    "kb": "urn:example:critic:"
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
   "@graph": [
     {
-      "@id": "kb:investigation-1",
-      "@type": "Investigation",
-      "name": "Critic fixture case"
+      "@id": "urn:uuid:11111111-1111-1111-1111-111111111111",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Critic fixture case INV-CRIT-001",
+      "case-investigation:relevantAuthorization": [
+        { "@id": "urn:uuid:aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa" }
+      ]
     },
     {
-      "@id": "kb:person-1",
-      "@type": "https://ontology.unifiedcyberontology.org/uco/identity/Person",
-      "name": "Alex Example"
+      "@id": "urn:uuid:aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      "@type": "case-investigation:Authorization",
+      "uco-core:name": "Test warrant"
     },
     {
-      "@id": "kb:charge-1",
-      "@type": "https://ontology.caseontology.org/case/vocabulary/CriminalCharge",
-      "name": "Wire fraud"
+      "@id": "urn:uuid:22222222-2222-2222-2222-222222222222",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Alex Example"
     },
     {
-      "@id": "kb:charged-with-relationship",
-      "@type": "Relationship",
-      "kindOfRelationship": "Charged_With",
-      "source": { "@id": "kb:charge-1" },
-      "target": { "@id": "kb:person-1" }
+      "@id": "urn:uuid:33333333-3333-3333-3333-333333333333",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Acquire disk image",
+      "uco-action:object": [
+        { "@id": "urn:uuid:44444444-4444-4444-4444-444444444444" }
+      ],
+      "case-investigation:relevantAuthorization": [
+        { "@id": "urn:uuid:aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa" }
+      ]
     },
     {
-      "@id": "kb:obs-1",
-      "@type": "https://ontology.unifiedcyberontology.org/uco/observable/ObservableObject",
-      "uco-observable:fileName": "evil.exe",
-      "uco-core:relevantAuthorization": { "@id": "kb:missing-warrant" }
+      "@id": "urn:uuid:44444444-4444-4444-4444-444444444444",
+      "@type": [
+        "uco-observable:ObservableObject",
+        "uco-observable:File"
+      ],
+      "uco-core:name": "evidence.E01",
+      "uco-observable:fileName": "evidence.E01"
     },
     {
-      "@id": "kb:acquire-1",
-      "@type": "https://ontology.caseontology.org/case/investigation/InvestigativeAction",
-      "name": "Acquire disk image",
-      "uco-action:object": { "@id": "kb:image-1" }
+      "@id": "urn:uuid:55555555-5555-5555-5555-555555555555",
+      "@type": "uco-core:Relationship",
+      "uco-core:kindOfRelationship": "Charged_With",
+      "uco-core:source": [
+        { "@id": "urn:uuid:66666666-6666-6666-6666-666666666666" }
+      ],
+      "uco-core:target": [
+        { "@id": "urn:uuid:22222222-2222-2222-2222-222222222222" }
+      ]
     },
     {
-      "@id": "kb:image-1",
-      "@type": "https://ontology.unifiedcyberontology.org/uco/observable/File",
-      "name": "evidence.E01"
+      "@id": "urn:uuid:66666666-6666-6666-6666-666666666666",
+      "@type": "uco-core:UcoObject",
+      "uco-core:name": "Wire fraud charge",
+      "uco-core:tag": ["CriminalCharge"]
     },
     {
-      "@id": "kb:dict-a",
-      "@type": "https://ontology.unifiedcyberontology.org/uco/types/Dictionary",
-      "uco-types:entry": { "@id": "kb:shared-entry" }
+      "@id": "urn:uuid:77777777-7777-7777-7777-777777777777",
+      "@type": "uco-types:Dictionary",
+      "uco-types:entry": [
+        { "@id": "urn:uuid:99999999-9999-9999-9999-999999999999" }
+      ]
     },
     {
-      "@id": "kb:dict-b",
-      "@type": "https://ontology.unifiedcyberontology.org/uco/types/Dictionary",
-      "uco-types:entry": { "@id": "kb:shared-entry" }
+      "@id": "urn:uuid:88888888-8888-8888-8888-888888888888",
+      "@type": "uco-types:Dictionary",
+      "uco-types:entry": [
+        { "@id": "urn:uuid:99999999-9999-9999-9999-999999999999" }
+      ]
     },
     {
-      "@id": "kb:shared-entry",
-      "@type": "https://ontology.unifiedcyberontology.org/uco/types/DictionaryEntry",
-      "name": "shared"
+      "@id": "urn:uuid:99999999-9999-9999-9999-999999999999",
+      "@type": "uco-types:DictionaryEntry",
+      "uco-core:name": "shared"
     },
     {
-      "@id": "kb:rel-1",
-      "@type": "Relationship",
-      "kindOfRelationship": "Related_To",
-      "source": { "@id": "kb:person-1" },
-      "target": { "@id": "kb:obs-1" }
+      "@id": "urn:uuid:bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+      "@type": "uco-core:Relationship",
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:source": [{ "@id": "urn:uuid:22222222-2222-2222-2222-222222222222" }],
+      "uco-core:target": [{ "@id": "urn:uuid:44444444-4444-4444-4444-444444444444" }]
     },
     {
-      "@id": "kb:rel-2",
-      "@type": "Relationship",
-      "kindOfRelationship": "Related_To",
-      "source": { "@id": "kb:person-1" },
-      "target": { "@id": "kb:image-1" }
+      "@id": "urn:uuid:cccccccc-cccc-cccc-cccc-cccccccccccc",
+      "@type": "uco-core:Relationship",
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:source": [{ "@id": "urn:uuid:22222222-2222-2222-2222-222222222222" }],
+      "uco-core:target": [{ "@id": "urn:uuid:33333333-3333-3333-3333-333333333333" }]
     },
     {
-      "@id": "kb:rel-3",
-      "@type": "Relationship",
-      "kindOfRelationship": "Related_To",
-      "source": { "@id": "kb:obs-1" },
-      "target": { "@id": "kb:image-1" }
+      "@id": "urn:uuid:dddddddd-dddd-dddd-dddd-dddddddddddd",
+      "@type": "uco-core:Relationship",
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:source": [{ "@id": "urn:uuid:33333333-3333-3333-3333-333333333333" }],
+      "uco-core:target": [{ "@id": "urn:uuid:44444444-4444-4444-4444-444444444444" }]
     },
     {
-      "@id": "kb:rel-4",
-      "@type": "Relationship",
-      "kindOfRelationship": "Related_To",
-      "source": { "@id": "kb:charge-1" },
-      "target": { "@id": "kb:obs-1" }
+      "@id": "urn:uuid:eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee",
+      "@type": "uco-core:Relationship",
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:source": [{ "@id": "urn:uuid:11111111-1111-1111-1111-111111111111" }],
+      "uco-core:target": [{ "@id": "urn:uuid:22222222-2222-2222-2222-222222222222" }]
     },
     {
-      "@id": "kb:rel-5",
-      "@type": "Relationship",
-      "kindOfRelationship": "Related_To",
-      "source": { "@id": "kb:acquire-1" },
-      "target": { "@id": "kb:image-1" }
+      "@id": "urn:uuid:ffffffff-ffff-ffff-ffff-ffffffffffff",
+      "@type": "uco-core:Relationship",
+      "uco-core:kindOfRelationship": "Related_To",
+      "uco-core:source": [{ "@id": "urn:uuid:66666666-6666-6666-6666-666666666666" }],
+      "uco-core:target": [{ "@id": "urn:uuid:44444444-4444-4444-4444-444444444444" }]
+    },
+    {
+      "@id": "urn:uuid:10101010-1010-1010-1010-101010101010",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "fixture-source.md",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:20202020-2020-2020-2020-202020202020",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:30303030-3030-3030-3030-303030303030",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:40404040-4040-4040-4040-404040404040",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "unrelated-artifact.bin",
+      "uco-core:description": "Mentions ART-999 only in prose",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:50505050-5050-5050-5050-505050505050",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:60606060-6060-6060-6060-606060606060",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

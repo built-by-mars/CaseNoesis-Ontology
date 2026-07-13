@@ -1,10 +1,4 @@
-"""Deterministic critic analysis entrypoint (issue #75).
-
-Runs parse/integrity, reused validation + relationship lint, structural
-heuristics, optional coverage/source checks, and Python serializer AST checks.
-Produces a ``CriticReview`` with a bounded prompt package for sampling/manual
-critics (#76). Does **not** call an LLM or mutate artifacts.
-"""
+"""Deterministic critic analysis entrypoint (issue #75 Round 2)."""
 
 from __future__ import annotations
 
@@ -15,15 +9,15 @@ from typing import Any
 import graph_validator
 import relationship_kinds
 import workspace_policy
-from critic.context_builder import build_prompt_package, excerpt_serializer
-from critic.coverage import check_embedded_source_hash, compare_coverage_contract
-from critic.finding_diff import assign_sequential_ids, diff_findings
-from critic.graph_heuristics import run_graph_heuristics
-from critic.graph_integrity import (
-    check_integrity,
-    load_jsonld_graph,
-    sha256_file,
+from critic.context_builder import (
+    build_prompt_package,
+    build_serializer_overview,
+    excerpt_serializer,
 )
+from critic.coverage import check_source_document_hash, compare_coverage_contract
+from critic.finding_diff import assign_display_indexes, diff_findings
+from critic.graph_heuristics import run_graph_heuristics
+from critic.graph_integrity import analyze_graph_integrity, sha256_file
 from critic.models import (
     CRITIC_SCHEMA_VERSION,
     ArtifactHashes,
@@ -31,6 +25,7 @@ from critic.models import (
     CriticFinding,
     CriticReview,
     CriticTarget,
+    SelfImprovementHandoffCandidate,
     ValidationSummary,
 )
 from critic.scorecard import build_deterministic_scorecard, merge_scorecards
@@ -44,10 +39,9 @@ class CriticError(Exception):
 
 
 def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
-    """Run a full deterministic critic pass and build a bounded prompt package."""
-
     started = time.perf_counter()
     errors: list[str] = []
+    rule_executions: list[dict[str, Any]] = []
 
     try:
         graph_path = workspace_policy.check_read_path(
@@ -55,7 +49,6 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
         )
     except ValueError as exc:
         raise CriticError("critic_path_outside_workspace", str(exc)) from exc
-
     if not graph_path.is_file():
         raise CriticError("critic_graph_missing")
 
@@ -73,11 +66,12 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
     source_paths: list[Path] = []
     for raw in request.source_paths:
         try:
-            source_paths.append(
-                workspace_policy.check_read_path(raw, include_write_roots=True)
-            )
+            sp = workspace_policy.check_read_path(raw, include_write_roots=True)
         except ValueError as exc:
             raise CriticError("critic_path_outside_workspace", str(exc)) from exc
+        if not sp.is_file():
+            raise CriticError("critic_graph_missing", f"source_missing:{sp.name}")
+        source_paths.append(sp)
 
     coverage_path: Path | None = None
     if request.coverage_contract_path:
@@ -87,62 +81,104 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
             )
         except ValueError as exc:
             raise CriticError("critic_path_outside_workspace", str(exc)) from exc
+        if not coverage_path.is_file():
+            raise CriticError("critic_graph_missing", "coverage_contract_missing")
 
-    project_root = (
-        Path(request.project_root).resolve()
-        if request.project_root
-        else Path(__file__).resolve().parents[2]
-    )
+    # project_root is internal — default to repository root; MCP tools must not
+    # expose arbitrary caller selection without policy (Round 2 / #76).
+    project_root = Path(__file__).resolve().parents[2]
+    if request.project_root:
+        candidate = Path(request.project_root).resolve()
+        if candidate == project_root or project_root in candidate.parents:
+            project_root = candidate
 
     hashes = ArtifactHashes(
         graph_sha256=sha256_file(graph_path),
         serializer_sha256=sha256_file(serializer_path) if serializer_path else None,
-        source_sha256={p.name: sha256_file(p) for p in source_paths if p.is_file()},
+        source_sha256={
+            # Preserve distinct keys when basenames collide
+            f"{p.parent.name}/{p.name}" if True else p.name: sha256_file(p)
+            for p in source_paths
+        },
         coverage_contract_sha256=(
-            sha256_file(coverage_path) if coverage_path and coverage_path.is_file() else None
+            sha256_file(coverage_path) if coverage_path else None
         ),
     )
+    # Prefer plain basename when unique
+    if len({p.name for p in source_paths}) == len(source_paths):
+        hashes.source_sha256 = {p.name: sha256_file(p) for p in source_paths}
 
     findings: list[CriticFinding] = []
-    document: dict[str, Any] | None = None
+    view = None
 
     if request.critic_scope in {"graph", "both"}:
-        document, parse_findings = load_jsonld_graph(graph_path)
-        findings.extend(parse_findings)
-        if document is not None:
-            findings.extend(check_integrity(document))
-            findings.extend(run_graph_heuristics(document))
-            if coverage_path and coverage_path.is_file():
-                findings.extend(compare_coverage_contract(document, coverage_path))
-            findings.extend(
-                check_embedded_source_hash(document, hashes.source_sha256)
-            )
+        view, integrity_findings, integrity_exec = analyze_graph_integrity(
+            graph_path, artifact_hash=hashes.graph_sha256
+        )
+        findings.extend(integrity_findings)
+        rule_executions.extend(e.to_dict() for e in integrity_exec)
 
-            # Relationship lint on parsed JSON-LD
-            lint = relationship_kinds.lint_relationship_kinds(document)
+        heur_findings, heur_exec = run_graph_heuristics(
+            view, artifact_hash=hashes.graph_sha256
+        )
+        findings.extend(heur_findings)
+        rule_executions.extend(e.to_dict() for e in heur_exec)
+
+        if coverage_path:
+            cov_findings, cov_exec = compare_coverage_contract(
+                view, coverage_path, artifact_hash=hashes.graph_sha256
+            )
+            findings.extend(cov_findings)
+            rule_executions.extend(e.to_dict() for e in cov_exec)
+
+        for sp in source_paths:
+            src_findings, src_exec = check_source_document_hash(
+                view,
+                source_name=sp.name,
+                expected_sha256=sha256_file(sp),
+                artifact_hash=hashes.graph_sha256,
+            )
+            findings.extend(src_findings)
+            rule_executions.extend(e.to_dict() for e in src_exec)
+
+        if view and view.raw_document is not None:
+            lint = relationship_kinds.lint_relationship_kinds(view.raw_document)
+            lint_findings: list[CriticFinding] = []
             for item in lint.get("findings") or []:
                 node_id = item.get("node_id")
-                findings.append(
-                    CriticFinding(
-                        finding_id="CRIT-PENDING",
-                        severity="medium" if item.get("severity") == "warning" else "high",
-                        category="relationship_vocabulary",
-                        confidence=1.0,
-                        status="new",
-                        target=CriticTarget(
-                            node_id=node_id if isinstance(node_id, str) else None,
-                            predicate="uco-core:kindOfRelationship",
-                        ),
-                        evidence_kind="deterministic",
-                        evidence=[str(item.get("kind") or "")],
-                        rationale=str(item.get("message") or "relationship kind lint"),
-                        recommended_change=(
-                            "Use a vocabulary member or justify open-vocabulary kind."
-                        ),
-                        verification_method="relationship_kinds.lint_relationship_kinds",
-                        rule_id="CRIT-G-REL-KIND-LINT",
-                    )
+                f = CriticFinding(
+                    finding_id="",
+                    severity="medium" if item.get("severity") == "warning" else "high",
+                    category="relationship_vocabulary",
+                    confidence=1.0,
+                    status="new",
+                    target=CriticTarget(
+                        node_id=node_id if isinstance(node_id, str) else None,
+                        predicate="uco-core:kindOfRelationship",
+                    ),
+                    evidence_kind="deterministic",
+                    evidence=[str(item.get("kind") or "")],
+                    rationale=str(item.get("message") or "relationship kind lint"),
+                    recommended_change=(
+                        "Use a vocabulary member or justify open-vocabulary kind."
+                    ),
+                    verification_method="relationship_kinds.lint_relationship_kinds",
+                    rule_id="CRIT-G-REL-KIND-LINT",
                 )
+                f.ensure_identity_key()
+                lint_findings.append(f)
+            findings.extend(lint_findings)
+            rule_executions.append(
+                {
+                    "rule_id": "CRIT-G-REL-KIND-LINT",
+                    "rule_version": "1.1.0",
+                    "status": "evaluated",
+                    "input_artifact_hash": hashes.graph_sha256,
+                    "targets_examined": lint.get("checked", 0),
+                    "finding_ids": [f.finding_id for f in lint_findings],
+                    "error_code": None,
+                }
+            )
 
     validation = _run_validation(
         graph_path,
@@ -151,85 +187,109 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
         project_root=project_root,
         errors=errors,
     )
-
-    # Map validation issues into findings
     findings.extend(_validation_findings(validation))
 
     serializer_excerpts: list[dict[str, Any]] = []
+    serializer_overview: dict[str, Any] | None = None
     if serializer_path and request.critic_scope in {"serializer", "both"}:
-        source_text = serializer_path.read_text(encoding="utf-8", errors="replace")
+        # Bound read: first 256 KiB for AST; overview from same buffer
+        max_ser_bytes = 256 * 1024
+        raw = serializer_path.read_bytes()[:max_ser_bytes]
+        source_text = raw.decode("utf-8", errors="replace")
         if serializer_path.suffix.lower() == ".py":
-            ser_findings = analyze_python_serializer(serializer_path, source_text)
+            ser_findings = analyze_python_serializer(
+                serializer_path,
+                source_text,
+                serializer_mode=request.serializer_mode,
+            )
             findings.extend(ser_findings)
             serializer_excerpts = excerpt_serializer(
                 source_text, ser_findings, path_name=serializer_path.name
             )
-        else:
-            findings.append(
-                CriticFinding(
-                    finding_id="CRIT-PENDING",
-                    severity="info",
-                    category="serializer_api",
-                    confidence=1.0,
-                    status="new",
-                    target=CriticTarget(path=serializer_path.name),
-                    evidence_kind="deterministic",
-                    evidence=[f"language={serializer_path.suffix}"],
-                    rationale=(
-                        "Non-Python serializers receive bounded text review in #76; "
-                        "deep AST analysis is Python-first in v1.22."
-                    ),
-                    recommended_change="Optional: provide a Python builder or await language analyzers.",
-                    verification_method="Check serializer_path suffix.",
-                    rule_id="CRIT-S-NON-PYTHON",
-                )
+            serializer_overview = build_serializer_overview(
+                source_text, path_name=serializer_path.name
             )
-            serializer_excerpts = [
+            rule_executions.append(
                 {
-                    "path": serializer_path.name,
-                    "start_line": 1,
-                    "end_line": min(40, source_text.count("\n") + 1),
-                    "text": "\n".join(source_text.splitlines()[:40]),
+                    "rule_id": "CRIT-S-PY-SUITE",
+                    "rule_version": "1.1.0",
+                    "status": "evaluated",
+                    "input_artifact_hash": hashes.serializer_sha256,
+                    "targets_examined": 1,
+                    "finding_ids": [f.finding_id for f in ser_findings],
+                    "error_code": None,
                 }
-            ]
+            )
+        else:
+            serializer_overview = {
+                "path": serializer_path.name,
+                "note": "non-python overview only",
+            }
 
-    # Re-running deterministic rules is explicit verification: a prior
-    # deterministic finding whose identity_key is absent from the new scan
-    # is treated as resolved.
-    prior = list(request.prior_findings)
-    current_keys = {f.ensure_identity_key() for f in findings}
-    resolved_keys = {
-        old.ensure_identity_key()
-        for old in prior
-        if old.evidence_kind == "deterministic"
-        and old.rule_id
-        and old.ensure_identity_key() not in current_keys
+    # Rule-execution ledger → resolve only when rule evaluated successfully
+    evaluated_rules = {
+        e["rule_id"]
+        for e in rule_executions
+        if e.get("status") == "evaluated"
     }
+    skipped_rules = {
+        e["rule_id"]
+        for e in rule_executions
+        if e.get("status") in {"skipped", "failed", "not_applicable"}
+    }
+    current_by_rule: dict[str, set[str]] = {}
+    for f in findings:
+        if f.rule_id:
+            current_by_rule.setdefault(f.rule_id, set()).add(f.finding_id)
+
+    resolved_ids: set[str] = set()
+    unevaluated_ids: set[str] = set()
+    for old in request.prior_findings:
+        if old.evidence_kind != "deterministic" or not old.rule_id:
+            unevaluated_ids.add(old.finding_id)
+            continue
+        if old.rule_id in skipped_rules or old.rule_id not in evaluated_rules:
+            unevaluated_ids.add(old.finding_id)
+            continue
+        # Rule evaluated successfully and finding absent → resolved
+        if old.finding_id not in {f.finding_id for f in findings}:
+            resolved_ids.add(old.finding_id)
+        # else persisting via diff
 
     diff = diff_findings(
-        prior,
+        list(request.prior_findings),
         findings,
         disputed_identity_keys=request.disputed_identity_keys,
-        resolved_identity_keys=resolved_keys,
+        resolved_finding_ids=resolved_ids,
+        unevaluated_finding_ids=unevaluated_ids,
     )
-    merged = [f for f in diff.apply_statuses() if f.status != "resolved"]
-    assign_sequential_ids(merged)
+    merged = diff.all_for_review()
+    assign_display_indexes([f for f in merged if f.status != "resolved"])
 
-    scorecard = build_deterministic_scorecard(validation, merged)
-    # Model score unused in deterministic-only pass
+    scorecard = build_deterministic_scorecard(
+        validation,
+        [f for f in merged if f.status != "resolved"],
+        has_sources=bool(source_paths),
+        has_serializer=bool(serializer_path),
+        has_coverage_contract=bool(coverage_path),
+    )
     scorecard = merge_scorecards(scorecard, None)
 
+    source_excerpts = _bounded_source_excerpts(source_paths)
     try:
         prompt_package = build_prompt_package(
             artifact_hashes=hashes,
             validation=validation,
-            deterministic_findings=merged,
-            graph_document=document,
+            deterministic_findings=[f for f in merged if f.status != "resolved"],
+            graph_view=view,
             serializer_excerpts=serializer_excerpts,
-            source_excerpts=_source_excerpts(source_paths),
-            prior_findings=prior,
+            serializer_overview=serializer_overview,
+            source_excerpts=source_excerpts,
+            prior_findings=list(request.prior_findings),
             extensions=request.extensions,
             profiles=request.profiles,
+            session_id=request.session_id,
+            pass_number=request.pass_number,
         )
     except ValueError as exc:
         if str(exc) == "critic_prompt_package_too_large":
@@ -237,21 +297,27 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
         raise
 
     status = _status_from(validation, merged, errors)
+    suggestions = _conservative_handoff_suggestions(
+        merged, validation.bundle_fingerprint
+    )
 
-    elapsed_ms = int((time.perf_counter() - started) * 1000)
     return CriticReview(
         schema_version=CRITIC_SCHEMA_VERSION,
         artifact_hashes=hashes,
         validation=validation,
-        deterministic_findings=list(merged),
+        deterministic_findings=[f for f in merged if f.evidence_kind == "deterministic"],
         critic_findings=[],
-        merged_findings=list(merged),
+        merged_findings=merged,
         scorecard=scorecard,
         prompt_package=prompt_package,
         status=status,
-        elapsed_ms=elapsed_ms,
-        handoff_candidates=_classify_handoffs(merged),
+        rule_executions=rule_executions,
+        finding_diff=diff.to_dict(),
+        elapsed_ms=int((time.perf_counter() - started) * 1000),
+        handoff_suggestions=suggestions,
+        handoff_candidates=suggestions,
         errors=errors,
+        token_estimate=prompt_package.get("token_estimate"),
     )
 
 
@@ -273,7 +339,6 @@ def _run_validation(
             selected_extensions=list(extensions),
             selected_profiles=list(profiles),
         )
-
     try:
         report = graph_validator.validate_graph_file(
             graph_path,
@@ -281,7 +346,7 @@ def _run_validation(
             profiles=profiles or None,
             project_root=project_root,
         )
-    except Exception as exc:  # noqa: BLE001 — typed surface for critic
+    except Exception as exc:  # noqa: BLE001
         errors.append("critic_validation_incomplete")
         return ValidationSummary(
             conforms=None,
@@ -291,7 +356,6 @@ def _run_validation(
             selected_extensions=list(extensions),
             selected_profiles=list(profiles),
         )
-
     stage = dict(report.stage_status)
     return ValidationSummary(
         conforms=report.conforms,
@@ -316,70 +380,68 @@ def _run_validation(
 def _validation_findings(validation: ValidationSummary) -> list[CriticFinding]:
     findings: list[CriticFinding] = []
     if validation.error_code == "critic_validation_unavailable":
-        findings.append(
-            CriticFinding(
-                finding_id="CRIT-PENDING",
-                severity="critical",
-                category="validation",
-                confidence=1.0,
-                status="new",
-                target=CriticTarget(),
-                evidence_kind="deterministic",
-                evidence=["validator_unavailable"],
-                rationale="Required validation stage could not run (case_validate missing).",
-                recommended_change="Install case-utils and re-run the critic.",
-                verification_method="shutil.which('case_validate')",
-                rule_id="CRIT-V-UNAVAILABLE",
-                related_validation_result="could_not_verify",
-            )
+        f = CriticFinding(
+            finding_id="",
+            severity="critical",
+            category="validation",
+            confidence=1.0,
+            status="new",
+            target=CriticTarget(),
+            evidence_kind="deterministic",
+            evidence=["validator_unavailable"],
+            rationale="Required validation stage could not run (case_validate missing).",
+            recommended_change="Install case-utils and re-run the critic.",
+            verification_method="shutil.which('case_validate')",
+            rule_id="CRIT-V-UNAVAILABLE",
+            related_validation_result="could_not_verify",
         )
+        f.ensure_identity_key()
+        findings.append(f)
     elif validation.verification_status != "complete" or validation.conforms is not True:
-        findings.append(
-            CriticFinding(
-                finding_id="CRIT-PENDING",
-                severity="critical",
-                category="validation",
-                confidence=1.0,
-                status="new",
-                target=CriticTarget(),
-                evidence_kind="deterministic",
-                evidence=[
-                    f"conforms={validation.conforms}",
-                    f"verification_status={validation.verification_status}",
-                    f"violations={validation.violation_count}",
-                ],
-                rationale="Graph validation is incomplete or non-conforming.",
-                recommended_change="Resolve SHACL/coverage failures before acceptance.",
-                verification_method="graph_validator.validate_graph_file",
-                rule_id="CRIT-V-NONCONFORMING",
-                related_validation_result=validation.verification_status,
-            )
+        f = CriticFinding(
+            finding_id="",
+            severity="critical",
+            category="validation",
+            confidence=1.0,
+            status="new",
+            target=CriticTarget(),
+            evidence_kind="deterministic",
+            evidence=[
+                f"conforms={validation.conforms}",
+                f"verification_status={validation.verification_status}",
+                f"violations={validation.violation_count}",
+            ],
+            rationale="Graph validation is incomplete or non-conforming.",
+            recommended_change="Resolve SHACL/coverage failures before acceptance.",
+            verification_method="graph_validator.validate_graph_file",
+            rule_id="CRIT-V-NONCONFORMING",
+            related_validation_result=validation.verification_status,
         )
+        f.ensure_identity_key()
+        findings.append(f)
     for item in validation.profile_not_selected:
-        findings.append(
-            CriticFinding(
-                finding_id="CRIT-PENDING",
-                severity="high",
-                category="validation",
-                confidence=1.0,
-                status="new",
-                target=CriticTarget(
-                    node_id=(
-                        str(item.get("term"))
-                        if isinstance(item, dict) and item.get("term")
-                        else None
-                    )
-                ),
-                evidence_kind="deterministic",
-                evidence=[str(item)],
-                rationale="Upper-ontology term used without selecting its profile.",
-                recommended_change="Pass the required profile in the validation bundle.",
-                verification_method="validation.profile_not_selected",
-                rule_id="CRIT-V-PROFILE-NOT-SELECTED",
-            )
+        f = CriticFinding(
+            finding_id="",
+            severity="high",
+            category="validation",
+            confidence=1.0,
+            status="new",
+            target=CriticTarget(
+                node_id=(
+                    str(item.get("term"))
+                    if isinstance(item, dict) and item.get("term")
+                    else None
+                )
+            ),
+            evidence_kind="deterministic",
+            evidence=[str(item)],
+            rationale="Upper-ontology term used without selecting its profile.",
+            recommended_change="Pass the required profile in the validation bundle.",
+            verification_method="validation.profile_not_selected",
+            rule_id="CRIT-V-PROFILE-NOT-SELECTED",
         )
-    for finding in findings:
-        finding.ensure_identity_key()
+        f.ensure_identity_key()
+        findings.append(f)
     return findings
 
 
@@ -388,14 +450,15 @@ def _status_from(
     findings: list[CriticFinding],
     errors: list[str],
 ) -> str:
+    open_findings = [f for f in findings if f.status != "resolved"]
     if "critic_validation_unavailable" in errors:
         return "validation_incomplete"
     if validation.verification_status != "complete":
         return "validation_incomplete"
-    actionable = [f for f in findings if f.severity in {"critical", "high"}]
+    actionable = [f for f in open_findings if f.severity in {"critical", "high"}]
     if actionable:
         return "needs_revision"
-    medium = [f for f in findings if f.severity == "medium"]
+    medium = [f for f in open_findings if f.severity == "medium"]
     if medium:
         return "completed_with_findings"
     if validation.conforms is True:
@@ -403,52 +466,33 @@ def _status_from(
     return "needs_revision"
 
 
-def _source_excerpts(paths: list[Path], max_chars: int = 800) -> list[dict[str, Any]]:
+def _bounded_source_excerpts(
+    paths: list[Path], *, max_chars: int = 800, max_read: int = 4096
+) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for path in paths[:5]:
-        try:
-            text = path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
-            continue
+        raw = path.read_bytes()[:max_read]
+        text = raw.decode("utf-8", errors="replace")
+        if len(text) > max_chars:
+            text = text[: max_chars - 1] + "…"
         out.append(
             {
                 "path": path.name,
                 "sha256": sha256_file(path),
-                "text": text[:max_chars] + ("…" if len(text) > max_chars else ""),
+                "text": text,
             }
         )
     return out
 
 
-def _classify_handoffs(findings: list[CriticFinding]):
-    from critic.models import SelfImprovementHandoffCandidate
+def _conservative_handoff_suggestions(
+    findings: list[CriticFinding],
+    bundle_fingerprint: str | None,
+) -> list[SelfImprovementHandoffCandidate]:
+    """Round 2: ordinary artifact defects are NOT persistent-learning suggestions."""
 
-    candidates: list[SelfImprovementHandoffCandidate] = []
-    by_cat: dict[str, list[CriticFinding]] = {}
-    for finding in findings:
-        by_cat.setdefault(finding.category, []).append(finding)
-
-    mapping = {
-        "relationship_direction": "recipe_improvement",
-        "generic_relationship": "recipe_improvement",
-        "facet_placement": "recipe_improvement",
-        "investigation_structure": "recipe_improvement",
-        "serializer_api": "sdk_bug",
-        "serializer_validation": "sdk_bug",
-        "serializer_safety": "sdk_bug",
-    }
-    for category, handoff_type in mapping.items():
-        group = by_cat.get(category) or []
-        if not group:
-            continue
-        candidates.append(
-            SelfImprovementHandoffCandidate(
-                handoff_type=handoff_type,  # type: ignore[arg-type]
-                finding_ids=[f.finding_id for f in group],
-                summary=f"{len(group)} {category} finding(s) may indicate reusable SDK gap",
-                recurrence_key=f"{handoff_type}:{category}",
-                validation_evidence=[f.rule_id or "" for f in group if f.rule_id],
-                requires_operator_approval=True,
-            )
-        )
-    return candidates
+    # Only emit unverified suggestions when the same rule fires repeatedly-like
+    # signal: multiple high findings of sdk_bug-ish serializer_api on private API
+    # still stay as suggestion_only / unverified — and we default to empty for
+    # single case defects.
+    return []

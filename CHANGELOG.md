@@ -9,12 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-#### Critic loop foundation (#75) — v1.22
+#### Critic loop foundation (#75) — v1.22 Round 2
 
-- `mcp_server/critic/` deterministic critic package: typed findings/review
-  contracts, graph integrity + modeling heuristics, Python AST serializer
-  checks, coverage-contract comparison, bounded prompt packages, finding
-  identity/diff, and JSON Schemas. Public API: `analyze_artifact`.
+- `mcp_server/critic/` deterministic critic package with RDFLib
+  `CanonicalGraphView`, exact-IRI heuristics, Python AST serializer checks,
+  ContentDataFacet source-hash compare, coverage-contract checks, bounded
+  prompt packages (with package hash + one-hop neighborhoods), stable
+  finding IDs, rule-execution ledger, Draft 2020-12 model-response schema
+  enforcement, and nullable scorecards. Public API: `analyze_artifact`.
   Docs: `docs/critic/RULES.md`. MCP session orchestration remains #76.
 
 ## [1.21.0] - 2026-07-12

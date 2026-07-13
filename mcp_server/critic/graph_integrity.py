@@ -1,16 +1,20 @@
-"""Graph parse/integrity helpers for the deterministic critic."""
+"""Graph parse/integrity checks over CanonicalGraphView."""
 
 from __future__ import annotations
 
 import hashlib
-import json
 from pathlib import Path
-from typing import Any
 
+from critic.canonical import (
+    CanonicalGraphView,
+    RuleExecution,
+    collect_object_iris_from_rdf,
+    load_canonical_graph,
+)
+from critic.finding_diff import make_stable_finding_id
 from critic.models import CriticFinding, CriticTarget
 
-SUPPORTED_EXTENSIONS = {".json", ".jsonld", ".json-ld", ".ttl", ".turtle"}
-MAX_GRAPH_BYTES = 50 * 1024 * 1024
+RULE_VERSION = "1.1.0"
 
 
 def sha256_file(path: Path) -> str:
@@ -21,279 +25,187 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def load_jsonld_graph(path: Path) -> tuple[dict[str, Any] | None, list[CriticFinding]]:
-    """Load a JSON-LD graph document; Turtle returns parse-deferred findings."""
-
-    findings: list[CriticFinding] = []
-    suffix = path.suffix.lower()
-    if suffix not in SUPPORTED_EXTENSIONS:
-        findings.append(
-            _finding(
-                rule_id="CRIT-G-UNSUPPORTED-TYPE",
-                severity="critical",
-                category="syntax_integrity",
-                target=CriticTarget(path=path.name),
-                evidence=[f"extension={suffix}"],
-                rationale="Graph file type is not a supported CASE/UCO serialization.",
-                recommended_change="Provide .jsonld/.json or .ttl/.turtle.",
-                verification_method="Check file extension against supported set.",
-            )
-        )
-        return None, findings
-
-    size = path.stat().st_size
-    if size > MAX_GRAPH_BYTES:
-        findings.append(
-            _finding(
-                rule_id="CRIT-G-SIZE-BOUND",
-                severity="critical",
-                category="syntax_integrity",
-                target=CriticTarget(path=path.name),
-                evidence=[f"size_bytes={size}"],
-                rationale="Graph exceeds the critic size bound.",
-                recommended_change="Split by forensic boundary or raise the bound deliberately.",
-                verification_method="Compare file size to MAX_GRAPH_BYTES.",
-            )
-        )
-        return None, findings
-
-    if suffix in {".ttl", ".turtle"}:
-        # Turtle is validated via case_validate; JSON heuristics need JSON-LD.
-        findings.append(
-            _finding(
-                rule_id="CRIT-G-TTL-JSON-HEURISTICS-SKIPPED",
-                severity="info",
-                category="syntax_integrity",
-                target=CriticTarget(path=path.name),
-                evidence=["format=turtle"],
-                rationale=(
-                    "Turtle graphs receive SHACL/coverage via the validator; "
-                    "JSON-structure heuristics require JSON-LD."
-                ),
-                recommended_change="Optionally also emit JSON-LD for richer critic heuristics.",
-                verification_method="Confirm validator stages completed for the Turtle file.",
-            )
-        )
-        return None, findings
-
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        findings.append(
-            _finding(
-                rule_id="CRIT-G-PARSE-FAILED",
-                severity="critical",
-                category="syntax_integrity",
-                target=CriticTarget(path=path.name),
-                evidence=[type(exc).__name__],
-                rationale="Graph JSON could not be parsed.",
-                recommended_change="Fix JSON syntax before critic review.",
-                verification_method="Re-parse with json.loads.",
-            )
-        )
-        return None, findings
-
-    if not isinstance(data, dict):
-        findings.append(
-            _finding(
-                rule_id="CRIT-G-ROOT-TYPE",
-                severity="critical",
-                category="syntax_integrity",
-                target=CriticTarget(path=path.name),
-                evidence=[f"root_type={type(data).__name__}"],
-                rationale="JSON-LD root must be an object with @context/@graph.",
-                recommended_change="Wrap nodes in a JSON-LD document object.",
-                verification_method="Assert isinstance(root, dict).",
-            )
-        )
-        return None, findings
-
-    return data, findings
-
-
-def iter_nodes(document: dict[str, Any]) -> list[dict[str, Any]]:
-    graph = document.get("@graph")
-    if isinstance(graph, list):
-        return [n for n in graph if isinstance(n, dict)]
-    if "@type" in document or "@id" in document:
-        return [document]
-    return []
-
-
-def check_integrity(document: dict[str, Any]) -> list[CriticFinding]:
-    findings: list[CriticFinding] = []
-    nodes = iter_nodes(document)
-    if not nodes:
-        findings.append(
-            _finding(
-                rule_id="CRIT-G-EMPTY",
-                severity="critical",
-                category="syntax_integrity",
-                target=CriticTarget(),
-                evidence=["node_count=0"],
-                rationale="Graph contains no nodes.",
-                recommended_change="Emit at least one typed CASE/UCO object.",
-                verification_method="Count @graph entries.",
-            )
-        )
-        return findings
-
-    ids: dict[str, int] = {}
-    id_to_node: dict[str, dict[str, Any]] = {}
-    for node in nodes:
-        node_id = node.get("@id")
-        if not isinstance(node_id, str) or not node_id:
-            findings.append(
-                _finding(
-                    rule_id="CRIT-G-MISSING-ID",
-                    severity="high",
-                    category="syntax_integrity",
-                    target=CriticTarget(
-                        json_pointer="/@graph",
-                        predicate="@id",
-                    ),
-                    evidence=[f"types={_types(node)}"],
-                    rationale="Top-level graph node is missing @id (SHACL often requires IRI nodeKind).",
-                    recommended_change="Assign a stable IRI @id to every top-level object.",
-                    verification_method="Assert every @graph entry has string @id.",
-                )
-            )
-            continue
-        ids[node_id] = ids.get(node_id, 0) + 1
-        prior = id_to_node.get(node_id)
-        if prior is not None and _normalized(prior) != _normalized(node):
-            findings.append(
-                _finding(
-                    rule_id="CRIT-G-CONFLICTING-DUPLICATE",
-                    severity="critical",
-                    category="syntax_integrity",
-                    target=CriticTarget(node_id=node_id),
-                    evidence=["incompatible_duplicate_assertions"],
-                    rationale="The same @id appears with incompatible property sets.",
-                    recommended_change="Merge into one node or use distinct IRIs.",
-                    verification_method="Compare normalized property maps for duplicate @id.",
-                )
-            )
-        id_to_node[node_id] = node
-
-    for node_id, count in ids.items():
-        if count > 1:
-            findings.append(
-                _finding(
-                    rule_id="CRIT-G-DUPLICATE-ID",
-                    severity="high",
-                    category="syntax_integrity",
-                    target=CriticTarget(node_id=node_id),
-                    evidence=[f"occurrences={count}"],
-                    rationale="Duplicate top-level @id values present in @graph.",
-                    recommended_change="Deduplicate or use CASEGraph upsert/reject policy.",
-                    verification_method="Group @graph by @id and count > 1.",
-                )
-            )
-
-    known_ids = set(id_to_node)
-    for node in nodes:
-        node_id = node.get("@id") if isinstance(node.get("@id"), str) else None
-        for predicate, value in node.items():
-            if predicate.startswith("@"):
-                continue
-            for ref in _extract_id_refs(value):
-                if ref.startswith("_:"):
-                    continue
-                if ref.startswith("kb:") or ref.startswith("urn:") or "://" in ref or ref.startswith("#"):
-                    # Local compact IRIs / same-document refs that should resolve in-graph
-                    if ref.startswith("#") and ref[1:] and f"kb:{ref[1:]}" not in known_ids:
-                        # soft: fragment-only
-                        pass
-                    if (
-                        ref.startswith("kb:")
-                        or ref.startswith("urn:case:")
-                        or ref.startswith("urn:example:")
-                    ) and ref not in known_ids:
-                        findings.append(
-                            _finding(
-                                rule_id="CRIT-G-DANGLING-REF",
-                                severity="high",
-                                category="syntax_integrity",
-                                target=CriticTarget(
-                                    node_id=node_id,
-                                    predicate=predicate,
-                                ),
-                                evidence=[f"missing_ref={ref}"],
-                                rationale="Local graph reference does not resolve to a top-level @id.",
-                                recommended_change="Add the referenced node or fix the IRI.",
-                                verification_method="Membership check of referenced @id in @graph.",
-                            )
-                        )
-
-    ctx = document.get("@context")
-    if isinstance(ctx, dict):
-        # Detect obvious prefix remapping collisions (same prefix, different IRI)
-        # — rare in compact docs; still cheap to scan nested maps.
-        _scan_context_collisions(ctx, findings)
-
-    return findings
-
-
-def _scan_context_collisions(ctx: dict[str, Any], findings: list[CriticFinding]) -> None:
-    seen: dict[str, str] = {}
-    for key, value in ctx.items():
-        if key.startswith("@"):
-            continue
-        iri = value if isinstance(value, str) else (
-            value.get("@id") if isinstance(value, dict) else None
-        )
-        if not isinstance(iri, str):
-            continue
-        prior = seen.get(key)
-        if prior and prior != iri:
-            findings.append(
-                _finding(
-                    rule_id="CRIT-G-CONTEXT-COLLISION",
-                    severity="critical",
-                    category="syntax_integrity",
-                    target=CriticTarget(predicate=key),
-                    evidence=[f"{prior} vs {iri}"],
-                    rationale="Context prefix is bound to conflicting IRIs.",
-                    recommended_change="Use a single consistent prefix binding.",
-                    verification_method="Compare @context entries for duplicate keys.",
-                )
-            )
-        seen[key] = iri
-
-
-def _extract_id_refs(value: Any) -> list[str]:
-    refs: list[str] = []
-    if isinstance(value, dict):
-        if isinstance(value.get("@id"), str):
-            refs.append(value["@id"])
-        for nested in value.values():
-            refs.extend(_extract_id_refs(nested))
-    elif isinstance(value, list):
-        for item in value:
-            refs.extend(_extract_id_refs(item))
-    elif isinstance(value, str) and (
-        value.startswith("kb:")
-        or value.startswith("urn:")
-        or value.startswith("#")
-    ):
-        refs.append(value)
-    return refs
-
-
-def _types(node: dict[str, Any]) -> str:
-    raw = node.get("@type")
-    if isinstance(raw, list):
-        return ",".join(str(t) for t in raw)
-    return str(raw or "")
-
-
-def _normalized(node: dict[str, Any]) -> str:
-    return json.dumps(node, sort_keys=True, separators=(",", ":"))
-
-
-def _finding(
+def analyze_graph_integrity(
+    path: Path,
     *,
+    artifact_hash: str,
+) -> tuple[CanonicalGraphView, list[CriticFinding], list[RuleExecution]]:
+    view = load_canonical_graph(path)
+    findings: list[CriticFinding] = []
+    executions: list[RuleExecution] = []
+
+    def _exec(rule_id: str, status: str, examined: int = 0, fids: list[str] | None = None, error: str | None = None):
+        executions.append(
+            RuleExecution(
+                rule_id=rule_id,
+                rule_version=RULE_VERSION,
+                status=status,  # type: ignore[arg-type]
+                input_artifact_hash=artifact_hash,
+                targets_examined=examined,
+                finding_ids=list(fids or []),
+                error_code=error,
+            )
+        )
+
+    if view.json_status == "unsupported_type" or view.rdf_status == "unsupported_type":
+        f = _f(
+            "CRIT-G-UNSUPPORTED-TYPE",
+            "critical",
+            "syntax_integrity",
+            CriticTarget(path=path.name),
+            [f"extension={path.suffix}"],
+            "Graph file type is not supported.",
+            "Provide .jsonld/.json or .ttl/.turtle.",
+            "Check file extension.",
+        )
+        findings.append(f)
+        _exec("CRIT-G-UNSUPPORTED-TYPE", "evaluated", 1, [f.finding_id])
+        return view, findings, executions
+
+    if view.json_status == "too_large" or view.rdf_status == "too_large":
+        f = _f(
+            "CRIT-G-SIZE-BOUND",
+            "critical",
+            "syntax_integrity",
+            CriticTarget(path=path.name),
+            ["size_bound"],
+            "Graph exceeds the critic size bound.",
+            "Split by forensic boundary or raise the bound deliberately.",
+            "Compare file size to MAX_GRAPH_BYTES.",
+        )
+        findings.append(f)
+        _exec("CRIT-G-SIZE-BOUND", "evaluated", 1, [f.finding_id])
+        return view, findings, executions
+
+    if view.kind == "jsonld" and view.json_status == "json_syntax_error":
+        f = _f(
+            "CRIT-G-PARSE-FAILED",
+            "critical",
+            "syntax_integrity",
+            CriticTarget(path=path.name),
+            view.errors or ["json_syntax_error"],
+            "Graph JSON could not be parsed.",
+            "Fix JSON syntax before critic review.",
+            "Re-parse with json.loads.",
+        )
+        findings.append(f)
+        _exec("CRIT-G-PARSE-FAILED", "evaluated", 1, [f.finding_id])
+        _exec("CRIT-G-RDF-PARSE", "skipped", error="json_syntax_error")
+        return view, findings, executions
+
+    if view.rdf_status == "rdf_parse_error":
+        f = _f(
+            "CRIT-G-RDF-PARSE",
+            "critical",
+            "syntax_integrity",
+            CriticTarget(path=path.name),
+            view.errors or ["rdf_parse_error"],
+            "RDF parse/expansion failed.",
+            "Fix RDF/JSON-LD so RDFLib can parse the graph.",
+            "rdflib Graph.parse",
+        )
+        findings.append(f)
+        _exec("CRIT-G-RDF-PARSE", "evaluated", 1, [f.finding_id])
+    else:
+        _exec("CRIT-G-RDF-PARSE", "evaluated", 1)
+
+    if view.duplicate_json_keys:
+        f = _f(
+            "CRIT-G-CONTEXT-COLLISION",
+            "critical",
+            "syntax_integrity",
+            CriticTarget(path=path.name, predicate=view.duplicate_json_keys[0]),
+            [f"duplicate_keys={view.duplicate_json_keys}"],
+            "Raw JSON contains duplicate object keys (last value wins silently).",
+            "Remove duplicate keys from @context or node objects.",
+            "json.loads(..., object_pairs_hook=...)",
+        )
+        findings.append(f)
+        _exec("CRIT-G-CONTEXT-COLLISION", "evaluated", len(view.duplicate_json_keys), [f.finding_id])
+    else:
+        _exec("CRIT-G-CONTEXT-COLLISION", "evaluated", 0)
+
+    if not view.nodes:
+        f = _f(
+            "CRIT-G-EMPTY",
+            "critical",
+            "syntax_integrity",
+            CriticTarget(path=path.name),
+            ["node_count=0"],
+            "Graph contains no identified nodes.",
+            "Emit at least one typed CASE/UCO object with @id.",
+            "Count indexed nodes in CanonicalGraphView.",
+        )
+        findings.append(f)
+        _exec("CRIT-G-EMPTY", "evaluated", 0, [f.finding_id])
+        _exec("CRIT-G-DUPLICATE-ID", "skipped", error="empty_graph")
+        _exec("CRIT-G-DANGLING-REF", "skipped", error="empty_graph")
+        return view, findings, executions
+
+    # Duplicate top-level IDs from raw JSON (semantic)
+    if view.raw_document and isinstance(view.raw_document.get("@graph"), list):
+        counts: dict[str, int] = {}
+        for node in view.raw_document["@graph"]:
+            if isinstance(node, dict) and isinstance(node.get("@id"), str):
+                counts[node["@id"]] = counts.get(node["@id"], 0) + 1
+        dup_findings = []
+        for node_id, count in counts.items():
+            if count > 1:
+                f = _f(
+                    "CRIT-G-DUPLICATE-ID",
+                    "high",
+                    "syntax_integrity",
+                    CriticTarget(node_id=node_id),
+                    [f"occurrences={count}"],
+                    "Duplicate top-level @id values present in @graph.",
+                    "Deduplicate or use CASEGraph upsert/reject policy.",
+                    "Group @graph by @id.",
+                )
+                findings.append(f)
+                dup_findings.append(f.finding_id)
+        _exec("CRIT-G-DUPLICATE-ID", "evaluated", len(counts), dup_findings)
+    else:
+        _exec("CRIT-G-DUPLICATE-ID", "evaluated", len(view.nodes))
+
+    # Dangling refs from RDF object positions / JSON @id refs
+    known = set(view.nodes)
+    object_iris = collect_object_iris_from_rdf(view)
+    dangling_ids: list[str] = []
+    examined_refs = 0
+    for obj_iri in object_iris:
+        examined_refs += 1
+        if not _is_local_resolvable(obj_iri):
+            continue
+        if obj_iri not in known:
+            f = _f(
+                "CRIT-G-DANGLING-REF",
+                "high",
+                "syntax_integrity",
+                CriticTarget(node_id=obj_iri, predicate="rdf:object"),
+                [f"missing_ref={obj_iri}"],
+                "Local graph reference does not resolve to an identified node.",
+                "Add the referenced node or fix the IRI.",
+                "Membership of RDF object IRI in node index.",
+            )
+            findings.append(f)
+            dangling_ids.append(f.finding_id)
+    _exec("CRIT-G-DANGLING-REF", "evaluated", examined_refs, dangling_ids)
+
+    return view, findings, executions
+
+
+def _is_local_resolvable(iri: str) -> bool:
+    return (
+        iri.startswith("urn:uuid:")
+        or iri.startswith("urn:example:")
+        or iri.startswith("urn:case:")
+        or iri.startswith("kb:")
+        or "/operation-phantom-gate" in iri
+        or iri.startswith("urn:case-uco:")
+    )
+
+
+def _f(
     rule_id: str,
     severity: str,
     category: str,
@@ -303,8 +215,9 @@ def _finding(
     recommended_change: str,
     verification_method: str,
 ) -> CriticFinding:
-    finding = CriticFinding(
-        finding_id="CRIT-PENDING",
+    finding_id = make_stable_finding_id(rule_id, *target.semantic_parts())
+    return CriticFinding(
+        finding_id=finding_id,
         severity=severity,  # type: ignore[arg-type]
         category=category,
         confidence=1.0,
@@ -316,6 +229,5 @@ def _finding(
         recommended_change=recommended_change,
         verification_method=verification_method,
         rule_id=rule_id,
+        identity_key=finding_id,
     )
-    finding.ensure_identity_key()
-    return finding

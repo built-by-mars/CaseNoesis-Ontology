@@ -1,8 +1,4 @@
-"""Typed critic review contracts (issue #75).
-
-These models are deliberately free of MCP/session orchestration concerns.
-Orchestration (#76) consumes these types and persists session state separately.
-"""
+"""Typed critic review contracts (issue #75 Round 2)."""
 
 from __future__ import annotations
 
@@ -12,7 +8,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Literal
 
-CRITIC_SCHEMA_VERSION = "1.0.0"
+CRITIC_SCHEMA_VERSION = "1.1.0"
 
 Severity = Literal["critical", "high", "medium", "low", "info"]
 FindingStatus = Literal["new", "persisting", "resolved", "regression", "disputed"]
@@ -34,23 +30,38 @@ def load_vocabularies() -> dict[str, Any]:
     return json.loads(VOCAB_PATH.read_text(encoding="utf-8"))
 
 
+def make_stable_finding_id(rule_id: str, *semantic_parts: str) -> str:
+    """Public stable finding ID from rule + normalized semantic target parts."""
+
+    normalized = [rule_id.strip()]
+    for part in semantic_parts:
+        text = (part or "").strip()
+        if text:
+            normalized.append(text)
+    digest = hashlib.sha256("|".join(normalized).encode("utf-8")).hexdigest()[:16]
+    return f"CRIT-{digest}"
+
+
 @dataclass
 class CriticTarget:
     path: str | None = None
     line: int | None = None
     node_id: str | None = None
     predicate: str | None = None
+    counterpart_id: str | None = None
     json_pointer: str | None = None
+    qualified_name: str | None = None  # serializer class/function
 
-    def identity_fragment(self) -> str:
-        parts = [
-            self.path or "",
-            str(self.line) if self.line is not None else "",
-            self.node_id or "",
-            self.predicate or "",
-            self.json_pointer or "",
-        ]
-        return "|".join(parts)
+    def semantic_parts(self) -> list[str]:
+        # Graph findings: node + predicate + counterpart (not line/path/pointer).
+        # Serializer findings: path + qualified_name (not line).
+        if self.node_id or self.predicate or self.counterpart_id:
+            return [
+                p
+                for p in (self.node_id, self.predicate, self.counterpart_id)
+                if p
+            ]
+        return [p for p in (self.path, self.qualified_name) if p]
 
 
 @dataclass
@@ -72,27 +83,32 @@ class CriticFinding:
     identity_key: str | None = None
     suppressible: bool = True
     disputed_rationale: str | None = None
+    display_index: int | None = None
+    occurrence: dict[str, Any] = field(default_factory=dict)
 
     def ensure_identity_key(self) -> str:
+        if self.finding_id and self.finding_id.startswith("CRIT-"):
+            self.identity_key = self.finding_id
+            return self.finding_id
+        if self.rule_id:
+            self.finding_id = make_stable_finding_id(
+                self.rule_id, *self.target.semantic_parts()
+            )
+            self.identity_key = self.finding_id
+            return self.finding_id
         if self.identity_key:
+            self.finding_id = self.identity_key
             return self.identity_key
-        evidence_key = "|".join(sorted(self.evidence))[:240]
-        raw = "|".join(
-            [
-                self.category,
-                self.rule_id or "",
-                self.target.identity_fragment(),
-                evidence_key,
-            ]
-        )
-        digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()[:12]
-        self.identity_key = f"CRIT-{digest}"
-        return self.identity_key
+        digest = hashlib.sha256(
+            json.dumps(self.to_dict(), sort_keys=True).encode("utf-8")
+        ).hexdigest()[:16]
+        self.finding_id = f"CRIT-{digest}"
+        self.identity_key = self.finding_id
+        return self.finding_id
 
     def to_dict(self) -> dict[str, Any]:
         self.ensure_identity_key()
-        data = asdict(self)
-        return data
+        return asdict(self)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> CriticFinding:
@@ -102,10 +118,12 @@ class CriticFinding:
             line=target_raw.get("line"),
             node_id=target_raw.get("node_id"),
             predicate=target_raw.get("predicate"),
+            counterpart_id=target_raw.get("counterpart_id"),
             json_pointer=target_raw.get("json_pointer"),
+            qualified_name=target_raw.get("qualified_name"),
         )
         finding = cls(
-            finding_id=str(data["finding_id"]),
+            finding_id=str(data.get("finding_id") or ""),
             severity=data["severity"],
             category=str(data["category"]),
             confidence=float(data["confidence"]),
@@ -122,38 +140,90 @@ class CriticFinding:
             identity_key=data.get("identity_key"),
             suppressible=bool(data.get("suppressible", True)),
             disputed_rationale=data.get("disputed_rationale"),
+            display_index=data.get("display_index"),
+            occurrence=dict(data.get("occurrence") or {}),
         )
         finding.ensure_identity_key()
         return finding
 
 
 @dataclass
-class CriticScorecard:
-    schema_concept_conformance: int = 0
-    source_fidelity: int = 0
-    semantic_precision: int = 0
-    provenance_custody: int = 0
-    markings_authorization: int = 0
-    coverage_completeness: int = 0
-    serializer_quality: int = 0
-    maintainability_reproducibility: int = 0
-    caps_applied: list[str] = field(default_factory=list)
+class ScoreDimension:
+    score: int | None = None
+    assessed: bool = False
+    evidence: list[str] = field(default_factory=list)
+    hard_cap: int | None = None
+    cap_reason: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
     @classmethod
+    def from_dict(cls, data: dict[str, Any] | None) -> ScoreDimension:
+        if not data:
+            return cls()
+        if isinstance(data, int):
+            return cls(score=data, assessed=True)
+        return cls(
+            score=data.get("score"),
+            assessed=bool(data.get("assessed", data.get("score") is not None)),
+            evidence=list(data.get("evidence") or []),
+            hard_cap=data.get("hard_cap"),
+            cap_reason=data.get("cap_reason"),
+        )
+
+
+@dataclass
+class CriticScorecard:
+    schema_concept_conformance: ScoreDimension = field(default_factory=ScoreDimension)
+    source_fidelity: ScoreDimension = field(default_factory=ScoreDimension)
+    semantic_precision: ScoreDimension = field(default_factory=ScoreDimension)
+    provenance_custody: ScoreDimension = field(default_factory=ScoreDimension)
+    markings_authorization: ScoreDimension = field(default_factory=ScoreDimension)
+    coverage_completeness: ScoreDimension = field(default_factory=ScoreDimension)
+    serializer_quality: ScoreDimension = field(default_factory=ScoreDimension)
+    maintainability_reproducibility: ScoreDimension = field(
+        default_factory=ScoreDimension
+    )
+    caps_applied: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_concept_conformance": self.schema_concept_conformance.to_dict(),
+            "source_fidelity": self.source_fidelity.to_dict(),
+            "semantic_precision": self.semantic_precision.to_dict(),
+            "provenance_custody": self.provenance_custody.to_dict(),
+            "markings_authorization": self.markings_authorization.to_dict(),
+            "coverage_completeness": self.coverage_completeness.to_dict(),
+            "serializer_quality": self.serializer_quality.to_dict(),
+            "maintainability_reproducibility": (
+                self.maintainability_reproducibility.to_dict()
+            ),
+            "caps_applied": list(self.caps_applied),
+        }
+
+    @classmethod
     def from_dict(cls, data: dict[str, Any]) -> CriticScorecard:
         return cls(
-            schema_concept_conformance=int(data.get("schema_concept_conformance", 0)),
-            source_fidelity=int(data.get("source_fidelity", 0)),
-            semantic_precision=int(data.get("semantic_precision", 0)),
-            provenance_custody=int(data.get("provenance_custody", 0)),
-            markings_authorization=int(data.get("markings_authorization", 0)),
-            coverage_completeness=int(data.get("coverage_completeness", 0)),
-            serializer_quality=int(data.get("serializer_quality", 0)),
-            maintainability_reproducibility=int(
-                data.get("maintainability_reproducibility", 0)
+            schema_concept_conformance=ScoreDimension.from_dict(
+                data.get("schema_concept_conformance")
+            ),
+            source_fidelity=ScoreDimension.from_dict(data.get("source_fidelity")),
+            semantic_precision=ScoreDimension.from_dict(data.get("semantic_precision")),
+            provenance_custody=ScoreDimension.from_dict(
+                data.get("provenance_custody")
+            ),
+            markings_authorization=ScoreDimension.from_dict(
+                data.get("markings_authorization")
+            ),
+            coverage_completeness=ScoreDimension.from_dict(
+                data.get("coverage_completeness")
+            ),
+            serializer_quality=ScoreDimension.from_dict(
+                data.get("serializer_quality")
+            ),
+            maintainability_reproducibility=ScoreDimension.from_dict(
+                data.get("maintainability_reproducibility")
             ),
             caps_applied=list(data.get("caps_applied") or []),
         )
@@ -167,6 +237,9 @@ class SelfImprovementHandoffCandidate:
     recurrence_key: str
     validation_evidence: list[str] = field(default_factory=list)
     requires_operator_approval: bool = True
+    suggestion_only: bool = True
+    unverified_generalization: bool = True
+    validation_bundle_fingerprint: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -184,6 +257,9 @@ class CriticArtifactRequest:
     project_root: str | None = None
     prior_findings: list[CriticFinding] = field(default_factory=list)
     disputed_identity_keys: dict[str, str] = field(default_factory=dict)
+    serializer_mode: Literal["typed_sdk", "raw_fixture", "auto"] = "auto"
+    pass_number: int = 1
+    session_id: str | None = None
 
 
 @dataclass
@@ -229,15 +305,22 @@ class CriticReview:
     scorecard: CriticScorecard
     prompt_package: dict[str, Any]
     status: str
+    rule_executions: list[dict[str, Any]] = field(default_factory=list)
+    finding_diff: dict[str, Any] = field(default_factory=dict)
     model_identifier: str | None = None
     token_estimate: int | None = None
     elapsed_ms: int | None = None
-    handoff_candidates: list[SelfImprovementHandoffCandidate] = field(
+    handoff_suggestions: list[SelfImprovementHandoffCandidate] = field(
         default_factory=list
     )
     errors: list[str] = field(default_factory=list)
+    # Backward-compatible alias used by older callers/tests
+    handoff_candidates: list[SelfImprovementHandoffCandidate] = field(
+        default_factory=list
+    )
 
     def to_dict(self) -> dict[str, Any]:
+        suggestions = self.handoff_suggestions or self.handoff_candidates
         return {
             "schema_version": self.schema_version,
             "artifact_hashes": self.artifact_hashes.to_dict(),
@@ -248,9 +331,11 @@ class CriticReview:
             "scorecard": self.scorecard.to_dict(),
             "prompt_package": self.prompt_package,
             "status": self.status,
+            "rule_executions": list(self.rule_executions),
+            "finding_diff": dict(self.finding_diff),
             "model_identifier": self.model_identifier,
             "token_estimate": self.token_estimate,
             "elapsed_ms": self.elapsed_ms,
-            "handoff_candidates": [h.to_dict() for h in self.handoff_candidates],
+            "handoff_suggestions": [h.to_dict() for h in suggestions],
             "errors": list(self.errors),
         }

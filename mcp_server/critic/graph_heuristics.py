@@ -1,341 +1,106 @@
-"""Deterministic structural modeling heuristics for the critic (issue #75).
-
-These are review prompts / high-confidence warnings, not a replacement for SHACL.
-Each rule has a stable ``rule_id`` and documented false-positive boundary in
-``docs/critic/RULES.md``.
-"""
+"""Deterministic structural modeling heuristics using CanonicalGraphView."""
 
 from __future__ import annotations
 
 from collections import Counter
-from typing import Any
+from typing import Callable
 
-from critic.graph_integrity import iter_nodes
+from critic.canonical import (
+    IRI_ACTION_OBJECT,
+    IRI_ACTION_RESULT,
+    IRI_DICT,
+    IRI_DICT_ENTRY_PROP,
+    IRI_FILE,
+    IRI_INVESTIGATION,
+    IRI_INVESTIGATIVE_ACTION,
+    IRI_KIND,
+    IRI_NAME,
+    IRI_OBJECT,
+    IRI_OBSERVABLE,
+    IRI_PERSON,
+    IRI_RELATIONSHIP,
+    IRI_RELEVANT_AUTH,
+    IRI_SOURCE,
+    IRI_TARGET,
+    CanonicalGraphView,
+    RuleExecution,
+)
+from critic.finding_diff import make_stable_finding_id
 from critic.models import CriticFinding, CriticTarget
 
+RULE_VERSION = "1.1.0"
 
-def run_graph_heuristics(document: dict[str, Any]) -> list[CriticFinding]:
-    nodes = iter_nodes(document)
+
+def run_graph_heuristics(
+    view: CanonicalGraphView,
+    *,
+    artifact_hash: str,
+) -> tuple[list[CriticFinding], list[RuleExecution]]:
     findings: list[CriticFinding] = []
-    findings.extend(_investigation_without_object(nodes))
-    findings.extend(_relevant_authorization_misuse(nodes))
-    findings.extend(_acquisition_input_result_inversion(nodes))
-    findings.extend(_generic_related_to_overuse(nodes))
-    findings.extend(_charged_with_direction(nodes))
-    findings.extend(_dictionary_entry_collisions(nodes))
-    findings.extend(_facet_like_props_on_observable(nodes))
-    return findings
-
-
-def _has_type(node: dict[str, Any], *needles: str) -> bool:
-    raw = node.get("@type")
-    types = raw if isinstance(raw, list) else [raw]
-    texts = [str(t) for t in types if t is not None]
-    for text in texts:
-        for needle in needles:
-            if needle in text:
-                return True
-    return False
-
-
-def _prop(node: dict[str, Any], *keys: str) -> Any:
-    for key in keys:
-        if key in node:
-            return node[key]
-    return None
-
-
-def _as_list(value: Any) -> list[Any]:
-    if value is None:
-        return []
-    if isinstance(value, list):
-        return value
-    return [value]
-
-
-def _investigation_without_object(nodes: list[dict[str, Any]]) -> list[CriticFinding]:
-    findings: list[CriticFinding] = []
-    for node in nodes:
-        if not _has_type(node, "Investigation"):
-            continue
-        obj = _prop(node, "uco-core:object", "object")
-        if obj:
-            continue
-        findings.append(
-            _h(
-                rule_id="CRIT-H-INV-NO-OBJECT",
-                severity="high",
-                category="investigation_structure",
-                target=CriticTarget(
-                    node_id=node.get("@id") if isinstance(node.get("@id"), str) else None,
-                    predicate="uco-core:object",
-                ),
-                evidence=["Investigation present without uco-core:object"],
-                rationale=(
-                    "An Investigation container is present but does not reference "
-                    "contained objects via uco-core:object."
-                ),
-                recommended_change=(
-                    "Attach evidence, actions, and related objects with uco-core:object."
-                ),
-                verification_method="SPARQL/JSON scan for Investigation lacking object.",
-            )
-        )
-    return findings
-
-
-def _relevant_authorization_misuse(nodes: list[dict[str, Any]]) -> list[CriticFinding]:
-    findings: list[CriticFinding] = []
-    for node in nodes:
-        auth = _prop(node, "uco-core:relevantAuthorization", "relevantAuthorization")
-        if auth is None:
-            continue
-        if _has_type(node, "Investigation"):
-            continue
-        findings.append(
-            _h(
-                rule_id="CRIT-H-AUTH-NON-INVESTIGATION",
-                severity="high",
-                category="authorization",
-                target=CriticTarget(
-                    node_id=node.get("@id") if isinstance(node.get("@id"), str) else None,
-                    predicate="uco-core:relevantAuthorization",
-                ),
-                evidence=[f"types={node.get('@type')}"],
-                rationale=(
-                    "relevantAuthorization is attached to a non-Investigation node; "
-                    "CASE patterns typically hang authorizations on the Investigation."
-                ),
-                recommended_change=(
-                    "Move relevantAuthorization to the Investigation (or justify via recipe)."
-                ),
-                verification_method="Find relevantAuthorization on nodes whose @type lacks Investigation.",
-            )
-        )
-    return findings
-
-
-def _acquisition_input_result_inversion(nodes: list[dict[str, Any]]) -> list[CriticFinding]:
-    """Flag acquisition-like actions where a likely image/result is only an input."""
-
-    findings: list[CriticFinding] = []
-    id_index = {
-        n.get("@id"): n for n in nodes if isinstance(n.get("@id"), str)
-    }
-    for node in nodes:
-        if not _has_type(node, "InvestigativeAction", "Action"):
-            continue
-        name = str(_prop(node, "uco-core:name", "name") or "").lower()
-        if "acquir" not in name and "image" not in name and "extract" not in name:
-            continue
-        inputs = _as_list(_prop(node, "uco-action:object", "object"))
-        results = _as_list(_prop(node, "uco-action:result", "result"))
-        if results:
-            continue
-        for item in inputs:
-            ref = item.get("@id") if isinstance(item, dict) else item
-            if not isinstance(ref, str):
-                continue
-            target = id_index.get(ref)
-            if target and _has_type(target, "File", "RasterPicture", "DiskImage", "Image"):
-                findings.append(
-                    _h(
-                        rule_id="CRIT-H-ACQ-INPUT-RESULT-INVERSION",
-                        severity="high",
-                        category="action_grammar",
-                        target=CriticTarget(
-                            node_id=node.get("@id") if isinstance(node.get("@id"), str) else None,
-                            predicate="uco-action:result",
-                        ),
-                        evidence=[f"likely_result_only_as_input={ref}"],
-                        rationale=(
-                            "Acquisition-like action lists a file/image only as input "
-                            "and has no result — often an input/result inversion."
-                        ),
-                        recommended_change=(
-                            "Place the acquired image/artifact on uco-action:result; "
-                            "keep the source device/media as object/instrument."
-                        ),
-                        verification_method="Check InvestigativeAction name + object/result roles.",
-                    )
+    executions: list[RuleExecution] = []
+    if not view.usable_for_heuristics:
+        for rule_id in _ALL_RULE_IDS:
+            executions.append(
+                RuleExecution(
+                    rule_id=rule_id,
+                    rule_version=RULE_VERSION,
+                    status="skipped",
+                    input_artifact_hash=artifact_hash,
+                    error_code="graph_heuristics_unavailable",
                 )
-                break
-    return findings
+            )
+        return findings, executions
 
-
-def _generic_related_to_overuse(nodes: list[dict[str, Any]]) -> list[CriticFinding]:
-    kinds: list[str] = []
-    for node in nodes:
-        if not _has_type(node, "Relationship"):
-            continue
-        kind = _prop(node, "uco-core:kindOfRelationship", "kindOfRelationship")
-        if kind is None:
-            continue
-        for value in _as_list(kind):
-            text = value.get("@value") if isinstance(value, dict) else value
-            kinds.append(str(text))
-    if not kinds:
-        return []
-    counts = Counter(kinds)
-    related = counts.get("Related_To", 0)
-    if related < 3:
-        return []
-    ratio = related / max(len(kinds), 1)
-    if related < 5 and ratio < 0.5:
-        return []
-    return [
-        _h(
-            rule_id="CRIT-H-RELATED-TO-OVERUSE",
-            severity="medium",
-            category="generic_relationship",
-            target=CriticTarget(predicate="uco-core:kindOfRelationship"),
-            evidence=[f"Related_To_count={related}", f"relationship_count={len(kinds)}"],
-            rationale=(
-                "Many relationships use generic Related_To when a governed "
-                "ObservableObjectRelationshipVocab member may be available."
-            ),
-            recommended_change=(
-                "Replace Related_To with specific kinds (Contained_Within, "
-                "Extracted_From, etc.) where the recipe defines them."
-            ),
-            verification_method="Count kindOfRelationship == Related_To versus total.",
-        )
+    runners: list[tuple[str, Callable[..., tuple[list[CriticFinding], int]]]] = [
+        ("CRIT-H-INV-NO-OBJECT", _investigation_without_object),
+        ("CRIT-H-AUTH-NON-INVESTIGATION", _relevant_authorization_misuse),
+        ("CRIT-H-ACQ-INPUT-RESULT-INVERSION", _acquisition_input_result_inversion),
+        ("CRIT-H-RELATED-TO-OVERUSE", _generic_related_to_overuse),
+        ("CRIT-H-CHARGED-WITH-REVERSED", _charged_with_direction),
+        ("CRIT-H-DICT-ENTRY-COLLISION", _dictionary_entry_collisions),
+        ("CRIT-H-FACET-PROPS-ON-OBSERVABLE", _facet_like_props_on_observable),
     ]
-
-
-def _charged_with_direction(nodes: list[dict[str, Any]]) -> list[CriticFinding]:
-    """Charged_With should be person → charge (not charge → person)."""
-
-    findings: list[CriticFinding] = []
-    id_index = {
-        n.get("@id"): n for n in nodes if isinstance(n.get("@id"), str)
-    }
-    for node in nodes:
-        if not _has_type(node, "Relationship"):
-            continue
-        kind = _prop(node, "uco-core:kindOfRelationship", "kindOfRelationship")
-        texts = []
-        for value in _as_list(kind):
-            texts.append(str(value.get("@value") if isinstance(value, dict) else value))
-        if "Charged_With" not in texts:
-            continue
-        source = _prop(node, "uco-core:source", "source")
-        target = _prop(node, "uco-core:target", "target")
-        source_ref = source.get("@id") if isinstance(source, dict) else source
-        target_ref = target.get("@id") if isinstance(target, dict) else target
-        if not isinstance(source_ref, str) or not isinstance(target_ref, str):
-            continue
-        source_node = id_index.get(source_ref)
-        target_node = id_index.get(target_ref)
-        if not source_node or not target_node:
-            continue
-        if _has_type(source_node, "CriminalCharge", "Charge") and _has_type(
-            target_node, "Person", "Identity"
-        ):
-            findings.append(
-                _h(
-                    rule_id="CRIT-H-CHARGED-WITH-REVERSED",
-                    severity="high",
-                    category="relationship_direction",
-                    target=CriticTarget(
-                        node_id=node.get("@id") if isinstance(node.get("@id"), str) else None,
-                        predicate="uco-core:kindOfRelationship",
-                    ),
-                    evidence=[
-                        f"source={source_ref}",
-                        f"target={target_ref}",
-                    ],
-                    rationale=(
-                        "Charged_With is modeled person→charge in CASE legal-process recipes; "
-                        "this relationship has charge→person."
-                    ),
-                    recommended_change="Reverse source and target.",
-                    verification_method=(
-                        "Assert Relationship source is Person and target is CriminalCharge."
-                    ),
+    for rule_id, runner in runners:
+        try:
+            rule_findings, examined = runner(view)
+            for finding in rule_findings:
+                finding.ensure_identity_key()
+            findings.extend(rule_findings)
+            executions.append(
+                RuleExecution(
+                    rule_id=rule_id,
+                    rule_version=RULE_VERSION,
+                    status="evaluated",
+                    input_artifact_hash=artifact_hash,
+                    targets_examined=examined,
+                    finding_ids=[f.finding_id for f in rule_findings],
                 )
             )
-    return findings
-
-
-def _dictionary_entry_collisions(nodes: list[dict[str, Any]]) -> list[CriticFinding]:
-    """Same dictionary-entry IRI appearing under multiple parent dictionaries."""
-
-    parents: dict[str, set[str]] = {}
-    for node in nodes:
-        if not _has_type(node, "Dictionary"):
-            continue
-        parent_id = node.get("@id")
-        if not isinstance(parent_id, str):
-            continue
-        entries = _as_list(_prop(node, "uco-types:entry", "entry"))
-        for entry in entries:
-            ref = entry.get("@id") if isinstance(entry, dict) else entry
-            if not isinstance(ref, str):
-                continue
-            parents.setdefault(ref, set()).add(parent_id)
-    findings: list[CriticFinding] = []
-    for entry_id, parent_ids in parents.items():
-        if len(parent_ids) < 2:
-            continue
-        findings.append(
-            _h(
-                rule_id="CRIT-H-DICT-ENTRY-COLLISION",
-                severity="high",
-                category="dictionary_collision",
-                target=CriticTarget(node_id=entry_id),
-                evidence=[f"parents={sorted(parent_ids)}"],
-                rationale="Dictionary entry IRI is referenced by multiple Dictionary parents.",
-                recommended_change="Mint parent-scoped entry IRIs (or distinct entries).",
-                verification_method="Group dictionary entry refs by @id across Dictionary nodes.",
+        except Exception as exc:  # noqa: BLE001
+            executions.append(
+                RuleExecution(
+                    rule_id=rule_id,
+                    rule_version=RULE_VERSION,
+                    status="failed",
+                    input_artifact_hash=artifact_hash,
+                    error_code=type(exc).__name__,
+                )
             )
-        )
-    return findings
+    return findings, executions
 
 
-def _facet_like_props_on_observable(nodes: list[dict[str, Any]]) -> list[CriticFinding]:
-    """Heuristic: Windows service / file facet properties placed on ObservableObject."""
-
-    facetish = {
-        "uco-observable:serviceName",
-        "uco-observable:serviceType",
-        "uco-observable:fileName",
-        "uco-observable:sizeInBytes",
-    }
-    findings: list[CriticFinding] = []
-    for node in nodes:
-        if not _has_type(node, "ObservableObject"):
-            continue
-        if _has_type(node, "Facet"):
-            continue
-        bad = [k for k in facetish if k in node]
-        if not bad:
-            continue
-        # Allow if hasFacet present — properties might still be wrong, but softer
-        has_facet = _prop(node, "uco-core:hasFacet", "hasFacet")
-        severity = "medium" if has_facet else "high"
-        findings.append(
-            _h(
-                rule_id="CRIT-H-FACET-PROPS-ON-OBSERVABLE",
-                severity=severity,  # type: ignore[arg-type]
-                category="facet_placement",
-                target=CriticTarget(
-                    node_id=node.get("@id") if isinstance(node.get("@id"), str) else None,
-                    predicate=bad[0],
-                ),
-                evidence=bad,
-                rationale=(
-                    "Facet-scoped properties appear directly on ObservableObject; "
-                    "CASE/UCO expects them on Facet instances via hasFacet."
-                ),
-                recommended_change="Move properties onto the appropriate *Facet and link via hasFacet.",
-                verification_method="Detect facet properties on ObservableObject nodes.",
-            )
-        )
-    return findings
+_ALL_RULE_IDS = [
+    "CRIT-H-INV-NO-OBJECT",
+    "CRIT-H-AUTH-NON-INVESTIGATION",
+    "CRIT-H-ACQ-INPUT-RESULT-INVERSION",
+    "CRIT-H-RELATED-TO-OVERUSE",
+    "CRIT-H-CHARGED-WITH-REVERSED",
+    "CRIT-H-DICT-ENTRY-COLLISION",
+    "CRIT-H-FACET-PROPS-ON-OBSERVABLE",
+]
 
 
-def _h(
+def _finding(
     *,
     rule_id: str,
     severity: str,
@@ -345,12 +110,14 @@ def _h(
     rationale: str,
     recommended_change: str,
     verification_method: str,
+    confidence: float = 0.9,
 ) -> CriticFinding:
-    finding = CriticFinding(
-        finding_id="CRIT-PENDING",
+    finding_id = make_stable_finding_id(rule_id, *target.semantic_parts())
+    return CriticFinding(
+        finding_id=finding_id,
         severity=severity,  # type: ignore[arg-type]
         category=category,
-        confidence=0.9,
+        confidence=confidence,
         status="new",
         target=target,
         evidence_kind="deterministic",
@@ -359,6 +126,314 @@ def _h(
         recommended_change=recommended_change,
         verification_method=verification_method,
         rule_id=rule_id,
+        identity_key=finding_id,
     )
-    finding.ensure_identity_key()
-    return finding
+
+
+def _investigation_without_object(
+    view: CanonicalGraphView,
+) -> tuple[list[CriticFinding], int]:
+    findings: list[CriticFinding] = []
+    examined = 0
+    for node in view.iter_nodes():
+        if not node.has_type(IRI_INVESTIGATION):
+            continue
+        examined += 1
+        if node.refs(IRI_OBJECT):
+            continue
+        findings.append(
+            _finding(
+                rule_id="CRIT-H-INV-NO-OBJECT",
+                severity="high",
+                category="investigation_structure",
+                target=CriticTarget(
+                    node_id=node.iri,
+                    predicate=IRI_OBJECT,
+                    json_pointer=node.location.json_pointer,
+                    path=node.location.path,
+                ),
+                evidence=["Investigation present without uco-core:object"],
+                rationale=(
+                    "An Investigation container is present but does not reference "
+                    "contained objects via uco-core:object."
+                ),
+                recommended_change=(
+                    "Attach evidence, actions, and related objects with uco-core:object."
+                ),
+                verification_method="CanonicalGraphView: Investigation.refs(object).",
+            )
+        )
+    return findings, examined
+
+
+def _relevant_authorization_misuse(
+    view: CanonicalGraphView,
+) -> tuple[list[CriticFinding], int]:
+    findings: list[CriticFinding] = []
+    examined = 0
+    for node in view.iter_nodes():
+        if not node.values(IRI_RELEVANT_AUTH):
+            continue
+        examined += 1
+        if node.has_type(IRI_INVESTIGATION):
+            continue
+        # Authorization nodes may carry the property in some patterns — skip
+        if any("Authorization" in t for t in node.types):
+            continue
+        findings.append(
+            _finding(
+                rule_id="CRIT-H-AUTH-NON-INVESTIGATION",
+                severity="high",
+                category="authorization",
+                target=CriticTarget(
+                    node_id=node.iri,
+                    predicate=IRI_RELEVANT_AUTH,
+                    json_pointer=node.location.json_pointer,
+                    path=node.location.path,
+                ),
+                evidence=[f"types={sorted(node.types)}"],
+                rationale=(
+                    "case-investigation:relevantAuthorization is attached to a "
+                    "non-Investigation node."
+                ),
+                recommended_change=(
+                    "Move relevantAuthorization to the Investigation (use Authorized_By "
+                    "for actions)."
+                ),
+                verification_method=(
+                    "CanonicalGraphView values(case-investigation:relevantAuthorization)."
+                ),
+            )
+        )
+    return findings, examined
+
+
+def _acquisition_input_result_inversion(
+    view: CanonicalGraphView,
+) -> tuple[list[CriticFinding], int]:
+    findings: list[CriticFinding] = []
+    examined = 0
+    for node in view.iter_nodes():
+        if not node.has_type(IRI_INVESTIGATIVE_ACTION) and not any(
+            "Action" in t for t in node.types
+        ):
+            continue
+        names = " ".join(node.literals(IRI_NAME)).lower()
+        if "acquir" not in names and "image" not in names and "extract" not in names:
+            continue
+        examined += 1
+        if node.refs(IRI_ACTION_RESULT):
+            continue
+        for ref in node.refs(IRI_ACTION_OBJECT):
+            target = view.get(ref)
+            if target and target.has_type(IRI_FILE, IRI_OBSERVABLE):
+                findings.append(
+                    _finding(
+                        rule_id="CRIT-H-ACQ-INPUT-RESULT-INVERSION",
+                        severity="high",
+                        category="action_grammar",
+                        target=CriticTarget(
+                            node_id=node.iri,
+                            predicate=IRI_ACTION_RESULT,
+                            counterpart_id=ref,
+                            json_pointer=node.location.json_pointer,
+                            path=node.location.path,
+                        ),
+                        evidence=[f"likely_result_only_as_input={ref}"],
+                        rationale=(
+                            "Acquisition-like action lists a file/image only as input "
+                            "and has no result — often an input/result inversion."
+                        ),
+                        recommended_change=(
+                            "Place the acquired image/artifact on uco-action:result."
+                        ),
+                        verification_method="Check InvestigativeAction object/result roles.",
+                    )
+                )
+                break
+    return findings, examined
+
+
+def _generic_related_to_overuse(
+    view: CanonicalGraphView,
+) -> tuple[list[CriticFinding], int]:
+    kinds: list[str] = []
+    examined = 0
+    for node in view.iter_nodes():
+        if not node.has_type(IRI_RELATIONSHIP):
+            continue
+        examined += 1
+        for lit in node.literals(IRI_KIND):
+            kinds.append(lit)
+        # Also accept IRI-typed kinds as last path segment
+        for ref in node.refs(IRI_KIND):
+            kinds.append(ref.rsplit("/", 1)[-1])
+    if not kinds:
+        return [], examined
+    counts = Counter(kinds)
+    related = counts.get("Related_To", 0)
+    if related >= 5 or (related >= 3 and related / max(len(kinds), 1) >= 0.5):
+        return [
+            _finding(
+                rule_id="CRIT-H-RELATED-TO-OVERUSE",
+                severity="medium",
+                category="generic_relationship",
+                target=CriticTarget(predicate=IRI_KIND),
+                evidence=[
+                    f"Related_To_count={related}",
+                    f"relationship_count={len(kinds)}",
+                ],
+                rationale=(
+                    "Many relationships use generic Related_To when a governed "
+                    "vocabulary member may be available."
+                ),
+                recommended_change="Prefer specific relationship kinds from the registry.",
+                verification_method="Count kindOfRelationship == Related_To.",
+            )
+        ], examined
+    return [], examined
+
+
+def _charged_with_direction(
+    view: CanonicalGraphView,
+) -> tuple[list[CriticFinding], int]:
+    findings: list[CriticFinding] = []
+    examined = 0
+    for node in view.iter_nodes():
+        if not node.has_type(IRI_RELATIONSHIP):
+            continue
+        kinds = set(node.literals(IRI_KIND))
+        kinds.update(r.rsplit("/", 1)[-1] for r in node.refs(IRI_KIND))
+        if "Charged_With" not in kinds:
+            continue
+        examined += 1
+        source_refs = node.refs(IRI_SOURCE)
+        target_refs = node.refs(IRI_TARGET)
+        if not source_refs or not target_refs:
+            continue
+        source_node = view.get(source_refs[0])
+        target_node = view.get(target_refs[0])
+        if not source_node or not target_node:
+            continue
+        source_is_charge = any("Charge" in t for t in source_node.types) or any(
+            "Charge" in lit for lit in source_node.literals(
+                "https://ontology.unifiedcyberontology.org/uco/core/tag"
+            )
+        ) or any(
+            "charge" in lit.lower() for lit in source_node.literals(IRI_NAME)
+        )
+        target_is_charge = any("Charge" in t for t in target_node.types) or any(
+            "Charge" in lit for lit in target_node.literals(
+                "https://ontology.unifiedcyberontology.org/uco/core/tag"
+            )
+        ) or any(
+            "charge" in lit.lower() for lit in target_node.literals(IRI_NAME)
+        )
+        target_is_person = target_node.has_type(IRI_PERSON) or any(
+            "Person" in t or "Identity" in t for t in target_node.types
+        )
+        source_is_person = source_node.has_type(IRI_PERSON) or any(
+            "Person" in t or "Identity" in t for t in source_node.types
+        )
+        if source_is_charge and target_is_person:
+            findings.append(
+                _finding(
+                    rule_id="CRIT-H-CHARGED-WITH-REVERSED",
+                    severity="high",
+                    category="relationship_direction",
+                    target=CriticTarget(
+                        node_id=node.iri,
+                        predicate=IRI_KIND,
+                        counterpart_id=f"{source_refs[0]}->{target_refs[0]}",
+                        json_pointer=node.location.json_pointer,
+                        path=node.location.path,
+                    ),
+                    evidence=[
+                        f"source={source_refs[0]}",
+                        f"target={target_refs[0]}",
+                    ],
+                    rationale=(
+                        "Charged_With is modeled person→charge; this edge is charge→person."
+                    ),
+                    recommended_change="Reverse source and target.",
+                    verification_method=(
+                        "CanonicalGraphView: Relationship source Person, target Charge."
+                    ),
+                )
+            )
+    return findings, examined
+
+
+def _dictionary_entry_collisions(
+    view: CanonicalGraphView,
+) -> tuple[list[CriticFinding], int]:
+    parents: dict[str, set[str]] = {}
+    examined = 0
+    for node in view.iter_nodes():
+        if not node.has_type(IRI_DICT):
+            continue
+        examined += 1
+        for ref in node.refs(IRI_DICT_ENTRY_PROP):
+            parents.setdefault(ref, set()).add(node.iri)
+    findings: list[CriticFinding] = []
+    for entry_id, parent_ids in parents.items():
+        if len(parent_ids) < 2:
+            continue
+        findings.append(
+            _finding(
+                rule_id="CRIT-H-DICT-ENTRY-COLLISION",
+                severity="high",
+                category="dictionary_collision",
+                target=CriticTarget(node_id=entry_id),
+                evidence=[f"parents={sorted(parent_ids)}"],
+                rationale="Dictionary entry IRI is referenced by multiple Dictionary parents.",
+                recommended_change="Mint parent-scoped entry IRIs.",
+                verification_method="Group dictionary entry refs by @id.",
+            )
+        )
+    return findings, examined
+
+
+def _facet_like_props_on_observable(
+    view: CanonicalGraphView,
+) -> tuple[list[CriticFinding], int]:
+    facet_props = {
+        "https://ontology.unifiedcyberontology.org/uco/observable/serviceName",
+        "https://ontology.unifiedcyberontology.org/uco/observable/serviceType",
+        "https://ontology.unifiedcyberontology.org/uco/observable/fileName",
+        "https://ontology.unifiedcyberontology.org/uco/observable/sizeInBytes",
+    }
+    findings: list[CriticFinding] = []
+    examined = 0
+    for node in view.iter_nodes():
+        if not node.has_type(IRI_OBSERVABLE):
+            continue
+        if any("Facet" in t for t in node.types):
+            continue
+        examined += 1
+        bad = [p for p in facet_props if node.values(p)]
+        if not bad:
+            continue
+        has_facet = bool(
+            node.refs("https://ontology.unifiedcyberontology.org/uco/core/hasFacet")
+        )
+        findings.append(
+            _finding(
+                rule_id="CRIT-H-FACET-PROPS-ON-OBSERVABLE",
+                severity="medium" if has_facet else "high",
+                category="facet_placement",
+                target=CriticTarget(
+                    node_id=node.iri,
+                    predicate=bad[0],
+                    json_pointer=node.location.json_pointer,
+                    path=node.location.path,
+                ),
+                evidence=bad,
+                rationale=(
+                    "Facet-scoped properties appear directly on ObservableObject."
+                ),
+                recommended_change="Move properties onto Facet instances via hasFacet.",
+                verification_method="Canonical property presence on ObservableObject.",
+            )
+        )
+    return findings, examined

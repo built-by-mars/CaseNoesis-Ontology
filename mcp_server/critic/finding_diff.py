@@ -1,10 +1,40 @@
-"""Stable finding identity and pass-to-pass diffing (issue #75)."""
+"""Stable finding identity and pass-to-pass diffing (issue #75 Round 2)."""
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 
-from critic.models import CriticFinding, FindingStatus
+from critic.models import CriticFinding, make_stable_finding_id
+
+__all__ = [
+    "FindingDiffResult",
+    "FindingOccurrence",
+    "assign_display_indexes",
+    "diff_findings",
+    "make_stable_finding_id",
+    "status_counts",
+]
+
+
+@dataclass
+class FindingOccurrence:
+    finding_id: str
+    artifact_hash: str
+    first_seen_pass: int
+    last_seen_pass: int
+    source_location: dict[str, Any] = field(default_factory=dict)
+    display_index: int | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "finding_id": self.finding_id,
+            "artifact_hash": self.artifact_hash,
+            "first_seen_pass": self.first_seen_pass,
+            "last_seen_pass": self.last_seen_pass,
+            "source_location": dict(self.source_location),
+            "display_index": self.display_index,
+        }
 
 
 @dataclass
@@ -14,34 +44,40 @@ class FindingDiffResult:
     resolved: list[CriticFinding]
     regressions: list[CriticFinding]
     disputed: list[CriticFinding]
+    unevaluated: list[CriticFinding]
 
-    def apply_statuses(self) -> list[CriticFinding]:
-        """Return a merged list with statuses set for the current pass."""
+    def all_for_review(self) -> list[CriticFinding]:
+        """Return findings including resolved/unevaluated for the review ledger."""
 
         out: list[CriticFinding] = []
-        for finding in self.new:
-            finding.status = "new"
-            out.append(finding)
-        for finding in self.persisting:
-            finding.status = "persisting"
-            out.append(finding)
-        for finding in self.regressions:
-            finding.status = "regression"
-            out.append(finding)
-        for finding in self.disputed:
-            finding.status = "disputed"
-            out.append(finding)
-        # Resolved findings are reported for the session ledger; keep status.
-        for finding in self.resolved:
-            finding.status = "resolved"
-            out.append(finding)
+        for group, status in (
+            (self.new, "new"),
+            (self.persisting, "persisting"),
+            (self.regressions, "regression"),
+            (self.disputed, "disputed"),
+            (self.resolved, "resolved"),
+            (self.unevaluated, "persisting"),  # still open; not verified
+        ):
+            for finding in group:
+                finding.status = status  # type: ignore[assignment]
+                out.append(finding)
         return out
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "new": [f.to_dict() for f in self.new],
+            "persisting": [f.to_dict() for f in self.persisting],
+            "resolved": [f.to_dict() for f in self.resolved],
+            "regressions": [f.to_dict() for f in self.regressions],
+            "disputed": [f.to_dict() for f in self.disputed],
+            "unevaluated": [f.to_dict() for f in self.unevaluated],
+        }
 
 
 def _index(findings: list[CriticFinding]) -> dict[str, CriticFinding]:
     indexed: dict[str, CriticFinding] = {}
     for finding in findings:
-        key = finding.ensure_identity_key()
+        key = finding.finding_id or finding.ensure_identity_key()
         indexed[key] = finding
     return indexed
 
@@ -51,19 +87,22 @@ def diff_findings(
     current: list[CriticFinding],
     *,
     disputed_identity_keys: dict[str, str] | None = None,
-    resolved_identity_keys: set[str] | None = None,
+    resolved_finding_ids: set[str] | None = None,
+    unevaluated_finding_ids: set[str] | None = None,
 ) -> FindingDiffResult:
-    """Diff prior-pass findings against the current deterministic/critic set.
+    """Diff prior-pass findings against the current set.
 
-    A finding is **not** considered resolved merely because it is absent from
-    ``current``. Callers must supply ``resolved_identity_keys`` after
-    deterministic verification (or an explicit critic assessment) confirms the
-    defect is gone. Absent that, previously open findings that disappear are
-    treated as *persisting* (carry-forward) unless disputed.
+    A finding is **resolved** only when its ID is listed in
+    ``resolved_finding_ids`` (rule successfully re-evaluated the target and
+    the defect was absent). Absence alone never resolves.
+
+    IDs listed in ``unevaluated_finding_ids`` are carried forward as open
+    (rule skipped/failed/not applicable) rather than resolved.
     """
 
     disputed_identity_keys = disputed_identity_keys or {}
-    resolved_identity_keys = resolved_identity_keys or set()
+    resolved_finding_ids = resolved_finding_ids or set()
+    unevaluated_finding_ids = unevaluated_finding_ids or set()
 
     prev = _index(previous)
     curr = _index(current)
@@ -73,6 +112,7 @@ def diff_findings(
     resolved: list[CriticFinding] = []
     regressions: list[CriticFinding] = []
     disputed: list[CriticFinding] = []
+    unevaluated: list[CriticFinding] = []
 
     for key, finding in curr.items():
         if key in disputed_identity_keys:
@@ -81,11 +121,7 @@ def diff_findings(
             continue
         if key in prev:
             prior = prev[key]
-            if prior.status == "resolved" and finding.severity in {
-                "critical",
-                "high",
-                "medium",
-            }:
+            if prior.status == "resolved":
                 regressions.append(finding)
             else:
                 persisting.append(finding)
@@ -95,13 +131,19 @@ def diff_findings(
     for key, finding in prev.items():
         if key in curr or key in disputed_identity_keys:
             continue
-        if key in resolved_identity_keys:
-            resolved.append(finding)
+        if key in resolved_finding_ids:
+            carried = CriticFinding.from_dict(finding.to_dict())
+            carried.status = "resolved"
+            resolved.append(carried)
             continue
-        # Carry forward: omission alone does not resolve.
-        carried = CriticFinding.from_dict(finding.to_dict())
-        carried.status = "persisting"
-        persisting.append(carried)
+        if key in unevaluated_finding_ids or key not in resolved_finding_ids:
+            carried = CriticFinding.from_dict(finding.to_dict())
+            # Default: not verified this pass → unevaluated/persisting open
+            if key in unevaluated_finding_ids:
+                unevaluated.append(carried)
+            else:
+                # Still open unless explicitly resolved
+                unevaluated.append(carried)
 
     return FindingDiffResult(
         new=new,
@@ -109,23 +151,19 @@ def diff_findings(
         resolved=resolved,
         regressions=regressions,
         disputed=disputed,
+        unevaluated=unevaluated,
     )
 
 
-def assign_sequential_ids(
-    findings: list[CriticFinding],
-    *,
-    start: int = 1,
-) -> list[CriticFinding]:
-    """Assign human-readable CRIT-NNNN finding_id values; preserve identity_key."""
+def assign_display_indexes(findings: list[CriticFinding], *, start: int = 1) -> list[CriticFinding]:
+    """Assign display_index only; never rewrite stable finding_id."""
 
     for index, finding in enumerate(findings, start=start):
-        finding.ensure_identity_key()
-        finding.finding_id = f"CRIT-{index:04d}"
+        finding.display_index = index
     return findings
 
 
-def status_counts(findings: list[CriticFinding]) -> dict[FindingStatus, int]:
+def status_counts(findings: list[CriticFinding]) -> dict[str, int]:
     counts: dict[str, int] = {
         "new": 0,
         "persisting": 0,
@@ -135,4 +173,4 @@ def status_counts(findings: list[CriticFinding]) -> dict[FindingStatus, int]:
     }
     for finding in findings:
         counts[finding.status] = counts.get(finding.status, 0) + 1
-    return counts  # type: ignore[return-value]
+    return counts
