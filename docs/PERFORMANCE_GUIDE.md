@@ -103,20 +103,37 @@ A naive split — taking the first N objects, then the next N — will break rel
 ### Implementation with the SDK
 
 ```python
-from case_uco.graph import CASEGraph
+from case_uco import CASEGraph
 
-# Partition by forensic boundary (recommended for investigative graphs)
+# Dependency-aware partition from evidence roots (#72)
+parts = graph.partition(
+    strategy="roots",
+    roots=[device_iri, volume_iri],
+    shared_node_policy="replicate-identical",
+)
+for name, part in parts.items():
+    metrics = part.write_streaming(f"{name}.jsonld")  # #71 atomic stream
+    print(name, metrics)
+
+# Or build per forensic boundary (also recommended)
 for volume in disk_image.volumes:
-    graph = CASEGraph(kb_prefix="http://example.org/kb/case-001/")
+    g = CASEGraph(kb_prefix="http://example.org/kb/case-001/")
     for item in volume.files:
-        graph.create(ObservableObject, has_facet=[...])
-    graph.write(f"volume-{volume.name}.jsonld")
+        g.create(ObservableObject, has_facet=[...])
+    g.write(f"volume-{volume.name}.jsonld")
+```
+
+Public synthetic benchmarks live under `benchmarks/` (#73):
+
+```bash
+python3 benchmarks/run_python_bench.py --tier small
 ```
 
 > **`split()` safety note:** The SDK's `split()` helper divides by object index.
 > It is safe for **catalog-style graphs** where objects are independent (file hash
 > lists, DNS records, IoC feeds). It is **not safe** for investigative graphs with
-> cross-object relationships — use source-level partitioning for those.
+> cross-object relationships — use `partition(strategy="roots")` or source-level
+> partitioning for those.
 
 ```python
 # Strategy 3: Merge multiple graph files for analysis

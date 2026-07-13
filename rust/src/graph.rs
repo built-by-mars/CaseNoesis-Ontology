@@ -3,7 +3,8 @@
 use serde::Serialize;
 use serde_json::{json, Map, Value};
 use sha2::{Digest, Sha256};
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap, HashSet, VecDeque};
+use std::io::Write;
 use uuid::Uuid;
 
 const KIND_SLUG_MAX_LEN: usize = 64;
@@ -129,11 +130,37 @@ pub trait CaseObject {
     }
 }
 
+/// How overlapping dependency closures are handled in [`CaseGraph::partition_by_roots`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum SharedPolicy {
+    /// Copy shared nodes into every partition that references them.
+    Duplicate,
+    /// Fail if any node would appear in more than one partition closure.
+    Reject,
+    /// Assign each shared node only to the first root partition that reaches it.
+    First,
+}
+
+impl SharedPolicy {
+    fn parse(name: &str) -> Result<Self, GraphError> {
+        match name {
+            "duplicate" => Ok(Self::Duplicate),
+            "reject" => Ok(Self::Reject),
+            "first" => Ok(Self::First),
+            other => Err(GraphError::InvalidArgument(format!(
+                "Unknown shared policy: '{other}'. Expected one of: duplicate, reject, first"
+            ))),
+        }
+    }
+}
+
 /// Build a CASE/UCO JSON-LD graph with typed objects.
 pub struct CaseGraph {
     context: HashMap<String, String>,
     objects: Vec<Value>,
     iri_index: HashMap<String, usize>,
+    /// Prefixes referenced by graph objects; maintained on create/add/load mutations (#71).
+    used_prefix_set: HashSet<String>,
     /// Named duplicate policy (default [`DuplicatePolicy::Reject`]).
     pub on_duplicate: DuplicatePolicy,
 }
@@ -147,6 +174,7 @@ impl CaseGraph {
             context,
             objects: Vec::new(),
             iri_index: HashMap::new(),
+            used_prefix_set: HashSet::new(),
             on_duplicate: DuplicatePolicy::Reject,
         }
     }
@@ -266,6 +294,8 @@ impl CaseGraph {
                         .map_err(|ApplyError::Duplicate(d)| GraphError::Duplicate(d))?;
                 }
             }
+            let tracked = self.objects[idx].clone();
+            self.track_prefixes_for(&tracked);
             return Ok(self.objects[idx].clone());
         }
 
@@ -289,6 +319,11 @@ impl CaseGraph {
         Ok(last.clone())
     }
 
+    fn track_prefixes_for(&mut self, node: &Value) {
+        let context_keys: HashSet<&str> = self.context.keys().map(|k| k.as_str()).collect();
+        collect_prefixes(node, &context_keys, &mut self.used_prefix_set);
+    }
+
     /// Add an `rdf:type` to an existing node (same `@id`).
     pub fn add_type(&mut self, node_id: &str, type_iri: &str) -> Result<(), GraphError> {
         let idx = self
@@ -299,6 +334,7 @@ impl CaseGraph {
             .ok_or_else(|| GraphError::InvalidArgument("indexed node must be object".into()))?;
         let merged = merge_types(obj.get("@type"), Some(Value::String(type_iri.to_string())));
         obj.insert("@type".to_string(), normalize_type_value(merged));
+        self.track_prefixes_for(&json!({ "@type": type_iri }));
         Ok(())
     }
 
@@ -315,8 +351,10 @@ impl CaseGraph {
         let obj = self.objects[idx]
             .as_object_mut()
             .ok_or_else(|| GraphError::InvalidArgument("indexed node must be object".into()))?;
-        apply_property(obj, key, value, node_id, PropertyMode::MergeCompatible)
-            .map_err(|ApplyError::Duplicate(d)| GraphError::Duplicate(d))
+        apply_property(obj, key, value.clone(), node_id, PropertyMode::MergeCompatible)
+            .map_err(|ApplyError::Duplicate(d)| GraphError::Duplicate(d))?;
+        self.track_prefixes_for(&json!({ key: value }));
+        Ok(())
     }
 
     /// Replace a property value (`replace` mode / scalar overwrite).
@@ -332,8 +370,10 @@ impl CaseGraph {
         let obj = self.objects[idx]
             .as_object_mut()
             .ok_or_else(|| GraphError::InvalidArgument("indexed node must be object".into()))?;
-        apply_property(obj, key, value, node_id, PropertyMode::Replace)
-            .map_err(|ApplyError::Duplicate(d)| GraphError::Duplicate(d))
+        apply_property(obj, key, value.clone(), node_id, PropertyMode::Replace)
+            .map_err(|ApplyError::Duplicate(d)| GraphError::Duplicate(d))?;
+        self.track_prefixes_for(&json!({ key: value }));
+        Ok(())
     }
 
     /// Add a direct property edge source --predicate--> target.
@@ -457,6 +497,7 @@ impl CaseGraph {
             context: self.context.clone(),
             objects: self.objects.clone(),
             iri_index: self.iri_index.clone(),
+            used_prefix_set: self.used_prefix_set.clone(),
         }
     }
 
@@ -464,6 +505,7 @@ impl CaseGraph {
         self.context = snap.context;
         self.objects = snap.objects;
         self.iri_index = snap.iri_index;
+        self.used_prefix_set = snap.used_prefix_set;
     }
 
     fn merge_context(&mut self, incoming: &Map<String, Value>) -> Result<(), LoadError> {
@@ -497,7 +539,10 @@ impl CaseGraph {
     /// Parse a JSON-LD string and return the graph with its objects.
     ///
     /// Since Rust lacks runtime reflection, objects are returned as raw
-    /// `serde_json::Value` items. Multi-type `@type` arrays are preserved.
+    /// [`serde_json::Value`] items rather than typed CASE/UCO structs. Multi-type
+    /// `@type` arrays are preserved. Typed registry caching (Python #70) is N/A
+    /// here — there is no process-wide class registry to warm; callers that need
+    /// typed views should map `Value` items to generated types themselves.
     pub fn from_jsonld(json: &str) -> Result<(CaseGraph, Vec<Value>), String> {
         let doc: Value =
             serde_json::from_str(json).map_err(|e| format!("Failed to parse JSON: {e}"))?;
@@ -523,30 +568,60 @@ impl CaseGraph {
 
     /// Serialize the graph to a JSON-LD string.
     pub fn serialize(&self) -> Result<String, serde_json::Error> {
-        let used = self.used_prefixes();
-        let context_value: Map<String, Value> = self
-            .context
-            .iter()
-            .filter(|(k, _)| used.contains(k.as_str()))
-            .map(|(k, v)| (k.clone(), Value::String(v.clone())))
-            .collect();
-
         let doc = json!({
-            "@context": context_value,
+            "@context": self.pruned_context(),
             "@graph": self.objects,
         });
 
         serde_json::to_string_pretty(&doc)
     }
 
-    fn used_prefixes(&self) -> std::collections::HashSet<String> {
-        let mut prefixes = std::collections::HashSet::new();
-        let context_keys: std::collections::HashSet<&str> =
-            self.context.keys().map(|k| k.as_str()).collect();
+    /// Return a copy of the context containing only prefixes used in the graph (#71).
+    fn pruned_context(&self) -> Map<String, Value> {
+        let used = if self.used_prefix_set.is_empty() {
+            self.used_prefixes()
+        } else {
+            self.used_prefix_set.clone()
+        };
+        self.context
+            .iter()
+            .filter(|(k, _)| used.contains(k.as_str()))
+            .map(|(k, v)| (k.clone(), Value::String(v.clone())))
+            .collect()
+    }
+
+    fn used_prefixes(&self) -> HashSet<String> {
+        let mut prefixes = HashSet::new();
+        let context_keys: HashSet<&str> = self.context.keys().map(|k| k.as_str()).collect();
         for obj in &self.objects {
             collect_prefixes(obj, &context_keys, &mut prefixes);
         }
         prefixes
+    }
+
+    /// Write the graph incrementally without materializing a second full document (#71).
+    pub fn write_streaming(&self, path: &str) -> std::io::Result<()> {
+        let file = std::fs::File::create(path)?;
+        let mut writer = std::io::BufWriter::new(file);
+        let ctx = self.pruned_context();
+
+        writer.write_all(b"{\n")?;
+        writer.write_all(b"  \"@context\": ")?;
+        serde_json::to_writer(&mut writer, &ctx).map_err(std::io::Error::other)?;
+        writer.write_all(b",\n  \"@graph\": [\n")?;
+
+        for (i, obj) in self.objects.iter().enumerate() {
+            writer.write_all(b"    ")?;
+            serde_json::to_writer(&mut writer, obj).map_err(std::io::Error::other)?;
+            if i + 1 < self.objects.len() {
+                writer.write_all(b",\n")?;
+            } else {
+                writer.write_all(b"\n")?;
+            }
+        }
+        writer.write_all(b"  ]\n}\n")?;
+        writer.flush()?;
+        Ok(())
     }
 
     /// Write the graph to a file.
@@ -587,6 +662,84 @@ impl CaseGraph {
         self.objects.iter().map(count_triples).sum()
     }
 
+    /// Partition the graph into dependency closures rooted at ``roots`` (#72).
+    ///
+    /// Each root's partition includes the root node and every top-level node
+    /// reachable by following nested ``@id`` references. ``shared_policy``
+    /// controls overlap: ``duplicate`` copies shared nodes into each partition,
+    /// ``reject`` fails on overlap, ``first`` assigns shared nodes only to the
+    /// earliest root partition.
+    pub fn partition_by_roots(
+        &self,
+        roots: &[String],
+        shared_policy: &str,
+    ) -> Result<BTreeMap<String, CaseGraph>, GraphError> {
+        if roots.is_empty() {
+            return Err(GraphError::InvalidArgument(
+                "partition_by_roots requires at least one root @id".into(),
+            ));
+        }
+        let policy = SharedPolicy::parse(shared_policy)?;
+        let by_id = self.top_level_index();
+
+        let mut closures: Vec<(String, HashSet<String>)> = Vec::with_capacity(roots.len());
+        for root in roots {
+            if !self.contains(root) {
+                return Err(GraphError::NotFound(root.clone()));
+            }
+            let closure = self.dependency_closure(root, &by_id);
+            closures.push((root.clone(), closure));
+        }
+
+        if policy == SharedPolicy::Reject {
+            let mut seen: HashMap<String, String> = HashMap::new();
+            for (root, closure) in &closures {
+                for node_id in closure {
+                    if let Some(other) = seen.get(node_id) {
+                        if other != root {
+                            return Err(GraphError::InvalidArgument(format!(
+                                "shared node '{node_id}' appears in closures for '{other}' and '{root}' (shared_policy=reject)"
+                            )));
+                        }
+                    } else {
+                        seen.insert(node_id.clone(), root.clone());
+                    }
+                }
+            }
+        }
+
+        let mut assigned: HashSet<String> = HashSet::new();
+        let mut partitions: BTreeMap<String, CaseGraph> = BTreeMap::new();
+
+        for (root, closure) in closures {
+            let mut part = CaseGraph {
+                context: self.context.clone(),
+                objects: Vec::new(),
+                iri_index: HashMap::new(),
+                used_prefix_set: HashSet::new(),
+                on_duplicate: DuplicatePolicy::MergeCompatible,
+            };
+
+            for node_id in &closure {
+                if policy == SharedPolicy::First && assigned.contains(node_id) {
+                    continue;
+                }
+                let Some(node) = self.resolve_top_level(node_id, &by_id) else {
+                    continue;
+                };
+                part.append_object(node.clone())
+                    .map_err(GraphError::Duplicate)?;
+                if policy == SharedPolicy::First {
+                    assigned.insert(node_id.clone());
+                }
+            }
+
+            partitions.insert(root, part);
+        }
+
+        Ok(partitions)
+    }
+
     /// Split the graph into smaller chunks of at most `max_objects` each.
     pub fn split(&self, max_objects: usize) -> Result<Vec<CaseGraph>, GraphError> {
         if max_objects == 0 {
@@ -598,6 +751,7 @@ impl CaseGraph {
                 context: self.context.clone(),
                 objects: Vec::new(),
                 iri_index: HashMap::new(),
+                used_prefix_set: HashSet::new(),
                 on_duplicate: self.on_duplicate,
             };
             for obj in chunk {
@@ -630,6 +784,63 @@ impl CaseGraph {
         iri.to_string()
     }
 
+    fn top_level_index(&self) -> HashMap<String, usize> {
+        let mut by_id = HashMap::new();
+        for (idx, obj) in self.objects.iter().enumerate() {
+            if let Some(oid) = obj.get("@id").and_then(|v| v.as_str()) {
+                by_id.insert(oid.to_string(), idx);
+                let expanded = self.expand_iri(oid);
+                if expanded != oid {
+                    by_id.insert(expanded, idx);
+                }
+            }
+        }
+        by_id
+    }
+
+    fn resolve_top_level<'a>(
+        &'a self,
+        node_id: &str,
+        by_id: &HashMap<String, usize>,
+    ) -> Option<&'a Value> {
+        if let Some(&idx) = by_id.get(node_id) {
+            return Some(&self.objects[idx]);
+        }
+        let expanded = self.expand_iri(node_id);
+        by_id.get(&expanded).map(|&idx| &self.objects[idx])
+    }
+
+    fn dependency_closure(&self, root: &str, by_id: &HashMap<String, usize>) -> HashSet<String> {
+        let mut closure = HashSet::new();
+        let mut queue = VecDeque::new();
+        queue.push_back(root.to_string());
+
+        while let Some(id) = queue.pop_front() {
+            if !closure.insert(id.clone()) {
+                continue;
+            }
+            let Some(node) = self.resolve_top_level(&id, by_id) else {
+                continue;
+            };
+            let mut refs = HashSet::new();
+            collect_nested_id_refs(node, &mut refs);
+            for ref_id in refs {
+                let next = if by_id.contains_key(&ref_id) {
+                    ref_id
+                } else {
+                    let expanded = self.expand_iri(&ref_id);
+                    if by_id.contains_key(&expanded) {
+                        expanded
+                    } else {
+                        continue;
+                    }
+                };
+                queue.push_back(next);
+            }
+        }
+        closure
+    }
+
     fn append_object(&mut self, obj: Value) -> Result<(), DuplicateNodeError> {
         let node_id = obj
             .as_object()
@@ -647,9 +858,12 @@ impl CaseGraph {
         }
 
         self.objects.push(obj);
+        let idx = self.objects.len() - 1;
         if let Some(id) = node_id {
-            self.index_node(&id, self.objects.len() - 1);
+            self.index_node(&id, idx);
         }
+        let tracked = self.objects[idx].clone();
+        self.track_prefixes_for(&tracked);
         Ok(())
     }
 
@@ -684,6 +898,9 @@ impl CaseGraph {
 
         let Some(node_id) = node_id else {
             self.objects.push(raw);
+            if let Some(node) = self.objects.last().cloned() {
+                self.track_prefixes_for(&node);
+            }
             return Ok(());
         };
 
@@ -710,6 +927,7 @@ impl CaseGraph {
                         }
                     }
                     existing.insert("@id".to_string(), preserved);
+                    self.track_prefixes_for(&raw);
                     return Ok(());
                 }
                 DuplicatePolicy::MergeIdentical => {
@@ -735,6 +953,7 @@ impl CaseGraph {
                             }
                         }
                     }
+                    self.track_prefixes_for(&raw);
                     return Ok(());
                 }
                 DuplicatePolicy::MergeCompatible => {
@@ -760,6 +979,7 @@ impl CaseGraph {
                             .map_err(|ApplyError::Duplicate(d)| LoadError::Duplicate(d))?;
                         }
                     }
+                    self.track_prefixes_for(&raw);
                     return Ok(());
                 }
             }
@@ -819,6 +1039,7 @@ struct GraphSnapshot {
     context: HashMap<String, String>,
     objects: Vec<Value>,
     iri_index: HashMap<String, usize>,
+    used_prefix_set: HashSet<String>,
 }
 
 #[derive(Clone, Copy)]
@@ -1130,10 +1351,26 @@ fn count_triples(value: &Value) -> usize {
     }
 }
 
-fn extract_prefix<'a>(
-    value: &'a str,
-    context_keys: &std::collections::HashSet<&str>,
-) -> Option<&'a str> {
+fn collect_nested_id_refs(value: &Value, out: &mut HashSet<String>) {
+    match value {
+        Value::Object(map) => {
+            if let Some(id) = map.get("@id").and_then(|v| v.as_str()) {
+                out.insert(id.to_string());
+            }
+            for val in map.values() {
+                collect_nested_id_refs(val, out);
+            }
+        }
+        Value::Array(items) => {
+            for item in items {
+                collect_nested_id_refs(item, out);
+            }
+        }
+        _ => {}
+    }
+}
+
+fn extract_prefix<'a>(value: &'a str, context_keys: &HashSet<&str>) -> Option<&'a str> {
     if value.contains("://") {
         return None;
     }
@@ -1148,11 +1385,7 @@ fn extract_prefix<'a>(
     None
 }
 
-fn collect_prefixes(
-    value: &Value,
-    context_keys: &std::collections::HashSet<&str>,
-    out: &mut std::collections::HashSet<String>,
-) {
+fn collect_prefixes(value: &Value, context_keys: &HashSet<&str>, out: &mut HashSet<String>) {
     match value {
         Value::Object(map) => {
             for (key, val) in map {

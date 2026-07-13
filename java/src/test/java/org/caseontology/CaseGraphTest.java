@@ -5,7 +5,9 @@ import org.caseontology.uco.tool.Tool;
 import org.caseontology.uco.observable.ObservableObject;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.List;
 import java.util.LinkedHashMap;
@@ -228,5 +230,104 @@ public class CaseGraphTest {
         } catch (IllegalArgumentException expected) {
             assertTrue(expected.getMessage().contains("Context prefix collision"));
         }
+    }
+
+    @Test
+    public void testClearClassRegistryCacheAndFromJsonLd() {
+        CaseGraph.clearClassRegistryCache();
+        String json = "{\n" +
+            "  \"@context\": {\n" +
+            "    \"kb\": \"http://example.org/kb/\",\n" +
+            "    \"uco-tool\": \"https://ontology.unifiedcyberontology.org/uco/tool/\",\n" +
+            "    \"uco-core\": \"https://ontology.unifiedcyberontology.org/uco/core/\"\n" +
+            "  },\n" +
+            "  \"@graph\": [\n" +
+            "    {\n" +
+            "      \"@id\": \"kb:Tool-stream-1\",\n" +
+            "      \"@type\": \"uco-tool:Tool\",\n" +
+            "      \"uco-core:name\": \"Registry Tool\"\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
+        CaseGraph.FromJsonLdResult first = CaseGraph.fromJsonLd(json);
+        assertEquals(1, first.getObjects().size());
+        assertTrue(first.getObjects().get(0) instanceof Tool);
+
+        CaseGraph.clearClassRegistryCache();
+        CaseGraph.FromJsonLdResult second = CaseGraph.fromJsonLd(json);
+        assertEquals(1, second.getObjects().size());
+        assertTrue(second.getObjects().get(0) instanceof Tool);
+    }
+
+    @Test
+    public void testWriteStreamingRoundtrip() throws Exception {
+        CaseGraph graph = new CaseGraph();
+        Tool tool = new Tool();
+        tool.setName("Streamed");
+        graph.addWithId(tool, "kb:Tool-stream");
+
+        java.nio.file.Path out = Files.createTempFile("case-graph-stream", ".jsonld");
+        try {
+            graph.writeStreaming(out.toString());
+            CaseGraph loaded = new CaseGraph();
+            loaded.load(Files.readString(out), "merge_compatible");
+            assertEquals("Streamed", loaded.get("kb:Tool-stream").get("uco-core:name"));
+        } finally {
+            Files.deleteIfExists(out);
+        }
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testPartitionByRootsDependencyClosure() {
+        CaseGraph graph = new CaseGraph();
+        graph.upsertNode("kb:root-a", "uco-core:UcoObject", Map.of("uco-core:name", "A"));
+        graph.upsertNode("kb:child-a", "uco-core:UcoObject", Map.of("uco-core:name", "ChildA"));
+        graph.link("kb:root-a", "uco-core:hasFacet", "kb:child-a");
+
+        Map<String, CaseGraph> parts = graph.partitionByRoots(Arrays.asList("kb:root-a"));
+        assertEquals(1, parts.size());
+        CaseGraph partA = parts.get("kb:root-a");
+        assertNotNull(partA);
+        assertTrue(partA.contains("kb:root-a"));
+        assertTrue(partA.contains("kb:child-a"));
+        assertEquals(2, partA.size());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testPartitionByRootsReplicateShared() {
+        CaseGraph graph = new CaseGraph();
+        graph.upsertNode("kb:root-a", "uco-core:UcoObject", Map.of("uco-core:name", "A"));
+        graph.upsertNode("kb:root-b", "uco-core:UcoObject", Map.of("uco-core:name", "B"));
+        graph.upsertNode("kb:shared", "uco-core:UcoObject", Map.of("uco-core:name", "Shared"));
+        graph.link("kb:root-a", "uco-core:hasFacet", "kb:shared");
+        graph.link("kb:root-b", "uco-core:hasFacet", "kb:shared");
+
+        Map<String, CaseGraph> parts = graph.partitionByRoots(
+            Arrays.asList("kb:root-a", "kb:root-b"), "replicate-identical");
+
+        assertTrue(parts.get("kb:root-a").contains("kb:shared"));
+        assertTrue(parts.get("kb:root-b").contains("kb:shared"));
+        assertEquals("Shared", parts.get("kb:root-a").get("kb:shared").get("uco-core:name"));
+        assertEquals("Shared", parts.get("kb:root-b").get("kb:shared").get("uco-core:name"));
+    }
+
+    @Test
+    public void testPartitionByRootsIsolateShared() {
+        CaseGraph graph = new CaseGraph();
+        graph.upsertNode("kb:root-a", "uco-core:UcoObject", Map.of("uco-core:name", "A"));
+        graph.upsertNode("kb:root-b", "uco-core:UcoObject", Map.of("uco-core:name", "B"));
+        graph.upsertNode("kb:shared", "uco-core:UcoObject", Map.of("uco-core:name", "Shared"));
+        graph.link("kb:root-a", "uco-core:hasFacet", "kb:shared");
+        graph.link("kb:root-b", "uco-core:hasFacet", "kb:shared");
+
+        Map<String, CaseGraph> parts = graph.partitionByRoots(
+            Arrays.asList("kb:root-a", "kb:root-b"), "isolate-shared");
+
+        assertTrue(parts.containsKey("_shared"));
+        assertTrue(parts.get("_shared").contains("kb:shared"));
+        assertFalse(parts.get("kb:root-a").contains("kb:shared"));
+        assertFalse(parts.get("kb:root-b").contains("kb:shared"));
     }
 }

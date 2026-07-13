@@ -393,7 +393,54 @@ def test_write_streaming_roundtrip(tmp_path):
     g = CASEGraph()
     g.create(Tool, id="kb:t", name="X")
     out = tmp_path / "stream.jsonld"
-    g.write_streaming(str(out))
+    metrics = g.write_streaming(str(out))
+    assert metrics["nodes"] == 1
+    assert metrics["bytes_written"] > 0
     loaded = CASEGraph()
     loaded.load_file(str(out), on_duplicate="merge_compatible")
     assert loaded.get("kb:t")["uco-core:name"] == "X"
+
+
+def test_class_registry_cache_clear_and_warm():
+    from case_uco.graph import _build_class_registry, clear_class_registry_cache
+
+    clear_class_registry_cache()
+    cold = _build_class_registry()
+    warm = _build_class_registry()
+    assert cold is not warm  # shallow copies
+    assert cold.keys() == warm.keys()
+    assert "https://ontology.unifiedcyberontology.org/uco/tool/Tool" in cold
+    clear_class_registry_cache()
+    rebuilt = _build_class_registry()
+    assert "https://ontology.unifiedcyberontology.org/uco/tool/Tool" in rebuilt
+
+
+def test_duplicate_extra_class_iri_rejected():
+    from dataclasses import dataclass
+    from case_uco.graph import DuplicateClassIriError, _build_class_registry, clear_class_registry_cache
+    from case_uco.uco.tool import Tool
+
+    @dataclass
+    class FakeTool:
+        CLASS_IRI = Tool.CLASS_IRI
+        name: str = "x"
+
+    clear_class_registry_cache()
+    with pytest.raises(DuplicateClassIriError):
+        _build_class_registry(extra_classes=[FakeTool])
+
+
+def test_partition_by_roots_dependency_closure():
+    g = CASEGraph()
+    g.upsert_node("kb:device", types="uco-core:UcoObject", properties={"uco-core:name": "phone"})
+    g.upsert_node(
+        "kb:file",
+        types="uco-core:UcoObject",
+        properties={"uco-core:name": "photo", "uco-core:object": {"@id": "kb:device"}},
+    )
+    g.upsert_node("kb:other", types="uco-core:UcoObject", properties={"uco-core:name": "solo"})
+    parts = g.partition(strategy="roots", roots=["kb:file"])
+    assert "kb:file" in parts
+    assert parts["kb:file"].contains("kb:file")
+    assert parts["kb:file"].contains("kb:device")
+    assert not parts["kb:file"].contains("kb:other")

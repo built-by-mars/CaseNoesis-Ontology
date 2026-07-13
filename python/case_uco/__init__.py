@@ -3,6 +3,7 @@
 from case_uco.graph import (
     CASEGraph,
     DeserializationWarning,
+    DuplicateClassIriError,
     DuplicateNodeError,
     InvalidSplitSizeError,
     clear_class_registry_cache,
@@ -11,6 +12,7 @@ from case_uco.graph import (
 __all__ = [
     "CASEGraph",
     "DeserializationWarning",
+    "DuplicateClassIriError",
     "DuplicateNodeError",
     "InvalidSplitSizeError",
     "clear_class_registry_cache",

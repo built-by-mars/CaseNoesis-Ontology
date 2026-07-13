@@ -1,6 +1,7 @@
 // Tests for CaseGraph builder and JSON-LD serialization.
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using CaseUco;
 using CaseUco.Uco.Tool;
@@ -220,6 +221,133 @@ namespace CaseUco.Tests
             });
             Assert.Throws<InvalidOperationException>(() =>
                 graph.Load(@"{ ""@context"": { ""kb"": ""http://example.org/kb/"" }, ""@graph"": [ { ""@id"": ""kb:x"", ""@type"": ""uco-core:UcoObject"", ""uco-core:name"": ""B"" } ] }"));
+        }
+
+        [Fact]
+        public void ClearClassRegistryCache_DoesNotBreakFromJsonLd()
+        {
+            var json = @"{
+                ""@context"": {
+                    ""kb"": ""http://example.org/kb/"",
+                    ""uco-tool"": ""https://ontology.unifiedcyberontology.org/uco/tool/"",
+                    ""uco-core"": ""https://ontology.unifiedcyberontology.org/uco/core/""
+                },
+                ""@graph"": [
+                    {
+                        ""@id"": ""kb:Tool-1"",
+                        ""@type"": ""uco-tool:Tool"",
+                        ""uco-core:name"": ""Cached""
+                    }
+                ]
+            }";
+
+            var first = CaseGraph.FromJsonLd(json);
+            Assert.IsType<Tool>(first.Objects[0]);
+            CaseGraph.ClearClassRegistryCache();
+            var second = CaseGraph.FromJsonLd(json);
+            Assert.IsType<Tool>(second.Objects[0]);
+        }
+
+        [Fact]
+        public void WriteStreaming_Roundtrip()
+        {
+            var graph = new CaseGraph();
+            graph.AddWithId(new Tool { Name = "Streamed" }, "kb:t-stream");
+            var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"caseuco-stream-{Guid.NewGuid()}.jsonld");
+            try
+            {
+                graph.WriteStreaming(path);
+                var loaded = new CaseGraph();
+                loaded.OnDuplicate = "merge_compatible";
+                loaded.Load(System.IO.File.ReadAllText(path));
+                Assert.Equal("Streamed", loaded.Get("kb:t-stream")["uco-core:name"]);
+            }
+            finally
+            {
+                if (System.IO.File.Exists(path))
+                    System.IO.File.Delete(path);
+            }
+        }
+
+        [Fact]
+        public void PartitionByRoots_ReplicatesSharedNodes()
+        {
+            var graph = new CaseGraph();
+            graph.UpsertNode("kb:shared", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:name"] = "Shared",
+            });
+            graph.UpsertNode("kb:root-a", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:object"] = new Dictionary<string, object> { ["@id"] = "kb:shared" },
+            });
+            graph.UpsertNode("kb:root-b", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:object"] = new Dictionary<string, object> { ["@id"] = "kb:shared" },
+            });
+
+            var parts = graph.PartitionByRoots(new[] { "kb:root-a", "kb:root-b" });
+            Assert.True(parts.ContainsKey("kb:root-a"));
+            Assert.True(parts.ContainsKey("kb:root-b"));
+            Assert.False(parts.ContainsKey("_shared"));
+            Assert.True(parts["kb:root-a"].Contains("kb:shared"));
+            Assert.True(parts["kb:root-b"].Contains("kb:shared"));
+        }
+
+        [Fact]
+        public void PartitionByRoots_PlacesSharedNodesInSharedPartition()
+        {
+            var graph = new CaseGraph();
+            graph.UpsertNode("kb:shared", "uco-core:UcoObject");
+            graph.UpsertNode("kb:root-a", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:object"] = new Dictionary<string, object> { ["@id"] = "kb:shared" },
+            });
+            graph.UpsertNode("kb:root-b", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:object"] = new Dictionary<string, object> { ["@id"] = "kb:shared" },
+            });
+
+            var parts = graph.PartitionByRoots(new[] { "kb:root-a", "kb:root-b" }, "shared");
+            Assert.True(parts.ContainsKey("_shared"));
+            Assert.True(parts["_shared"].Contains("kb:shared"));
+        }
+
+        [Fact]
+        public void PartitionByLabel_GroupsByBoundaryKey()
+        {
+            var graph = new CaseGraph();
+            graph.UpsertNode("kb:art-a", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:name"] = "A",
+            });
+            graph.UpsertNode("kb:art-b", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:name"] = "B",
+            });
+            graph.CreateRelationship("kb:art-a", "kb:art-b", "Related_To");
+
+            var parts = graph.PartitionByLabel(node =>
+            {
+                if (node.TryGetValue("uco-core:name", out var name) && name as string == "A")
+                    return "part-a";
+                if (name as string == "B")
+                    return "part-b";
+                return null;
+            });
+
+            Assert.True(parts.ContainsKey("part-a"));
+            Assert.True(parts.ContainsKey("part-b"));
+            Assert.Equal(
+                parts.Keys.OrderBy(x => x).ToArray(),
+                graph.PartitionByLabel(node =>
+                {
+                    if (node.TryGetValue("uco-core:name", out var name) && name as string == "A")
+                        return "part-a";
+                    if (name as string == "B")
+                        return "part-b";
+                    return null;
+                }).Keys.OrderBy(x => x).ToArray());
         }
     }
 }

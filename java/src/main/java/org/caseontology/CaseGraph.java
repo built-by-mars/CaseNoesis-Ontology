@@ -7,14 +7,21 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.time.ZonedDateTime;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,10 +34,15 @@ import java.util.UUID;
  */
 public class CaseGraph {
 
+    private static final ConcurrentHashMap<String, Class<?>> CLASS_REGISTRY_CACHE = new ConcurrentHashMap<>();
+    private static final Object CLASS_REGISTRY_LOCK = new Object();
+    private static volatile boolean classRegistryBuilt = false;
+
     private final Map<String, String> context;
     private final List<Map<String, Object>> objects;
     private final Map<Object, String> idMap;
     private final Map<String, Integer> iriIndex = new LinkedHashMap<>();
+    private final Set<String> usedPrefixSet = new HashSet<>();
     private String onDuplicate = "reject";
     private final List<DeserializationWarning> deserializationWarnings = new ArrayList<>();
 
@@ -191,6 +203,7 @@ public class CaseGraph {
     public void addType(String id, String typeIri) {
         Map<String, Object> obj = requireObject(id);
         obj.put("@type", normalizeTypeValue(mergeTypes(obj.get("@type"), typeIri)));
+        trackPrefixesFor(Collections.singletonMap("@type", typeIri));
     }
 
     /**
@@ -290,7 +303,10 @@ public class CaseGraph {
     }
 
     private Map<String, String> prunedContext() {
-        java.util.Set<String> used = usedPrefixes();
+        Set<String> used = usedPrefixSet.isEmpty() ? usedPrefixes() : usedPrefixSet;
+        if (used.isEmpty()) {
+            used = usedPrefixes();
+        }
         Map<String, String> pruned = new LinkedHashMap<>();
         for (Map.Entry<String, String> entry : context.entrySet()) {
             if (used.contains(entry.getKey())) {
@@ -300,16 +316,20 @@ public class CaseGraph {
         return pruned;
     }
 
-    private java.util.Set<String> usedPrefixes() {
-        java.util.Set<String> prefixes = new java.util.HashSet<>();
-        java.util.Set<String> contextKeys = context.keySet();
+    private Set<String> usedPrefixes() {
+        Set<String> prefixes = new HashSet<>();
+        Set<String> contextKeys = context.keySet();
         for (Map<String, Object> obj : objects) {
             collectPrefixes(obj, contextKeys, prefixes);
         }
         return prefixes;
     }
 
-    private static String extractPrefix(String value, java.util.Set<String> contextKeys) {
+    private void trackPrefixesFor(Object node) {
+        collectPrefixes(node, context.keySet(), usedPrefixSet);
+    }
+
+    private static String extractPrefix(String value, Set<String> contextKeys) {
         if (value.contains("://")) return null;
         int colon = value.indexOf(':');
         if (colon > 0) {
@@ -320,7 +340,7 @@ public class CaseGraph {
     }
 
     @SuppressWarnings("unchecked")
-    private static void collectPrefixes(Object node, java.util.Set<String> contextKeys, java.util.Set<String> out) {
+    private static void collectPrefixes(Object node, Set<String> contextKeys, Set<String> out) {
         if (node instanceof Map) {
             for (Map.Entry<String, Object> entry : ((Map<String, Object>) node).entrySet()) {
                 String p = extractPrefix(entry.getKey(), contextKeys);
@@ -358,6 +378,44 @@ public class CaseGraph {
     public void write(String path) throws IOException {
         try (Writer writer = new OutputStreamWriter(Files.newOutputStream(Paths.get(path)), StandardCharsets.UTF_8)) {
             writer.write(serialize());
+        }
+    }
+
+    /**
+     * Stream JSON-LD to disk without building a second full-document string.
+     *
+     * <p>Emits {@code @context} then each {@code @graph} element incrementally.
+     * Peak memory is dominated by the in-memory graph rather than a duplicate
+     * serialized buffer. Use {@link #serialize()} when a complete string is needed.
+     */
+    public void writeStreaming(String path) throws IOException {
+        try (Writer writer = new OutputStreamWriter(Files.newOutputStream(Paths.get(path)), StandardCharsets.UTF_8)) {
+            Map<String, String> ctx = prunedContext();
+            writer.write("{\n");
+            writer.write("  \"@context\": ");
+            writer.write(toJsonString(ctx, 1));
+            writer.write(",\n");
+            writer.write("  \"@graph\": [\n");
+            for (int i = 0; i < objects.size(); i++) {
+                writer.write(indentJsonLines(toJsonString(objects.get(i), 2), "    "));
+                if (i + 1 < objects.size()) {
+                    writer.write(",\n");
+                } else {
+                    writer.write("\n");
+                }
+            }
+            writer.write("  ]\n");
+            writer.write("}\n");
+        }
+    }
+
+    /**
+     * Invalidate the process-wide deserialization class registry (#70).
+     */
+    public static void clearClassRegistryCache() {
+        synchronized (CLASS_REGISTRY_LOCK) {
+            CLASS_REGISTRY_CACHE.clear();
+            classRegistryBuilt = false;
         }
     }
 
@@ -604,6 +662,12 @@ public class CaseGraph {
         if (expandedIri == null) {
             return null;
         }
+        ensureClassRegistryBuilt();
+        Class<?> cached = CLASS_REGISTRY_CACHE.get(expandedIri);
+        if (cached != null) {
+            return cached;
+        }
+
         String localName = expandedIri.substring(expandedIri.lastIndexOf('/') + 1);
 
         List<String> candidates = new ArrayList<>();
@@ -625,10 +689,61 @@ public class CaseGraph {
                 if (!expandedIri.equals(classIriField.get(null))) {
                     continue;
                 }
+                CLASS_REGISTRY_CACHE.putIfAbsent(expandedIri, cls);
                 return cls;
             } catch (Exception ignored) {}
         }
         return null;
+    }
+
+    private static void ensureClassRegistryBuilt() {
+        if (classRegistryBuilt) {
+            return;
+        }
+        synchronized (CLASS_REGISTRY_LOCK) {
+            if (!classRegistryBuilt) {
+                buildClassRegistry();
+                classRegistryBuilt = true;
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void buildClassRegistry() {
+        for (String className : OntologyRegistry.listClasses()) {
+            Map<String, Object> meta = OntologyRegistry.getClass(className);
+            if (meta == null) {
+                continue;
+            }
+            Object iriObj = meta.get("iri");
+            Object moduleObj = meta.get("module");
+            if (!(iriObj instanceof String) || !(moduleObj instanceof String)) {
+                continue;
+            }
+            String iri = (String) iriObj;
+            String fqcn = moduleToPackage((String) moduleObj) + "." + className;
+            try {
+                Class<?> cls = Class.forName(fqcn);
+                Field classIriField = cls.getDeclaredField("CLASS_IRI");
+                String classIri = (String) classIriField.get(null);
+                if (!iri.equals(classIri)) {
+                    continue;
+                }
+                Class<?> existing = CLASS_REGISTRY_CACHE.putIfAbsent(iri, cls);
+                if (existing != null && existing != cls) {
+                    throw new IllegalStateException(
+                        "Duplicate CLASS_IRI '" + iri + "': " + existing.getName() + " vs " + cls.getName());
+                }
+            } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException ignored) {
+            }
+        }
+    }
+
+    private static String moduleToPackage(String module) {
+        if (module.startsWith("case.")) {
+            return "org.caseontology._case." + module.substring("case.".length());
+        }
+        return "org.caseontology." + module;
     }
 
     private static Class<?> selectMostSpecificClass(List<Class<?>> classes) {
@@ -760,6 +875,11 @@ public class CaseGraph {
 
     /**
      * Split the graph into smaller chunks of at most maxObjects each.
+     *
+     * <p><b>Warning:</b> Object-count splitting is only safe for independent
+     * catalog-style graphs (hash lists, IoC feeds). For investigation graphs,
+     * prefer {@link #partitionByRoots} at natural forensic boundaries
+     * (per-volume, per-app, per-device).
      */
     public List<CaseGraph> split(int maxObjects) {
         if (maxObjects <= 0) {
@@ -776,6 +896,68 @@ public class CaseGraph {
             chunks.add(chunk);
         }
         return chunks;
+    }
+
+    /**
+     * Partition the graph by root IRIs using dependency closure over {@code @id} references.
+     *
+     * <p>Each root IRI defines a partition. All top-level nodes reachable from that root
+     * via nested {@code @id} references (including Relationship source/target edges)
+     * are included. Nodes reachable from multiple roots follow {@code sharedNodePolicy}:
+     * {@code replicate-identical} (default) deep-copies shared nodes into every
+     * partition that needs them; {@code isolate-shared} places multi-root nodes only
+     * in a {@code _shared} partition.
+     */
+    public Map<String, CaseGraph> partitionByRoots(Collection<String> rootIris, String sharedNodePolicy) {
+        if (rootIris == null || rootIris.isEmpty()) {
+            throw new IllegalArgumentException("rootIris must be a non-empty collection");
+        }
+        String policy = normalizeSharedNodePolicy(sharedNodePolicy);
+        Map<String, Map<String, Object>> byExpandedId = buildExpandedIdIndex();
+
+        Map<String, Set<String>> rootClosures = new LinkedHashMap<>();
+        for (String root : rootIris) {
+            rootClosures.put(root, dependencyClosure(root, byExpandedId));
+        }
+
+        Map<String, Set<String>> nodeOwners = new LinkedHashMap<>();
+        for (Map.Entry<String, Set<String>> entry : rootClosures.entrySet()) {
+            for (String nodeId : entry.getValue()) {
+                nodeOwners.computeIfAbsent(nodeId, ignored -> new LinkedHashSet<>()).add(entry.getKey());
+            }
+        }
+
+        Map<String, CaseGraph> partitions = new LinkedHashMap<>();
+        for (String root : rootIris) {
+            partitions.put(root, newPartitionGraph());
+        }
+        CaseGraph sharedPartition = null;
+        if ("isolate-shared".equals(policy)) {
+            sharedPartition = newPartitionGraph();
+            partitions.put("_shared", sharedPartition);
+        }
+
+        for (Map.Entry<String, Set<String>> entry : nodeOwners.entrySet()) {
+            Map<String, Object> node = byExpandedId.get(entry.getKey());
+            if (node == null) {
+                continue;
+            }
+            Set<String> owners = entry.getValue();
+            if (owners.size() == 1) {
+                appendPartitionNode(partitions.get(owners.iterator().next()), node);
+            } else if ("replicate-identical".equals(policy)) {
+                for (String owner : owners) {
+                    appendPartitionNode(partitions.get(owner), node);
+                }
+            } else {
+                appendPartitionNode(sharedPartition, node);
+            }
+        }
+        return partitions;
+    }
+
+    public Map<String, CaseGraph> partitionByRoots(Collection<String> rootIris) {
+        return partitionByRoots(rootIris, "replicate-identical");
     }
 
     /**
@@ -807,6 +989,7 @@ public class CaseGraph {
         if (nodeId != null) {
             indexNode(nodeId, objects.size() - 1);
         }
+        trackPrefixesFor(obj);
     }
 
     private void indexNode(String nodeId, int index) {
@@ -851,6 +1034,7 @@ public class CaseGraph {
         Object idObj = raw.get("@id");
         if (!(idObj instanceof String)) {
             objects.add(raw);
+            trackPrefixesFor(raw);
             return;
         }
         String nodeId = (String) idObj;
@@ -871,6 +1055,7 @@ public class CaseGraph {
                 existing.put(e.getKey(), deepCopyValue(e.getValue()));
             }
             existing.put("@id", preserved);
+            trackPrefixesFor(existing);
             return;
         }
         if ("merge_identical".equals(policy)) {
@@ -885,6 +1070,7 @@ public class CaseGraph {
                         "Duplicate @id '" + nodeId + "': merge_identical conflict on '" + e.getKey() + "'");
                 }
             }
+            trackPrefixesFor(raw);
             return;
         }
         // merge_compatible
@@ -898,6 +1084,7 @@ public class CaseGraph {
             }
             applyProperty(existing, key, entry.getValue(), nodeId, "merge_compatible");
         }
+        trackPrefixesFor(raw);
     }
 
     private static String normalizeDuplicatePolicy(String policy) {
@@ -912,13 +1099,15 @@ public class CaseGraph {
     }
 
     @SuppressWarnings("unchecked")
-    private static void applyProperty(Map<String, Object> obj, String key, Object value, String nodeId, String mode) {
+    private void applyProperty(Map<String, Object> obj, String key, Object value, String nodeId, String mode) {
         if ("replace".equals(mode)) {
             obj.put(key, deepCopyValue(value));
+            trackPrefixesFor(Collections.singletonMap(key, obj.get(key)));
             return;
         }
         if (!obj.containsKey(key)) {
             obj.put(key, deepCopyValue(value));
+            trackPrefixesFor(Collections.singletonMap(key, obj.get(key)));
             return;
         }
         Object existing = obj.get(key);
@@ -927,6 +1116,7 @@ public class CaseGraph {
         }
         if (existing instanceof List) {
             accumulateListValue((List<Object>) existing, value);
+            trackPrefixesFor(Collections.singletonMap(key, obj.get(key)));
             return;
         }
         if (value instanceof List) {
@@ -934,6 +1124,7 @@ public class CaseGraph {
             merged.add(deepCopyValue(existing));
             accumulateListValue(merged, value);
             obj.put(key, merged);
+            trackPrefixesFor(Collections.singletonMap(key, merged));
             return;
         }
         // Distinct JSON-LD node references are multi-valued, not scalar conflicts.
@@ -948,6 +1139,7 @@ public class CaseGraph {
                 multi.add(deepCopyValue(existing));
                 multi.add(deepCopyValue(value));
                 obj.put(key, multi);
+                trackPrefixesFor(Collections.singletonMap(key, multi));
                 return;
             }
         }
@@ -1418,5 +1610,98 @@ public class CaseGraph {
 
     private static void skipWhitespace(String json, int[] pos) {
         while (pos[0] < json.length() && Character.isWhitespace(json.charAt(pos[0]))) pos[0]++;
+    }
+
+    private static String indentJsonLines(String json, String prefix) {
+        String[] lines = json.split("\n", -1);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < lines.length; i++) {
+            if (i > 0) {
+                sb.append('\n');
+            }
+            sb.append(prefix).append(lines[i]);
+        }
+        return sb.toString();
+    }
+
+    private static String normalizeSharedNodePolicy(String policy) {
+        if (policy == null || policy.isEmpty()) {
+            return "replicate-identical";
+        }
+        if ("replicate-identical".equals(policy) || "isolate-shared".equals(policy) || "_shared".equals(policy)) {
+            return "_shared".equals(policy) ? "isolate-shared" : policy;
+        }
+        throw new IllegalArgumentException(
+            "Unknown sharedNodePolicy: '" + policy +
+            "'. Expected one of: replicate-identical, isolate-shared, _shared");
+    }
+
+    private CaseGraph newPartitionGraph() {
+        CaseGraph partition = new CaseGraph(context.get("kb"));
+        partition.context.putAll(context);
+        partition.setOnDuplicate("merge_compatible");
+        return partition;
+    }
+
+    private void appendPartitionNode(CaseGraph partition, Map<String, Object> node) {
+        if (partition == null) {
+            return;
+        }
+        partition.ingestRawNode(deepCopyMap(node), "merge_compatible");
+    }
+
+    private Map<String, Map<String, Object>> buildExpandedIdIndex() {
+        Map<String, Map<String, Object>> byExpandedId = new LinkedHashMap<>();
+        for (Map<String, Object> obj : objects) {
+            Object idObj = obj.get("@id");
+            if (idObj instanceof String) {
+                byExpandedId.put(expandIri((String) idObj), obj);
+            }
+        }
+        return byExpandedId;
+    }
+
+    private Set<String> dependencyClosure(String rootId, Map<String, Map<String, Object>> byExpandedId) {
+        String expandedRoot = expandIri(rootId);
+        Set<String> visited = new LinkedHashSet<>();
+        Deque<String> queue = new ArrayDeque<>();
+        queue.add(expandedRoot);
+        while (!queue.isEmpty()) {
+            String current = queue.removeFirst();
+            if (!visited.add(current)) {
+                continue;
+            }
+            Map<String, Object> node = byExpandedId.get(current);
+            if (node == null) {
+                continue;
+            }
+            Set<String> refs = new LinkedHashSet<>();
+            collectIdRefs(node, refs);
+            for (String ref : refs) {
+                String expandedRef = expandIri(ref);
+                if (!visited.contains(expandedRef)) {
+                    queue.add(expandedRef);
+                }
+            }
+        }
+        return visited;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void collectIdRefs(Object node, Set<String> out) {
+        if (node instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>) node;
+            Object idObj = map.get("@id");
+            if (idObj instanceof String) {
+                out.add((String) idObj);
+            }
+            for (Object value : map.values()) {
+                collectIdRefs(value, out);
+            }
+        } else if (node instanceof List) {
+            for (Object item : (List<Object>) node) {
+                collectIdRefs(item, out);
+            }
+        }
     }
 }

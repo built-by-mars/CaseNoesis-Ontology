@@ -198,6 +198,11 @@ jobs:
       - name: Run tests
         run: PYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v
 
+      - name: Run synthetic performance benchmarks (small tier)
+        run: |
+          python3 benchmarks/run_python_bench.py --tier small --out artifacts/bench/python-small.json
+          test -s artifacts/bench/python-small.json
+
       - name: Run MCP server tests
         run: python -m pytest mcp_server/tests -v
 

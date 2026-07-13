@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -16,11 +17,15 @@ namespace CaseUco
     /// </summary>
     public class CaseGraph
     {
+        private static readonly object RegistryLock = new object();
+        private static volatile Dictionary<string, Type> _classRegistryCache;
+
         private readonly Dictionary<string, string> _context;
         private readonly List<Dictionary<string, object>> _objects;
         private readonly Dictionary<object, string> _idMap;
         private readonly Dictionary<string, int> _iriIndex = new Dictionary<string, int>();
         private readonly List<DeserializationWarning> _deserializationWarnings = new List<DeserializationWarning>();
+        private readonly HashSet<string> _usedPrefixSet = new HashSet<string>();
 
         /// <summary>
         /// Named duplicate policy: reject | merge_identical | merge_compatible | replace.
@@ -154,6 +159,7 @@ namespace CaseUco
                 foreach (var kv in properties)
                     ApplyProperty(obj, kv.Key, kv.Value, id, "merge_compatible");
             }
+            TrackPrefixesFor(obj);
             return DeepCopyDict(obj);
         }
 
@@ -163,6 +169,7 @@ namespace CaseUco
             var obj = RequireObject(id);
             object existingTypes = obj.TryGetValue("@type", out var typeVal) ? typeVal : null;
             obj["@type"] = NormalizeTypeValue(MergeTypes(existingTypes, typeIri));
+            TrackPrefixesFor(new Dictionary<string, object> { ["@type"] = typeIri });
         }
 
         /// <summary>Add or merge a property on an existing node (merge_compatible).</summary>
@@ -170,6 +177,7 @@ namespace CaseUco
         {
             var obj = RequireObject(id);
             ApplyProperty(obj, key, value, id, "merge_compatible");
+            TrackPrefixesFor(new Dictionary<string, object> { [key] = value });
         }
 
         /// <summary>Replace a property value (replace / scalar overwrite mode).</summary>
@@ -177,6 +185,7 @@ namespace CaseUco
         {
             var obj = RequireObject(id);
             ApplyProperty(obj, key, value, id, "replace");
+            TrackPrefixesFor(new Dictionary<string, object> { [key] = value });
         }
 
         /// <summary>Add a direct property edge source --predicate--> target.</summary>
@@ -361,6 +370,25 @@ namespace CaseUco
 
         private static Type FindTypeByClassIri(string expandedIri)
         {
+            EnsureClassRegistryCache();
+            return _classRegistryCache.TryGetValue(expandedIri, out var type) ? type : null;
+        }
+
+        private static void EnsureClassRegistryCache()
+        {
+            if (_classRegistryCache != null)
+                return;
+            lock (RegistryLock)
+            {
+                if (_classRegistryCache != null)
+                    return;
+                _classRegistryCache = BuildClassRegistryCache();
+            }
+        }
+
+        private static Dictionary<string, Type> BuildClassRegistryCache()
+        {
+            var registry = new Dictionary<string, Type>(StringComparer.Ordinal);
             foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
             {
                 Type[] types;
@@ -372,12 +400,28 @@ namespace CaseUco
                     t.Namespace.StartsWith("CaseUco")))
                 {
                     var field = type.GetField("ClassIri", BindingFlags.Public | BindingFlags.Static);
-                    if (field == null || (string)field.GetValue(null) != expandedIri)
+                    if (field == null)
                         continue;
-                    return type;
+                    var iri = (string)field.GetValue(null);
+                    if (iri == null)
+                        continue;
+                    if (registry.TryGetValue(iri, out var existing) && existing != type)
+                    {
+                        throw new ClassRegistryConflictException(iri, existing, type);
+                    }
+                    registry[iri] = type;
                 }
             }
-            return null;
+            return registry;
+        }
+
+        /// <summary>Invalidate the process-wide deserialization class registry (#70).</summary>
+        public static void ClearClassRegistryCache()
+        {
+            lock (RegistryLock)
+            {
+                _classRegistryCache = null;
+            }
         }
 
         private static Type SelectMostSpecificType(List<Type> types)
@@ -461,10 +505,19 @@ namespace CaseUco
 
         private Dictionary<string, string> PrunedContext()
         {
-            var used = UsedPrefixes();
+            var used = _usedPrefixSet.Count > 0
+                ? new HashSet<string>(_usedPrefixSet)
+                : UsedPrefixes();
+            if (used.Count == 0)
+                used = UsedPrefixes();
             return _context
                 .Where(kv => used.Contains(kv.Key))
                 .ToDictionary(kv => kv.Key, kv => kv.Value);
+        }
+
+        private void TrackPrefixesFor(object node)
+        {
+            CollectPrefixes(node, new HashSet<string>(_context.Keys), _usedPrefixSet);
         }
 
         private HashSet<string> UsedPrefixes()
@@ -528,6 +581,59 @@ namespace CaseUco
         public void Write(string path)
         {
             System.IO.File.WriteAllText(path, Serialize());
+        }
+
+        /// <summary>
+        /// Stream JSON-LD to disk without building a second full document string (#71).
+        /// Emits @context then each @graph element incrementally with deterministic ordering.
+        /// </summary>
+        public void WriteStreaming(string path, int indent = 2)
+        {
+            var ctx = PrunedContext();
+            var sortedContext = ctx.OrderBy(kv => kv.Key, StringComparer.Ordinal)
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+            using (var writer = new StreamWriter(path, false, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)))
+            {
+                if (indent < 0)
+                {
+                    writer.Write("{\"@context\":");
+                    writer.Write(ToJsonString(sortedContext, -1));
+                    writer.Write(",\"@graph\":[");
+                    for (var i = 0; i < _objects.Count; i++)
+                    {
+                        if (i > 0)
+                            writer.Write(",");
+                        writer.Write(ToJsonString(_objects[i], -1));
+                    }
+                    writer.Write("]}");
+                    return;
+                }
+
+                var pad = new string(' ', indent);
+                var grandChildPad = new string(' ', indent * 3);
+                writer.Write("{\n");
+                writer.Write(pad);
+                writer.Write("\"@context\": ");
+                writer.Write(ToJsonString(sortedContext, indent));
+                writer.Write(",\n");
+                writer.Write(pad);
+                writer.Write("\"@graph\": [\n");
+                for (var i = 0; i < _objects.Count; i++)
+                {
+                    foreach (var line in ToJsonString(_objects[i], indent).Split('\n'))
+                    {
+                        writer.Write(grandChildPad);
+                        writer.Write(line);
+                        writer.Write("\n");
+                    }
+                    if (i + 1 < _objects.Count)
+                        writer.Write(new string(' ', indent * 2));
+                    writer.Write(i + 1 < _objects.Count ? ",\n" : "");
+                }
+                writer.Write(pad);
+                writer.Write("]\n");
+                writer.Write("}\n");
+            }
         }
 
         /// <summary>Validate this graph against CASE/UCO SHACL constraints using case_validate.
@@ -622,7 +728,12 @@ namespace CaseUco
             return count;
         }
 
-        /// <summary>Split the graph into smaller chunks of at most maxObjects each.</summary>
+        /// <summary>
+        /// Split the graph into smaller chunks of at most maxObjects each.
+        /// Catalog-style graphs only: object-count splits can break investigative
+        /// relationships. Prefer <see cref="PartitionByRoots"/> or
+        /// <see cref="PartitionByLabel"/> for CASE investigation graphs.
+        /// </summary>
         public List<CaseGraph> Split(int maxObjects = 10000)
         {
             if (maxObjects <= 0)
@@ -639,6 +750,340 @@ namespace CaseUco
                 chunks.Add(chunk);
             }
             return chunks;
+        }
+
+        /// <summary>
+        /// Partition the graph by dependency closure from each root IRI (#72).
+        /// Nodes reachable from multiple roots are replicated into each partition
+        /// when <paramref name="sharedNodePolicy"/> is <c>replicate-identical</c>,
+        /// or placed in a <c>_shared</c> partition when <c>shared</c>.
+        /// </summary>
+        public Dictionary<string, CaseGraph> PartitionByRoots(
+            IEnumerable<string> rootIris,
+            string sharedNodePolicy = "replicate-identical")
+        {
+            if (rootIris == null)
+                throw new ArgumentNullException(nameof(rootIris));
+            sharedNodePolicy = NormalizeSharedNodePolicy(sharedNodePolicy);
+
+            var byId = BuildNodeIndex();
+            var rootEntries = new List<(string Key, string Expanded)>();
+            foreach (var root in rootIris)
+            {
+                if (string.IsNullOrEmpty(root))
+                    continue;
+                var expanded = ExpandIri(root);
+                if (rootEntries.Any(entry => entry.Expanded == expanded))
+                    continue;
+                rootEntries.Add((root, expanded));
+            }
+
+            var rootReachable = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+            foreach (var entry in rootEntries)
+            {
+                if (!byId.ContainsKey(entry.Expanded))
+                    continue;
+                rootReachable[entry.Expanded] = CollectReachable(entry.Expanded, byId);
+            }
+
+            var nodeRoots = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+            foreach (var kv in rootReachable)
+            {
+                foreach (var nodeId in kv.Value)
+                {
+                    if (!nodeRoots.TryGetValue(nodeId, out var roots))
+                    {
+                        roots = new List<string>();
+                        nodeRoots[nodeId] = roots;
+                    }
+                    if (!roots.Contains(kv.Key))
+                        roots.Add(kv.Key);
+                }
+            }
+
+            var partitions = new Dictionary<string, CaseGraph>(StringComparer.Ordinal);
+            foreach (var entry in rootEntries)
+            {
+                if (!partitions.ContainsKey(entry.Key))
+                    partitions[entry.Key] = CreatePartitionShell();
+            }
+
+            foreach (var kv in nodeRoots)
+            {
+                if (!byId.TryGetValue(kv.Key, out var node))
+                    continue;
+
+                if (kv.Value.Count == 1)
+                {
+                    var rootKey = RootKeyForExpanded(rootEntries, kv.Value[0]);
+                    IngestIntoPartition(partitions[rootKey], node);
+                    continue;
+                }
+
+                if (sharedNodePolicy == "replicate-identical")
+                {
+                    foreach (var expandedRoot in kv.Value)
+                    {
+                        var rootKey = RootKeyForExpanded(rootEntries, expandedRoot);
+                        IngestIntoPartition(partitions[rootKey], node);
+                    }
+                    continue;
+                }
+
+                if (!partitions.ContainsKey("_shared"))
+                    partitions["_shared"] = CreatePartitionShell();
+                IngestIntoPartition(partitions["_shared"], node);
+            }
+
+            return partitions;
+        }
+
+        /// <summary>
+        /// Experimental label partitioning by a caller-supplied boundary key.
+        /// Not dependency-aware; prefer <see cref="PartitionByRoots"/> when closure matters.
+        /// </summary>
+        public Dictionary<string, CaseGraph> PartitionByLabel(Func<Dictionary<string, object>, string> boundaryKey)
+        {
+            return PartitionByLabel(boundaryKey, null, true);
+        }
+
+        /// <summary>
+        /// Experimental label partitioning by a caller-supplied boundary key (#72).
+        /// </summary>
+        public Dictionary<string, CaseGraph> PartitionByLabel(
+            Func<Dictionary<string, object>, string> boundaryKey,
+            HashSet<string> sharedIds,
+            bool includeDanglingRelationships = true)
+        {
+            if (boundaryKey == null)
+                throw new ArgumentNullException(nameof(boundaryKey));
+            sharedIds = sharedIds ?? new HashSet<string>();
+
+            var partitions = new Dictionary<string, CaseGraph>(StringComparer.Ordinal);
+            var membership = new Dictionary<string, string>(StringComparer.Ordinal);
+
+            foreach (var obj in _objects)
+            {
+                if (!obj.TryGetValue("@id", out var idObj) || !(idObj is string nodeId))
+                    continue;
+                var key = boundaryKey(obj);
+                if (key == null)
+                    continue;
+                membership[nodeId] = key;
+                if (!partitions.ContainsKey(key))
+                    partitions[key] = CreatePartitionShell();
+                IngestIntoPartition(partitions[key], obj);
+            }
+
+            var byId = BuildNodeIndex();
+            foreach (var obj in _objects)
+            {
+                if (!IsRelationshipNode(obj))
+                    continue;
+                var sourceId = FirstEndpointId(obj, "uco-core:source");
+                var targetId = FirstEndpointId(obj, "uco-core:target");
+                if (sourceId == null || targetId == null)
+                    continue;
+                membership.TryGetValue(sourceId, out var sourcePart);
+                membership.TryGetValue(targetId, out var targetPart);
+                if (sourcePart != null && targetPart != null && sourcePart == targetPart)
+                    continue;
+                if (!includeDanglingRelationships && sourcePart != targetPart)
+                    continue;
+
+                var partNames = new HashSet<string>();
+                if (sourcePart != null) partNames.Add(sourcePart);
+                if (targetPart != null) partNames.Add(targetPart);
+                foreach (var partName in partNames)
+                {
+                    if (!partitions.ContainsKey(partName))
+                        partitions[partName] = CreatePartitionShell();
+                    foreach (var nid in new[] { sourceId, targetId })
+                    {
+                        if (nid != null && byId.TryGetValue(ExpandIri(nid), out var endpoint))
+                            IngestIntoPartition(partitions[partName], endpoint);
+                    }
+                    IngestIntoPartition(partitions[partName], obj);
+                }
+            }
+
+            foreach (var sharedId in sharedIds)
+            {
+                if (!byId.TryGetValue(ExpandIri(sharedId), out var sharedNode))
+                    continue;
+                foreach (var partition in partitions.Values)
+                    IngestIntoPartition(partition, sharedNode);
+            }
+
+            return partitions;
+        }
+
+        private CaseGraph CreatePartitionShell()
+        {
+            var shell = new CaseGraph(_context["kb"]);
+            foreach (var kv in _context)
+                shell._context[kv.Key] = kv.Value;
+            shell.OnDuplicate = "merge_compatible";
+            return shell;
+        }
+
+        private static string RootKeyForExpanded(List<(string Key, string Expanded)> rootEntries, string expandedRoot)
+        {
+            foreach (var entry in rootEntries)
+            {
+                if (entry.Expanded == expandedRoot)
+                    return entry.Key;
+            }
+            return expandedRoot;
+        }
+
+        private static string NormalizeSharedNodePolicy(string policy)
+        {
+            if (policy == "replicate-identical" || policy == "shared")
+                return policy;
+            throw new ArgumentException(
+                $"Unknown sharedNodePolicy: '{policy}'. Expected 'replicate-identical' or 'shared'.",
+                nameof(policy));
+        }
+
+        private Dictionary<string, Dictionary<string, object>> BuildNodeIndex()
+        {
+            var byId = new Dictionary<string, Dictionary<string, object>>(StringComparer.Ordinal);
+            foreach (var obj in _objects)
+            {
+                if (!obj.TryGetValue("@id", out var idObj) || !(idObj is string nodeId))
+                    continue;
+                var expanded = ExpandIri(nodeId);
+                byId[expanded] = obj;
+                if (!byId.ContainsKey(nodeId))
+                    byId[nodeId] = obj;
+            }
+            return byId;
+        }
+
+        private HashSet<string> CollectReachable(
+            string rootExpanded,
+            Dictionary<string, Dictionary<string, object>> byId)
+        {
+            var visited = new HashSet<string>(StringComparer.Ordinal);
+            var queue = new Queue<string>();
+            queue.Enqueue(rootExpanded);
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+                if (!visited.Add(current))
+                    continue;
+                if (!byId.TryGetValue(current, out var node))
+                    continue;
+
+                foreach (var refId in CollectReferencedIds(node))
+                {
+                    var expanded = ExpandIri(refId);
+                    if (byId.ContainsKey(expanded) && !visited.Contains(expanded))
+                        queue.Enqueue(expanded);
+                }
+            }
+
+            return visited;
+        }
+
+        private static IEnumerable<string> CollectReferencedIds(Dictionary<string, object> node)
+        {
+            foreach (var refId in WalkIdReferences(node))
+                yield return refId;
+
+            if (IsRelationshipNode(node))
+            {
+                var sourceId = FirstEndpointId(node, "uco-core:source");
+                if (sourceId != null)
+                    yield return sourceId;
+                var targetId = FirstEndpointId(node, "uco-core:target");
+                if (targetId != null)
+                    yield return targetId;
+            }
+        }
+
+        private static IEnumerable<string> WalkIdReferences(object value)
+        {
+            if (value is Dictionary<string, object> dict)
+            {
+                if (dict.TryGetValue("@id", out var idObj) && idObj is string id && id.Length > 0)
+                    yield return id;
+                foreach (var kv in dict)
+                {
+                    if (kv.Key == "@id")
+                        continue;
+                    foreach (var nested in WalkIdReferences(kv.Value))
+                        yield return nested;
+                }
+                yield break;
+            }
+
+            if (value is List<object> list)
+            {
+                foreach (var item in list)
+                {
+                    foreach (var nested in WalkIdReferences(item))
+                        yield return nested;
+                }
+                yield break;
+            }
+
+            if (value is IList ilist && !(value is string))
+            {
+                foreach (var item in ilist)
+                {
+                    foreach (var nested in WalkIdReferences(item))
+                        yield return nested;
+                }
+            }
+        }
+
+        private static bool IsRelationshipNode(Dictionary<string, object> node)
+        {
+            if (!node.TryGetValue("@type", out var typeObj) || typeObj == null)
+                return false;
+            foreach (var typeStr in AsTypeList(typeObj))
+            {
+                if (typeStr == "uco-core:Relationship"
+                    || typeStr == "https://ontology.unifiedcyberontology.org/uco/core/Relationship")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static string FirstEndpointId(Dictionary<string, object> node, string key)
+        {
+            if (!node.TryGetValue(key, out var value) || value == null)
+                return null;
+            if (value is Dictionary<string, object> dict && dict.TryGetValue("@id", out var idObj) && idObj is string id)
+                return id;
+            if (value is List<object> list && list.Count > 0)
+            {
+                if (list[0] is Dictionary<string, object> first && first.TryGetValue("@id", out var listId) && listId is string lid)
+                    return lid;
+            }
+            if (value is IList ilist && ilist.Count > 0 && ilist[0] is Dictionary<string, object> iFirst
+                && iFirst.TryGetValue("@id", out var iidObj) && iidObj is string iid)
+            {
+                return iid;
+            }
+            return null;
+        }
+
+        private static void IngestIntoPartition(CaseGraph partition, Dictionary<string, object> node)
+        {
+            try
+            {
+                partition.IngestRawNode(DeepCopyDict(node), "merge_compatible");
+            }
+            catch (InvalidOperationException)
+            {
+                // merge_compatible may already contain the node.
+            }
         }
 
         /// <summary>Load and merge multiple JSON-LD files into a single graph.</summary>
@@ -663,6 +1108,7 @@ namespace CaseUco
             _objects.Add(obj);
             if (nodeId != null)
                 IndexNode(nodeId, _objects.Count - 1);
+            TrackPrefixesFor(obj);
         }
 
         private void IndexNode(string nodeId, int index)
@@ -705,6 +1151,7 @@ namespace CaseUco
             if (!raw.TryGetValue("@id", out var idObj) || !(idObj is string nodeId))
             {
                 _objects.Add(raw);
+                TrackPrefixesFor(raw);
                 return;
             }
 
@@ -727,6 +1174,7 @@ namespace CaseUco
                 foreach (var kv in raw)
                     existing[kv.Key] = DeepCopyValue(kv.Value);
                 existing["@id"] = preserved;
+                TrackPrefixesFor(existing);
                 return;
             }
             if (policy == "merge_identical")
@@ -742,6 +1190,7 @@ namespace CaseUco
                         throw new InvalidOperationException(
                             $"Duplicate @id '{nodeId}': merge_identical conflict on '{kv.Key}'");
                 }
+                TrackPrefixesFor(raw);
                 return;
             }
             // merge_compatible
@@ -754,6 +1203,7 @@ namespace CaseUco
             {
                 ApplyProperty(existing, kv.Key, kv.Value, nodeId, "merge_compatible");
             }
+            TrackPrefixesFor(raw);
         }
 
         private static string NormalizeDuplicatePolicy(string policy)
@@ -1266,6 +1716,22 @@ namespace CaseUco
     {
         public CaseGraph Graph { get; set; }
         public List<object> Objects { get; set; }
+    }
+
+    /// <summary>Raised when two registered types share the same ClassIri (#70).</summary>
+    public class ClassRegistryConflictException : InvalidOperationException
+    {
+        public string ClassIri { get; }
+        public Type ExistingType { get; }
+        public Type ConflictingType { get; }
+
+        public ClassRegistryConflictException(string classIri, Type existingType, Type conflictingType)
+            : base($"Duplicate ClassIri '{classIri}' maps to incompatible types: {existingType.FullName} vs {conflictingType.FullName}")
+        {
+            ClassIri = classIri;
+            ExistingType = existingType;
+            ConflictingType = conflictingType;
+        }
     }
 }
 

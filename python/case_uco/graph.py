@@ -7,7 +7,9 @@ import hashlib
 import json
 import re
 import uuid
+import threading
 import warnings
+import dataclasses
 from dataclasses import Field, dataclass, fields, is_dataclass
 from datetime import date, datetime
 from typing import Any, Callable, TypeVar, Type
@@ -345,34 +347,83 @@ class CASEGraph:
         *,
         format: str = "json-ld",
         indent: int = 2,
-    ) -> None:
+        atomic: bool = True,
+    ) -> dict[str, int]:
         """Stream JSON-LD to disk without building a second full document string.
 
         Emits ``@context`` then each ``@graph`` element incrementally. Peak
         memory is dominated by the in-memory graph itself rather than a
         duplicate serialized buffer. Retains :meth:`serialize` for callers
         that need a complete string.
+
+        When ``atomic`` is True (default), writes through a temporary file and
+        renames into place; partial temp files are removed on failure.
+
+        Returns ``{"nodes": N, "bytes_written": B}``.
         """
         if format != "json-ld":
             raise ValueError(f"Unsupported format: {format}. Only 'json-ld' is supported.")
-        ctx = self._pruned_context()
-        pad = " " * indent
-        with open(path, "w", encoding="utf-8") as f:
-            f.write("{\n")
-            f.write(f'{pad}"@context": ')
-            f.write(json.dumps(ctx, indent=indent, default=str))
-            f.write(",\n")
-            f.write(f'{pad}"@graph": [\n')
-            for i, obj in enumerate(self._objects):
-                chunk = json.dumps(obj, indent=indent, default=str)
-                indented = "\n".join(pad + pad + line for line in chunk.splitlines())
-                f.write(indented)
-                if i + 1 < len(self._objects):
-                    f.write(",\n")
-                else:
-                    f.write("\n")
-            f.write(f"{pad}]\n")
-            f.write("}\n")
+        import os
+        import tempfile
+
+        target = path
+        out_path = path
+        tmp_fd = None
+        tmp_name = None
+        if atomic:
+            directory = os.path.dirname(os.path.abspath(path)) or "."
+            os.makedirs(directory, exist_ok=True)
+            tmp_fd, tmp_name = tempfile.mkstemp(
+                prefix=".casegraph-", suffix=".jsonld.tmp", dir=directory
+            )
+            os.close(tmp_fd)
+            tmp_fd = None
+            out_path = tmp_name
+        try:
+            ctx = self._pruned_context()
+            pad = " " * indent
+            bytes_written = 0
+            with open(out_path, "w", encoding="utf-8") as f:
+                def _w(s: str) -> None:
+                    nonlocal bytes_written
+                    f.write(s)
+                    bytes_written += len(s.encode("utf-8"))
+
+                _w("{\n")
+                _w(f'{pad}"@context": ')
+                _w(json.dumps(ctx, indent=indent, default=str))
+                _w(",\n")
+                _w(f'{pad}"@graph": [\n')
+                for i, obj in enumerate(self._objects):
+                    chunk = json.dumps(obj, indent=indent, default=str)
+                    indented = "\n".join(pad + pad + line for line in chunk.splitlines())
+                    _w(indented)
+                    if i + 1 < len(self._objects):
+                        _w(",\n")
+                    else:
+                        _w("\n")
+                _w(f"{pad}]\n")
+                _w("}\n")
+                f.flush()
+                os.fsync(f.fileno())
+            if atomic and tmp_name:
+                os.replace(tmp_name, target)
+                tmp_name = None
+            return {"nodes": len(self._objects), "bytes_written": bytes_written}
+        except Exception:
+            if tmp_name and os.path.exists(tmp_name):
+                os.unlink(tmp_name)
+            raise
+        finally:
+            if tmp_fd is not None:
+                try:
+                    os.close(tmp_fd)
+                except OSError:
+                    pass
+
+    def write_stream(self, path: str, **kwargs: Any) -> dict[str, int]:
+        """Alias for :meth:`write_streaming` (#71)."""
+        return self.write_streaming(path, **kwargs)
 
     def load(self, json_str: str, *, on_duplicate: str | None = None) -> None:
         """Load a JSON-LD string, merging context and upserting objects.
@@ -615,6 +666,117 @@ class CASEGraph:
             shared_ids=shared_ids,
             include_dangling_relationships=include_dangling_relationships,
         )
+
+    def partition(
+        self,
+        *,
+        strategy: str = "roots",
+        roots: list[str] | None = None,
+        shared_node_policy: str = "replicate-identical",
+        boundary_key: Callable[[dict[str, Any]], str | None] | None = None,
+    ) -> dict[str, CASEGraph]:
+        """Dependency-aware graph partitioning (#72).
+
+        Strategies:
+        - ``roots`` (default): BFS closure from each root IRI following nested
+          ``@id`` references. Shared nodes are either replicated into each
+          partition (``replicate-identical``) or placed in a ``_shared``
+          partition (``shared`` / ``isolate-shared``).
+        - ``label``: delegate to :meth:`partition_by` with ``boundary_key``.
+
+        Prefer this over :meth:`split` for investigation graphs.
+        """
+        if strategy == "label":
+            if boundary_key is None:
+                raise ValueError("boundary_key is required for strategy='label'")
+            return self.partition_by(boundary_key)
+        if strategy != "roots":
+            raise ValueError(f"Unsupported partition strategy: {strategy}")
+        if not roots:
+            raise ValueError("roots is required for strategy='roots'")
+        return self.partition_by_roots(
+            roots, shared_node_policy=shared_node_policy
+        )
+
+    def partition_by_roots(
+        self,
+        roots: list[str],
+        *,
+        shared_node_policy: str = "replicate-identical",
+    ) -> dict[str, CASEGraph]:
+        """Partition by dependency closure from root IRIs (#72).
+
+        Follows nested ``{"@id": ...}`` references (including Relationship
+        source/target) so facets, actions, and related observables stay with
+        their evidence root.
+        """
+        by_id = {o.get("@id"): o for o in self._objects if isinstance(o.get("@id"), str)}
+        if not by_id:
+            return {}
+
+        def collect_refs(node: Any, out: set[str]) -> None:
+            if isinstance(node, dict):
+                nid = node.get("@id")
+                if isinstance(nid, str) and len(node) == 1:
+                    out.add(nid)
+                for value in node.values():
+                    collect_refs(value, out)
+            elif isinstance(node, list):
+                for item in node:
+                    collect_refs(item, out)
+
+        closures: dict[str, set[str]] = {}
+        for root in roots:
+            if root not in by_id:
+                continue
+            seen: set[str] = set()
+            queue = [root]
+            while queue:
+                current = queue.pop(0)
+                if current in seen or current not in by_id:
+                    continue
+                seen.add(current)
+                refs: set[str] = set()
+                collect_refs(by_id[current], refs)
+                for ref in refs:
+                    if ref not in seen:
+                        queue.append(ref)
+            closures[root] = seen
+
+        membership_count: dict[str, int] = {}
+        for members in closures.values():
+            for nid in members:
+                membership_count[nid] = membership_count.get(nid, 0) + 1
+
+        partitions: dict[str, CASEGraph] = {}
+        shared_policy = shared_node_policy
+        for root, members in closures.items():
+            pg = CASEGraph(kb_prefix=self.kb_prefix, extra_context=dict(self._context))
+            pg.on_duplicate = "merge_compatible"
+            for nid in members:
+                if membership_count.get(nid, 0) > 1 and shared_policy in {
+                    "shared",
+                    "isolate-shared",
+                }:
+                    continue
+                try:
+                    pg._ingest_raw_node(dict(by_id[nid]), policy="merge_compatible")
+                except DuplicateNodeError:
+                    pass
+            partitions[root] = pg
+
+        if shared_policy in {"shared", "isolate-shared"}:
+            shared = CASEGraph(kb_prefix=self.kb_prefix, extra_context=dict(self._context))
+            shared.on_duplicate = "merge_compatible"
+            for nid, count in membership_count.items():
+                if count > 1:
+                    try:
+                        shared._ingest_raw_node(dict(by_id[nid]), policy="merge_compatible")
+                    except DuplicateNodeError:
+                        pass
+            if len(shared) > 0:
+                partitions["_shared"] = shared
+        return partitions
 
     @classmethod
     def merge_files(cls, paths: list[str], kb_prefix: str = "http://example.org/kb/") -> CASEGraph:
@@ -889,7 +1051,7 @@ class CASEGraph:
         if not is_dataclass(instance):
             return result
 
-        for f in fields(instance):
+        for f in _cached_dataclass_fields(type(instance)):
             if f.name in ("CLASS_IRI", "NAMESPACE_PREFIX"):
                 continue
 
@@ -961,7 +1123,7 @@ class CASEGraph:
         if not is_dataclass(instance):
             return
 
-        for field_info in fields(instance):
+        for field_info in _cached_dataclass_fields(type(instance)):
             if field_info.name in ("CLASS_IRI", "NAMESPACE_PREFIX"):
                 continue
 
@@ -1128,61 +1290,99 @@ class CASEGraph:
         return iri
 
 
+_CLASS_REGISTRY_CACHE: dict[str, type] | None = None
+_CLASS_FIELD_CACHE: dict[type, tuple] | None = None
+_CLASS_REGISTRY_LOCK = threading.RLock()
+
+
+class DuplicateClassIriError(ValueError):
+    """Raised when two incompatible classes claim the same CLASS_IRI (#70)."""
+
+
 def _build_class_registry(extra_classes: list[type] | None = None) -> dict[str, type]:
     """Build a mapping from CLASS_IRI -> Python dataclass for all generated classes.
 
     The core registry is cached process-wide (#70). Extension classes from
     ``extra_classes`` are layered on a shallow copy so callers cannot mutate
-    the shared cache.
+    the shared cache. Construction is thread-safe.
     """
     global _CLASS_REGISTRY_CACHE
-    if _CLASS_REGISTRY_CACHE is None:
-        registry: dict[str, type] = {}
-        import importlib
-        module_names = [
-            "case_uco.case.investigation",
-            "case_uco.uco.action",
-            "case_uco.uco.analysis",
-            "case_uco.uco.configuration",
-            "case_uco.uco.core",
-            "case_uco.uco.identity",
-            "case_uco.uco.location",
-            "case_uco.uco.marking",
-            "case_uco.uco.observable",
-            "case_uco.uco.pattern",
-            "case_uco.uco.role",
-            "case_uco.uco.time",
-            "case_uco.uco.tool",
-            "case_uco.uco.types",
-            "case_uco.uco.victim",
-        ]
+    with _CLASS_REGISTRY_LOCK:
+        if _CLASS_REGISTRY_CACHE is None:
+            registry: dict[str, type] = {}
+            import importlib
+            module_names = [
+                "case_uco.case.investigation",
+                "case_uco.uco.action",
+                "case_uco.uco.analysis",
+                "case_uco.uco.configuration",
+                "case_uco.uco.core",
+                "case_uco.uco.identity",
+                "case_uco.uco.location",
+                "case_uco.uco.marking",
+                "case_uco.uco.observable",
+                "case_uco.uco.pattern",
+                "case_uco.uco.role",
+                "case_uco.uco.time",
+                "case_uco.uco.tool",
+                "case_uco.uco.types",
+                "case_uco.uco.victim",
+            ]
 
-        for mod_name in module_names:
-            try:
-                mod = importlib.import_module(mod_name)
-            except ImportError:
-                continue
-            for attr_name in dir(mod):
-                attr = getattr(mod, attr_name)
-                if isinstance(attr, type) and is_dataclass(attr) and hasattr(attr, "CLASS_IRI"):
-                    registry[attr.CLASS_IRI] = attr
-        _CLASS_REGISTRY_CACHE = registry
+            for mod_name in module_names:
+                try:
+                    mod = importlib.import_module(mod_name)
+                except ImportError:
+                    continue
+                for attr_name in dir(mod):
+                    attr = getattr(mod, attr_name)
+                    if isinstance(attr, type) and is_dataclass(attr) and hasattr(attr, "CLASS_IRI"):
+                        iri = attr.CLASS_IRI
+                        existing = registry.get(iri)
+                        if existing is not None and existing is not attr:
+                            raise DuplicateClassIriError(
+                                f"CLASS_IRI {iri!r} claimed by both "
+                                f"{existing.__module__}.{existing.__name__} and "
+                                f"{attr.__module__}.{attr.__name__}"
+                            )
+                        registry[iri] = attr
+            _CLASS_REGISTRY_CACHE = registry
 
-    result = dict(_CLASS_REGISTRY_CACHE)
+        result = dict(_CLASS_REGISTRY_CACHE)
     if extra_classes:
         for cls in extra_classes:
             if hasattr(cls, "CLASS_IRI"):
-                result[cls.CLASS_IRI] = cls
+                iri = cls.CLASS_IRI
+                existing = result.get(iri)
+                if existing is not None and existing is not cls:
+                    raise DuplicateClassIriError(
+                        f"extra_classes CLASS_IRI {iri!r} conflicts with "
+                        f"{existing.__module__}.{existing.__name__}"
+                    )
+                result[iri] = cls
     return result
 
 
-_CLASS_REGISTRY_CACHE: dict[str, type] | None = None
+def _cached_dataclass_fields(cls: type) -> tuple:
+    """Return dataclass fields for ``cls``, cached process-wide (#70)."""
+    global _CLASS_FIELD_CACHE
+    with _CLASS_REGISTRY_LOCK:
+        if _CLASS_FIELD_CACHE is None:
+            _CLASS_FIELD_CACHE = {}
+        cached = _CLASS_FIELD_CACHE.get(cls)
+        if cached is not None:
+            return cached
+        field_tuple = tuple(dataclasses.fields(cls))
+        _CLASS_FIELD_CACHE[cls] = field_tuple
+        return field_tuple
 
 
 def clear_class_registry_cache() -> None:
-    """Invalidate the process-wide deserialization class registry (#70)."""
-    global _CLASS_REGISTRY_CACHE
-    _CLASS_REGISTRY_CACHE = None
+    """Invalidate the process-wide deserialization class/field registries (#70)."""
+    global _CLASS_REGISTRY_CACHE, _CLASS_FIELD_CACHE
+    with _CLASS_REGISTRY_LOCK:
+        _CLASS_REGISTRY_CACHE = None
+        _CLASS_FIELD_CACHE = None
 
 
 def _expand_iri(compact: str, context: dict[str, str]) -> str:
@@ -1356,7 +1556,7 @@ def _rehydrate_with_diagnostics(
         )
 
     jsonld_key_to_field: dict[str, tuple[str, Field[Any]]] = {}
-    for f in fields(cls):
+    for f in _cached_dataclass_fields(cls):
         key = f.metadata.get("jsonld_key")
         if key:
             jsonld_key_to_field[key] = (f.name, f)

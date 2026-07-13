@@ -273,3 +273,109 @@ fn test_set_property_and_relationship_id() {
     assert_ne!(r1.get("@id"), r2.get("@id"));
     assert_eq!(graph.len(), 4);
 }
+
+#[test]
+fn test_write_streaming_roundtrip() {
+    use std::fs;
+
+    let mut graph = CaseGraph::new("http://example.org/kb/");
+    graph
+        .upsert_node(
+            "kb:t",
+            Some(serde_json::json!("uco-tool:Tool")),
+            Some(
+                serde_json::json!({"uco-core:name": "X"})
+                    .as_object()
+                    .cloned()
+                    .expect("object"),
+            ),
+        )
+        .expect("upsert");
+
+    let path = std::env::temp_dir().join("case_uco_rust_stream_test.jsonld");
+    graph
+        .write_streaming(path.to_str().expect("temp path"))
+        .expect("write_streaming");
+
+    let mut loaded = CaseGraph::new("http://example.org/kb/");
+    let json = fs::read_to_string(&path).expect("read streamed file");
+    loaded.load(&json).expect("load streamed file");
+    assert_eq!(
+        loaded.get("kb:t").unwrap()["uco-core:name"],
+        serde_json::json!("X")
+    );
+    let _ = fs::remove_file(path);
+}
+
+#[test]
+fn test_partition_by_roots_dependency_closure() {
+    let mut graph = CaseGraph::new("http://example.org/kb/");
+    graph
+        .upsert_node("kb:root-a", Some(serde_json::json!("uco-core:UcoObject")), None)
+        .expect("root a");
+    graph
+        .upsert_node("kb:child-a", Some(serde_json::json!("uco-core:UcoObject")), None)
+        .expect("child a");
+    graph
+        .upsert_node("kb:root-b", Some(serde_json::json!("uco-core:UcoObject")), None)
+        .expect("root b");
+    graph
+        .link("kb:root-a", "uco-core:hasFacet", "kb:child-a")
+        .expect("link");
+
+    let parts = graph
+        .partition_by_roots(
+            &["kb:root-a".to_string(), "kb:root-b".to_string()],
+            "duplicate",
+        )
+        .expect("partition");
+
+    assert_eq!(parts.get("kb:root-a").unwrap().len(), 2);
+    assert_eq!(parts.get("kb:root-b").unwrap().len(), 1);
+    assert!(parts.get("kb:root-a").unwrap().contains("kb:child-a"));
+}
+
+#[test]
+fn test_partition_by_roots_reject_shared() {
+    let mut graph = CaseGraph::new("http://example.org/kb/");
+    graph
+        .upsert_node("kb:shared", Some(serde_json::json!("uco-core:UcoObject")), None)
+        .expect("shared");
+    graph
+        .upsert_node("kb:root-a", Some(serde_json::json!("uco-core:UcoObject")), None)
+        .expect("root a");
+    graph
+        .upsert_node("kb:root-b", Some(serde_json::json!("uco-core:UcoObject")), None)
+        .expect("root b");
+    graph
+        .link("kb:root-a", "uco-core:relatedTo", "kb:shared")
+        .expect("link a");
+    graph
+        .link("kb:root-b", "uco-core:relatedTo", "kb:shared")
+        .expect("link b");
+
+    let err = graph
+        .partition_by_roots(
+            &["kb:root-a".to_string(), "kb:root-b".to_string()],
+            "reject",
+        )
+        .err()
+        .expect("overlap should fail");
+    assert!(err.to_string().contains("shared node"));
+}
+
+#[test]
+fn test_used_prefix_set_maintained_on_create() {
+    let mut graph = CaseGraph::new("http://example.org/kb/");
+    let tool = Tool::builder()
+        .tool_type("forensic".to_string())
+        .version("1.0".to_string())
+        .build();
+    graph.create(&tool);
+
+    let json = graph.serialize().expect("serialize");
+    let parsed: serde_json::Value = serde_json::from_str(&json).unwrap();
+    let ctx = parsed.get("@context").unwrap().as_object().unwrap();
+    assert!(ctx.contains_key("uco-tool"));
+    assert!(!ctx.contains_key("uco-identity"));
+}

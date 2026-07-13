@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Performance / scalability (#70–#73) — v1.22
+
+- **#70**: Thread-safe process-wide class/field registry caches with
+  `clear_class_registry_cache()` / `ClearClassRegistryCache()` /
+  `clearClassRegistryCache()` and duplicate-`CLASS_IRI` rejection (Python/C#/Java;
+  Rust documents N/A for typed rehydration).
+- **#71**: Incremental used-prefix tracking + `write_streaming` /
+  `WriteStreaming` / `writeStreaming` across Python/C#/Java/Rust (Python returns
+  `{nodes, bytes_written}` and supports atomic temp+rename).
+- **#72**: Dependency-aware `partition` / `PartitionByRoots` /
+  `partitionByRoots` / `partition_by_roots` following nested `@id` closures;
+  `split()` retained as catalog-only with warnings.
+- **#73**: Expanded `benchmarks/run_python_bench.py` (catalog, relationship-rich
+  partition, cold/warm `from_jsonld`, streaming write); Rust
+  `benchmarks/run_rust_bench.sh`; CI small-tier Python bench job;
+  `benchmarks/README.md`.
+
 #### Critic loop (#74–#78) — v1.22
 
 - **#75 contracts**: authoritative model-response schema, bound per-pass consts,
