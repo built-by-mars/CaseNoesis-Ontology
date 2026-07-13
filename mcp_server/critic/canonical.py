@@ -119,6 +119,8 @@ class RuleExecution:
     targets_examined: int = 0
     finding_ids: list[str] = field(default_factory=list)
     error_code: str | None = None
+    required_for_scope: bool = True
+    verifies_rule_ids: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -129,6 +131,8 @@ class RuleExecution:
             "targets_examined": self.targets_examined,
             "finding_ids": list(self.finding_ids),
             "error_code": self.error_code,
+            "required_for_scope": self.required_for_scope,
+            "verifies_rule_ids": list(self.verifies_rule_ids or [self.rule_id]),
         }
 
 
@@ -271,12 +275,29 @@ def _load_jsonld(path: Path) -> CanonicalGraphView:
         )
 
     prefixes = _extract_prefixes(document.get("@context"))
+    remote = _remote_context_urls(document.get("@context"))
+    if remote:
+        return CanonicalGraphView(
+            path_name=path_name,
+            kind="jsonld",
+            json_status="ok",
+            rdf_status="rdf_parse_error",
+            prefixes=prefixes,
+            nodes={},
+            top_level_order=[],
+            rdf_graph=None,
+            raw_document=document,
+            duplicate_json_keys=sorted(set(duplicate_keys)),
+            errors=["critic_remote_context_disallowed:" + ",".join(remote[:5])],
+        )
+
     nodes, order = _index_json_nodes(document, prefixes, path_name)
 
     rdf_graph: Graph | None = None
     rdf_status: ParseStatus = "ok"
     try:
         rdf_graph = Graph()
+        # Offline: do not resolve remote contexts (already rejected above).
         rdf_graph.parse(data=json.dumps(document), format="json-ld")
         # Merge RDF-identified subjects not present in compact @graph
         _merge_rdf_subjects(rdf_graph, nodes, prefixes, path_name)
@@ -385,6 +406,98 @@ def _extract_prefixes(context: Any) -> dict[str, str]:
     return prefixes
 
 
+
+def _remote_context_urls(context: Any) -> list[str]:
+    """Return remote @context / @import URLs that are not offline-vendored.
+
+    Offline policy: only inline object contexts (and local file: URIs if ever
+    registered) are allowed. HTTP(S) context URLs and @import are rejected.
+    """
+
+    remote: list[str] = []
+
+    def walk(node: Any) -> None:
+        if node is None:
+            return
+        if isinstance(node, str):
+            if node.startswith(("http://", "https://")):
+                remote.append(node)
+            return
+        if isinstance(node, list):
+            for item in node:
+                walk(item)
+            return
+        if isinstance(node, dict):
+            imp = node.get("@import")
+            if isinstance(imp, str) and imp.startswith(("http://", "https://")):
+                remote.append(imp)
+            elif isinstance(imp, list):
+                for item in imp:
+                    if isinstance(item, str) and item.startswith(("http://", "https://")):
+                        remote.append(item)
+            for key, value in node.items():
+                if key in {"@import"}:
+                    continue
+                # Nested context objects may still embed remote strings via lists
+                if key == "@context":
+                    walk(value)
+
+    walk(context)
+    # Deduplicate preserving order
+    seen: set[str] = set()
+    out: list[str] = []
+    for url in remote:
+        if url not in seen:
+            seen.add(url)
+            out.append(url)
+    return out
+
+
+def lint_kind_of_relationship(
+    view: "CanonicalGraphView",
+    *,
+    allow_open_vocabulary: bool = True,
+) -> dict[str, Any]:
+    """Lint kindOfRelationship via canonical graph (JSON-LD and Turtle)."""
+
+    from relationship_kinds import known_relationship_kinds
+
+    known = known_relationship_kinds()
+    findings: list[dict[str, Any]] = []
+    checked = 0
+    for node in view.iter_nodes():
+        values = node.literals(IRI_KIND)
+        # Also accept IRI-typed kinds if any
+        if not values:
+            for cv in node.values(IRI_KIND):
+                if cv.literal:
+                    values.append(cv.literal)
+                elif cv.iris:
+                    values.extend(cv.iris)
+        if not values:
+            continue
+        for text in values:
+            checked += 1
+            if text in known:
+                continue
+            findings.append({
+                "node_id": node.iri,
+                "kind": text,
+                "severity": "warning" if allow_open_vocabulary else "error",
+                "message": (
+                    f"kindOfRelationship {text!r} is not in "
+                    "ObservableObjectRelationshipVocab / ActionRelationshipVocab"
+                ),
+            })
+    errors = [f for f in findings if f["severity"] == "error"]
+    return {
+        "ok": not errors,
+        "checked": checked,
+        "findings": findings,
+        "known_kind_count": len(known),
+    }
+
+
 def _expand_term(term: Any, prefixes: dict[str, str]) -> str | None:
     if not isinstance(term, str):
         return None
@@ -419,10 +532,11 @@ def _index_json_nodes(
     nodes: dict[str, CanonicalNode] = {}
     order: list[str] = []
     for index, raw in enumerate(raw_nodes):
-        iri = raw.get("@id")
-        if not isinstance(iri, str) or not iri:
+        raw_iri = raw.get("@id")
+        if not isinstance(raw_iri, str) or not raw_iri:
             # Placeholder anonymous — skip indexing by IRI
             continue
+        iri = _expand_term(raw_iri, prefixes) or raw_iri
         pointer = f"{pointer_prefix}/{index}" if pointer_prefix else ""
         types_raw = raw.get("@type")
         type_list = types_raw if isinstance(types_raw, list) else [types_raw]
@@ -471,7 +585,7 @@ def _index_embedded(
         for i, item in enumerate(items):
             if not isinstance(item, dict) or not isinstance(item.get("@id"), str):
                 continue
-            iri = item["@id"]
+            iri = _expand_term(item["@id"], prefixes) or item["@id"]
             if iri in nodes:
                 continue
             child_pointer = f"{pointer}/{key}/{i}" if pointer else f"/{key}/{i}"
@@ -504,7 +618,8 @@ def _normalize_values(value: Any, prefixes: dict[str, str]) -> list[CanonicalVal
     for item in items:
         if isinstance(item, dict):
             if isinstance(item.get("@id"), str):
-                out.append(CanonicalValue(raw=item, iris=(item["@id"],)))
+                expanded = _expand_term(item["@id"], prefixes) or item["@id"]
+                out.append(CanonicalValue(raw=item, iris=(expanded,)))
             elif "@value" in item:
                 out.append(CanonicalValue(raw=item, literal=str(item["@value"])))
             else:

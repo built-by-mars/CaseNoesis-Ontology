@@ -21,6 +21,29 @@ from critic.models import CriticFinding, CriticTarget
 RULE_VERSION = "1.1.0"
 
 
+def _exec(
+    rule_id: str,
+    status: str,
+    artifact_hash: str,
+    finding_ids: list[str],
+    *,
+    examined: int = 0,
+    error: str | None = None,
+    required: bool = True,
+) -> RuleExecution:
+    return RuleExecution(
+        rule_id=rule_id,
+        rule_version=RULE_VERSION,
+        status=status,  # type: ignore[arg-type]
+        input_artifact_hash=artifact_hash,
+        targets_examined=examined,
+        finding_ids=finding_ids,
+        error_code=error,
+        required_for_scope=required,
+        verifies_rule_ids=[rule_id],
+    )
+
+
 def compare_coverage_contract(
     view: CanonicalGraphView,
     contract_path: Path,
@@ -44,37 +67,28 @@ def compare_coverage_contract(
             evidence_kind="source",
         )
         return [f], [
-            RuleExecution(
-                rule_id="CRIT-C-CONTRACT-PARSE",
-                rule_version=RULE_VERSION,
-                status="failed",
-                input_artifact_hash=artifact_hash,
-                finding_ids=[f.finding_id],
-                error_code=type(exc).__name__,
+            _exec(
+                "CRIT-C-CONTRACT-PARSE",
+                "failed",
+                artifact_hash,
+                [f.finding_id],
+                error=type(exc).__name__,
             )
         ]
 
     if not view.usable_for_heuristics:
-        return [], [
-            RuleExecution(
-                rule_id="CRIT-C-COVERAGE",
-                rule_version=RULE_VERSION,
-                status="skipped",
-                input_artifact_hash=artifact_hash,
-                error_code="graph_unavailable",
-            )
-        ]
+        return [], _skipped_coverage_executions(contract, artifact_hash)
 
     # First-class node label coverage (not prose-only)
     required_labels = contract.get("required_artifact_labels") or {}
     missing_labels: list[str] = []
     prose_only: list[str] = []
-    examined = 0
+    label_examined = 0
     for _group, labels in required_labels.items() if isinstance(required_labels, dict) else []:
         if not isinstance(labels, list):
             continue
         for label in labels:
-            examined += 1
+            label_examined += 1
             text = str(label)
             if _first_class_label(view, text):
                 continue
@@ -112,9 +126,28 @@ def compare_coverage_contract(
             )
         )
 
+    if isinstance(required_labels, dict) and required_labels:
+        executions.append(
+            _exec(
+                "CRIT-C-MISSING-LABEL",
+                "evaluated",
+                artifact_hash,
+                [f.finding_id for f in findings if f.rule_id == "CRIT-C-MISSING-LABEL"],
+                examined=label_examined,
+            )
+        )
+        executions.append(
+            _exec(
+                "CRIT-C-PROSE-ONLY-LABEL",
+                "evaluated",
+                artifact_hash,
+                [f.finding_id for f in findings if f.rule_id == "CRIT-C-PROSE-ONLY-LABEL"],
+                examined=label_examined,
+            )
+        )
+
     case_id = contract.get("case_identifier")
     if isinstance(case_id, str) and case_id:
-        examined += 1
         if not _first_class_case_id(view, case_id) and not _any_literal_equals(view, case_id):
             findings.append(
                 _finding(
@@ -129,10 +162,18 @@ def compare_coverage_contract(
                     evidence_kind="source",
                 )
             )
+        executions.append(
+            _exec(
+                "CRIT-C-CASE-ID-MISSING",
+                "evaluated",
+                artifact_hash,
+                [f.finding_id for f in findings if f.rule_id == "CRIT-C-CASE-ID-MISSING"],
+                examined=1,
+            )
+        )
 
     min_nodes = contract.get("min_nodes")
     if isinstance(min_nodes, int):
-        examined += 1
         count = len(view.top_level_order) or len(view.nodes)
         if count < min_nodes:
             findings.append(
@@ -148,10 +189,21 @@ def compare_coverage_contract(
                     evidence_kind="source",
                 )
             )
+        executions.append(
+            _exec(
+                "CRIT-C-MIN-NODES",
+                "evaluated",
+                artifact_hash,
+                [f.finding_id for f in findings if f.rule_id == "CRIT-C-MIN-NODES"],
+                examined=1,
+            )
+        )
 
     # Phantom Gate-style extras when present
-    for phrase in contract.get("required_authorizations") or []:
-        examined += 1
+    auth_phrases = contract.get("required_authorizations") or []
+    auth_examined = 0
+    for phrase in auth_phrases:
+        auth_examined += 1
         if not _name_contains(view, str(phrase)):
             findings.append(
                 _finding(
@@ -166,9 +218,25 @@ def compare_coverage_contract(
                     evidence_kind="source",
                 )
             )
+    if auth_phrases:
+        executions.append(
+            _exec(
+                "CRIT-C-MISSING-AUTHORIZATION",
+                "evaluated",
+                artifact_hash,
+                [
+                    f.finding_id
+                    for f in findings
+                    if f.rule_id == "CRIT-C-MISSING-AUTHORIZATION"
+                ],
+                examined=auth_examined,
+            )
+        )
 
-    for docket in contract.get("required_charging_dockets") or []:
-        examined += 1
+    dockets = contract.get("required_charging_dockets") or []
+    docket_examined = 0
+    for docket in dockets:
+        docket_examined += 1
         if not _any_literal_equals(view, str(docket)):
             findings.append(
                 _finding(
@@ -183,10 +251,19 @@ def compare_coverage_contract(
                     evidence_kind="source",
                 )
             )
+    if dockets:
+        executions.append(
+            _exec(
+                "CRIT-C-MISSING-DOCKET",
+                "evaluated",
+                artifact_hash,
+                [f.finding_id for f in findings if f.rule_id == "CRIT-C-MISSING-DOCKET"],
+                examined=docket_examined,
+            )
+        )
 
     grouping = contract.get("required_grouping")
     if isinstance(grouping, str) and grouping:
-        examined += 1
         if not _name_contains(view, grouping):
             findings.append(
                 _finding(
@@ -201,18 +278,80 @@ def compare_coverage_contract(
                     evidence_kind="source",
                 )
             )
-
-    executions.append(
-        RuleExecution(
-            rule_id="CRIT-C-COVERAGE",
-            rule_version=RULE_VERSION,
-            status="evaluated",
-            input_artifact_hash=artifact_hash,
-            targets_examined=examined,
-            finding_ids=[f.finding_id for f in findings],
+        executions.append(
+            _exec(
+                "CRIT-C-MISSING-GROUPING",
+                "evaluated",
+                artifact_hash,
+                [f.finding_id for f in findings if f.rule_id == "CRIT-C-MISSING-GROUPING"],
+                examined=1,
+            )
         )
-    )
+
     return findings, executions
+
+
+def _skipped_coverage_executions(
+    contract: dict[str, Any], artifact_hash: str
+) -> list[RuleExecution]:
+    """Emit per-rule skipped executions when the graph is unavailable."""
+
+    executions: list[RuleExecution] = []
+    required_labels = contract.get("required_artifact_labels") or {}
+    if isinstance(required_labels, dict) and required_labels:
+        for rule_id in ("CRIT-C-MISSING-LABEL", "CRIT-C-PROSE-ONLY-LABEL"):
+            executions.append(
+                _exec(rule_id, "skipped", artifact_hash, [], error="graph_unavailable")
+            )
+    if isinstance(contract.get("case_identifier"), str) and contract.get("case_identifier"):
+        executions.append(
+            _exec(
+                "CRIT-C-CASE-ID-MISSING",
+                "skipped",
+                artifact_hash,
+                [],
+                error="graph_unavailable",
+            )
+        )
+    if isinstance(contract.get("min_nodes"), int):
+        executions.append(
+            _exec("CRIT-C-MIN-NODES", "skipped", artifact_hash, [], error="graph_unavailable")
+        )
+    if contract.get("required_authorizations"):
+        executions.append(
+            _exec(
+                "CRIT-C-MISSING-AUTHORIZATION",
+                "skipped",
+                artifact_hash,
+                [],
+                error="graph_unavailable",
+            )
+        )
+    if contract.get("required_charging_dockets"):
+        executions.append(
+            _exec(
+                "CRIT-C-MISSING-DOCKET",
+                "skipped",
+                artifact_hash,
+                [],
+                error="graph_unavailable",
+            )
+        )
+    if isinstance(contract.get("required_grouping"), str) and contract.get("required_grouping"):
+        executions.append(
+            _exec(
+                "CRIT-C-MISSING-GROUPING",
+                "skipped",
+                artifact_hash,
+                [],
+                error="graph_unavailable",
+            )
+        )
+    if not executions:
+        executions.append(
+            _exec("CRIT-C-COVERAGE", "skipped", artifact_hash, [], error="graph_unavailable")
+        )
+    return executions
 
 
 def check_source_document_hash(
@@ -227,12 +366,12 @@ def check_source_document_hash(
     findings: list[CriticFinding] = []
     if not view.usable_for_heuristics:
         return [], [
-            RuleExecution(
-                rule_id="CRIT-C-SOURCE-HASH",
-                rule_version=RULE_VERSION,
-                status="skipped",
-                input_artifact_hash=artifact_hash,
-                error_code="graph_unavailable",
+            _exec(
+                "CRIT-C-SOURCE-HASH",
+                "skipped",
+                artifact_hash,
+                [],
+                error="graph_unavailable",
             )
         ]
 
@@ -253,15 +392,15 @@ def check_source_document_hash(
             "Add an ObservableObject named after the source file with ContentDataFacet hash.",
             "Find node where uco-core:name equals source file name.",
             evidence_kind="source",
+            verifier_rule_id="CRIT-C-SOURCE-HASH",
         )
         return [f], [
-            RuleExecution(
-                rule_id="CRIT-C-SOURCE-HASH",
-                rule_version=RULE_VERSION,
-                status="evaluated",
-                input_artifact_hash=artifact_hash,
-                targets_examined=0,
-                finding_ids=[f.finding_id],
+            _exec(
+                "CRIT-C-SOURCE-NODE-MISSING",
+                "evaluated",
+                artifact_hash,
+                [f.finding_id],
+                examined=0,
             )
         ]
 
@@ -277,15 +416,15 @@ def check_source_document_hash(
             "Attach ContentDataFacet with SHA-256 hash of the source file.",
             "Traverse hasFacet → ContentDataFacet → hash → hashValue.",
             evidence_kind="source",
+            verifier_rule_id="CRIT-C-SOURCE-HASH",
         )
         return [f], [
-            RuleExecution(
-                rule_id="CRIT-C-SOURCE-HASH",
-                rule_version=RULE_VERSION,
-                status="evaluated",
-                input_artifact_hash=artifact_hash,
-                targets_examined=1,
-                finding_ids=[f.finding_id],
+            _exec(
+                "CRIT-C-SOURCE-HASH-MISSING",
+                "evaluated",
+                artifact_hash,
+                [f.finding_id],
+                examined=1,
             )
         ]
 
@@ -300,27 +439,20 @@ def check_source_document_hash(
             "Update the embedded hash to match sha256(source file).",
             "Compare ContentDataFacet hashValue to sha256_file(source).",
             evidence_kind="source",
+            verifier_rule_id="CRIT-C-SOURCE-HASH",
         )
         return [f], [
-            RuleExecution(
-                rule_id="CRIT-C-SOURCE-HASH",
-                rule_version=RULE_VERSION,
-                status="evaluated",
-                input_artifact_hash=artifact_hash,
-                targets_examined=1,
-                finding_ids=[f.finding_id],
+            _exec(
+                "CRIT-C-SOURCE-HASH-MISMATCH",
+                "evaluated",
+                artifact_hash,
+                [f.finding_id],
+                examined=1,
             )
         ]
 
     return [], [
-        RuleExecution(
-            rule_id="CRIT-C-SOURCE-HASH",
-            rule_version=RULE_VERSION,
-            status="evaluated",
-            input_artifact_hash=artifact_hash,
-            targets_examined=1,
-            finding_ids=[],
-        )
+        _exec("CRIT-C-SOURCE-HASH", "evaluated", artifact_hash, [], examined=1)
     ]
 
 
@@ -423,6 +555,7 @@ def _finding(
     verification_method: str,
     *,
     evidence_kind: str = "source",
+    verifier_rule_id: str | None = None,
 ) -> CriticFinding:
     finding_id = make_stable_finding_id(rule_id, *target.semantic_parts(), *evidence[:1])
     # Keep identity semantic: rule + target primarily
@@ -440,5 +573,7 @@ def _finding(
         recommended_change=recommended_change,
         verification_method=verification_method,
         rule_id=rule_id,
+        verifier_rule_id=verifier_rule_id or rule_id,
+        rule_version=RULE_VERSION,
         identity_key=finding_id,
     )

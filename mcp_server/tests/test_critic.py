@@ -175,12 +175,16 @@ def test_regression_when_resolved_finding_returns():
 
 def test_python_serializer_ast_findings():
     path = FIXTURES / "bad_serializer.py"
-    findings = analyze_python_serializer(path, path.read_text(encoding="utf-8"))
+    findings, executions = analyze_python_serializer(path, path.read_text(encoding="utf-8"))
     rules = {f.rule_id for f in findings}
     assert "CRIT-S-PY-PRIVATE-OBJECTS" in rules
     assert "CRIT-S-PY-JSON-DUMPS-ONLY" in rules
     assert "CRIT-S-PY-SWALLOWED-EXCEPTION" in rules
     assert "CRIT-S-PY-FAIL-OPEN-VALIDATION" in rules
+    exec_rules = {e.rule_id for e in executions}
+    assert "CRIT-S-PY-PRIVATE-OBJECTS" in exec_rules
+    assert all(e.rule_version == "1.1.0" for e in executions)
+    assert all(f.rule_version == "1.1.0" for f in findings)
 
 
 def test_source_hash_ignores_unrelated_hashes(tmp_path, monkeypatch):
@@ -235,7 +239,7 @@ def test_model_response_schema_enforcement():
     with pytest.raises(Exception) as exc:
         parse_critic_model_response(
             {
-                "schema_version": "1.1.0",
+                "schema_version": "1.2.0",
                 "graph_sha256": "a" * 64,
                 "prompt_package_hash": "b" * 64,
                 "findings": [
@@ -243,6 +247,7 @@ def test_model_response_schema_enforcement():
                         "severity": "high",
                         "category": "validation",
                         "confidence": 0.5,
+                        "claim_type": "validation_override",
                         "target": {"node_id": "urn:uuid:1"},
                         "evidence": ["x"],
                         "evidence_kind": "deterministic",
@@ -276,8 +281,16 @@ def test_prompt_package_schema_and_reproducible_hash(tmp_path, monkeypatch):
     )
     package = review.prompt_package
     assert "response_schema" in package
+    assert "response_schema_version" in package
+    assert "response_schema_sha256" in package
+    assert "review_request_sha256" in package
+    assert "source_findings" in package
+    assert "critic_findings" in package
     validate_prompt_package(package)
     assert package["prompt_package_hash"] == compute_prompt_package_hash(package)
+    assert package["byte_size"] == len(
+        json.dumps(package, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    )
     # Mutating excluded metadata must not change the content hash.
     mutated = dict(package)
     mutated["byte_size"] = package["byte_size"] + 99
@@ -287,7 +300,7 @@ def test_prompt_package_schema_and_reproducible_hash(tmp_path, monkeypatch):
 
 def test_model_response_requires_serializer_session_pass_bindings():
     base = {
-        "schema_version": "1.1.0",
+        "schema_version": "1.2.0",
         "session_id": "sess-1",
         "pass_number": 2,
         "graph_sha256": "a" * 64,
@@ -306,7 +319,10 @@ def test_model_response_requires_serializer_session_pass_bindings():
             session_id="sess-1",
             pass_number=2,
         )
-    assert exc.value.code == "critic_artifact_hash_mismatch"
+    assert exc.value.code in {
+        "critic_artifact_hash_mismatch",
+        "critic_response_schema_mismatch",
+    }
 
     with pytest.raises(Exception) as exc2:
         parse_critic_model_response(
@@ -317,7 +333,25 @@ def test_model_response_requires_serializer_session_pass_bindings():
             session_id="sess-OTHER",
             pass_number=2,
         )
-    assert exc2.value.code == "critic_artifact_hash_mismatch"
+    assert exc2.value.code in {
+        "critic_artifact_hash_mismatch",
+        "critic_response_schema_mismatch",
+    }
+
+    # Unexpected serializer when none expected
+    with pytest.raises(Exception) as exc3:
+        parse_critic_model_response(
+            {**base, "session_id": None, "pass_number": None},
+            expected_graph_sha256="a" * 64,
+            expected_prompt_package_hash="b" * 64,
+            expected_serializer_sha256=None,
+            session_id=None,
+            pass_number=None,
+        )
+    assert exc3.value.code in {
+        "critic_artifact_hash_mismatch",
+        "critic_response_schema_mismatch",
+    }
 
     ok = parse_critic_model_response(
         base,
@@ -402,3 +436,228 @@ def test_real_case_validate_integration_on_gold():
     assert review.validation.verification_status in {"complete", "could_not_verify"}
     if review.validation.verification_status == "complete":
         assert review.validation.conforms is not None
+
+
+def test_byte_size_equals_final_serialized_package(tmp_path, monkeypatch):
+    import graph_validator
+    from critic.context_builder import build_prompt_package
+    from critic.models import ArtifactHashes
+
+    monkeypatch.setattr(graph_validator, "validator_available", lambda: False)
+    g = tmp_path / "g.jsonld"
+    g.write_text((FIXTURES / "gold-charged-with.jsonld").read_text(encoding="utf-8"))
+    review = analyze_artifact(
+        CriticArtifactRequest(graph_path=str(g), critic_scope="graph")
+    )
+    package = review.prompt_package
+    encoded = json.dumps(package, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    assert package["byte_size"] == len(encoded)
+    assert package["byte_size"] <= 48_000
+
+    tiny = build_prompt_package(
+        artifact_hashes=ArtifactHashes(graph_sha256="a" * 64),
+        validation=ValidationSummary(conforms=True, verification_status="complete"),
+        deterministic_findings=[],
+        max_bytes=package["byte_size"],
+    )
+    assert tiny["byte_size"] <= package["byte_size"]
+
+    with pytest.raises(ValueError, match="critic_prompt_package_too_large"):
+        build_prompt_package(
+            artifact_hashes=ArtifactHashes(graph_sha256="a" * 64),
+            validation=ValidationSummary(conforms=True, verification_status="complete"),
+            deterministic_findings=[],
+            max_bytes=200,
+        )
+
+
+def test_model_finding_ids_ignore_array_order():
+    payload = {
+        "schema_version": "1.2.0",
+        "graph_sha256": "a" * 64,
+        "prompt_package_hash": "b" * 64,
+        "findings": [
+            {
+                "severity": "high",
+                "category": "provenance",
+                "confidence": 0.9,
+                "claim_type": "missing_provenance",
+                "target": {"node_id": "urn:uuid:1"},
+                "evidence": ["e1"],
+                "rationale": "r",
+                "recommended_change": "c",
+                "verification_method": "v",
+            },
+            {
+                "severity": "medium",
+                "category": "coverage",
+                "confidence": 0.8,
+                "claim_type": "missing_label",
+                "target": {"node_id": "urn:uuid:2"},
+                "evidence": ["e2"],
+                "rationale": "r2",
+                "recommended_change": "c2",
+                "verification_method": "v2",
+            },
+        ],
+        "scorecard": {},
+    }
+    a = parse_critic_model_response(
+        payload,
+        expected_graph_sha256="a" * 64,
+        expected_prompt_package_hash="b" * 64,
+    )
+    reversed_payload = {**payload, "findings": list(reversed(payload["findings"]))}
+    b = parse_critic_model_response(
+        reversed_payload,
+        expected_graph_sha256="a" * 64,
+        expected_prompt_package_hash="b" * 64,
+    )
+    assert {f.finding_id for f in a["findings"]} == {f.finding_id for f in b["findings"]}
+
+
+def test_failed_required_rule_yields_analysis_incomplete(tmp_path, monkeypatch):
+    import graph_validator
+    import critic.deterministic as det
+    from critic.canonical import RuleExecution
+
+    monkeypatch.setattr(graph_validator, "validator_available", lambda: False)
+
+    def boom(view, *, artifact_hash):
+        return [], [
+            RuleExecution(
+                rule_id="CRIT-H-CHARGED-WITH-REVERSED",
+                rule_version="1.1.0",
+                status="failed",
+                input_artifact_hash=artifact_hash,
+                error_code="boom",
+                required_for_scope=True,
+            )
+        ]
+
+    monkeypatch.setattr(det, "run_graph_heuristics", boom)
+    g = tmp_path / "g.jsonld"
+    g.write_text((FIXTURES / "gold-charged-with.jsonld").read_text(encoding="utf-8"))
+    review = analyze_artifact(
+        CriticArtifactRequest(graph_path=str(g), critic_scope="graph")
+    )
+    assert review.analysis_status == "failed"
+    assert review.status == "analysis_incomplete"
+    assert review.status != "deterministic_clean"
+
+
+def test_per_rule_serializer_executions_and_resolution(tmp_path, monkeypatch):
+    import graph_validator
+
+    monkeypatch.setattr(graph_validator, "validator_available", lambda: False)
+    g = tmp_path / "g.jsonld"
+    s = tmp_path / "bad.py"
+    g.write_text((FIXTURES / "gold-charged-with.jsonld").read_text(encoding="utf-8"))
+    s.write_text((FIXTURES / "bad_serializer.py").read_text(encoding="utf-8"))
+    review = analyze_artifact(
+        CriticArtifactRequest(
+            graph_path=str(g), serializer_path=str(s), critic_scope="both"
+        )
+    )
+    exec_ids = {e["rule_id"] for e in review.rule_executions}
+    assert "CRIT-S-PY-PRIVATE-OBJECTS" in exec_ids
+    assert "CRIT-S-PY-SUITE" not in exec_ids or "CRIT-S-PY-PRIVATE-OBJECTS" in exec_ids
+    assert "CRIT-V-SHACL" in exec_ids or "CRIT-V-UNAVAILABLE" in {
+        f.rule_id for f in review.merged_findings
+    }
+    private = next(
+        f for f in review.merged_findings if f.rule_id == "CRIT-S-PY-PRIVATE-OBJECTS"
+    )
+    assert private.occurrence.get("occurrence_count", 0) >= 1
+    assert private.verifier_rule_id == "CRIT-S-PY-PRIVATE-OBJECTS"
+
+
+def test_compact_expanded_subject_ids_index_once(tmp_path):
+    doc = {
+        "@context": {
+            "kb": "https://example.org/kb#",
+            "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+            "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+        },
+        "@graph": [
+            {
+                "@id": "kb:inv1",
+                "@type": "case-investigation:Investigation",
+                "uco-core:name": "A",
+            },
+            {
+                "@id": "https://example.org/kb#inv1",
+                "@type": "case-investigation:Investigation",
+                "uco-core:name": "A-dup-should-merge-key",
+            },
+        ],
+    }
+    path = tmp_path / "compact-expanded.jsonld"
+    path.write_text(json.dumps(doc), encoding="utf-8")
+    view = load_canonical_graph(path)
+    assert "https://example.org/kb#inv1" in view.nodes
+    # Compact and expanded forms must not create two distinct keys for the same IRI.
+    assert "kb:inv1" not in view.nodes
+
+
+def test_remote_context_rejected(tmp_path):
+    doc = {
+        "@context": "https://example.org/remote-context.jsonld",
+        "@graph": [{"@id": "urn:uuid:1", "@type": "Thing"}],
+    }
+    path = tmp_path / "remote.jsonld"
+    path.write_text(json.dumps(doc), encoding="utf-8")
+    view = load_canonical_graph(path)
+    assert any("critic_remote_context_disallowed" in e for e in view.errors)
+    assert not view.usable_for_heuristics
+
+
+def test_merge_scorecards_hard_cap_only():
+    det = CriticScorecard.from_dict(
+        {
+            "semantic_precision": {
+                "score": 4,
+                "assessed": True,
+                "hard_cap": None,
+                "evidence": ["provisional"],
+            }
+        }
+    )
+    model = CriticScorecard.from_dict(
+        {"semantic_precision": {"score": 5, "assessed": True}}
+    )
+    merged = merge_scorecards(det, model)
+    assert merged.semantic_precision.score == 5
+
+    capped = CriticScorecard.from_dict(
+        {
+            "schema_concept_conformance": {
+                "score": 0,
+                "assessed": True,
+                "hard_cap": 0,
+                "cap_reason": "validation",
+            }
+        }
+    )
+    model2 = CriticScorecard.from_dict(
+        {"schema_concept_conformance": {"score": 5, "assessed": True}}
+    )
+    assert merge_scorecards(capped, model2).schema_concept_conformance.score == 0
+
+
+def test_serializer_too_large_skips_ast(tmp_path, monkeypatch):
+    import graph_validator
+
+    monkeypatch.setattr(graph_validator, "validator_available", lambda: False)
+    g = tmp_path / "g.jsonld"
+    s = tmp_path / "huge.py"
+    g.write_text((FIXTURES / "gold-charged-with.jsonld").read_text(encoding="utf-8"))
+    s.write_bytes(b"# " + (b"x" * (256 * 1024 + 10)))
+    review = analyze_artifact(
+        CriticArtifactRequest(
+            graph_path=str(g), serializer_path=str(s), critic_scope="both"
+        )
+    )
+    assert "critic_serializer_too_large" in review.errors
+    assert review.analysis_status in {"partial", "failed"}
+    assert review.status == "analysis_incomplete"

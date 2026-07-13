@@ -1,9 +1,30 @@
 {
-  "schema_version": "1.0.0",
-  "severities": ["critical", "high", "medium", "low", "info"],
-  "finding_statuses": ["new", "persisting", "resolved", "regression", "disputed"],
-  "evidence_kinds": ["deterministic", "source", "critic_inference"],
-  "critic_scopes": ["graph", "serializer", "both"],
+  "schema_version": "1.2.0",
+  "severities": [
+    "critical",
+    "high",
+    "medium",
+    "low",
+    "info"
+  ],
+  "finding_statuses": [
+    "new",
+    "persisting",
+    "resolved",
+    "regression",
+    "disputed",
+    "unevaluated"
+  ],
+  "evidence_kinds": [
+    "deterministic",
+    "source",
+    "critic_inference"
+  ],
+  "critic_scopes": [
+    "graph",
+    "serializer",
+    "both"
+  ],
   "categories": [
     "syntax_integrity",
     "validation",
@@ -35,16 +56,23 @@
     "sdk_bug"
   ],
   "error_codes": [
+    "critic_analysis_incomplete",
+    "critic_artifact_hash_mismatch",
     "critic_graph_missing",
-    "critic_serializer_missing",
-    "critic_path_outside_workspace",
     "critic_graph_parse_failed",
-    "critic_validation_unavailable",
-    "critic_validation_incomplete",
+    "critic_path_outside_workspace",
+    "critic_prompt_package_hash_mismatch",
+    "critic_prompt_package_schema_mismatch",
+    "critic_prompt_package_size_unstable",
     "critic_prompt_package_too_large",
+    "critic_remote_context_disallowed",
     "critic_response_invalid",
     "critic_response_schema_mismatch",
-    "critic_artifact_hash_mismatch"
+    "critic_review_schema_mismatch",
+    "critic_serializer_missing",
+    "critic_serializer_too_large",
+    "critic_validation_incomplete",
+    "critic_validation_unavailable"
   ],
   "score_dimensions": [
     "schema_concept_conformance",

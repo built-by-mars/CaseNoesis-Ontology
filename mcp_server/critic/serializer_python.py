@@ -6,8 +6,45 @@ import ast
 from pathlib import Path
 from typing import Literal
 
+from critic.canonical import RuleExecution
 from critic.finding_diff import make_stable_finding_id
 from critic.models import CriticFinding, CriticTarget
+
+RULE_VERSION = "1.1.0"
+
+_PY_RULES = (
+    "CRIT-S-PY-PRIVATE-OBJECTS",
+    "CRIT-S-PY-JSON-DUMPS-ONLY",
+    "CRIT-S-PY-FAIL-OPEN-VALIDATION",
+    "CRIT-S-PY-SWALLOWED-EXCEPTION",
+    "CRIT-S-PY-UNSCOPED-UUID5",
+    "CRIT-S-PY-GLOBAL-UUID-IDS",
+)
+
+_NESTED_ID_KEYWORDS = ("entry", "dict", "item", "child", "nested")
+_CASE_SCOPED_HELPER_NAMES = frozenset({"uid", "make_id", "iri_for"})
+
+
+def _exec(
+    rule_id: str,
+    artifact_hash: str,
+    finding_ids: list[str],
+    *,
+    status: str = "evaluated",
+    examined: int = 1,
+    error: str | None = None,
+) -> RuleExecution:
+    return RuleExecution(
+        rule_id=rule_id,
+        rule_version=RULE_VERSION,
+        status=status,  # type: ignore[arg-type]
+        input_artifact_hash=artifact_hash,
+        targets_examined=examined,
+        finding_ids=finding_ids,
+        error_code=error,
+        required_for_scope=True,
+        verifies_rule_ids=[rule_id],
+    )
 
 
 def analyze_python_serializer(
@@ -15,21 +52,31 @@ def analyze_python_serializer(
     source: str,
     *,
     serializer_mode: Literal["typed_sdk", "raw_fixture", "auto"] = "auto",
-) -> list[CriticFinding]:
+    artifact_hash: str | None = None,
+) -> tuple[list[CriticFinding], list[RuleExecution]]:
     findings: list[CriticFinding] = []
+    artifact = artifact_hash or path.name
     try:
         tree = ast.parse(source, filename=str(path.name))
     except SyntaxError as exc:
-        return [
-            _s(
-                rule_id="CRIT-S-PY-SYNTAX",
-                severity="critical",
-                category="serializer_api",
-                target=CriticTarget(path=path.name, line=exc.lineno),
-                evidence=[exc.msg],
-                rationale="Serializer/builder Python source does not parse.",
-                recommended_change="Fix syntax errors before critic review.",
-                verification_method="ast.parse the serializer source.",
+        finding = _s(
+            rule_id="CRIT-S-PY-SYNTAX",
+            severity="critical",
+            category="serializer_api",
+            target=CriticTarget(path=path.name, line=exc.lineno),
+            evidence=[exc.msg],
+            rationale="Serializer/builder Python source does not parse.",
+            recommended_change="Fix syntax errors before critic review.",
+            verification_method="ast.parse the serializer source.",
+        )
+        return [finding], [
+            _exec(
+                "CRIT-S-PY-SYNTAX",
+                artifact,
+                [finding.finding_id],
+                status="failed",
+                examined=0,
+                error=type(exc).__name__,
             )
         ]
 
@@ -38,7 +85,16 @@ def analyze_python_serializer(
     findings.extend(_fail_open_validation(path, tree))
     findings.extend(_broad_swallowed_exceptions(path, tree))
     findings.extend(_uuid_helpers(path, tree))
-    return findings
+
+    executions = [
+        _exec(
+            rule_id,
+            artifact,
+            [f.finding_id for f in findings if f.rule_id == rule_id],
+        )
+        for rule_id in _PY_RULES
+    ]
+    return findings, executions
 
 
 def _private_objects_mutation(path: Path, tree: ast.AST) -> list[CriticFinding]:
@@ -234,6 +290,18 @@ def _is_swallow(body: list[ast.stmt]) -> bool:
     return False
 
 
+def _is_case_scoped_id_helper(node: ast.FunctionDef) -> bool:
+    """Simple uid(label)/make_id(label) helpers are case-scoped, not nested-entry IDs."""
+
+    base_name = node.name.lower().lstrip("_")
+    if base_name not in _CASE_SCOPED_HELPER_NAMES:
+        return False
+    if any(keyword in node.name.lower() for keyword in _NESTED_ID_KEYWORDS):
+        return False
+    arg_names = [a.arg for a in node.args.args if a.arg not in {"self", "cls"}]
+    return len(arg_names) == 1
+
+
 def _uuid_helpers(path: Path, tree: ast.AST) -> list[CriticFinding]:
     findings: list[CriticFinding] = []
     for node in ast.walk(tree):
@@ -260,26 +328,28 @@ def _uuid_helpers(path: Path, tree: ast.AST) -> list[CriticFinding]:
                 "scope",
             }:
                 uses_parent = True
-        if uses_uuid5 and not uses_parent:
-            findings.append(
-                _s(
-                    rule_id="CRIT-S-PY-UNSCOPED-UUID5",
-                    severity="high",
-                    category="serializer_api",
-                    target=CriticTarget(
-                        path=path.name,
-                        line=node.lineno,
-                        qualified_name=node.name,
-                    ),
-                    evidence=[f"function={node.name}"],
-                    rationale=(
-                        "Deterministic uuid5/label ID helper omits parent/scope; "
-                        "nested entries can collide across parents."
-                    ),
-                    recommended_change="Include parent IRI/scope in nested ID material.",
-                    verification_method="AST FunctionDef uuid5 without parent arg.",
+        if uses_uuid5 and not uses_parent and not _is_case_scoped_id_helper(node):
+            nested_identity = any(keyword in name for keyword in _NESTED_ID_KEYWORDS)
+            if nested_identity or _uuid5_material_omits_parent(node):
+                findings.append(
+                    _s(
+                        rule_id="CRIT-S-PY-UNSCOPED-UUID5",
+                        severity="high",
+                        category="serializer_api",
+                        target=CriticTarget(
+                            path=path.name,
+                            line=node.lineno,
+                            qualified_name=node.name,
+                        ),
+                        evidence=[f"function={node.name}"],
+                        rationale=(
+                            "Deterministic uuid5/label ID helper omits parent/scope; "
+                            "nested entries can collide across parents."
+                        ),
+                        recommended_change="Include parent IRI/scope in nested ID material.",
+                        verification_method="AST FunctionDef uuid5 without parent arg.",
+                    )
                 )
-            )
         elif uses_uuid4 and not uses_parent and name.startswith(("make_", "new_", "build_")):
             findings.append(
                 _s(
@@ -298,6 +368,25 @@ def _uuid_helpers(path: Path, tree: ast.AST) -> list[CriticFinding]:
                 )
             )
     return findings
+
+
+def _uuid5_material_omits_parent(node: ast.FunctionDef) -> bool:
+    """True when uuid5 namespace/name args do not reference parent/scope identifiers."""
+
+    parent_tokens = {"parent", "parent_id", "parent_iri", "scope"}
+    for child in ast.walk(node):
+        if not isinstance(child, ast.Call):
+            continue
+        func = child.func
+        if not (isinstance(func, ast.Attribute) and func.attr == "uuid5"):
+            continue
+        for arg in child.args:
+            if isinstance(arg, ast.Name) and arg.id in parent_tokens:
+                return False
+            if isinstance(arg, ast.Attribute) and arg.attr in parent_tokens:
+                return False
+        return True
+    return False
 
 
 def _s(
@@ -325,5 +414,7 @@ def _s(
         recommended_change=recommended_change,
         verification_method=verification_method,
         rule_id=rule_id,
+        verifier_rule_id=rule_id,
+        rule_version=RULE_VERSION,
         identity_key=finding_id,
     )

@@ -3,6 +3,7 @@
   "$id": "https://caseontology.org/schemas/critic-review.schema.json",
   "title": "CASE/UCO CriticReview",
   "type": "object",
+  "additionalProperties": false,
   "required": [
     "schema_version",
     "artifact_hashes",
@@ -13,78 +14,64 @@
     "status"
   ],
   "properties": {
-    "schema_version": { "type": "string" },
+    "schema_version": { "type": "string", "minLength": 1 },
     "artifact_hashes": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["graph_sha256"],
       "properties": {
-        "graph_sha256": { "type": "string", "minLength": 64, "maxLength": 64 },
-        "serializer_sha256": { "type": ["string", "null"] },
-        "source_sha256": { "type": "object" },
-        "coverage_contract_sha256": { "type": ["string", "null"] }
+        "graph_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "serializer_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "source_sha256": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{64}$"
+          }
+        },
+        "coverage_contract_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-fA-F0-9]{64}$"
+        }
       }
     },
     "validation": { "type": "object" },
     "deterministic_findings": {
       "type": "array",
-      "items": { "$ref": "#/$defs/finding" }
+      "items": { "$ref": "critic-finding.schema.json" }
     },
     "critic_findings": {
       "type": "array",
-      "items": { "$ref": "#/$defs/finding" }
+      "items": { "$ref": "critic-finding.schema.json" }
     },
     "merged_findings": {
       "type": "array",
-      "items": { "$ref": "#/$defs/finding" }
+      "items": { "$ref": "critic-finding.schema.json" }
     },
-    "scorecard": { "type": "object" },
+    "scorecard": { "$ref": "critic-scorecard.schema.json" },
     "prompt_package": { "type": "object" },
     "status": { "type": "string" },
+    "analysis_status": {
+      "enum": ["complete", "partial", "failed"]
+    },
+    "rule_executions": {
+      "type": "array",
+      "items": { "$ref": "critic-rule-execution.schema.json" }
+    },
+    "finding_diff": { "type": "object" },
+    "handoff_suggestions": { "type": "array" },
+    "model_identifier": { "type": ["string", "null"] },
+    "token_estimate": { "type": ["integer", "null"] },
+    "elapsed_ms": { "type": ["integer", "null"] },
     "errors": {
       "type": "array",
       "items": { "type": "string" }
-    }
-  },
-  "$defs": {
-    "finding": {
-      "type": "object",
-      "required": [
-        "finding_id",
-        "severity",
-        "category",
-        "confidence",
-        "status",
-        "target",
-        "evidence_kind",
-        "evidence",
-        "rationale",
-        "recommended_change",
-        "verification_method"
-      ],
-      "properties": {
-        "finding_id": { "type": "string" },
-        "identity_key": { "type": "string" },
-        "severity": {
-          "enum": ["critical", "high", "medium", "low", "info"]
-        },
-        "category": { "type": "string" },
-        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
-        "status": {
-          "enum": ["new", "persisting", "resolved", "regression", "disputed"]
-        },
-        "target": { "type": "object" },
-        "evidence_kind": {
-          "enum": ["deterministic", "source", "critic_inference"]
-        },
-        "evidence": {
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "rationale": { "type": "string" },
-        "recommended_change": { "type": "string" },
-        "verification_method": { "type": "string" },
-        "rule_id": { "type": ["string", "null"] }
-      }
     }
   }
 }

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/critic-scorecard.schema.json",
+  "title": "CASE/UCO CriticScorecard",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_concept_conformance": { "$ref": "#/$defs/score_dimension" },
+    "source_fidelity": { "$ref": "#/$defs/score_dimension" },
+    "semantic_precision": { "$ref": "#/$defs/score_dimension" },
+    "provenance_custody": { "$ref": "#/$defs/score_dimension" },
+    "markings_authorization": { "$ref": "#/$defs/score_dimension" },
+    "coverage_completeness": { "$ref": "#/$defs/score_dimension" },
+    "serializer_quality": { "$ref": "#/$defs/score_dimension" },
+    "maintainability_reproducibility": { "$ref": "#/$defs/score_dimension" },
+    "caps_applied": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "score_dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "score": { "type": ["integer", "null"], "minimum": 0, "maximum": 5 },
+        "assessed": { "type": "boolean" },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "hard_cap": { "type": ["integer", "null"], "minimum": 0, "maximum": 5 },
+        "cap_reason": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

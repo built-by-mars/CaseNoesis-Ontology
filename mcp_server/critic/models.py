@@ -8,10 +8,10 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Literal
 
-CRITIC_SCHEMA_VERSION = "1.1.0"
+CRITIC_SCHEMA_VERSION = "1.2.0"
 
 Severity = Literal["critical", "high", "medium", "low", "info"]
-FindingStatus = Literal["new", "persisting", "resolved", "regression", "disputed"]
+FindingStatus = Literal["new", "persisting", "resolved", "regression", "disputed", "unevaluated"]
 EvidenceKind = Literal["deterministic", "source", "critic_inference"]
 CriticScope = Literal["graph", "serializer", "both"]
 HandoffType = Literal[
@@ -78,6 +78,10 @@ class CriticFinding:
     recommended_change: str
     verification_method: str
     rule_id: str | None = None
+    verifier_rule_id: str | None = None
+    rule_version: str | None = None
+    claim_type: str | None = None
+    assesses_finding_id: str | None = None
     related_recipe: str | None = None
     related_validation_result: str | None = None
     identity_key: str | None = None
@@ -90,17 +94,26 @@ class CriticFinding:
         if self.finding_id and self.finding_id.startswith("CRIT-"):
             self.identity_key = self.finding_id
             return self.finding_id
+        if self.identity_key and self.identity_key.startswith("CRIT-"):
+            self.finding_id = self.identity_key
+            return self.finding_id
         if self.rule_id:
             self.finding_id = make_stable_finding_id(
                 self.rule_id, *self.target.semantic_parts()
             )
             self.identity_key = self.finding_id
             return self.finding_id
-        if self.identity_key:
-            self.finding_id = self.identity_key
-            return self.identity_key
+        # Fallback without calling to_dict() (would recurse).
         digest = hashlib.sha256(
-            json.dumps(self.to_dict(), sort_keys=True).encode("utf-8")
+            "|".join(
+                [
+                    self.category,
+                    self.evidence_kind,
+                    *self.target.semantic_parts(),
+                    self.claim_type or "",
+                    "|".join(self.evidence[:3]),
+                ]
+            ).encode("utf-8")
         ).hexdigest()[:16]
         self.finding_id = f"CRIT-{digest}"
         self.identity_key = self.finding_id
@@ -135,6 +148,10 @@ class CriticFinding:
             recommended_change=str(data.get("recommended_change") or ""),
             verification_method=str(data.get("verification_method") or ""),
             rule_id=data.get("rule_id"),
+            verifier_rule_id=data.get("verifier_rule_id"),
+            rule_version=data.get("rule_version"),
+            claim_type=data.get("claim_type"),
+            assesses_finding_id=data.get("assesses_finding_id"),
             related_recipe=data.get("related_recipe"),
             related_validation_result=data.get("related_validation_result"),
             identity_key=data.get("identity_key"),
@@ -305,6 +322,7 @@ class CriticReview:
     scorecard: CriticScorecard
     prompt_package: dict[str, Any]
     status: str
+    analysis_status: str = "complete"  # complete|partial|failed
     rule_executions: list[dict[str, Any]] = field(default_factory=list)
     finding_diff: dict[str, Any] = field(default_factory=dict)
     model_identifier: str | None = None
@@ -331,6 +349,7 @@ class CriticReview:
             "scorecard": self.scorecard.to_dict(),
             "prompt_package": self.prompt_package,
             "status": self.status,
+            "analysis_status": self.analysis_status,
             "rule_executions": list(self.rule_executions),
             "finding_diff": dict(self.finding_diff),
             "model_identifier": self.model_identifier,

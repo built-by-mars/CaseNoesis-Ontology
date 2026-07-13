@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/critic-rule-execution.schema.json",
+  "title": "CASE/UCO Critic RuleExecution",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "rule_id",
+    "rule_version",
+    "status",
+    "input_artifact_hash"
+  ],
+  "properties": {
+    "rule_id": { "type": "string", "minLength": 1 },
+    "rule_version": { "type": "string", "minLength": 1 },
+    "status": {
+      "enum": ["evaluated", "not_applicable", "skipped", "failed"]
+    },
+    "input_artifact_hash": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "targets_examined": { "type": "integer", "minimum": 0 },
+    "finding_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "error_code": { "type": ["string", "null"] },
+    "required_for_scope": { "type": "boolean" },
+    "verifies_rule_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

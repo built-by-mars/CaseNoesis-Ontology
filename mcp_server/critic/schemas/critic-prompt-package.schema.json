@@ -11,6 +11,8 @@
     "artifact_hashes",
     "validation_summary",
     "response_schema",
+    "response_schema_version",
+    "response_schema_sha256",
     "prompt_package_hash",
     "byte_size",
     "truncated"
@@ -47,6 +49,8 @@
     "extensions": { "type": "array", "items": { "type": "string" } },
     "profiles": { "type": "array", "items": { "type": "string" } },
     "deterministic_findings": { "type": "array" },
+    "source_findings": { "type": "array" },
+    "critic_findings": { "type": "array" },
     "prior_pass_findings": { "type": "array" },
     "graph_neighborhoods": { "type": "array" },
     "serializer_excerpts": { "type": "array" },
@@ -55,6 +59,15 @@
     "structural_stats": { "type": "object" },
     "omissions": { "type": "array", "items": { "type": "string" } },
     "response_schema": { "type": "object" },
+    "response_schema_version": { "type": "string", "minLength": 1, "maxLength": 32 },
+    "response_schema_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "review_request_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
     "prompt_package_hash": { "type": "string", "minLength": 64, "maxLength": 64 },
     "byte_size": { "type": "integer", "minimum": 1 },
     "token_estimate": { "type": "integer", "minimum": 1 },

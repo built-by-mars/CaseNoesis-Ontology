@@ -4,6 +4,45 @@ from __future__ import annotations
 
 from critic.models import CriticFinding, CriticScorecard, ScoreDimension, ValidationSummary
 
+_SEVERITY_SCORE = {"critical": 1, "high": 2, "medium": 3, "low": 4, "info": 5}
+
+
+def _evaluated_rule_ids(rule_executions: list[dict] | None) -> set[str]:
+    evaluated: set[str] = set()
+    for execution in rule_executions or []:
+        if execution.get("status") != "evaluated":
+            continue
+        evaluated.add(str(execution["rule_id"]))
+        for rule_id in execution.get("verifies_rule_ids") or []:
+            evaluated.add(str(rule_id))
+    return evaluated
+
+
+def _coverage_rules_evaluated(rule_executions: list[dict] | None) -> bool:
+    return any(
+        str(execution.get("rule_id", "")).startswith("CRIT-C-")
+        and execution.get("status") == "evaluated"
+        for execution in rule_executions or []
+    )
+
+
+def _coverage_rules_attempted(rule_executions: list[dict] | None) -> bool:
+    return any(
+        str(execution.get("rule_id", "")).startswith("CRIT-C-")
+        for execution in rule_executions or []
+    )
+
+
+def _semantic_rules_evaluated(evaluated: set[str]) -> bool:
+    return any(
+        rule_id.startswith("CRIT-H-") or rule_id.startswith("CRIT-G-")
+        for rule_id in evaluated
+    )
+
+
+def _python_serializer_rules_evaluated(evaluated: set[str]) -> bool:
+    return any(rule_id.startswith("CRIT-S-PY-") for rule_id in evaluated)
+
 
 def build_deterministic_scorecard(
     validation: ValidationSummary,
@@ -12,8 +51,11 @@ def build_deterministic_scorecard(
     has_sources: bool,
     has_serializer: bool,
     has_coverage_contract: bool,
+    rule_executions: list[dict] | None = None,
+    serializer_is_python: bool | None = None,
 ) -> CriticScorecard:
     score = CriticScorecard()
+    evaluated = _evaluated_rule_ids(rule_executions)
 
     # Schema/concept conformance — assessed from validation
     if validation.verification_status != "complete" or validation.conforms is not True:
@@ -35,29 +77,36 @@ def build_deterministic_scorecard(
             evidence=["validation_complete_conforming"],
         )
 
-    # Source fidelity
+    # Source fidelity — only when CRIT-C-* rules actually evaluated
     if has_sources or has_coverage_contract:
         src_findings = [f for f in findings if f.category in {"source_fidelity", "coverage"}]
-        if src_findings:
-            score.source_fidelity = ScoreDimension(
-                score=2,
-                assessed=True,
-                evidence=[f.finding_id for f in src_findings[:5]],
-                hard_cap=2,
-                cap_reason="source_or_coverage_findings",
-            )
+        if _coverage_rules_evaluated(rule_executions):
+            if src_findings:
+                score.source_fidelity = ScoreDimension(
+                    score=2,
+                    assessed=True,
+                    evidence=[f.finding_id for f in src_findings[:5]],
+                    hard_cap=2,
+                    cap_reason="source_or_coverage_findings",
+                )
+            else:
+                score.source_fidelity = ScoreDimension(
+                    score=4,
+                    assessed=True,
+                    evidence=["no_source_coverage_findings"],
+                )
+            score.coverage_completeness = score.source_fidelity
+        elif _coverage_rules_attempted(rule_executions):
+            score.source_fidelity = ScoreDimension(assessed=False)
+            score.coverage_completeness = ScoreDimension(assessed=False)
         else:
-            score.source_fidelity = ScoreDimension(
-                score=4,
-                assessed=True,
-                evidence=["no_source_coverage_findings"],
-            )
-        score.coverage_completeness = score.source_fidelity
+            score.source_fidelity = ScoreDimension(assessed=False)
+            score.coverage_completeness = ScoreDimension(assessed=False)
     else:
         score.source_fidelity = ScoreDimension(assessed=False)
         score.coverage_completeness = ScoreDimension(assessed=False)
 
-    # Semantic precision — only when modeling heuristics ran findings of that class
+    # Semantic precision — only when heuristic semantic rules completed
     semantic_cats = {
         "relationship_direction",
         "action_grammar",
@@ -68,22 +117,24 @@ def build_deterministic_scorecard(
         "identity_conflation",
     }
     semantic = [f for f in findings if f.category in semantic_cats]
-    if semantic:
-        worst = min({"critical": 1, "high": 2, "medium": 3, "low": 4, "info": 5}[f.severity] for f in semantic)
-        score.semantic_precision = ScoreDimension(
-            score=worst,
-            assessed=True,
-            evidence=[f.finding_id for f in semantic[:5]],
-            hard_cap=worst,
-            cap_reason="semantic_modeling_findings",
-        )
+    if _semantic_rules_evaluated(evaluated):
+        if semantic:
+            worst = min(_SEVERITY_SCORE[f.severity] for f in semantic)
+            score.semantic_precision = ScoreDimension(
+                score=worst,
+                assessed=True,
+                evidence=[f.finding_id for f in semantic[:5]],
+                hard_cap=worst,
+                cap_reason="semantic_modeling_findings",
+            )
+        else:
+            score.semantic_precision = ScoreDimension(
+                score=4,
+                assessed=True,
+                evidence=["no_semantic_heuristic_findings"],
+            )
     else:
-        # Assessed only lightly when graph heuristics evaluated with no hits
-        score.semantic_precision = ScoreDimension(
-            score=4,
-            assessed=True,
-            evidence=["no_semantic_heuristic_findings"],
-        )
+        score.semantic_precision = ScoreDimension(assessed=False)
 
     # Markings / authorization
     auth = [f for f in findings if f.category in {"authorization", "markings"}]
@@ -111,8 +162,11 @@ def build_deterministic_scorecard(
     else:
         score.provenance_custody = ScoreDimension(assessed=False)
 
-    # Serializer quality
-    if has_serializer:
+    # Serializer quality — only when Python serializer rules evaluated
+    if has_serializer and serializer_is_python is False:
+        score.serializer_quality = ScoreDimension(assessed=False)
+        score.maintainability_reproducibility = ScoreDimension(assessed=False)
+    elif _python_serializer_rules_evaluated(evaluated):
         ser = [f for f in findings if f.category.startswith("serializer_")]
         if any(f.category == "serializer_validation" for f in ser):
             score.serializer_quality = ScoreDimension(
@@ -141,6 +195,9 @@ def build_deterministic_scorecard(
             assessed=True,
             evidence=["serializer_present"],
         )
+    elif has_serializer:
+        score.serializer_quality = ScoreDimension(assessed=False)
+        score.maintainability_reproducibility = ScoreDimension(assessed=False)
     else:
         score.serializer_quality = ScoreDimension(assessed=False)
         score.maintainability_reproducibility = ScoreDimension(assessed=False)
@@ -175,8 +232,6 @@ def merge_scorecards(
         score = mod.score
         if det.hard_cap is not None:
             score = min(score, det.hard_cap)
-        if det.score is not None:
-            score = min(score, det.score)
         return ScoreDimension(
             score=score,
             assessed=True,

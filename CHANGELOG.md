@@ -9,17 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-#### Critic loop foundation (#75) — v1.22 Round 2
+#### Critic loop foundation (#75) — v1.22 Round 4 (P0 contracts)
 
-- `mcp_server/critic/` deterministic critic package with RDFLib
-  `CanonicalGraphView`, exact-IRI heuristics, Python AST serializer checks,
-  ContentDataFacet source-hash compare, coverage-contract checks, bounded
-  prompt packages (schema-valid, independently reproducible
-  `prompt_package_hash`, one-hop neighborhoods), stable finding IDs,
-  rule-execution ledger, Draft 2020-12 model-response schema enforcement
-  with graph/serializer/session/pass bindings, and nullable scorecards.
-  Public API: `analyze_artifact`. Docs: `docs/critic/RULES.md`.
-  MCP session orchestration remains #76.
+- Authoritative `critic-model-response.schema.json` shared by prompt builder
+  and response parser; per-pass const bindings; `response_schema_version` /
+  `response_schema_sha256` / `review_request_sha256`.
+- Prompt `byte_size` equals final canonical serialization and is bounded by
+  `max_bytes`; content hash excludes derived metadata (including bound
+  `response_schema`).
+- Per-rule `RuleExecution` ledger with `verifier_rule_id`, `required_for_scope`,
+  validation executions (`CRIT-V-SHACL` / concept / profile / relationship
+  lint), `analysis_status`, and `analysis_incomplete` when required rules
+  fail or skip (never `deterministic_clean` then).
+- Separate prompt sections for deterministic / source / critic findings;
+  model finding IDs without array index (`claim_type` / `assesses_finding_id`);
+  reject unexpected serializer/session/pass bindings; hex-64 hash patterns.
+- Offline remote `@context` rejection; expanded subject/object IRIs; Turtle
+  relationship-kind lint via canonical graph; occurrence metadata;
+  `unevaluated` status; outgoing `CriticReview` schema validation.
+- Scorecard dimensions assessed only when matching rules completed; model
+  merge constrained by deterministic `hard_cap` only; serializer AST skipped
+  (not truncated-parse) when source exceeds 256 KiB.
+- Issue #75 remains open until Phantom Gate oracles and remaining declared
+  rule fixtures land. MCP sessions remain #76.
 
 ## [1.21.0] - 2026-07-12
 

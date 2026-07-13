@@ -56,7 +56,7 @@ class FindingDiffResult:
             (self.regressions, "regression"),
             (self.disputed, "disputed"),
             (self.resolved, "resolved"),
-            (self.unevaluated, "persisting"),  # still open; not verified
+            (self.unevaluated, "unevaluated"),
         ):
             for finding in group:
                 finding.status = status  # type: ignore[assignment]
@@ -170,6 +170,7 @@ def status_counts(findings: list[CriticFinding]) -> dict[str, int]:
         "resolved": 0,
         "regression": 0,
         "disputed": 0,
+        "unevaluated": 0,
     }
     for finding in findings:
         counts[finding.status] = counts.get(finding.status, 0) + 1

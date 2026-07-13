@@ -1,4 +1,4 @@
-"""Bounded critic prompt/context package builder (Round 2 / Round 3)."""
+"""Bounded critic prompt/context package builder (issue #75 contracts)."""
 
 from __future__ import annotations
 
@@ -23,6 +23,12 @@ from critic.models import (
     CriticFinding,
     ValidationSummary,
 )
+from critic.schema_util import (
+    SUPPORTED_SCHEMA_VERSION,
+    bound_model_response_schema,
+    compute_review_request_sha256,
+    model_response_schema_sha256,
+)
 
 DEFAULT_MAX_PACKAGE_BYTES = 48_000
 DEFAULT_NEIGHBORHOOD_NODES = 12
@@ -30,11 +36,12 @@ DEFAULT_EXCERPT_CHARS = 1_200
 MAX_NESTED_STR = 160
 SCHEMA_PATH = Path(__file__).resolve().parent / "schemas" / "critic-prompt-package.schema.json"
 
-# Metadata excluded from the independently reproducible content hash.
 HASH_EXCLUDED_FIELDS = frozenset({
     "prompt_package_hash",
     "byte_size",
     "token_estimate",
+    "review_request_sha256",  # derived from prompt hash; not part of content digest
+    "response_schema",  # replaced by deterministic stub in _hashable_package
 })
 
 CRITIC_SYSTEM_ROLE = (
@@ -48,42 +55,36 @@ CRITIC_SYSTEM_ROLE = (
     "Never claim validation conforms when the validation summary says otherwise."
 )
 
-# Slim response contract embedded for the critic model / manual fallback host.
-# Full enforcement lives in response_parser.MODEL_RESPONSE_SCHEMA.
-CRITIC_MODEL_RESPONSE_SCHEMA_HINT = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": [
-        "schema_version",
-        "graph_sha256",
-        "prompt_package_hash",
-        "findings",
-        "scorecard",
-    ],
-    "properties": {
-        "schema_version": {"type": "string"},
-        "session_id": {"type": ["string", "null"]},
-        "pass_number": {"type": ["integer", "null"]},
-        "graph_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
-        "serializer_sha256": {"type": ["string", "null"]},
-        "prompt_package_hash": {"type": "string", "minLength": 64, "maxLength": 64},
-        "findings": {"type": "array"},
-        "scorecard": {"type": "object"},
-        "notes": {"type": "string"},
-    },
-}
-
 
 def content_hash_payload(package: dict[str, Any]) -> dict[str, Any]:
-    """Return the package fields that participate in prompt_package_hash."""
-
     return {k: v for k, v in package.items() if k not in HASH_EXCLUDED_FIELDS}
 
 
-def compute_prompt_package_hash(package: dict[str, Any]) -> str:
-    """Independently reproducible SHA-256 over content fields only."""
+def _hashable_package(package: dict[str, Any]) -> dict[str, Any]:
+    """Normalize package for hashing: replace bound response_schema with stub.
 
-    return hashlib.sha256(_dumps(content_hash_payload(package))).hexdigest()
+    The bound schema includes ``prompt_package_hash`` as a const, so hashing the
+    live schema would be circular. Hash a deterministic stub instead.
+    """
+
+    stub = dict(package)
+    arts = package.get("artifact_hashes") or {}
+    stub["response_schema"] = {
+        "schema_sha256": package.get("response_schema_sha256") or model_response_schema_sha256(),
+        "bound": {
+            "graph_sha256": arts.get("graph_sha256"),
+            "serializer_sha256": arts.get("serializer_sha256"),
+            "session_id": package.get("session_id"),
+            "pass_number": package.get("pass_number"),
+            "schema_version": package.get("response_schema_version") or SUPPORTED_SCHEMA_VERSION,
+            "review_request_sha256": package.get("review_request_sha256"),
+        },
+    }
+    return content_hash_payload(stub)
+
+
+def compute_prompt_package_hash(package: dict[str, Any]) -> str:
+    return hashlib.sha256(_dumps(_hashable_package(package))).hexdigest()
 
 
 def validate_prompt_package(package: dict[str, Any]) -> None:
@@ -94,9 +95,11 @@ def validate_prompt_package(package: dict[str, Any]) -> None:
     )
     if errors:
         raise ValueError(f"critic_prompt_package_schema_mismatch: {errors[0].message}")
-    expected = compute_prompt_package_hash(package)
-    if package.get("prompt_package_hash") != expected:
+    if package.get("prompt_package_hash") != compute_prompt_package_hash(package):
         raise ValueError("critic_prompt_package_hash_mismatch")
+    actual = len(_dumps(package))
+    if package.get("byte_size") != actual:
+        raise ValueError("critic_prompt_package_size_mismatch")
 
 
 def build_prompt_package(
@@ -104,10 +107,12 @@ def build_prompt_package(
     artifact_hashes: ArtifactHashes,
     validation: ValidationSummary,
     deterministic_findings: list[CriticFinding],
-    graph_view: CanonicalGraphView | None,
-    serializer_excerpts: list[dict[str, Any]],
-    serializer_overview: dict[str, Any] | None,
-    source_excerpts: list[dict[str, Any]],
+    source_findings: list[CriticFinding] | None = None,
+    critic_findings: list[CriticFinding] | None = None,
+    graph_view: CanonicalGraphView | None = None,
+    serializer_excerpts: list[dict[str, Any]] | None = None,
+    serializer_overview: dict[str, Any] | None = None,
+    source_excerpts: list[dict[str, Any]] | None = None,
     prior_findings: list[CriticFinding] | None = None,
     extensions: list[str] | None = None,
     profiles: list[str] | None = None,
@@ -115,10 +120,24 @@ def build_prompt_package(
     session_id: str | None = None,
     pass_number: int = 1,
 ) -> dict[str, Any]:
-    neighborhoods = _one_hop_neighborhoods(graph_view, deterministic_findings)
-    ser_excerpts = list(serializer_excerpts)
-    src_excerpts = list(source_excerpts)
+    serializer_excerpts = list(serializer_excerpts or [])
+    source_excerpts = list(source_excerpts or [])
+    source_findings = list(source_findings or [])
+    critic_findings = list(critic_findings or [])
+    neighborhoods = _one_hop_neighborhoods(
+        graph_view, deterministic_findings + source_findings + critic_findings
+    )
     overview: dict[str, Any] = dict(serializer_overview or {})
+
+    # Placeholder schema; rebound after hash is known.
+    response_schema = bound_model_response_schema(
+        graph_sha256=artifact_hashes.graph_sha256,
+        prompt_package_hash="0" * 64,
+        serializer_sha256=artifact_hashes.serializer_sha256,
+        session_id=session_id,
+        pass_number=pass_number,
+        schema_version=SUPPORTED_SCHEMA_VERSION,
+    )
 
     def assemble(*, truncated: bool, omissions: list[str]) -> dict[str, Any]:
         return {
@@ -141,54 +160,126 @@ def build_prompt_package(
             "validation_summary": validation.to_dict(),
             "extensions": list(extensions or []),
             "profiles": list(profiles or []),
-            "deterministic_findings": [
-                _compact_finding(f) for f in deterministic_findings[:40]
-            ],
-            "prior_pass_findings": [
-                _compact_finding(f) for f in (prior_findings or [])[:40]
-            ],
+            "deterministic_findings": [_compact_finding(f) for f in deterministic_findings[:40]],
+            "source_findings": [_compact_finding(f) for f in source_findings[:40]],
+            "critic_findings": [_compact_finding(f) for f in critic_findings[:40]],
+            "prior_pass_findings": [_compact_finding(f) for f in (prior_findings or [])[:40]],
             "graph_neighborhoods": list(neighborhoods),
-            "serializer_excerpts": list(ser_excerpts[:20]),
+            "serializer_excerpts": list(serializer_excerpts[:20]),
             "serializer_overview": dict(overview),
-            "source_excerpts": list(src_excerpts[:20]),
+            "source_excerpts": list(source_excerpts[:20]),
             "structural_stats": {
                 "node_count": len(graph_view.nodes) if graph_view else 0,
                 "top_level_count": len(graph_view.top_level_order) if graph_view else 0,
             },
             "omissions": list(omissions),
-            "response_schema": CRITIC_MODEL_RESPONSE_SCHEMA_HINT,
+            "response_schema": response_schema,
+            "response_schema_version": SUPPORTED_SCHEMA_VERSION,
+            "response_schema_sha256": model_response_schema_sha256(),
             "truncated": truncated,
         }
 
     omissions: list[str] = []
     package = assemble(truncated=False, omissions=omissions)
-    content_bytes = _dumps(content_hash_payload(package))
-    if len(content_bytes) > max_bytes:
+
+    def shrink() -> None:
+        nonlocal package, omissions
+        if len(_dumps(content_hash_payload(package))) <= max_bytes:
+            return
         neighborhoods[:] = neighborhoods[:3]
-        ser_excerpts[:] = ser_excerpts[:5]
-        src_excerpts[:] = src_excerpts[:5]
+        serializer_excerpts[:] = serializer_excerpts[:5]
+        source_excerpts[:] = source_excerpts[:5]
         omissions = ["truncated_neighborhoods_and_excerpts"]
         package = assemble(truncated=True, omissions=omissions)
-        content_bytes = _dumps(content_hash_payload(package))
-    if len(content_bytes) > max_bytes:
+        if len(_dumps(content_hash_payload(package))) <= max_bytes:
+            return
         neighborhoods.clear()
-        ser_excerpts.clear()
-        src_excerpts.clear()
-        omissions = [
-            "truncated_neighborhoods_and_excerpts",
-            "dropped_context_sections",
-        ]
-        overview = {}
+        serializer_excerpts.clear()
+        source_excerpts.clear()
+        overview.clear()
+        omissions = ["truncated_neighborhoods_and_excerpts", "dropped_context_sections"]
         package = assemble(truncated=True, omissions=omissions)
-        content_bytes = _dumps(content_hash_payload(package))
-    if len(content_bytes) > max_bytes:
+
+    shrink()
+    if len(_dumps(content_hash_payload(package))) > max_bytes:
         raise ValueError("critic_prompt_package_too_large")
 
-    package["prompt_package_hash"] = hashlib.sha256(content_bytes).hexdigest()
-    package["token_estimate"] = max(1, len(content_bytes) // 4)
-    package["byte_size"] = len(_dumps(package))
+    # Bind response schema with a temporary hash, then settle content hash.
+    package["review_request_sha256"] = compute_review_request_sha256(
+        schema_version=SUPPORTED_SCHEMA_VERSION,
+        session_id=session_id,
+        pass_number=pass_number,
+        graph_sha256=artifact_hashes.graph_sha256,
+        serializer_sha256=artifact_hashes.serializer_sha256,
+        source_sha256=artifact_hashes.source_sha256,
+        coverage_contract_sha256=artifact_hashes.coverage_contract_sha256,
+        prompt_package_hash="0" * 64,
+    )
+    package["response_schema_version"] = SUPPORTED_SCHEMA_VERSION
+    package["response_schema_sha256"] = model_response_schema_sha256()
+    package["prompt_package_hash"] = compute_prompt_package_hash(package)
+    package["review_request_sha256"] = compute_review_request_sha256(
+        schema_version=SUPPORTED_SCHEMA_VERSION,
+        session_id=session_id,
+        pass_number=pass_number,
+        graph_sha256=artifact_hashes.graph_sha256,
+        serializer_sha256=artifact_hashes.serializer_sha256,
+        source_sha256=artifact_hashes.source_sha256,
+        coverage_contract_sha256=artifact_hashes.coverage_contract_sha256,
+        prompt_package_hash=package["prompt_package_hash"],
+    )
+    package["prompt_package_hash"] = compute_prompt_package_hash(package)
+    package["response_schema"] = bound_model_response_schema(
+        graph_sha256=artifact_hashes.graph_sha256,
+        prompt_package_hash=package["prompt_package_hash"],
+        serializer_sha256=artifact_hashes.serializer_sha256,
+        session_id=session_id,
+        pass_number=pass_number,
+        schema_version=SUPPORTED_SCHEMA_VERSION,
+        review_request_sha256=package["review_request_sha256"],
+    )
+    package["token_estimate"] = max(1, len(_dumps(_hashable_package(package))) // 4)
+
+    # Stabilize byte_size to equal final serialized length.
+    package["byte_size"] = 0
+    for _ in range(8):
+        actual = len(_dumps(package))
+        if package["byte_size"] == actual:
+            break
+        package["byte_size"] = actual
+    else:
+        raise ValueError("critic_prompt_package_size_unstable")
+
+    if package["byte_size"] > max_bytes:
+        raise ValueError("critic_prompt_package_too_large")
+
     validate_prompt_package(package)
     return package
+
+
+def validate_prompt_package_relaxed(package: dict[str, Any]) -> None:
+    """Validate size/hash invariants; schema file may lag — still check required keys."""
+
+    required = {
+        "schema_version",
+        "system_role",
+        "trust_boundary",
+        "artifact_hashes",
+        "validation_summary",
+        "response_schema",
+        "response_schema_version",
+        "response_schema_sha256",
+        "prompt_package_hash",
+        "byte_size",
+        "truncated",
+    }
+    missing = required - set(package)
+    if missing:
+        raise ValueError(f"critic_prompt_package_schema_mismatch: missing {sorted(missing)}")
+    if package["byte_size"] != len(_dumps(package)):
+        raise ValueError("critic_prompt_package_size_mismatch")
+    if package["prompt_package_hash"] != compute_prompt_package_hash(package):
+        raise ValueError("critic_prompt_package_hash_mismatch")
 
 
 def excerpt_serializer(
@@ -225,8 +316,6 @@ def excerpt_serializer(
 
 
 def build_serializer_overview(source: str, *, path_name: str, max_chars: int = 2400) -> dict[str, Any]:
-    """Bounded overview even when no AST finding fires."""
-
     lines = source.splitlines()
     imports = [ln for ln in lines if ln.startswith(("import ", "from "))][:30]
     defs = [
@@ -250,6 +339,10 @@ def _compact_finding(finding: CriticFinding) -> dict[str, Any]:
         "severity": finding.severity,
         "category": finding.category,
         "rule_id": finding.rule_id,
+        "rule_version": finding.rule_version,
+        "evidence_kind": finding.evidence_kind,
+        "status": finding.status,
+        "verification_method": finding.verification_method[:200],
         "target": {
             "path": finding.target.path,
             "line": finding.target.line,
