@@ -1,0 +1,39 @@
+{
+  "suite": "case-uco-synthetic-benchmark",
+  "schema_version": "1.1.0",
+  "tier": "small",
+  "language": "python",
+  "result": {
+    "catalog": {
+      "workload": "catalog",
+      "nodes": 1000,
+      "build_seconds": 0.08167,
+      "lookup_enrich_seconds": 0.000175,
+      "serialize_seconds": 0.00169,
+      "serialize_bytes": 176911,
+      "estimate_triples": 3100
+    },
+    "relationship_rich": {
+      "workload": "relationship_rich",
+      "nodes": 300,
+      "build_seconds": 0.015201,
+      "partition_seconds": 0.000313,
+      "partition_count": 5,
+      "estimate_triples": 1000
+    },
+    "deserialize_roundtrip": {
+      "workload": "deserialize_roundtrip",
+      "nodes": 1000,
+      "from_jsonld_cold_seconds": 0.295326,
+      "from_jsonld_warm_seconds": 0.142994,
+      "serialize_bytes": 172022
+    },
+    "streaming_write": {
+      "workload": "streaming_write",
+      "nodes": 1000,
+      "write_streaming_seconds": 0.024426,
+      "write_full_seconds": 0.001865,
+      "bytes_written": 139995
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "cac-press-release-subset",
-  "description": "CAC ontology and SHACL files used for press-release and investigator KG validation via the SDK MCP server. Avoids full-manifest SPARQL constraints that may fail on some pySHACL builds until upstream CAC shapes are repaired.",
+  "description": "CAC ontology and SHACL files used for press-release and investigator KG validation via the SDK MCP server. Includes detection module terms used by Operation Phantom Gate. Avoids full-manifest SPARQL constraints that may fail on some pySHACL builds until upstream CAC shapes are repaired.",
   "ontology_files": [
     "ontology/ontology/cacontology-core-spine.ttl",
     "ontology/ontology/cacontology-core.ttl",
@@ -12,6 +12,7 @@
     "ontology/ontology/cacontology-grooming.ttl",
     "ontology/ontology/cacontology-specialized-units.ttl",
     "ontology/ontology/cacontology-physical-evidence.ttl",
+    "ontology/ontology/cacontology-detection.ttl",
     "local/cacontology-sdk-pending.ttl"
   ],
   "full_manifest_note": "Use `make validate-extension EXT=cac DATA=...` for full manifest validation after upstream CAC SHACL SPARQL repairs."

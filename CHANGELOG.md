@@ -7,44 +7,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.0] - 2026-07-13
+
 ### Added
 
-#### Performance / scalability (#70–#73) — v1.22
+#### Performance / scalability (#70–#73)
 
 - **#70**: Thread-safe process-wide class/field registry caches with
   `clear_class_registry_cache()` / `ClearClassRegistryCache()` /
   `clearClassRegistryCache()` and duplicate-`CLASS_IRI` rejection (Python/C#/Java;
-  Rust documents N/A for typed rehydration).
+  Rust documents N/A for typed rehydration). C# caches Type→property attribute
+  maps; Java caches Class→field maps (cleared with the same cache APIs).
 - **#71**: Incremental used-prefix tracking + `write_streaming` /
-  `WriteStreaming` / `writeStreaming` across Python/C#/Java/Rust (Python returns
-  `{nodes, bytes_written}` and supports atomic temp+rename).
-- **#72**: Dependency-aware `partition` / `PartitionByRoots` /
-  `partitionByRoots` / `partition_by_roots` following nested `@id` closures;
+  `WriteStreaming` / `writeStreaming` across Python/C#/Java/Rust. All four
+  languages support atomic temp+rename and return/expose `{nodes, bytes_written}`
+  metrics (`StreamingWriteResult` / `StreamingWriteMetrics`). Phase-2 bounded
+  writer remains deferred (see `docs/PERFORMANCE_GUIDE.md`).
+- **#72**: Experimental root closure via `partition` /
+  `PartitionByRoots` / `partitionByRoots` / `partition_by_roots` with
+  **outgoing + incoming** `@id` closure (`include_incoming=True` by default)
+  and optional Python partition manifest (`return_manifest=True`).
   `split()` retained as catalog-only with warnings.
 - **#73**: Expanded `benchmarks/run_python_bench.py` (catalog, relationship-rich
-  partition, cold/warm `from_jsonld`, streaming write); Rust
-  `benchmarks/run_rust_bench.sh`; CI small-tier Python bench job;
-  `benchmarks/README.md`.
+  partition, cold/warm `from_jsonld`, streaming write); committed
+  `benchmarks/baselines/python-small.json`; `benchmarks/compare_baseline.py`
+  (+100% CI gate); Rust/C#/Java bench runners; CI small-tier Python bench +
+  compare step; `benchmarks/README.md`.
 
-#### Critic loop (#74–#78) — v1.22
+#### Critic loop (#74–#78)
 
 - **#75 contracts**: authoritative model-response schema, bound per-pass consts,
-  final `byte_size`/`max_bytes`, `review_request_sha256`, per-rule ledger with
-  `verifier_rule_id` / `analysis_status`, offline remote `@context` rejection,
-  Turtle relationship lint, occurrence/`unevaluated`, outgoing review schema
-  validation, ledger-aware scorecards, serializer too-large AST skip.
+  final `byte_size`/`max_bytes`, non-circular `prompt_content_sha256` →
+  `review_request_sha256`, per-rule ledger with `verifier_rule_id` /
+  `analysis_status`, offline remote `@context` rejection, Turtle relationship
+  lint, occurrence/`unevaluated`, outgoing review schema validation,
+  ledger-aware scorecards, serializer too-large AST skip. Graph heuristics
+  v1.2.0 add action completeness, identity conflation, proxy duplicates,
+  derived hash/provenance, marking inheritance, custody pairing, image-container
+  mismatch, and compilation omission. Python AST adds nonexistent-API,
+  relationship-ID collapse, silent lookup, unsafe overwrite, source-hash drift,
+  synthetic hash, and quadratic-scan checks. CAC validation-subset includes
+  detection terms so Phantom Gate gold can fully conform.
 - **#76 sessions**: resumable workspace-confined `critic-sessions/` store with
-  flock + atomic JSON + audit log; MCP tools `start_critic_review`,
-  `submit_manual_critic_response`, `submit_critic_revision`,
-  `extend_critic_review`, `get_critic_review_status`, `finalize_critic_review`,
-  `cancel_critic_review`; policies `disabled`/`manual`/`client_sampling`;
+  cross-platform locks, hash-chained audit, full artifact-set rehash at
+  finalize, completed-pass merge of critic findings/assessments into blockers,
+  outcomes (`accepted` / `completed_with_findings` / `blocked_with_findings` /
+  …), MCP tools including async `start_critic_review_with_sampling` /
+  `submit_critic_revision_with_sampling` (full prompt package + typed sampling
+  fallbacks), returned `extend_approval_challenge`, reject over-cap iterations;
   FastMCP pinned to `>=3.4.0,<4`.
-- **#77 evaluation**: `evaluation/critic/` micro/serializer/phantom-gate/
-  adversarial cases, oracle + session-replay harnesses, CI critic job.
-- **#78 handoff**: `prepare_critic_handoff` preview-only package with optional
-  approved write under workspace policy (no auto promotion/issues).
+- **#77 evaluation**: conforming gold oracles (micro Charged_With + Phantom
+  Gate), micro cases for new heuristics, real session state-machine replay,
+  oracle + session-replay harnesses, CI critic job with workspace roots.
+- **#78 handoff**: explicit operator-selected type, approval token, preview by
+  default, atomic no-overwrite writes under `critic-handoffs/candidates/` (no
+  auto category promotion / GitHub / recipe promotion).
 
-Docs: `docs/critic/RULES.md`.
+Docs: `docs/critic/RULES.md`, `docs/CROSS_LANGUAGE_PARITY.md`,
+`docs/PERFORMANCE_GUIDE.md`.
+
+Package versions bumped to **1.22.0**.
 
 ## [1.21.0] - 2026-07-12
 
@@ -1750,7 +1772,8 @@ digital forensics, cyber-investigation, and cyber-observable data.
 - GitHub Actions workflows: CI, CodeQL, dependency review, release
 - Dependabot configuration for automated dependency updates
 
-[Unreleased]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.21.0...HEAD
+[Unreleased]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.0...HEAD
+[1.22.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.21.0...v1.22.0
 [1.21.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.20.0...v1.21.0
 [1.20.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.19.0...v1.20.0
 [1.8.0]: https://github.com/vulnmaster/CASE-UCO-SDK/releases/tag/v1.8.0

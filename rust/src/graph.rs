@@ -154,6 +154,13 @@ impl SharedPolicy {
     }
 }
 
+/// Metrics from an atomic/incremental streaming write (#71).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct StreamingWriteMetrics {
+    pub nodes: usize,
+    pub bytes_written: u64,
+}
+
 /// Build a CASE/UCO JSON-LD graph with typed objects.
 pub struct CaseGraph {
     context: HashMap<String, String>,
@@ -600,28 +607,66 @@ impl CaseGraph {
     }
 
     /// Write the graph incrementally without materializing a second full document (#71).
-    pub fn write_streaming(&self, path: &str) -> std::io::Result<()> {
-        let file = std::fs::File::create(path)?;
-        let mut writer = std::io::BufWriter::new(file);
-        let ctx = self.pruned_context();
+    ///
+    /// Writes through a temporary file and renames into place (atomic on rename-capable
+    /// filesystems). Returns nodes written and UTF-8 bytes emitted.
+    pub fn write_streaming(&self, path: &str) -> std::io::Result<StreamingWriteMetrics> {
+        let target = std::path::Path::new(path);
+        let parent = target.parent().unwrap_or_else(|| std::path::Path::new("."));
+        std::fs::create_dir_all(parent)?;
+        let tmp_path = parent.join(format!(
+            ".casegraph-{}.jsonld.tmp",
+            std::process::id()
+        ));
 
-        writer.write_all(b"{\n")?;
-        writer.write_all(b"  \"@context\": ")?;
-        serde_json::to_writer(&mut writer, &ctx).map_err(std::io::Error::other)?;
-        writer.write_all(b",\n  \"@graph\": [\n")?;
+        let write_result = (|| -> std::io::Result<u64> {
+            let file = std::fs::File::create(&tmp_path)?;
+            let mut writer = std::io::BufWriter::new(file);
+            let ctx = self.pruned_context();
+            let mut bytes_written: u64 = 0;
 
-        for (i, obj) in self.objects.iter().enumerate() {
-            writer.write_all(b"    ")?;
-            serde_json::to_writer(&mut writer, obj).map_err(std::io::Error::other)?;
-            if i + 1 < self.objects.len() {
-                writer.write_all(b",\n")?;
-            } else {
-                writer.write_all(b"\n")?;
+            let mut emit = |buf: &[u8]| -> std::io::Result<()> {
+                writer.write_all(buf)?;
+                bytes_written += buf.len() as u64;
+                Ok(())
+            };
+
+            emit(b"{\n")?;
+            emit(b"  \"@context\": ")?;
+            {
+                let ctx_bytes = serde_json::to_vec(&ctx).map_err(std::io::Error::other)?;
+                emit(&ctx_bytes)?;
+            }
+            emit(b",\n  \"@graph\": [\n")?;
+
+            for (i, obj) in self.objects.iter().enumerate() {
+                emit(b"    ")?;
+                let obj_bytes = serde_json::to_vec(obj).map_err(std::io::Error::other)?;
+                emit(&obj_bytes)?;
+                if i + 1 < self.objects.len() {
+                    emit(b",\n")?;
+                } else {
+                    emit(b"\n")?;
+                }
+            }
+            emit(b"  ]\n}\n")?;
+            writer.flush()?;
+            Ok(bytes_written)
+        })();
+
+        match write_result {
+            Ok(bytes_written) => {
+                std::fs::rename(&tmp_path, target)?;
+                Ok(StreamingWriteMetrics {
+                    nodes: self.objects.len(),
+                    bytes_written,
+                })
+            }
+            Err(e) => {
+                let _ = std::fs::remove_file(&tmp_path);
+                Err(e)
             }
         }
-        writer.write_all(b"  ]\n}\n")?;
-        writer.flush()?;
-        Ok(())
     }
 
     /// Write the graph to a file.

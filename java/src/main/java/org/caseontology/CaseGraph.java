@@ -35,6 +35,7 @@ import java.util.UUID;
 public class CaseGraph {
 
     private static final ConcurrentHashMap<String, Class<?>> CLASS_REGISTRY_CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Class<?>, List<FieldBinding>> FIELD_BINDING_CACHE = new ConcurrentHashMap<>();
     private static final Object CLASS_REGISTRY_LOCK = new Object();
     private static volatile boolean classRegistryBuilt = false;
 
@@ -382,30 +383,123 @@ public class CaseGraph {
     }
 
     /**
-     * Stream JSON-LD to disk without building a second full-document string.
+     * Stream JSON-LD to disk without building a second full-document string (#71).
      *
      * <p>Emits {@code @context} then each {@code @graph} element incrementally.
-     * Peak memory is dominated by the in-memory graph rather than a duplicate
-     * serialized buffer. Use {@link #serialize()} when a complete string is needed.
+     * Writes via a temp file then atomic rename by default. Use
+     * {@link #serialize()} when a complete string is needed.
+     *
+     * @return nodes written and UTF-8 bytes emitted
      */
-    public void writeStreaming(String path) throws IOException {
-        try (Writer writer = new OutputStreamWriter(Files.newOutputStream(Paths.get(path)), StandardCharsets.UTF_8)) {
-            Map<String, String> ctx = prunedContext();
-            writer.write("{\n");
-            writer.write("  \"@context\": ");
-            writer.write(toJsonString(ctx, 1));
-            writer.write(",\n");
-            writer.write("  \"@graph\": [\n");
-            for (int i = 0; i < objects.size(); i++) {
-                writer.write(indentJsonLines(toJsonString(objects.get(i), 2), "    "));
-                if (i + 1 < objects.size()) {
-                    writer.write(",\n");
-                } else {
-                    writer.write("\n");
-                }
+    public StreamingWriteResult writeStreaming(String path) throws IOException {
+        return writeStreaming(path, true);
+    }
+
+    /**
+     * Stream JSON-LD to disk (#71).
+     *
+     * @param atomic when true, write through a temp file and rename into place
+     */
+    public StreamingWriteResult writeStreaming(String path, boolean atomic) throws IOException {
+        java.nio.file.Path target = Paths.get(path);
+        java.nio.file.Path outPath = target;
+        java.nio.file.Path tmpPath = null;
+        if (atomic) {
+            java.nio.file.Path parent = target.toAbsolutePath().getParent();
+            if (parent == null) {
+                parent = Paths.get(".");
             }
-            writer.write("  ]\n");
-            writer.write("}\n");
+            Files.createDirectories(parent);
+            tmpPath = Files.createTempFile(parent, ".casegraph-", ".jsonld.tmp");
+            outPath = tmpPath;
+        }
+        long bytesWritten = 0;
+        try {
+            try (CountingWriter writer = new CountingWriter(
+                    new OutputStreamWriter(Files.newOutputStream(outPath), StandardCharsets.UTF_8))) {
+                Map<String, String> ctx = prunedContext();
+                writer.write("{\n");
+                writer.write("  \"@context\": ");
+                writer.write(toJsonString(ctx, 1));
+                writer.write(",\n");
+                writer.write("  \"@graph\": [\n");
+                for (int i = 0; i < objects.size(); i++) {
+                    writer.write(indentJsonLines(toJsonString(objects.get(i), 2), "    "));
+                    if (i + 1 < objects.size()) {
+                        writer.write(",\n");
+                    } else {
+                        writer.write("\n");
+                    }
+                }
+                writer.write("  ]\n");
+                writer.write("}\n");
+                writer.flush();
+                bytesWritten = writer.getBytesWritten();
+            }
+            if (atomic && tmpPath != null) {
+                try {
+                    Files.move(tmpPath, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING,
+                        java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+                } catch (java.nio.file.AtomicMoveNotSupportedException ex) {
+                    Files.move(tmpPath, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                }
+                tmpPath = null;
+            }
+            return new StreamingWriteResult(objects.size(), bytesWritten);
+        } catch (IOException | RuntimeException ex) {
+            if (tmpPath != null) {
+                Files.deleteIfExists(tmpPath);
+            }
+            throw ex;
+        }
+    }
+
+    /** Metrics from an atomic/incremental streaming write (#71). */
+    public static final class StreamingWriteResult {
+        private final int nodes;
+        private final long bytesWritten;
+
+        public StreamingWriteResult(int nodes, long bytesWritten) {
+            this.nodes = nodes;
+            this.bytesWritten = bytesWritten;
+        }
+
+        public int getNodes() { return nodes; }
+        public long getBytesWritten() { return bytesWritten; }
+    }
+
+    private static final class CountingWriter extends Writer {
+        private final Writer inner;
+        private long bytesWritten;
+
+        CountingWriter(Writer inner) {
+            this.inner = inner;
+        }
+
+        long getBytesWritten() {
+            return bytesWritten;
+        }
+
+        @Override
+        public void write(char[] cbuf, int off, int len) throws IOException {
+            inner.write(cbuf, off, len);
+            bytesWritten += new String(cbuf, off, len).getBytes(StandardCharsets.UTF_8).length;
+        }
+
+        @Override
+        public void write(String str) throws IOException {
+            inner.write(str);
+            bytesWritten += str.getBytes(StandardCharsets.UTF_8).length;
+        }
+
+        @Override
+        public void flush() throws IOException {
+            inner.flush();
+        }
+
+        @Override
+        public void close() throws IOException {
+            inner.close();
         }
     }
 
@@ -415,8 +509,14 @@ public class CaseGraph {
     public static void clearClassRegistryCache() {
         synchronized (CLASS_REGISTRY_LOCK) {
             CLASS_REGISTRY_CACHE.clear();
+            FIELD_BINDING_CACHE.clear();
             classRegistryBuilt = false;
         }
+    }
+
+    /** Expose field-binding cache size for warm-path unit tests (#70). */
+    public static int fieldBindingCacheCount() {
+        return FIELD_BINDING_CACHE.size();
     }
 
     /**
@@ -769,8 +869,23 @@ public class CaseGraph {
         return specific.size() == 1 ? specific.get(0) : null;
     }
 
-    private static void setFieldsFromJsonLd(Object instance, Map<String, Object> obj) {
-        Class<?> current = instance.getClass();
+    private static final class FieldBinding {
+        final Field field;
+        final String propKey;
+
+        FieldBinding(Field field, String propKey) {
+            this.field = field;
+            this.propKey = propKey;
+        }
+    }
+
+    private static List<FieldBinding> getFieldBindings(Class<?> cls) {
+        List<FieldBinding> cached = FIELD_BINDING_CACHE.get(cls);
+        if (cached != null) {
+            return cached;
+        }
+        List<FieldBinding> bindings = new ArrayList<>();
+        Class<?> current = cls;
         while (current != null && current != Object.class) {
             for (Field field : current.getDeclaredFields()) {
                 if (Modifier.isStatic(field.getModifiers())) continue;
@@ -782,15 +897,23 @@ public class CaseGraph {
                 } catch (Exception ignored) {}
 
                 String propKey = nsPrefix + ":" + field.getName();
-                if (!obj.containsKey(propKey)) continue;
-
                 field.setAccessible(true);
-                try {
-                    Object value = convertFromJsonLd(obj.get(propKey), field.getType());
-                    field.set(instance, value);
-                } catch (Exception ignored) {}
+                bindings.add(new FieldBinding(field, propKey));
             }
             current = current.getSuperclass();
+        }
+        List<FieldBinding> immutable = Collections.unmodifiableList(bindings);
+        List<FieldBinding> raced = FIELD_BINDING_CACHE.putIfAbsent(cls, immutable);
+        return raced != null ? raced : immutable;
+    }
+
+    private static void setFieldsFromJsonLd(Object instance, Map<String, Object> obj) {
+        for (FieldBinding binding : getFieldBindings(instance.getClass())) {
+            if (!obj.containsKey(binding.propKey)) continue;
+            try {
+                Object value = convertFromJsonLd(obj.get(binding.propKey), binding.field.getType());
+                binding.field.set(instance, value);
+            } catch (Exception ignored) {}
         }
     }
 
@@ -899,25 +1022,29 @@ public class CaseGraph {
     }
 
     /**
-     * Partition the graph by root IRIs using dependency closure over {@code @id} references.
+     * Experimental root closure (#72).
      *
-     * <p>Each root IRI defines a partition. All top-level nodes reachable from that root
-     * via nested {@code @id} references (including Relationship source/target edges)
-     * are included. Nodes reachable from multiple roots follow {@code sharedNodePolicy}:
+     * <p>Each root IRI defines a partition. Top-level nodes reachable from that
+     * root via nested {@code @id} references are included (outgoing). When
+     * {@code includeIncoming} is true (default), reverse references from other
+     * top-level objects (e.g. Relationships pointing at the root) are also
+     * followed. Nodes reachable from multiple roots follow {@code sharedNodePolicy}:
      * {@code replicate-identical} (default) deep-copies shared nodes into every
      * partition that needs them; {@code isolate-shared} places multi-root nodes only
      * in a {@code _shared} partition.
      */
-    public Map<String, CaseGraph> partitionByRoots(Collection<String> rootIris, String sharedNodePolicy) {
+    public Map<String, CaseGraph> partitionByRoots(
+            Collection<String> rootIris, String sharedNodePolicy, boolean includeIncoming) {
         if (rootIris == null || rootIris.isEmpty()) {
             throw new IllegalArgumentException("rootIris must be a non-empty collection");
         }
         String policy = normalizeSharedNodePolicy(sharedNodePolicy);
         Map<String, Map<String, Object>> byExpandedId = buildExpandedIdIndex();
+        Map<String, Set<String>> reverseIndex = buildReverseIdIndex(byExpandedId);
 
         Map<String, Set<String>> rootClosures = new LinkedHashMap<>();
         for (String root : rootIris) {
-            rootClosures.put(root, dependencyClosure(root, byExpandedId));
+            rootClosures.put(root, dependencyClosure(root, byExpandedId, reverseIndex, includeIncoming));
         }
 
         Map<String, Set<String>> nodeOwners = new LinkedHashMap<>();
@@ -956,8 +1083,12 @@ public class CaseGraph {
         return partitions;
     }
 
+    public Map<String, CaseGraph> partitionByRoots(Collection<String> rootIris, String sharedNodePolicy) {
+        return partitionByRoots(rootIris, sharedNodePolicy, true);
+    }
+
     public Map<String, CaseGraph> partitionByRoots(Collection<String> rootIris) {
-        return partitionByRoots(rootIris, "replicate-identical");
+        return partitionByRoots(rootIris, "replicate-identical", true);
     }
 
     /**
@@ -1661,7 +1792,28 @@ public class CaseGraph {
         return byExpandedId;
     }
 
-    private Set<String> dependencyClosure(String rootId, Map<String, Map<String, Object>> byExpandedId) {
+    private Map<String, Set<String>> buildReverseIdIndex(Map<String, Map<String, Object>> byExpandedId) {
+        Map<String, Set<String>> reverse = new LinkedHashMap<>();
+        for (Map.Entry<String, Map<String, Object>> entry : byExpandedId.entrySet()) {
+            String ownerExpanded = entry.getKey();
+            Set<String> refs = new LinkedHashSet<>();
+            collectIdRefs(entry.getValue(), refs);
+            for (String ref : refs) {
+                String expandedRef = expandIri(ref);
+                if (expandedRef.equals(ownerExpanded)) {
+                    continue;
+                }
+                reverse.computeIfAbsent(expandedRef, ignored -> new LinkedHashSet<>()).add(ownerExpanded);
+            }
+        }
+        return reverse;
+    }
+
+    private Set<String> dependencyClosure(
+            String rootId,
+            Map<String, Map<String, Object>> byExpandedId,
+            Map<String, Set<String>> reverseIndex,
+            boolean includeIncoming) {
         String expandedRoot = expandIri(rootId);
         Set<String> visited = new LinkedHashSet<>();
         Deque<String> queue = new ArrayDeque<>();
@@ -1679,12 +1831,26 @@ public class CaseGraph {
             collectIdRefs(node, refs);
             for (String ref : refs) {
                 String expandedRef = expandIri(ref);
-                if (!visited.contains(expandedRef)) {
+                if (!visited.contains(expandedRef) && byExpandedId.containsKey(expandedRef)) {
                     queue.add(expandedRef);
+                }
+            }
+            if (includeIncoming && reverseIndex != null) {
+                Set<String> referrers = reverseIndex.get(current);
+                if (referrers != null) {
+                    for (String referrer : referrers) {
+                        if (!visited.contains(referrer) && byExpandedId.containsKey(referrer)) {
+                            queue.add(referrer);
+                        }
+                    }
                 }
             }
         }
         return visited;
+    }
+
+    private Set<String> dependencyClosure(String rootId, Map<String, Map<String, Object>> byExpandedId) {
+        return dependencyClosure(rootId, byExpandedId, buildReverseIdIndex(byExpandedId), true);
     }
 
     @SuppressWarnings("unchecked")

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import re
 from pathlib import Path
 from typing import Literal
 
@@ -19,11 +20,44 @@ _PY_RULES = (
     "CRIT-S-PY-SWALLOWED-EXCEPTION",
     "CRIT-S-PY-UNSCOPED-UUID5",
     "CRIT-S-PY-GLOBAL-UUID-IDS",
+    "CRIT-S-PY-NONEXISTENT-API",
+    "CRIT-S-PY-REL-ID-COLLAPSE",
+    "CRIT-S-PY-SILENT-LOOKUP",
+    "CRIT-S-PY-UNSAFE-OVERWRITE",
+    "CRIT-S-PY-SOURCE-HASH-DRIFT",
+    "CRIT-S-PY-SYNTHETIC-HASH",
+    "CRIT-S-PY-QUADRATIC-SCAN",
 )
 
 _NESTED_ID_KEYWORDS = ("entry", "dict", "item", "child", "nested")
 _CASE_SCOPED_HELPER_NAMES = frozenset({"uid", "make_id", "iri_for"})
-
+_GRAPH_RECEIVER_NAMES = frozenset({"graph", "g", "case_graph", "cg"})
+_CASEGRAPH_ALLOWLIST = frozenset({
+    "create",
+    "create_relationship",
+    "write",
+    "write_streaming",
+    "get",
+    "contains",
+    "upsert_node",
+    "link",
+    "partition",
+    "partition_by_roots",
+    "serialize",
+    "from_jsonld",
+    "clear",
+    "add_context",
+    "set_context",
+    "objects",
+    "__iter__",
+    "__len__",
+    "__contains__",
+})
+_HEX64_RE = re.compile(r"^[0-9a-fA-F]{64}$")
+_SYNTHETIC_HASH_NAME_RE = re.compile(
+    r"(synthetic_hash|fake_hash|placeholder_hash)",
+    re.IGNORECASE,
+)
 
 def _exec(
     rule_id: str,
@@ -85,6 +119,13 @@ def analyze_python_serializer(
     findings.extend(_fail_open_validation(path, tree))
     findings.extend(_broad_swallowed_exceptions(path, tree))
     findings.extend(_uuid_helpers(path, tree))
+    findings.extend(_nonexistent_sdk_api(path, tree))
+    findings.extend(_relationship_id_collapse(path, tree))
+    findings.extend(_silent_lookup_failure(path, tree))
+    findings.extend(_unsafe_overwrite_or_workspace_bypass(path, tree, source))
+    findings.extend(_source_hash_drift(path, tree))
+    findings.extend(_synthetic_vs_evidence_hash(path, tree))
+    findings.extend(_quadratic_full_scans(path, tree))
 
     executions = [
         _exec(
@@ -385,6 +426,425 @@ def _uuid5_material_omits_parent(node: ast.FunctionDef) -> bool:
                 return False
             if isinstance(arg, ast.Attribute) and arg.attr in parent_tokens:
                 return False
+        return True
+    return False
+
+
+def _nonexistent_sdk_api(path: Path, tree: ast.AST) -> list[CriticFinding]:
+    findings: list[CriticFinding] = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if not isinstance(func, ast.Attribute):
+            continue
+        if not _is_graph_receiver(func.value):
+            continue
+        method = func.attr
+        if method in _CASEGRAPH_ALLOWLIST:
+            continue
+        findings.append(
+            _s(
+                rule_id="CRIT-S-PY-NONEXISTENT-API",
+                severity="high",
+                category="serializer_api",
+                target=CriticTarget(
+                    path=path.name,
+                    line=getattr(node, "lineno", None),
+                    qualified_name=method,
+                ),
+                evidence=[f"call={method}"],
+                rationale=(
+                    f"Call to unknown CASEGraph method {method!r}; not in the "
+                    "public allowlist."
+                ),
+                recommended_change="Use a documented CASEGraph API method.",
+                verification_method="AST Attribute call on graph/g/case_graph allowlist.",
+            )
+        )
+    return findings
+
+
+def _is_graph_receiver(node: ast.AST) -> bool:
+    return isinstance(node, ast.Name) and node.id in _GRAPH_RECEIVER_NAMES
+
+
+def _relationship_id_collapse(path: Path, tree: ast.AST) -> list[CriticFinding]:
+    findings: list[CriticFinding] = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.For):
+            continue
+        for child in ast.walk(node):
+            if child is node or not isinstance(child, ast.Call):
+                continue
+            func = child.func
+            if not (
+                isinstance(func, ast.Attribute)
+                and func.attr == "create_relationship"
+                and _is_graph_receiver(func.value)
+            ):
+                continue
+            kw_names = {
+                kw.arg for kw in child.keywords if isinstance(kw.arg, str)
+            }
+            if "assertion_id" in kw_names or "relationship_id" in kw_names:
+                continue
+            findings.append(
+                _s(
+                    rule_id="CRIT-S-PY-REL-ID-COLLAPSE",
+                    severity="high",
+                    category="serializer_api",
+                    target=CriticTarget(
+                        path=path.name,
+                        line=getattr(child, "lineno", None),
+                        qualified_name="create_relationship",
+                    ),
+                    evidence=["create_relationship_in_for_without_assertion_id"],
+                    rationale=(
+                        "create_relationship in a loop without assertion_id/"
+                        "relationship_id can collapse repeated assertions."
+                    ),
+                    recommended_change=(
+                        "Pass assertion_id or relationship_id for repeated edges."
+                    ),
+                    verification_method="AST For containing create_relationship without id kw.",
+                )
+            )
+    return findings
+
+
+def _silent_lookup_failure(path: Path, tree: ast.AST) -> list[CriticFinding]:
+    findings: list[CriticFinding] = []
+    seen_lines: set[int] = set()
+
+    def scan_block(stmts: list[ast.stmt], assigned_from_get: set[str]) -> None:
+        local_gets = set(assigned_from_get)
+        for stmt in stmts:
+            if isinstance(stmt, ast.Assign) and len(stmt.targets) == 1:
+                target = stmt.targets[0]
+                if isinstance(target, ast.Name) and isinstance(stmt.value, ast.Call):
+                    func = stmt.value.func
+                    if isinstance(func, ast.Attribute) and func.attr == "get":
+                        local_gets.add(target.id)
+            if isinstance(stmt, ast.If):
+                names = _names_in_test(stmt.test)
+                hit = names & local_gets
+                if hit and not _body_has_raise(stmt.body) and not _body_has_raise(
+                    stmt.orelse
+                ):
+                    if _body_has_silent_exit(stmt.body) or _body_has_silent_exit(
+                        stmt.orelse
+                    ):
+                        line = stmt.lineno
+                        if line not in seen_lines:
+                            seen_lines.add(line)
+                            findings.append(
+                                _s(
+                                    rule_id="CRIT-S-PY-SILENT-LOOKUP",
+                                    severity="high",
+                                    category="serializer_safety",
+                                    target=CriticTarget(path=path.name, line=line),
+                                    evidence=[f"lookup_names={sorted(hit)}"],
+                                    rationale=(
+                                        "Assignment from .get(...) followed by If that "
+                                        "returns/passes/continues without Raise — silent "
+                                        "lookup failure."
+                                    ),
+                                    recommended_change=(
+                                        "Raise or surface a finding when required lookup fails."
+                                    ),
+                                    verification_method=(
+                                        "AST Assign .get + If Return/Pass/Continue without Raise."
+                                    ),
+                                )
+                            )
+                scan_block(stmt.body, local_gets)
+                scan_block(stmt.orelse, local_gets)
+            elif isinstance(stmt, (ast.For, ast.While, ast.With, ast.AsyncWith)):
+                scan_block(stmt.body, local_gets)
+            elif isinstance(stmt, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                scan_block(stmt.body, set())
+            elif isinstance(stmt, ast.ClassDef):
+                scan_block(stmt.body, set())
+
+    assert isinstance(tree, ast.Module)
+    scan_block(tree.body, set())
+    return findings
+
+
+def _names_in_test(test: ast.AST) -> set[str]:
+    return {n.id for n in ast.walk(test) if isinstance(n, ast.Name)}
+
+
+def _body_has_raise(body: list[ast.stmt]) -> bool:
+    for stmt in body:
+        for node in ast.walk(stmt):
+            if isinstance(node, ast.Raise):
+                return True
+    return False
+
+
+def _body_has_silent_exit(body: list[ast.stmt]) -> bool:
+    for stmt in body:
+        if isinstance(stmt, (ast.Return, ast.Pass, ast.Continue)):
+            return True
+        if isinstance(stmt, ast.If) and (
+            _body_has_silent_exit(stmt.body) or _body_has_silent_exit(stmt.orelse)
+        ):
+            return True
+    return False
+
+def _unsafe_overwrite_or_workspace_bypass(
+    path: Path,
+    tree: ast.AST,
+    source: str,
+) -> list[CriticFinding]:
+    if "workspace_policy" in source:
+        return []
+    findings: list[CriticFinding] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            func = node.func
+            # open(..., "w") / open(..., mode="w")
+            if isinstance(func, ast.Name) and func.id == "open":
+                if _open_is_write(node):
+                    findings.append(
+                        _s(
+                            rule_id="CRIT-S-PY-UNSAFE-OVERWRITE",
+                            severity="high",
+                            category="serializer_safety",
+                            target=CriticTarget(
+                                path=path.name,
+                                line=getattr(node, "lineno", None),
+                                qualified_name="open",
+                            ),
+                            evidence=["open_write_without_workspace_policy"],
+                            rationale=(
+                                "open(..., 'w') without workspace_policy in the same file."
+                            ),
+                            recommended_change=(
+                                "Route writes through workspace_policy / approved write roots."
+                            ),
+                            verification_method="AST open write mode; module lacks workspace_policy.",
+                        )
+                    )
+            if isinstance(func, ast.Attribute) and func.attr in {
+                "write_text",
+                "write_bytes",
+            }:
+                findings.append(
+                    _s(
+                        rule_id="CRIT-S-PY-UNSAFE-OVERWRITE",
+                        severity="high",
+                        category="serializer_safety",
+                        target=CriticTarget(
+                            path=path.name,
+                            line=getattr(node, "lineno", None),
+                            qualified_name=func.attr,
+                        ),
+                        evidence=[f"{func.attr}_without_workspace_policy"],
+                        rationale=(
+                            f"Path.{func.attr} without workspace_policy in the same file."
+                        ),
+                        recommended_change=(
+                            "Route writes through workspace_policy / approved write roots."
+                        ),
+                        verification_method="AST Path.write_*; module lacks workspace_policy.",
+                    )
+                )
+    return findings
+
+
+def _open_is_write(node: ast.Call) -> bool:
+    if len(node.args) >= 2 and isinstance(node.args[1], ast.Constant):
+        mode = node.args[1].value
+        if isinstance(mode, str) and ("w" in mode or "a" in mode or "x" in mode):
+            return True
+    for kw in node.keywords:
+        if kw.arg == "mode" and isinstance(kw.value, ast.Constant):
+            mode = kw.value.value
+            if isinstance(mode, str) and ("w" in mode or "a" in mode or "x" in mode):
+                return True
+    return False
+
+
+def _source_hash_drift(path: Path, tree: ast.AST) -> list[CriticFinding]:
+    findings: list[CriticFinding] = []
+    for func in ast.walk(tree):
+        if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        has_hashlib = any(
+            (isinstance(n, ast.Name) and n.id == "hashlib")
+            or (isinstance(n, ast.Attribute) and n.attr in {"sha256", "sha1", "md5"})
+            for n in ast.walk(func)
+        )
+        for node in ast.walk(func):
+            if not isinstance(node, ast.Assign):
+                continue
+            hex_lit = _hex64_from_value(node.value)
+            if not hex_lit:
+                continue
+            near_hash = False
+            for target in node.targets:
+                if _name_mentions_hash(target):
+                    near_hash = True
+            # Also: keyword-like via AnnAssign already covered; check RHS Name targets
+            # assigned into hash_value constructions nearby in same function via Call kwargs
+            if not near_hash:
+                continue
+            if has_hashlib:
+                continue
+            findings.append(
+                _s(
+                    rule_id="CRIT-S-PY-SOURCE-HASH-DRIFT",
+                    severity="high",
+                    category="serializer_safety",
+                    target=CriticTarget(
+                        path=path.name,
+                        line=getattr(node, "lineno", None),
+                        qualified_name="hash_value",
+                    ),
+                    evidence=[f"hex_literal={hex_lit[:12]}..."],
+                    rationale=(
+                        "64-hex literal assigned near hash_value/hashValue without "
+                        "hashlib in the same function — possible source-hash drift."
+                    ),
+                    recommended_change=(
+                        "Compute hashValue with hashlib from the source bytes in-scope."
+                    ),
+                    verification_method="AST hex64 assign near hash_* without hashlib.",
+                )
+            )
+    return findings
+
+
+def _hex64_from_value(value: ast.AST) -> str | None:
+    if isinstance(value, ast.Constant) and isinstance(value.value, str):
+        if _HEX64_RE.match(value.value):
+            return value.value
+    return None
+
+
+def _name_mentions_hash(target: ast.AST) -> bool:
+    if isinstance(target, ast.Name):
+        lower = target.id.lower()
+        return "hash_value" in lower or "hashvalue" in lower or lower in {
+            "hash_value",
+            "hashvalue",
+            "digest",
+        }
+    if isinstance(target, ast.Attribute):
+        lower = target.attr.lower()
+        return "hash_value" in lower or "hashvalue" in lower
+    if isinstance(target, ast.Tuple):
+        return any(_name_mentions_hash(elt) for elt in target.elts)
+    return False
+
+
+def _synthetic_vs_evidence_hash(path: Path, tree: ast.AST) -> list[CriticFinding]:
+    findings: list[CriticFinding] = []
+    synthetic_funcs: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if _SYNTHETIC_HASH_NAME_RE.search(node.name):
+                synthetic_funcs.add(node.name)
+    if not synthetic_funcs:
+        return findings
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        # Call to synthetic helper
+        called = None
+        if isinstance(node.func, ast.Name) and node.func.id in synthetic_funcs:
+            called = node.func.id
+        elif isinstance(node.func, ast.Attribute) and node.func.attr in synthetic_funcs:
+            called = node.func.attr
+        if not called:
+            continue
+        # Parent context: used in hash construction if ancestor Assign/Call mentions hash
+        # Simpler: any Call whose args include a Call to synthetic, or Assign of Call
+        # We already are at the Call — flag when this Call appears in hash-ish assignment
+        findings.append(
+            _s(
+                rule_id="CRIT-S-PY-SYNTHETIC-HASH",
+                severity="high",
+                category="serializer_safety",
+                target=CriticTarget(
+                    path=path.name,
+                    line=getattr(node, "lineno", None),
+                    qualified_name=called,
+                ),
+                evidence=[f"synthetic_helper={called}"],
+                rationale=(
+                    "synthetic_hash/fake_hash/placeholder_hash return feeds hash "
+                    "construction — do not present as evidence digest."
+                ),
+                recommended_change=(
+                    "Use real source/evidence hashes; reserve synthetic digests for Tier T0 only."
+                ),
+                verification_method="AST function name synthetic_*_hash and Call sites.",
+            )
+        )
+    return findings
+
+
+def _quadratic_full_scans(path: Path, tree: ast.AST) -> list[CriticFinding]:
+    findings: list[CriticFinding] = []
+    seen: set[int] = set()
+    for outer in ast.walk(tree):
+        if not isinstance(outer, ast.For):
+            continue
+        if not _iterates_graph_objects(outer.iter):
+            continue
+        for inner in ast.walk(outer):
+            if inner is outer or not isinstance(inner, ast.For):
+                continue
+            if not _iterates_graph_objects(inner.iter):
+                continue
+            line = getattr(outer, "lineno", 0) or 0
+            if line in seen:
+                break
+            seen.add(line)
+            findings.append(
+                _s(
+                    rule_id="CRIT-S-PY-QUADRATIC-SCAN",
+                    severity="medium",
+                    category="serializer_performance",
+                    target=CriticTarget(
+                        path=path.name,
+                        line=line or None,
+                        qualified_name="_objects",
+                    ),
+                    evidence=["nested_for_over_graph_objects"],
+                    rationale=(
+                        "Nested For loops both iterate graph `_objects` / list(graph) — "
+                        "likely O(n²) scan."
+                    ),
+                    recommended_change="Index by IRI or use a single pass / map lookup.",
+                    verification_method="AST nested For over _objects or list/iter(graph).",
+                )
+            )
+            break
+    return findings
+
+
+def _iterates_graph_objects(iter_node: ast.AST) -> bool:
+    if isinstance(iter_node, ast.Attribute) and iter_node.attr == "_objects":
+        return True
+    if isinstance(iter_node, ast.Call):
+        func = iter_node.func
+        if isinstance(func, ast.Name) and func.id in {"list", "iter", "tuple"}:
+            if iter_node.args:
+                return _iterates_graph_objects(iter_node.args[0])
+        if isinstance(func, ast.Attribute) and func.attr in {"values", "keys", "items"}:
+            if isinstance(func.value, ast.Attribute) and func.value.attr == "_objects":
+                return True
+        # list(graph) / iter(graph)
+        if isinstance(func, ast.Name) and func.id in {"list", "iter"} and iter_node.args:
+            arg0 = iter_node.args[0]
+            if isinstance(arg0, ast.Name) and arg0.id in _GRAPH_RECEIVER_NAMES:
+                return True
+    if isinstance(iter_node, ast.Name) and iter_node.id in _GRAPH_RECEIVER_NAMES:
         return True
     return False
 

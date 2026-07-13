@@ -1,0 +1,49 @@
+{
+  "@context": {
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:c1000000-0000-4000-8000-000000000001",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Derived no-hash micro case",
+      "uco-core:object": [
+        { "@id": "urn:uuid:c1000000-0000-4000-8000-000000000002" },
+        { "@id": "urn:uuid:c1000000-0000-4000-8000-000000000003" },
+        { "@id": "urn:uuid:c1000000-0000-4000-8000-000000000004" }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c1000000-0000-4000-8000-000000000002",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Extract carved file",
+      "uco-action:performer": [
+        { "@id": "urn:uuid:c1000000-0000-4000-8000-000000000005" }
+      ],
+      "uco-action:object": [
+        { "@id": "urn:uuid:c1000000-0000-4000-8000-000000000003" }
+      ],
+      "uco-action:result": [
+        { "@id": "urn:uuid:c1000000-0000-4000-8000-000000000004" }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c1000000-0000-4000-8000-000000000003",
+      "@type": ["uco-observable:ObservableObject", "uco-observable:File"],
+      "uco-core:name": "volume.dd"
+    },
+    {
+      "@id": "urn:uuid:c1000000-0000-4000-8000-000000000004",
+      "@type": ["uco-observable:ObservableObject", "uco-observable:File"],
+      "uco-core:name": "carved-photo.jpg"
+    },
+    {
+      "@id": "urn:uuid:c1000000-0000-4000-8000-000000000005",
+      "@type": "uco-core:UcoObject",
+      "uco-core:name": "examiner-tool"
+    }
+  ]
+}

@@ -69,6 +69,14 @@
       "pattern": "^[a-fA-F0-9]{64}$"
     },
     "prompt_package_hash": { "type": "string", "minLength": 64, "maxLength": 64 },
+    "prompt_content_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "serialization_integrity_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
     "byte_size": { "type": "integer", "minimum": 1 },
     "token_estimate": { "type": "integer", "minimum": 1 },
     "truncated": { "type": "boolean" }

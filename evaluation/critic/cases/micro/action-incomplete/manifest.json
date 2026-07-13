@@ -1,0 +1,6 @@
+{
+  "case_id": "micro-action-incomplete",
+  "tier": "T0",
+  "critic_scope": "graph",
+  "graph_path": "graph.jsonld"
+}

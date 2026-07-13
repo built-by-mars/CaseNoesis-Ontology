@@ -444,3 +444,42 @@ def test_partition_by_roots_dependency_closure():
     assert parts["kb:file"].contains("kb:file")
     assert parts["kb:file"].contains("kb:device")
     assert not parts["kb:file"].contains("kb:other")
+
+
+def test_partition_by_roots_include_incoming_relationship():
+    g = CASEGraph()
+    g.upsert_node("kb:device", types="uco-core:UcoObject", properties={"uco-core:name": "phone"})
+    g.upsert_node("kb:file", types="uco-core:UcoObject", properties={"uco-core:name": "photo"})
+    rel = g.create_relationship("kb:file", "kb:device", "Contained_Within")
+    rel_id = rel["@id"]
+
+    parts_in = g.partition_by_roots(["kb:device"], include_incoming=True)
+    assert parts_in["kb:device"].contains("kb:device")
+    assert parts_in["kb:device"].contains(rel_id)
+    assert parts_in["kb:device"].contains("kb:file")
+
+    parts_out = g.partition_by_roots(["kb:device"], include_incoming=False)
+    assert parts_out["kb:device"].contains("kb:device")
+    assert not parts_out["kb:device"].contains(rel_id)
+    assert not parts_out["kb:device"].contains("kb:file")
+
+
+def test_partition_by_roots_return_manifest():
+    g = CASEGraph()
+    g.upsert_node("kb:a", types="uco-core:UcoObject", properties={"uco-core:name": "A"})
+    g.upsert_node(
+        "kb:b",
+        types="uco-core:UcoObject",
+        properties={"uco-core:name": "B", "uco-core:object": {"@id": "kb:a"}},
+    )
+    parts, manifest = g.partition_by_roots(
+        ["kb:b"], include_incoming=True, return_manifest=True
+    )
+    assert "kb:b" in parts
+    assert manifest["schema_version"] == "1.0.0"
+    assert manifest["strategy"] == "outgoing_and_incoming_id_closure"
+    assert manifest["include_incoming"] is True
+    assert manifest["partitions"]["kb:b"]["node_count"] >= 2
+    assert "kb:a" in manifest["partitions"]["kb:b"]["node_ids"]
+    assert "replicated_node_ids" in manifest
+    assert "cross_partition_relationship_ids" in manifest

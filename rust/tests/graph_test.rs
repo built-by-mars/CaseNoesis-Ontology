@@ -293,9 +293,11 @@ fn test_write_streaming_roundtrip() {
         .expect("upsert");
 
     let path = std::env::temp_dir().join("case_uco_rust_stream_test.jsonld");
-    graph
+    let metrics = graph
         .write_streaming(path.to_str().expect("temp path"))
         .expect("write_streaming");
+    assert_eq!(metrics.nodes, 1);
+    assert!(metrics.bytes_written > 0);
 
     let mut loaded = CaseGraph::new("http://example.org/kb/");
     let json = fs::read_to_string(&path).expect("read streamed file");

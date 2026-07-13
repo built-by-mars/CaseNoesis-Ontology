@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import fcntl
+import hashlib
 import json
 import os
 import secrets
@@ -16,14 +16,21 @@ from typing import Any, Iterator, Literal
 
 import workspace_policy
 from critic.deterministic import CriticError, analyze_artifact
-from critic.models import CriticArtifactRequest, CriticFinding, CriticReview
-from critic.response_parser import CriticResponseError, parse_critic_model_response
-from critic.scorecard import merge_scorecards
+from critic.file_lock import FileLock, ensure_lock_file
+from critic.graph_integrity import sha256_file
+from critic.models import CriticArtifactRequest, CriticFinding, CriticReview, CriticScorecard
+from critic.pass_merge import finalize_outcome_from_summary, merge_completed_pass_review
+from critic.response_parser import (
+    CriticResponseError,
+    build_assessment_ledger,
+    parse_critic_model_response,
+)
 
 REQUIRED_PASSES = 2
 MAX_TOTAL_PASSES = 8
 SESSION_DIR_NAME = "critic-sessions"
-CRITIC_SESSION_SCHEMA = "1.0.0"
+CRITIC_SESSION_SCHEMA = "1.1.0"
+HANDOFF_CANDIDATES_DIR = "critic-handoffs/candidates"
 
 ModelPolicy = Literal["disabled", "manual", "client_sampling"]
 SessionState = Literal[
@@ -68,19 +75,38 @@ def default_model_policy() -> ModelPolicy:
 
 
 def session_root() -> Path:
+    """Resolve session root under an approved write root (fail closed)."""
+
     override = os.environ.get(SESSION_ROOT_ENV)
-    if override:
-        path = Path(override).expanduser().resolve()
-        path.mkdir(parents=True, exist_ok=True)
-        return path
     write_roots = workspace_policy.write_roots()
+    if override:
+        candidate = Path(override).expanduser().resolve()
+        try:
+            checked = workspace_policy.check_write_path(
+                str(candidate), enforce_no_overwrite=False
+            )
+        except ValueError as exc:
+            raise CriticSessionError(
+                "critic_session_root_denied", "session root outside write roots"
+            ) from exc
+        checked.mkdir(parents=True, exist_ok=True)
+        return checked
     if write_roots:
         path = (write_roots[0] / SESSION_DIR_NAME).resolve()
-        path.mkdir(parents=True, exist_ok=True)
-        return path
-    path = (Path.cwd() / ".critic-sessions").resolve()
-    path.mkdir(parents=True, exist_ok=True)
-    return path
+        try:
+            checked = workspace_policy.check_write_path(
+                str(path), enforce_no_overwrite=False
+            )
+        except ValueError as exc:
+            raise CriticSessionError(
+                "critic_session_root_denied", "session root outside write roots"
+            ) from exc
+        checked.mkdir(parents=True, exist_ok=True)
+        return checked
+    raise CriticSessionError(
+        "critic_session_root_unavailable",
+        "no write root configured for critic sessions",
+    )
 
 
 def _session_dir(session_id: str) -> Path:
@@ -95,13 +121,10 @@ def _locked(session_id: str) -> Iterator[Path]:
     if not directory.is_dir():
         raise CriticSessionError("critic_session_not_found")
     lock_path = directory / "lock"
-    lock_path.touch(exist_ok=True)
+    ensure_lock_file(lock_path)
     with lock_path.open("a+", encoding="utf-8") as lock_file:
-        fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
-        try:
+        with FileLock(lock_file):
             yield directory
-        finally:
-            fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
 
 
 def _atomic_write_json(path: Path, data: dict[str, Any]) -> None:
@@ -119,14 +142,112 @@ def _atomic_write_json(path: Path, data: dict[str, Any]) -> None:
             os.unlink(tmp_name)
 
 
-def _append_audit(directory: Path, event: str, payload: dict[str, Any]) -> None:
-    entry = {
+def _append_audit(
+    directory: Path,
+    event: str,
+    payload: dict[str, Any],
+    *,
+    prior_state: str | None = None,
+    new_state: str | None = None,
+    artifact_set_sha256: str | None = None,
+) -> None:
+    audit_path = directory / "audit.jsonl"
+    previous_event_sha256 = "0" * 64
+    sequence = 0
+    if audit_path.is_file():
+        lines = [ln for ln in audit_path.read_text(encoding="utf-8").splitlines() if ln.strip()]
+        if lines:
+            try:
+                last = json.loads(lines[-1])
+                previous_event_sha256 = str(last.get("event_sha256") or previous_event_sha256)
+                sequence = int(last.get("sequence") or 0)
+            except (json.JSONDecodeError, TypeError, ValueError):
+                pass
+    sequence += 1
+    body = {
         "ts": time.time(),
         "event": event,
+        "sequence": sequence,
+        "previous_event_sha256": previous_event_sha256,
+        "prior_state": prior_state,
+        "new_state": new_state,
+        "artifact_set_sha256": artifact_set_sha256,
         **payload,
     }
-    with (directory / "audit.jsonl").open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(entry, sort_keys=True) + "\n")
+    # Hash without event_sha256 field.
+    event_sha256 = hashlib.sha256(
+        json.dumps(body, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    body["event_sha256"] = event_sha256
+    with audit_path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(body, sort_keys=True) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def _artifact_set_from_hashes(hashes: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "graph_sha256": hashes.get("graph_sha256"),
+        "serializer_sha256": hashes.get("serializer_sha256"),
+        "source_sha256": dict(hashes.get("source_sha256") or {}),
+        "coverage_contract_sha256": hashes.get("coverage_contract_sha256"),
+    }
+
+
+def _artifact_set_sha256(artifact_set: dict[str, Any]) -> str:
+    payload = {
+        "graph_sha256": artifact_set.get("graph_sha256"),
+        "serializer_sha256": artifact_set.get("serializer_sha256"),
+        "source_sha256": dict(sorted((artifact_set.get("source_sha256") or {}).items())),
+        "coverage_contract_sha256": artifact_set.get("coverage_contract_sha256"),
+    }
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def _rehash_config_artifacts(cfg: dict[str, Any]) -> dict[str, Any]:
+    """Resolve current config paths through workspace policy and rehash."""
+
+    try:
+        graph_path = workspace_policy.check_read_path(cfg["graph_path"])
+    except ValueError as exc:
+        raise CriticSessionError("critic_session_artifact_path_denied", "graph") from exc
+    serializer_sha = None
+    if cfg.get("serializer_path"):
+        try:
+            ser_path = workspace_policy.check_read_path(cfg["serializer_path"])
+        except ValueError as exc:
+            raise CriticSessionError(
+                "critic_session_artifact_path_denied", "serializer"
+            ) from exc
+        serializer_sha = sha256_file(ser_path)
+    source_sha: dict[str, str] = {}
+    for idx, raw in enumerate(cfg.get("source_paths") or [], start=1):
+        try:
+            path = workspace_policy.check_read_path(raw)
+        except ValueError as exc:
+            raise CriticSessionError(
+                "critic_session_artifact_path_denied", f"source:{idx}"
+            ) from exc
+        source_sha[f"source-{idx}:{path.name}"] = sha256_file(path)
+    coverage_sha = None
+    if cfg.get("coverage_contract_path"):
+        try:
+            cov = workspace_policy.check_read_path(cfg["coverage_contract_path"])
+        except ValueError as exc:
+            raise CriticSessionError(
+                "critic_session_artifact_path_denied", "coverage"
+            ) from exc
+        coverage_sha = sha256_file(cov)
+    return _artifact_set_from_hashes(
+        {
+            "graph_sha256": sha256_file(graph_path),
+            "serializer_sha256": serializer_sha,
+            "source_sha256": source_sha,
+            "coverage_contract_sha256": coverage_sha,
+        }
+    )
 
 
 def _load(directory: Path) -> dict[str, Any]:
@@ -228,13 +349,16 @@ def start_critic_review(
 ) -> dict[str, Any]:
     if additional_iterations < 0:
         raise CriticSessionError("critic_session_invalid_additional_iterations")
+    if additional_iterations > MAX_TOTAL_PASSES - REQUIRED_PASSES:
+        raise CriticSessionError(
+            "critic_session_pass_cap",
+            f"additional_iterations exceeds cap of {MAX_TOTAL_PASSES - REQUIRED_PASSES}",
+        )
     policy: ModelPolicy = (  # type: ignore[assignment]
         model_policy if model_policy in {"disabled", "manual", "client_sampling"} else default_model_policy()
     )
-    approved_additional = min(int(additional_iterations), MAX_TOTAL_PASSES - REQUIRED_PASSES)
+    approved_additional = int(additional_iterations)
     max_passes = REQUIRED_PASSES + approved_additional
-    if max_passes > MAX_TOTAL_PASSES:
-        raise CriticSessionError("critic_session_pass_cap")
 
     session_id = _new_session_id()
     directory = session_root() / session_id
@@ -263,6 +387,8 @@ def start_critic_review(
     _atomic_write_json(directory / "prompt-pass-1.json", review.prompt_package)
 
     extend_token = secrets.token_urlsafe(24)
+    extend_challenge = secrets.token_urlsafe(18)
+    artifact_set = _artifact_set_from_hashes(review.artifact_hashes.to_dict())
     session = {
         "schema_version": CRITIC_SESSION_SCHEMA,
         "session_id": session_id,
@@ -292,27 +418,43 @@ def start_critic_review(
         "artifact_hash_history": [review.artifact_hashes.graph_sha256],
         "latest_artifact_hash": review.artifact_hashes.graph_sha256,
         "latest_reviewed_hash": None,
+        "latest_artifact_set": artifact_set,
+        "latest_reviewed_artifacts": None,
         "latest_prompt_package_hash": review.prompt_package.get("prompt_package_hash"),
+        "latest_prompt_content_sha256": review.prompt_package.get("prompt_content_sha256"),
         "latest_review_request_sha256": review.prompt_package.get("review_request_sha256"),
         "latest_serializer_sha256": review.artifact_hashes.serializer_sha256,
+        "latest_bundle_fingerprint": (review.validation.bundle_fingerprint
+                                      if hasattr(review.validation, "bundle_fingerprint")
+                                      else None),
         "latest_review_summary": _review_summary(review),
         "prior_finding_ids": [f.finding_id for f in review.merged_findings],
+        "prior_findings": [f.to_dict() for f in review.merged_findings],
         "extend_approval_token": extend_token,
+        "extend_approval_challenge": extend_challenge,
         "passes": [
             {
                 "pass_number": 1,
                 "deterministic": _review_summary(review),
                 "critic": None,
+                "completed_pass": None,
             }
         ],
     }
     if policy == "disabled":
-        # Deterministic-only: pass 1 analysis done; await revision or finalize path.
         session["state"] = "awaiting_revision"
         session["latest_reviewed_hash"] = review.artifact_hashes.graph_sha256
+        session["latest_reviewed_artifacts"] = artifact_set
 
     _save(directory, session)
-    _append_audit(directory, "start", {"pass": 1, "model_policy": policy})
+    _append_audit(
+        directory,
+        "start",
+        {"pass": 1, "model_policy": policy},
+        prior_state=None,
+        new_state=session["state"],
+        artifact_set_sha256=_artifact_set_sha256(artifact_set),
+    )
 
     result = {
         "session_id": session_id,
@@ -324,16 +466,17 @@ def start_critic_review(
         "additional_passes_approved": approved_additional,
         "review": _review_summary(review),
         "prompt_package": review.prompt_package if policy != "disabled" else None,
+        "assessment_ledger": build_assessment_ledger(review.merged_findings),
         "next_action": (
             "submit_manual_critic_response"
             if policy == "manual"
             else (
-                "sample_or_submit_manual_critic_response"
+                "start_critic_review_with_sampling"
                 if policy == "client_sampling"
                 else "submit_critic_revision_or_finalize"
             )
         ),
-        "extend_approval_token_hint": "set CASE_UCO_CRITIC_EXTEND_TOKEN or use session token via get status (redacted)",
+        "extend_approval_challenge": extend_challenge,
     }
     return result
 
@@ -353,12 +496,16 @@ def get_critic_review_status(session_id: str) -> dict[str, Any]:
         "max_total_passes": session["max_total_passes"],
         "latest_artifact_hash": session["latest_artifact_hash"],
         "latest_reviewed_hash": session["latest_reviewed_hash"],
+        "latest_reviewed_artifacts": session.get("latest_reviewed_artifacts"),
         "latest_review_summary": session.get("latest_review_summary"),
+        "final_outcome": session.get("final_outcome"),
+        "extend_approval_challenge": session.get("extend_approval_challenge"),
         "passes": [
             {
                 "pass_number": p["pass_number"],
                 "has_critic": p.get("critic") is not None,
                 "deterministic_status": (p.get("deterministic") or {}).get("status"),
+                "completed_status": (p.get("completed_pass") or {}).get("status"),
             }
             for p in session.get("passes") or []
         ],
@@ -377,6 +524,7 @@ def submit_manual_critic_response(
             raise CriticSessionError(
                 "critic_session_invalid_state", session["state"]
             )
+        prior_state = session["state"]
         pass_number = int(session["current_pass"])
         prompt = json.loads(
             (directory / f"prompt-pass-{pass_number}.json").read_text(encoding="utf-8")
@@ -384,6 +532,8 @@ def submit_manual_critic_response(
         review_path = directory / f"review-pass-{pass_number}.json"
         review_dict = json.loads(review_path.read_text(encoding="utf-8"))
         hashes = review_dict["artifact_hashes"]
+        det_findings = _findings_from_review_dict(review_dict)
+        ledger = build_assessment_ledger(det_findings)
         try:
             parsed = parse_critic_model_response(
                 response,
@@ -394,11 +544,10 @@ def submit_manual_critic_response(
                 pass_number=pass_number,
                 expected_review_request_sha256=prompt.get("review_request_sha256"),
                 bound_schema=prompt.get("response_schema"),
+                allowed_assessments=ledger,
             )
         except CriticResponseError as exc:
             raise CriticSessionError(exc.code, str(exc)) from exc
-
-        from critic.models import CriticScorecard
 
         model_scorecard = parsed["scorecard"]
         if not isinstance(model_scorecard, CriticScorecard):
@@ -406,38 +555,84 @@ def submit_manual_critic_response(
         det_scorecard = CriticScorecard.from_dict(
             (review_dict.get("scorecard") or {})
         )
-        merged_score = merge_scorecards(det_scorecard, model_scorecard)
-
-        critic_findings = [f.to_dict() for f in parsed["findings"]]
-        critic_record = {
-            "finding_ids": [f["finding_id"] for f in critic_findings],
-            "finding_count": len(critic_findings),
-            "notes": parsed.get("notes") or "",
-            "scorecard": merged_score.to_dict(),
-        }
-        # Persist critic findings separately (no raw evidence graph).
+        assessments = list(parsed.get("finding_assessments") or [])
+        critic_findings = list(parsed["findings"])
+        completed = merge_completed_pass_review(
+            deterministic_findings=det_findings,
+            assessments=assessments,
+            new_critic_findings=critic_findings,
+            det_scorecard=det_scorecard,
+            model_scorecard=model_scorecard,
+            validation=dict(review_dict.get("validation") or {}),
+            analysis_status=str(review_dict.get("analysis_status") or "complete"),
+            artifact_hashes=hashes,
+            status=None,
+        )
+        _atomic_write_json(
+            directory / f"completed-pass-{pass_number}.json", completed
+        )
         _atomic_write_json(
             directory / f"critic-pass-{pass_number}.json",
-            {"findings": critic_findings, "scorecard": merged_score.to_dict()},
+            {
+                "findings": [f.to_dict() for f in critic_findings],
+                "finding_assessments": assessments,
+                "scorecard": completed["scorecard"],
+            },
         )
 
+        critic_record = {
+            "finding_ids": [f.finding_id for f in critic_findings],
+            "finding_count": len(critic_findings),
+            "assessment_count": len(assessments),
+            "notes": parsed.get("notes") or "",
+            "scorecard": completed["scorecard"],
+            "completed_status": completed["status"],
+            "finding_counts": completed["finding_counts"],
+        }
         for item in session["passes"]:
             if item["pass_number"] == pass_number:
                 item["critic"] = critic_record
+                item["completed_pass"] = {
+                    "status": completed["status"],
+                    "finding_counts": completed["finding_counts"],
+                    "open_finding_ids": completed["open_finding_ids"],
+                }
                 break
+
+        artifact_set = _artifact_set_from_hashes(hashes)
         session["completed_critic_responses"] = int(session["completed_critic_responses"]) + 1
         session["latest_reviewed_hash"] = hashes["graph_sha256"]
+        session["latest_reviewed_artifacts"] = artifact_set
+        session["latest_artifact_set"] = artifact_set
+        session["latest_review_summary"] = {
+            "status": completed["status"],
+            "analysis_status": completed["analysis_status"],
+            "artifact_hashes": hashes,
+            "validation": completed["validation"],
+            "finding_counts": completed["finding_counts"],
+            "open_finding_ids": completed["open_finding_ids"],
+            "scorecard": completed["scorecard"],
+            "errors": list(review_dict.get("errors") or []),
+            "elapsed_ms": review_dict.get("elapsed_ms"),
+        }
         session["state"] = "awaiting_revision"
-        # Merge critic findings into prior set for next deterministic pass.
-        prior = _findings_from_review_dict(review_dict)
-        prior.extend(parsed["findings"])
-        session["prior_findings"] = [f.to_dict() for f in prior]
-        session["prior_finding_ids"] = [f.finding_id for f in prior]
+        session["prior_findings"] = completed["merged_findings"]
+        session["prior_finding_ids"] = [
+            f["finding_id"] for f in completed["merged_findings"]
+        ]
         _save(directory, session)
         _append_audit(
             directory,
             "manual_critic_response",
-            {"pass": pass_number, "finding_count": len(critic_findings)},
+            {
+                "pass": pass_number,
+                "finding_count": len(critic_findings),
+                "assessment_count": len(assessments),
+                "completed_status": completed["status"],
+            },
+            prior_state=prior_state,
+            new_state=session["state"],
+            artifact_set_sha256=_artifact_set_sha256(artifact_set),
         )
         return {
             "session_id": session_id,
@@ -445,6 +640,7 @@ def submit_manual_critic_response(
             "pass_number": pass_number,
             "completed_critic_responses": session["completed_critic_responses"],
             "critic": critic_record,
+            "completed_pass": session["latest_review_summary"],
             "next_action": "submit_critic_revision",
         }
 
@@ -552,9 +748,21 @@ def submit_critic_revision(
         )
         session["latest_serializer_sha256"] = review.artifact_hashes.serializer_sha256
         session["latest_review_summary"] = _review_summary(review)
+        session["latest_artifact_set"] = _artifact_set_from_hashes(
+            review.artifact_hashes.to_dict()
+        )
+        session["latest_bundle_fingerprint"] = review.validation.bundle_fingerprint
         session["config"]["graph_path"] = graph_path
         if serializer_path is not None:
             session["config"]["serializer_path"] = serializer_path
+        if source_paths is not None:
+            session["config"]["source_paths"] = list(source_paths)
+        if coverage_contract_path is not None:
+            session["config"]["coverage_contract_path"] = coverage_contract_path
+        if extensions is not None:
+            session["config"]["extensions"] = list(extensions)
+        if profiles is not None:
+            session["config"]["profiles"] = list(profiles)
         if change_summary:
             session["last_change_summary"] = change_summary[:2000]
         if addressed_finding_ids:
@@ -565,11 +773,13 @@ def submit_critic_revision(
                 "pass_number": next_pass,
                 "deterministic": _review_summary(review),
                 "critic": None,
+                "completed_pass": None,
             }
         )
 
         if session["model_policy"] == "disabled":
             session["latest_reviewed_hash"] = new_hash
+            session["latest_reviewed_artifacts"] = session["latest_artifact_set"]
             session["state"] = "awaiting_revision"
             next_action = (
                 "finalize_critic_review"
@@ -591,12 +801,16 @@ def submit_critic_revision(
                 "graph_sha256": new_hash,
                 "addressed": list(addressed_finding_ids or [])[:50],
             },
+            prior_state="awaiting_revision",
+            new_state=session["state"],
+            artifact_set_sha256=_artifact_set_sha256(session["latest_artifact_set"]),
         )
         return {
             "session_id": session_id,
             "state": session["state"],
             "pass_number": next_pass,
             "review": _review_summary(review),
+            "assessment_ledger": build_assessment_ledger(review.merged_findings),
             "prompt_package": (
                 None
                 if session["model_policy"] == "disabled"
@@ -618,15 +832,25 @@ def extend_critic_review(
         session = _load(directory)
         if session["state"] in {"finalized", "cancelled"}:
             raise CriticSessionError("critic_session_invalid_state", session["state"])
-        expected = os.environ.get(EXTEND_TOKEN_ENV) or session.get(
-            "extend_approval_token"
-        )
-        if not approval_token or approval_token != expected:
+        env_token = os.environ.get(EXTEND_TOKEN_ENV)
+        expected_tokens = {
+            t
+            for t in (
+                env_token,
+                session.get("extend_approval_token"),
+                session.get("extend_approval_challenge"),
+            )
+            if t
+        }
+        if not approval_token or approval_token not in expected_tokens:
             raise CriticSessionError("critic_session_extend_denied")
         new_additional = int(session["additional_passes_approved"]) + additional_iterations
         new_max = REQUIRED_PASSES + new_additional
         if new_max > MAX_TOTAL_PASSES:
             raise CriticSessionError("critic_session_pass_cap")
+        # One-time challenge: rotate after successful use when challenge matched.
+        if approval_token == session.get("extend_approval_challenge"):
+            session["extend_approval_challenge"] = secrets.token_urlsafe(18)
         session["additional_passes_approved"] = new_additional
         session["max_total_passes"] = new_max
         _save(directory, session)
@@ -634,12 +858,15 @@ def extend_critic_review(
             directory,
             "extend",
             {"additional_iterations": additional_iterations, "max": new_max},
+            prior_state=session["state"],
+            new_state=session["state"],
         )
         return {
             "session_id": session_id,
             "additional_passes_approved": new_additional,
             "max_total_passes": new_max,
             "state": session["state"],
+            "extend_approval_challenge": session.get("extend_approval_challenge"),
         }
 
 
@@ -657,32 +884,68 @@ def finalize_critic_review(session_id: str) -> dict[str, Any]:
             if int(session["completed_critic_responses"]) < REQUIRED_PASSES:
                 raise CriticSessionError("critic_session_passes_incomplete")
             if session["state"] != "awaiting_revision":
-                # Must have submitted the last critic response.
                 raise CriticSessionError(
                     "critic_session_invalid_state", session["state"]
                 )
 
+        # Rehash complete artifact set from disk and compare to last reviewed set.
+        current_set = _rehash_config_artifacts(session["config"])
+        reviewed_set = session.get("latest_reviewed_artifacts") or {}
+        if not reviewed_set:
+            raise CriticSessionError("critic_session_hash_mismatch", "no reviewed artifacts")
+        if current_set != reviewed_set:
+            raise CriticSessionError(
+                "critic_session_hash_mismatch",
+                "artifact set changed after last review",
+            )
         if session["latest_artifact_hash"] != session["latest_reviewed_hash"]:
             raise CriticSessionError("critic_session_hash_mismatch")
 
         summary = session.get("latest_review_summary") or {}
+        # Prefer completed-pass file for the latest critic pass when present.
+        pass_number = int(session["current_pass"])
+        completed_path = directory / f"completed-pass-{pass_number}.json"
+        if completed_path.is_file():
+            completed = json.loads(completed_path.read_text(encoding="utf-8"))
+            summary = {
+                "status": completed.get("status"),
+                "analysis_status": completed.get("analysis_status"),
+                "artifact_hashes": completed.get("artifact_hashes"),
+                "validation": completed.get("validation"),
+                "finding_counts": completed.get("finding_counts"),
+                "open_finding_ids": completed.get("open_finding_ids"),
+                "scorecard": completed.get("scorecard"),
+            }
+
+        outcome = finalize_outcome_from_summary(summary)
         validation = summary.get("validation") or {}
-        if validation.get("verification_status") != "complete":
+        if outcome == "validation_incomplete":
             raise CriticSessionError("critic_session_validation_incomplete")
-        if validation.get("conforms") is not True:
+        if outcome == "needs_revision":
             raise CriticSessionError("critic_session_nonconforming")
-        if summary.get("analysis_status") != "complete":
+        if outcome == "analysis_incomplete":
             raise CriticSessionError("critic_session_analysis_incomplete")
-        blockers = int(
-            (summary.get("finding_counts") or {}).get("critical_high_open") or 0
-        )
-        if blockers:
+        if outcome == "blocked_with_findings":
             raise CriticSessionError("critic_session_blockers_remain")
 
+        # accepted and completed_with_findings are successful finalizations
         session["state"] = "finalized"
         session["finalized_at"] = time.time()
+        session["final_outcome"] = outcome
+        session["accepted"] = outcome == "accepted"
         _save(directory, session)
-        _append_audit(directory, "finalize", {"hash": session["latest_artifact_hash"]})
+        _append_audit(
+            directory,
+            "finalize",
+            {
+                "hash": session["latest_artifact_hash"],
+                "outcome": outcome,
+                "artifact_set": current_set,
+            },
+            prior_state="awaiting_revision",
+            new_state="finalized",
+            artifact_set_sha256=_artifact_set_sha256(current_set),
+        )
 
         if session["config"].get("report_output"):
             try:
@@ -694,20 +957,27 @@ def finalize_critic_review(session_id: str) -> dict[str, Any]:
                     {
                         "session_id": session_id,
                         "finalized": True,
+                        "outcome": outcome,
+                        "accepted": session["accepted"],
                         "latest_artifact_hash": session["latest_artifact_hash"],
+                        "latest_reviewed_artifacts": reviewed_set,
                         "summary": summary,
                     },
                 )
             except ValueError as exc:
-                raise CriticSessionError("critic_session_report_write_denied", str(exc)) from exc
+                raise CriticSessionError(
+                    "critic_session_report_write_denied", "report path denied"
+                ) from exc
 
         return {
             "session_id": session_id,
             "state": "finalized",
+            "outcome": outcome,
+            "accepted": session["accepted"],
             "latest_artifact_hash": session["latest_artifact_hash"],
             "latest_reviewed_hash": session["latest_reviewed_hash"],
+            "latest_reviewed_artifacts": reviewed_set,
             "summary": summary,
-            "accepted": True,
         }
 
 
@@ -716,9 +986,16 @@ def cancel_critic_review(session_id: str) -> dict[str, Any]:
         session = _load(directory)
         if session["state"] == "finalized":
             raise CriticSessionError("critic_session_invalid_state", "finalized")
+        prior_state = session["state"]
         session["state"] = "cancelled"
         _save(directory, session)
-        _append_audit(directory, "cancel", {})
+        _append_audit(
+            directory,
+            "cancel",
+            {},
+            prior_state=prior_state,
+            new_state="cancelled",
+        )
         return {"session_id": session_id, "state": "cancelled"}
 
 
@@ -727,11 +1004,20 @@ def load_session_for_handoff(session_id: str) -> dict[str, Any]:
         session = _load(directory)
         if session["state"] != "finalized":
             raise CriticSessionError("critic_session_not_finalized")
-        # Load last critic + review findings for handoff selection.
         pass_number = int(session["current_pass"])
         review = json.loads(
             (directory / f"review-pass-{pass_number}.json").read_text(encoding="utf-8")
         )
+        completed_path = directory / f"completed-pass-{pass_number}.json"
+        if completed_path.is_file():
+            completed = json.loads(completed_path.read_text(encoding="utf-8"))
+            review = {
+                **review,
+                "merged_findings": completed.get("merged_findings")
+                or review.get("merged_findings"),
+                "artifact_hashes": completed.get("artifact_hashes")
+                or review.get("artifact_hashes"),
+            }
         critic_path = directory / f"critic-pass-{pass_number}.json"
         critic = (
             json.loads(critic_path.read_text(encoding="utf-8"))
@@ -744,3 +1030,108 @@ def load_session_for_handoff(session_id: str) -> dict[str, Any]:
             "critic": critic,
             "directory": str(directory),
         }
+
+
+def replay_manual_session(
+    *,
+    case_dir: Path | str,
+    pass1_response_path: Path | str,
+    pass2_response_path: Path | str,
+    session_id: str | None = None,
+    project_root: Path | str | None = None,
+    pass2_graph_path: Path | str | None = None,
+) -> dict[str, Any]:
+    """Real two-pass session state-machine replay for evaluation harnesses."""
+
+    case_dir = Path(case_dir)
+    manifest = json.loads((case_dir / "manifest.json").read_text(encoding="utf-8"))
+    graph_path = (case_dir / manifest["graph_path"]).resolve()
+    pass2_graph = (
+        Path(pass2_graph_path).resolve()
+        if pass2_graph_path
+        else graph_path
+    )
+    started = start_critic_review(
+        graph_path=str(graph_path),
+        critic_scope=manifest.get("critic_scope", "graph"),
+        model_policy="manual",
+        extensions=list(manifest.get("extensions") or []),
+        profiles=list(manifest.get("profiles") or []),
+        coverage_contract_path=(
+            str((case_dir / manifest["coverage_contract_path"]).resolve())
+            if manifest.get("coverage_contract_path")
+            else None
+        ),
+        source_paths=[
+            str((case_dir / p).resolve()) for p in (manifest.get("source_paths") or [])
+        ],
+        project_root=str(project_root) if project_root else None,
+    )
+    sid = started["session_id"]
+    if session_id:
+        # Keep generated id; external ids are not injectable into store path.
+        pass
+
+    def _bind(template: dict[str, Any], package: dict[str, Any], pass_number: int) -> dict[str, Any]:
+        bound = dict(template)
+        bound["schema_version"] = template.get("schema_version", "1.2.0")
+        bound["graph_sha256"] = package["artifact_hashes"]["graph_sha256"]
+        bound["serializer_sha256"] = package["artifact_hashes"].get("serializer_sha256")
+        bound["prompt_package_hash"] = package["prompt_package_hash"]
+        bound["session_id"] = sid
+        bound["pass_number"] = pass_number
+        bound["review_request_sha256"] = package.get("review_request_sha256")
+        bound.setdefault("findings", [])
+        bound.setdefault("finding_assessments", [])
+        bound.setdefault("scorecard", {})
+        return bound
+
+    pass1_template = json.loads(Path(pass1_response_path).read_text(encoding="utf-8"))
+    pass1 = submit_manual_critic_response(
+        sid, _bind(pass1_template, started["prompt_package"], 1)
+    )
+    revised = submit_critic_revision(
+        sid,
+        graph_path=str(pass2_graph),
+        change_summary="evaluation replay pass-2 artifact",
+    )
+    pass2_template = json.loads(Path(pass2_response_path).read_text(encoding="utf-8"))
+    package2 = revised.get("prompt_package") or {}
+    pass2 = submit_manual_critic_response(
+        sid, _bind(pass2_template, package2, 2)
+    )
+    final_error = None
+    final: dict[str, Any] | None = None
+    try:
+        final = finalize_critic_review(sid)
+    except CriticSessionError as exc:
+        final_error = {"code": exc.code, "message": str(exc)}
+
+    return {
+        "case_id": manifest.get("case_id"),
+        "session_id": sid,
+        "passes": [
+            {
+                "pass_number": 1,
+                "parsed_ok": True,
+                "model_finding_count": pass1.get("critic", {}).get("finding_count"),
+                "completed_status": (pass1.get("completed_pass") or {}).get("status"),
+            },
+            {
+                "pass_number": 2,
+                "parsed_ok": True,
+                "model_finding_count": pass2.get("critic", {}).get("finding_count"),
+                "completed_status": (pass2.get("completed_pass") or {}).get("status"),
+            },
+        ],
+        "converged": bool(
+            final
+            and final.get("outcome") in {"accepted", "completed_with_findings"}
+        ),
+        "finalized": final is not None,
+        "final": final,
+        "final_error": final_error,
+        "final_status": (pass2.get("completed_pass") or {}).get("status"),
+        "final_outcome": (final or {}).get("outcome"),
+        "accepted": bool((final or {}).get("accepted")),
+    }

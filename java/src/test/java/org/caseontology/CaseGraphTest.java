@@ -268,13 +268,62 @@ public class CaseGraphTest {
 
         java.nio.file.Path out = Files.createTempFile("case-graph-stream", ".jsonld");
         try {
-            graph.writeStreaming(out.toString());
+            CaseGraph.StreamingWriteResult metrics = graph.writeStreaming(out.toString());
+            assertEquals(1, metrics.getNodes());
+            assertTrue(metrics.getBytesWritten() > 0);
             CaseGraph loaded = new CaseGraph();
             loaded.load(Files.readString(out), "merge_compatible");
             assertEquals("Streamed", loaded.get("kb:Tool-stream").get("uco-core:name"));
         } finally {
             Files.deleteIfExists(out);
         }
+    }
+
+    @Test
+    public void testFieldBindingCacheWarmPath() {
+        CaseGraph.clearClassRegistryCache();
+        assertEquals(0, CaseGraph.fieldBindingCacheCount());
+        String json = "{\n" +
+            "  \"@context\": {\n" +
+            "    \"kb\": \"http://example.org/kb/\",\n" +
+            "    \"uco-tool\": \"https://ontology.unifiedcyberontology.org/uco/tool/\",\n" +
+            "    \"uco-core\": \"https://ontology.unifiedcyberontology.org/uco/core/\"\n" +
+            "  },\n" +
+            "  \"@graph\": [\n" +
+            "    {\n" +
+            "      \"@id\": \"kb:Tool-warm\",\n" +
+            "      \"@type\": \"uco-tool:Tool\",\n" +
+            "      \"uco-core:name\": \"Warm\"\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
+        CaseGraph.fromJsonLd(json);
+        int afterCold = CaseGraph.fieldBindingCacheCount();
+        assertTrue(afterCold > 0);
+        CaseGraph.fromJsonLd(json);
+        assertEquals(afterCold, CaseGraph.fieldBindingCacheCount());
+        CaseGraph.clearClassRegistryCache();
+        assertEquals(0, CaseGraph.fieldBindingCacheCount());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testPartitionByRootsIncludeIncoming() {
+        CaseGraph graph = new CaseGraph();
+        graph.upsertNode("kb:device", "uco-core:UcoObject", Map.of("uco-core:name", "phone"));
+        graph.upsertNode("kb:file", "uco-core:UcoObject", Map.of("uco-core:name", "photo"));
+        Map<String, Object> rel = graph.createRelationship("kb:file", "kb:device", "Contained_Within");
+        String relId = (String) rel.get("@id");
+
+        Map<String, CaseGraph> withIncoming = graph.partitionByRoots(
+            Arrays.asList("kb:device"), "replicate-identical", true);
+        assertTrue(withIncoming.get("kb:device").contains(relId));
+        assertTrue(withIncoming.get("kb:device").contains("kb:file"));
+
+        Map<String, CaseGraph> outgoingOnly = graph.partitionByRoots(
+            Arrays.asList("kb:device"), "replicate-identical", false);
+        assertFalse(outgoingOnly.get("kb:device").contains(relId));
+        assertFalse(outgoingOnly.get("kb:device").contains("kb:file"));
     }
 
     @Test

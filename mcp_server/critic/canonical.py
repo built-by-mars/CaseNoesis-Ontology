@@ -33,6 +33,7 @@ DEFAULT_PREFIXES: dict[str, str] = {
     "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
     "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
     "uco-vocabulary": "https://ontology.unifiedcyberontology.org/uco/vocabulary/",
+    "uco-marking": "https://ontology.unifiedcyberontology.org/uco/marking/",
     "case-investigation": "https://ontology.caseontology.org/case/investigation/",
     "case-vocabulary": "https://ontology.caseontology.org/case/vocabulary/",
     "legalproc": "https://ontology.caseontology.org/case/extension/legalproc/",
@@ -63,6 +64,18 @@ IRI_DICT_ENTRY_PROP = DEFAULT_PREFIXES["uco-types"] + "entry"
 IRI_INVESTIGATIVE_ACTION = (
     DEFAULT_PREFIXES["case-investigation"] + "InvestigativeAction"
 )
+IRI_PERFORMER = DEFAULT_PREFIXES["uco-action"] + "performer"
+IRI_INSTRUMENT = DEFAULT_PREFIXES["uco-action"] + "instrument"
+IRI_OBJECT_MARKING = DEFAULT_PREFIXES["uco-core"] + "objectMarking"
+IRI_PROVENANCE_RECORD = DEFAULT_PREFIXES["case-investigation"] + "ProvenanceRecord"
+IRI_CONTEXTUAL_COMPILATION = DEFAULT_PREFIXES["uco-core"] + "ContextualCompilation"
+IRI_ACCOUNT = DEFAULT_PREFIXES["uco-observable"] + "Account"
+IRI_IMAGE = DEFAULT_PREFIXES["uco-observable"] + "Image"
+IRI_RASTER = DEFAULT_PREFIXES["uco-observable"] + "RasterPicture"
+IRI_HASH_METHOD = DEFAULT_PREFIXES["uco-types"] + "hashMethod"
+IRI_TAG = DEFAULT_PREFIXES["uco-core"] + "tag"
+IRI_DESCRIPTION = DEFAULT_PREFIXES["uco-core"] + "description"
+IRI_ROLE = DEFAULT_PREFIXES["uco-identity"] + "Role"
 
 MAX_GRAPH_BYTES = 50 * 1024 * 1024
 SUPPORTED_EXTENSIONS = {".json", ".jsonld", ".json-ld", ".ttl", ".turtle"}

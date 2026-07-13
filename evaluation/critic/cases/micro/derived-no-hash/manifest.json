@@ -1,0 +1,6 @@
+{
+  "case_id": "micro-derived-no-hash",
+  "tier": "T0",
+  "critic_scope": "graph",
+  "graph_path": "graph.jsonld"
+}

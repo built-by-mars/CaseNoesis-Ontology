@@ -47,6 +47,28 @@ def test_gold_charged_with_no_direction_finding():
     assert "CRIT-H-AUTH-NON-INVESTIGATION" not in {f.rule_id for f in findings}
 
 
+def test_heuristic_action_completeness_fixture():
+    view = load_canonical_graph(FIXTURES / "heuristic-action-incomplete.jsonld")
+    findings, executions = run_graph_heuristics(view, artifact_hash="act")
+    assert "CRIT-H-ACTION-COMPLETENESS" in {f.rule_id for f in findings}
+    assert any(
+        e.rule_id == "CRIT-H-ACTION-COMPLETENESS" and e.status == "evaluated"
+        for e in executions
+    )
+
+
+def test_heuristic_identity_conflation_fixture():
+    view = load_canonical_graph(FIXTURES / "heuristic-identity-conflation.jsonld")
+    findings, _ = run_graph_heuristics(view, artifact_hash="id")
+    assert "CRIT-H-IDENTITY-CONFLATION" in {f.rule_id for f in findings}
+
+
+def test_heuristic_derived_no_hash_fixture():
+    view = load_canonical_graph(FIXTURES / "heuristic-derived-no-hash.jsonld")
+    findings, _ = run_graph_heuristics(view, artifact_hash="der")
+    assert "CRIT-H-DERIVED-NO-HASH" in {f.rule_id for f in findings}
+
+
 def test_jsonld_turtle_semantic_equivalence(tmp_path):
     # Minimal equivalent graphs: Investigation without object
     jsonld = {

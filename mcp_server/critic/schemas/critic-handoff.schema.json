@@ -12,7 +12,8 @@
     "operator_id",
     "requires_operator_approval",
     "suggestion_only",
-    "selected_findings"
+    "selected_findings",
+    "handoff_type"
   ],
   "properties": {
     "schema_version": { "type": "string" },
@@ -27,6 +28,20 @@
     "suggestion_only": { "const": true },
     "unverified_generalization": { "type": "boolean" },
     "persistent_write": { "type": "boolean" },
+    "handoff_type": {
+      "enum": [
+        "recipe_improvement",
+        "routing_gap",
+        "new_recipe_candidate",
+        "ontology_gap",
+        "extension_gap",
+        "sdk_bug",
+        "case_specific",
+        "false_positive",
+        "known_limitation",
+        "generalizable"
+      ]
+    },
     "selected_findings": {
       "type": "array",
       "minItems": 1,
@@ -42,7 +57,11 @@
               "new_recipe_candidate",
               "ontology_gap",
               "extension_gap",
-              "sdk_bug"
+              "sdk_bug",
+              "case_specific",
+              "false_positive",
+              "known_limitation",
+              "generalizable"
             ]
           },
           "severity": { "type": "string" },
@@ -50,6 +69,7 @@
           "rule_id": { "type": ["string", "null"] },
           "evidence_kind": { "type": ["string", "null"] },
           "confidence": { "type": ["number", "null"] },
+          "status": { "type": ["string", "null"] },
           "rationale": { "type": "string" },
           "recommended_change": { "type": "string" },
           "related_recipe": { "type": ["string", "null"] }
@@ -57,7 +77,14 @@
         "additionalProperties": false
       }
     },
+    "next_tools": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
     "created_at": { "type": "number" },
+    "written_at": { "type": "number" },
+    "package_sha256": { "type": ["string", "null"] },
+    "deployment_profile": { "type": ["string", "null"] },
     "notes": { "type": "string" }
   }
 }

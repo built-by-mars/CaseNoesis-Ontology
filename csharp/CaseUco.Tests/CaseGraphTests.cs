@@ -249,6 +249,36 @@ namespace CaseUco.Tests
         }
 
         [Fact]
+        public void PropertyBindingCache_WarmPath()
+        {
+            CaseGraph.ClearClassRegistryCache();
+            Assert.Equal(0, CaseGraph.PropertyBindingCacheCount);
+
+            var json = @"{
+                ""@context"": {
+                    ""kb"": ""http://example.org/kb/"",
+                    ""uco-tool"": ""https://ontology.unifiedcyberontology.org/uco/tool/"",
+                    ""uco-core"": ""https://ontology.unifiedcyberontology.org/uco/core/""
+                },
+                ""@graph"": [
+                    {
+                        ""@id"": ""kb:Tool-warm"",
+                        ""@type"": ""uco-tool:Tool"",
+                        ""uco-core:name"": ""Warm""
+                    }
+                ]
+            }";
+
+            CaseGraph.FromJsonLd(json);
+            var afterCold = CaseGraph.PropertyBindingCacheCount;
+            Assert.True(afterCold > 0);
+            CaseGraph.FromJsonLd(json);
+            Assert.Equal(afterCold, CaseGraph.PropertyBindingCacheCount);
+            CaseGraph.ClearClassRegistryCache();
+            Assert.Equal(0, CaseGraph.PropertyBindingCacheCount);
+        }
+
+        [Fact]
         public void WriteStreaming_Roundtrip()
         {
             var graph = new CaseGraph();
@@ -256,7 +286,9 @@ namespace CaseUco.Tests
             var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"caseuco-stream-{Guid.NewGuid()}.jsonld");
             try
             {
-                graph.WriteStreaming(path);
+                var metrics = graph.WriteStreaming(path);
+                Assert.Equal(1, metrics.Nodes);
+                Assert.True(metrics.BytesWritten > 0);
                 var loaded = new CaseGraph();
                 loaded.OnDuplicate = "merge_compatible";
                 loaded.Load(System.IO.File.ReadAllText(path));
@@ -267,6 +299,30 @@ namespace CaseUco.Tests
                 if (System.IO.File.Exists(path))
                     System.IO.File.Delete(path);
             }
+        }
+
+        [Fact]
+        public void PartitionByRoots_IncludesIncomingRelationship()
+        {
+            var graph = new CaseGraph();
+            graph.UpsertNode("kb:device", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:name"] = "phone",
+            });
+            graph.UpsertNode("kb:file", "uco-core:UcoObject", new Dictionary<string, object>
+            {
+                ["uco-core:name"] = "photo",
+            });
+            var rel = graph.CreateRelationship("kb:file", "kb:device", "Contained_Within");
+            var relId = (string)rel["@id"];
+
+            var withIncoming = graph.PartitionByRoots(new[] { "kb:device" }, "replicate-identical", includeIncoming: true);
+            Assert.True(withIncoming["kb:device"].Contains(relId));
+            Assert.True(withIncoming["kb:device"].Contains("kb:file"));
+
+            var outgoingOnly = graph.PartitionByRoots(new[] { "kb:device" }, "replicate-identical", includeIncoming: false);
+            Assert.False(outgoingOnly["kb:device"].Contains(relId));
+            Assert.False(outgoingOnly["kb:device"].Contains("kb:file"));
         }
 
         [Fact]

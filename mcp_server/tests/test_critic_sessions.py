@@ -45,6 +45,7 @@ def workspace(tmp_path, monkeypatch):
     monkeypatch.setenv("CASE_UCO_MCP_READ_ROOTS", str(read))
     monkeypatch.setenv("CASE_UCO_MCP_WRITE_ROOTS", str(write))
     monkeypatch.setenv("CASE_UCO_CRITIC_SESSION_ROOT", str(write / "critic-sessions"))
+    monkeypatch.setenv("CASE_UCO_MCP_ALLOW_OVERWRITE", "1")
     monkeypatch.setattr(graph_validator, "validator_available", lambda: True)
     monkeypatch.setattr(
         graph_validator,
@@ -74,8 +75,27 @@ def _empty_critic_response(started: dict) -> dict:
         "prompt_package_hash": package["prompt_package_hash"],
         "review_request_sha256": package.get("review_request_sha256"),
         "findings": [],
+        "finding_assessments": [],
         "scorecard": {},
     }
+
+
+def _critical_critic_finding(started: dict) -> dict:
+    payload = _empty_critic_response(started)
+    payload["findings"] = [
+        {
+            "severity": "critical",
+            "category": "investigation_structure",
+            "confidence": 0.9,
+            "claim_type": "missing_object_link",
+            "target": {"node_id": "urn:example:investigation"},
+            "evidence": ["model observed missing object"],
+            "rationale": "Investigation lacks required object reference",
+            "recommended_change": "Add uco-core:object",
+            "verification_method": "re-analyze graph",
+        }
+    ]
+    return payload
 
 
 def test_two_pass_manual_finalize(workspace):
@@ -87,10 +107,10 @@ def test_two_pass_manual_finalize(workspace):
         model_policy="manual",
     )
     assert started["state"] == "awaiting_critic_response"
+    assert "extend_approval_challenge" in started
     sid = started["session_id"]
 
     submit_manual_critic_response(sid, _empty_critic_response(started))
-    # Confirmation revision with identical hash allowed when no critical/high blockers
     revised = submit_critic_revision(sid, graph_path=str(graph), change_summary="confirm")
     assert revised["pass_number"] == 2
     submit_manual_critic_response(sid, _empty_critic_response(revised))
@@ -99,8 +119,33 @@ def test_two_pass_manual_finalize(workspace):
     assert status["completed_critic_responses"] == 2
 
     final = finalize_critic_review(sid)
-    assert final["accepted"] is True
     assert final["state"] == "finalized"
+    assert final["outcome"] in {"accepted", "completed_with_findings"}
+
+
+def test_pass2_critic_critical_blocks_acceptance(workspace):
+    read, _ = workspace
+    graph = _copy_gold(read)
+    started = start_critic_review(graph_path=str(graph), critic_scope="graph")
+    sid = started["session_id"]
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(sid, graph_path=str(graph), change_summary="confirm")
+    submit_manual_critic_response(sid, _critical_critic_finding(revised))
+    with pytest.raises(CriticSessionError) as exc:
+        finalize_critic_review(sid)
+    assert exc.value.code == "critic_session_blockers_remain"
+
+
+def test_overcap_additional_iterations_rejected(workspace):
+    read, _ = workspace
+    graph = _copy_gold(read)
+    with pytest.raises(CriticSessionError) as exc:
+        start_critic_review(
+            graph_path=str(graph),
+            critic_scope="graph",
+            additional_iterations=99,
+        )
+    assert exc.value.code == "critic_session_pass_cap"
 
 
 def test_manual_response_rejects_wrong_hash(workspace):
@@ -117,7 +162,7 @@ def test_manual_response_rejects_wrong_hash(workspace):
     }
 
 
-def test_extend_requires_token_and_caps(workspace):
+def test_extend_uses_returned_challenge(workspace):
     read, _ = workspace
     graph = _copy_gold(read)
     started = start_critic_review(graph_path=str(graph), critic_scope="graph")
@@ -126,16 +171,15 @@ def test_extend_requires_token_and_caps(workspace):
         extend_critic_review(sid, 1, approval_token="wrong")
     assert exc.value.code == "critic_session_extend_denied"
 
-    # Load real token from session file
-    session_path = (
-        Path(workspace[1] / "critic-sessions" / sid / "session.json")
-    )
-    token = json.loads(session_path.read_text())["extend_approval_token"]
-    extended = extend_critic_review(sid, 2, approval_token=token)
+    challenge = started["extend_approval_challenge"]
+    extended = extend_critic_review(sid, 2, approval_token=challenge)
     assert extended["max_total_passes"] == 4
+    assert extended["extend_approval_challenge"] != challenge
 
     with pytest.raises(CriticSessionError) as exc2:
-        extend_critic_review(sid, 20, approval_token=token)
+        extend_critic_review(
+            sid, 20, approval_token=extended["extend_approval_challenge"]
+        )
     assert exc2.value.code == "critic_session_pass_cap"
 
 
@@ -149,7 +193,6 @@ def test_finalize_rejects_open_critical(workspace, monkeypatch):
     started = start_critic_review(graph_path=str(seeded), critic_scope="graph")
     sid = started["session_id"]
     submit_manual_critic_response(sid, _empty_critic_response(started))
-    # Must change artifact to revise while blockers remain
     mutated = json.loads(seeded.read_text())
     mutated["@graph"][0]["uco-core:name"] = "mutated"
     seeded.write_text(json.dumps(mutated), encoding="utf-8")
@@ -160,8 +203,23 @@ def test_finalize_rejects_open_critical(workspace, monkeypatch):
     assert exc.value.code == "critic_session_blockers_remain"
 
 
-def test_handoff_preview_and_write(workspace):
+def test_finalize_rejects_post_review_file_modification(workspace):
+    read, _ = workspace
+    graph = _copy_gold(read)
+    started = start_critic_review(graph_path=str(graph), critic_scope="graph")
+    sid = started["session_id"]
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(sid, graph_path=str(graph))
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+    graph.write_text(graph.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+    with pytest.raises(CriticSessionError) as exc:
+        finalize_critic_review(sid)
+    assert exc.value.code == "critic_session_hash_mismatch"
+
+
+def test_handoff_preview_and_write(workspace, monkeypatch):
     read, write = workspace
+    monkeypatch.setenv("CASE_UCO_CRITIC_HANDOFF_TOKEN", "handoff-secret")
     graph = _copy_gold(read)
     started = start_critic_review(graph_path=str(graph), critic_scope="graph")
     sid = started["session_id"]
@@ -170,13 +228,11 @@ def test_handoff_preview_and_write(workspace):
     submit_manual_critic_response(sid, _empty_critic_response(revised))
     finalize_critic_review(sid)
 
-    # Use a deterministic finding id from last review
     review = json.loads(
         (write / "critic-sessions" / sid / "review-pass-2.json").read_text()
     )
     finding_ids = [f["finding_id"] for f in review["merged_findings"][:1]]
     if not finding_ids:
-        # Fabricate by reading pass-1 if gold has no findings
         review = json.loads(
             (write / "critic-sessions" / sid / "review-pass-1.json").read_text()
         )
@@ -186,27 +242,30 @@ def test_handoff_preview_and_write(workspace):
     preview = prepare_critic_handoff(
         sid,
         finding_ids,
+        requested_handoff_type="recipe_improvement",
         operator_id="tester",
         operator_rationale="review recipe guidance",
     )
     assert preview["preview"]["requires_operator_approval"] is True
     assert preview["written_path"] is None
 
-    out = write / "handoff.json"
     written = prepare_critic_handoff(
         sid,
         finding_ids,
+        requested_handoff_type="case_specific",
         operator_id="tester",
-        output_path=str(out),
         approve_write=True,
+        approval_token="handoff-secret",
     )
     assert written["written_path"]
+    assert "critic-handoffs/candidates" in written["written_path"].replace("\\", "/")
     assert Path(written["written_path"]).is_file()
 
 
 def test_sampling_fake_context(workspace):
     import asyncio
     from critic.sampling import FakeSampleContext, maybe_sample_critic
+    from critic_tools import tool_start_critic_review_with_sampling
 
     read, _ = workspace
     graph = _copy_gold(read)
@@ -224,6 +283,41 @@ def test_sampling_fake_context(workspace):
         )
 
     sampled = asyncio.run(_run())
-    assert sampled is not None
-    result = submit_manual_critic_response(started["session_id"], sampled)
+    assert sampled.status == "ok"
+    user_json = json.loads(ctx.kwargs_history[0]["messages"][0]["content"])
+    assert "prompt_package" in user_json
+    assert "graph_neighborhoods" in user_json["prompt_package"]
+    result = submit_manual_critic_response(started["session_id"], sampled.response)
     assert result["completed_critic_responses"] == 1
+
+    async def _wired_ok():
+        class Ctx:
+            async def sample(self, **kwargs):
+                content = json.loads(kwargs["messages"][0]["content"])
+                package = content["prompt_package"]
+                resp = {
+                    "schema_version": "1.2.0",
+                    "session_id": package["session_id"],
+                    "pass_number": package["pass_number"],
+                    "graph_sha256": package["artifact_hashes"]["graph_sha256"],
+                    "serializer_sha256": package["artifact_hashes"].get(
+                        "serializer_sha256"
+                    ),
+                    "prompt_package_hash": package["prompt_package_hash"],
+                    "review_request_sha256": package.get("review_request_sha256"),
+                    "findings": [],
+                    "finding_assessments": [],
+                    "scorecard": {},
+                }
+                return {"text": json.dumps(resp), "model": "fake"}
+
+        return await tool_start_critic_review_with_sampling(
+            Ctx(),
+            graph_path=str(graph),
+            critic_scope="graph",
+        )
+
+    wired = asyncio.run(_wired_ok())
+    assert wired["ok"] is True
+    assert wired["sampling"]["status"] == "ok"
+    assert wired["state"] == "awaiting_revision"

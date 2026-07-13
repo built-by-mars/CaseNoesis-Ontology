@@ -191,7 +191,9 @@ def main(argv: list[str] | None = None) -> int:
         session_id=args.session_id,
     )
     metrics = pass_counts(session_report)
-    passed = bool(session_report.get("converged"))
+    passed = bool(session_report.get("converged")) and bool(
+        session_report.get("finalized")
+    )
 
     report = {
         "harness": "run_session_replay",

@@ -19,6 +19,7 @@ namespace CaseUco
     {
         private static readonly object RegistryLock = new object();
         private static volatile Dictionary<string, Type> _classRegistryCache;
+        private static Dictionary<Type, PropertyBinding[]> _propertyBindingCache;
 
         private readonly Dictionary<string, string> _context;
         private readonly List<Dictionary<string, object>> _objects;
@@ -421,6 +422,7 @@ namespace CaseUco
             lock (RegistryLock)
             {
                 _classRegistryCache = null;
+                _propertyBindingCache = null;
             }
         }
 
@@ -434,31 +436,73 @@ namespace CaseUco
             return specific.Count == 1 ? specific[0] : null;
         }
 
-        private static void SetPropertiesFromJsonLd(object instance, Dictionary<string, object> obj, Dictionary<string, string> context)
+        /// <summary>Cached property → JSON-LD key bindings for typed deserialization (#70).</summary>
+        private sealed class PropertyBinding
         {
-            var type = instance.GetType();
-            foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.CanWrite))
+            public PropertyInfo Property { get; }
+            public string AttrKey { get; }
+            public string InferredKey { get; }
+
+            public PropertyBinding(PropertyInfo property, string attrKey, string inferredKey)
             {
-                string matchKey = null;
+                Property = property;
+                AttrKey = attrKey;
+                InferredKey = inferredKey;
+            }
+        }
 
-                var attr = prop.GetCustomAttribute<JsonLdPropertyAttribute>(inherit: true);
-                if (attr != null && obj.ContainsKey(attr.Key))
-                    matchKey = attr.Key;
+        private static PropertyBinding[] GetPropertyBindings(Type type)
+        {
+            lock (RegistryLock)
+            {
+                if (_propertyBindingCache == null)
+                    _propertyBindingCache = new Dictionary<Type, PropertyBinding[]>();
+                if (_propertyBindingCache.TryGetValue(type, out var cached))
+                    return cached;
 
-                if (matchKey == null)
+                var bindings = new List<PropertyBinding>();
+                foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(p => p.CanWrite))
                 {
+                    var attr = prop.GetCustomAttribute<JsonLdPropertyAttribute>(inherit: true);
                     var nsField = (prop.DeclaringType ?? type).GetField("NamespacePrefix");
                     var ns = nsField != null ? (string)nsField.GetValue(null) : "uco-core";
                     var camelName = char.ToLower(prop.Name[0]) + prop.Name.Substring(1);
-                    var candidate = ns + ":" + camelName;
-                    if (obj.ContainsKey(candidate))
-                        matchKey = candidate;
+                    var inferred = ns + ":" + camelName;
+                    bindings.Add(new PropertyBinding(prop, attr?.Key, inferred));
                 }
+                var arr = bindings.ToArray();
+                _propertyBindingCache[type] = arr;
+                return arr;
+            }
+        }
+
+        /// <summary>Expose property-binding cache size for warm-path unit tests (#70).</summary>
+        public static int PropertyBindingCacheCount
+        {
+            get
+            {
+                lock (RegistryLock)
+                {
+                    return _propertyBindingCache == null ? 0 : _propertyBindingCache.Count;
+                }
+            }
+        }
+
+        private static void SetPropertiesFromJsonLd(object instance, Dictionary<string, object> obj, Dictionary<string, string> context)
+        {
+            var type = instance.GetType();
+            foreach (var binding in GetPropertyBindings(type))
+            {
+                string matchKey = null;
+                if (binding.AttrKey != null && obj.ContainsKey(binding.AttrKey))
+                    matchKey = binding.AttrKey;
+                else if (obj.ContainsKey(binding.InferredKey))
+                    matchKey = binding.InferredKey;
 
                 if (matchKey == null) continue;
 
-                try { prop.SetValue(instance, ConvertToClrType(obj[matchKey], prop.PropertyType)); }
+                try { binding.Property.SetValue(instance, ConvertToClrType(obj[matchKey], binding.Property.PropertyType)); }
                 catch (ArgumentException) { /* skip: property type mismatch during deserialization */ }
                 catch (TargetException) { /* skip: target object mismatch */ }
                 catch (TargetInvocationException) { /* skip: setter threw */ }
@@ -586,53 +630,132 @@ namespace CaseUco
         /// <summary>
         /// Stream JSON-LD to disk without building a second full document string (#71).
         /// Emits @context then each @graph element incrementally with deterministic ordering.
+        /// Writes via a temp file then rename when <paramref name="atomic"/> is true (default).
         /// </summary>
-        public void WriteStreaming(string path, int indent = 2)
+        /// <returns>Nodes written and UTF-8 bytes emitted.</returns>
+        public StreamingWriteResult WriteStreaming(string path, int indent = 2, bool atomic = true)
         {
             var ctx = PrunedContext();
             var sortedContext = ctx.OrderBy(kv => kv.Key, StringComparer.Ordinal)
                 .ToDictionary(kv => kv.Key, kv => kv.Value);
-            using (var writer = new StreamWriter(path, false, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)))
+
+            string outPath = path;
+            string tmpPath = null;
+            if (atomic)
             {
-                if (indent < 0)
+                var dir = Path.GetDirectoryName(Path.GetFullPath(path));
+                if (string.IsNullOrEmpty(dir))
+                    dir = ".";
+                Directory.CreateDirectory(dir);
+                tmpPath = Path.Combine(dir, $".casegraph-{Guid.NewGuid():N}.jsonld.tmp");
+                outPath = tmpPath;
+            }
+
+            long bytesWritten = 0;
+            try
+            {
+                using (var fileStream = new FileStream(outPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                using (var counting = new CountingStream(fileStream))
+                using (var writer = new StreamWriter(counting, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)))
                 {
-                    writer.Write("{\"@context\":");
-                    writer.Write(ToJsonString(sortedContext, -1));
-                    writer.Write(",\"@graph\":[");
-                    for (var i = 0; i < _objects.Count; i++)
+                    if (indent < 0)
                     {
-                        if (i > 0)
-                            writer.Write(",");
-                        writer.Write(ToJsonString(_objects[i], -1));
+                        writer.Write("{\"@context\":");
+                        writer.Write(ToJsonString(sortedContext, -1));
+                        writer.Write(",\"@graph\":[");
+                        for (var i = 0; i < _objects.Count; i++)
+                        {
+                            if (i > 0)
+                                writer.Write(",");
+                            writer.Write(ToJsonString(_objects[i], -1));
+                        }
+                        writer.Write("]}");
                     }
-                    writer.Write("]}");
-                    return;
+                    else
+                    {
+                        var pad = new string(' ', indent);
+                        var grandChildPad = new string(' ', indent * 3);
+                        writer.Write("{\n");
+                        writer.Write(pad);
+                        writer.Write("\"@context\": ");
+                        writer.Write(ToJsonString(sortedContext, indent));
+                        writer.Write(",\n");
+                        writer.Write(pad);
+                        writer.Write("\"@graph\": [\n");
+                        for (var i = 0; i < _objects.Count; i++)
+                        {
+                            foreach (var line in ToJsonString(_objects[i], indent).Split('\n'))
+                            {
+                                writer.Write(grandChildPad);
+                                writer.Write(line);
+                                writer.Write("\n");
+                            }
+                            if (i + 1 < _objects.Count)
+                                writer.Write(new string(' ', indent * 2));
+                            writer.Write(i + 1 < _objects.Count ? ",\n" : "");
+                        }
+                        writer.Write(pad);
+                        writer.Write("]\n");
+                        writer.Write("}\n");
+                    }
+                    writer.Flush();
+                    fileStream.Flush(true);
+                    bytesWritten = counting.BytesWritten;
                 }
 
-                var pad = new string(' ', indent);
-                var grandChildPad = new string(' ', indent * 3);
-                writer.Write("{\n");
-                writer.Write(pad);
-                writer.Write("\"@context\": ");
-                writer.Write(ToJsonString(sortedContext, indent));
-                writer.Write(",\n");
-                writer.Write(pad);
-                writer.Write("\"@graph\": [\n");
-                for (var i = 0; i < _objects.Count; i++)
+                if (atomic && tmpPath != null)
                 {
-                    foreach (var line in ToJsonString(_objects[i], indent).Split('\n'))
-                    {
-                        writer.Write(grandChildPad);
-                        writer.Write(line);
-                        writer.Write("\n");
-                    }
-                    if (i + 1 < _objects.Count)
-                        writer.Write(new string(' ', indent * 2));
-                    writer.Write(i + 1 < _objects.Count ? ",\n" : "");
+                    if (File.Exists(path))
+                        File.Delete(path);
+                    File.Move(tmpPath, path);
+                    tmpPath = null;
                 }
-                writer.Write(pad);
-                writer.Write("]\n");
-                writer.Write("}\n");
+                return new StreamingWriteResult(_objects.Count, bytesWritten);
+            }
+            catch
+            {
+                if (tmpPath != null && File.Exists(tmpPath))
+                    File.Delete(tmpPath);
+                throw;
+            }
+        }
+
+        private sealed class CountingStream : Stream
+        {
+            private readonly Stream _inner;
+            public long BytesWritten { get; private set; }
+
+            public CountingStream(Stream inner) { _inner = inner; }
+            public override bool CanRead => false;
+            public override bool CanSeek => false;
+            public override bool CanWrite => true;
+            public override long Length => _inner.Length;
+            public override long Position
+            {
+                get => _inner.Position;
+                set => throw new NotSupportedException();
+            }
+            public override void Flush() => _inner.Flush();
+            public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+            public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+            public override void SetLength(long value) => throw new NotSupportedException();
+            public override void Write(byte[] buffer, int offset, int count)
+            {
+                _inner.Write(buffer, offset, count);
+                BytesWritten += count;
+            }
+#if NETSTANDARD2_0
+#else
+            public override void Write(ReadOnlySpan<byte> buffer)
+            {
+                _inner.Write(buffer);
+                BytesWritten += buffer.Length;
+            }
+#endif
+            protected override void Dispose(bool disposing)
+            {
+                // Do not dispose inner; caller owns FileStream lifetime.
+                base.Dispose(disposing);
             }
         }
 
@@ -753,20 +876,27 @@ namespace CaseUco
         }
 
         /// <summary>
-        /// Partition the graph by dependency closure from each root IRI (#72).
-        /// Nodes reachable from multiple roots are replicated into each partition
-        /// when <paramref name="sharedNodePolicy"/> is <c>replicate-identical</c>,
+        /// Experimental root closure (#72). Follows nested <c>{"@id": ...}</c>
+        /// references reachable from each root (outgoing). When
+        /// <paramref name="includeIncoming"/> is true (default), also follows
+        /// reverse references from other top-level objects (e.g. Relationships
+        /// pointing at the root). Nodes reachable from multiple roots are
+        /// replicated into each partition when
+        /// <paramref name="sharedNodePolicy"/> is <c>replicate-identical</c>,
         /// or placed in a <c>_shared</c> partition when <c>shared</c>.
         /// </summary>
         public Dictionary<string, CaseGraph> PartitionByRoots(
             IEnumerable<string> rootIris,
-            string sharedNodePolicy = "replicate-identical")
+            string sharedNodePolicy = "replicate-identical",
+            bool includeIncoming = true)
         {
             if (rootIris == null)
                 throw new ArgumentNullException(nameof(rootIris));
             sharedNodePolicy = NormalizeSharedNodePolicy(sharedNodePolicy);
 
             var byId = BuildNodeIndex();
+            var reverseIndex = BuildReverseIdIndex(byId);
+
             var rootEntries = new List<(string Key, string Expanded)>();
             foreach (var root in rootIris)
             {
@@ -783,7 +913,8 @@ namespace CaseUco
             {
                 if (!byId.ContainsKey(entry.Expanded))
                     continue;
-                rootReachable[entry.Expanded] = CollectReachable(entry.Expanded, byId);
+                rootReachable[entry.Expanded] = CollectReachable(
+                    entry.Expanded, byId, reverseIndex, includeIncoming);
             }
 
             var nodeRoots = new Dictionary<string, List<string>>(StringComparer.Ordinal);
@@ -961,9 +1092,38 @@ namespace CaseUco
             return byId;
         }
 
+        private Dictionary<string, HashSet<string>> BuildReverseIdIndex(
+            Dictionary<string, Dictionary<string, object>> byId)
+        {
+            var reverse = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+            foreach (var obj in _objects)
+            {
+                if (!obj.TryGetValue("@id", out var idObj) || !(idObj is string ownerId))
+                    continue;
+                var ownerExpanded = ExpandIri(ownerId);
+                foreach (var refId in CollectReferencedIds(obj))
+                {
+                    var expanded = ExpandIri(refId);
+                    if (expanded == ownerExpanded)
+                        continue;
+                    if (!byId.ContainsKey(expanded))
+                        continue;
+                    if (!reverse.TryGetValue(expanded, out var owners))
+                    {
+                        owners = new HashSet<string>(StringComparer.Ordinal);
+                        reverse[expanded] = owners;
+                    }
+                    owners.Add(ownerExpanded);
+                }
+            }
+            return reverse;
+        }
+
         private HashSet<string> CollectReachable(
             string rootExpanded,
-            Dictionary<string, Dictionary<string, object>> byId)
+            Dictionary<string, Dictionary<string, object>> byId,
+            Dictionary<string, HashSet<string>> reverseIndex = null,
+            bool includeIncoming = true)
         {
             var visited = new HashSet<string>(StringComparer.Ordinal);
             var queue = new Queue<string>();
@@ -982,6 +1142,16 @@ namespace CaseUco
                     var expanded = ExpandIri(refId);
                     if (byId.ContainsKey(expanded) && !visited.Contains(expanded))
                         queue.Enqueue(expanded);
+                }
+
+                if (includeIncoming && reverseIndex != null
+                    && reverseIndex.TryGetValue(current, out var referrers))
+                {
+                    foreach (var referrer in referrers)
+                    {
+                        if (byId.ContainsKey(referrer) && !visited.Contains(referrer))
+                            queue.Enqueue(referrer);
+                    }
                 }
             }
 
@@ -1694,6 +1864,19 @@ namespace CaseUco
             }
             end = pos + 1; // skip closing '"'
             return sb.ToString();
+        }
+    }
+
+    /// <summary>Metrics from an atomic/incremental streaming write (#71).</summary>
+    public sealed class StreamingWriteResult
+    {
+        public int Nodes { get; }
+        public long BytesWritten { get; }
+
+        public StreamingWriteResult(int nodes, long bytesWritten)
+        {
+            Nodes = nodes;
+            BytesWritten = bytesWritten;
         }
     }
 

@@ -1,0 +1,6 @@
+{
+  "case_id": "serializer-nonexistent-api",
+  "expected_rule_ids": ["CRIT-S-PY-NONEXISTENT-API"],
+  "forbidden_unexpected_critical_high": false,
+  "expect_validation": {"allow_unavailable": true}
+}

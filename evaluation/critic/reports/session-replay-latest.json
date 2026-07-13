@@ -1,106 +1,155 @@
 {
   "harness": "run_session_replay",
-  "generated_at": "2026-07-13T17:45:15.619099+00:00",
+  "generated_at": "2026-07-13T18:53:29.183536+00:00",
   "passed": true,
   "metrics": {
     "passes_attempted": 2,
     "passes_parsed_ok": 2,
     "converged": true,
-    "final_status": "needs_revision"
+    "final_status": "completed_with_findings"
   },
   "session": {
     "case_id": "micro-gold-charged-with",
-    "session_id": "eval-session-replay-001",
+    "session_id": "critsess-1e4ca23441ce47559dffa991f39ac5cc",
     "passes": [
       {
         "pass_number": 1,
-        "mock_path": "responses/mock/pass1-empty-findings.json",
         "parsed_ok": true,
-        "parse_error": null,
         "model_finding_count": 0,
-        "status": "needs_revision",
-        "analysis_status": "complete"
+        "completed_status": "completed_with_findings"
       },
       {
         "pass_number": 2,
-        "mock_path": "responses/mock/pass2-empty-findings.json",
         "parsed_ok": true,
-        "parse_error": null,
         "model_finding_count": 0,
-        "status": "needs_revision",
-        "analysis_status": "complete"
+        "completed_status": "completed_with_findings"
       }
     ],
     "converged": true,
-    "final_status": "needs_revision",
-    "final_analysis_status": "complete",
-    "merged_scorecard": {
-      "schema_concept_conformance": {
-        "score": 0,
-        "assessed": true,
-        "evidence": [
-          "conforms=False",
-          "verification_status=complete"
+    "finalized": true,
+    "final": {
+      "session_id": "critsess-1e4ca23441ce47559dffa991f39ac5cc",
+      "state": "finalized",
+      "outcome": "completed_with_findings",
+      "accepted": false,
+      "latest_artifact_hash": "e15e1930943389569cc216f59213c8f94a4ea3eb4d22b795cd13e6ca2e03d9c0",
+      "latest_reviewed_hash": "e15e1930943389569cc216f59213c8f94a4ea3eb4d22b795cd13e6ca2e03d9c0",
+      "latest_reviewed_artifacts": {
+        "coverage_contract_sha256": null,
+        "graph_sha256": "e15e1930943389569cc216f59213c8f94a4ea3eb4d22b795cd13e6ca2e03d9c0",
+        "serializer_sha256": null,
+        "source_sha256": {}
+      },
+      "summary": {
+        "status": "completed_with_findings",
+        "analysis_status": "complete",
+        "artifact_hashes": {
+          "coverage_contract_sha256": null,
+          "graph_sha256": "e15e1930943389569cc216f59213c8f94a4ea3eb4d22b795cd13e6ca2e03d9c0",
+          "serializer_sha256": null,
+          "source_sha256": {}
+        },
+        "validation": {
+          "bundle_fingerprint": null,
+          "conforms": true,
+          "error_code": null,
+          "profile_not_selected": [],
+          "relationship_lint_findings": [],
+          "relationship_lint_ok": null,
+          "role_mismatches": [],
+          "safe_summary": "Graph conforms to CASE/UCO SHACL shapes.",
+          "selected_extensions": [],
+          "selected_profiles": [],
+          "stage_status": {
+            "bundle_resolution": "skipped",
+            "coverage_conformance": "ok",
+            "coverage_execution": "complete",
+            "shacl_conformance": "conforms",
+            "shacl_execution": "complete"
+          },
+          "verification_status": "complete",
+          "violation_count": 0,
+          "warning_count": 0
+        },
+        "finding_counts": {
+          "critical_high_open": 0,
+          "medium_low_open": 1,
+          "merged": 1,
+          "open": 1
+        },
+        "open_finding_ids": [
+          "CRIT-0a25e21d4c6e1cf5"
         ],
-        "hard_cap": 0,
-        "cap_reason": "validation_incomplete_or_nonconforming"
-      },
-      "source_fidelity": {
-        "score": null,
-        "assessed": false,
-        "evidence": [],
-        "hard_cap": null,
-        "cap_reason": null
-      },
-      "semantic_precision": {
-        "score": 4,
-        "assessed": true,
-        "evidence": [
-          "no_semantic_heuristic_findings"
-        ],
-        "hard_cap": null,
-        "cap_reason": null
-      },
-      "provenance_custody": {
-        "score": null,
-        "assessed": false,
-        "evidence": [],
-        "hard_cap": null,
-        "cap_reason": null
-      },
-      "markings_authorization": {
-        "score": null,
-        "assessed": false,
-        "evidence": [],
-        "hard_cap": null,
-        "cap_reason": null
-      },
-      "coverage_completeness": {
-        "score": null,
-        "assessed": false,
-        "evidence": [],
-        "hard_cap": null,
-        "cap_reason": null
-      },
-      "serializer_quality": {
-        "score": null,
-        "assessed": false,
-        "evidence": [],
-        "hard_cap": null,
-        "cap_reason": null
-      },
-      "maintainability_reproducibility": {
-        "score": null,
-        "assessed": false,
-        "evidence": [],
-        "hard_cap": null,
-        "cap_reason": null
-      },
-      "caps_applied": [
-        "validation_incomplete_or_nonconforming",
-        "model_scores_merged"
-      ]
+        "scorecard": {
+          "caps_applied": [
+            "model_scores_merged"
+          ],
+          "coverage_completeness": {
+            "assessed": false,
+            "cap_reason": null,
+            "evidence": [],
+            "hard_cap": null,
+            "score": null
+          },
+          "maintainability_reproducibility": {
+            "assessed": false,
+            "cap_reason": null,
+            "evidence": [],
+            "hard_cap": null,
+            "score": null
+          },
+          "markings_authorization": {
+            "assessed": false,
+            "cap_reason": null,
+            "evidence": [],
+            "hard_cap": null,
+            "score": null
+          },
+          "provenance_custody": {
+            "assessed": false,
+            "cap_reason": null,
+            "evidence": [],
+            "hard_cap": null,
+            "score": null
+          },
+          "schema_concept_conformance": {
+            "assessed": true,
+            "cap_reason": null,
+            "evidence": [
+              "validation_complete_conforming"
+            ],
+            "hard_cap": null,
+            "score": 5
+          },
+          "semantic_precision": {
+            "assessed": true,
+            "cap_reason": null,
+            "evidence": [
+              "no_semantic_heuristic_findings"
+            ],
+            "hard_cap": null,
+            "score": 4
+          },
+          "serializer_quality": {
+            "assessed": false,
+            "cap_reason": null,
+            "evidence": [],
+            "hard_cap": null,
+            "score": null
+          },
+          "source_fidelity": {
+            "assessed": false,
+            "cap_reason": null,
+            "evidence": [],
+            "hard_cap": null,
+            "score": null
+          }
+        }
+      }
     },
-    "final_review_status": "needs_revision"
+    "final_error": null,
+    "final_status": "completed_with_findings",
+    "final_outcome": "completed_with_findings",
+    "accepted": false
   }
 }

@@ -1,0 +1,14 @@
+{
+  "case_id": "micro-derived-no-hash",
+  "expected_rule_ids": ["CRIT-H-DERIVED-NO-HASH"],
+  "forbidden_rule_ids_on_gold": [],
+  "expected_severities_min": {
+    "CRIT-H-DERIVED-NO-HASH": "high"
+  },
+  "expect_validation": {
+    "allow_unavailable": true
+  },
+  "expect_zero_unexpected_critical_high": false,
+  "allowed_repairs": [],
+  "forbidden_regressions": []
+}

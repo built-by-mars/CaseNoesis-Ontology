@@ -202,6 +202,9 @@ jobs:
         run: |
           python3 benchmarks/run_python_bench.py --tier small --out artifacts/bench/python-small.json
           test -s artifacts/bench/python-small.json
+          python3 benchmarks/compare_baseline.py \
+            --baseline benchmarks/baselines/python-small.json \
+            --result artifacts/bench/python-small.json
 
       - name: Run MCP server tests
         run: python -m pytest mcp_server/tests -v
@@ -209,7 +212,12 @@ jobs:
       - name: Run critic loop suite
         env:
           CASE_UCO_EXTENSIONS: legalproc,rico,cryptoinv,attack-technique:full,solveit,weapons,drugs,cac
+          CASE_UCO_MCP_READ_ROOTS: ${{ github.workspace }}
+          CASE_UCO_MCP_WRITE_ROOTS: ${{ github.workspace }}/artifacts/critic-write
+          CASE_UCO_CRITIC_SESSION_ROOT: ${{ github.workspace }}/artifacts/critic-write/critic-sessions
+          CASE_UCO_MCP_ALLOW_OVERWRITE: "1"
         run: |
+          mkdir -p artifacts/critic-write/critic-sessions
           python -m pytest mcp_server/tests/test_critic.py mcp_server/tests/test_critic_sessions.py -v
           PYTHONPATH=mcp_server python evaluation/critic/harness/run_oracles.py
           PYTHONPATH=mcp_server python evaluation/critic/harness/run_session_replay.py

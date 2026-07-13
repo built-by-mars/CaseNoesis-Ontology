@@ -1,0 +1,31 @@
+{
+  "@context": {
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:a1000000-0000-4000-8000-000000000001",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Action completeness micro case",
+      "uco-core:object": [
+        { "@id": "urn:uuid:a1000000-0000-4000-8000-000000000002" }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a1000000-0000-4000-8000-000000000002",
+      "@type": "case-investigation:InvestigativeAction",
+      "uco-core:name": "Acquire disk image",
+      "uco-action:object": [
+        { "@id": "urn:uuid:a1000000-0000-4000-8000-000000000003" }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a1000000-0000-4000-8000-000000000003",
+      "@type": ["uco-observable:ObservableObject", "uco-observable:File"],
+      "uco-core:name": "source-drive"
+    }
+  ]
+}

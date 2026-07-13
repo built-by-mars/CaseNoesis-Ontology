@@ -23,6 +23,8 @@ from critic.schema_util import (
 )
 
 HEX64 = re.compile(r"^[a-fA-F0-9]{64}$")
+ALLOWED_ASSESSMENTS = frozenset({"persists", "resolved", "disputed"})
+DETERMINISTIC_EVIDENCE = frozenset({"deterministic", "source"})
 
 
 class CriticResponseError(ValueError):
@@ -41,8 +43,14 @@ def parse_critic_model_response(
     pass_number: int | None = None,
     expected_review_request_sha256: str | None = None,
     bound_schema: dict[str, Any] | None = None,
+    allowed_assessments: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Validate and normalize a model/manual critic response against JSON Schema."""
+    """Validate and normalize a model/manual critic response against JSON Schema.
+
+    Returns findings (new only), finding_assessments, and scorecard. Lifecycle
+    changes are applied by the session merger — not by inventing finding IDs
+    from ``assesses_finding_id``.
+    """
 
     if isinstance(payload, str):
         try:
@@ -53,6 +61,19 @@ def parse_critic_model_response(
     if not isinstance(payload, dict):
         raise CriticResponseError("critic_response_invalid", "root must be object")
 
+    # Reject legacy finding-ID hijack field if still present on finding items.
+    for item in payload.get("findings") or []:
+        if isinstance(item, dict) and "assesses_finding_id" in item:
+            raise CriticResponseError(
+                "critic_response_schema_mismatch",
+                "assesses_finding_id belongs in finding_assessments, not findings",
+            )
+        if isinstance(item, dict) and item.get("finding_id"):
+            raise CriticResponseError(
+                "critic_response_schema_mismatch",
+                "model must not supply finding_id",
+            )
+
     schema = bound_schema or bound_model_response_schema(
         graph_sha256=expected_graph_sha256,
         prompt_package_hash=expected_prompt_package_hash,
@@ -62,8 +83,6 @@ def parse_critic_model_response(
         schema_version=SUPPORTED_SCHEMA_VERSION,
         review_request_sha256=expected_review_request_sha256,
     )
-    # Ensure unbound baseline properties still exist when caller supplies a
-    # partial bound schema (tests may pass only const overrides).
     if "$schema" not in schema:
         base = model_response_schema()
         base_props = dict(base.get("properties") or {})
@@ -96,7 +115,6 @@ def parse_critic_model_response(
     if payload["prompt_package_hash"] != expected_prompt_package_hash:
         raise CriticResponseError("critic_artifact_hash_mismatch", "prompt_package_hash")
 
-    # Serializer: reject unexpected values as well as missing expected ones.
     ser = payload.get("serializer_sha256")
     if expected_serializer_sha256 is None:
         if ser is not None:
@@ -113,7 +131,6 @@ def parse_critic_model_response(
                 "critic_response_schema_mismatch", "bad hex hash: serializer_sha256"
             )
 
-    # Session / pass: reject unexpected values when operating without one.
     got_session = payload.get("session_id")
     if session_id is None:
         if got_session is not None:
@@ -170,18 +187,12 @@ def parse_critic_model_response(
                 "critic_response_schema_mismatch",
                 "model evidence_kind must be critic_inference",
             )
-        if item.get("finding_id"):
-            raise CriticResponseError(
-                "critic_response_schema_mismatch",
-                "model must not supply finding_id",
-            )
 
         claim_type = str(item.get("claim_type") or "").strip()
         if not claim_type:
             raise CriticResponseError(
                 "critic_response_schema_mismatch", "claim_type required"
             )
-        assesses = item.get("assesses_finding_id")
 
         target_raw = item["target"]
         target = CriticTarget(
@@ -207,15 +218,11 @@ def parse_critic_model_response(
                 "target must identify a location",
             )
 
-        # Stable ID: no array index. Prefer assesses_finding_id when reassessing.
-        if isinstance(assesses, str) and assesses.strip():
-            finding_id = assesses.strip()
-        else:
-            finding_id = make_stable_finding_id(
-                f"MODEL-{category}",
-                *target.semantic_parts(),
-                claim_type,
-            )
+        finding_id = make_stable_finding_id(
+            f"MODEL-{category}",
+            *target.semantic_parts(),
+            claim_type,
+        )
         findings.append(
             CriticFinding(
                 finding_id=finding_id,
@@ -231,20 +238,124 @@ def parse_critic_model_response(
                 verification_method=str(item["verification_method"]),
                 related_recipe=item.get("related_recipe"),
                 claim_type=claim_type,
-                assesses_finding_id=assesses if isinstance(assesses, str) else None,
                 identity_key=finding_id,
             )
         )
 
+    assessments = _parse_assessments(
+        payload.get("finding_assessments") or [],
+        allowed_assessments=allowed_assessments,
+    )
+
     scorecard = _parse_scorecard(payload.get("scorecard") or {})
     return {
         "findings": findings,
+        "finding_assessments": assessments,
         "scorecard": scorecard,
         "notes": str(payload.get("notes") or ""),
         "session_id": payload.get("session_id", session_id),
         "pass_number": payload.get("pass_number", pass_number),
         "review_request_sha256": payload.get("review_request_sha256"),
     }
+
+
+def _parse_assessments(
+    raw_items: list[Any],
+    *,
+    allowed_assessments: dict[str, dict[str, Any]] | None,
+) -> list[dict[str, Any]]:
+    assessments: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for item in raw_items:
+        if not isinstance(item, dict):
+            raise CriticResponseError(
+                "critic_response_schema_mismatch", "assessment must be object"
+            )
+        assesses = str(item.get("assesses_finding_id") or "").strip()
+        if not assesses:
+            raise CriticResponseError(
+                "critic_response_schema_mismatch", "assesses_finding_id required"
+            )
+        if assesses in seen:
+            raise CriticResponseError(
+                "critic_response_duplicate_assessment", assesses
+            )
+        seen.add(assesses)
+        assessment = str(item.get("assessment") or "").strip()
+        if assessment not in ALLOWED_ASSESSMENTS:
+            raise CriticResponseError(
+                "critic_response_schema_mismatch", f"bad assessment {assessment}"
+            )
+        ledger = (allowed_assessments or {}).get(assesses)
+        if allowed_assessments is not None:
+            if ledger is None:
+                raise CriticResponseError(
+                    "critic_assessment_unknown_finding", assesses
+                )
+            evidence_kind = str(ledger.get("evidence_kind") or "")
+            allowed = set(ledger.get("allowed_assessments") or [])
+            if assessment not in allowed:
+                raise CriticResponseError(
+                    "critic_assessment_not_permitted",
+                    f"{assesses}:{assessment}",
+                )
+            # Deterministic/source findings may be disputed but never model-resolved.
+            if evidence_kind in DETERMINISTIC_EVIDENCE and assessment == "resolved":
+                raise CriticResponseError(
+                    "critic_assessment_deterministic_resolve_forbidden",
+                    assesses,
+                )
+        assessment_id = item.get("assessment_id")
+        if assessment_id is None:
+            assessment_id = make_stable_finding_id("ASSESS", assesses, assessment)
+        assessments.append(
+            {
+                "assessment_id": str(assessment_id),
+                "assesses_finding_id": assesses,
+                "assessment": assessment,
+                "evidence": [str(e) for e in (item.get("evidence") or [])],
+                "verification_method": str(item.get("verification_method") or ""),
+                "rationale": str(item.get("rationale") or ""),
+            }
+        )
+    return assessments
+
+
+def build_assessment_ledger(
+    findings: list[CriticFinding] | list[dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Build the allowed-assessment ledger for the current pass."""
+
+    ledger: dict[str, dict[str, Any]] = {}
+    for raw in findings:
+        finding = (
+            raw
+            if isinstance(raw, CriticFinding)
+            else CriticFinding.from_dict(raw)
+        )
+        if finding.status == "resolved":
+            continue
+        evidence_kind = finding.evidence_kind
+        if evidence_kind in DETERMINISTIC_EVIDENCE:
+            allowed = ["persists", "disputed"]
+        else:
+            allowed = ["persists", "resolved", "disputed"]
+        ledger[finding.finding_id] = {
+            "evidence_kind": evidence_kind,
+            "target": {
+                "path": finding.target.path,
+                "line": finding.target.line,
+                "node_id": finding.target.node_id,
+                "predicate": finding.target.predicate,
+                "counterpart_id": finding.target.counterpart_id,
+                "json_pointer": finding.target.json_pointer,
+                "qualified_name": finding.target.qualified_name,
+            },
+            "allowed_assessments": allowed,
+            "severity": finding.severity,
+            "status": finding.status,
+        }
+    return ledger
 
 
 def _parse_scorecard(raw: dict[str, Any]) -> CriticScorecard:

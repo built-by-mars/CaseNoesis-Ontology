@@ -1,0 +1,14 @@
+{
+  "case_id": "micro-identity-conflation",
+  "expected_rule_ids": ["CRIT-H-IDENTITY-CONFLATION"],
+  "forbidden_rule_ids_on_gold": [],
+  "expected_severities_min": {
+    "CRIT-H-IDENTITY-CONFLATION": "high"
+  },
+  "expect_validation": {
+    "allow_unavailable": true
+  },
+  "expect_zero_unexpected_critical_high": false,
+  "allowed_repairs": [],
+  "forbidden_regressions": []
+}

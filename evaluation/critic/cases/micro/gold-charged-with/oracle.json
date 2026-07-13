@@ -4,7 +4,9 @@
   "forbidden_rule_ids_on_gold": ["CRIT-H-CHARGED-WITH-REVERSED"],
   "forbidden_unexpected_critical_high": true,
   "expect_validation": {
-    "allow_unavailable": true
+    "allow_unavailable": true,
+    "require_conforming": true,
+    "require_conforming_when_complete": true
   },
   "allowed_repairs": [],
   "forbidden_regressions": []

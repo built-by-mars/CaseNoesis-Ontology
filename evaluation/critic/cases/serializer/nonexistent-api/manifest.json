@@ -1,0 +1,7 @@
+{
+  "case_id": "serializer-nonexistent-api",
+  "tier": "T0",
+  "critic_scope": "serializer",
+  "serializer_path": "serializer.py",
+  "graph_path": "graph.jsonld"
+}

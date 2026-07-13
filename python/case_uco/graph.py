@@ -674,14 +674,18 @@ class CASEGraph:
         roots: list[str] | None = None,
         shared_node_policy: str = "replicate-identical",
         boundary_key: Callable[[dict[str, Any]], str | None] | None = None,
-    ) -> dict[str, CASEGraph]:
+        include_incoming: bool = True,
+        return_manifest: bool = False,
+    ) -> dict[str, CASEGraph] | tuple[dict[str, CASEGraph], dict[str, Any]]:
         """Dependency-aware graph partitioning (#72).
 
         Strategies:
         - ``roots`` (default): BFS closure from each root IRI following nested
-          ``@id`` references. Shared nodes are either replicated into each
-          partition (``replicate-identical``) or placed in a ``_shared``
-          partition (``shared`` / ``isolate-shared``).
+          ``@id`` references (outgoing) and, when ``include_incoming`` is True
+          (default), reverse references from other top-level objects. Shared
+          nodes are either replicated into each partition
+          (``replicate-identical``) or placed in a ``_shared`` partition
+          (``shared`` / ``isolate-shared``).
         - ``label``: delegate to :meth:`partition_by` with ``boundary_key``.
 
         Prefer this over :meth:`split` for investigation graphs.
@@ -695,7 +699,10 @@ class CASEGraph:
         if not roots:
             raise ValueError("roots is required for strategy='roots'")
         return self.partition_by_roots(
-            roots, shared_node_policy=shared_node_policy
+            roots,
+            shared_node_policy=shared_node_policy,
+            include_incoming=include_incoming,
+            return_manifest=return_manifest,
         )
 
     def partition_by_roots(
@@ -703,16 +710,30 @@ class CASEGraph:
         roots: list[str],
         *,
         shared_node_policy: str = "replicate-identical",
-    ) -> dict[str, CASEGraph]:
-        """Partition by dependency closure from root IRIs (#72).
+        include_incoming: bool = True,
+        return_manifest: bool = False,
+    ) -> dict[str, CASEGraph] | tuple[dict[str, CASEGraph], dict[str, Any]]:
+        """Partition by experimental root closure (#72).
 
-        Follows nested ``{"@id": ...}`` references (including Relationship
-        source/target) so facets, actions, and related observables stay with
-        their evidence root.
+        **Experimental.** Follows nested ``{"@id": ...}`` references reachable
+        from each root (outgoing). When ``include_incoming`` is True (default),
+        also follows reverse references: top-level objects that nest a
+        ``{"@id": root}`` (or any already-seen node) are pulled into the
+        closure. This includes Relationships pointing *to* a root.
+
+        Still not fully marking-safe and not an RDF-union equivalence
+        partition. When ``return_manifest`` is True, returns
+        ``(partitions, manifest)`` with schema_version ``1.0.0``; otherwise
+        returns only the partition map (backward compatible).
         """
         by_id = {o.get("@id"): o for o in self._objects if isinstance(o.get("@id"), str)}
         if not by_id:
-            return {}
+            empty: dict[str, CASEGraph] = {}
+            if return_manifest:
+                return empty, self._empty_partition_manifest(
+                    roots, shared_node_policy, include_incoming
+                )
+            return empty
 
         def collect_refs(node: Any, out: set[str]) -> None:
             if isinstance(node, dict):
@@ -725,6 +746,16 @@ class CASEGraph:
                 for item in node:
                     collect_refs(item, out)
 
+        # Reverse index: target_id → top-level object ids that reference it.
+        incoming: dict[str, set[str]] = {}
+        outgoing: dict[str, set[str]] = {}
+        for oid, obj in by_id.items():
+            refs: set[str] = set()
+            collect_refs(obj, refs)
+            outgoing[oid] = refs
+            for ref in refs:
+                incoming.setdefault(ref, set()).add(oid)
+
         closures: dict[str, set[str]] = {}
         for root in roots:
             if root not in by_id:
@@ -736,11 +767,13 @@ class CASEGraph:
                 if current in seen or current not in by_id:
                     continue
                 seen.add(current)
-                refs: set[str] = set()
-                collect_refs(by_id[current], refs)
-                for ref in refs:
+                for ref in outgoing.get(current, ()):
                     if ref not in seen:
                         queue.append(ref)
+                if include_incoming:
+                    for referrer in incoming.get(current, ()):
+                        if referrer not in seen:
+                            queue.append(referrer)
             closures[root] = seen
 
         membership_count: dict[str, int] = {}
@@ -776,7 +809,108 @@ class CASEGraph:
                         pass
             if len(shared) > 0:
                 partitions["_shared"] = shared
-        return partitions
+
+        if not return_manifest:
+            return partitions
+
+        replicated = sorted(nid for nid, count in membership_count.items() if count > 1)
+        cross_rels = self._cross_partition_relationship_ids(by_id, closures)
+        manifest: dict[str, Any] = {
+            "schema_version": "1.0.0",
+            "strategy": (
+                "outgoing_and_incoming_id_closure"
+                if include_incoming
+                else "outgoing_id_closure"
+            ),
+            "roots": list(roots),
+            "shared_node_policy": shared_policy,
+            "include_incoming": include_incoming,
+            "partitions": {
+                root: {
+                    "node_count": len(members),
+                    "node_ids": sorted(members),
+                }
+                for root, members in closures.items()
+            },
+            "replicated_node_ids": replicated,
+            "cross_partition_relationship_ids": cross_rels,
+        }
+        return partitions, manifest
+
+    @staticmethod
+    def _empty_partition_manifest(
+        roots: list[str],
+        shared_node_policy: str,
+        include_incoming: bool,
+    ) -> dict[str, Any]:
+        return {
+            "schema_version": "1.0.0",
+            "strategy": (
+                "outgoing_and_incoming_id_closure"
+                if include_incoming
+                else "outgoing_id_closure"
+            ),
+            "roots": list(roots),
+            "shared_node_policy": shared_node_policy,
+            "include_incoming": include_incoming,
+            "partitions": {},
+            "replicated_node_ids": [],
+            "cross_partition_relationship_ids": [],
+        }
+
+    @staticmethod
+    def _is_relationship_node(obj: dict[str, Any]) -> bool:
+        types = obj.get("@type")
+        if isinstance(types, str):
+            types = [types]
+        if not isinstance(types, list):
+            return False
+        return any(
+            t in (
+                "uco-core:Relationship",
+                "https://ontology.unifiedcyberontology.org/uco/core/Relationship",
+            )
+            for t in types
+            if isinstance(t, str)
+        )
+
+    @staticmethod
+    def _first_endpoint_id(obj: dict[str, Any], key: str) -> str | None:
+        val = obj.get(key)
+        if isinstance(val, dict) and isinstance(val.get("@id"), str):
+            return val["@id"]
+        if isinstance(val, list):
+            for item in val:
+                if isinstance(item, dict) and isinstance(item.get("@id"), str):
+                    return item["@id"]
+        return None
+
+    def _cross_partition_relationship_ids(
+        self,
+        by_id: dict[str, dict[str, Any]],
+        closures: dict[str, set[str]],
+    ) -> list[str]:
+        """Relationship @ids whose source/target fall in different root closures."""
+        node_roots: dict[str, set[str]] = {}
+        for root, members in closures.items():
+            for nid in members:
+                node_roots.setdefault(nid, set()).add(root)
+
+        cross: list[str] = []
+        for nid, obj in by_id.items():
+            if not self._is_relationship_node(obj):
+                continue
+            source = self._first_endpoint_id(obj, "uco-core:source")
+            target = self._first_endpoint_id(obj, "uco-core:target")
+            if source is None or target is None:
+                continue
+            src_roots = node_roots.get(source, set())
+            tgt_roots = node_roots.get(target, set())
+            if not src_roots or not tgt_roots:
+                continue
+            if src_roots.isdisjoint(tgt_roots):
+                cross.append(nid)
+        return sorted(cross)
 
     @classmethod
     def merge_files(cls, paths: list[str], kb_prefix: str = "http://example.org/kb/") -> CASEGraph:

@@ -25,10 +25,11 @@ programmatically instead of parsing markdown documentation. Tool groups:
 - Change proposals: check_existing_proposals (UCO/CASE/CAC issue trackers)
   and draft_change_proposal (writes proposal markdown, example JSON-LD, and
   SPARQL query files to change_proposals/).
-- Critic loop (#75–#78): start_critic_review, submit_manual_critic_response,
-  submit_critic_revision, extend_critic_review, get_critic_review_status,
-  finalize_critic_review, cancel_critic_review, and prepare_critic_handoff
-  (preview-only self-improvement bridge).
+- Critic loop (#75–#78): start_critic_review, start_critic_review_with_sampling,
+  submit_manual_critic_response, submit_critic_revision,
+  submit_critic_revision_with_sampling, extend_critic_review,
+  get_critic_review_status, finalize_critic_review, cancel_critic_review,
+  and prepare_critic_handoff (preview-only self-improvement bridge).
 
 MCP resources: case-uco://domains, case-uco://profiles, case-uco://modules,
 and case-uco://patterns.
@@ -57,7 +58,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "python"))
 
-from fastmcp import FastMCP
+from fastmcp import Context, FastMCP
 
 _logger = logging.getLogger(__name__)
 
@@ -1842,6 +1843,39 @@ def start_critic_review(
 
 
 @mcp.tool
+async def start_critic_review_with_sampling(
+    ctx: Context,
+    graph_path: str,
+    serializer_path: str | None = None,
+    source_paths: list[str] | None = None,
+    coverage_contract_path: str | None = None,
+    extensions: list[str] | None = None,
+    profiles: list[str] | None = None,
+    critic_scope: str = "both",
+    additional_iterations: int = 0,
+    report_output: str | None = None,
+) -> dict:
+    """Start a critic session and sample via the MCP client when available.
+
+    On sampling failure, returns the same manual prompt_package with a typed
+    sampling.status fallback code.
+    """
+    return await critic_tools.tool_start_critic_review_with_sampling(
+        ctx,
+        graph_path=graph_path,
+        serializer_path=serializer_path,
+        source_paths=source_paths,
+        coverage_contract_path=coverage_contract_path,
+        extensions=extensions,
+        profiles=profiles,
+        critic_scope=critic_scope,
+        additional_iterations=additional_iterations,
+        model_policy="client_sampling",
+        report_output=report_output,
+    )
+
+
+@mcp.tool
 def submit_manual_critic_response(
     session_id: str,
     response: dict | str,
@@ -1864,6 +1898,34 @@ def submit_critic_revision(
 ) -> dict:
     """Resubmit a revised graph/serializer for the next critic pass."""
     return critic_tools.tool_submit_critic_revision(
+        session_id=session_id,
+        graph_path=graph_path,
+        serializer_path=serializer_path,
+        source_paths=source_paths,
+        coverage_contract_path=coverage_contract_path,
+        change_summary=change_summary,
+        addressed_finding_ids=addressed_finding_ids,
+        extensions=extensions,
+        profiles=profiles,
+    )
+
+
+@mcp.tool
+async def submit_critic_revision_with_sampling(
+    ctx: Context,
+    session_id: str,
+    graph_path: str,
+    serializer_path: str | None = None,
+    source_paths: list[str] | None = None,
+    coverage_contract_path: str | None = None,
+    change_summary: str | None = None,
+    addressed_finding_ids: list[str] | None = None,
+    extensions: list[str] | None = None,
+    profiles: list[str] | None = None,
+) -> dict:
+    """Revise artifacts then attempt client sampling for the next critic pass."""
+    return await critic_tools.tool_submit_critic_revision_with_sampling(
+        ctx,
         session_id=session_id,
         graph_path=graph_path,
         serializer_path=serializer_path,
@@ -1915,10 +1977,12 @@ def prepare_critic_handoff(
     operator_id: str = "",
     output_path: str | None = None,
     approve_write: bool = False,
+    approval_token: str | None = None,
 ) -> dict:
     """Preview-only self-improvement handoff from a finalized session (#78).
 
-    Persistent write requires approve_write=True and a workspace write path.
+    Persistent write requires approve_write=True, an explicit handoff type,
+    approval_token, and a path under critic-handoffs/candidates/.
     Never promotes recipes or creates issues automatically.
     """
     return critic_tools.tool_prepare_critic_handoff(
@@ -1929,6 +1993,7 @@ def prepare_critic_handoff(
         operator_id=operator_id,
         output_path=output_path,
         approve_write=approve_write,
+        approval_token=approval_token,
     )
 
 

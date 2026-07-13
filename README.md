@@ -2,7 +2,7 @@
 
 # CASE/UCO SDK
 
-**v1.21.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md#1210---2026-07-12)
+**v1.22.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md#1220---2026-07-13)
 
 A multi-language data modeling library for digital forensics, cyber-investigation, and cyber-observable data. If your software produces or consumes forensic evidence, this SDK gives you typed, validated builders in **Python**, **C#**, **Java**, and **Rust** — so you can model investigation data in your language and produce interoperable [CASE/UCO](https://caseontology.org/) JSON-LD output.
 
@@ -34,7 +34,7 @@ Beyond the generated code, the repository provides:
 
 Install the SDK package for your language. No need to clone the repo or run the generator.
 
-**v1.21.0** ships installable artifacts on the [GitHub Release](https://github.com/vulnmaster/CASE-UCO-SDK/releases/tag/v1.21.0) (wheel, sdist, NuGet package, Maven JAR, and Rust crate, with checksums and attestations). Registry publication to PyPI, NuGet, Maven Central, and crates.io is opt-in and is **not** enabled for this tag. You can also build from source via the CLI or MCP (see [Getting Started](#getting-started) below).
+**v1.22.0** ships installable artifacts on the [GitHub Release](https://github.com/vulnmaster/CASE-UCO-SDK/releases/tag/v1.22.0) (wheel, sdist, NuGet package, Maven JAR, and Rust crate, with checksums and attestations). Registry publication to PyPI, NuGet, Maven Central, and crates.io is opt-in and is **not** enabled for this tag. You can also build from source via the CLI or MCP (see [Getting Started](#getting-started) below).
 
 When registry packages are published in a later release:
 
@@ -50,7 +50,7 @@ For Java (once on Maven Central), add to your `pom.xml`:
 <dependency>
     <groupId>org.caseontology</groupId>
     <artifactId>case-uco</artifactId>
-    <version>1.21.0</version>
+    <version>1.22.0</version>
 </dependency>
 ```
 
@@ -707,7 +707,7 @@ Each example includes both the Python source that builds the graph and the valid
 
 The `examples/` directory goes further, with validated end-to-end investigation graphs built from real public-record sources: PACER federal case dockets processed through `process_document_file` (`examples/pacer/` — trafficking, CSAM production, cryptocurrency, and racketeering cases), a cyber threat intelligence exemplar (`examples/cti/`), ICAC arrest and CyberTip workflows, and document-processing outputs.
 
-### Cross-ontology profiles (v1.21.0)
+### Cross-ontology profiles (v1.22.0)
 
 Use the public composition API (`upsert_node` / `add_type` / `link` / `create_relationship`) to enrich a CASE/UCO node with compatible upper-ontology types on the **same IRI**. Validate with named profiles:
 

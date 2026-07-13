@@ -126,8 +126,22 @@ for volume in disk_image.volumes:
 Public synthetic benchmarks live under `benchmarks/` (#73):
 
 ```bash
-python3 benchmarks/run_python_bench.py --tier small
+python3 benchmarks/run_python_bench.py --tier small \
+  --out artifacts/bench/python-small.json
+python3 benchmarks/compare_baseline.py \
+  --baseline benchmarks/baselines/python-small.json \
+  --result artifacts/bench/python-small.json
+
+./benchmarks/run_csharp_bench.sh --tier small
+./benchmarks/run_java_bench.sh --tier small
+./benchmarks/run_rust_bench.sh --tier small
 ```
+
+CI runs the Python small tier and fails if any timing key exceeds the committed
+baseline by more than +100% (lenient host variance). Phase-2 **bounded writer**
+(chunked/back-pressured streaming for multi-GB graphs) is deferred; current
+`write_streaming` is incremental + atomic with metrics, not a bounded buffer
+pipeline.
 
 > **`split()` safety note:** The SDK's `split()` helper divides by object index.
 > It is safe for **catalog-style graphs** where objects are independent (file hash

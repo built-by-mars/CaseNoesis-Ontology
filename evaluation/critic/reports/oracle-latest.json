@@ -1,10 +1,10 @@
 {
   "harness": "run_oracles",
-  "generated_at": "2026-07-13T17:47:41.411409+00:00",
+  "generated_at": "2026-07-13T18:55:32.104078+00:00",
   "passed": true,
   "metrics": {
-    "case_count": 6,
-    "passed_cases": 6,
+    "case_count": 10,
+    "passed_cases": 10,
     "mean_detection_recall": 1.0,
     "gold_false_positive_critical_high_total": 0
   },
@@ -49,11 +49,53 @@
       }
     },
     {
+      "case_id": "micro-action-incomplete",
+      "passed": true,
+      "violations": [],
+      "detected_rule_ids": [
+        "CRIT-H-ACQ-INPUT-RESULT-INVERSION",
+        "CRIT-H-ACTION-COMPLETENESS"
+      ],
+      "validation": {
+        "conforms": true,
+        "verification_status": "complete",
+        "violation_count": 0,
+        "warning_count": 0,
+        "bundle_fingerprint": null,
+        "selected_profiles": [],
+        "selected_extensions": [],
+        "stage_status": {
+          "bundle_resolution": "skipped",
+          "shacl_execution": "complete",
+          "shacl_conformance": "conforms",
+          "coverage_execution": "complete",
+          "coverage_conformance": "ok"
+        },
+        "profile_not_selected": [],
+        "role_mismatches": [],
+        "relationship_lint_ok": null,
+        "relationship_lint_findings": [],
+        "error_code": null,
+        "safe_summary": "Graph conforms to CASE/UCO SHACL shapes."
+      },
+      "status": "needs_revision",
+      "analysis_status": "complete",
+      "metrics": {
+        "detection_recall": {
+          "expected": 1,
+          "found": 1,
+          "recall": 1.0,
+          "missing": []
+        }
+      }
+    },
+    {
       "case_id": "micro-charged-with-reversed",
       "passed": true,
       "violations": [],
       "detected_rule_ids": [
         "CRIT-H-ACQ-INPUT-RESULT-INVERSION",
+        "CRIT-H-ACTION-COMPLETENESS",
         "CRIT-H-AUTH-NON-INVESTIGATION",
         "CRIT-H-CHARGED-WITH-REVERSED",
         "CRIT-H-DICT-ENTRY-COLLISION",
@@ -97,17 +139,16 @@
       }
     },
     {
-      "case_id": "micro-gold-charged-with",
+      "case_id": "micro-derived-no-hash",
       "passed": true,
       "violations": [],
       "detected_rule_ids": [
-        "CRIT-V-NONCONFORMING",
-        "CRIT-V-RELATIONSHIP-LINT"
+        "CRIT-H-DERIVED-NO-HASH"
       ],
       "validation": {
-        "conforms": false,
+        "conforms": true,
         "verification_status": "complete",
-        "violation_count": 1,
+        "violation_count": 0,
         "warning_count": 0,
         "bundle_fingerprint": null,
         "selected_profiles": [],
@@ -115,7 +156,7 @@
         "stage_status": {
           "bundle_resolution": "skipped",
           "shacl_execution": "complete",
-          "shacl_conformance": "nonconformant",
+          "shacl_conformance": "conforms",
           "coverage_execution": "complete",
           "coverage_conformance": "ok"
         },
@@ -124,9 +165,49 @@
         "relationship_lint_ok": null,
         "relationship_lint_findings": [],
         "error_code": null,
-        "safe_summary": "Graph does not conform: 1 constraint violation(s). Fix the graph before submitting it for review."
+        "safe_summary": "Graph conforms to CASE/UCO SHACL shapes."
       },
       "status": "needs_revision",
+      "analysis_status": "complete",
+      "metrics": {
+        "detection_recall": {
+          "expected": 1,
+          "found": 1,
+          "recall": 1.0,
+          "missing": []
+        }
+      }
+    },
+    {
+      "case_id": "micro-gold-charged-with",
+      "passed": true,
+      "violations": [],
+      "detected_rule_ids": [
+        "CRIT-V-RELATIONSHIP-LINT"
+      ],
+      "validation": {
+        "conforms": true,
+        "verification_status": "complete",
+        "violation_count": 0,
+        "warning_count": 0,
+        "bundle_fingerprint": null,
+        "selected_profiles": [],
+        "selected_extensions": [],
+        "stage_status": {
+          "bundle_resolution": "skipped",
+          "shacl_execution": "complete",
+          "shacl_conformance": "conforms",
+          "coverage_execution": "complete",
+          "coverage_conformance": "ok"
+        },
+        "profile_not_selected": [],
+        "role_mismatches": [],
+        "relationship_lint_ok": null,
+        "relationship_lint_findings": [],
+        "error_code": null,
+        "safe_summary": "Graph conforms to CASE/UCO SHACL shapes."
+      },
+      "status": "completed_with_findings",
       "analysis_status": "complete",
       "metrics": {
         "detection_recall": {
@@ -137,6 +218,46 @@
         "false_positive_critical_high": {
           "count": 0,
           "rule_ids": []
+        }
+      }
+    },
+    {
+      "case_id": "micro-identity-conflation",
+      "passed": true,
+      "violations": [],
+      "detected_rule_ids": [
+        "CRIT-H-IDENTITY-CONFLATION"
+      ],
+      "validation": {
+        "conforms": true,
+        "verification_status": "complete",
+        "violation_count": 0,
+        "warning_count": 0,
+        "bundle_fingerprint": null,
+        "selected_profiles": [],
+        "selected_extensions": [],
+        "stage_status": {
+          "bundle_resolution": "skipped",
+          "shacl_execution": "complete",
+          "shacl_conformance": "conforms",
+          "coverage_execution": "complete",
+          "coverage_conformance": "ok"
+        },
+        "profile_not_selected": [],
+        "role_mismatches": [],
+        "relationship_lint_ok": null,
+        "relationship_lint_findings": [],
+        "error_code": null,
+        "safe_summary": "Graph conforms to CASE/UCO SHACL shapes."
+      },
+      "status": "needs_revision",
+      "analysis_status": "complete",
+      "metrics": {
+        "detection_recall": {
+          "expected": 1,
+          "found": 1,
+          "recall": 1.0,
+          "missing": []
         }
       }
     },
@@ -187,16 +308,21 @@
       "violations": [],
       "detected_rule_ids": [
         "CRIT-C-MISSING-LABEL",
+        "CRIT-H-ACTION-COMPLETENESS",
+        "CRIT-H-CONTEXTUAL-COMPILATION-OMISSION",
+        "CRIT-H-CUSTODY-UNPAIRED",
+        "CRIT-H-DERIVED-NO-HASH",
+        "CRIT-H-DERIVED-NO-PROVENANCE",
+        "CRIT-H-MARKING-INHERITANCE",
         "CRIT-H-RELATED-TO-OVERUSE",
-        "CRIT-V-NONCONFORMING",
         "CRIT-V-RELATIONSHIP-LINT"
       ],
       "validation": {
-        "conforms": false,
+        "conforms": true,
         "verification_status": "complete",
         "violation_count": 0,
         "warning_count": 0,
-        "bundle_fingerprint": "9e11e73de50de7a5d40e7dd44d1ba9fac235d4aca4fde4434d10362379704216",
+        "bundle_fingerprint": "7a74dbb72f752389b03d39686d05fdc5d1b63ed615ec43d482ef0f1292a5799d",
         "selected_profiles": [],
         "selected_extensions": [
           "legalproc",
@@ -213,14 +339,14 @@
           "shacl_execution": "complete",
           "shacl_conformance": "conforms",
           "coverage_execution": "complete",
-          "coverage_conformance": "failed"
+          "coverage_conformance": "ok"
         },
         "profile_not_selected": [],
         "role_mismatches": [],
         "relationship_lint_ok": null,
         "relationship_lint_findings": [],
         "error_code": null,
-        "safe_summary": "Graph uses 2 class/property term(s) not declared in CASE/UCO or supported extension ontologies: https://cacontology.projectvic.org/detection#DetectionResult, https://cacontology.projectvic.org/detection#confidenceScore. Draft a change proposal or add the concept(s) to an extension ontology, then re-validate."
+        "safe_summary": "Graph conforms to CASE/UCO SHACL shapes with extension(s): legalproc, rico, cryptoinv, attack-technique:full, solveit, weapons, drugs, cac. (validation-subset)"
       },
       "status": "needs_revision",
       "analysis_status": "complete",
@@ -244,6 +370,7 @@
         "CRIT-S-PY-FAIL-OPEN-VALIDATION",
         "CRIT-S-PY-GLOBAL-UUID-IDS",
         "CRIT-S-PY-JSON-DUMPS-ONLY",
+        "CRIT-S-PY-NONEXISTENT-API",
         "CRIT-S-PY-PRIVATE-OBJECTS",
         "CRIT-S-PY-SWALLOWED-EXCEPTION",
         "CRIT-V-NONCONFORMING",
@@ -277,6 +404,47 @@
         "detection_recall": {
           "expected": 4,
           "found": 4,
+          "recall": 1.0,
+          "missing": []
+        }
+      }
+    },
+    {
+      "case_id": "serializer-nonexistent-api",
+      "passed": true,
+      "violations": [],
+      "detected_rule_ids": [
+        "CRIT-S-PY-NONEXISTENT-API",
+        "CRIT-V-NONCONFORMING"
+      ],
+      "validation": {
+        "conforms": false,
+        "verification_status": "complete",
+        "violation_count": 1,
+        "warning_count": 0,
+        "bundle_fingerprint": null,
+        "selected_profiles": [],
+        "selected_extensions": [],
+        "stage_status": {
+          "bundle_resolution": "skipped",
+          "shacl_execution": "complete",
+          "shacl_conformance": "nonconformant",
+          "coverage_execution": "complete",
+          "coverage_conformance": "ok"
+        },
+        "profile_not_selected": [],
+        "role_mismatches": [],
+        "relationship_lint_ok": null,
+        "relationship_lint_findings": [],
+        "error_code": null,
+        "safe_summary": "Graph does not conform: 1 constraint violation(s). Fix the graph before submitting it for review."
+      },
+      "status": "needs_revision",
+      "analysis_status": "complete",
+      "metrics": {
+        "detection_recall": {
+          "expected": 1,
+          "found": 1,
           "recall": 1.0,
           "missing": []
         }

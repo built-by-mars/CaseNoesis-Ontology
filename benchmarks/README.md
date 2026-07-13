@@ -13,16 +13,21 @@ Fully synthetic, deterministic workloads for Python / C# / Java / Rust.
 ## Run
 
 ```bash
-# Python (all workloads)
+# Python (all workloads) + baseline compare
 python3 benchmarks/run_python_bench.py --tier small --out artifacts/bench/python-small.json
+python3 benchmarks/compare_baseline.py \
+  --baseline benchmarks/baselines/python-small.json \
+  --result artifacts/bench/python-small.json
 
-# Rust
+# Rust / C# / Java (catalog serialize)
 ./benchmarks/run_rust_bench.sh --tier small
-
-# C# / Java — use language test projects' smoke paths or:
-#   cd csharp && dotnet run --project CaseUco.Smoke -- --bench small
-#   (add dedicated runners as needed)
+./benchmarks/run_csharp_bench.sh --tier small
+./benchmarks/run_java_bench.sh --tier small
 ```
+
+Committed baseline: `benchmarks/baselines/python-small.json`. Compare fails if
+any `*_seconds` timing with baseline ≥ 50ms exceeds that baseline by more than
++100% (sub-50ms keys are skipped as too noisy for CI).
 
 ## Workloads (Python)
 

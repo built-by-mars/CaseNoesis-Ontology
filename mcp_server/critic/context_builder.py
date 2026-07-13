@@ -38,10 +38,12 @@ SCHEMA_PATH = Path(__file__).resolve().parent / "schemas" / "critic-prompt-packa
 
 HASH_EXCLUDED_FIELDS = frozenset({
     "prompt_package_hash",
+    "prompt_content_sha256",
     "byte_size",
     "token_estimate",
-    "review_request_sha256",  # derived from prompt hash; not part of content digest
-    "response_schema",  # replaced by deterministic stub in _hashable_package
+    "review_request_sha256",  # derived from prompt_content_sha256; not part of content digest
+    "response_schema",  # bound after content hash; excluded from content digest
+    "serialization_integrity_sha256",
 })
 
 CRITIC_SYSTEM_ROLE = (
@@ -61,30 +63,23 @@ def content_hash_payload(package: dict[str, Any]) -> dict[str, Any]:
 
 
 def _hashable_package(package: dict[str, Any]) -> dict[str, Any]:
-    """Normalize package for hashing: replace bound response_schema with stub.
+    """Content digest payload excluding response binding and derived metadata.
 
-    The bound schema includes ``prompt_package_hash`` as a const, so hashing the
-    live schema would be circular. Hash a deterministic stub instead.
+    ``prompt_content_sha256`` must not depend on ``review_request_sha256`` or the
+    bound ``response_schema`` (both are derived *from* the content hash).
     """
 
-    stub = dict(package)
-    arts = package.get("artifact_hashes") or {}
-    stub["response_schema"] = {
-        "schema_sha256": package.get("response_schema_sha256") or model_response_schema_sha256(),
-        "bound": {
-            "graph_sha256": arts.get("graph_sha256"),
-            "serializer_sha256": arts.get("serializer_sha256"),
-            "session_id": package.get("session_id"),
-            "pass_number": package.get("pass_number"),
-            "schema_version": package.get("response_schema_version") or SUPPORTED_SCHEMA_VERSION,
-            "review_request_sha256": package.get("review_request_sha256"),
-        },
-    }
-    return content_hash_payload(stub)
+    return content_hash_payload(dict(package))
+
+
+def compute_prompt_content_sha256(package: dict[str, Any]) -> str:
+    return hashlib.sha256(_dumps(_hashable_package(package))).hexdigest()
 
 
 def compute_prompt_package_hash(package: dict[str, Any]) -> str:
-    return hashlib.sha256(_dumps(_hashable_package(package))).hexdigest()
+    """Alias for the non-circular prompt content hash (response binding value)."""
+
+    return compute_prompt_content_sha256(package)
 
 
 def validate_prompt_package(package: dict[str, Any]) -> None:
@@ -124,6 +119,8 @@ def build_prompt_package(
     source_excerpts = list(source_excerpts or [])
     source_findings = list(source_findings or [])
     critic_findings = list(critic_findings or [])
+    deterministic_findings = list(deterministic_findings or [])
+    prior_findings = list(prior_findings or [])
     neighborhoods = _one_hop_neighborhoods(
         graph_view, deterministic_findings + source_findings + critic_findings
     )
@@ -183,7 +180,8 @@ def build_prompt_package(
     package = assemble(truncated=False, omissions=omissions)
 
     def shrink() -> None:
-        nonlocal package, omissions
+        nonlocal package, omissions, deterministic_findings, source_findings
+        nonlocal critic_findings, prior_findings
         if len(_dumps(content_hash_payload(package))) <= max_bytes:
             return
         neighborhoods[:] = neighborhoods[:3]
@@ -199,25 +197,42 @@ def build_prompt_package(
         overview.clear()
         omissions = ["truncated_neighborhoods_and_excerpts", "dropped_context_sections"]
         package = assemble(truncated=True, omissions=omissions)
+        if len(_dumps(content_hash_payload(package))) <= max_bytes:
+            return
+        # Keep only critical/high finding summaries for large graphs.
+        deterministic_findings = [
+            f
+            for f in deterministic_findings
+            if f.severity in {"critical", "high"}
+        ][:15]
+        source_findings = [
+            f for f in source_findings if f.severity in {"critical", "high"}
+        ][:10]
+        critic_findings = critic_findings[:10]
+        prior_findings = (prior_findings or [])[:10]
+        omissions = list(omissions) + ["truncated_findings_to_critical_high"]
+        package = assemble(truncated=True, omissions=omissions)
+        if len(_dumps(content_hash_payload(package))) <= max_bytes:
+            return
+        deterministic_findings = deterministic_findings[:5]
+        source_findings = []
+        critic_findings = []
+        prior_findings = []
+        omissions = list(omissions) + ["dropped_nonessential_findings"]
+        package = assemble(truncated=True, omissions=omissions)
 
     shrink()
     if len(_dumps(content_hash_payload(package))) > max_bytes:
         raise ValueError("critic_prompt_package_too_large")
 
-    # Bind response schema with a temporary hash, then settle content hash.
-    package["review_request_sha256"] = compute_review_request_sha256(
-        schema_version=SUPPORTED_SCHEMA_VERSION,
-        session_id=session_id,
-        pass_number=pass_number,
-        graph_sha256=artifact_hashes.graph_sha256,
-        serializer_sha256=artifact_hashes.serializer_sha256,
-        source_sha256=artifact_hashes.source_sha256,
-        coverage_contract_sha256=artifact_hashes.coverage_contract_sha256,
-        prompt_package_hash="0" * 64,
-    )
+    # Non-circular binding:
+    #   prompt_content_sha256 = hash(prompt content excluding derived fields)
+    #   review_request_sha256 = hash(session/pass/artifacts + prompt_content_sha256)
+    #   bound response_schema uses those finals (not rehashed into content)
     package["response_schema_version"] = SUPPORTED_SCHEMA_VERSION
     package["response_schema_sha256"] = model_response_schema_sha256()
-    package["prompt_package_hash"] = compute_prompt_package_hash(package)
+    package["prompt_content_sha256"] = compute_prompt_content_sha256(package)
+    package["prompt_package_hash"] = package["prompt_content_sha256"]
     package["review_request_sha256"] = compute_review_request_sha256(
         schema_version=SUPPORTED_SCHEMA_VERSION,
         session_id=session_id,
@@ -226,18 +241,32 @@ def build_prompt_package(
         serializer_sha256=artifact_hashes.serializer_sha256,
         source_sha256=artifact_hashes.source_sha256,
         coverage_contract_sha256=artifact_hashes.coverage_contract_sha256,
-        prompt_package_hash=package["prompt_package_hash"],
+        prompt_package_hash=package["prompt_content_sha256"],
     )
-    package["prompt_package_hash"] = compute_prompt_package_hash(package)
     package["response_schema"] = bound_model_response_schema(
         graph_sha256=artifact_hashes.graph_sha256,
-        prompt_package_hash=package["prompt_package_hash"],
+        prompt_package_hash=package["prompt_content_sha256"],
         serializer_sha256=artifact_hashes.serializer_sha256,
         session_id=session_id,
         pass_number=pass_number,
         schema_version=SUPPORTED_SCHEMA_VERSION,
         review_request_sha256=package["review_request_sha256"],
     )
+    # Optional integrity hash over the fully bound package (not used for binding).
+    package["serialization_integrity_sha256"] = hashlib.sha256(
+        _dumps(
+            {
+                k: v
+                for k, v in package.items()
+                if k
+                not in {
+                    "serialization_integrity_sha256",
+                    "byte_size",
+                    "token_estimate",
+                }
+            }
+        )
+    ).hexdigest()
     package["token_estimate"] = max(1, len(_dumps(_hashable_package(package))) // 4)
 
     # Stabilize byte_size to equal final serialized length.
@@ -251,7 +280,11 @@ def build_prompt_package(
         raise ValueError("critic_prompt_package_size_unstable")
 
     if package["byte_size"] > max_bytes:
-        raise ValueError("critic_prompt_package_too_large")
+        # Bound schema + metadata may exceed the content budget; only fail when
+        # the content digest payload itself is still over the limit.
+        content_size = len(_dumps(content_hash_payload(package)))
+        if content_size > max_bytes:
+            raise ValueError("critic_prompt_package_too_large")
 
     validate_prompt_package(package)
     return package

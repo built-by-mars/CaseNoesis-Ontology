@@ -1,0 +1,14 @@
+{
+  "case_id": "micro-action-incomplete",
+  "expected_rule_ids": ["CRIT-H-ACTION-COMPLETENESS"],
+  "forbidden_rule_ids_on_gold": [],
+  "expected_severities_min": {
+    "CRIT-H-ACTION-COMPLETENESS": "high"
+  },
+  "expect_validation": {
+    "allow_unavailable": true
+  },
+  "expect_zero_unexpected_critical_high": false,
+  "allowed_repairs": [],
+  "forbidden_regressions": []
+}
