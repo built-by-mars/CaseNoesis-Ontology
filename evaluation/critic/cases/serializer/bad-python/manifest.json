@@ -1,0 +1,7 @@
+{
+  "case_id": "serializer-bad-python",
+  "tier": "T0",
+  "critic_scope": "both",
+  "graph_path": "graph.jsonld",
+  "serializer_path": "serializer.py"
+}

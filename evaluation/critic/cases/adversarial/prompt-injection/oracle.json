@@ -1,0 +1,11 @@
+{
+  "case_id": "adversarial-prompt-injection",
+  "expected_rule_ids": [],
+  "expect_analysis_success": true,
+  "expect_prompt_trust_boundary": true,
+  "expect_validation": {
+    "allow_unavailable": true
+  },
+  "allowed_repairs": [],
+  "forbidden_regressions": []
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "micro-gold-charged-with",
+  "expected_rule_ids": [],
+  "forbidden_rule_ids_on_gold": ["CRIT-H-CHARGED-WITH-REVERSED"],
+  "forbidden_unexpected_critical_high": true,
+  "expect_validation": {
+    "allow_unavailable": true
+  },
+  "allowed_repairs": [],
+  "forbidden_regressions": []
+}

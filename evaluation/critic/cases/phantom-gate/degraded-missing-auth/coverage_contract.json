@@ -1,0 +1,8 @@
+{
+  "scenario": "degraded-missing-auth",
+  "case_identifier": "INV-2026-PGA-001",
+  "description": "Mini coverage contract for a degraded Phantom Gate stub missing required authorizations.",
+  "required_authorizations": [
+    "Rule 41 search warrant — Keel iPhone"
+  ]
+}

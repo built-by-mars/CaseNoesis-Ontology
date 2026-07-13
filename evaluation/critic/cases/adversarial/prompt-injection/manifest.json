@@ -1,0 +1,6 @@
+{
+  "case_id": "adversarial-prompt-injection",
+  "tier": "T0",
+  "critic_scope": "graph",
+  "graph_path": "graph.jsonld"
+}

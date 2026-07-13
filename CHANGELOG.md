@@ -9,29 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-#### Critic loop foundation (#75) — v1.22 Round 4 (P0 contracts)
+#### Critic loop (#74–#78) — v1.22
 
-- Authoritative `critic-model-response.schema.json` shared by prompt builder
-  and response parser; per-pass const bindings; `response_schema_version` /
-  `response_schema_sha256` / `review_request_sha256`.
-- Prompt `byte_size` equals final canonical serialization and is bounded by
-  `max_bytes`; content hash excludes derived metadata (including bound
-  `response_schema`).
-- Per-rule `RuleExecution` ledger with `verifier_rule_id`, `required_for_scope`,
-  validation executions (`CRIT-V-SHACL` / concept / profile / relationship
-  lint), `analysis_status`, and `analysis_incomplete` when required rules
-  fail or skip (never `deterministic_clean` then).
-- Separate prompt sections for deterministic / source / critic findings;
-  model finding IDs without array index (`claim_type` / `assesses_finding_id`);
-  reject unexpected serializer/session/pass bindings; hex-64 hash patterns.
-- Offline remote `@context` rejection; expanded subject/object IRIs; Turtle
-  relationship-kind lint via canonical graph; occurrence metadata;
-  `unevaluated` status; outgoing `CriticReview` schema validation.
-- Scorecard dimensions assessed only when matching rules completed; model
-  merge constrained by deterministic `hard_cap` only; serializer AST skipped
-  (not truncated-parse) when source exceeds 256 KiB.
-- Issue #75 remains open until Phantom Gate oracles and remaining declared
-  rule fixtures land. MCP sessions remain #76.
+- **#75 contracts**: authoritative model-response schema, bound per-pass consts,
+  final `byte_size`/`max_bytes`, `review_request_sha256`, per-rule ledger with
+  `verifier_rule_id` / `analysis_status`, offline remote `@context` rejection,
+  Turtle relationship lint, occurrence/`unevaluated`, outgoing review schema
+  validation, ledger-aware scorecards, serializer too-large AST skip.
+- **#76 sessions**: resumable workspace-confined `critic-sessions/` store with
+  flock + atomic JSON + audit log; MCP tools `start_critic_review`,
+  `submit_manual_critic_response`, `submit_critic_revision`,
+  `extend_critic_review`, `get_critic_review_status`, `finalize_critic_review`,
+  `cancel_critic_review`; policies `disabled`/`manual`/`client_sampling`;
+  FastMCP pinned to `>=3.4.0,<4`.
+- **#77 evaluation**: `evaluation/critic/` micro/serializer/phantom-gate/
+  adversarial cases, oracle + session-replay harnesses, CI critic job.
+- **#78 handoff**: `prepare_critic_handoff` preview-only package with optional
+  approved write under workspace policy (no auto promotion/issues).
+
+Docs: `docs/critic/RULES.md`.
 
 ## [1.21.0] - 2026-07-12
 

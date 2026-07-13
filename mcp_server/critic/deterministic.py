@@ -200,6 +200,8 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
         project_root=project_root,
         errors=errors,
         artifact_hash=hashes.graph_sha256,
+        extra_ontology_graphs=list(request.extra_ontology_graphs or []),
+        force_rdfs_inference=bool(request.force_rdfs_inference),
     )
     findings.extend(_validation_findings(validation))
     rule_executions.extend(e.to_dict() for e in validation_execs)
@@ -412,6 +414,8 @@ def _run_validation(
     project_root: Path,
     errors: list[str],
     artifact_hash: str,
+    extra_ontology_graphs: list[str] | None = None,
+    force_rdfs_inference: bool = False,
 ) -> tuple[ValidationSummary, list[RuleExecution]]:
     executions: list[RuleExecution] = []
     if not graph_validator.validator_available():
@@ -448,6 +452,8 @@ def _run_validation(
             extensions=extensions or None,
             profiles=profiles or None,
             project_root=project_root,
+            extra_ontology_graphs=extra_ontology_graphs or None,
+            force_rdfs_inference=force_rdfs_inference,
         )
     except Exception as exc:  # noqa: BLE001
         errors.append("critic_validation_incomplete")

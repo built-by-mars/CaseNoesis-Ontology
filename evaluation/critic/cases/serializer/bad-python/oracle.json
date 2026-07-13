@@ -1,0 +1,19 @@
+{
+  "case_id": "serializer-bad-python",
+  "expected_rule_ids": [
+    "CRIT-S-PY-PRIVATE-OBJECTS",
+    "CRIT-S-PY-JSON-DUMPS-ONLY",
+    "CRIT-S-PY-SWALLOWED-EXCEPTION",
+    "CRIT-S-PY-FAIL-OPEN-VALIDATION"
+  ],
+  "forbidden_rule_ids_on_gold": [],
+  "expected_severities_min": {
+    "CRIT-S-PY-PRIVATE-OBJECTS": "high"
+  },
+  "expect_validation": {
+    "allow_unavailable": true
+  },
+  "expect_zero_unexpected_critical_high": false,
+  "allowed_repairs": [],
+  "forbidden_regressions": []
+}

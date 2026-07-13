@@ -1,0 +1,20 @@
+{
+  "case_id": "phantom-gate-gold",
+  "tier": "T0",
+  "critic_scope": "graph",
+  "graph_path": "examples/scenarios/operation-phantom-gate.jsonld",
+  "coverage_contract_path": "examples/scenarios/phantom_gate_coverage.json",
+  "extensions": [
+    "legalproc",
+    "rico",
+    "cryptoinv",
+    "attack-technique:full",
+    "solveit",
+    "weapons",
+    "drugs",
+    "cac"
+  ],
+  "extra_ontology_graphs": ["ontology/solveit/solve-it-kb.ttl"],
+  "force_rdfs_inference": true,
+  "source_paths": ["examples/scenarios/operation-phantom-gate.md"]
+}

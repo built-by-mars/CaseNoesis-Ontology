@@ -1,0 +1,14 @@
+{
+  "@context": {
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:11111111-1111-1111-1111-111111111111",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "INV-2026-PGA-001 — degraded auth stub",
+      "uco-core:description": "Tier T0 synthetic stub: Investigation without modeled authorizations."
+    }
+  ]
+}

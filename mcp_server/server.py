@@ -25,6 +25,10 @@ programmatically instead of parsing markdown documentation. Tool groups:
 - Change proposals: check_existing_proposals (UCO/CASE/CAC issue trackers)
   and draft_change_proposal (writes proposal markdown, example JSON-LD, and
   SPARQL query files to change_proposals/).
+- Critic loop (#75–#78): start_critic_review, submit_manual_critic_response,
+  submit_critic_revision, extend_critic_review, get_critic_review_status,
+  finalize_critic_review, cancel_critic_review, and prepare_critic_handoff
+  (preview-only self-improvement bridge).
 
 MCP resources: case-uco://domains, case-uco://profiles, case-uco://modules,
 and case-uco://patterns.
@@ -90,6 +94,7 @@ from cac_content_router import route_cac_content as _route_cac_content, search_r
 from investigation_router import route_investigation_content as _route_investigation_content
 import solveit_index
 import workspace_policy
+import critic_tools
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -1802,6 +1807,129 @@ def get_patterns() -> str:
         lines.append(p["description"])
         lines.append(f"\n```python\n{p['python_example']}\n```\n")
     return "\n".join(lines)
+
+
+@mcp.tool
+def start_critic_review(
+    graph_path: str,
+    serializer_path: str | None = None,
+    source_paths: list[str] | None = None,
+    coverage_contract_path: str | None = None,
+    extensions: list[str] | None = None,
+    profiles: list[str] | None = None,
+    critic_scope: str = "both",
+    additional_iterations: int = 0,
+    model_policy: str | None = None,
+    report_output: str | None = None,
+) -> dict:
+    """Start a bounded critic-session review (issue #76).
+
+    Default is two critic passes. Returns a prompt_package for manual or
+    client-sampling critics. The originating agent owns all edits.
+    """
+    return critic_tools.tool_start_critic_review(
+        graph_path=graph_path,
+        serializer_path=serializer_path,
+        source_paths=source_paths,
+        coverage_contract_path=coverage_contract_path,
+        extensions=extensions,
+        profiles=profiles,
+        critic_scope=critic_scope,
+        additional_iterations=additional_iterations,
+        model_policy=model_policy,
+        report_output=report_output,
+    )
+
+
+@mcp.tool
+def submit_manual_critic_response(
+    session_id: str,
+    response: dict | str,
+) -> dict:
+    """Submit a schema-valid critic JSON response for the current pass."""
+    return critic_tools.tool_submit_manual_critic_response(session_id, response)
+
+
+@mcp.tool
+def submit_critic_revision(
+    session_id: str,
+    graph_path: str,
+    serializer_path: str | None = None,
+    source_paths: list[str] | None = None,
+    coverage_contract_path: str | None = None,
+    change_summary: str | None = None,
+    addressed_finding_ids: list[str] | None = None,
+    extensions: list[str] | None = None,
+    profiles: list[str] | None = None,
+) -> dict:
+    """Resubmit a revised graph/serializer for the next critic pass."""
+    return critic_tools.tool_submit_critic_revision(
+        session_id=session_id,
+        graph_path=graph_path,
+        serializer_path=serializer_path,
+        source_paths=source_paths,
+        coverage_contract_path=coverage_contract_path,
+        change_summary=change_summary,
+        addressed_finding_ids=addressed_finding_ids,
+        extensions=extensions,
+        profiles=profiles,
+    )
+
+
+@mcp.tool
+def extend_critic_review(
+    session_id: str,
+    additional_iterations: int,
+    approval_token: str,
+) -> dict:
+    """Approve additional passes beyond the default two (hard cap 8)."""
+    return critic_tools.tool_extend_critic_review(
+        session_id, additional_iterations, approval_token
+    )
+
+
+@mcp.tool
+def get_critic_review_status(session_id: str) -> dict:
+    """Return critic-session status without raw evidence copies."""
+    return critic_tools.tool_get_critic_review_status(session_id)
+
+
+@mcp.tool
+def finalize_critic_review(session_id: str) -> dict:
+    """Finalize only when hashes, validation, analysis, and blockers pass."""
+    return critic_tools.tool_finalize_critic_review(session_id)
+
+
+@mcp.tool
+def cancel_critic_review(session_id: str) -> dict:
+    """Cancel an in-progress critic session."""
+    return critic_tools.tool_cancel_critic_review(session_id)
+
+
+@mcp.tool
+def prepare_critic_handoff(
+    session_id: str,
+    finding_ids: list[str],
+    requested_handoff_type: str | None = None,
+    operator_rationale: str = "",
+    operator_id: str = "",
+    output_path: str | None = None,
+    approve_write: bool = False,
+) -> dict:
+    """Preview-only self-improvement handoff from a finalized session (#78).
+
+    Persistent write requires approve_write=True and a workspace write path.
+    Never promotes recipes or creates issues automatically.
+    """
+    return critic_tools.tool_prepare_critic_handoff(
+        session_id=session_id,
+        finding_ids=finding_ids,
+        requested_handoff_type=requested_handoff_type,
+        operator_rationale=operator_rationale,
+        operator_id=operator_id,
+        output_path=output_path,
+        approve_write=approve_write,
+    )
 
 
 @mcp.tool

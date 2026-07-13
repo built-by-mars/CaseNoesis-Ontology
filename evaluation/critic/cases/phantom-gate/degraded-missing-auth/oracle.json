@@ -1,0 +1,13 @@
+{
+  "case_id": "phantom-gate-degraded-missing-auth",
+  "expected_rule_ids": ["CRIT-C-MISSING-AUTHORIZATION"],
+  "expected_severities_min": {
+    "CRIT-C-MISSING-AUTHORIZATION": "high"
+  },
+  "expect_validation": {
+    "allow_unavailable": true
+  },
+  "expect_zero_unexpected_critical_high": false,
+  "allowed_repairs": [],
+  "forbidden_regressions": []
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/evaluation/critic-case-manifest.schema.json",
+  "title": "Critic evaluation case manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["case_id", "tier", "critic_scope", "graph_path"],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["T0"]
+    },
+    "critic_scope": {
+      "type": "string",
+      "enum": ["graph", "serializer", "both"]
+    },
+    "graph_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "serializer_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "serializer_mode": {
+      "type": "string",
+      "enum": ["typed_sdk", "raw_fixture", "auto"]
+    },
+    "coverage_contract_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_paths": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "extensions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "profiles": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

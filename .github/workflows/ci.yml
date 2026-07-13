@@ -193,13 +193,21 @@ jobs:
           path: .
 
       - name: Install dependencies
-        run: pip install rdflib jinja2 pytest mypy jsonschema
+        run: pip install rdflib jinja2 pytest mypy jsonschema "fastmcp>=3.4.0,<4" case-utils
 
       - name: Run tests
         run: PYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v
 
       - name: Run MCP server tests
         run: python -m pytest mcp_server/tests -v
+
+      - name: Run critic loop suite
+        env:
+          CASE_UCO_EXTENSIONS: legalproc,rico,cryptoinv,attack-technique:full,solveit,weapons,drugs,cac
+        run: |
+          python -m pytest mcp_server/tests/test_critic.py mcp_server/tests/test_critic_sessions.py -v
+          PYTHONPATH=mcp_server python evaluation/critic/harness/run_oracles.py
+          PYTHONPATH=mcp_server python evaluation/critic/harness/run_session_replay.py
 
       - name: Type check
         run: cd python && mypy case_uco/ --ignore-missing-imports

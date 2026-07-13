@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/evaluation/critic-oracle.schema.json",
+  "title": "Critic evaluation oracle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["case_id"],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "graph_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "coverage_contract_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expected_rule_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "forbidden_rule_ids_on_gold": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "expected_severities_min": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["critical", "high", "medium", "low", "info"]
+      }
+    },
+    "expect_validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allow_unavailable": { "type": "boolean" },
+        "prefer_complete_conforming": { "type": "boolean" },
+        "require_conforming": { "type": "boolean" }
+      }
+    },
+    "expect_zero_unexpected_critical_high": { "type": "boolean" },
+    "forbidden_unexpected_critical_high": { "type": "boolean" },
+    "allowed_critical_high_rule_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "expect_analysis_success": { "type": "boolean" },
+    "expect_prompt_trust_boundary": { "type": "boolean" },
+    "allowed_repairs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "forbidden_regressions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

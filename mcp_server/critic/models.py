@@ -277,6 +277,8 @@ class CriticArtifactRequest:
     serializer_mode: Literal["typed_sdk", "raw_fixture", "auto"] = "auto"
     pass_number: int = 1
     session_id: str | None = None
+    extra_ontology_graphs: list[str] = field(default_factory=list)
+    force_rdfs_inference: bool = False
 
 
 @dataclass

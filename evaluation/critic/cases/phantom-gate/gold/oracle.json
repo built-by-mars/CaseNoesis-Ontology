@@ -1,0 +1,20 @@
+{
+  "case_id": "phantom-gate-gold",
+  "graph_path": "examples/scenarios/operation-phantom-gate.jsonld",
+  "coverage_contract_path": "examples/scenarios/phantom_gate_coverage.json",
+  "expected_rule_ids": [],
+  "forbidden_unexpected_critical_high": true,
+  "allowed_critical_high_rule_ids": [
+    "CRIT-V-NONCONFORMING",
+    "CRIT-V-UNAVAILABLE",
+    "CRIT-V-PROFILE-NOT-SELECTED"
+  ],
+  "notes": "Pinned Phantom Gate gold currently reports SHACL-clean but strict concept coverage flags two CAC detection terms; treat CRIT-V-NONCONFORMING as known until the scenario ontology bundle includes those terms.",
+  "expect_validation": {
+    "prefer_complete_conforming": true,
+    "allow_unavailable": true,
+    "require_conforming_when_complete": false
+  },
+  "expect_shacl_violation_count_max": 0,
+  "source_path": "examples/scenarios/operation-phantom-gate.md"
+}

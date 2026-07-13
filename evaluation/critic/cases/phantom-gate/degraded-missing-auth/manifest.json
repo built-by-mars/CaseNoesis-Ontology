@@ -1,0 +1,7 @@
+{
+  "case_id": "phantom-gate-degraded-missing-auth",
+  "tier": "T0",
+  "critic_scope": "graph",
+  "graph_path": "graph.jsonld",
+  "coverage_contract_path": "coverage_contract.json"
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/evaluation/critic-result.schema.json",
+  "title": "Critic evaluation harness result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["harness", "generated_at", "passed", "case_results"],
+  "properties": {
+    "harness": {
+      "type": "string",
+      "enum": ["run_oracles", "run_session_replay"]
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "passed": { "type": "boolean" },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "case_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["case_id", "passed"],
+        "properties": {
+          "case_id": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "violations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "detected_rule_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "validation": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": { "type": "string" },
+          "analysis_status": { "type": "string" }
+        }
+      }
+    }
+  }
+}
