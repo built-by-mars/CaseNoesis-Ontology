@@ -2,7 +2,7 @@
 
 # CASE/UCO SDK
 
-**v1.22.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md#1220---2026-07-13)
+**v1.22.0** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md#1220---2026-07-14)
 
 A multi-language data modeling library for digital forensics, cyber-investigation, and cyber-observable data. If your software produces or consumes forensic evidence, this SDK gives you typed, validated builders in **Python**, **C#**, **Java**, and **Rust** — so you can model investigation data in your language and produce interoperable [CASE/UCO](https://caseontology.org/) JSON-LD output.
 
@@ -25,7 +25,7 @@ Beyond the generated code, the repository provides:
 
 - **Bundled extension ontologies** — queryable through the same registry and MCP tools as core CASE/UCO (see [Bundled Extension Ontologies](#bundled-extension-ontologies))
 - **77 modeling recipes** — end-to-end modeling patterns for forensic workflows and whole investigation types, each grounded in example graphs ([docs/recipes/](docs/recipes/INDEX.md))
-- **An MCP server for AI agents** — ontology discovery, investigation routing, document processing, SHACL + concept-coverage validation, and change-proposal drafting ([AI-Assisted Development](#ai-assisted-development))
+- **An MCP server for AI agents** — ontology discovery, investigation routing, document processing, SHACL + concept-coverage validation, change-proposal drafting, and a resumable critic acceptance loop ([AI-Assisted Development](#ai-assisted-development))
 - **A change-proposal pipeline** — when a concept is missing, the tooling searches the UCO, CASE, and CAC issue trackers, drafts a filled-in proposal with tested example data, and supports local extension declarations so work is never blocked on upstream adoption ([change_proposals/](change_proposals/README.md))
 
 ## Installation
@@ -591,6 +591,27 @@ The MCP server is the centerpiece. It carries a working knowledge of the entire 
 - **CDO community awareness** — the server knows the [Community Playground](https://docs.google.com/document/d/1EiXQiAeUGk-629xdKx7HZHVn927k891LGkPcQzNLLr8/edit?usp=sharing) submission requirements and the UCO/CASE/CAC change-proposal process, so its output is aimed at upstream adoption rather than one-off hacks.
 
 The result: if a concept touches the cyber domain — or describes work done on, in, or through it — the agent can model it. When the ontology has a gap, the agent doesn't stop; it drafts a local extension to unblock the work and a formal change proposal to close the gap upstream. And because recipes are updated when live cases prove them wrong or incomplete ([recipe-authoring](docs/recipes/recipe-authoring.md)), the system improves with use.
+
+### Critic loop and SDK self-improvement
+
+v1.22 adds a **critic acceptance loop** that works with — but stays separate from — that self-improvement cycle. Together they let the SDK grow with the user while modeling stays grounded in, and extends, the open Cyber Domain Ontology family.
+
+```text
+Originating agent  →  builds serializer + CASE/UCO graph via MCP discovery/routing
+        ↓
+Critic loop (#74–#78)  →  deterministic checks + independent critic pass(es)
+        ↓                 structured findings; hash-bound, tamper-evident sessions
+Originating agent  →  revises the current artifact (not the SDK catalog)
+        ↓
+Finalize  →  accepted / completed_with_findings / blocked…
+        ↘ optional operator-approved handoff only
+SDK self-improvement  →  recipes, extensions, change proposals, routing index
+```
+
+- **Critic loop (artifact improvement):** MCP tools such as `start_critic_review`, `submit_critic_revision`, and `finalize_critic_review` review one immutable graph/serializer version at a time. Deterministic SHACL, coverage, heuristics, and serializer checks run before any model critique. Sampling is client-controlled and marking-aware; offline/manual modes never require a cloud provider. Sessions under `critic-sessions/` are resumable, audit-chained, and projection-bound so later passes cannot quietly rewrite prior findings or config. See [`docs/critic/RULES.md`](docs/critic/RULES.md).
+- **Self-improvement loop (persistent knowledge):** gap detection, local extension playgrounds, upstream change proposals, and recipe/extension lifecycle promotion improve what the MCP server knows for the *next* investigation. The critic may emit handoff *candidates* (recipe gap, ontology gap, SDK bug), but `prepare_critic_handoff` writes only under explicit operator approval — never silent catalog mutation.
+
+Net effect: each investigation can raise the quality of the current graph through the critic, while approved learnings feed back into recipes and ontologies so the MCP server keeps improving modeling results for the user without bypassing validation or open-ontology process.
 
 ### How It Works
 

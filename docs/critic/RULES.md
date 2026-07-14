@@ -57,6 +57,14 @@ Graph literals, serializer comments, and source excerpts are **untrusted**.
 Prompt packages include a trust-boundary block. Self-improvement writes require
 explicit operator approval (`prepare_critic_handoff(..., approve_write=True)`).
 
+Session `audit.jsonl` is tamper-evident against partial or out-of-band edits
+(file digests, state, and the full semantic `session.json` projection are
+reconciled). It is **not** a cryptographically signed external ledger against
+an administrator who can rewrite the entire session directory and audit history
+together. Sessions created on pre-release v1.22 builds before full-session
+projection binding may fail closed after upgrade — restart them rather than
+manually migrating state.
+
 ## Graph heuristics (`CRIT-H-*`, `graph_heuristics` v1.2.0)
 
 | Rule ID | Intent |

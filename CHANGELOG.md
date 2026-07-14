@@ -9,13 +9,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.22.0] - 2026-07-14
 
-#### ChatGPT NO-GO trust-boundary hardening (post-`1860f11`; do **not** tag yet)
+Critic acceptance loop (#74–#78), performance foundations (#70–#73), and
+trust-boundary hardening. Installable packages ship on the GitHub Release;
+registry publication remains opt-in via `PUBLISH_PACKAGES` (**disabled** for
+this tag).
+
+- **Executable SHA:** `2a859060e9e3b16f5a5365fe33bdf6b4663efbd3`
+  ([CI](https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29362720114)
+  green, 11/11 jobs;
+  [CodeQL](https://github.com/vulnmaster/CASE-UCO-SDK/actions/runs/29362720174)
+  green for python/csharp/java-kotlin; code-scanning open alerts **0** at
+  `2026-07-14T20:13:15Z`; 116 critic tests; 11/11 oracles; accepted repair
+  replay; Windows critic smoke; advisory bench).
+- **Oracle / repair CI artifacts** (exact-SHA): `critic-oracle-report`
+  id `8323033763`; `critic-repair-charged-with-accepted` id `8323034246`.
+- **Package preflight:** [`artifacts/ci/package-preflight-v1.22.md`](artifacts/ci/package-preflight-v1.22.md)
+  (Python wheel/sdist clean install, NuGet consumer, Maven consumer, cargo
+  package + publish `--dry-run`, local `cargo audit` clean).
+- **Release/tag commit:** this documentation/evidence commit (descendant of the
+  executable SHA; annotated tag `v1.22.0` points here).
+
+#### Critic-loop security and trust-boundary hardening
 
 - **#75/#76/#78 session↔audit reconciliation**: audit history is authoritative for
   pass-file digests and state; each transition binds `session_projection_sha256`
   over the **complete** semantic `session.json` (excluding only
   `latest_audit_event_sha256`) and stamps that event hash (audit-then-save).
-  Retargeting hashes, forging `state=finalized`, altering omitted control fields
+  Retargeting hashes, forging `state=finalized`, altering control fields
   (`prior_findings`, `config`, extend approval, pass metadata), or interrupting
   the transaction fails closed (`critic_session_audit_reconcile_mismatch` /
   `critic_session_incomplete_transaction`). Integrity also gates extend/cancel.
@@ -38,11 +58,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   before committing `state=finalized`; never fail after irreversible finalize.
 - **#77 reports**: stop committing mutable `*-latest.json`; CI artifacts only.
 
-Executable SHA recorded at tag time (placeholder: `TBD`).
+**Operational limitations**
+
+- Session `audit.jsonl` is tamper-evident against partial or out-of-band
+  modification. It is **not** a cryptographically signed external ledger against
+  an administrator who can rewrite the session directory, audit history, and all
+  related storage together.
+- Critic sessions created on pre-release v1.22 commits before the full-session
+  projection binding may fail closed after upgrade; restart those sessions
+  rather than manually migrating them.
 
 ### Fixed
 
-#### Critic loop P0 hardening (post-`23e6aaa` review; do not tag that SHA)
+#### Critic loop P0 hardening
 
 - **#75 resolution**: build `evaluated_rule_versions` from per-verifier
   `RuleExecution` so heuristic findings (`rule_version` 1.2.0) can resolve on
@@ -70,7 +98,7 @@ Executable SHA recorded at tag time (placeholder: `TBD`).
   extend challenge); `relative_to(candidates)` + `O_CREAT|O_EXCL` atomic create.
 - **#71 C#**: `WriteStreaming` uses `File.Replace` (no delete-before-move).
 
-#### Post-`129ca05` hardening (do **not** tag `129ca05`)
+#### Post-hardening follow-ups
 
 - **C# netstandard2.0**: remove `File.Move(..., overwrite:)` (unsupported);
   keep `File.Replace` / Move-when-absent; never delete destination before
