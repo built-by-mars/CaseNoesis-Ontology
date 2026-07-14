@@ -167,21 +167,39 @@ def test_prompt_rebuild_hash_mismatch_fails(workspace):
         graph_path=str(graph), critic_scope="graph", model_policy="manual"
     )
     sid = started["session_id"]
-    review_path = write / "critic-sessions" / sid / "review-pass-1.json"
+    sess_dir = write / "critic-sessions" / sid
+    review_path = sess_dir / "review-pass-1.json"
     review = json.loads(review_path.read_text(encoding="utf-8"))
     review["prompt_package_hash"] = "0" * 64
     review_path.write_text(json.dumps(review, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    # Keep pass-file integrity in sync so the rebuild mismatch path is exercised.
+    # Keep pass-file + audit integrity in sync so the rebuild mismatch path is exercised.
     import hashlib
 
+    from critic.sessions import _compute_session_projection_sha256
+
     new_digest = hashlib.sha256(review_path.read_bytes()).hexdigest()
-    session_path = write / "critic-sessions" / sid / "session.json"
+    session_path = sess_dir / "session.json"
     session = json.loads(session_path.read_text(encoding="utf-8"))
     session.setdefault("pass_file_hashes", {})["review-pass-1.json"] = new_digest
     for item in session.get("passes") or []:
         files = item.get("files")
         if isinstance(files, dict) and "review-pass-1.json" in files:
             files["review-pass-1.json"] = new_digest
+
+    audit_path = sess_dir / "audit.jsonl"
+    lines = [ln for ln in audit_path.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    last = json.loads(lines[-1])
+    files = dict(last.get("files") or {})
+    files["review-pass-1.json"] = new_digest
+    last["files"] = files
+    last["session_projection_sha256"] = _compute_session_projection_sha256(session)
+    body = {k: v for k, v in last.items() if k != "event_sha256"}
+    last["event_sha256"] = hashlib.sha256(
+        json.dumps(body, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    lines[-1] = json.dumps(last, sort_keys=True)
+    audit_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    session["latest_audit_event_sha256"] = last["event_sha256"]
     session_path.write_text(json.dumps(session, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     with pytest.raises(CriticSessionError) as exc:

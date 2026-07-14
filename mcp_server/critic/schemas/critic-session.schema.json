@@ -151,6 +151,11 @@
     "extend_approval_challenge": { "type": "string" },
     "final_outcome": { "type": ["string", "null"] },
     "accepted": { "type": ["boolean", "null"] },
-    "finalized_at": { "type": ["number", "null"] }
+    "finalized_at": { "type": ["number", "null"] },
+    "latest_audit_event_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$",
+      "description": "SHA-256 of the latest audit.jsonl event; binds session.json to the audit chain (schema 1.2.0+ writers always set this)."
+    }
   }
 }

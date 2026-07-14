@@ -223,6 +223,59 @@ def _atomic_write_json(path: Path, data: dict[str, Any]) -> str:
     return digest
 
 
+def _session_projection_payload(session: dict[str, Any]) -> dict[str, Any]:
+    """Canonical fields bound into each audit transition.
+
+    Excludes ``latest_audit_event_sha256`` (set after the audit event is hashed).
+    """
+
+    pass_file_hashes = {
+        str(k): str(v)
+        for k, v in sorted((session.get("pass_file_hashes") or {}).items())
+    }
+    passes_files: list[dict[str, Any]] = []
+    for item in session.get("passes") or []:
+        files = item.get("files") if isinstance(item, dict) else None
+        files_map = (
+            {str(k): str(v) for k, v in sorted(files.items())}
+            if isinstance(files, dict)
+            else {}
+        )
+        passes_files.append(
+            {
+                "pass_number": int(item.get("pass_number") or 0),
+                "files": files_map,
+            }
+        )
+    return {
+        "session_id": session.get("session_id"),
+        "state": session.get("state"),
+        "current_pass": session.get("current_pass"),
+        "model_policy": session.get("model_policy"),
+        "pass_file_hashes": pass_file_hashes,
+        "passes_files": passes_files,
+        "latest_artifact_hash": session.get("latest_artifact_hash"),
+        "latest_reviewed_hash": session.get("latest_reviewed_hash"),
+        "latest_reviewed_artifacts": session.get("latest_reviewed_artifacts"),
+        "latest_review_config_sha256": session.get("latest_review_config_sha256"),
+        "latest_artifact_set": session.get("latest_artifact_set"),
+        "additional_passes_approved": session.get("additional_passes_approved"),
+        "target_passes": session.get("target_passes"),
+        "completed_critic_responses": session.get("completed_critic_responses"),
+        "completed_deterministic_passes": session.get("completed_deterministic_passes"),
+        "final_outcome": session.get("final_outcome"),
+        "accepted": session.get("accepted"),
+        "latest_review_summary": session.get("latest_review_summary"),
+    }
+
+
+def _compute_session_projection_sha256(session: dict[str, Any]) -> str:
+    payload = _session_projection_payload(session)
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
 def _append_audit(
     directory: Path,
     event: str,
@@ -231,20 +284,32 @@ def _append_audit(
     prior_state: str | None = None,
     new_state: str | None = None,
     artifact_set_sha256: str | None = None,
-) -> None:
+) -> str:
+    """Append a chained audit event; return ``event_sha256``.
+
+    Optional ``session_projection_sha256``, ``files``, and ``outcome`` travel in
+    ``payload``. Raises when the trailing audit line is corrupt instead of
+    silently resetting the chain.
+    """
+
     audit_path = directory / "audit.jsonl"
     previous_event_sha256 = "0" * 64
     sequence = 0
     if audit_path.is_file():
-        lines = [ln for ln in audit_path.read_text(encoding="utf-8").splitlines() if ln.strip()]
+        raw = audit_path.read_bytes()
+        lines = [ln for ln in raw.splitlines() if ln.strip()]
         if lines:
             try:
-                last = json.loads(lines[-1])
-                previous_event_sha256 = str(last.get("event_sha256") or previous_event_sha256)
+                last = json.loads(lines[-1].decode("utf-8"))
+                previous_event_sha256 = str(
+                    last.get("event_sha256") or previous_event_sha256
+                )
                 sequence = int(last.get("sequence") or 0)
-            except (json.JSONDecodeError, TypeError, ValueError):
-                # Corrupt trailing audit line: start a new chain segment.
-                pass
+            except (json.JSONDecodeError, TypeError, ValueError, UnicodeDecodeError) as exc:
+                raise CriticSessionError(
+                    "critic_session_audit_corrupt",
+                    "corrupt trailing audit line",
+                ) from exc
     sequence += 1
     body = {
         "ts": time.time(),
@@ -261,10 +326,38 @@ def _append_audit(
         json.dumps(body, sort_keys=True, separators=(",", ":")).encode("utf-8")
     ).hexdigest()
     body["event_sha256"] = event_sha256
-    with audit_path.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(body, sort_keys=True) + "\n")
+    encoded = (json.dumps(body, sort_keys=True) + "\n").encode("utf-8")
+    with audit_path.open("ab") as handle:
+        handle.write(encoded)
         handle.flush()
         os.fsync(handle.fileno())
+    return event_sha256
+
+
+def _commit_session_transition(
+    directory: Path,
+    session: dict[str, Any],
+    event: str,
+    payload: dict[str, Any],
+    *,
+    prior_state: str | None,
+    new_state: str | None,
+    artifact_set_sha256: str | None = None,
+) -> str:
+    """Bind session projection → append audit → stamp event sha → save session."""
+
+    projection = _compute_session_projection_sha256(session)
+    event_sha = _append_audit(
+        directory,
+        event,
+        {**payload, "session_projection_sha256": projection},
+        prior_state=prior_state,
+        new_state=new_state,
+        artifact_set_sha256=artifact_set_sha256,
+    )
+    session["latest_audit_event_sha256"] = event_sha
+    _save(directory, session)
+    return event_sha
 
 
 def _artifact_set_from_hashes(
@@ -764,15 +857,8 @@ def _save(directory: Path, session: dict[str, Any]) -> None:
     _atomic_write_json(directory / "session.json", session)
 
 
-def _verify_session_integrity(directory: Path, session: dict[str, Any]) -> None:
-    """Audit chain + persisted pass-file digests (call after ``_load``)."""
-
-    _verify_audit_chain(directory)
-    _verify_persisted_file_hashes(directory, session)
-
-
-def _verify_audit_chain(directory: Path) -> None:
-    """Walk audit.jsonl and verify sequence + previous_event_sha256 linkage."""
+def _verify_audit_chain(directory: Path) -> list[dict[str, Any]]:
+    """Walk audit.jsonl; return verified events. Raise on any chain failure."""
 
     audit_path = directory / "audit.jsonl"
     if not audit_path.is_file():
@@ -781,6 +867,7 @@ def _verify_audit_chain(directory: Path) -> None:
         )
     previous_event_sha256 = "0" * 64
     expected_sequence = 0
+    events: list[dict[str, Any]] = []
     for line_no, line in enumerate(
         audit_path.read_text(encoding="utf-8").splitlines(), start=1
     ):
@@ -792,6 +879,11 @@ def _verify_audit_chain(directory: Path) -> None:
             raise CriticSessionError(
                 "critic_session_audit_corrupt", f"invalid json at line {line_no}"
             ) from exc
+        if not isinstance(event, dict):
+            raise CriticSessionError(
+                "critic_session_audit_corrupt",
+                f"event must be object at line {line_no}",
+            )
         expected_sequence += 1
         if int(event.get("sequence") or 0) != expected_sequence:
             raise CriticSessionError(
@@ -814,6 +906,137 @@ def _verify_audit_chain(directory: Path) -> None:
                 f"event_sha256 mismatch at line {line_no}",
             )
         previous_event_sha256 = stored_hash
+        events.append(event)
+    return events
+
+
+def _verify_session_integrity(directory: Path, session: dict[str, Any]) -> None:
+    """Reconcile session.json projection with audit.jsonl and on-disk pass files."""
+
+    events = _verify_audit_chain(directory)
+    if not events:
+        raise CriticSessionError("critic_session_audit_corrupt", "empty audit")
+
+    audit_files: dict[str, str] = {}
+    for ev in events:
+        files = ev.get("files")
+        if isinstance(files, dict):
+            audit_files.update({str(k): str(v) for k, v in files.items()})
+
+    session_files = {
+        str(k): str(v) for k, v in (session.get("pass_file_hashes") or {}).items()
+    }
+    if session_files != audit_files:
+        raise CriticSessionError(
+            "critic_session_audit_reconcile_mismatch", "pass_file_hashes"
+        )
+
+    for item in session.get("passes") or []:
+        files = item.get("files")
+        if not isinstance(files, dict):
+            continue
+        for name, digest in files.items():
+            if audit_files.get(str(name)) != str(digest):
+                raise CriticSessionError(
+                    "critic_session_audit_reconcile_mismatch",
+                    f"pass.files:{name}",
+                )
+
+    for filename, expected_hash in sorted(audit_files.items()):
+        path = directory / filename
+        if not path.is_file():
+            raise CriticSessionError(
+                "critic_session_corrupt", f"missing hashed file {filename}"
+            )
+        actual = hashlib.sha256(path.read_bytes()).hexdigest()
+        if actual != expected_hash:
+            raise CriticSessionError(
+                "critic_session_file_hash_mismatch", filename
+            )
+
+    latest = events[-1]
+    if session.get("latest_audit_event_sha256") != latest.get("event_sha256"):
+        raise CriticSessionError(
+            "critic_session_incomplete_transaction", "latest_audit_event_sha256"
+        )
+
+    if session.get("state") != latest.get("new_state"):
+        raise CriticSessionError(
+            "critic_session_audit_reconcile_mismatch", "state"
+        )
+
+    expected_proj = _compute_session_projection_sha256(session)
+    if latest.get("session_projection_sha256") and (
+        latest["session_projection_sha256"] != expected_proj
+    ):
+        raise CriticSessionError(
+            "critic_session_audit_reconcile_mismatch",
+            "session_projection_sha256",
+        )
+
+    if latest.get("artifact_set_sha256") and (
+        session.get("latest_artifact_set") or session.get("latest_reviewed_artifacts")
+    ):
+        reviewed = session.get("latest_reviewed_artifacts") or {}
+        live = session.get("latest_artifact_set") or {}
+        ok = (
+            (live and _artifact_set_sha256(live) == latest["artifact_set_sha256"])
+            or (
+                reviewed
+                and _artifact_set_sha256(reviewed) == latest["artifact_set_sha256"]
+            )
+        )
+        if not ok:
+            raise CriticSessionError(
+                "critic_session_audit_reconcile_mismatch",
+                "artifact_set_sha256",
+            )
+
+    if session.get("latest_review_config_sha256") and latest.get(
+        "review_config_sha256"
+    ):
+        if session["latest_review_config_sha256"] != latest["review_config_sha256"]:
+            raise CriticSessionError(
+                "critic_session_audit_reconcile_mismatch",
+                "review_config_sha256",
+            )
+
+    pass_numbers = [
+        int(ev["pass"])
+        for ev in events
+        if ev.get("pass") is not None
+    ]
+    if pass_numbers and int(session.get("current_pass") or 0) != max(pass_numbers):
+        raise CriticSessionError(
+            "critic_session_audit_reconcile_mismatch", "current_pass"
+        )
+
+    if session.get("state") == "finalized":
+        if latest.get("event") != "finalize":
+            raise CriticSessionError(
+                "critic_session_audit_reconcile_mismatch",
+                "missing_finalize_event",
+            )
+        if latest.get("new_state") != "finalized":
+            raise CriticSessionError(
+                "critic_session_audit_reconcile_mismatch",
+                "finalize_new_state",
+            )
+        if latest.get("outcome") != session.get("final_outcome"):
+            raise CriticSessionError(
+                "critic_session_audit_reconcile_mismatch",
+                "final_outcome",
+            )
+        if bool(session.get("accepted")) != (
+            session.get("final_outcome") == "accepted"
+        ):
+            raise CriticSessionError(
+                "critic_session_audit_reconcile_mismatch", "accepted"
+            )
+        if latest.get("outcome") == "accepted" and not session.get("accepted"):
+            raise CriticSessionError(
+                "critic_session_audit_reconcile_mismatch", "accepted"
+            )
 
 
 def _write_config_pass(
@@ -1234,11 +1457,16 @@ def start_critic_review(
         session["latest_reviewed_hash"] = review.artifact_hashes.graph_sha256
         session["latest_reviewed_artifacts"] = artifact_set
 
-    _save(directory, session)
-    _append_audit(
+    _commit_session_transition(
         directory,
+        session,
         "start",
-        {"pass": 1, "model_policy": policy, "files": dict(pass_files)},
+        {
+            "pass": 1,
+            "model_policy": policy,
+            "files": dict(pass_files),
+            "review_config_sha256": review_config_sha,
+        },
         prior_state=None,
         new_state=session["state"],
         artifact_set_sha256=_artifact_set_sha256(artifact_set),
@@ -1450,9 +1678,9 @@ def submit_manual_critic_response(
         session["prior_finding_ids"] = [
             f["finding_id"] for f in completed["merged_findings"]
         ]
-        _save(directory, session)
-        _append_audit(
+        _commit_session_transition(
             directory,
+            session,
             "manual_critic_response",
             {
                 "pass": pass_number,
@@ -1461,6 +1689,10 @@ def submit_manual_critic_response(
                 "completed_status": completed["status"],
                 "sampling_status": (sampling or {}).get("status"),
                 "files": written_files,
+                "review_config_sha256": (
+                    prompt.get("review_config_sha256")
+                    or review_dict.get("review_config_sha256")
+                ),
             },
             prior_state=prior_state,
             new_state=session["state"],
@@ -1677,15 +1909,16 @@ def submit_critic_revision(
 
         session["prior_findings"] = [f.to_dict() for f in review.merged_findings]
         session["prior_finding_ids"] = [f.finding_id for f in review.merged_findings]
-        _save(directory, session)
-        _append_audit(
+        _commit_session_transition(
             directory,
+            session,
             "revision",
             {
                 "pass": next_pass,
                 "graph_sha256": new_hash,
                 "addressed": list(addressed_finding_ids or [])[:50],
                 "files": dict(pass_files),
+                "review_config_sha256": review_config_sha,
             },
             prior_state="awaiting_revision",
             new_state=session["state"],
@@ -1716,6 +1949,7 @@ def extend_critic_review(
         raise CriticSessionError("critic_session_invalid_additional_iterations")
     with _locked(session_id) as directory:
         session = _load(directory)
+        _verify_session_integrity(directory, session)
         if session["state"] in {"finalized", "cancelled"}:
             raise CriticSessionError("critic_session_invalid_state", session["state"])
         env_token = os.environ.get(EXTEND_TOKEN_ENV)
@@ -1730,6 +1964,7 @@ def extend_critic_review(
         }
         if not approval_token or approval_token not in expected_tokens:
             raise CriticSessionError("critic_session_extend_denied")
+        prior_state = session["state"]
         new_additional = int(session["additional_passes_approved"]) + additional_iterations
         new_target = _target_passes(new_additional)
         if new_target > MAX_TOTAL_PASSES:
@@ -1740,16 +1975,16 @@ def extend_critic_review(
         session["additional_passes_approved"] = new_additional
         session["target_passes"] = new_target
         session["max_total_passes"] = new_target
-        _save(directory, session)
-        _append_audit(
+        _commit_session_transition(
             directory,
+            session,
             "extend",
             {
                 "additional_iterations": additional_iterations,
                 "max": new_target,
                 "target_passes": new_target,
             },
-            prior_state=session["state"],
+            prior_state=prior_state,
             new_state=session["state"],
         )
         return {
@@ -1911,14 +2146,17 @@ def finalize_critic_review(session_id: str) -> dict[str, Any]:
         session["finalized_at"] = time.time()
         session["final_outcome"] = outcome
         session["accepted"] = outcome == "accepted"
-        _save(directory, session)
-        _append_audit(
+        _commit_session_transition(
             directory,
+            session,
             "finalize",
             {
                 "hash": session["latest_artifact_hash"],
                 "outcome": outcome,
+                "accepted": session["accepted"],
+                "files": dict(session.get("pass_file_hashes") or {}),
                 "artifact_set": current_set,
+                "review_config_sha256": current_set.get("review_config_sha256"),
                 "bundle_fingerprint": live_bundle.get("bundle_fingerprint"),
             },
             prior_state=prior_state,
@@ -1941,13 +2179,14 @@ def finalize_critic_review(session_id: str) -> dict[str, Any]:
 def cancel_critic_review(session_id: str) -> dict[str, Any]:
     with _locked(session_id) as directory:
         session = _load(directory)
+        _verify_session_integrity(directory, session)
         if session["state"] == "finalized":
             raise CriticSessionError("critic_session_invalid_state", "finalized")
         prior_state = session["state"]
         session["state"] = "cancelled"
-        _save(directory, session)
-        _append_audit(
+        _commit_session_transition(
             directory,
+            session,
             "cancel",
             {},
             prior_state=prior_state,

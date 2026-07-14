@@ -941,4 +941,118 @@ def test_pass_file_hashes_recorded_on_write(workspace):
         assert hashes[name] == actual
     pass2 = next(p for p in session["passes"] if p["pass_number"] == 2)
     assert "completed-pass-2.json" in pass2["files"]
+    assert session.get("latest_audit_event_sha256")
+    audit_lines = [
+        ln
+        for ln in (sess_dir / "audit.jsonl").read_text(encoding="utf-8").splitlines()
+        if ln.strip()
+    ]
+    assert json.loads(audit_lines[-1])["event_sha256"] == session["latest_audit_event_sha256"]
+
+
+def _rewrite_session(sess_dir: Path, session: dict) -> None:
+    (sess_dir / "session.json").write_text(
+        json.dumps(session, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+
+def test_completed_pass_semantic_tamper_retargeted_session_hashes_fails(workspace):
+    """Retargeting session digests without audit must fail reconcile."""
+
+    import hashlib
+
+    sid, sess_dir = _two_pass_awaiting_revision(workspace)
+    completed_path = sess_dir / "completed-pass-2.json"
+    data = json.loads(completed_path.read_text(encoding="utf-8"))
+    if data.get("merged_findings"):
+        data["merged_findings"][0]["severity"] = "low"
+        data["merged_findings"][0]["status"] = "resolved"
+    data["finding_counts"]["critical_high_open"] = 0
+    data["finding_counts"]["open"] = 0
+    data["status"] = "accepted"
+    raw = json.dumps(data, indent=2, sort_keys=True) + "\n"
+    completed_path.write_text(raw, encoding="utf-8")
+    digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+    session = json.loads((sess_dir / "session.json").read_text(encoding="utf-8"))
+    session["pass_file_hashes"]["completed-pass-2.json"] = digest
+    for item in session.get("passes") or []:
+        if int(item.get("pass_number") or 0) == 2 and isinstance(item.get("files"), dict):
+            item["files"]["completed-pass-2.json"] = digest
+    _rewrite_session(sess_dir, session)
+
+    with pytest.raises(CriticSessionError) as exc:
+        get_critic_review_status(sid)
+    assert exc.value.code == "critic_session_audit_reconcile_mismatch"
+
+
+def test_forged_finalized_state_without_finalize_audit_fails(workspace):
+    sid, sess_dir = _two_pass_awaiting_revision(workspace)
+    session = json.loads((sess_dir / "session.json").read_text(encoding="utf-8"))
+    session["state"] = "finalized"
+    session["final_outcome"] = "accepted"
+    session["accepted"] = True
+    _rewrite_session(sess_dir, session)
+
+    with pytest.raises(CriticSessionError) as exc:
+        get_critic_review_status(sid)
+    assert exc.value.code == "critic_session_audit_reconcile_mismatch"
+
+    from critic.sessions import load_session_for_handoff
+
+    with pytest.raises(CriticSessionError) as exc2:
+        load_session_for_handoff(sid)
+    assert exc2.value.code in {
+        "critic_session_audit_reconcile_mismatch",
+        "critic_session_not_finalized",
+    }
+
+
+def test_altered_outcome_after_finalize_fails_projection(workspace, monkeypatch):
+    import critic.deterministic as det
+
+    monkeypatch.setattr(
+        det,
+        "lint_kind_of_relationship",
+        lambda *a, **k: {"ok": True, "checked": 0, "findings": []},
+    )
+    sid, sess_dir = _two_pass_awaiting_revision(workspace)
+    final = finalize_critic_review(sid)
+    assert final["state"] == "finalized"
+
+    session = json.loads((sess_dir / "session.json").read_text(encoding="utf-8"))
+    session["final_outcome"] = "completed_with_findings"
+    session["accepted"] = False
+    session["latest_review_summary"] = {
+        **(session.get("latest_review_summary") or {}),
+        "status": "needs_revision",
+    }
+    _rewrite_session(sess_dir, session)
+
+    with pytest.raises(CriticSessionError) as exc:
+        get_critic_review_status(sid)
+    assert exc.value.code == "critic_session_audit_reconcile_mismatch"
+
+
+def test_session_audit_file_map_disagreement_fails(workspace):
+    sid, sess_dir = _two_pass_awaiting_revision(workspace)
+    session = json.loads((sess_dir / "session.json").read_text(encoding="utf-8"))
+    assert "completed-pass-2.json" in session["pass_file_hashes"]
+    del session["pass_file_hashes"]["completed-pass-2.json"]
+    _rewrite_session(sess_dir, session)
+
+    with pytest.raises(CriticSessionError) as exc:
+        get_critic_review_status(sid)
+    assert exc.value.code == "critic_session_audit_reconcile_mismatch"
+
+
+def test_interrupted_transaction_latest_audit_event_sha_fails(workspace):
+    sid, sess_dir = _two_pass_awaiting_revision(workspace)
+    session = json.loads((sess_dir / "session.json").read_text(encoding="utf-8"))
+    session["latest_audit_event_sha256"] = "0" * 64
+    _rewrite_session(sess_dir, session)
+
+    with pytest.raises(CriticSessionError) as exc:
+        get_critic_review_status(sid)
+    assert exc.value.code == "critic_session_incomplete_transaction"
 
