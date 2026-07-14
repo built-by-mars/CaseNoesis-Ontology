@@ -1,10 +1,10 @@
 {
   "harness": "run_oracles",
-  "generated_at": "2026-07-13T18:55:32.104078+00:00",
+  "generated_at": "2026-07-14T13:08:35.054294+00:00",
   "passed": true,
   "metrics": {
-    "case_count": 10,
-    "passed_cases": 10,
+    "case_count": 11,
+    "passed_cases": 11,
     "mean_detection_recall": 1.0,
     "gold_false_positive_critical_high_total": 0
   },
@@ -256,6 +256,55 @@
         "detection_recall": {
           "expected": 1,
           "found": 1,
+          "recall": 1.0,
+          "missing": []
+        }
+      }
+    },
+    {
+      "case_id": "micro-repair-charged-with",
+      "passed": true,
+      "violations": [],
+      "detected_rule_ids": [
+        "CRIT-H-ACQ-INPUT-RESULT-INVERSION",
+        "CRIT-H-ACTION-COMPLETENESS",
+        "CRIT-H-AUTH-NON-INVESTIGATION",
+        "CRIT-H-CHARGED-WITH-REVERSED",
+        "CRIT-H-DICT-ENTRY-COLLISION",
+        "CRIT-H-FACET-PROPS-ON-OBSERVABLE",
+        "CRIT-H-INV-NO-OBJECT",
+        "CRIT-H-RELATED-TO-OVERUSE",
+        "CRIT-V-NONCONFORMING",
+        "CRIT-V-RELATIONSHIP-LINT"
+      ],
+      "validation": {
+        "conforms": false,
+        "verification_status": "complete",
+        "violation_count": 10,
+        "warning_count": 0,
+        "bundle_fingerprint": null,
+        "selected_profiles": [],
+        "selected_extensions": [],
+        "stage_status": {
+          "bundle_resolution": "skipped",
+          "shacl_execution": "complete",
+          "shacl_conformance": "nonconformant",
+          "coverage_execution": "complete",
+          "coverage_conformance": "ok"
+        },
+        "profile_not_selected": [],
+        "role_mismatches": [],
+        "relationship_lint_ok": null,
+        "relationship_lint_findings": [],
+        "error_code": null,
+        "safe_summary": "Graph does not conform: 10 constraint violation(s). Fix the graph before submitting it for review."
+      },
+      "status": "needs_revision",
+      "analysis_status": "complete",
+      "metrics": {
+        "detection_recall": {
+          "expected": 4,
+          "found": 4,
           "recall": 1.0,
           "missing": []
         }

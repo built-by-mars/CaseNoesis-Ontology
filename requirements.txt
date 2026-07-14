@@ -10,7 +10,7 @@ wheel
 case-utils>=0.15.0
 
 # MCP server
-fastmcp>=3.4.0,<4
+fastmcp>=3.4.0,<3.6
 
 # Dev / testing
 pytest>=7.0.0

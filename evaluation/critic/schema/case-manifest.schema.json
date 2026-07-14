@@ -23,6 +23,11 @@
       "type": "string",
       "minLength": 1
     },
+    "pass2_graph_path": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional repaired graph for two-pass session replay revision."
+    },
     "serializer_path": {
       "type": "string",
       "minLength": 1

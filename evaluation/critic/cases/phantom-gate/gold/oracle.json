@@ -12,7 +12,8 @@
     "CRIT-H-DERIVED-NO-PROVENANCE",
     "CRIT-H-MARKING-INHERITANCE"
   ],
-  "notes": "Phantom Gate gold is SHACL+coverage conforming (CAC subset includes detection). Listed CRIT-H findings are known scenario modeling debt surfaced by v1.2.0 heuristics — allow-listed, not unexplained false positives. Micro fixtures cover positive detection for each rule.",
+  "tier_label": "baseline-known-debt",
+  "notes": "baseline-known-debt: Phantom Gate gold is SHACL+coverage conforming (CAC subset includes detection). Listed CRIT-H findings are known scenario modeling debt surfaced by v1.2.0 heuristics — allow-listed, not unexplained false positives. This is not a zero-CRIT-H acceptance oracle; true acceptance evidence lives in micro/repair-charged-with --require-accepted. Micro fixtures cover positive detection for each rule.",
   "expect_validation": {
     "prefer_complete_conforming": true,
     "allow_unavailable": true,

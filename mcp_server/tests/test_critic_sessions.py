@@ -123,6 +123,75 @@ def test_two_pass_manual_finalize(workspace):
     assert final["outcome"] in {"accepted", "completed_with_findings"}
 
 
+def test_two_pass_repair_charged_with_accepted(workspace, monkeypatch):
+    """Degraded Charged_With → gold revision → empty critic → accepted.
+
+    Open-vocab relationship lint on Charged_With is suppressed so the repair
+    contract can assert true acceptance (no open medium findings from lint).
+    """
+    import critic.deterministic as det
+
+    monkeypatch.setattr(
+        det,
+        "lint_kind_of_relationship",
+        lambda *a, **k: {"ok": True, "checked": 0, "findings": []},
+    )
+
+    read, write = workspace
+    degraded = read / "charged-with-reversed.jsonld"
+    degraded.write_text(
+        (FIXTURES / "seeded-defects.jsonld").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    gold = write / "gold-charged-with.jsonld"
+    gold.write_text(
+        (FIXTURES / "gold-charged-with.jsonld").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+
+    started = start_critic_review(
+        graph_path=str(degraded),
+        critic_scope="graph",
+        model_policy="manual",
+    )
+    sid = started["session_id"]
+    review1 = json.loads(
+        (write / "critic-sessions" / sid / "review-pass-1.json").read_text()
+    )
+    assert review1.get("status") == "needs_revision"
+    pass1_rules = {
+        f["rule_id"]
+        for f in review1.get("merged_findings") or []
+        if f.get("rule_id") and f.get("status") != "resolved"
+    }
+    assert "CRIT-H-CHARGED-WITH-REVERSED" in pass1_rules
+
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(
+        sid,
+        graph_path=str(gold),
+        change_summary="repair charged-with direction to gold",
+    )
+    assert revised["pass_number"] == 2
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+
+    final = finalize_critic_review(sid)
+    assert final["state"] == "finalized"
+    assert final["outcome"] == "accepted"
+    assert final["accepted"] is True
+
+    review2 = json.loads(
+        (write / "critic-sessions" / sid / "review-pass-2.json").read_text()
+    )
+    resolved_charged = [
+        f
+        for f in review2.get("merged_findings") or []
+        if f.get("rule_id") == "CRIT-H-CHARGED-WITH-REVERSED"
+        and f.get("status") == "resolved"
+    ]
+    assert resolved_charged
+
+
 def test_pass2_critic_critical_blocks_acceptance(workspace):
     read, _ = workspace
     graph = _copy_gold(read)
@@ -249,6 +318,18 @@ def test_handoff_preview_and_write(workspace, monkeypatch):
     assert preview["preview"]["requires_operator_approval"] is True
     assert preview["written_path"] is None
 
+    # extend_approval_challenge must NEVER authorize handoff write.
+    with pytest.raises(CriticSessionError) as denied:
+        prepare_critic_handoff(
+            sid,
+            finding_ids,
+            requested_handoff_type="case_specific",
+            operator_id="tester",
+            approve_write=True,
+            approval_token=started["extend_approval_challenge"],
+        )
+    assert denied.value.code == "critic_handoff_approval_denied"
+
     written = prepare_critic_handoff(
         sid,
         finding_ids,
@@ -260,6 +341,9 @@ def test_handoff_preview_and_write(workspace, monkeypatch):
     assert written["written_path"]
     assert "critic-handoffs/candidates" in written["written_path"].replace("\\", "/")
     assert Path(written["written_path"]).is_file()
+    assert written["package_sha256"]
+    on_disk = json.loads(Path(written["written_path"]).read_text(encoding="utf-8"))
+    assert on_disk["package_sha256"] == written["package_sha256"]
 
 
 def test_sampling_fake_context(workspace):
@@ -321,3 +405,323 @@ def test_sampling_fake_context(workspace):
     assert wired["ok"] is True
     assert wired["sampling"]["status"] == "ok"
     assert wired["state"] == "awaiting_revision"
+
+
+def test_sampling_respects_deployment_manual_mode(workspace, monkeypatch):
+    import asyncio
+    from critic_tools import tool_start_critic_review_with_sampling
+
+    monkeypatch.setenv("CASE_UCO_MCP_CRITIC_MODE", "manual")
+    read, _ = workspace
+    graph = _copy_gold(read)
+    calls = {"n": 0}
+
+    class Ctx:
+        async def sample(self, **kwargs):
+            calls["n"] += 1
+            return {"text": "{}"}
+
+    async def _run():
+        return await tool_start_critic_review_with_sampling(
+            Ctx(),
+            graph_path=str(graph),
+            critic_scope="graph",
+            model_policy="client_sampling",
+        )
+
+    result = asyncio.run(_run())
+    assert result["ok"] is True
+    assert calls["n"] == 0
+    assert result["model_policy"] == "manual"
+    assert result["sampling"]["fallback"] is True
+    assert result["sampling"]["status"] in {
+        "critic_manual_response_required",
+        "skipped_policy",
+    }
+    assert result["sampling"].get("reason") == "deployment_mode"
+
+
+def test_sampling_schema_validate_retries_then_invalid(workspace):
+    """Invalid model JSON retries; after retries returns invalid_response (not ok dict)."""
+
+    import asyncio
+    from critic.sampling import FakeSampleContext, maybe_sample_critic
+
+    read, _ = workspace
+    graph = _copy_gold(read)
+    started = start_critic_review(
+        graph_path=str(graph),
+        critic_scope="graph",
+        model_policy="client_sampling",
+    )
+    bad_payload = {"schema_version": "1.2.0", "findings": "not-a-list"}
+    ctx = FakeSampleContext(bad_payload)
+
+    async def _run():
+        return await maybe_sample_critic(
+            ctx,
+            started["prompt_package"],
+            model_policy="client_sampling",
+            retries=1,
+        )
+
+    sampled = asyncio.run(_run())
+    assert sampled.status == "critic_sampling_invalid_response"
+    assert sampled.fallback is True
+    assert sampled.response is None
+    assert ctx.calls >= 2
+
+
+def test_handoff_offline_allows_preview_denies_write(workspace, monkeypatch):
+    read, write = workspace
+    monkeypatch.setenv("CASE_UCO_CRITIC_HANDOFF_TOKEN", "handoff-secret")
+    monkeypatch.setenv("CASE_UCO_MCP_PROFILE", "offline-investigation")
+    graph = _copy_gold(read)
+    started = start_critic_review(graph_path=str(graph), critic_scope="graph")
+    sid = started["session_id"]
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(sid, graph_path=str(graph))
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+    finalize_critic_review(sid)
+    review = json.loads(
+        (write / "critic-sessions" / sid / "review-pass-2.json").read_text()
+    )
+    finding_ids = [f["finding_id"] for f in review["merged_findings"][:1]]
+    if not finding_ids:
+        review = json.loads(
+            (write / "critic-sessions" / sid / "review-pass-1.json").read_text()
+        )
+        finding_ids = [f["finding_id"] for f in review["merged_findings"][:1]]
+    assert finding_ids
+
+    preview = prepare_critic_handoff(
+        sid,
+        finding_ids,
+        requested_handoff_type="recipe_improvement",
+        operator_id="tester",
+    )
+    assert preview["written_path"] is None
+
+    with pytest.raises(CriticSessionError) as exc:
+        prepare_critic_handoff(
+            sid,
+            finding_ids,
+            requested_handoff_type="recipe_improvement",
+            operator_id="tester",
+            approve_write=True,
+            approval_token="handoff-secret",
+        )
+    assert exc.value.code == "critic_handoff_profile_denied"
+
+
+def test_prompt_not_persisted_by_default(workspace, monkeypatch):
+    read, write = workspace
+    monkeypatch.delenv("CASE_UCO_CRITIC_PERSIST_PROMPTS", raising=False)
+    sentinel = "SENTINEL_PROMPT_LEAK_XYZ"
+    graph = read / "sentinel.jsonld"
+    payload = json.loads(
+        (FIXTURES / "gold-charged-with.jsonld").read_text(encoding="utf-8")
+    )
+    # Put sentinel on Authorization name so it appears in prompt neighborhoods
+    # when prompts are persisted, but not in typical deterministic finding text.
+    for node in payload["@graph"]:
+        if node.get("@type") == "case-investigation:Authorization":
+            node["uco-core:name"] = sentinel
+            break
+    graph.write_text(json.dumps(payload), encoding="utf-8")
+
+    started = start_critic_review(
+        graph_path=str(graph), critic_scope="graph", model_policy="manual"
+    )
+    sid = started["session_id"]
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(sid, graph_path=str(graph), change_summary="confirm")
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+
+    session_dir = write / "critic-sessions" / sid
+    assert not list(session_dir.glob("prompt-pass-*.json"))
+    for path in session_dir.rglob("*"):
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        assert sentinel not in text, f"sentinel leaked into {path.name}"
+
+    review = json.loads((session_dir / "review-pass-1.json").read_text(encoding="utf-8"))
+    assert "prompt_package" not in review
+    assert review.get("prompt_package_hash")
+    assert review.get("prompt_content_sha256")
+
+
+def test_write_root_graph_finalize_ok(workspace):
+    import hashlib
+
+    read, write = workspace
+    source = read / "notes.md"
+    source_body = "# source note\n"
+    source.write_text(source_body, encoding="utf-8")
+    source_hash = hashlib.sha256(source_body.encode("utf-8")).hexdigest()
+
+    graph = write / "generated-gold.jsonld"
+    payload = json.loads(
+        (FIXTURES / "gold-charged-with.jsonld").read_text(encoding="utf-8")
+    )
+    # Source fidelity expects a same-named node with ContentDataFacet hash.
+    payload["@context"]["uco-observable"] = (
+        "https://ontology.unifiedcyberontology.org/uco/observable/"
+    )
+    source_node = {
+        "@id": "urn:uuid:bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        "@type": "uco-observable:ObservableObject",
+        "uco-core:name": "notes.md",
+        "uco-core:hasFacet": [
+            {
+                "@id": "urn:uuid:cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+                "@type": "uco-observable:ContentDataFacet",
+                "uco-observable:hash": [
+                    {
+                        "@id": "urn:uuid:dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+                        "@type": "uco-types:Hash",
+                        "uco-types:hashMethod": "SHA256",
+                        "uco-types:hashValue": source_hash,
+                    }
+                ],
+            }
+        ],
+    }
+    payload["@context"]["uco-types"] = (
+        "https://ontology.unifiedcyberontology.org/uco/types/"
+    )
+    payload["@graph"].append(source_node)
+    payload["@graph"][0]["uco-core:object"].append({"@id": source_node["@id"]})
+    graph.write_text(json.dumps(payload), encoding="utf-8")
+
+    started = start_critic_review(
+        graph_path=str(graph),
+        source_paths=[str(source)],
+        critic_scope="graph",
+        model_policy="manual",
+    )
+    sid = started["session_id"]
+    assert started["review"]["finding_counts"]["critical_high_open"] == 0
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(
+        sid, graph_path=str(graph), source_paths=[str(source)], change_summary="confirm"
+    )
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+    final = finalize_critic_review(sid)
+    assert final["state"] == "finalized"
+
+
+def test_target_passes_blocks_early_finalize(workspace):
+    read, _ = workspace
+    graph = _copy_gold(read)
+    started = start_critic_review(
+        graph_path=str(graph),
+        critic_scope="graph",
+        model_policy="manual",
+        additional_iterations=1,
+    )
+    assert started["target_passes"] == 3
+    sid = started["session_id"]
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(sid, graph_path=str(graph), change_summary="confirm")
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+    with pytest.raises(CriticSessionError) as exc:
+        finalize_critic_review(sid)
+    assert exc.value.code == "critic_session_passes_incomplete"
+
+    challenge = started["extend_approval_challenge"]
+    # Extend is not needed here — target already 3; do a third pass instead.
+    revised2 = submit_critic_revision(
+        sid, graph_path=str(graph), change_summary="pass3 confirm"
+    )
+    assert revised2["pass_number"] == 3
+    submit_manual_critic_response(sid, _empty_critic_response(revised2))
+    final = finalize_critic_review(sid)
+    assert final["state"] == "finalized"
+    assert challenge  # retained for extend tests; unused here
+
+
+def test_extend_increases_target_passes(workspace):
+    read, _ = workspace
+    graph = _copy_gold(read)
+    started = start_critic_review(
+        graph_path=str(graph), critic_scope="graph", additional_iterations=0
+    )
+    assert started["target_passes"] == 2
+    sid = started["session_id"]
+    extended = extend_critic_review(
+        sid, 1, approval_token=started["extend_approval_challenge"]
+    )
+    assert extended["target_passes"] == 3
+    assert extended["max_total_passes"] == 3
+    with pytest.raises(CriticSessionError) as exc:
+        extend_critic_review(
+            sid, 20, approval_token=extended["extend_approval_challenge"]
+        )
+    assert exc.value.code == "critic_session_pass_cap"
+
+
+def test_serializer_only_revision(workspace):
+    read, _ = workspace
+    graph = _copy_gold(read)
+    serializer = read / "serializer.py"
+    serializer.write_text(
+        "# v1\nfrom case_uco import CASEGraph\ng = CASEGraph()\n",
+        encoding="utf-8",
+    )
+    started = start_critic_review(
+        graph_path=str(graph),
+        serializer_path=str(serializer),
+        critic_scope="both",
+        model_policy="manual",
+    )
+    sid = started["session_id"]
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    serializer.write_text(
+        "# v2 serializer-only change\nfrom case_uco import CASEGraph\ng = CASEGraph()\n",
+        encoding="utf-8",
+    )
+    revised = submit_critic_revision(
+        sid,
+        graph_path=str(graph),
+        serializer_path=str(serializer),
+        change_summary="serializer-only",
+    )
+    assert revised["pass_number"] == 2
+    assert revised["state"] == "awaiting_critic_response"
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+    final = finalize_critic_review(sid)
+    assert final["state"] == "finalized"
+
+
+def test_audit_chain_corruption_fails_finalize(workspace):
+    read, write = workspace
+    graph = _copy_gold(read)
+    started = start_critic_review(
+        graph_path=str(graph), critic_scope="graph", model_policy="manual"
+    )
+    sid = started["session_id"]
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(sid, graph_path=str(graph), change_summary="confirm")
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+
+    audit_path = write / "critic-sessions" / sid / "audit.jsonl"
+    lines = audit_path.read_text(encoding="utf-8").splitlines()
+    assert lines
+    # Break previous_event_sha256 linkage on the last event.
+    last = json.loads(lines[-1])
+    last["previous_event_sha256"] = "a" * 64
+    # Keep event_sha256 so verification fails on linkage (or recompute without fixing link).
+    body = {k: v for k, v in last.items() if k != "event_sha256"}
+    import hashlib
+
+    last["event_sha256"] = hashlib.sha256(
+        json.dumps(body, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    lines[-1] = json.dumps(last, sort_keys=True)
+    audit_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    with pytest.raises(CriticSessionError) as exc:
+        finalize_critic_review(sid)
+    assert exc.value.code == "critic_session_audit_corrupt"

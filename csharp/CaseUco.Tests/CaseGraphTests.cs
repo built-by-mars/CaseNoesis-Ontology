@@ -302,6 +302,41 @@ namespace CaseUco.Tests
         }
 
         [Fact]
+        public void WriteStreaming_ReplacesExistingWithoutDeleteFirst()
+        {
+            // Atomic WriteStreaming must replace in place via temp+File.Replace/Move,
+            // not delete-then-write (which races readers and loses the prior file on failure).
+            var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"caseuco-replace-{Guid.NewGuid()}.jsonld");
+            try
+            {
+                System.IO.File.WriteAllText(path, "OLD");
+                Assert.Equal("OLD", System.IO.File.ReadAllText(path));
+
+                var v1 = new CaseGraph();
+                v1.AddWithId(new Tool { Name = "V1" }, "kb:t-replace");
+                v1.WriteStreaming(path);
+                Assert.Contains("V1", System.IO.File.ReadAllText(path));
+                Assert.DoesNotContain("OLD", System.IO.File.ReadAllText(path));
+
+                var v2 = new CaseGraph();
+                v2.AddWithId(new Tool { Name = "V2" }, "kb:t-replace");
+                v2.WriteStreaming(path);
+                var text = System.IO.File.ReadAllText(path);
+                Assert.Contains("V2", text);
+                Assert.DoesNotContain("V1", text);
+
+                // On Windows, File.Replace is preferred for existing destinations.
+                // This test documents replace-without-delete-first semantics across platforms;
+                // PlatformNotSupportedException → File.Move(overwrite) is exercised on non-Windows.
+            }
+            finally
+            {
+                if (System.IO.File.Exists(path))
+                    System.IO.File.Delete(path);
+            }
+        }
+
+        [Fact]
         public void PartitionByRoots_IncludesIncomingRelationship()
         {
             var graph = new CaseGraph();

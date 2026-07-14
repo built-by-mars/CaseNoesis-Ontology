@@ -5,7 +5,6 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import tempfile
 import time
 from pathlib import Path
 from typing import Any
@@ -50,9 +49,9 @@ def prepare_critic_handoff(
     Persistent write requires:
     - explicit operator-selected handoff type (no auto category promotion)
     - approve_write=True
-    - matching operator approval token (env or session)
+    - matching CASE_UCO_CRITIC_HANDOFF_TOKEN (never session extend challenge)
     - dedicated candidates directory under a write root
-    - atomic no-overwrite write of the exact validated package
+    - atomic O_EXCL create of the exact validated package
     """
 
     if not finding_ids:
@@ -68,13 +67,7 @@ def prepare_critic_handoff(
         raise CriticSessionError("critic_handoff_invalid_type", requested_handoff_type)
 
     profile = workspace_policy.deployment_profile()
-    if profile in {
-        workspace_policy.PROFILE_OFFLINE_INVESTIGATION,
-    }:
-        raise CriticSessionError(
-            "critic_handoff_profile_denied",
-            "offline-investigation profile forbids persistent handoffs",
-        )
+    offline = profile == workspace_policy.PROFILE_OFFLINE_INVESTIGATION
 
     loaded = load_session_for_handoff(session_id)
     session = loaded["session"]
@@ -144,17 +137,27 @@ def prepare_critic_handoff(
     }
 
     schema = load_json_schema("critic-handoff.schema.json")
-    # Validate preview package first.
     _validate_handoff(schema, package)
 
     written = None
     package_sha256 = None
     if approve_write:
-        expected = os.environ.get(HANDOFF_APPROVAL_ENV) or session.get(
-            "extend_approval_challenge"
-        )
-        if not approval_token or approval_token != expected:
+        # Offline profile: preview is allowed; persistent writes are not.
+        if offline:
+            raise CriticSessionError(
+                "critic_handoff_profile_denied",
+                "offline-investigation profile forbids persistent handoffs",
+            )
+        # NEVER accept extend_approval_challenge — dedicated out-of-band token only.
+        expected = os.environ.get(HANDOFF_APPROVAL_ENV)
+        if not expected or not approval_token or approval_token != expected:
             raise CriticSessionError("critic_handoff_approval_denied")
+        # Reject tokens that match session extend challenge even if env is unset
+        # (defense: never treat extend challenge as handoff approval).
+        extend_challenge = session.get("extend_approval_challenge")
+        if extend_challenge and approval_token == extend_challenge:
+            raise CriticSessionError("critic_handoff_approval_denied")
+
         write_roots = workspace_policy.write_roots()
         if not write_roots:
             raise CriticSessionError("critic_handoff_write_denied", "no write root")
@@ -169,45 +172,55 @@ def prepare_critic_handoff(
         if output_path:
             dest = Path(output_path).expanduser()
             if not dest.is_absolute():
-                dest = candidates / dest.name
+                dest = (candidates / dest.name).resolve()
             else:
                 dest = dest.resolve()
         else:
-            dest = candidates / f"{session_id}-{int(time.time())}.json"
+            dest = (candidates / f"{session_id}-{int(time.time())}.json").resolve()
+
         try:
-            dest = workspace_policy.check_write_path(str(dest), enforce_no_overwrite=True)
+            dest.relative_to(candidates)
         except ValueError as exc:
             raise CriticSessionError(
-                "critic_handoff_write_denied", "path denied or exists"
-            ) from exc
-        if CANDIDATES_SUBDIR.as_posix() not in dest.as_posix():
-            raise CriticSessionError(
                 "critic_handoff_write_denied",
-                "writes must target critic-handoffs/candidates",
-            )
+                "destination outside critic-handoffs/candidates",
+            ) from exc
 
         final_package = dict(package)
         final_package["persistent_write"] = True
         final_package["written_at"] = time.time()
+        final_package.pop("package_sha256", None)
+        _validate_handoff(schema, final_package)
+        # Hash covers canonical JSON of the package without package_sha256.
+        body_raw = json.dumps(final_package, indent=2, sort_keys=True) + "\n"
+        package_sha256 = hashlib.sha256(body_raw.encode("utf-8")).hexdigest()
+        final_package["package_sha256"] = package_sha256
         _validate_handoff(schema, final_package)
         raw = json.dumps(final_package, indent=2, sort_keys=True) + "\n"
-        package_sha256 = hashlib.sha256(raw.encode("utf-8")).hexdigest()
-        final_package["package_sha256"] = package_sha256
-        # Re-serialize after hash field (hash covers pre-hash body; store separately).
-        body = dict(final_package)
-        body_raw = json.dumps(body, indent=2, sort_keys=True) + "\n"
-        fd, tmp_name = tempfile.mkstemp(prefix=dest.name, dir=str(dest.parent))
+
+        try:
+            fd = os.open(
+                str(dest),
+                os.O_CREAT | os.O_EXCL | os.O_WRONLY,
+                0o644,
+            )
+        except FileExistsError as exc:
+            raise CriticSessionError(
+                "critic_handoff_write_denied", "destination exists"
+            ) from exc
         try:
             with os.fdopen(fd, "w", encoding="utf-8") as handle:
-                handle.write(body_raw)
+                handle.write(raw)
                 handle.flush()
                 os.fsync(handle.fileno())
-            os.replace(tmp_name, dest)
-        finally:
-            if os.path.exists(tmp_name):
-                os.unlink(tmp_name)
+        except Exception:
+            try:
+                os.unlink(dest)
+            except OSError:
+                pass
+            raise
         written = str(dest)
-        package = body
+        package = final_package
 
     return {
         "session_id": session_id,

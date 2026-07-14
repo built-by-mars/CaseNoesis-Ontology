@@ -31,6 +31,8 @@ from critic.schema_util import (
 )
 
 DEFAULT_MAX_PACKAGE_BYTES = 48_000
+# Hard ceiling on the fully bound package (content budget + bound schema/metadata).
+HARD_MAX_PACKAGE_BYTES = 96_000
 DEFAULT_NEIGHBORHOOD_NODES = 12
 DEFAULT_EXCERPT_CHARS = 1_200
 MAX_NESTED_STR = 160
@@ -82,6 +84,25 @@ def compute_prompt_package_hash(package: dict[str, Any]) -> str:
     return compute_prompt_content_sha256(package)
 
 
+def compute_serialization_integrity_sha256(package: dict[str, Any]) -> str:
+    """Integrity digest over the fully bound package (excludes size/token metadata)."""
+
+    return hashlib.sha256(
+        _dumps(
+            {
+                k: v
+                for k, v in package.items()
+                if k
+                not in {
+                    "serialization_integrity_sha256",
+                    "byte_size",
+                    "token_estimate",
+                }
+            }
+        )
+    ).hexdigest()
+
+
 def validate_prompt_package(package: dict[str, Any]) -> None:
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     errors = sorted(
@@ -95,6 +116,13 @@ def validate_prompt_package(package: dict[str, Any]) -> None:
     actual = len(_dumps(package))
     if package.get("byte_size") != actual:
         raise ValueError("critic_prompt_package_size_mismatch")
+    if package.get("byte_size", 0) > HARD_MAX_PACKAGE_BYTES:
+        raise ValueError("critic_prompt_package_too_large")
+    integrity = package.get("serialization_integrity_sha256")
+    if integrity is not None and integrity != compute_serialization_integrity_sha256(
+        package
+    ):
+        raise ValueError("critic_prompt_package_integrity_mismatch")
 
 
 def build_prompt_package(
@@ -253,20 +281,9 @@ def build_prompt_package(
         review_request_sha256=package["review_request_sha256"],
     )
     # Optional integrity hash over the fully bound package (not used for binding).
-    package["serialization_integrity_sha256"] = hashlib.sha256(
-        _dumps(
-            {
-                k: v
-                for k, v in package.items()
-                if k
-                not in {
-                    "serialization_integrity_sha256",
-                    "byte_size",
-                    "token_estimate",
-                }
-            }
-        )
-    ).hexdigest()
+    package["serialization_integrity_sha256"] = compute_serialization_integrity_sha256(
+        package
+    )
     package["token_estimate"] = max(1, len(_dumps(_hashable_package(package))) // 4)
 
     # Stabilize byte_size to equal final serialized length.
@@ -279,12 +296,12 @@ def build_prompt_package(
     else:
         raise ValueError("critic_prompt_package_size_unstable")
 
-    if package["byte_size"] > max_bytes:
-        # Bound schema + metadata may exceed the content budget; only fail when
-        # the content digest payload itself is still over the limit.
-        content_size = len(_dumps(content_hash_payload(package)))
-        if content_size > max_bytes:
-            raise ValueError("critic_prompt_package_too_large")
+    # max_bytes remains the content budget; HARD_MAX bounds the final package.
+    content_size = len(_dumps(content_hash_payload(package)))
+    if content_size > max_bytes:
+        raise ValueError("critic_prompt_package_too_large")
+    if package["byte_size"] > HARD_MAX_PACKAGE_BYTES:
+        raise ValueError("critic_prompt_package_too_large")
 
     validate_prompt_package(package)
     return package

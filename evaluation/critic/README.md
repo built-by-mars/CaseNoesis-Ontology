@@ -42,9 +42,9 @@ evaluation/critic/
 
 | Family | Cases | What it measures |
 |--------|-------|------------------|
-| `micro/` | `charged-with-reversed`, `gold-charged-with` | Seeded heuristic detection vs gold false positives |
+| `micro/` | `charged-with-reversed`, `gold-charged-with`, `repair-charged-with` | Seeded heuristic detection, gold baseline, two-pass repair → accepted |
 | `serializer/` | `bad-python` | Python AST serializer rule recall |
-| `phantom-gate/` | `gold`, `degraded-missing-auth` | Full-scenario gold cleanliness + mini coverage degradation |
+| `phantom-gate/` | `gold` (`tier_label: baseline-known-debt`), `degraded-missing-auth` | Allow-listed CRIT-H known debt + mini coverage degradation |
 | `adversarial/` | `prompt-injection` | Injection resilience of offline analysis |
 
 ## Running offline
@@ -59,7 +59,12 @@ PYTHONPATH=mcp_server python evaluation/critic/harness/run_oracles.py
 cd evaluation/critic && PYTHONPATH=../../mcp_server python -m harness.run_oracles
 
 # Two-pass manual session replay (mock responses, micro gold case)
-PYTHONPATH=mcp_server python evaluation/critic/harness/run_session_replay.py
+PYTHONPATH=mcp_server python3 evaluation/critic/harness/run_session_replay.py
+
+# Two-pass repair → accepted (degraded Charged_With → gold revision)
+PYTHONPATH=mcp_server python3 evaluation/critic/harness/run_session_replay.py \
+  --case-dir evaluation/critic/cases/micro/repair-charged-with \
+  --require-accepted
 ```
 
 Reports are written to:
@@ -67,20 +72,25 @@ Reports are written to:
 - `evaluation/critic/reports/oracle-latest.json`
 - `evaluation/critic/reports/session-replay-latest.json`
 
-Both harnesses exit non-zero on failure.
+Session-replay reports include `recall` / `precision` / `repair_rate` /
+`regressions` / `score_delta` / `validation_preservation` when pass finding
+snapshots are available. Both harnesses exit non-zero on failure.
 
-### Phantom Gate gold
+### Phantom Gate gold (`baseline-known-debt`)
 
 The `phantom-gate/gold` case references repo-root paths:
 
 - `examples/scenarios/operation-phantom-gate.jsonld`
 - `examples/scenarios/phantom_gate_coverage.json`
 
-The oracle forbids unexpected **non-validation** critical/high deterministic
-findings (heuristics, integrity, serializer). Validation status
-(`conforms`, `verification_status`) is recorded in the report; when
-`case_validate` is installed, `prefer_complete_conforming` signals whether
-the gold graph currently passes SHACL.
+Oracle `tier_label` is **`baseline-known-debt`**: unexpected critical/high
+findings outside the allow-list fail, but listed CRIT-H IDs are known scenario
+modeling debt (not a zero-CRIT-H acceptance gate). True repair→accepted
+evidence is the `micro/repair-charged-with` session with `--require-accepted`.
+
+Validation status (`conforms`, `verification_status`) is recorded in the
+report; when `case_validate` is installed, `prefer_complete_conforming`
+signals whether the gold graph currently passes SHACL.
 
 ## Oracle contract
 

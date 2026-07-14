@@ -167,6 +167,8 @@ def _finding(
         recommended_change=recommended_change,
         verification_method=verification_method,
         rule_id=rule_id,
+        rule_version=RULE_VERSION,
+        verifier_rule_id=rule_id,
         identity_key=finding_id,
     )
 

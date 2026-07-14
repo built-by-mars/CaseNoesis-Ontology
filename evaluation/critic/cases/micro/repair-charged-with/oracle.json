@@ -1,0 +1,21 @@
+{
+  "case_id": "micro-repair-charged-with",
+  "graph_path": "pass1/graph.jsonld",
+  "expected_rule_ids": [
+    "CRIT-H-CHARGED-WITH-REVERSED",
+    "CRIT-H-INV-NO-OBJECT",
+    "CRIT-H-AUTH-NON-INVESTIGATION",
+    "CRIT-H-ACTION-COMPLETENESS"
+  ],
+  "allowed_repairs": [
+    "CRIT-H-CHARGED-WITH-REVERSED",
+    "CRIT-H-INV-NO-OBJECT",
+    "CRIT-H-AUTH-NON-INVESTIGATION",
+    "CRIT-H-ACTION-COMPLETENESS"
+  ],
+  "forbidden_regressions": [
+    "CRIT-H-CHARGED-WITH-REVERSED"
+  ],
+  "notes": "Two-pass repair: pass1 seeded reversed Charged_With (and sibling seeded defects); pass2 gold-charged-with. Session harness expects outcome accepted under --require-accepted (open-vocab relationship lint suppressed for CASE-domain Charged_With).",
+  "tier_label": "repair-accepted"
+}

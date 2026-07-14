@@ -1822,6 +1822,9 @@ def start_critic_review(
     additional_iterations: int = 0,
     model_policy: str | None = None,
     report_output: str | None = None,
+    serializer_mode: str = "auto",
+    extra_ontology_graphs: list[str] | None = None,
+    force_rdfs_inference: bool = False,
 ) -> dict:
     """Start a bounded critic-session review (issue #76).
 
@@ -1839,6 +1842,9 @@ def start_critic_review(
         additional_iterations=additional_iterations,
         model_policy=model_policy,
         report_output=report_output,
+        serializer_mode=serializer_mode,
+        extra_ontology_graphs=extra_ontology_graphs,
+        force_rdfs_inference=force_rdfs_inference,
     )
 
 
@@ -1854,12 +1860,16 @@ async def start_critic_review_with_sampling(
     critic_scope: str = "both",
     additional_iterations: int = 0,
     report_output: str | None = None,
+    serializer_mode: str = "auto",
+    extra_ontology_graphs: list[str] | None = None,
+    force_rdfs_inference: bool = False,
 ) -> dict:
     """Start a critic session and sample via the MCP client when available.
 
     On sampling failure, returns the same manual prompt_package with a typed
     sampling.status fallback code.
     """
+    # Request client_sampling; critic_tools clamps via CASE_UCO_MCP_CRITIC_MODE.
     return await critic_tools.tool_start_critic_review_with_sampling(
         ctx,
         graph_path=graph_path,
@@ -1872,6 +1882,9 @@ async def start_critic_review_with_sampling(
         additional_iterations=additional_iterations,
         model_policy="client_sampling",
         report_output=report_output,
+        serializer_mode=serializer_mode,
+        extra_ontology_graphs=extra_ontology_graphs,
+        force_rdfs_inference=force_rdfs_inference,
     )
 
 
@@ -1895,6 +1908,9 @@ def submit_critic_revision(
     addressed_finding_ids: list[str] | None = None,
     extensions: list[str] | None = None,
     profiles: list[str] | None = None,
+    serializer_mode: str | None = None,
+    extra_ontology_graphs: list[str] | None = None,
+    force_rdfs_inference: bool | None = None,
 ) -> dict:
     """Resubmit a revised graph/serializer for the next critic pass."""
     return critic_tools.tool_submit_critic_revision(
@@ -1907,6 +1923,9 @@ def submit_critic_revision(
         addressed_finding_ids=addressed_finding_ids,
         extensions=extensions,
         profiles=profiles,
+        serializer_mode=serializer_mode,
+        extra_ontology_graphs=extra_ontology_graphs,
+        force_rdfs_inference=force_rdfs_inference,
     )
 
 
@@ -1922,6 +1941,9 @@ async def submit_critic_revision_with_sampling(
     addressed_finding_ids: list[str] | None = None,
     extensions: list[str] | None = None,
     profiles: list[str] | None = None,
+    serializer_mode: str | None = None,
+    extra_ontology_graphs: list[str] | None = None,
+    force_rdfs_inference: bool | None = None,
 ) -> dict:
     """Revise artifacts then attempt client sampling for the next critic pass."""
     return await critic_tools.tool_submit_critic_revision_with_sampling(
@@ -1935,6 +1957,9 @@ async def submit_critic_revision_with_sampling(
         addressed_finding_ids=addressed_finding_ids,
         extensions=extensions,
         profiles=profiles,
+        serializer_mode=serializer_mode,
+        extra_ontology_graphs=extra_ontology_graphs,
+        force_rdfs_inference=force_rdfs_inference,
     )
 
 

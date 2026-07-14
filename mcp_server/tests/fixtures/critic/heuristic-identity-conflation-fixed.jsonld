@@ -1,0 +1,29 @@
+{
+  "@context": {
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:b1000000-0000-4000-8000-000000000001",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Identity conflation micro case (fixed)",
+      "uco-core:object": [
+        { "@id": "urn:uuid:b1000000-0000-4000-8000-000000000002" },
+        { "@id": "urn:uuid:b1000000-0000-4000-8000-000000000003" }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b1000000-0000-4000-8000-000000000002",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Alex Example"
+    },
+    {
+      "@id": "urn:uuid:b1000000-0000-4000-8000-000000000003",
+      "@type": "uco-observable:Account",
+      "uco-core:name": "alex@example.com"
+    }
+  ]
+}

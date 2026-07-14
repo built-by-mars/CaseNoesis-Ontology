@@ -193,7 +193,7 @@ jobs:
           path: .
 
       - name: Install dependencies
-        run: pip install rdflib jinja2 pytest mypy jsonschema "fastmcp>=3.4.0,<4" case-utils
+        run: pip install rdflib jinja2 pytest mypy jsonschema "fastmcp>=3.4.0,<3.6" case-utils
 
       - name: Run tests
         run: PYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v

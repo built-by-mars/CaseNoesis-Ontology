@@ -209,6 +209,78 @@ def test_python_serializer_ast_findings():
     assert all(f.rule_version == "1.1.0" for f in findings)
 
 
+def test_python_serializer_real_casegraph_api_not_nonexistent():
+    """Serializers using real CASEGraph public methods must not fire NONEXISTENT-API."""
+
+    source = '''
+from case_uco import CASEGraph
+from case_uco.uco.core import Relationship
+
+def build(output_path: str):
+    graph = CASEGraph()
+    inv = graph.create(type("Investigation", (), {}), id="kb:inv")
+    graph.create_relationship(
+        source=inv,
+        target=inv,
+        relationship_type="related-to",
+        assertion_id="kb:rel-1",
+    )
+    graph.get("kb:inv")
+    graph.contains("kb:inv")
+    graph.write(output_path)
+    return graph.serialize()
+'''
+    findings, _ = analyze_python_serializer(
+        Path("good_serializer.py"), source, serializer_mode="typed_sdk"
+    )
+    nonexistent = [f for f in findings if f.rule_id == "CRIT-S-PY-NONEXISTENT-API"]
+    assert nonexistent == []
+
+
+def test_rel_id_collapse_requires_repeated_calls():
+    single = '''
+def build(graph):
+    for item in items:  # noqa: F821
+        graph.create_relationship(source=a, target=b)  # noqa: F821
+'''
+    multi = '''
+def build(graph):
+    for item in items:  # noqa: F821
+        graph.create_relationship(source=a, target=b)  # noqa: F821
+        graph.create_relationship(source=c, target=d)  # noqa: F821
+'''
+    single_findings, _ = analyze_python_serializer(Path("s.py"), single)
+    multi_findings, _ = analyze_python_serializer(Path("m.py"), multi)
+    single_rel = [f for f in single_findings if f.rule_id == "CRIT-S-PY-REL-ID-COLLAPSE"]
+    multi_rel = [f for f in multi_findings if f.rule_id == "CRIT-S-PY-REL-ID-COLLAPSE"]
+    assert len(single_rel) == 1
+    assert single_rel[0].severity == "medium"
+    assert multi_rel
+    assert all(f.severity == "high" for f in multi_rel)
+
+
+def test_unsafe_overwrite_ignores_literal_write_text():
+    source = '''
+from pathlib import Path
+
+def build():
+    Path("fixed.jsonld").write_text("{}")
+'''
+    findings, _ = analyze_python_serializer(Path("lit.py"), source)
+    assert "CRIT-S-PY-UNSAFE-OVERWRITE" not in {f.rule_id for f in findings}
+
+    tainted = '''
+from pathlib import Path
+import sys
+
+def build(output_path: str):
+    Path(output_path).write_text("{}")
+    Path(sys.argv[1]).write_text("{}")
+'''
+    bad, _ = analyze_python_serializer(Path("tainted.py"), tainted)
+    assert "CRIT-S-PY-UNSAFE-OVERWRITE" in {f.rule_id for f in bad}
+
+
 def test_source_hash_ignores_unrelated_hashes(tmp_path, monkeypatch):
     import graph_validator
 
@@ -471,10 +543,13 @@ def test_byte_size_equals_final_serialized_package(tmp_path, monkeypatch):
     review = analyze_artifact(
         CriticArtifactRequest(graph_path=str(g), critic_scope="graph")
     )
+    from critic.context_builder import HARD_MAX_PACKAGE_BYTES
+
     package = review.prompt_package
     encoded = json.dumps(package, sort_keys=True, separators=(",", ":")).encode("utf-8")
     assert package["byte_size"] == len(encoded)
-    assert package["byte_size"] <= 48_000
+    assert package["byte_size"] <= HARD_MAX_PACKAGE_BYTES
+    assert package.get("serialization_integrity_sha256")
 
     tiny = build_prompt_package(
         artifact_hashes=ArtifactHashes(graph_sha256="a" * 64),

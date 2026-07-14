@@ -7,6 +7,8 @@ import json
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
+from critic.response_parser import CriticResponseError, parse_critic_model_response
+
 SamplingStatus = Literal[
     "ok",
     "skipped_policy",
@@ -49,6 +51,40 @@ class SampleResult:
         }
 
 
+def _expected_hashes_from_package(prompt_package: dict[str, Any]) -> dict[str, Any]:
+    hashes = prompt_package.get("artifact_hashes") or {}
+    return {
+        "expected_graph_sha256": hashes.get("graph_sha256") or "",
+        "expected_prompt_package_hash": prompt_package.get("prompt_package_hash") or "",
+        "expected_serializer_sha256": hashes.get("serializer_sha256"),
+        "session_id": prompt_package.get("session_id"),
+        "pass_number": prompt_package.get("pass_number"),
+        "expected_review_request_sha256": prompt_package.get("review_request_sha256"),
+        "bound_schema": prompt_package.get("response_schema"),
+    }
+
+
+def _deployment_blocks_sampling() -> SampleResult | None:
+    """Non-bypassable server deployment gate (CASE_UCO_MCP_CRITIC_MODE)."""
+
+    try:
+        from critic.sessions import deployment_critic_mode
+    except Exception:  # noqa: BLE001
+        return None
+    mode = deployment_critic_mode()
+    if mode == "client_sampling":
+        return None
+    status: SamplingStatus = (
+        "skipped_policy" if mode == "disabled" else "critic_manual_response_required"
+    )
+    return SampleResult(
+        status=status,
+        fallback=True,
+        error="deployment_mode",
+        metadata={"reason": "deployment_mode", "deployment_mode": mode},
+    )
+
+
 async def maybe_sample_critic(
     ctx: Any,
     prompt_package: dict[str, Any],
@@ -62,8 +98,16 @@ async def maybe_sample_critic(
 ) -> SampleResult:
     """Sample using the complete bounded prompt package; never silently swallow errors."""
 
+    blocked = _deployment_blocks_sampling()
+    if blocked is not None:
+        return blocked
+
     if model_policy != "client_sampling":
-        return SampleResult(status="skipped_policy", fallback=True)
+        return SampleResult(
+            status="skipped_policy",
+            fallback=True,
+            metadata={"reason": "model_policy"},
+        )
     if ctx is None or not hasattr(ctx, "sample"):
         return SampleResult(
             status="critic_sampling_unavailable",
@@ -97,6 +141,7 @@ async def maybe_sample_critic(
         },
         sort_keys=True,
     )
+    expected = _expected_hashes_from_package(prompt_package)
 
     last_error: str | None = None
     attempts = max(1, int(retries) + 1)
@@ -164,6 +209,24 @@ async def maybe_sample_critic(
             continue
         if not isinstance(data, dict):
             last_error = "response_not_object"
+            continue
+        try:
+            parse_critic_model_response(
+                data,
+                expected_graph_sha256=str(expected["expected_graph_sha256"]),
+                expected_prompt_package_hash=str(
+                    expected["expected_prompt_package_hash"]
+                ),
+                expected_serializer_sha256=expected["expected_serializer_sha256"],
+                session_id=expected["session_id"],
+                pass_number=expected["pass_number"],
+                expected_review_request_sha256=expected[
+                    "expected_review_request_sha256"
+                ],
+                bound_schema=expected["bound_schema"],
+            )
+        except CriticResponseError as exc:
+            last_error = f"{exc.code}:{exc}"
             continue
         return SampleResult(
             status="ok",

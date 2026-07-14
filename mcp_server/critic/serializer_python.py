@@ -32,32 +32,81 @@ _PY_RULES = (
 _NESTED_ID_KEYWORDS = ("entry", "dict", "item", "child", "nested")
 _CASE_SCOPED_HELPER_NAMES = frozenset({"uid", "make_id", "iri_for"})
 _GRAPH_RECEIVER_NAMES = frozenset({"graph", "g", "case_graph", "cg"})
-_CASEGRAPH_ALLOWLIST = frozenset({
+# Expanded static fallback when case_uco.graph.CASEGraph cannot be imported.
+_CASEGRAPH_ALLOWLIST_STATIC = frozenset({
+    "add",
+    "add_property",
+    "add_type",
+    "contains",
     "create",
     "create_relationship",
-    "write",
-    "write_streaming",
+    "estimate_triples",
+    "expand_iri",
+    "from_jsonld",
     "get",
-    "contains",
-    "upsert_node",
+    "get_id",
     "link",
+    "load",
+    "load_file",
+    "merge_files",
     "partition",
+    "partition_by",
+    "partition_by_label",
     "partition_by_roots",
     "serialize",
-    "from_jsonld",
-    "clear",
-    "add_context",
-    "set_context",
-    "objects",
+    "set_property",
+    "split",
+    "upsert_node",
+    "validate",
+    "write",
+    "write_stream",
+    "write_streaming",
     "__iter__",
     "__len__",
     "__contains__",
+})
+_OUTPUT_PATH_PARAM_NAMES = frozenset({
+    "output_path",
+    "graph_path",
+    "out_path",
+    "outfile",
 })
 _HEX64_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 _SYNTHETIC_HASH_NAME_RE = re.compile(
     r"(synthetic_hash|fake_hash|placeholder_hash)",
     re.IGNORECASE,
 )
+
+
+def _casegraph_allowlist() -> frozenset[str]:
+    """Public CASEGraph methods via introspection, with static fallback."""
+
+    try:
+        from case_uco.graph import CASEGraph
+    except Exception:  # noqa: BLE001
+        return _CASEGRAPH_ALLOWLIST_STATIC
+    names: set[str] = set()
+    for name in dir(CASEGraph):
+        if name.startswith("_") and name not in {
+            "__iter__",
+            "__len__",
+            "__contains__",
+        }:
+            continue
+        try:
+            attr = getattr(CASEGraph, name)
+        except Exception:  # noqa: BLE001
+            continue
+        if callable(attr):
+            names.add(name)
+    # Known classmethods / constructors always include when present.
+    for extra in ("from_jsonld", "load", "load_file", "merge_files"):
+        if hasattr(CASEGraph, extra):
+            names.add(extra)
+    return frozenset(names) if names else _CASEGRAPH_ALLOWLIST_STATIC
+
+
+_CASEGRAPH_ALLOWLIST = _casegraph_allowlist()
 
 def _exec(
     rule_id: str,
@@ -470,12 +519,19 @@ def _is_graph_receiver(node: ast.AST) -> bool:
 
 
 def _relationship_id_collapse(path: Path, tree: ast.AST) -> list[CriticFinding]:
+    """Flag repeated create_relationship without assertion_id in the same scope.
+
+    A single call site (even inside a loop) is medium; two or more unscoped
+    call sites in the same function or loop body are high.
+    """
+
     findings: list[CriticFinding] = []
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.For):
-            continue
-        for child in ast.walk(node):
-            if child is node or not isinstance(child, ast.Call):
+    seen: set[tuple[int, str]] = set()
+
+    def _unscoped_rel_calls(root: ast.AST) -> list[ast.Call]:
+        calls: list[ast.Call] = []
+        for child in ast.walk(root):
+            if child is root or not isinstance(child, ast.Call):
                 continue
             func = child.func
             if not (
@@ -489,27 +545,54 @@ def _relationship_id_collapse(path: Path, tree: ast.AST) -> list[CriticFinding]:
             }
             if "assertion_id" in kw_names or "relationship_id" in kw_names:
                 continue
+            calls.append(child)
+        return calls
+
+    def _emit(calls: list[ast.Call], *, scope: str) -> None:
+        if not calls:
+            return
+        severity = "high" if len(calls) > 1 else "medium"
+        if len(calls) == 1 and scope == "function":
+            # Single call outside a loop is not a collapse hazard.
+            return
+        for child in calls:
+            key = (getattr(child, "lineno", 0) or 0, severity)
+            if key in seen:
+                continue
+            seen.add(key)
             findings.append(
                 _s(
                     rule_id="CRIT-S-PY-REL-ID-COLLAPSE",
-                    severity="high",
+                    severity=severity,
                     category="serializer_api",
                     target=CriticTarget(
                         path=path.name,
                         line=getattr(child, "lineno", None),
                         qualified_name="create_relationship",
                     ),
-                    evidence=["create_relationship_in_for_without_assertion_id"],
+                    evidence=[
+                        f"create_relationship_unscoped_count={len(calls)}",
+                        f"scope={scope}",
+                    ],
                     rationale=(
-                        "create_relationship in a loop without assertion_id/"
-                        "relationship_id can collapse repeated assertions."
+                        "create_relationship without assertion_id/relationship_id "
+                        "can collapse repeated assertions when called more than once."
                     ),
                     recommended_change=(
                         "Pass assertion_id or relationship_id for repeated edges."
                     ),
-                    verification_method="AST For containing create_relationship without id kw.",
+                    verification_method=(
+                        "AST count of create_relationship without id kw in function/loop."
+                    ),
                 )
             )
+
+    assert isinstance(tree, ast.Module)
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.For, ast.While, ast.AsyncFor)):
+            _emit(_unscoped_rel_calls(node), scope="loop")
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            _emit(_unscoped_rel_calls(node), scope="function")
     return findings
 
 
@@ -602,57 +685,104 @@ def _unsafe_overwrite_or_workspace_bypass(
     if "workspace_policy" in source:
         return []
     findings: list[CriticFinding] = []
+    enclosing_params = _enclosing_param_names(tree)
+
     for node in ast.walk(tree):
-        if isinstance(node, ast.Call):
-            func = node.func
-            # open(..., "w") / open(..., mode="w")
-            if isinstance(func, ast.Name) and func.id == "open":
-                if _open_is_write(node):
-                    findings.append(
-                        _s(
-                            rule_id="CRIT-S-PY-UNSAFE-OVERWRITE",
-                            severity="high",
-                            category="serializer_safety",
-                            target=CriticTarget(
-                                path=path.name,
-                                line=getattr(node, "lineno", None),
-                                qualified_name="open",
-                            ),
-                            evidence=["open_write_without_workspace_policy"],
-                            rationale=(
-                                "open(..., 'w') without workspace_policy in the same file."
-                            ),
-                            recommended_change=(
-                                "Route writes through workspace_policy / approved write roots."
-                            ),
-                            verification_method="AST open write mode; module lacks workspace_policy.",
-                        )
-                    )
-            if isinstance(func, ast.Attribute) and func.attr in {
-                "write_text",
-                "write_bytes",
-            }:
-                findings.append(
-                    _s(
-                        rule_id="CRIT-S-PY-UNSAFE-OVERWRITE",
-                        severity="high",
-                        category="serializer_safety",
-                        target=CriticTarget(
-                            path=path.name,
-                            line=getattr(node, "lineno", None),
-                            qualified_name=func.attr,
-                        ),
-                        evidence=[f"{func.attr}_without_workspace_policy"],
-                        rationale=(
-                            f"Path.{func.attr} without workspace_policy in the same file."
-                        ),
-                        recommended_change=(
-                            "Route writes through workspace_policy / approved write roots."
-                        ),
-                        verification_method="AST Path.write_*; module lacks workspace_policy.",
-                    )
-                )
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        path_arg: ast.AST | None = None
+        kind: str | None = None
+        if isinstance(func, ast.Name) and func.id == "open" and _open_is_write(node):
+            path_arg = node.args[0] if node.args else None
+            kind = "open"
+        elif isinstance(func, ast.Attribute) and func.attr in {
+            "write_text",
+            "write_bytes",
+        }:
+            # Path.write_text(data) — the Path receiver is the path expression.
+            path_arg = func.value
+            kind = func.attr
+        if path_arg is None or kind is None:
+            continue
+        if not _path_arg_is_externally_influenced(path_arg, enclosing_params):
+            continue
+        findings.append(
+            _s(
+                rule_id="CRIT-S-PY-UNSAFE-OVERWRITE",
+                severity="high",
+                category="serializer_safety",
+                target=CriticTarget(
+                    path=path.name,
+                    line=getattr(node, "lineno", None),
+                    qualified_name=kind,
+                ),
+                evidence=[f"{kind}_external_path_without_workspace_policy"],
+                rationale=(
+                    f"{kind} writes a path influenced by sys.argv / os.environ / "
+                    "input() / output_path-like parameters without workspace_policy."
+                ),
+                recommended_change=(
+                    "Route writes through workspace_policy / approved write roots."
+                ),
+                verification_method=(
+                    "AST write path involves argv/environ/input/output_path params."
+                ),
+            )
+        )
     return findings
+
+
+def _enclosing_param_names(tree: ast.AST) -> set[str]:
+    names: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            for arg in node.args.args:
+                names.add(arg.arg)
+            for arg in node.args.kwonlyargs:
+                names.add(arg.arg)
+            if node.args.vararg:
+                names.add(node.args.vararg.arg)
+            if node.args.kwarg:
+                names.add(node.args.kwarg.arg)
+    return names
+
+
+def _path_arg_is_externally_influenced(
+    path_arg: ast.AST, enclosing_params: set[str]
+) -> bool:
+    """True when the path expression involves argv/environ/input/output-like params."""
+
+    for node in ast.walk(path_arg):
+        if isinstance(node, ast.Attribute):
+            if isinstance(node.value, ast.Name) and node.value.id == "sys":
+                if node.attr == "argv":
+                    return True
+            if isinstance(node.value, ast.Name) and node.value.id == "os":
+                if node.attr == "environ":
+                    return True
+        if isinstance(node, ast.Subscript):
+            # os.environ["KEY"] / sys.argv[1]
+            target = node.value
+            if isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name):
+                if target.value.id == "os" and target.attr == "environ":
+                    return True
+                if target.value.id == "sys" and target.attr == "argv":
+                    return True
+        if isinstance(node, ast.Call):
+            if isinstance(node.func, ast.Name) and node.func.id == "input":
+                return True
+            if (
+                isinstance(node.func, ast.Attribute)
+                and node.func.attr == "getenv"
+                and isinstance(node.func.value, ast.Name)
+                and node.func.value.id == "os"
+            ):
+                return True
+        if isinstance(node, ast.Name) and node.id in enclosing_params:
+            if node.id in _OUTPUT_PATH_PARAM_NAMES:
+                return True
+    return False
 
 
 def _open_is_write(node: ast.Call) -> bool:

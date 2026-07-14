@@ -44,6 +44,21 @@ SessionState = Literal[
 POLICY_ENV = "CASE_UCO_CRITIC_MODEL_POLICY"
 SESSION_ROOT_ENV = "CASE_UCO_CRITIC_SESSION_ROOT"
 EXTEND_TOKEN_ENV = "CASE_UCO_CRITIC_EXTEND_TOKEN"
+PERSIST_PROMPTS_ENV = "CASE_UCO_CRITIC_PERSIST_PROMPTS"
+DEPLOYMENT_MODE_ENV = "CASE_UCO_MCP_CRITIC_MODE"
+
+# Fields retained on disk for review-pass-N.json (prompt body never persisted by default).
+_REVIEW_PASS_KEEP = (
+    "artifact_hashes",
+    "validation",
+    "merged_findings",
+    "scorecard",
+    "analysis_status",
+    "status",
+    "rule_executions",
+    "errors",
+    "elapsed_ms",
+)
 
 
 class CriticSessionError(Exception):
@@ -65,13 +80,48 @@ class SessionConfig:
     model_policy: ModelPolicy = "manual"
     report_output: str | None = None
     project_root: str | None = None
+    serializer_mode: str = "auto"
+    extra_ontology_graphs: list[str] = field(default_factory=list)
+    force_rdfs_inference: bool = False
+
+
+def normalize_model_policy(raw: str | None) -> ModelPolicy | None:
+    """Normalize hyphen/underscore policy strings to ModelPolicy values."""
+
+    if raw is None:
+        return None
+    cleaned = str(raw).strip().lower().replace("-", "_")
+    if cleaned in {"disabled", "manual", "client_sampling"}:
+        return cleaned  # type: ignore[return-value]
+    return None
 
 
 def default_model_policy() -> ModelPolicy:
-    raw = (os.environ.get(POLICY_ENV) or "manual").strip().lower()
-    if raw in {"disabled", "manual", "client_sampling"}:
-        return raw  # type: ignore[return-value]
-    return "manual"
+    return normalize_model_policy(os.environ.get(POLICY_ENV)) or "manual"
+
+
+def deployment_critic_mode() -> ModelPolicy:
+    """Non-bypassable deployment gate for sampling (unset → allow client_sampling)."""
+
+    return normalize_model_policy(os.environ.get(DEPLOYMENT_MODE_ENV)) or "client_sampling"
+
+
+def effective_model_policy(requested: str | ModelPolicy | None) -> ModelPolicy:
+    """Clamp requested session policy by optional deployment mode ceiling."""
+
+    requested_norm = normalize_model_policy(requested) or default_model_policy()
+    deployment = normalize_model_policy(os.environ.get(DEPLOYMENT_MODE_ENV))
+    if deployment is None:
+        return requested_norm
+    rank = {"disabled": 0, "manual": 1, "client_sampling": 2}
+    if rank[requested_norm] > rank[deployment]:
+        return deployment
+    return requested_norm
+
+
+def _persist_prompts_enabled() -> bool:
+    raw = (os.environ.get(PERSIST_PROMPTS_ENV) or "").strip().lower()
+    return raw in {"1", "true", "yes"}
 
 
 def session_root() -> Path:
@@ -191,6 +241,7 @@ def _artifact_set_from_hashes(hashes: dict[str, Any]) -> dict[str, Any]:
         "serializer_sha256": hashes.get("serializer_sha256"),
         "source_sha256": dict(hashes.get("source_sha256") or {}),
         "coverage_contract_sha256": hashes.get("coverage_contract_sha256"),
+        "extra_ontology_sha256": dict(hashes.get("extra_ontology_sha256") or {}),
     }
 
 
@@ -200,45 +251,88 @@ def _artifact_set_sha256(artifact_set: dict[str, Any]) -> str:
         "serializer_sha256": artifact_set.get("serializer_sha256"),
         "source_sha256": dict(sorted((artifact_set.get("source_sha256") or {}).items())),
         "coverage_contract_sha256": artifact_set.get("coverage_contract_sha256"),
+        "extra_ontology_sha256": dict(
+            sorted((artifact_set.get("extra_ontology_sha256") or {}).items())
+        ),
     }
     return hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
     ).hexdigest()
 
 
-def _rehash_config_artifacts(cfg: dict[str, Any]) -> dict[str, Any]:
-    """Resolve current config paths through workspace policy and rehash."""
+def _extra_ontology_hashes(paths: list[str] | None) -> dict[str, str]:
+    result: dict[str, str] = {}
+    for idx, raw in enumerate(paths or [], start=1):
+        path = _resolve_artifact_path(
+            raw, allow_write_roots=True, label=f"extra_ontology:{idx}"
+        )
+        result[f"extra-{idx}:{path.name}"] = sha256_file(path)
+    return result
+
+
+def _artifact_set_for_config(
+    hashes: dict[str, Any], cfg: dict[str, Any]
+) -> dict[str, Any]:
+    merged = dict(hashes)
+    merged["extra_ontology_sha256"] = _extra_ontology_hashes(
+        cfg.get("extra_ontology_graphs")
+    )
+    return _artifact_set_from_hashes(merged)
+
+
+def _resolve_artifact_path(
+    path: str,
+    *,
+    allow_write_roots: bool,
+    label: str,
+) -> Path:
+    """Resolve artifact paths: generated graph/serializer may live under write roots.
+
+    Evidence/source paths stay read-root-only when ``allow_write_roots`` is False,
+    matching ``analyze_artifact`` for graphs/serializers.
+    """
 
     try:
-        graph_path = workspace_policy.check_read_path(cfg["graph_path"])
+        if allow_write_roots:
+            return workspace_policy.check_read_path(
+                path, include_write_roots=True
+            )
+        return workspace_policy.check_read_path(path)
     except ValueError as exc:
-        raise CriticSessionError("critic_session_artifact_path_denied", "graph") from exc
+        raise CriticSessionError(
+            "critic_session_artifact_path_denied", label
+        ) from exc
+
+
+def _rehash_config_artifacts(cfg: dict[str, Any]) -> dict[str, Any]:
+    """Resolve current config paths through workspace policy and rehash.
+
+    Graph/serializer/coverage (generated) may sit under approved write roots.
+    Source evidence paths remain read-root-only.
+    """
+
+    graph_path = _resolve_artifact_path(
+        cfg["graph_path"], allow_write_roots=True, label="graph"
+    )
     serializer_sha = None
     if cfg.get("serializer_path"):
-        try:
-            ser_path = workspace_policy.check_read_path(cfg["serializer_path"])
-        except ValueError as exc:
-            raise CriticSessionError(
-                "critic_session_artifact_path_denied", "serializer"
-            ) from exc
+        ser_path = _resolve_artifact_path(
+            cfg["serializer_path"], allow_write_roots=True, label="serializer"
+        )
         serializer_sha = sha256_file(ser_path)
     source_sha: dict[str, str] = {}
     for idx, raw in enumerate(cfg.get("source_paths") or [], start=1):
-        try:
-            path = workspace_policy.check_read_path(raw)
-        except ValueError as exc:
-            raise CriticSessionError(
-                "critic_session_artifact_path_denied", f"source:{idx}"
-            ) from exc
+        path = _resolve_artifact_path(
+            raw, allow_write_roots=False, label=f"source:{idx}"
+        )
         source_sha[f"source-{idx}:{path.name}"] = sha256_file(path)
     coverage_sha = None
     if cfg.get("coverage_contract_path"):
-        try:
-            cov = workspace_policy.check_read_path(cfg["coverage_contract_path"])
-        except ValueError as exc:
-            raise CriticSessionError(
-                "critic_session_artifact_path_denied", "coverage"
-            ) from exc
+        cov = _resolve_artifact_path(
+            cfg["coverage_contract_path"],
+            allow_write_roots=True,
+            label="coverage",
+        )
         coverage_sha = sha256_file(cov)
     return _artifact_set_from_hashes(
         {
@@ -246,6 +340,9 @@ def _rehash_config_artifacts(cfg: dict[str, Any]) -> dict[str, Any]:
             "serializer_sha256": serializer_sha,
             "source_sha256": source_sha,
             "coverage_contract_sha256": coverage_sha,
+            "extra_ontology_sha256": _extra_ontology_hashes(
+                cfg.get("extra_ontology_graphs")
+            ),
         }
     )
 
@@ -254,11 +351,164 @@ def _load(directory: Path) -> dict[str, Any]:
     path = directory / "session.json"
     if not path.is_file():
         raise CriticSessionError("critic_session_corrupt", "missing session.json")
-    return json.loads(path.read_text(encoding="utf-8"))
+    try:
+        session = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise CriticSessionError(
+            "critic_session_corrupt", "corrupt session.json"
+        ) from exc
+    if not isinstance(session, dict) or not session.get("schema_version"):
+        raise CriticSessionError(
+            "critic_session_corrupt", "missing schema_version"
+        )
+    return session
 
 
 def _save(directory: Path, session: dict[str, Any]) -> None:
     _atomic_write_json(directory / "session.json", session)
+
+
+def _verify_audit_chain(directory: Path) -> None:
+    """Walk audit.jsonl and verify sequence + previous_event_sha256 linkage."""
+
+    audit_path = directory / "audit.jsonl"
+    if not audit_path.is_file():
+        raise CriticSessionError(
+            "critic_session_audit_corrupt", "missing audit.jsonl"
+        )
+    previous_event_sha256 = "0" * 64
+    expected_sequence = 0
+    for line_no, line in enumerate(
+        audit_path.read_text(encoding="utf-8").splitlines(), start=1
+    ):
+        if not line.strip():
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise CriticSessionError(
+                "critic_session_audit_corrupt", f"invalid json at line {line_no}"
+            ) from exc
+        expected_sequence += 1
+        if int(event.get("sequence") or 0) != expected_sequence:
+            raise CriticSessionError(
+                "critic_session_audit_corrupt",
+                f"sequence mismatch at line {line_no}",
+            )
+        if str(event.get("previous_event_sha256") or "") != previous_event_sha256:
+            raise CriticSessionError(
+                "critic_session_audit_corrupt",
+                f"previous_event_sha256 mismatch at line {line_no}",
+            )
+        stored_hash = str(event.get("event_sha256") or "")
+        body = {k: v for k, v in event.items() if k != "event_sha256"}
+        computed = hashlib.sha256(
+            json.dumps(body, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        if stored_hash != computed:
+            raise CriticSessionError(
+                "critic_session_audit_corrupt",
+                f"event_sha256 mismatch at line {line_no}",
+            )
+        previous_event_sha256 = stored_hash
+
+
+def _write_review_pass(
+    directory: Path, pass_number: int, review: CriticReview
+) -> dict[str, Any]:
+    """Persist review metadata without raw prompt_package body by default."""
+
+    full = review.to_dict()
+    package = full.get("prompt_package") or review.prompt_package or {}
+    stored: dict[str, Any] = {
+        key: full[key] for key in _REVIEW_PASS_KEEP if key in full
+    }
+    if "schema_version" in full:
+        stored["schema_version"] = full["schema_version"]
+    stored["prompt_package_hash"] = package.get("prompt_package_hash")
+    stored["prompt_content_sha256"] = package.get("prompt_content_sha256")
+    stored["review_request_sha256"] = package.get("review_request_sha256")
+    stored["response_schema_sha256"] = package.get("response_schema_sha256")
+    _atomic_write_json(directory / f"review-pass-{pass_number}.json", stored)
+    if _persist_prompts_enabled():
+        _atomic_write_json(
+            directory / f"prompt-pass-{pass_number}.json", package
+        )
+    return stored
+
+
+def _target_passes(additional_passes_approved: int) -> int:
+    return REQUIRED_PASSES + int(additional_passes_approved)
+
+
+def _open_actionable_blockers(session: dict[str, Any]) -> bool:
+    """True when critical/high remain open, or actionable medium findings remain."""
+
+    summary = session.get("latest_review_summary") or {}
+    counts = summary.get("finding_counts") or {}
+    if int(counts.get("critical_high_open") or 0) > 0:
+        return True
+    for finding in session.get("prior_findings") or []:
+        if finding.get("status") in {"resolved"}:
+            continue
+        severity = finding.get("severity")
+        if severity in {"critical", "high"}:
+            return True
+        # Actionable medium: explicitly non-suppressible open medium findings.
+        if severity == "medium" and finding.get("suppressible") is False:
+            return True
+    return False
+
+
+def rebuild_prompt_package_for_pass(
+    session: dict[str, Any],
+    directory: Path,
+    pass_number: int,
+) -> dict[str, Any]:
+    """Rebuild the prompt package for schema binding when prompt-pass file is absent."""
+
+    cfg = session["config"]
+    prior: list[CriticFinding] = []
+    if pass_number > 1:
+        completed_path = directory / f"completed-pass-{pass_number - 1}.json"
+        if completed_path.is_file():
+            completed = json.loads(completed_path.read_text(encoding="utf-8"))
+            prior = _findings_from_review_dict(completed)
+    request = CriticArtifactRequest(
+        graph_path=cfg["graph_path"],
+        serializer_path=cfg.get("serializer_path"),
+        source_paths=list(cfg.get("source_paths") or []),
+        coverage_contract_path=cfg.get("coverage_contract_path"),
+        extensions=list(cfg.get("extensions") or []),
+        profiles=list(cfg.get("profiles") or []),
+        critic_scope=cfg.get("critic_scope") or "both",
+        project_root=cfg.get("project_root"),
+        serializer_mode=cfg.get("serializer_mode") or "auto",  # type: ignore[arg-type]
+        extra_ontology_graphs=list(cfg.get("extra_ontology_graphs") or []),
+        force_rdfs_inference=bool(cfg.get("force_rdfs_inference")),
+        prior_findings=prior,
+        session_id=session["session_id"],
+        pass_number=pass_number,
+    )
+    try:
+        review = analyze_artifact(request)
+    except CriticError as exc:
+        raise CriticSessionError(exc.code, str(exc)) from exc
+    if review.artifact_hashes.graph_sha256 != session.get("latest_artifact_hash"):
+        raise CriticSessionError(
+            "critic_session_hash_mismatch",
+            "rebuilt prompt package artifact hash mismatch",
+        )
+    rebuilt_set = _artifact_set_for_config(
+        review.artifact_hashes.to_dict(), cfg
+    )
+    latest_set = session.get("latest_artifact_set") or {}
+    if latest_set and rebuilt_set != latest_set:
+        raise CriticSessionError(
+            "critic_session_hash_mismatch",
+            "rebuilt prompt package artifact set mismatch",
+        )
+    return review.prompt_package
 
 
 def _new_session_id() -> str:
@@ -346,6 +596,9 @@ def start_critic_review(
     model_policy: str | None = None,
     report_output: str | None = None,
     project_root: str | None = None,
+    serializer_mode: str = "auto",
+    extra_ontology_graphs: list[str] | None = None,
+    force_rdfs_inference: bool = False,
 ) -> dict[str, Any]:
     if additional_iterations < 0:
         raise CriticSessionError("critic_session_invalid_additional_iterations")
@@ -354,11 +607,14 @@ def start_critic_review(
             "critic_session_pass_cap",
             f"additional_iterations exceeds cap of {MAX_TOTAL_PASSES - REQUIRED_PASSES}",
         )
-    policy: ModelPolicy = (  # type: ignore[assignment]
-        model_policy if model_policy in {"disabled", "manual", "client_sampling"} else default_model_policy()
+    policy = effective_model_policy(
+        model_policy
+        if normalize_model_policy(model_policy) is not None
+        else default_model_policy()
     )
     approved_additional = int(additional_iterations)
-    max_passes = REQUIRED_PASSES + approved_additional
+    target_passes = _target_passes(approved_additional)
+    max_passes = target_passes
 
     session_id = _new_session_id()
     directory = session_root() / session_id
@@ -374,6 +630,9 @@ def start_critic_review(
         profiles=list(profiles or []),
         critic_scope=critic_scope,  # type: ignore[arg-type]
         project_root=project_root,
+        serializer_mode=serializer_mode or "auto",  # type: ignore[arg-type]
+        extra_ontology_graphs=list(extra_ontology_graphs or []),
+        force_rdfs_inference=bool(force_rdfs_inference),
         session_id=session_id,
         pass_number=1,
     )
@@ -382,13 +641,29 @@ def start_critic_review(
     except CriticError as exc:
         raise CriticSessionError(exc.code, str(exc)) from exc
 
-    review_dict = review.to_dict()
-    _atomic_write_json(directory / "review-pass-1.json", review_dict)
-    _atomic_write_json(directory / "prompt-pass-1.json", review.prompt_package)
+    config = asdict(
+        SessionConfig(
+            graph_path=graph_path,
+            serializer_path=serializer_path,
+            source_paths=list(source_paths or []),
+            coverage_contract_path=coverage_contract_path,
+            extensions=list(extensions or []),
+            profiles=list(profiles or []),
+            critic_scope=critic_scope,
+            additional_iterations=approved_additional,
+            model_policy=policy,
+            report_output=report_output,
+            project_root=project_root,
+            serializer_mode=serializer_mode or "auto",
+            extra_ontology_graphs=list(extra_ontology_graphs or []),
+            force_rdfs_inference=bool(force_rdfs_inference),
+        )
+    )
+    _write_review_pass(directory, 1, review)
 
     extend_token = secrets.token_urlsafe(24)
     extend_challenge = secrets.token_urlsafe(18)
-    artifact_set = _artifact_set_from_hashes(review.artifact_hashes.to_dict())
+    artifact_set = _artifact_set_for_config(review.artifact_hashes.to_dict(), config)
     session = {
         "schema_version": CRITIC_SESSION_SCHEMA,
         "session_id": session_id,
@@ -396,25 +671,12 @@ def start_critic_review(
         "model_policy": policy,
         "required_passes": REQUIRED_PASSES,
         "additional_passes_approved": approved_additional,
+        "target_passes": target_passes,
         "max_total_passes": max_passes,
         "current_pass": 1,
         "completed_critic_responses": 0,
         "completed_deterministic_passes": 1,
-        "config": asdict(
-            SessionConfig(
-                graph_path=graph_path,
-                serializer_path=serializer_path,
-                source_paths=list(source_paths or []),
-                coverage_contract_path=coverage_contract_path,
-                extensions=list(extensions or []),
-                profiles=list(profiles or []),
-                critic_scope=critic_scope,
-                additional_iterations=approved_additional,
-                model_policy=policy,
-                report_output=report_output,
-                project_root=project_root,
-            )
-        ),
+        "config": config,
         "artifact_hash_history": [review.artifact_hashes.graph_sha256],
         "latest_artifact_hash": review.artifact_hashes.graph_sha256,
         "latest_reviewed_hash": None,
@@ -462,6 +724,7 @@ def start_critic_review(
         "pass_number": 1,
         "model_policy": policy,
         "required_passes": REQUIRED_PASSES,
+        "target_passes": target_passes,
         "max_total_passes": max_passes,
         "additional_passes_approved": approved_additional,
         "review": _review_summary(review),
@@ -484,6 +747,11 @@ def start_critic_review(
 def get_critic_review_status(session_id: str) -> dict[str, Any]:
     with _locked(session_id) as directory:
         session = _load(directory)
+        try:
+            _verify_audit_chain(directory)
+        except CriticSessionError:
+            # Surface status even when audit is damaged; callers can check code separately.
+            pass
     return {
         "session_id": session_id,
         "state": session["state"],
@@ -492,6 +760,8 @@ def get_critic_review_status(session_id: str) -> dict[str, Any]:
         "completed_critic_responses": session["completed_critic_responses"],
         "completed_deterministic_passes": session["completed_deterministic_passes"],
         "required_passes": session["required_passes"],
+        "target_passes": session.get("target_passes")
+        or _target_passes(session.get("additional_passes_approved") or 0),
         "additional_passes_approved": session["additional_passes_approved"],
         "max_total_passes": session["max_total_passes"],
         "latest_artifact_hash": session["latest_artifact_hash"],
@@ -515,6 +785,8 @@ def get_critic_review_status(session_id: str) -> dict[str, Any]:
 def submit_manual_critic_response(
     session_id: str,
     response: dict[str, Any] | str,
+    *,
+    sampling: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     with _locked(session_id) as directory:
         session = _load(directory)
@@ -526,9 +798,11 @@ def submit_manual_critic_response(
             )
         prior_state = session["state"]
         pass_number = int(session["current_pass"])
-        prompt = json.loads(
-            (directory / f"prompt-pass-{pass_number}.json").read_text(encoding="utf-8")
-        )
+        prompt_path = directory / f"prompt-pass-{pass_number}.json"
+        if prompt_path.is_file():
+            prompt = json.loads(prompt_path.read_text(encoding="utf-8"))
+        else:
+            prompt = rebuild_prompt_package_for_pass(session, directory, pass_number)
         review_path = directory / f"review-pass-{pass_number}.json"
         review_dict = json.loads(review_path.read_text(encoding="utf-8"))
         hashes = review_dict["artifact_hashes"]
@@ -580,7 +854,7 @@ def submit_manual_critic_response(
             },
         )
 
-        critic_record = {
+        critic_record: dict[str, Any] = {
             "finding_ids": [f.finding_id for f in critic_findings],
             "finding_count": len(critic_findings),
             "assessment_count": len(assessments),
@@ -589,6 +863,17 @@ def submit_manual_critic_response(
             "completed_status": completed["status"],
             "finding_counts": completed["finding_counts"],
         }
+        if sampling:
+            # Persist sampling metadata (model, tokens, status, fallback reason).
+            critic_record["sampling"] = {
+                "status": sampling.get("status"),
+                "model": sampling.get("model"),
+                "input_tokens": sampling.get("input_tokens"),
+                "output_tokens": sampling.get("output_tokens"),
+                "fallback": sampling.get("fallback"),
+                "error": sampling.get("error"),
+                "metadata": sampling.get("metadata") or {},
+            }
         for item in session["passes"]:
             if item["pass_number"] == pass_number:
                 item["critic"] = critic_record
@@ -599,7 +884,7 @@ def submit_manual_critic_response(
                 }
                 break
 
-        artifact_set = _artifact_set_from_hashes(hashes)
+        artifact_set = _artifact_set_for_config(hashes, session["config"])
         session["completed_critic_responses"] = int(session["completed_critic_responses"]) + 1
         session["latest_reviewed_hash"] = hashes["graph_sha256"]
         session["latest_reviewed_artifacts"] = artifact_set
@@ -629,6 +914,7 @@ def submit_manual_critic_response(
                 "finding_count": len(critic_findings),
                 "assessment_count": len(assessments),
                 "completed_status": completed["status"],
+                "sampling_status": (sampling or {}).get("status"),
             },
             prior_state=prior_state,
             new_state=session["state"],
@@ -648,8 +934,12 @@ def submit_manual_critic_response(
 def apply_sampled_critic_response(
     session_id: str,
     raw_text_or_dict: dict[str, Any] | str,
+    *,
+    sampling: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    return submit_manual_critic_response(session_id, raw_text_or_dict)
+    return submit_manual_critic_response(
+        session_id, raw_text_or_dict, sampling=sampling
+    )
 
 
 def submit_critic_revision(
@@ -662,6 +952,9 @@ def submit_critic_revision(
     addressed_finding_ids: list[str] | None = None,
     extensions: list[str] | None = None,
     profiles: list[str] | None = None,
+    serializer_mode: str | None = None,
+    extra_ontology_graphs: list[str] | None = None,
+    force_rdfs_inference: bool | None = None,
 ) -> dict[str, Any]:
     with _locked(session_id) as directory:
         session = _load(directory)
@@ -669,8 +962,12 @@ def submit_critic_revision(
             raise CriticSessionError(
                 "critic_session_invalid_state", session["state"]
             )
+        target_passes = int(
+            session.get("target_passes")
+            or _target_passes(session.get("additional_passes_approved") or 0)
+        )
         if session["current_pass"] >= session["max_total_passes"] and (
-            session["completed_critic_responses"] >= session["required_passes"]
+            session["completed_critic_responses"] >= target_passes
             or session["model_policy"] == "disabled"
         ):
             # Allow final confirmation analysis only if under cap for next pass.
@@ -683,6 +980,13 @@ def submit_critic_revision(
         cfg = session["config"]
         prior_raw = session.get("prior_findings") or []
         prior = [CriticFinding.from_dict(item) for item in prior_raw]
+
+        if serializer_mode is not None:
+            cfg["serializer_mode"] = serializer_mode
+        if extra_ontology_graphs is not None:
+            cfg["extra_ontology_graphs"] = list(extra_ontology_graphs)
+        if force_rdfs_inference is not None:
+            cfg["force_rdfs_inference"] = bool(force_rdfs_inference)
 
         request = CriticArtifactRequest(
             graph_path=graph_path,
@@ -707,6 +1011,9 @@ def submit_critic_revision(
             ),
             critic_scope=cfg.get("critic_scope") or "both",
             project_root=cfg.get("project_root"),
+            serializer_mode=cfg.get("serializer_mode") or "auto",  # type: ignore[arg-type]
+            extra_ontology_graphs=list(cfg.get("extra_ontology_graphs") or []),
+            force_rdfs_inference=bool(cfg.get("force_rdfs_inference")),
             prior_findings=prior,
             session_id=session_id,
             pass_number=next_pass,
@@ -716,42 +1023,7 @@ def submit_critic_revision(
         except CriticError as exc:
             raise CriticSessionError(exc.code, str(exc)) from exc
 
-        new_hash = review.artifact_hashes.graph_sha256
-        old_hash = session["latest_artifact_hash"]
-        prev_summary = session.get("latest_review_summary") or {}
-        prev_blockers = int(
-            (prev_summary.get("finding_counts") or {}).get("critical_high_open") or 0
-        )
-        if new_hash == old_hash and prev_blockers > 0:
-            raise CriticSessionError(
-                "critic_session_revision_unchanged",
-                "artifact hash unchanged while blockers remain",
-            )
-
-        review_dict = review.to_dict()
-        _atomic_write_json(directory / f"review-pass-{next_pass}.json", review_dict)
-        _atomic_write_json(
-            directory / f"prompt-pass-{next_pass}.json", review.prompt_package
-        )
-
-        session["current_pass"] = next_pass
-        session["completed_deterministic_passes"] = (
-            int(session["completed_deterministic_passes"]) + 1
-        )
-        session["artifact_hash_history"].append(new_hash)
-        session["latest_artifact_hash"] = new_hash
-        session["latest_prompt_package_hash"] = review.prompt_package.get(
-            "prompt_package_hash"
-        )
-        session["latest_review_request_sha256"] = review.prompt_package.get(
-            "review_request_sha256"
-        )
-        session["latest_serializer_sha256"] = review.artifact_hashes.serializer_sha256
-        session["latest_review_summary"] = _review_summary(review)
-        session["latest_artifact_set"] = _artifact_set_from_hashes(
-            review.artifact_hashes.to_dict()
-        )
-        session["latest_bundle_fingerprint"] = review.validation.bundle_fingerprint
+        # Update config paths before building artifact set so extras/paths match.
         session["config"]["graph_path"] = graph_path
         if serializer_path is not None:
             session["config"]["serializer_path"] = serializer_path
@@ -763,6 +1035,39 @@ def submit_critic_revision(
             session["config"]["extensions"] = list(extensions)
         if profiles is not None:
             session["config"]["profiles"] = list(profiles)
+
+        new_hash = review.artifact_hashes.graph_sha256
+        new_set = _artifact_set_for_config(
+            review.artifact_hashes.to_dict(), session["config"]
+        )
+        old_set = session.get("latest_artifact_set") or {}
+        if new_set == old_set and _open_actionable_blockers(session):
+            raise CriticSessionError(
+                "critic_session_revision_unchanged",
+                "artifact set unchanged while blockers remain",
+            )
+
+        _write_review_pass(directory, next_pass, review)
+
+        session["current_pass"] = next_pass
+        session["completed_deterministic_passes"] = (
+            int(session["completed_deterministic_passes"]) + 1
+        )
+        session["artifact_hash_history"].append(new_hash)
+        session["latest_artifact_hash"] = new_hash
+        session["latest_prompt_package_hash"] = review.prompt_package.get(
+            "prompt_package_hash"
+        )
+        session["latest_prompt_content_sha256"] = review.prompt_package.get(
+            "prompt_content_sha256"
+        )
+        session["latest_review_request_sha256"] = review.prompt_package.get(
+            "review_request_sha256"
+        )
+        session["latest_serializer_sha256"] = review.artifact_hashes.serializer_sha256
+        session["latest_review_summary"] = _review_summary(review)
+        session["latest_artifact_set"] = new_set
+        session["latest_bundle_fingerprint"] = review.validation.bundle_fingerprint
         if change_summary:
             session["last_change_summary"] = change_summary[:2000]
         if addressed_finding_ids:
@@ -783,7 +1088,7 @@ def submit_critic_revision(
             session["state"] = "awaiting_revision"
             next_action = (
                 "finalize_critic_review"
-                if session["completed_deterministic_passes"] >= REQUIRED_PASSES
+                if session["completed_deterministic_passes"] >= target_passes
                 else "submit_critic_revision"
             )
         else:
@@ -845,26 +1150,32 @@ def extend_critic_review(
         if not approval_token or approval_token not in expected_tokens:
             raise CriticSessionError("critic_session_extend_denied")
         new_additional = int(session["additional_passes_approved"]) + additional_iterations
-        new_max = REQUIRED_PASSES + new_additional
-        if new_max > MAX_TOTAL_PASSES:
+        new_target = _target_passes(new_additional)
+        if new_target > MAX_TOTAL_PASSES:
             raise CriticSessionError("critic_session_pass_cap")
         # One-time challenge: rotate after successful use when challenge matched.
         if approval_token == session.get("extend_approval_challenge"):
             session["extend_approval_challenge"] = secrets.token_urlsafe(18)
         session["additional_passes_approved"] = new_additional
-        session["max_total_passes"] = new_max
+        session["target_passes"] = new_target
+        session["max_total_passes"] = new_target
         _save(directory, session)
         _append_audit(
             directory,
             "extend",
-            {"additional_iterations": additional_iterations, "max": new_max},
+            {
+                "additional_iterations": additional_iterations,
+                "max": new_target,
+                "target_passes": new_target,
+            },
             prior_state=session["state"],
             new_state=session["state"],
         )
         return {
             "session_id": session_id,
             "additional_passes_approved": new_additional,
-            "max_total_passes": new_max,
+            "target_passes": new_target,
+            "max_total_passes": new_target,
             "state": session["state"],
             "extend_approval_challenge": session.get("extend_approval_challenge"),
         }
@@ -876,12 +1187,18 @@ def finalize_critic_review(session_id: str) -> dict[str, Any]:
         if session["state"] in {"cancelled", "finalized"}:
             raise CriticSessionError("critic_session_invalid_state", session["state"])
 
+        _verify_audit_chain(directory)
+
+        target_passes = int(
+            session.get("target_passes")
+            or _target_passes(session.get("additional_passes_approved") or 0)
+        )
         policy = session["model_policy"]
         if policy == "disabled":
-            if int(session["completed_deterministic_passes"]) < REQUIRED_PASSES:
+            if int(session["completed_deterministic_passes"]) < target_passes:
                 raise CriticSessionError("critic_session_passes_incomplete")
         else:
-            if int(session["completed_critic_responses"]) < REQUIRED_PASSES:
+            if int(session["completed_critic_responses"]) < target_passes:
                 raise CriticSessionError("critic_session_passes_incomplete")
             if session["state"] != "awaiting_revision":
                 raise CriticSessionError(
@@ -1039,18 +1356,23 @@ def replay_manual_session(
     pass2_response_path: Path | str,
     session_id: str | None = None,
     project_root: Path | str | None = None,
+    pass1_graph_path: Path | str | None = None,
     pass2_graph_path: Path | str | None = None,
 ) -> dict[str, Any]:
     """Real two-pass session state-machine replay for evaluation harnesses."""
 
     case_dir = Path(case_dir)
     manifest = json.loads((case_dir / "manifest.json").read_text(encoding="utf-8"))
-    graph_path = (case_dir / manifest["graph_path"]).resolve()
-    pass2_graph = (
-        Path(pass2_graph_path).resolve()
-        if pass2_graph_path
-        else graph_path
-    )
+    if pass1_graph_path:
+        graph_path = Path(pass1_graph_path).resolve()
+    else:
+        graph_path = (case_dir / manifest["graph_path"]).resolve()
+    if pass2_graph_path:
+        pass2_graph = Path(pass2_graph_path).resolve()
+    elif manifest.get("pass2_graph_path"):
+        pass2_graph = (case_dir / manifest["pass2_graph_path"]).resolve()
+    else:
+        pass2_graph = graph_path
     started = start_critic_review(
         graph_path=str(graph_path),
         critic_scope=manifest.get("critic_scope", "graph"),
@@ -1066,6 +1388,14 @@ def replay_manual_session(
             str((case_dir / p).resolve()) for p in (manifest.get("source_paths") or [])
         ],
         project_root=str(project_root) if project_root else None,
+        serializer_mode=manifest.get("serializer_mode", "auto"),
+        extra_ontology_graphs=[
+            str((case_dir / p).resolve())
+            if not Path(p).is_absolute()
+            else str(Path(p).resolve())
+            for p in (manifest.get("extra_ontology_graphs") or [])
+        ],
+        force_rdfs_inference=bool(manifest.get("force_rdfs_inference")),
     )
     sid = started["session_id"]
     if session_id:
@@ -1086,10 +1416,49 @@ def replay_manual_session(
         bound.setdefault("scorecard", {})
         return bound
 
+    def _finding_snapshot(pass_number: int) -> dict[str, Any]:
+        review_path = session_root() / sid / f"review-pass-{pass_number}.json"
+        if not review_path.is_file():
+            return {
+                "open": 0,
+                "resolved": 0,
+                "regressions": 0,
+                "open_rule_ids": [],
+                "resolved_rule_ids": [],
+                "validation_conforms": None,
+                "scorecard": None,
+            }
+        review = json.loads(review_path.read_text(encoding="utf-8"))
+        open_ids: list[str] = []
+        resolved_ids: list[str] = []
+        regressions = 0
+        for finding in review.get("merged_findings") or []:
+            rule_id = finding.get("rule_id")
+            status = finding.get("status")
+            if status == "resolved" and rule_id:
+                resolved_ids.append(str(rule_id))
+            elif status == "regression":
+                regressions += 1
+                if rule_id:
+                    open_ids.append(str(rule_id))
+            elif status != "resolved" and rule_id:
+                open_ids.append(str(rule_id))
+        validation = review.get("validation") or {}
+        return {
+            "open": len(open_ids),
+            "resolved": len(resolved_ids),
+            "regressions": regressions,
+            "open_rule_ids": sorted(set(open_ids)),
+            "resolved_rule_ids": sorted(set(resolved_ids)),
+            "validation_conforms": validation.get("conforms"),
+            "scorecard": review.get("scorecard"),
+        }
+
     pass1_template = json.loads(Path(pass1_response_path).read_text(encoding="utf-8"))
     pass1 = submit_manual_critic_response(
         sid, _bind(pass1_template, started["prompt_package"], 1)
     )
+    snap1 = _finding_snapshot(1)
     revised = submit_critic_revision(
         sid,
         graph_path=str(pass2_graph),
@@ -1100,6 +1469,7 @@ def replay_manual_session(
     pass2 = submit_manual_critic_response(
         sid, _bind(pass2_template, package2, 2)
     )
+    snap2 = _finding_snapshot(2)
     final_error = None
     final: dict[str, Any] | None = None
     try:
@@ -1110,18 +1480,22 @@ def replay_manual_session(
     return {
         "case_id": manifest.get("case_id"),
         "session_id": sid,
+        "pass1_graph": str(graph_path),
+        "pass2_graph": str(pass2_graph),
         "passes": [
             {
                 "pass_number": 1,
                 "parsed_ok": True,
                 "model_finding_count": pass1.get("critic", {}).get("finding_count"),
                 "completed_status": (pass1.get("completed_pass") or {}).get("status"),
+                "findings": snap1,
             },
             {
                 "pass_number": 2,
                 "parsed_ok": True,
                 "model_finding_count": pass2.get("critic", {}).get("finding_count"),
                 "completed_status": (pass2.get("completed_pass") or {}).get("status"),
+                "findings": snap2,
             },
         ],
         "converged": bool(

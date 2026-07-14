@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+#### Critic loop P0 hardening (post-`23e6aaa` review; do not tag that SHA)
+
+- **#75 resolution**: build `evaluated_rule_versions` from per-verifier
+  `RuleExecution` so heuristic findings (`rule_version` 1.2.0) can resolve on
+  repair; stamp `rule_version`/`verifier_rule_id` on heuristic findings;
+  resolution/repair tests for CRIT-H rules + accepted two-pass charged-with session.
+- **#76 sessions**: finalize rehash accepts generated graphs under write roots
+  (sources stay read-only); prompts not persisted by default
+  (`CASE_UCO_CRITIC_PERSIST_PROMPTS`); strip `prompt_package` from
+  `review-pass-N.json`; rebuild prompts from hash-matching artifacts;
+  `target_passes` for finalize/extend; full artifact-set revision comparison;
+  `serializer_mode` / `extra_ontology_graphs` / `force_rdfs_inference` in
+  SessionConfig + MCP tools; audit-chain verification on finalize.
+- **#76 sampling**: non-bypassable `CASE_UCO_MCP_CRITIC_MODE`; schema-validate
+  inside sampling retry loop; FastMCP pin `>=3.4.0,<3.6`.
+- **#75 serializer AST**: dynamic CASEGraph public-API allowlist; tighter
+  rel-id-collapse and unsafe-overwrite heuristics.
+- **#77 eval**: repair-charged-with case with `--require-accepted`; truthful
+  repair metrics; Phantom Gate gold labeled `baseline-known-debt`.
+- **#78 handoff**: dedicated `CASE_UCO_CRITIC_HANDOFF_TOKEN` only (never reuse
+  extend challenge); `relative_to(candidates)` + `O_CREAT|O_EXCL` atomic create.
+- **#71 C#**: `WriteStreaming` uses `File.Replace` (no delete-before-move).
+
+#### Performance scope
+
+- **#70–#73**: scoped experimental completion for v1.22; deferred contracts
+  tracked as v1.23 follow-ups #79–#82.
+
 ## [1.22.0] - 2026-07-13
 
 ### Added

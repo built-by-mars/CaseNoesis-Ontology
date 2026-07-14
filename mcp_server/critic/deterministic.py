@@ -259,16 +259,20 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
                 "note": "non-python overview only",
             }
 
-    evaluated_rules: set[str] = set()
+    # Map each verifier rule_id → concrete rule_version from RuleExecution.
+    # Resolution must use per-verifier versions (heuristic 1.2.0 ≠ module 1.1.0).
+    evaluated_rule_versions: dict[str, str] = {}
     blocking_incomplete = False
     for execution in rule_executions:
         rule_id = str(execution.get("rule_id", ""))
         status = execution.get("status")
         required = bool(execution.get("required_for_scope", True))
+        version = str(execution.get("rule_version") or RULE_VERSION)
         verified = [str(v) for v in (execution.get("verifies_rule_ids") or [rule_id])]
         if status == "evaluated":
-            evaluated_rules.update(verified)
-            evaluated_rules.add(rule_id)
+            for rid in {rule_id, *verified}:
+                if rid:
+                    evaluated_rule_versions[rid] = version
         elif status == "failed" and required:
             blocking_incomplete = True
         elif status == "skipped" and required:
@@ -280,19 +284,30 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
 
     resolved_ids: set[str] = set()
     unevaluated_ids: set[str] = set()
+    current_ids = {f.finding_id for f in findings}
     for old in request.prior_findings:
         if old.evidence_kind not in {"deterministic", "source"} or not old.rule_id:
             unevaluated_ids.add(old.finding_id)
             continue
-        # Rule version must be compatible (exact match for now).
-        if old.rule_version and old.rule_version != RULE_VERSION:
-            unevaluated_ids.add(old.finding_id)
-            continue
         check_ids = _rule_ids_for_finding(old)
-        if not check_ids or not (check_ids & evaluated_rules):
+        if not check_ids:
             unevaluated_ids.add(old.finding_id)
             continue
-        if old.finding_id not in {f.finding_id for f in findings}:
+        # Compatible when any verifier rule was evaluated at a matching version.
+        version_ok = False
+        evaluated = False
+        for rid in check_ids:
+            if rid not in evaluated_rule_versions:
+                continue
+            evaluated = True
+            executed_version = evaluated_rule_versions[rid]
+            if not old.rule_version or old.rule_version == executed_version:
+                version_ok = True
+                break
+        if not evaluated or not version_ok:
+            unevaluated_ids.add(old.finding_id)
+            continue
+        if old.finding_id not in current_ids:
             resolved_ids.add(old.finding_id)
 
     diff = diff_findings(

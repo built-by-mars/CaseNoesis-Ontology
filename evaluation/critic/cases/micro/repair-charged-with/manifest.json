@@ -1,0 +1,7 @@
+{
+  "case_id": "micro-repair-charged-with",
+  "tier": "T0",
+  "critic_scope": "graph",
+  "graph_path": "pass1/graph.jsonld",
+  "pass2_graph_path": "pass2/graph.jsonld"
+}

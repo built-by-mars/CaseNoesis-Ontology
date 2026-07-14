@@ -1,4 +1,4 @@
-fastmcp>=3.4.0,<4
+fastmcp>=3.4.0,<3.6
 # PDF text extraction fallback for the document processor (used when the
 # poppler `pdftotext` CLI is not installed). Pure-Python; offline-safe.
 pypdf

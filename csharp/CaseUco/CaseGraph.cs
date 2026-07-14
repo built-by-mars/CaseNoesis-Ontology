@@ -705,9 +705,29 @@ namespace CaseUco
 
                 if (atomic && tmpPath != null)
                 {
-                    if (File.Exists(path))
-                        File.Delete(path);
-                    File.Move(tmpPath, path);
+                    // Prefer atomic replace so a failed swap keeps the destination.
+                    // Do NOT delete the destination before moving the temp file.
+                    try
+                    {
+                        if (File.Exists(path))
+                        {
+                            File.Replace(
+                                tmpPath,
+                                path,
+                                destinationBackupFileName: null,
+                                ignoreMetadataErrors: true);
+                        }
+                        else
+                        {
+                            File.Move(tmpPath, path);
+                        }
+                    }
+                    catch (PlatformNotSupportedException)
+                    {
+                        // Documented fallback: atomic rename onto missing dest, else
+                        // Move with overwrite where supported (never Delete-then-Move).
+                        File.Move(tmpPath, path, overwrite: true);
+                    }
                     tmpPath = null;
                 }
                 return new StreamingWriteResult(_objects.Count, bytesWritten);
