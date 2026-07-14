@@ -726,7 +726,11 @@ class CASEGraph:
         ``(partitions, manifest)`` with schema_version ``1.0.0``; otherwise
         returns only the partition map (backward compatible).
         """
-        by_id = {o.get("@id"): o for o in self._objects if isinstance(o.get("@id"), str)}
+        by_id: dict[str, dict[str, Any]] = {}
+        for obj in self._objects:
+            oid = obj.get("@id")
+            if isinstance(oid, str):
+                by_id[oid] = obj
         if not by_id:
             empty: dict[str, CASEGraph] = {}
             if return_manifest:
@@ -879,12 +883,16 @@ class CASEGraph:
     @staticmethod
     def _first_endpoint_id(obj: dict[str, Any], key: str) -> str | None:
         val = obj.get(key)
-        if isinstance(val, dict) and isinstance(val.get("@id"), str):
-            return val["@id"]
+        if isinstance(val, dict):
+            nid = val.get("@id")
+            if isinstance(nid, str):
+                return nid
         if isinstance(val, list):
             for item in val:
-                if isinstance(item, dict) and isinstance(item.get("@id"), str):
-                    return item["@id"]
+                if isinstance(item, dict):
+                    nid = item.get("@id")
+                    if isinstance(nid, str):
+                        return nid
         return None
 
     def _cross_partition_relationship_ids(
@@ -1427,7 +1435,7 @@ class CASEGraph:
 
 
 _CLASS_REGISTRY_CACHE: dict[str, type] | None = None
-_CLASS_FIELD_CACHE: dict[type, tuple] | None = None
+_CLASS_FIELD_CACHE: dict[type, tuple[Any, ...]] | None = None
 _CLASS_REGISTRY_LOCK = threading.RLock()
 
 
@@ -1499,7 +1507,7 @@ def _build_class_registry(extra_classes: list[type] | None = None) -> dict[str, 
     return result
 
 
-def _cached_dataclass_fields(cls: type) -> tuple:
+def _cached_dataclass_fields(cls: type) -> tuple[Any, ...]:
     """Return dataclass fields for ``cls``, cached process-wide (#70)."""
     global _CLASS_FIELD_CACHE
     with _CLASS_REGISTRY_LOCK:
@@ -1508,7 +1516,7 @@ def _cached_dataclass_fields(cls: type) -> tuple:
         cached = _CLASS_FIELD_CACHE.get(cls)
         if cached is not None:
             return cached
-        field_tuple = tuple(dataclasses.fields(cls))
+        field_tuple: tuple[Any, ...] = tuple(dataclasses.fields(cls))
         _CLASS_FIELD_CACHE[cls] = field_tuple
         return field_tuple
 

@@ -69,6 +69,11 @@ def main() -> int:
         default=1.0,
         help="Max allowed relative increase (1.0 = +100%%)",
     )
+    parser.add_argument(
+        "--advisory",
+        action="store_true",
+        help="Report regressions but exit 0 (v1.22 advisory bench policy).",
+    )
     args = parser.parse_args()
 
     if not args.baseline.is_file():
@@ -82,10 +87,11 @@ def main() -> int:
     current = json.loads(args.result.read_text(encoding="utf-8"))
     failures = compare(baseline, current, args.threshold)
     if failures:
-        print("Benchmark regression vs baseline:", file=sys.stderr)
+        label = "advisory regression" if args.advisory else "Benchmark regression"
+        print(f"{label} vs baseline:", file=sys.stderr)
         for line in failures:
             print(f"  {line}", file=sys.stderr)
-        return 1
+        return 0 if args.advisory else 1
     print(
         f"OK: all timing keys within +{args.threshold * 100:.0f}% of {args.baseline}"
     )

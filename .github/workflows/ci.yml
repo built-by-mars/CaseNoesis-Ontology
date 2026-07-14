@@ -194,7 +194,7 @@ jobs:
 
       - name: Install dependencies
         # fastmcp==3.4.4 — Context.sample string/SamplingMessage API pin
-        run: pip install rdflib jinja2 pytest mypy jsonschema "fastmcp==3.4.4" case-utils
+        run: pip install rdflib jinja2 pytest "mypy>=1.0,<2.4" jsonschema "fastmcp==3.4.4" case-utils
 
       - name: Run tests
         run: PYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v
@@ -279,11 +279,11 @@ jobs:
           test -s artifacts/bench/python-small.json
 
       - name: Compare against baseline (v1.22 advisory median policy)
-        continue-on-error: true
         run: |
           python3 benchmarks/compare_baseline.py \
             --baseline benchmarks/baselines/python-small.json \
-            --result artifacts/bench/python-small.json
+            --result artifacts/bench/python-small.json \
+            --advisory
 
       - name: Upload bench result
         if: always()
