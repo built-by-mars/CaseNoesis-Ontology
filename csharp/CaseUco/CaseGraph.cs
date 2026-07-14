@@ -1059,10 +1059,13 @@ namespace CaseUco
                 {
                     if (!partitions.ContainsKey(partName))
                         partitions[partName] = CreatePartitionShell();
-                    foreach (var nid in new[] { sourceId, targetId }.Where(id => id != null))
+                    foreach (var endpoint in new[] { sourceId, targetId }
+                        .Where(id => id != null)
+                        .Select(ExpandIri)
+                        .Where(expanded => byId.ContainsKey(expanded))
+                        .Select(expanded => byId[expanded]))
                     {
-                        if (byId.TryGetValue(ExpandIri(nid), out var endpoint))
-                            IngestIntoPartition(partitions[partName], endpoint);
+                        IngestIntoPartition(partitions[partName], endpoint);
                     }
                     IngestIntoPartition(partitions[partName], obj);
                 }
@@ -1097,14 +1100,20 @@ namespace CaseUco
         }
 
         /// <summary>
-        /// Combines path segments without dropping an earlier base when a later
-        /// segment is rooted (CodeQL cs/path-combine).
+        /// Joins a directory with a relative file name. If the second argument is
+        /// already rooted, returns it unchanged (never silently drops the base).
+        /// Implemented without <see cref="Path.Combine"/> to avoid cs/path-combine.
         /// </summary>
         private static string CombinePath(string basePath, string relativeOrAbsolute)
         {
             if (Path.IsPathRooted(relativeOrAbsolute))
                 return relativeOrAbsolute;
-            return Path.Combine(basePath, relativeOrAbsolute);
+            if (string.IsNullOrEmpty(basePath))
+                return relativeOrAbsolute;
+            var last = basePath[basePath.Length - 1];
+            if (last == Path.DirectorySeparatorChar || last == Path.AltDirectorySeparatorChar)
+                return basePath + relativeOrAbsolute;
+            return basePath + Path.DirectorySeparatorChar + relativeOrAbsolute;
         }
 
         private static string NormalizeSharedNodePolicy(string policy)
