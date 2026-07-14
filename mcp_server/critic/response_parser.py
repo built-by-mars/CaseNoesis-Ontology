@@ -42,6 +42,7 @@ def parse_critic_model_response(
     session_id: str | None = None,
     pass_number: int | None = None,
     expected_review_request_sha256: str | None = None,
+    expected_review_config_sha256: str | None = None,
     bound_schema: dict[str, Any] | None = None,
     allowed_assessments: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
@@ -82,6 +83,7 @@ def parse_critic_model_response(
         pass_number=pass_number,
         schema_version=SUPPORTED_SCHEMA_VERSION,
         review_request_sha256=expected_review_request_sha256,
+        review_config_sha256=expected_review_config_sha256,
     )
     if "$schema" not in schema:
         base = model_response_schema()
@@ -165,6 +167,24 @@ def parse_critic_model_response(
             raise CriticResponseError(
                 "critic_response_schema_mismatch",
                 "bad hex hash: review_request_sha256",
+            )
+
+    got_cfg = payload.get("review_config_sha256")
+    if expected_review_config_sha256 is not None:
+        if got_cfg != expected_review_config_sha256:
+            raise CriticResponseError(
+                "critic_artifact_hash_mismatch", "review_config_sha256"
+            )
+        if not isinstance(got_cfg, str) or not HEX64.fullmatch(got_cfg):
+            raise CriticResponseError(
+                "critic_response_schema_mismatch",
+                "bad hex hash: review_config_sha256",
+            )
+    elif got_cfg is not None:
+        if not isinstance(got_cfg, str) or not HEX64.fullmatch(got_cfg):
+            raise CriticResponseError(
+                "critic_response_schema_mismatch",
+                "bad hex hash: review_config_sha256",
             )
 
     vocab = load_vocabularies()
@@ -256,6 +276,7 @@ def parse_critic_model_response(
         "session_id": payload.get("session_id", session_id),
         "pass_number": payload.get("pass_number", pass_number),
         "review_request_sha256": payload.get("review_request_sha256"),
+        "review_config_sha256": payload.get("review_config_sha256"),
     }
 
 

@@ -2,6 +2,13 @@
 
 from __future__ import annotations
 
+import hashlib
+import os
+import platform
+import subprocess
+import sys
+from importlib import metadata
+from pathlib import Path
 from typing import Any
 
 SEVERITY_RANK = {
@@ -13,6 +20,16 @@ SEVERITY_RANK = {
 }
 
 VALIDATION_RULE_PREFIX = "CRIT-V-"
+
+
+def _repo_relative(path: str | Path, root: Path) -> str:
+    """Return a repo-relative path string; fall back to basename."""
+
+    candidate = Path(path)
+    try:
+        return str(candidate.resolve().relative_to(root.resolve()))
+    except (ValueError, OSError):
+        return candidate.name
 
 
 def open_rule_ids(findings: list[dict[str, Any]]) -> set[str]:
@@ -58,6 +75,30 @@ def detection_recall(
         "found": found,
         "recall": round(found / len(expected), 3),
         "missing": [rule_id for rule_id in expected if rule_id not in detected_rule_ids],
+    }
+
+
+def oracle_detection_precision(
+    expected_rule_ids: list[str],
+    detected_rule_ids: set[str],
+) -> dict[str, Any]:
+    """Precision of detected open rule IDs against expected oracle rule IDs.
+
+    ``true_positives / (true_positives + false_positives)`` where true positives
+    are expected∩detected and false positives are detected − expected.
+    """
+
+    expected = set(expected_rule_ids)
+    detected = set(detected_rule_ids)
+    true_positives = sorted(expected & detected)
+    false_positives = sorted(detected - expected)
+    denom = len(true_positives) + len(false_positives)
+    precision = round(len(true_positives) / denom, 3) if denom else None
+    return {
+        "true_positives": len(true_positives),
+        "false_positives": len(false_positives),
+        "precision": precision,
+        "false_positive_rule_ids": false_positives,
     }
 
 
@@ -132,7 +173,7 @@ def session_repair_metrics(session_report: dict[str, Any]) -> dict[str, Any]:
         round(len(repaired) / len(open1), 3) if open1 else None
     )
     # Precision against pass-1 open set as the "relevant" defect population.
-    precision = (
+    repair_precision = (
         round(len(repaired) / max(len(repaired) + len(new_open), 1), 3)
         if open1 or new_open
         else None
@@ -186,7 +227,9 @@ def session_repair_metrics(session_report: dict[str, Any]) -> dict[str, Any]:
         "still_open_rule_ids": still_open,
         "new_open_rule_ids": new_open,
         "recall": recall,
-        "precision": precision,
+        "repair_precision": repair_precision,
+        # Backward-compat alias for one release.
+        "precision": repair_precision,
         "repair_rate": repair_rate,
         "regressions": regressions,
         "score_delta": score_delta,
@@ -203,6 +246,14 @@ def aggregate_oracle_metrics(case_results: list[dict[str, Any]]) -> dict[str, An
         for item in case_results
         if item.get("metrics", {}).get("detection_recall", {}).get("recall") is not None
     ]
+    precisions = [
+        item["metrics"]["oracle_detection_precision"]["precision"]
+        for item in case_results
+        if item.get("metrics", {})
+        .get("oracle_detection_precision", {})
+        .get("precision")
+        is not None
+    ]
     gold_fp = [
         item["metrics"]["false_positive_critical_high"]
         for item in case_results
@@ -212,7 +263,102 @@ def aggregate_oracle_metrics(case_results: list[dict[str, Any]]) -> dict[str, An
         "case_count": len(case_results),
         "passed_cases": sum(1 for item in case_results if item.get("passed")),
         "mean_detection_recall": round(sum(recalls) / len(recalls), 3) if recalls else None,
+        "mean_oracle_detection_precision": (
+            round(sum(precisions) / len(precisions), 3) if precisions else None
+        ),
         "gold_false_positive_critical_high_total": sum(
             fp.get("count", 0) for fp in gold_fp
         ),
     }
+
+
+def _sha256_file(path: Path) -> str | None:
+    if not path.is_file():
+        return None
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(65536), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _git_sha(root: Path) -> str | None:
+    env_sha = os.environ.get("GITHUB_SHA")
+    if env_sha:
+        return env_sha.strip()
+    try:
+        completed = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=root,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if completed.returncode == 0:
+            return completed.stdout.strip() or None
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return None
+
+
+def _pkg_version(name: str) -> str | None:
+    try:
+        return metadata.version(name)
+    except metadata.PackageNotFoundError:
+        return None
+
+
+def report_environment_metadata(
+    *,
+    root: Path,
+    fixture_paths: list[Path] | None = None,
+    validation_bundle_fingerprint: str | None = None,
+) -> dict[str, Any]:
+    """Sanitized reproducibility metadata for harness JSON reports."""
+
+    try:
+        from critic.models import CRITIC_SCHEMA_VERSION
+        from critic.schema_util import SUPPORTED_SCHEMA_VERSION
+        from critic.deterministic import RULE_VERSION as DETERMINISTIC_RULE_VERSION
+        from critic.graph_heuristics import RULE_VERSION as HEURISTIC_RULE_VERSION
+    except Exception:  # noqa: BLE001
+        CRITIC_SCHEMA_VERSION = None
+        SUPPORTED_SCHEMA_VERSION = None
+        DETERMINISTIC_RULE_VERSION = None
+        HEURISTIC_RULE_VERSION = None
+
+    fixture_hashes: dict[str, str] = {}
+    for path in fixture_paths or []:
+        digest = _sha256_file(Path(path))
+        if digest:
+            fixture_hashes[_repo_relative(path, root)] = digest
+
+    return {
+        "repository_sha": _git_sha(root),
+        "fixture_hashes": fixture_hashes,
+        "rule_schema_versions": {
+            "CRITIC_SCHEMA_VERSION": CRITIC_SCHEMA_VERSION,
+            "SUPPORTED_SCHEMA_VERSION": SUPPORTED_SCHEMA_VERSION,
+            "deterministic_RULE_VERSION": DETERMINISTIC_RULE_VERSION,
+            "heuristic_RULE_VERSION": HEURISTIC_RULE_VERSION,
+        },
+        "environment": {
+            "python_version": sys.version.split()[0],
+            "platform": platform.platform(),
+        },
+        "validation_bundle_fingerprint": validation_bundle_fingerprint,
+        "dependency_versions": {
+            "fastmcp": _pkg_version("fastmcp"),
+        },
+    }
+
+
+def sanitize_session_paths(session_report: dict[str, Any], root: Path) -> dict[str, Any]:
+    """Rewrite absolute graph paths in a session report to repo-relative form."""
+
+    sanitized = dict(session_report)
+    for key in ("pass1_graph", "pass2_graph"):
+        if sanitized.get(key):
+            sanitized[key] = _repo_relative(sanitized[key], root)
+    return sanitized

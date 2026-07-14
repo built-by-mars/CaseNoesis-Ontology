@@ -299,6 +299,7 @@ class ValidationSummary:
     violation_count: int = 0
     warning_count: int = 0
     bundle_fingerprint: str | None = None
+    bundle_resource_hashes: dict[str, str] = field(default_factory=dict)
     selected_profiles: list[str] = field(default_factory=list)
     selected_extensions: list[str] = field(default_factory=list)
     stage_status: dict[str, str] = field(default_factory=dict)

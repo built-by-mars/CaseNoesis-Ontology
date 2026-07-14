@@ -193,18 +193,11 @@ jobs:
           path: .
 
       - name: Install dependencies
-        run: pip install rdflib jinja2 pytest mypy jsonschema "fastmcp>=3.4.0,<3.6" case-utils
+        # fastmcp==3.4.4 — Context.sample string/SamplingMessage API pin
+        run: pip install rdflib jinja2 pytest mypy jsonschema "fastmcp==3.4.4" case-utils
 
       - name: Run tests
         run: PYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v
-
-      - name: Run synthetic performance benchmarks (small tier)
-        run: |
-          python3 benchmarks/run_python_bench.py --tier small --out artifacts/bench/python-small.json
-          test -s artifacts/bench/python-small.json
-          python3 benchmarks/compare_baseline.py \
-            --baseline benchmarks/baselines/python-small.json \
-            --result artifacts/bench/python-small.json
 
       - name: Run MCP server tests
         run: python -m pytest mcp_server/tests -v
@@ -217,13 +210,112 @@ jobs:
           CASE_UCO_CRITIC_SESSION_ROOT: ${{ github.workspace }}/artifacts/critic-write/critic-sessions
           CASE_UCO_MCP_ALLOW_OVERWRITE: "1"
         run: |
-          mkdir -p artifacts/critic-write/critic-sessions
-          python -m pytest mcp_server/tests/test_critic.py mcp_server/tests/test_critic_sessions.py -v
-          PYTHONPATH=mcp_server python evaluation/critic/harness/run_oracles.py
-          PYTHONPATH=mcp_server python evaluation/critic/harness/run_session_replay.py
+          mkdir -p artifacts/critic-write/critic-sessions evaluation/critic/reports
+          python -m pytest \
+            mcp_server/tests/test_critic.py \
+            mcp_server/tests/test_critic_sessions.py \
+            mcp_server/tests/test_critic_resolution.py \
+            mcp_server/tests/test_critic_review_config.py \
+            mcp_server/tests/test_critic_fastmcp_sampling.py \
+            mcp_server/tests/test_critic_file_lock_smoke.py \
+            -v
+          PYTHONPATH=mcp_server python evaluation/critic/harness/run_oracles.py \
+            --report evaluation/critic/reports/oracles-latest.json
+          PYTHONPATH=mcp_server python evaluation/critic/harness/run_session_replay.py \
+            --case-dir evaluation/critic/cases/micro/repair-charged-with \
+            --pass1-graph evaluation/critic/cases/micro/repair-charged-with/pass1/graph.jsonld \
+            --pass2-graph evaluation/critic/cases/micro/repair-charged-with/pass2/graph.jsonld \
+            --require-accepted \
+            --report evaluation/critic/reports/repair-charged-with-accepted.json
+
+      - name: Upload critic oracle report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: critic-oracle-report
+          path: evaluation/critic/reports/oracles-latest.json
+          if-no-files-found: warn
+
+      - name: Upload accepted session replay report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: critic-repair-charged-with-accepted
+          path: evaluation/critic/reports/repair-charged-with-accepted.json
+          if-no-files-found: warn
 
       - name: Type check
         run: cd python && mypy case_uco/ --ignore-missing-imports
+
+  bench-python:
+    name: Benchmark Python (advisory)
+    needs: generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Download generated sources
+        uses: actions/download-artifact@v8
+        with:
+          name: generated-sources
+          path: .
+
+      - name: Install dependencies
+        run: pip install rdflib jinja2
+
+      - name: Run synthetic performance benchmarks (small tier)
+        run: |
+          mkdir -p artifacts/bench
+          python3 benchmarks/run_python_bench.py --tier small --out artifacts/bench/python-small.json
+          test -s artifacts/bench/python-small.json
+
+      - name: Compare against baseline (v1.22 advisory median policy)
+        continue-on-error: true
+        run: |
+          python3 benchmarks/compare_baseline.py \
+            --baseline benchmarks/baselines/python-small.json \
+            --result artifacts/bench/python-small.json
+
+      - name: Upload bench result
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: python-bench-small
+          path: artifacts/bench/python-small.json
+          if-no-files-found: warn
+
+  test-critic-windows:
+    name: Critic Windows smoke
+    needs: generate
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Download generated sources
+        uses: actions/download-artifact@v8
+        with:
+          name: generated-sources
+          path: .
+
+      - name: Install dependencies
+        run: pip install rdflib jinja2 pytest jsonschema "fastmcp==3.4.4" case-utils
+
+      - name: FileLock + session smoke
+        env:
+          CASE_UCO_MCP_ALLOW_OVERWRITE: "1"
+        run: python -m pytest mcp_server/tests/test_critic_file_lock_smoke.py -v
 
   test-csharp:
     name: Test C#

@@ -29,6 +29,8 @@ from harness.report import (  # noqa: E402
     false_positive_critical_high_on_gold,
     open_findings_by_rule,
     open_rule_ids,
+    oracle_detection_precision,
+    report_environment_metadata,
     severity_at_least,
 )
 
@@ -180,10 +182,11 @@ def evaluate_oracle(
         if not trust.get("forbidden_actions"):
             violations.append("missing_forbidden_actions")
 
+    expected_ids = list(oracle.get("expected_rule_ids") or [])
     metrics = {
-        "detection_recall": detection_recall(
-            list(oracle.get("expected_rule_ids") or []),
-            detected,
+        "detection_recall": detection_recall(expected_ids, detected),
+        "oracle_detection_precision": oracle_detection_precision(
+            expected_ids, detected
         ),
     }
     if oracle.get("forbidden_unexpected_critical_high") or oracle.get(
@@ -253,6 +256,7 @@ def main(argv: list[str] | None = None) -> int:
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "passed": passed,
         "metrics": aggregate_oracle_metrics(case_results),
+        "metadata": report_environment_metadata(root=PROJECT_ROOT),
         "case_results": case_results,
     }
 

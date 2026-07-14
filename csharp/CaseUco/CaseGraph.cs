@@ -19,6 +19,13 @@ namespace CaseUco
     {
         private static readonly object RegistryLock = new object();
         private static volatile Dictionary<string, Type> _classRegistryCache;
+
+        /// <summary>
+        /// Test hook: when non-null, invoked immediately before atomic replace.
+        /// Returning a non-null exception aborts replacement so prior destination
+        /// bytes must survive (induced replacement-failure tests).
+        /// </summary>
+        internal static Func<string, string, Exception> SimulateReplaceFailureForTests;
         private static Dictionary<Type, PropertyBinding[]> _propertyBindingCache;
 
         private readonly Dictionary<string, string> _context;
@@ -706,7 +713,15 @@ namespace CaseUco
                 if (atomic && tmpPath != null)
                 {
                     // Prefer atomic replace so a failed swap keeps the destination.
-                    // Do NOT delete the destination before moving the temp file.
+                    // Do NOT delete the destination before a successful replacement.
+                    // netstandard2.0 has no File.Move(src, dest, overwrite: true).
+                    var induced = SimulateReplaceFailureForTests;
+                    if (induced != null)
+                    {
+                        var failure = induced(tmpPath, path);
+                        if (failure != null)
+                            throw failure;
+                    }
                     try
                     {
                         if (File.Exists(path))
@@ -724,9 +739,12 @@ namespace CaseUco
                     }
                     catch (PlatformNotSupportedException)
                     {
-                        // Documented fallback: atomic rename onto missing dest, else
-                        // Move with overwrite where supported (never Delete-then-Move).
-                        File.Move(tmpPath, path, overwrite: true);
+                        // Documented safe fallback for hosts without File.Replace:
+                        // Move only when the destination is absent. Never
+                        // Delete-then-Move (old bytes must survive replace failure).
+                        if (File.Exists(path))
+                            throw;
+                        File.Move(tmpPath, path);
                     }
                     tmpPath = null;
                 }

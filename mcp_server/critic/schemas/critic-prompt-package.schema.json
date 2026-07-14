@@ -68,6 +68,11 @@
       "type": ["string", "null"],
       "pattern": "^[a-fA-F0-9]{64}$"
     },
+    "review_config_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "review_config": { "type": "object" },
     "prompt_package_hash": { "type": "string", "minLength": 64, "maxLength": 64 },
     "prompt_content_sha256": {
       "type": "string",

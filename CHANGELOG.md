@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.0] - 2026-07-14
+
+Executable SHA recorded at tag time (placeholder: `TBD`).
+
 ### Fixed
 
 #### Critic loop P0 hardening (post-`23e6aaa` review; do not tag that SHA)
@@ -23,21 +27,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `serializer_mode` / `extra_ontology_graphs` / `force_rdfs_inference` in
   SessionConfig + MCP tools; audit-chain verification on finalize.
 - **#76 sampling**: non-bypassable `CASE_UCO_MCP_CRITIC_MODE`; schema-validate
-  inside sampling retry loop; FastMCP pin `>=3.4.0,<3.6`.
+  inside sampling retry loop; FastMCP pin `fastmcp==3.4.4`; session-policy
+  gates so `*_with_sampling` cannot sample unless the existing session is
+  `client_sampling`; profile defaults (`offline-investigation` → manual,
+  production-like → disabled); string/`SamplingMessage` sample inputs.
 - **#75 serializer AST**: dynamic CASEGraph public-API allowlist; tighter
   rel-id-collapse and unsafe-overwrite heuristics.
 - **#77 eval**: repair-charged-with case with `--require-accepted`; truthful
-  repair metrics; Phantom Gate gold labeled `baseline-known-debt`.
+  repair metrics (`repair_precision`); oracle detection precision; sanitized
+  repo-relative harness reports with reproducibility metadata; Phantom Gate
+  gold labeled `baseline-known-debt`.
 - **#78 handoff**: dedicated `CASE_UCO_CRITIC_HANDOFF_TOKEN` only (never reuse
   extend challenge); `relative_to(candidates)` + `O_CREAT|O_EXCL` atomic create.
 - **#71 C#**: `WriteStreaming` uses `File.Replace` (no delete-before-move).
+
+#### Post-`129ca05` hardening (do **not** tag `129ca05`)
+
+- **C# netstandard2.0**: remove `File.Move(..., overwrite:)` (unsupported);
+  keep `File.Replace` / Move-when-absent; never delete destination before
+  successful replace; induced replacement-failure test proves old bytes survive.
+- **`review_config_sha256`**: canonical fingerprint over critic_scope,
+  serializer_mode, extensions, profiles, force_rdfs_inference, extra ontology
+  hashes, bundle fingerprint, and bundle resource hashes; bound into
+  `review_request_sha256` / response schema / artifact set / audit / revision
+  / finalize; immutable `config-pass-N.json` snapshots; extension-, profile-,
+  inference-, bundle-, and session-config-tamper tests.
+- **Prompt rebuild verification**: before accepting a critic response, rebuilt
+  package hashes must match stored pass metadata (typed mismatch errors);
+  schema-validate session/review/completed files on load; status no longer
+  hides audit-chain corruption.
+- **Sampling gates**: deployment + existing session `model_policy` must both
+  allow `client_sampling` before `Context.sample`; offline-investigation
+  defaults to manual; production-like profiles default to disabled; FastMCP
+  string/`SamplingMessage` inputs; `model_preferences` is `str | list[str] |
+  None`; pin `fastmcp==3.4.4`; in-memory FastMCP sampling test.
+- **CI**: Python bench+compare isolated in advisory `bench-python` job;
+  `test-python` always runs MCP/critic/oracles/`--require-accepted`/mypy;
+  Windows critic FileLock/session smoke; oracle and accepted-replay reports
+  uploaded as artifacts.
+- **Report sanitization**: absolute paths stripped to repo-relative;
+  `repair_precision` + oracle detection precision; repository SHA / fixture
+  hashes / rule-schema versions / env / dependency metadata.
 
 #### Performance scope
 
 - **#70–#73**: scoped experimental completion for v1.22; deferred contracts
   tracked as v1.23 follow-ups #79–#82.
-
-## [1.22.0] - 2026-07-13
 
 ### Added
 
@@ -85,7 +120,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   …), MCP tools including async `start_critic_review_with_sampling` /
   `submit_critic_revision_with_sampling` (full prompt package + typed sampling
   fallbacks), returned `extend_approval_challenge`, reject over-cap iterations;
-  FastMCP pinned to `>=3.4.0,<4`.
+  FastMCP pinned to `fastmcp==3.4.4`.
 - **#77 evaluation**: conforming gold oracles (micro Charged_With + Phantom
   Gate), micro cases for new heuristics, real session state-machine replay,
   oracle + session-replay harnesses, CI critic job with workspace roots.

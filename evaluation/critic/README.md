@@ -72,9 +72,11 @@ Reports are written to:
 - `evaluation/critic/reports/oracle-latest.json`
 - `evaluation/critic/reports/session-replay-latest.json`
 
-Session-replay reports include `recall` / `precision` / `repair_rate` /
-`regressions` / `score_delta` / `validation_preservation` when pass finding
-snapshots are available. Both harnesses exit non-zero on failure.
+Session-replay reports include `recall` / `repair_precision` (alias
+`precision`) / `repair_rate` / `regressions` / `score_delta` /
+`validation_preservation` when pass finding snapshots are available. Oracle
+reports include `oracle_detection_precision`. Both harnesses exit non-zero on
+failure.
 
 ### Phantom Gate gold (`baseline-known-debt`)
 

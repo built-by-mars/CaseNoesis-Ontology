@@ -378,6 +378,8 @@ def test_prompt_package_schema_and_reproducible_hash(tmp_path, monkeypatch):
     assert "response_schema_version" in package
     assert "response_schema_sha256" in package
     assert "review_request_sha256" in package
+    assert "review_config_sha256" in package
+    assert "review_config" in package
     assert "source_findings" in package
     assert "critic_findings" in package
     validate_prompt_package(package)

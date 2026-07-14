@@ -36,6 +36,10 @@
       "type": ["string", "null"],
       "pattern": "^[a-fA-F0-9]{64}$"
     },
+    "review_config_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
     "finding_assessments": {
       "type": "array",
       "maxItems": 200,

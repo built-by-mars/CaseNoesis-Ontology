@@ -325,12 +325,36 @@ namespace CaseUco.Tests
                 Assert.Contains("V2", text);
                 Assert.DoesNotContain("V1", text);
 
-                // On Windows, File.Replace is preferred for existing destinations.
-                // This test documents replace-without-delete-first semantics across platforms;
-                // PlatformNotSupportedException → File.Move(overwrite) is exercised on non-Windows.
+                // netstandard2.0: File.Replace for existing destinations; File.Move
+                // only when the destination is absent. Never Delete-then-Move.
             }
             finally
             {
+                if (System.IO.File.Exists(path))
+                    System.IO.File.Delete(path);
+            }
+        }
+
+        [Fact]
+        public void WriteStreaming_InducedReplaceFailure_PreservesOldBytes()
+        {
+            var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"caseuco-fail-replace-{Guid.NewGuid()}.jsonld");
+            CaseGraph.SimulateReplaceFailureForTests = null;
+            try
+            {
+                System.IO.File.WriteAllText(path, "SURVIVE-ME");
+                CaseGraph.SimulateReplaceFailureForTests = (tmp, dest) =>
+                    new System.IO.IOException("induced replace failure");
+
+                var graph = new CaseGraph();
+                graph.AddWithId(new Tool { Name = "ShouldNotLand" }, "kb:t-fail");
+                var ex = Assert.Throws<System.IO.IOException>(() => graph.WriteStreaming(path));
+                Assert.Contains("induced replace failure", ex.Message);
+                Assert.Equal("SURVIVE-ME", System.IO.File.ReadAllText(path));
+            }
+            finally
+            {
+                CaseGraph.SimulateReplaceFailureForTests = null;
                 if (System.IO.File.Exists(path))
                     System.IO.File.Delete(path);
             }

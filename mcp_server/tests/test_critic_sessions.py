@@ -74,6 +74,7 @@ def _empty_critic_response(started: dict) -> dict:
         "serializer_sha256": package["artifact_hashes"].get("serializer_sha256"),
         "prompt_package_hash": package["prompt_package_hash"],
         "review_request_sha256": package.get("review_request_sha256"),
+        "review_config_sha256": package.get("review_config_sha256"),
         "findings": [],
         "finding_assessments": [],
         "scorecard": {},
@@ -368,7 +369,9 @@ def test_sampling_fake_context(workspace):
 
     sampled = asyncio.run(_run())
     assert sampled.status == "ok"
-    user_json = json.loads(ctx.kwargs_history[0]["messages"][0]["content"])
+    messages = ctx.kwargs_history[0]["messages"]
+    assert isinstance(messages, str)
+    user_json = json.loads(messages)
     assert "prompt_package" in user_json
     assert "graph_neighborhoods" in user_json["prompt_package"]
     result = submit_manual_critic_response(started["session_id"], sampled.response)
@@ -377,7 +380,9 @@ def test_sampling_fake_context(workspace):
     async def _wired_ok():
         class Ctx:
             async def sample(self, **kwargs):
-                content = json.loads(kwargs["messages"][0]["content"])
+                messages_arg = kwargs["messages"]
+                assert isinstance(messages_arg, str)
+                content = json.loads(messages_arg)
                 package = content["prompt_package"]
                 resp = {
                     "schema_version": "1.2.0",
@@ -389,6 +394,7 @@ def test_sampling_fake_context(workspace):
                     ),
                     "prompt_package_hash": package["prompt_package_hash"],
                     "review_request_sha256": package.get("review_request_sha256"),
+                    "review_config_sha256": package.get("review_config_sha256"),
                     "findings": [],
                     "finding_assessments": [],
                     "scorecard": {},
@@ -439,6 +445,87 @@ def test_sampling_respects_deployment_manual_mode(workspace, monkeypatch):
         "skipped_policy",
     }
     assert result["sampling"].get("reason") == "deployment_mode"
+
+
+def test_revision_with_sampling_skips_manual_session(workspace):
+    """with_sampling revision must not sample when session policy is manual."""
+
+    import asyncio
+    from critic.sampling import FakeSampleContext
+    from critic_tools import tool_submit_critic_revision_with_sampling
+
+    read, _ = workspace
+    graph = _copy_gold(read)
+    started = start_critic_review(
+        graph_path=str(graph),
+        critic_scope="graph",
+        model_policy="manual",
+    )
+    submit_manual_critic_response(started["session_id"], _empty_critic_response(started))
+    ctx = FakeSampleContext({"schema_version": "1.2.0"})
+
+    async def _run():
+        return await tool_submit_critic_revision_with_sampling(
+            ctx,
+            session_id=started["session_id"],
+            graph_path=str(graph),
+            change_summary="manual-session revision",
+        )
+
+    result = asyncio.run(_run())
+    assert result["ok"] is True
+    assert ctx.calls == 0
+    assert result["sampling"]["fallback"] is True
+    assert result["sampling"]["status"] == "critic_manual_response_required"
+    assert result["sampling"].get("reason") == "session_model_policy"
+
+
+def test_deployment_mode_profile_defaults(monkeypatch):
+    from critic.sessions import deployment_critic_mode
+
+    monkeypatch.delenv("CASE_UCO_MCP_CRITIC_MODE", raising=False)
+    monkeypatch.setenv("CASE_UCO_MCP_PROFILE", "offline-investigation")
+    assert deployment_critic_mode() == "manual"
+
+    monkeypatch.setenv("CASE_UCO_MCP_PROFILE", "production")
+    assert deployment_critic_mode() == "disabled"
+
+    monkeypatch.setenv("CASE_UCO_MCP_PROFILE", "secure")
+    assert deployment_critic_mode() == "disabled"
+
+    monkeypatch.delenv("CASE_UCO_MCP_PROFILE", raising=False)
+    assert deployment_critic_mode() == "client_sampling"
+
+    monkeypatch.setenv("CASE_UCO_MCP_CRITIC_MODE", "manual")
+    monkeypatch.setenv("CASE_UCO_MCP_PROFILE", "development")
+    assert deployment_critic_mode() == "manual"
+
+
+def test_sampling_rejects_dict_model_preferences(workspace):
+    import asyncio
+    from critic.sampling import FakeSampleContext, maybe_sample_critic
+
+    read, _ = workspace
+    graph = _copy_gold(read)
+    started = start_critic_review(
+        graph_path=str(graph),
+        critic_scope="graph",
+        model_policy="client_sampling",
+    )
+    ctx = FakeSampleContext(_empty_critic_response(started))
+
+    async def _run():
+        return await maybe_sample_critic(
+            ctx,
+            started["prompt_package"],
+            model_policy="client_sampling",
+            model_preferences={"hints": ["x"]},  # type: ignore[arg-type]
+        )
+
+    sampled = asyncio.run(_run())
+    assert sampled.status == "critic_sampling_provider_error"
+    assert sampled.error == "invalid_model_preferences_type"
+    assert ctx.calls == 0
 
 
 def test_sampling_schema_validate_retries_then_invalid(workspace):

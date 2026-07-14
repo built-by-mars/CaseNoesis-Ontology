@@ -32,7 +32,12 @@ PROJECT_ROOT = EVAL_ROOT.parents[1]
 sys.path.insert(0, str(EVAL_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT / "mcp_server"))
 
-from harness.report import pass_counts, session_repair_metrics  # noqa: E402
+from harness.report import (  # noqa: E402
+    pass_counts,
+    report_environment_metadata,
+    sanitize_session_paths,
+    session_repair_metrics,
+)
 
 
 DEFAULT_CASE = EVAL_ROOT / "cases" / "micro" / "gold-charged-with"
@@ -328,6 +333,7 @@ def main(argv: list[str] | None = None) -> int:
             pass2_graph=args.pass2_graph,
         )
 
+    session_report = sanitize_session_paths(session_report, PROJECT_ROOT)
     base_metrics = pass_counts(session_report)
     repair = session_repair_metrics(session_report)
     metrics = {**base_metrics, **repair}
@@ -338,12 +344,34 @@ def main(argv: list[str] | None = None) -> int:
     if args.require_accepted:
         passed = passed and bool(session_report.get("accepted"))
 
+    fixture_files = [
+        Path(p)
+        for p in (
+            args.pass1_mock,
+            args.pass2_mock,
+            args.pass1_graph,
+            args.pass2_graph,
+        )
+        if p is not None and Path(p).is_file()
+    ]
+    bundle_fp = None
+    final = session_report.get("final") or {}
+    if isinstance(final, dict):
+        bundle_fp = final.get("validation_bundle_fingerprint") or (
+            (final.get("validation") or {}).get("bundle_fingerprint")
+        )
+
     report = {
         "harness": "run_session_replay",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "passed": passed,
         "require_accepted": bool(args.require_accepted),
         "metrics": metrics,
+        "metadata": report_environment_metadata(
+            root=PROJECT_ROOT,
+            fixture_paths=fixture_files,
+            validation_bundle_fingerprint=bundle_fp,
+        ),
         "session": session_report,
     }
 

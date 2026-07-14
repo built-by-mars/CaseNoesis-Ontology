@@ -15,5 +15,6 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="CaseUco.Tests" />
   </ItemGroup>
 </Project>

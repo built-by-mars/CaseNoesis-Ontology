@@ -35,6 +35,7 @@ def bound_model_response_schema(
     pass_number: int | None = None,
     schema_version: str = SUPPORTED_SCHEMA_VERSION,
     review_request_sha256: str | None = None,
+    review_config_sha256: str | None = None,
 ) -> dict[str, Any]:
     """Return the authoritative schema with per-pass const bindings."""
 
@@ -72,8 +73,40 @@ def bound_model_response_schema(
     if review_request_sha256 is not None:
         bind("review_request_sha256", review_request_sha256, require=True)
 
+    if review_config_sha256 is not None:
+        bind("review_config_sha256", review_config_sha256, require=True)
+
     schema["required"] = sorted(required)
     return schema
+
+
+def compute_review_config_sha256(
+    *,
+    critic_scope: str,
+    serializer_mode: str,
+    extensions: list[str],
+    profiles: list[str],
+    force_rdfs_inference: bool,
+    extra_ontology_sha256: dict[str, str],
+    bundle_fingerprint: str | None,
+    bundle_resource_hashes: dict[str, str] | None = None,
+) -> str:
+    """Canonical digest over review configuration + validation bundle identity."""
+
+    payload = {
+        "bundle_fingerprint": bundle_fingerprint,
+        "bundle_resource_hashes": dict(
+            sorted((bundle_resource_hashes or {}).items())
+        ),
+        "critic_scope": critic_scope,
+        "extensions": sorted(extensions),
+        "extra_ontology_sha256": dict(sorted(extra_ontology_sha256.items())),
+        "force_rdfs_inference": bool(force_rdfs_inference),
+        "profiles": sorted(profiles),
+        "serializer_mode": serializer_mode,
+    }
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def compute_review_request_sha256(
@@ -86,6 +119,7 @@ def compute_review_request_sha256(
     source_sha256: dict[str, str],
     coverage_contract_sha256: str | None,
     prompt_package_hash: str,
+    review_config_sha256: str,
 ) -> str:
     payload = {
         "schema_version": schema_version,
@@ -96,6 +130,7 @@ def compute_review_request_sha256(
         "source_sha256": dict(sorted(source_sha256.items())),
         "coverage_contract_sha256": coverage_contract_sha256,
         "prompt_package_hash": prompt_package_hash,
+        "review_config_sha256": review_config_sha256,
     }
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()

@@ -60,7 +60,7 @@ def tool_start_critic_review(**kwargs: Any) -> dict[str, Any]:
 async def tool_start_critic_review_with_sampling(
     ctx: Any, **kwargs: Any
 ) -> dict[str, Any]:
-    """Start a session and attempt client sampling when policy allows."""
+    """Start a session and attempt client sampling when session policy allows."""
 
     try:
         gate = _deployment_sampling_gate()
@@ -70,16 +70,26 @@ async def tool_start_critic_review_with_sampling(
             requested = "client_sampling"
         kwargs["model_policy"] = effective_model_policy(requested)
         started = start_critic_review(**kwargs)
+        session_policy = str(started.get("model_policy") or "manual")
         if gate is not None:
             return {"ok": True, **started, "sampling": gate}
-        if started.get("model_policy") != "client_sampling":
+        if session_policy != "client_sampling":
+            status = (
+                "skipped_policy"
+                if session_policy == "disabled"
+                else "critic_manual_response_required"
+            )
             return {
                 "ok": True,
                 **started,
                 "sampling": {
-                    "status": "skipped_policy",
+                    "status": status,
                     "fallback": True,
-                    "reason": "deployment_mode",
+                    "reason": "session_model_policy",
+                    "metadata": {
+                        "reason": "session_model_policy",
+                        "model_policy": session_policy,
+                    },
                 },
             }
         package = started.get("prompt_package")
@@ -92,8 +102,9 @@ async def tool_start_critic_review_with_sampling(
                     "fallback": True,
                 },
             }
+        # Pass existing session policy — never force client_sampling here.
         sample = await maybe_sample_critic(
-            ctx, package, model_policy="client_sampling"
+            ctx, package, model_policy=session_policy
         )
         if sample.status != "ok" or not sample.response:
             return {
@@ -140,15 +151,37 @@ async def tool_submit_critic_revision_with_sampling(
     ctx: Any, **kwargs: Any
 ) -> dict[str, Any]:
     try:
-        gate = _deployment_sampling_gate()
         revised = submit_critic_revision(**kwargs)
+        # Read existing session policy — with_sampling must not bypass manual/disabled.
+        status = get_critic_review_status(revised["session_id"])
+        session_policy = str(
+            status.get("model_policy") or revised.get("model_policy") or "manual"
+        )
+        if session_policy != "client_sampling":
+            sampling_status = (
+                "skipped_policy"
+                if session_policy == "disabled"
+                else "critic_manual_response_required"
+            )
+            return {
+                "ok": True,
+                **revised,
+                "sampling": {
+                    "status": sampling_status,
+                    "fallback": True,
+                    "reason": "session_model_policy",
+                    "error": "session_model_policy",
+                    "metadata": {
+                        "reason": "session_model_policy",
+                        "model_policy": session_policy,
+                    },
+                },
+            }
+        gate = _deployment_sampling_gate()
         if gate is not None:
             return {"ok": True, **revised, "sampling": gate}
         if revised.get("state") != "awaiting_critic_response":
             return {"ok": True, **revised, "sampling": {"status": "skipped_policy"}}
-        if revised.get("model_policy") not in {None, "client_sampling"}:
-            # Session may not echo model_policy; fall through to maybe_sample gate.
-            pass
         package = revised.get("prompt_package")
         if not package:
             return {
@@ -160,7 +193,7 @@ async def tool_submit_critic_revision_with_sampling(
                 },
             }
         sample = await maybe_sample_critic(
-            ctx, package, model_policy="client_sampling"
+            ctx, package, model_policy=session_policy
         )
         if sample.status != "ok" or not sample.response:
             return {

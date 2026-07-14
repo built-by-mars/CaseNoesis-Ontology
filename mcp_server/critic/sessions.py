@@ -25,6 +25,7 @@ from critic.response_parser import (
     build_assessment_ledger,
     parse_critic_model_response,
 )
+from critic.schema_util import compute_review_config_sha256
 
 REQUIRED_PASSES = 2
 MAX_TOTAL_PASSES = 8
@@ -101,18 +102,39 @@ def default_model_policy() -> ModelPolicy:
 
 
 def deployment_critic_mode() -> ModelPolicy:
-    """Non-bypassable deployment gate for sampling (unset → allow client_sampling)."""
+    """Non-bypassable deployment gate for sampling.
 
-    return normalize_model_policy(os.environ.get(DEPLOYMENT_MODE_ENV)) or "client_sampling"
+    Explicit ``CASE_UCO_MCP_CRITIC_MODE`` always wins. When unset, profile
+    defaults apply:
+
+    - ``offline-investigation`` → ``manual``
+    - production-like (``secure`` / ``production`` / ``prod`` /
+      ``production-authoring`` / ``production-review``) → ``disabled``
+    - otherwise (local/dev) → ``client_sampling``
+    """
+
+    explicit = normalize_model_policy(os.environ.get(DEPLOYMENT_MODE_ENV))
+    if explicit is not None:
+        return explicit
+    profile = (os.environ.get("CASE_UCO_MCP_PROFILE") or "").strip().lower()
+    if profile == "offline-investigation":
+        return "manual"
+    if profile in {
+        "secure",
+        "production",
+        "prod",
+        "production-authoring",
+        "production-review",
+    }:
+        return "disabled"
+    return "client_sampling"
 
 
 def effective_model_policy(requested: str | ModelPolicy | None) -> ModelPolicy:
-    """Clamp requested session policy by optional deployment mode ceiling."""
+    """Clamp requested session policy by deployment mode ceiling."""
 
     requested_norm = normalize_model_policy(requested) or default_model_policy()
-    deployment = normalize_model_policy(os.environ.get(DEPLOYMENT_MODE_ENV))
-    if deployment is None:
-        return requested_norm
+    deployment = deployment_critic_mode()
     rank = {"disabled": 0, "manual": 1, "client_sampling": 2}
     if rank[requested_norm] > rank[deployment]:
         return deployment
@@ -236,13 +258,16 @@ def _append_audit(
 
 
 def _artifact_set_from_hashes(hashes: dict[str, Any]) -> dict[str, Any]:
-    return {
+    result = {
         "graph_sha256": hashes.get("graph_sha256"),
         "serializer_sha256": hashes.get("serializer_sha256"),
         "source_sha256": dict(hashes.get("source_sha256") or {}),
         "coverage_contract_sha256": hashes.get("coverage_contract_sha256"),
         "extra_ontology_sha256": dict(hashes.get("extra_ontology_sha256") or {}),
     }
+    if hashes.get("review_config_sha256"):
+        result["review_config_sha256"] = hashes["review_config_sha256"]
+    return result
 
 
 def _artifact_set_sha256(artifact_set: dict[str, Any]) -> str:
@@ -255,6 +280,8 @@ def _artifact_set_sha256(artifact_set: dict[str, Any]) -> str:
             sorted((artifact_set.get("extra_ontology_sha256") or {}).items())
         ),
     }
+    if artifact_set.get("review_config_sha256"):
+        payload["review_config_sha256"] = artifact_set["review_config_sha256"]
     return hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
     ).hexdigest()
@@ -277,7 +304,170 @@ def _artifact_set_for_config(
     merged["extra_ontology_sha256"] = _extra_ontology_hashes(
         cfg.get("extra_ontology_graphs")
     )
+    if hashes.get("review_config_sha256"):
+        merged["review_config_sha256"] = hashes["review_config_sha256"]
     return _artifact_set_from_hashes(merged)
+
+
+def _review_config_sha256_for(
+    cfg: dict[str, Any],
+    *,
+    bundle_fingerprint: str | None = None,
+    bundle_resource_hashes: dict[str, str] | None = None,
+    extra_ontology_sha256: dict[str, str] | None = None,
+) -> str:
+    return compute_review_config_sha256(
+        critic_scope=str(cfg.get("critic_scope") or "both"),
+        serializer_mode=str(cfg.get("serializer_mode") or "auto"),
+        extensions=list(cfg.get("extensions") or []),
+        profiles=list(cfg.get("profiles") or []),
+        force_rdfs_inference=bool(cfg.get("force_rdfs_inference")),
+        extra_ontology_sha256=(
+            dict(extra_ontology_sha256)
+            if extra_ontology_sha256 is not None
+            else _extra_ontology_hashes(cfg.get("extra_ontology_graphs"))
+        ),
+        bundle_fingerprint=bundle_fingerprint,
+        bundle_resource_hashes=bundle_resource_hashes,
+    )
+
+
+def _bundle_resource_hashes_from_validation(
+    validation: dict[str, Any] | None,
+) -> dict[str, str]:
+    if not validation:
+        return {}
+    raw = validation.get("bundle_resource_hashes")
+    if isinstance(raw, dict):
+        return {str(k): str(v) for k, v in raw.items()}
+    return {}
+
+
+_SESSION_REQUIRED_KEYS = frozenset(
+    {
+        "schema_version",
+        "session_id",
+        "state",
+        "model_policy",
+        "config",
+        "current_pass",
+        "latest_artifact_hash",
+    }
+)
+_REVIEW_PASS_REQUIRED_KEYS = frozenset(
+    {
+        "artifact_hashes",
+        "validation",
+        "prompt_package_hash",
+    }
+)
+_COMPLETED_PASS_REQUIRED_KEYS = frozenset(
+    {
+        "merged_findings",
+        "artifact_hashes",
+        "status",
+    }
+)
+_CRITIC_PASS_REQUIRED_KEYS = frozenset({"findings"})
+
+
+def _require_keys(
+    data: dict[str, Any],
+    required: frozenset[str],
+    *,
+    code: str,
+    label: str,
+) -> None:
+    missing = sorted(required - set(data))
+    if missing:
+        raise CriticSessionError(code, f"{label} missing keys: {missing}")
+
+
+def _load_json_object(path: Path, *, code: str, label: str) -> dict[str, Any]:
+    if not path.is_file():
+        raise CriticSessionError(code, f"missing {label}")
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise CriticSessionError(code, f"corrupt {label}") from exc
+    if not isinstance(data, dict):
+        raise CriticSessionError(code, f"{label} must be object")
+    return data
+
+
+def _load_review_pass(directory: Path, pass_number: int) -> dict[str, Any]:
+    data = _load_json_object(
+        directory / f"review-pass-{pass_number}.json",
+        code="critic_session_corrupt",
+        label=f"review-pass-{pass_number}.json",
+    )
+    _require_keys(
+        data,
+        _REVIEW_PASS_REQUIRED_KEYS,
+        code="critic_session_corrupt",
+        label=f"review-pass-{pass_number}.json",
+    )
+    return data
+
+
+def _load_completed_pass(directory: Path, pass_number: int) -> dict[str, Any]:
+    data = _load_json_object(
+        directory / f"completed-pass-{pass_number}.json",
+        code="critic_session_corrupt",
+        label=f"completed-pass-{pass_number}.json",
+    )
+    _require_keys(
+        data,
+        _COMPLETED_PASS_REQUIRED_KEYS,
+        code="critic_session_corrupt",
+        label=f"completed-pass-{pass_number}.json",
+    )
+    return data
+
+
+def _load_critic_pass(directory: Path, pass_number: int) -> dict[str, Any]:
+    data = _load_json_object(
+        directory / f"critic-pass-{pass_number}.json",
+        code="critic_session_corrupt",
+        label=f"critic-pass-{pass_number}.json",
+    )
+    _require_keys(
+        data,
+        _CRITIC_PASS_REQUIRED_KEYS,
+        code="critic_session_corrupt",
+        label=f"critic-pass-{pass_number}.json",
+    )
+    return data
+
+
+def _verify_prompt_package_against_stored(
+    package: dict[str, Any],
+    *,
+    stored_review: dict[str, Any],
+    session: dict[str, Any],
+) -> None:
+    """Ensure rebuilt/loaded prompt package matches immutable review-pass metadata."""
+
+    checks = (
+        ("prompt_package_hash", "latest_prompt_package_hash"),
+        ("prompt_content_sha256", "latest_prompt_content_sha256"),
+        ("review_request_sha256", "latest_review_request_sha256"),
+        ("response_schema_sha256", None),
+        ("review_config_sha256", "latest_review_config_sha256"),
+    )
+    for package_field, session_field in checks:
+        got = package.get(package_field)
+        expected = stored_review.get(package_field)
+        if expected is not None and got != expected:
+            raise CriticSessionError(
+                "critic_session_prompt_rebuild_mismatch", package_field
+            )
+        if session_field:
+            session_expected = session.get(session_field)
+            if session_expected is not None and got != session_expected:
+                raise CriticSessionError(
+                    "critic_session_prompt_rebuild_mismatch", package_field
+                )
 
 
 def _resolve_artifact_path(
@@ -361,6 +551,14 @@ def _load(directory: Path) -> dict[str, Any]:
         raise CriticSessionError(
             "critic_session_corrupt", "missing schema_version"
         )
+    _require_keys(
+        session,
+        _SESSION_REQUIRED_KEYS,
+        code="critic_session_corrupt",
+        label="session.json",
+    )
+    if not isinstance(session.get("config"), dict):
+        raise CriticSessionError("critic_session_corrupt", "config must be object")
     return session
 
 
@@ -413,6 +611,25 @@ def _verify_audit_chain(directory: Path) -> None:
         previous_event_sha256 = stored_hash
 
 
+def _write_config_pass(
+    directory: Path,
+    pass_number: int,
+    *,
+    config: dict[str, Any],
+    package: dict[str, Any],
+    validation: dict[str, Any] | None,
+) -> None:
+    extra_ontology_sha256 = _extra_ontology_hashes(config.get("extra_ontology_graphs"))
+    snapshot = {
+        "config": dict(config),
+        "review_config_sha256": package.get("review_config_sha256"),
+        "bundle_fingerprint": (validation or {}).get("bundle_fingerprint"),
+        "bundle_resource_hashes": _bundle_resource_hashes_from_validation(validation),
+        "extra_ontology_sha256": extra_ontology_sha256,
+    }
+    _atomic_write_json(directory / f"config-pass-{pass_number}.json", snapshot)
+
+
 def _write_review_pass(
     directory: Path, pass_number: int, review: CriticReview
 ) -> dict[str, Any]:
@@ -428,6 +645,7 @@ def _write_review_pass(
     stored["prompt_package_hash"] = package.get("prompt_package_hash")
     stored["prompt_content_sha256"] = package.get("prompt_content_sha256")
     stored["review_request_sha256"] = package.get("review_request_sha256")
+    stored["review_config_sha256"] = package.get("review_config_sha256")
     stored["response_schema_sha256"] = package.get("response_schema_sha256")
     _atomic_write_json(directory / f"review-pass-{pass_number}.json", stored)
     if _persist_prompts_enabled():
@@ -472,7 +690,7 @@ def rebuild_prompt_package_for_pass(
     if pass_number > 1:
         completed_path = directory / f"completed-pass-{pass_number - 1}.json"
         if completed_path.is_file():
-            completed = json.loads(completed_path.read_text(encoding="utf-8"))
+            completed = _load_completed_pass(directory, pass_number - 1)
             prior = _findings_from_review_dict(completed)
     request = CriticArtifactRequest(
         graph_path=cfg["graph_path"],
@@ -499,8 +717,14 @@ def rebuild_prompt_package_for_pass(
             "critic_session_hash_mismatch",
             "rebuilt prompt package artifact hash mismatch",
         )
+    package = review.prompt_package
+    review_config_sha = package.get("review_config_sha256")
     rebuilt_set = _artifact_set_for_config(
-        review.artifact_hashes.to_dict(), cfg
+        {
+            **review.artifact_hashes.to_dict(),
+            "review_config_sha256": review_config_sha,
+        },
+        cfg,
     )
     latest_set = session.get("latest_artifact_set") or {}
     if latest_set and rebuilt_set != latest_set:
@@ -508,7 +732,22 @@ def rebuild_prompt_package_for_pass(
             "critic_session_hash_mismatch",
             "rebuilt prompt package artifact set mismatch",
         )
-    return review.prompt_package
+    stored_review = _load_review_pass(directory, pass_number)
+    _verify_prompt_package_against_stored(
+        package, stored_review=stored_review, session=session
+    )
+    # Config drift: recompute review_config_sha256 from session config + stored bundle.
+    validation = stored_review.get("validation") or {}
+    recomputed = _review_config_sha256_for(
+        cfg,
+        bundle_fingerprint=validation.get("bundle_fingerprint"),
+        bundle_resource_hashes=_bundle_resource_hashes_from_validation(validation),
+    )
+    if review_config_sha != recomputed:
+        raise CriticSessionError(
+            "critic_session_prompt_rebuild_mismatch", "review_config_sha256"
+        )
+    return package
 
 
 def _new_session_id() -> str:
@@ -660,10 +899,24 @@ def start_critic_review(
         )
     )
     _write_review_pass(directory, 1, review)
+    _write_config_pass(
+        directory,
+        1,
+        config=config,
+        package=review.prompt_package,
+        validation=review.validation.to_dict(),
+    )
 
     extend_token = secrets.token_urlsafe(24)
     extend_challenge = secrets.token_urlsafe(18)
-    artifact_set = _artifact_set_for_config(review.artifact_hashes.to_dict(), config)
+    review_config_sha = review.prompt_package.get("review_config_sha256")
+    artifact_set = _artifact_set_for_config(
+        {
+            **review.artifact_hashes.to_dict(),
+            "review_config_sha256": review_config_sha,
+        },
+        config,
+    )
     session = {
         "schema_version": CRITIC_SESSION_SCHEMA,
         "session_id": session_id,
@@ -685,6 +938,7 @@ def start_critic_review(
         "latest_prompt_package_hash": review.prompt_package.get("prompt_package_hash"),
         "latest_prompt_content_sha256": review.prompt_package.get("prompt_content_sha256"),
         "latest_review_request_sha256": review.prompt_package.get("review_request_sha256"),
+        "latest_review_config_sha256": review_config_sha,
         "latest_serializer_sha256": review.artifact_hashes.serializer_sha256,
         "latest_bundle_fingerprint": (review.validation.bundle_fingerprint
                                       if hasattr(review.validation, "bundle_fingerprint")
@@ -747,11 +1001,7 @@ def start_critic_review(
 def get_critic_review_status(session_id: str) -> dict[str, Any]:
     with _locked(session_id) as directory:
         session = _load(directory)
-        try:
-            _verify_audit_chain(directory)
-        except CriticSessionError:
-            # Surface status even when audit is damaged; callers can check code separately.
-            pass
+        _verify_audit_chain(directory)
     return {
         "session_id": session_id,
         "state": session["state"],
@@ -800,11 +1050,17 @@ def submit_manual_critic_response(
         pass_number = int(session["current_pass"])
         prompt_path = directory / f"prompt-pass-{pass_number}.json"
         if prompt_path.is_file():
-            prompt = json.loads(prompt_path.read_text(encoding="utf-8"))
+            prompt = _load_json_object(
+                prompt_path,
+                code="critic_session_corrupt",
+                label=f"prompt-pass-{pass_number}.json",
+            )
         else:
             prompt = rebuild_prompt_package_for_pass(session, directory, pass_number)
-        review_path = directory / f"review-pass-{pass_number}.json"
-        review_dict = json.loads(review_path.read_text(encoding="utf-8"))
+        review_dict = _load_review_pass(directory, pass_number)
+        _verify_prompt_package_against_stored(
+            prompt, stored_review=review_dict, session=session
+        )
         hashes = review_dict["artifact_hashes"]
         det_findings = _findings_from_review_dict(review_dict)
         ledger = build_assessment_ledger(det_findings)
@@ -817,6 +1073,7 @@ def submit_manual_critic_response(
                 session_id=session_id,
                 pass_number=pass_number,
                 expected_review_request_sha256=prompt.get("review_request_sha256"),
+                expected_review_config_sha256=prompt.get("review_config_sha256"),
                 bound_schema=prompt.get("response_schema"),
                 allowed_assessments=ledger,
             )
@@ -884,7 +1141,14 @@ def submit_manual_critic_response(
                 }
                 break
 
-        artifact_set = _artifact_set_for_config(hashes, session["config"])
+        artifact_set = _artifact_set_for_config(
+            {
+                **hashes,
+                "review_config_sha256": prompt.get("review_config_sha256")
+                or review_dict.get("review_config_sha256"),
+            },
+            session["config"],
+        )
         session["completed_critic_responses"] = int(session["completed_critic_responses"]) + 1
         session["latest_reviewed_hash"] = hashes["graph_sha256"]
         session["latest_reviewed_artifacts"] = artifact_set
@@ -1037,8 +1301,13 @@ def submit_critic_revision(
             session["config"]["profiles"] = list(profiles)
 
         new_hash = review.artifact_hashes.graph_sha256
+        review_config_sha = review.prompt_package.get("review_config_sha256")
         new_set = _artifact_set_for_config(
-            review.artifact_hashes.to_dict(), session["config"]
+            {
+                **review.artifact_hashes.to_dict(),
+                "review_config_sha256": review_config_sha,
+            },
+            session["config"],
         )
         old_set = session.get("latest_artifact_set") or {}
         if new_set == old_set and _open_actionable_blockers(session):
@@ -1047,7 +1316,25 @@ def submit_critic_revision(
                 "artifact set unchanged while blockers remain",
             )
 
+        # Drift check: package review_config must match recomputed config+bundle.
+        expected_cfg = _review_config_sha256_for(
+            session["config"],
+            bundle_fingerprint=review.validation.bundle_fingerprint,
+            bundle_resource_hashes=dict(review.validation.bundle_resource_hashes or {}),
+        )
+        if review_config_sha != expected_cfg:
+            raise CriticSessionError(
+                "critic_session_hash_mismatch", "review_config_sha256"
+            )
+
         _write_review_pass(directory, next_pass, review)
+        _write_config_pass(
+            directory,
+            next_pass,
+            config=session["config"],
+            package=review.prompt_package,
+            validation=review.validation.to_dict(),
+        )
 
         session["current_pass"] = next_pass
         session["completed_deterministic_passes"] = (
@@ -1064,6 +1351,7 @@ def submit_critic_revision(
         session["latest_review_request_sha256"] = review.prompt_package.get(
             "review_request_sha256"
         )
+        session["latest_review_config_sha256"] = review_config_sha
         session["latest_serializer_sha256"] = review.artifact_hashes.serializer_sha256
         session["latest_review_summary"] = _review_summary(review)
         session["latest_artifact_set"] = new_set
@@ -1210,7 +1498,14 @@ def finalize_critic_review(session_id: str) -> dict[str, Any]:
         reviewed_set = session.get("latest_reviewed_artifacts") or {}
         if not reviewed_set:
             raise CriticSessionError("critic_session_hash_mismatch", "no reviewed artifacts")
-        if current_set != reviewed_set:
+        # Compare artifact fields excluding optional review_config binding.
+        current_core = {
+            k: v for k, v in current_set.items() if k != "review_config_sha256"
+        }
+        reviewed_core = {
+            k: v for k, v in reviewed_set.items() if k != "review_config_sha256"
+        }
+        if current_core != reviewed_core:
             raise CriticSessionError(
                 "critic_session_hash_mismatch",
                 "artifact set changed after last review",
@@ -1218,12 +1513,30 @@ def finalize_critic_review(session_id: str) -> dict[str, Any]:
         if session["latest_artifact_hash"] != session["latest_reviewed_hash"]:
             raise CriticSessionError("critic_session_hash_mismatch")
 
+        # review_config_sha256 drift: recompute from config + stored review validation.
+        pass_number = int(session["current_pass"])
+        review_pass = _load_review_pass(directory, pass_number)
+        validation = review_pass.get("validation") or {}
+        recomputed_cfg = _review_config_sha256_for(
+            session["config"],
+            bundle_fingerprint=validation.get("bundle_fingerprint"),
+            bundle_resource_hashes=_bundle_resource_hashes_from_validation(validation),
+        )
+        stored_cfg = (
+            session.get("latest_review_config_sha256")
+            or review_pass.get("review_config_sha256")
+            or reviewed_set.get("review_config_sha256")
+        )
+        if stored_cfg and stored_cfg != recomputed_cfg:
+            raise CriticSessionError(
+                "critic_session_hash_mismatch", "review_config_sha256"
+            )
+
         summary = session.get("latest_review_summary") or {}
         # Prefer completed-pass file for the latest critic pass when present.
-        pass_number = int(session["current_pass"])
         completed_path = directory / f"completed-pass-{pass_number}.json"
         if completed_path.is_file():
-            completed = json.loads(completed_path.read_text(encoding="utf-8"))
+            completed = _load_completed_pass(directory, pass_number)
             summary = {
                 "status": completed.get("status"),
                 "analysis_status": completed.get("analysis_status"),
@@ -1411,6 +1724,7 @@ def replay_manual_session(
         bound["session_id"] = sid
         bound["pass_number"] = pass_number
         bound["review_request_sha256"] = package.get("review_request_sha256")
+        bound["review_config_sha256"] = package.get("review_config_sha256")
         bound.setdefault("findings", [])
         bound.setdefault("finding_assessments", [])
         bound.setdefault("scorecard", {})

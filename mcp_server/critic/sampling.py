@@ -60,6 +60,7 @@ def _expected_hashes_from_package(prompt_package: dict[str, Any]) -> dict[str, A
         "session_id": prompt_package.get("session_id"),
         "pass_number": prompt_package.get("pass_number"),
         "expected_review_request_sha256": prompt_package.get("review_request_sha256"),
+        "expected_review_config_sha256": prompt_package.get("review_config_sha256"),
         "bound_schema": prompt_package.get("response_schema"),
     }
 
@@ -85,6 +86,30 @@ def _deployment_blocks_sampling() -> SampleResult | None:
     )
 
 
+def _normalize_model_preferences(
+    model_preferences: str | list[str] | None,
+) -> SampleResult | str | list[str] | None:
+    """Accept FastMCP ``str | list[str] | None`` only; reject dict/other types."""
+
+    if model_preferences is None:
+        return None
+    if isinstance(model_preferences, str):
+        return model_preferences
+    if isinstance(model_preferences, list) and all(
+        isinstance(item, str) for item in model_preferences
+    ):
+        return list(model_preferences)
+    return SampleResult(
+        status="critic_sampling_provider_error",
+        fallback=True,
+        error="invalid_model_preferences_type",
+        metadata={
+            "reason": "model_preferences_must_be_str_or_list",
+            "got_type": type(model_preferences).__name__,
+        },
+    )
+
+
 async def maybe_sample_critic(
     ctx: Any,
     prompt_package: dict[str, Any],
@@ -94,9 +119,14 @@ async def maybe_sample_critic(
     timeout_s: float = DEFAULT_TIMEOUT_S,
     temperature: float = DEFAULT_TEMPERATURE,
     retries: int = DEFAULT_RETRIES,
-    model_preferences: dict[str, Any] | None = None,
+    model_preferences: str | list[str] | None = None,
 ) -> SampleResult:
-    """Sample using the complete bounded prompt package; never silently swallow errors."""
+    """Sample using the complete bounded prompt package; never silently swallow errors.
+
+    Callers must pass the *existing session* ``model_policy``. Sampling runs only
+    when that policy is ``client_sampling`` and the deployment gate allows it —
+    never merely because a ``*_with_sampling`` tool was invoked.
+    """
 
     blocked = _deployment_blocks_sampling()
     if blocked is not None:
@@ -108,6 +138,9 @@ async def maybe_sample_critic(
             fallback=True,
             metadata={"reason": "model_policy"},
         )
+    prefs = _normalize_model_preferences(model_preferences)
+    if isinstance(prefs, SampleResult):
+        return prefs
     if ctx is None or not hasattr(ctx, "sample"):
         return SampleResult(
             status="critic_sampling_unavailable",
@@ -124,6 +157,8 @@ async def maybe_sample_critic(
         )
     )
     # Pass the complete bounded prompt package (neighborhoods, excerpts, priors…).
+    # FastMCP Context.sample accepts str | Sequence[str | SamplingMessage] — use a
+    # plain string (not role/content dict messages).
     user_payload = json.dumps(
         {
             "instruction": (
@@ -148,13 +183,13 @@ async def maybe_sample_critic(
     for attempt in range(attempts):
         try:
             sample_kwargs: dict[str, Any] = {
-                "messages": [{"role": "user", "content": user_payload}],
+                "messages": user_payload,
                 "system_prompt": system_prompt,
                 "max_tokens": max_tokens,
                 "temperature": temperature,
             }
-            if model_preferences:
-                sample_kwargs["model_preferences"] = model_preferences
+            if prefs is not None:
+                sample_kwargs["model_preferences"] = prefs
             result = await asyncio.wait_for(
                 ctx.sample(**sample_kwargs),
                 timeout=timeout_s,
@@ -222,6 +257,9 @@ async def maybe_sample_critic(
                 pass_number=expected["pass_number"],
                 expected_review_request_sha256=expected[
                     "expected_review_request_sha256"
+                ],
+                expected_review_config_sha256=expected[
+                    "expected_review_config_sha256"
                 ],
                 bound_schema=expected["bound_schema"],
             )

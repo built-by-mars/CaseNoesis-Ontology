@@ -3,6 +3,11 @@
 
 Fails (exit 1) if any compared timing key exceeds baseline by more than
 ``--threshold`` (default +100%, i.e. 2×). Lenient for CI host variance.
+
+v1.22 advisory median policy: the CI ``bench-python`` job runs this step with
+``continue-on-error: true`` so median timing noise does not fail ``test-python``.
+Treat a non-zero exit as an advisory signal until a harder gate lands in a
+later release.
 """
 
 from __future__ import annotations

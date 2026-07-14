@@ -26,6 +26,7 @@ from critic.models import (
 from critic.schema_util import (
     SUPPORTED_SCHEMA_VERSION,
     bound_model_response_schema,
+    compute_review_config_sha256,
     compute_review_request_sha256,
     model_response_schema_sha256,
 )
@@ -44,6 +45,7 @@ HASH_EXCLUDED_FIELDS = frozenset({
     "byte_size",
     "token_estimate",
     "review_request_sha256",  # derived from prompt_content_sha256; not part of content digest
+    "review_config_sha256",  # binding metadata; snapshot lives in review_config content
     "response_schema",  # bound after content hash; excluded from content digest
     "serialization_integrity_sha256",
 })
@@ -142,6 +144,10 @@ def build_prompt_package(
     max_bytes: int = DEFAULT_MAX_PACKAGE_BYTES,
     session_id: str | None = None,
     pass_number: int = 1,
+    critic_scope: str = "both",
+    serializer_mode: str = "auto",
+    force_rdfs_inference: bool = False,
+    extra_ontology_sha256: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     serializer_excerpts = list(serializer_excerpts or [])
     source_excerpts = list(source_excerpts or [])
@@ -149,10 +155,20 @@ def build_prompt_package(
     critic_findings = list(critic_findings or [])
     deterministic_findings = list(deterministic_findings or [])
     prior_findings = list(prior_findings or [])
+    ext_list = list(extensions or [])
+    prof_list = list(profiles or [])
+    extra_hashes = dict(extra_ontology_sha256 or {})
     neighborhoods = _one_hop_neighborhoods(
         graph_view, deterministic_findings + source_findings + critic_findings
     )
     overview: dict[str, Any] = dict(serializer_overview or {})
+    review_config = {
+        "critic_scope": critic_scope,
+        "serializer_mode": serializer_mode,
+        "force_rdfs_inference": bool(force_rdfs_inference),
+        "extensions": sorted(ext_list),
+        "profiles": sorted(prof_list),
+    }
 
     # Placeholder schema; rebound after hash is known.
     response_schema = bound_model_response_schema(
@@ -183,8 +199,9 @@ def build_prompt_package(
             },
             "artifact_hashes": artifact_hashes.to_dict(),
             "validation_summary": validation.to_dict(),
-            "extensions": list(extensions or []),
-            "profiles": list(profiles or []),
+            "review_config": dict(review_config),
+            "extensions": list(ext_list),
+            "profiles": list(prof_list),
             "deterministic_findings": [_compact_finding(f) for f in deterministic_findings[:40]],
             "source_findings": [_compact_finding(f) for f in source_findings[:40]],
             "critic_findings": [_compact_finding(f) for f in critic_findings[:40]],
@@ -255,12 +272,23 @@ def build_prompt_package(
 
     # Non-circular binding:
     #   prompt_content_sha256 = hash(prompt content excluding derived fields)
-    #   review_request_sha256 = hash(session/pass/artifacts + prompt_content_sha256)
+    #   review_config_sha256 = hash(scope/mode/extensions/profiles/inference/bundle)
+    #   review_request_sha256 = hash(session/pass/artifacts + content + config)
     #   bound response_schema uses those finals (not rehashed into content)
     package["response_schema_version"] = SUPPORTED_SCHEMA_VERSION
     package["response_schema_sha256"] = model_response_schema_sha256()
     package["prompt_content_sha256"] = compute_prompt_content_sha256(package)
     package["prompt_package_hash"] = package["prompt_content_sha256"]
+    package["review_config_sha256"] = compute_review_config_sha256(
+        critic_scope=critic_scope,
+        serializer_mode=serializer_mode,
+        extensions=ext_list,
+        profiles=prof_list,
+        force_rdfs_inference=bool(force_rdfs_inference),
+        extra_ontology_sha256=extra_hashes,
+        bundle_fingerprint=validation.bundle_fingerprint,
+        bundle_resource_hashes=validation.bundle_resource_hashes,
+    )
     package["review_request_sha256"] = compute_review_request_sha256(
         schema_version=SUPPORTED_SCHEMA_VERSION,
         session_id=session_id,
@@ -270,6 +298,7 @@ def build_prompt_package(
         source_sha256=artifact_hashes.source_sha256,
         coverage_contract_sha256=artifact_hashes.coverage_contract_sha256,
         prompt_package_hash=package["prompt_content_sha256"],
+        review_config_sha256=package["review_config_sha256"],
     )
     package["response_schema"] = bound_model_response_schema(
         graph_sha256=artifact_hashes.graph_sha256,
@@ -279,6 +308,7 @@ def build_prompt_package(
         pass_number=pass_number,
         schema_version=SUPPORTED_SCHEMA_VERSION,
         review_request_sha256=package["review_request_sha256"],
+        review_config_sha256=package["review_config_sha256"],
     )
     # Optional integrity hash over the fully bound package (not used for binding).
     package["serialization_integrity_sha256"] = compute_serialization_integrity_sha256(

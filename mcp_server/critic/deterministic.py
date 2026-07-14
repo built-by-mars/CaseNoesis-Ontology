@@ -357,6 +357,10 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
     ]
 
     source_excerpts = _bounded_source_excerpts(source_aliases)
+    extra_ontology_sha256 = {
+        f"extra-{idx}:{Path(raw).name}": sha256_file(Path(raw))
+        for idx, raw in enumerate(request.extra_ontology_graphs or [], start=1)
+    }
     try:
         prompt_package = build_prompt_package(
             artifact_hashes=hashes,
@@ -373,6 +377,10 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
             profiles=request.profiles,
             session_id=request.session_id,
             pass_number=request.pass_number,
+            critic_scope=request.critic_scope,
+            serializer_mode=request.serializer_mode,
+            force_rdfs_inference=bool(request.force_rdfs_inference),
+            extra_ontology_sha256=extra_ontology_sha256,
         )
     except ValueError as exc:
         msg = str(exc)
@@ -505,6 +513,11 @@ def _run_validation(
         violation_count=report.violation_count,
         warning_count=report.warning_count,
         bundle_fingerprint=report.bundle_fingerprint,
+        bundle_resource_hashes={
+            str(r.get("path")): str(r.get("sha256"))
+            for r in (report.bundle_resources or [])
+            if r.get("path") and r.get("sha256")
+        },
         selected_profiles=list(report.selected_profiles),
         selected_extensions=list(report.selected_extensions),
         stage_status={k: v for k, v in stage.items()} if stage else {},
