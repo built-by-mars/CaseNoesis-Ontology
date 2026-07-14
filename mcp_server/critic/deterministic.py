@@ -361,6 +361,25 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
         f"extra-{idx}:{Path(raw).name}": sha256_file(Path(raw))
         for idx, raw in enumerate(request.extra_ontology_graphs or [], start=1)
     }
+    # Bind review_config to a live disk bundle identity (not cached/stored hashes alone).
+    try:
+        from validation_bundle import hash_validation_bundle_identity
+
+        live_identity = hash_validation_bundle_identity(
+            extensions=list(request.extensions or []),
+            profiles=list(request.profiles or []),
+            extra_ontology_graphs=list(request.extra_ontology_graphs or []) or None,
+            project_root=project_root,
+            force_rdfs_inference=bool(request.force_rdfs_inference),
+            use_cache=False,
+        )
+        validation.bundle_fingerprint = live_identity["bundle_fingerprint"]
+        validation.bundle_resource_hashes = dict(
+            live_identity["bundle_resource_hashes"]
+        )
+    except Exception:  # noqa: BLE001
+        # Resolution failures surface later via validation / session checks.
+        pass
     try:
         prompt_package = build_prompt_package(
             artifact_hashes=hashes,

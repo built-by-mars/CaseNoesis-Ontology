@@ -1,0 +1,99 @@
+{
+  "@context": {
+    "@vocab": "http://example.org/",
+    "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+    "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+    "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+    "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+    "marking": "https://ontology.unifiedcyberontology.org/uco/marking/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "urn:uuid:f64defd7-103a-5857-aea4-8347d66b1780",
+      "@type": [
+        "marking:MarkingDefinition",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "TOP SECRET//SCI",
+      "marking:definitionType": "statement",
+      "marking:definition": [
+        {
+          "@id": "urn:uuid:75d3e9d9-1b5c-57f8-b3bb-04b62d6192f2"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:75d3e9d9-1b5c-57f8-b3bb-04b62d6192f2",
+      "@type": "marking:StatementMarking",
+      "marking:definitionType": "statement",
+      "marking:statement": "TOP SECRET//SCI \u2014 unauthorized disclosure subject to 18 U.S.C. \u00a7 793 et seq."
+    },
+    {
+      "@id": "urn:uuid:a83efe54-dbd8-587b-932c-2343f4dcfa03",
+      "@type": [
+        "marking:MarkingDefinition",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "CAC-RESTRICTED",
+      "marking:definitionType": "statement",
+      "marking:definition": [
+        {
+          "@id": "urn:uuid:85f82b08-fbf8-5517-8d4c-8479cac7fcba"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:85f82b08-fbf8-5517-8d4c-8479cac7fcba",
+      "@type": "marking:StatementMarking",
+      "marking:definitionType": "statement",
+      "marking:statement": "CAC-RESTRICTED \u2014 crimes-against-children investigation material; restricted to ICAC task force and designated prosecutors."
+    },
+    {
+      "@id": "urn:uuid:4d50c95c-783f-58aa-a39f-a7ea35f1cee5",
+      "@type": [
+        "marking:MarkingDefinition",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "JUVENILE-PRIVACY",
+      "marking:definitionType": "statement",
+      "marking:definition": [
+        {
+          "@id": "urn:uuid:a2c6aa7d-8bae-5ebe-95e2-954430d2ab56"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a2c6aa7d-8bae-5ebe-95e2-954430d2ab56",
+      "@type": "marking:StatementMarking",
+      "marking:definitionType": "statement",
+      "marking:statement": "JUVENILE-PRIVACY \u2014 minor victim identifying information; limited to named UC, prosecutor, and court-authorized personnel."
+    },
+    {
+      "@id": "urn:uuid:c1cd4a81-101e-557a-821d-fa32a4cd275a",
+      "@type": [
+        "uco-observable:ObservableObject",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "CYBERTIP-001 image set (5 images)",
+      "uco-core:objectMarking": [
+        {
+          "@id": "urn:uuid:a83efe54-dbd8-587b-932c-2343f4dcfa03"
+        }
+      ]
+    },
+    {
+      "@id": "urn:example:phantom-gate-marking-probe",
+      "@type": [
+        "case-investigation:Investigation",
+        "uco-core:UcoObject"
+      ],
+      "uco-core:name": "Phantom Gate marking probe (synthetic T0)",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:c1cd4a81-101e-557a-821d-fa32a4cd275a"
+        }
+      ]
+    }
+  ]
+}

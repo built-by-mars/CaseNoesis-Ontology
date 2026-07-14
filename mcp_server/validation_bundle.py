@@ -587,3 +587,47 @@ def _build_bundle(
 def clear_bundle_cache() -> None:
     with _BUNDLE_CACHE_LOCK:
         _BUNDLE_CACHE.clear()
+
+
+def hash_validation_bundle_identity(
+    *,
+    extensions: list[str] | None = None,
+    profiles: list[str] | None = None,
+    extra_ontology_graphs: list[str | Path] | None = None,
+    project_root: Path = PROJECT_ROOT,
+    force_rdfs_inference: bool = False,
+    use_cache: bool = False,
+) -> dict[str, Any]:
+    """Resolve a validation bundle from disk and return identity fields.
+
+    Defaults to ``use_cache=False`` so callers that reverify at finalization
+    always rehash selected ontology/shapes/bridge/auxiliary resources.
+    """
+
+    bundle = resolve_validation_bundle(
+        extensions=list(extensions or []),
+        profiles=list(profiles or []),
+        project_root=project_root,
+        extra_ontology_graphs=extra_ontology_graphs,
+        use_cache=use_cache,
+    )
+    inference = bundle.inference
+    if not inference and force_rdfs_inference:
+        inference = "rdfs"
+    try:
+        import importlib.metadata as metadata
+
+        validator_version: str | None = metadata.version("case-utils")
+    except Exception:  # noqa: BLE001
+        validator_version = None
+    return {
+        "bundle_fingerprint": bundle.fingerprint,
+        "bundle_resource_hashes": {r.path: r.sha256 for r in bundle.resources},
+        "bundle_resources": list(bundle.to_manifest(portable=True)["resources"]),
+        "inference": inference,
+        "resolver_schema_version": bundle.resolver_schema_version,
+        "built_version": bundle.built_version,
+        "validator_version": validator_version,
+        "extensions": list(bundle.extensions),
+        "profiles": list(bundle.profiles),
+    }

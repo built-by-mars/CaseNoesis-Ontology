@@ -84,6 +84,41 @@
     },
     "byte_size": { "type": "integer", "minimum": 1 },
     "token_estimate": { "type": "integer", "minimum": 1 },
-    "truncated": { "type": "boolean" }
+    "truncated": { "type": "boolean" },
+    "sampling_disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contains_source_excerpts",
+        "contains_serializer_excerpts",
+        "contains_graph_literals",
+        "marking_ids",
+        "marking_names",
+        "restricted_content_detected",
+        "excerpt_bytes",
+        "estimated_tokens",
+        "egress_decision"
+      ],
+      "properties": {
+        "contains_source_excerpts": { "type": "boolean" },
+        "contains_serializer_excerpts": { "type": "boolean" },
+        "contains_graph_literals": { "type": "boolean" },
+        "marking_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "marking_names": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "restricted_content_detected": { "type": "boolean" },
+        "excerpt_bytes": { "type": "integer", "minimum": 0 },
+        "estimated_tokens": { "type": "integer", "minimum": 0 },
+        "egress_decision": {
+          "type": "string",
+          "enum": ["allow", "manual_required", "deny"]
+        }
+      }
+    }
   }
 }

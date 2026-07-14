@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/critic-review-pass.schema.json",
+  "title": "CASE/UCO Critic Review Pass (persisted metadata)",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "artifact_hashes",
+    "validation",
+    "analysis_status",
+    "merged_findings",
+    "prompt_package_hash",
+    "review_request_sha256",
+    "review_config_sha256",
+    "status"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "minLength": 1 },
+    "artifact_hashes": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["graph_sha256"],
+      "properties": {
+        "graph_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "serializer_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "source_sha256": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{64}$"
+          }
+        },
+        "coverage_contract_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "extra_ontology_sha256": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{64}$"
+          }
+        },
+        "review_config_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        }
+      }
+    },
+    "validation": { "type": "object" },
+    "analysis_status": {
+      "enum": ["complete", "partial", "failed"]
+    },
+    "status": { "type": "string", "minLength": 1 },
+    "merged_findings": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "prompt_package_hash": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "prompt_content_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "review_request_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "review_config_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "response_schema_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "scorecard": { "type": "object" },
+    "rule_executions": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "errors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "elapsed_ms": { "type": ["integer", "null"] }
+  }
+}

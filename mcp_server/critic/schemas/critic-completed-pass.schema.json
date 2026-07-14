@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/critic-completed-pass.schema.json",
+  "title": "CASE/UCO Critic Completed Pass Review",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "status",
+    "analysis_status",
+    "artifact_hashes",
+    "validation",
+    "merged_findings",
+    "finding_counts"
+  ],
+  "properties": {
+    "status": { "type": "string", "minLength": 1 },
+    "analysis_status": {
+      "enum": ["complete", "partial", "failed"]
+    },
+    "artifact_hashes": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["graph_sha256"],
+      "properties": {
+        "graph_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "serializer_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "source_sha256": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{64}$"
+          }
+        },
+        "coverage_contract_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-fA-F0-9]{64}$"
+        }
+      }
+    },
+    "validation": { "type": "object" },
+    "merged_findings": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "finding_assessments": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "new_critic_finding_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "finding_counts": {
+      "type": "object",
+      "required": ["merged", "open", "critical_high_open"],
+      "additionalProperties": true,
+      "properties": {
+        "merged": { "type": "integer", "minimum": 0 },
+        "open": { "type": "integer", "minimum": 0 },
+        "critical_high_open": { "type": "integer", "minimum": 0 },
+        "medium_low_open": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "open_finding_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "scorecard": { "type": "object" }
+  }
+}

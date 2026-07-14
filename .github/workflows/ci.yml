@@ -211,6 +211,7 @@ jobs:
             mcp_server/tests/test_critic_review_config.py \
             mcp_server/tests/test_critic_fastmcp_sampling.py \
             mcp_server/tests/test_critic_file_lock_smoke.py \
+            mcp_server/tests/test_critic_sampling_ledger.py \
             -v
 
       - name: Run critic oracles and accepted repair replay

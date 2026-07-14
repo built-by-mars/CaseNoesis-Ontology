@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/critic-critic-pass.schema.json",
+  "title": "CASE/UCO Critic Model Pass Record",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["findings"],
+  "properties": {
+    "findings": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "finding_assessments": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "scorecard": { "type": "object" },
+    "notes": { "type": "string" },
+    "sampling": { "type": "object" }
+  }
+}

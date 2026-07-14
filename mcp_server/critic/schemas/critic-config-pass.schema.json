@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/critic-config-pass.schema.json",
+  "title": "CASE/UCO Critic Config Pass Snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "config",
+    "review_config_sha256",
+    "bundle_resource_hashes",
+    "extra_ontology_sha256"
+  ],
+  "properties": {
+    "config": {
+      "type": "object",
+      "required": ["graph_path", "critic_scope"],
+      "additionalProperties": true,
+      "properties": {
+        "graph_path": { "type": "string", "minLength": 1 },
+        "critic_scope": { "type": "string" }
+      }
+    },
+    "review_config_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "bundle_fingerprint": { "type": ["string", "null"] },
+    "bundle_resource_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-fA-F0-9]{64}$"
+      }
+    },
+    "bundle_resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "extra_ontology_sha256": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-fA-F0-9]{64}$"
+      }
+    },
+    "inference": { "type": ["string", "null"] },
+    "resolver_schema_version": { "type": ["string", "null"] },
+    "built_version": { "type": ["string", "null"] },
+    "validator_version": { "type": ["string", "null"] },
+    "extensions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "profiles": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

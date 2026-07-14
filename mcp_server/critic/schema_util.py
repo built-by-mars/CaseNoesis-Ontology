@@ -8,13 +8,46 @@ import json
 from pathlib import Path
 from typing import Any
 
+from jsonschema import Draft202012Validator
+
 SCHEMA_DIR = Path(__file__).resolve().parent / "schemas"
 SUPPORTED_SCHEMA_VERSION = "1.2.0"
 HEX64 = "^[a-fA-F0-9]{64}$"
 
+_SESSION_FILE_SCHEMAS: dict[str, dict[str, Any]] = {}
+
 
 def load_json_schema(name: str) -> dict[str, Any]:
     return json.loads((SCHEMA_DIR / name).read_text(encoding="utf-8"))
+
+
+def validate_against_schema(
+    data: dict[str, Any],
+    schema_name: str,
+    *,
+    error_code: str = "critic_session_schema_mismatch",
+    label: str = "",
+) -> None:
+    """Validate ``data`` with Draft 2020-12 against a named critic schema.
+
+    Raises ``ValueError`` whose message begins with ``error_code``.
+    """
+
+    schema = _SESSION_FILE_SCHEMAS.get(schema_name)
+    if schema is None:
+        schema = load_json_schema(schema_name)
+        Draft202012Validator.check_schema(schema)
+        _SESSION_FILE_SCHEMAS[schema_name] = schema
+    errors = sorted(
+        Draft202012Validator(schema).iter_errors(data),
+        key=lambda e: list(e.path),
+    )
+    if errors:
+        first = errors[0]
+        path = "/".join(str(p) for p in first.path)
+        location = f" at {path}" if path else ""
+        where = f"{label}: " if label else ""
+        raise ValueError(f"{error_code}: {where}{first.message}{location}")
 
 
 def model_response_schema() -> dict[str, Any]:
@@ -80,6 +113,15 @@ def bound_model_response_schema(
     return schema
 
 
+def case_utils_version() -> str | None:
+    try:
+        import importlib.metadata as metadata
+
+        return metadata.version("case-utils")
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def compute_review_config_sha256(
     *,
     critic_scope: str,
@@ -90,20 +132,35 @@ def compute_review_config_sha256(
     extra_ontology_sha256: dict[str, str],
     bundle_fingerprint: str | None,
     bundle_resource_hashes: dict[str, str] | None = None,
+    validator_version: str | None = None,
+    built_version: str | None = None,
+    resolver_schema_version: str | None = None,
 ) -> str:
     """Canonical digest over review configuration + validation bundle identity."""
+
+    if validator_version is None:
+        validator_version = case_utils_version()
+    if built_version is None:
+        built_version = "case-1.4.0"
+    if resolver_schema_version is None:
+        from validation_bundle import RESOLVER_SCHEMA_VERSION
+
+        resolver_schema_version = RESOLVER_SCHEMA_VERSION
 
     payload = {
         "bundle_fingerprint": bundle_fingerprint,
         "bundle_resource_hashes": dict(
             sorted((bundle_resource_hashes or {}).items())
         ),
+        "built_version": built_version,
         "critic_scope": critic_scope,
         "extensions": sorted(extensions),
         "extra_ontology_sha256": dict(sorted(extra_ontology_sha256.items())),
         "force_rdfs_inference": bool(force_rdfs_inference),
         "profiles": sorted(profiles),
+        "resolver_schema_version": resolver_schema_version,
         "serializer_mode": serializer_mode,
+        "validator_version": validator_version,
     }
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()

@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.22.0] - 2026-07-14
 
+#### ChatGPT NO-GO trust-boundary hardening (post-`1860f11`; do **not** tag yet)
+
+- **#75 bundle finalization**: re-resolve and rehash OWL/SHACL/bridge/auxiliary
+  resources from disk at finalize; compare to `config-pass-N.json`; include
+  validator/built/resolver versions in `review_config_sha256`; fail
+  `critic_session_bundle_drift` on mutation; prefer final complete+conforming
+  validation.
+- **#76 marking-aware sampling**: `sampling_disclosure` + egress decisions;
+  marked/unknown → manual; CAC/juvenile/classified/SAR →
+  `critic_sampling_restricted_content` unless
+  `CASE_UCO_CRITIC_SAMPLING_RESTRICTED_ALLOW=1`; Phantom Gate marked fixture test.
+- **#76 ledger-aware sampling**: `allowed_assessments` in `maybe_sample_critic`
+  retry loop; assessment failures fall back to manual (`ok: true`); lifecycle
+  tests for forbidden deterministic resolve / model finding assessments.
+- **#78/#75 session integrity**: Draft 2020-12 schemas for session/config/
+  review/critic/completed passes; pass-file SHA-256 in session+audit; verify
+  before response/revision/status/finalize/handoff; tamper tests.
+- **#76 report transaction**: resolve `report_output` at start; write report
+  before committing `state=finalized`; never fail after irreversible finalize.
+- **#77 reports**: stop committing mutable `*-latest.json`; CI artifacts only.
+
 Executable SHA recorded at tag time (placeholder: `TBD`).
 
 ### Fixed

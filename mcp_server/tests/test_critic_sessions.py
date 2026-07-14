@@ -811,3 +811,134 @@ def test_audit_chain_corruption_fails_finalize(workspace):
     with pytest.raises(CriticSessionError) as exc:
         finalize_critic_review(sid)
     assert exc.value.code == "critic_session_audit_corrupt"
+
+
+def _two_pass_awaiting_revision(workspace):
+    """Drive a manual session through pass 2 completed → awaiting_revision."""
+
+    read, write = workspace
+    graph = _copy_gold(read)
+    started = start_critic_review(
+        graph_path=str(graph), critic_scope="graph", model_policy="manual"
+    )
+    sid = started["session_id"]
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(sid, graph_path=str(graph), change_summary="confirm")
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+    sess_dir = write / "critic-sessions" / sid
+    return sid, sess_dir
+
+
+def test_completed_pass_tamper_fails_status_and_finalize(workspace):
+    """Editing severity/status/counts in completed-pass must fail hash verify."""
+
+    sid, sess_dir = _two_pass_awaiting_revision(workspace)
+    completed_path = sess_dir / "completed-pass-2.json"
+    assert completed_path.is_file()
+    data = json.loads(completed_path.read_text(encoding="utf-8"))
+    assert data.get("finding_counts")
+    # Valid JSON mutation that would otherwise greenwash blockers.
+    if data.get("merged_findings"):
+        data["merged_findings"][0]["severity"] = "low"
+        data["merged_findings"][0]["status"] = "resolved"
+    data["finding_counts"]["critical_high_open"] = 0
+    data["finding_counts"]["open"] = 0
+    data["status"] = "accepted"
+    completed_path.write_text(
+        json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+    with pytest.raises(CriticSessionError) as exc:
+        get_critic_review_status(sid)
+    assert exc.value.code == "critic_session_file_hash_mismatch"
+
+    with pytest.raises(CriticSessionError) as exc2:
+        finalize_critic_review(sid)
+    assert exc2.value.code == "critic_session_file_hash_mismatch"
+
+
+def test_completed_pass_tamper_fails_handoff(workspace, monkeypatch):
+    """Handoff must not load tampered completed-pass via raw json.loads."""
+
+    import critic.deterministic as det
+
+    monkeypatch.setattr(
+        det,
+        "lint_kind_of_relationship",
+        lambda *a, **k: {"ok": True, "checked": 0, "findings": []},
+    )
+    sid, sess_dir = _two_pass_awaiting_revision(workspace)
+    final = finalize_critic_review(sid)
+    assert final["state"] == "finalized"
+
+    completed_path = sess_dir / "completed-pass-2.json"
+    data = json.loads(completed_path.read_text(encoding="utf-8"))
+    if data.get("merged_findings"):
+        data["merged_findings"][0]["severity"] = "info"
+        data["merged_findings"][0]["status"] = "resolved"
+    else:
+        data["finding_counts"]["merged"] = 99
+    completed_path.write_text(
+        json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+    from critic.sessions import load_session_for_handoff
+
+    with pytest.raises(CriticSessionError) as exc:
+        load_session_for_handoff(sid)
+    assert exc.value.code == "critic_session_file_hash_mismatch"
+
+
+def test_review_pass_missing_review_config_sha256_schema_mismatch(workspace):
+    """Removing review_config_sha256 fails Draft202012 schema validation on load."""
+
+    import hashlib
+
+    from critic.sessions import _load_review_pass, _session_dir
+
+    sid, sess_dir = _two_pass_awaiting_revision(workspace)
+    review_path = sess_dir / "review-pass-2.json"
+    data = json.loads(review_path.read_text(encoding="utf-8"))
+    assert "review_config_sha256" in data
+    del data["review_config_sha256"]
+    raw = json.dumps(data, indent=2, sort_keys=True) + "\n"
+    review_path.write_text(raw, encoding="utf-8")
+    # Retarget stored digests so hash verify is not the first failure.
+    digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+    session_path = sess_dir / "session.json"
+    session = json.loads(session_path.read_text(encoding="utf-8"))
+    session["pass_file_hashes"]["review-pass-2.json"] = digest
+    for item in session.get("passes") or []:
+        if int(item.get("pass_number") or 0) == 2 and isinstance(item.get("files"), dict):
+            item["files"]["review-pass-2.json"] = digest
+    session_path.write_text(
+        json.dumps(session, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+    with pytest.raises(CriticSessionError) as exc:
+        _load_review_pass(_session_dir(sid), 2)
+    assert exc.value.code == "critic_session_schema_mismatch"
+
+
+def test_pass_file_hashes_recorded_on_write(workspace):
+    import hashlib
+
+    sid, sess_dir = _two_pass_awaiting_revision(workspace)
+    session = json.loads((sess_dir / "session.json").read_text(encoding="utf-8"))
+    hashes = session["pass_file_hashes"]
+    for name in (
+        "review-pass-1.json",
+        "config-pass-1.json",
+        "completed-pass-1.json",
+        "critic-pass-1.json",
+        "review-pass-2.json",
+        "config-pass-2.json",
+        "completed-pass-2.json",
+        "critic-pass-2.json",
+    ):
+        assert name in hashes
+        actual = hashlib.sha256((sess_dir / name).read_bytes()).hexdigest()
+        assert hashes[name] == actual
+    pass2 = next(p for p in session["passes"] if p["pass_number"] == 2)
+    assert "completed-pass-2.json" in pass2["files"]
+

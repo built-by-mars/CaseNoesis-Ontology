@@ -48,6 +48,8 @@ HASH_EXCLUDED_FIELDS = frozenset({
     "review_config_sha256",  # binding metadata; snapshot lives in review_config content
     "response_schema",  # bound after content hash; excluded from content digest
     "serialization_integrity_sha256",
+    # Egress decision depends on operator env; keep visible but out of content hash.
+    "sampling_disclosure",
 })
 
 CRITIC_SYSTEM_ROLE = (
@@ -99,6 +101,8 @@ def compute_serialization_integrity_sha256(package: dict[str, Any]) -> str:
                     "serialization_integrity_sha256",
                     "byte_size",
                     "token_estimate",
+                    # Operator-env-dependent egress summary; not part of binding integrity.
+                    "sampling_disclosure",
                 }
             }
         )
@@ -315,6 +319,11 @@ def build_prompt_package(
         package
     )
     package["token_estimate"] = max(1, len(_dumps(_hashable_package(package))) // 4)
+
+    # Marking-aware sampling disclosure (hash-excluded; visible for manual path too).
+    from critic.sampling import attach_sampling_disclosure
+
+    attach_sampling_disclosure(package, graph_view=graph_view)
 
     # Stabilize byte_size to equal final serialized length.
     package["byte_size"] = 0

@@ -170,7 +170,19 @@ def test_prompt_rebuild_hash_mismatch_fails(workspace):
     review_path = write / "critic-sessions" / sid / "review-pass-1.json"
     review = json.loads(review_path.read_text(encoding="utf-8"))
     review["prompt_package_hash"] = "0" * 64
-    review_path.write_text(json.dumps(review, indent=2), encoding="utf-8")
+    review_path.write_text(json.dumps(review, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    # Keep pass-file integrity in sync so the rebuild mismatch path is exercised.
+    import hashlib
+
+    new_digest = hashlib.sha256(review_path.read_bytes()).hexdigest()
+    session_path = write / "critic-sessions" / sid / "session.json"
+    session = json.loads(session_path.read_text(encoding="utf-8"))
+    session.setdefault("pass_file_hashes", {})["review-pass-1.json"] = new_digest
+    for item in session.get("passes") or []:
+        files = item.get("files")
+        if isinstance(files, dict) and "review-pass-1.json" in files:
+            files["review-pass-1.json"] = new_digest
+    session_path.write_text(json.dumps(session, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     with pytest.raises(CriticSessionError) as exc:
         submit_manual_critic_response(sid, _empty_critic_response(started))
@@ -244,3 +256,117 @@ def test_analyze_artifact_embeds_review_config(workspace):
     assert package["review_config"]["extensions"] == ["cac"]
     assert package["review_config_sha256"]
     assert (session_root() / started["session_id"] / "config-pass-1.json").is_file()
+
+
+def test_validator_built_resolver_versions_change_review_config_sha256():
+    base = _base_kwargs()
+    a = compute_review_config_sha256(**base)
+    b = compute_review_config_sha256(**{**base, "validator_version": "9.9.9"})
+    c = compute_review_config_sha256(**{**base, "built_version": "case-9.9.9"})
+    d = compute_review_config_sha256(**{**base, "resolver_schema_version": "99.0"})
+    assert a != b
+    assert a != c
+    assert a != d
+
+
+def test_finalize_bundle_drift_on_extra_ontology_mutation(workspace):
+    """P0-1: mutating a selected extra ontology after pass 2 blocks finalize."""
+
+    from critic.sessions import finalize_critic_review, submit_critic_revision
+
+    read, write = workspace
+    graph = _copy_gold(read)
+    extra = write / "extra-ont.ttl"
+    extra.write_text(
+        "@prefix ex: <http://example.org/extra#> .\nex:Concept a <http://www.w3.org/2002/07/owl#Class> .\n",
+        encoding="utf-8",
+    )
+    started = start_critic_review(
+        graph_path=str(graph),
+        critic_scope="graph",
+        model_policy="manual",
+        extra_ontology_graphs=[str(extra)],
+    )
+    sid = started["session_id"]
+    config_pass = json.loads(
+        (session_root() / sid / "config-pass-1.json").read_text(encoding="utf-8")
+    )
+    assert config_pass["bundle_resource_hashes"]
+    assert any(
+        str(extra.name) in path for path in config_pass["bundle_resource_hashes"]
+    )
+
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(
+        sid,
+        graph_path=str(graph),
+        extra_ontology_graphs=[str(extra)],
+        change_summary="confirm",
+    )
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+
+    extra.write_text(
+        "# mutated after critic response\n"
+        "@prefix ex: <http://example.org/extra#> .\n"
+        "ex:Concept a <http://www.w3.org/2002/07/owl#Class> .\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(CriticSessionError) as exc:
+        finalize_critic_review(sid)
+    assert exc.value.code == "critic_session_bundle_drift"
+
+
+def test_report_output_denied_at_start(workspace):
+    """P0-5: report_output outside write roots fails before session creation."""
+
+    read, write = workspace
+    graph = _copy_gold(read)
+    denied = read / "not-a-write-root" / "report.json"
+    with pytest.raises(CriticSessionError) as exc:
+        start_critic_review(
+            graph_path=str(graph),
+            critic_scope="graph",
+            model_policy="manual",
+            report_output=str(denied),
+        )
+    assert exc.value.code == "critic_session_report_path_denied"
+    assert not any((write / "critic-sessions").glob("critsess-*"))
+
+
+def test_report_write_failure_before_finalize_commit(workspace, monkeypatch):
+    """P0-5: report write failure must not leave session state=finalized."""
+
+    import critic.sessions as sessions_mod
+    from critic.sessions import finalize_critic_review, submit_critic_revision
+
+    read, write = workspace
+    graph = _copy_gold(read)
+    report_path = write / "final-report.json"
+    started = start_critic_review(
+        graph_path=str(graph),
+        critic_scope="graph",
+        model_policy="manual",
+        report_output=str(report_path),
+    )
+    sid = started["session_id"]
+    submit_manual_critic_response(sid, _empty_critic_response(started))
+    revised = submit_critic_revision(sid, graph_path=str(graph), change_summary="confirm")
+    submit_manual_critic_response(sid, _empty_critic_response(revised))
+
+    real_atomic = sessions_mod._atomic_write_json
+
+    def boom(path, data):
+        if Path(path).resolve() == report_path.resolve():
+            raise OSError("induced report write failure")
+        return real_atomic(path, data)
+
+    monkeypatch.setattr(sessions_mod, "_atomic_write_json", boom)
+    with pytest.raises(CriticSessionError) as exc:
+        finalize_critic_review(sid)
+    assert exc.value.code == "critic_session_report_write_failed"
+
+    session = json.loads(
+        (session_root() / sid / "session.json").read_text(encoding="utf-8")
+    )
+    assert session["state"] == "awaiting_revision"
+    assert not report_path.exists()

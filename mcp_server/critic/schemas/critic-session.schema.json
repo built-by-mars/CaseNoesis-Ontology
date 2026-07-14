@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseontology.org/schemas/critic-session.schema.json",
+  "title": "CASE/UCO Critic Session State",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "session_id",
+    "state",
+    "model_policy",
+    "config",
+    "current_pass",
+    "latest_artifact_hash",
+    "pass_file_hashes",
+    "passes"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^1\\.(1|2)\\.[0-9]+$"
+    },
+    "session_id": {
+      "type": "string",
+      "pattern": "^critsess-[a-f0-9]+$"
+    },
+    "state": {
+      "enum": [
+        "awaiting_critic_response",
+        "awaiting_revision",
+        "finalized",
+        "cancelled",
+        "failed"
+      ]
+    },
+    "model_policy": {
+      "enum": ["disabled", "manual", "client_sampling"]
+    },
+    "config": {
+      "type": "object",
+      "required": ["graph_path", "critic_scope"],
+      "properties": {
+        "graph_path": { "type": "string", "minLength": 1 },
+        "serializer_path": { "type": ["string", "null"] },
+        "source_paths": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "coverage_contract_path": { "type": ["string", "null"] },
+        "extensions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "profiles": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "critic_scope": { "type": "string" },
+        "additional_iterations": { "type": "integer", "minimum": 0 },
+        "model_policy": {
+          "enum": ["disabled", "manual", "client_sampling"]
+        },
+        "report_output": { "type": ["string", "null"] },
+        "project_root": { "type": ["string", "null"] },
+        "serializer_mode": { "type": "string" },
+        "extra_ontology_graphs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "force_rdfs_inference": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "current_pass": { "type": "integer", "minimum": 1 },
+    "required_passes": { "type": "integer", "minimum": 1 },
+    "additional_passes_approved": { "type": "integer", "minimum": 0 },
+    "target_passes": { "type": "integer", "minimum": 1 },
+    "max_total_passes": { "type": "integer", "minimum": 1 },
+    "completed_critic_responses": { "type": "integer", "minimum": 0 },
+    "completed_deterministic_passes": { "type": "integer", "minimum": 0 },
+    "latest_artifact_hash": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "latest_reviewed_hash": {
+      "type": ["string", "null"],
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "latest_prompt_package_hash": {
+      "type": ["string", "null"],
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "latest_prompt_content_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "latest_review_request_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "latest_review_config_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "pass_file_hashes": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-fA-F0-9]{64}$"
+      }
+    },
+    "passes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["pass_number"],
+        "additionalProperties": true,
+        "properties": {
+          "pass_number": { "type": "integer", "minimum": 1 },
+          "deterministic": { "type": ["object", "null"] },
+          "critic": { "type": ["object", "null"] },
+          "completed_pass": { "type": ["object", "null"] },
+          "files": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{64}$"
+            }
+          }
+        }
+      }
+    },
+    "latest_review_summary": { "type": ["object", "null"] },
+    "latest_artifact_set": { "type": ["object", "null"] },
+    "latest_reviewed_artifacts": { "type": ["object", "null"] },
+    "artifact_hash_history": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-fA-F0-9]{64}$"
+      }
+    },
+    "prior_findings": { "type": "array" },
+    "prior_finding_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "extend_approval_token": { "type": "string" },
+    "extend_approval_challenge": { "type": "string" },
+    "final_outcome": { "type": ["string", "null"] },
+    "accepted": { "type": ["boolean", "null"] },
+    "finalized_at": { "type": ["number", "null"] }
+  }
+}

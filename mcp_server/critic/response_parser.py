@@ -315,16 +315,16 @@ def _parse_assessments(
                 )
             evidence_kind = str(ledger.get("evidence_kind") or "")
             allowed = set(ledger.get("allowed_assessments") or [])
-            if assessment not in allowed:
-                raise CriticResponseError(
-                    "critic_assessment_not_permitted",
-                    f"{assesses}:{assessment}",
-                )
             # Deterministic/source findings may be disputed but never model-resolved.
             if evidence_kind in DETERMINISTIC_EVIDENCE and assessment == "resolved":
                 raise CriticResponseError(
                     "critic_assessment_deterministic_resolve_forbidden",
                     assesses,
+                )
+            if assessment not in allowed:
+                raise CriticResponseError(
+                    "critic_assessment_not_permitted",
+                    f"{assesses}:{assessment}",
                 )
         assessment_id = item.get("assessment_id")
         if assessment_id is None:

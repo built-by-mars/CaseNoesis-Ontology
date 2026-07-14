@@ -102,15 +102,25 @@ async def tool_start_critic_review_with_sampling(
                     "fallback": True,
                 },
             }
+        ledger = started.get("assessment_ledger")
+        if not isinstance(ledger, dict):
+            from critic.response_parser import build_assessment_ledger
+
+            ledger = build_assessment_ledger([])
         # Pass existing session policy — never force client_sampling here.
         sample = await maybe_sample_critic(
-            ctx, package, model_policy=session_policy
+            ctx,
+            package,
+            model_policy=session_policy,
+            allowed_assessments=ledger,
         )
         if sample.status != "ok" or not sample.response:
+            sampling = sample.to_dict()
             return {
                 "ok": True,
                 **started,
-                "sampling": sample.to_dict(),
+                "sampling": sampling,
+                "prompt_package": package,
                 "next_action": "submit_manual_critic_response",
             }
         sampling_meta = sample.to_dict()
@@ -192,14 +202,24 @@ async def tool_submit_critic_revision_with_sampling(
                     "fallback": True,
                 },
             }
+        ledger = revised.get("assessment_ledger")
+        if not isinstance(ledger, dict):
+            from critic.response_parser import build_assessment_ledger
+
+            ledger = build_assessment_ledger([])
         sample = await maybe_sample_critic(
-            ctx, package, model_policy=session_policy
+            ctx,
+            package,
+            model_policy=session_policy,
+            allowed_assessments=ledger,
         )
         if sample.status != "ok" or not sample.response:
+            sampling = sample.to_dict()
             return {
                 "ok": True,
                 **revised,
-                "sampling": sample.to_dict(),
+                "sampling": sampling,
+                "prompt_package": package,
                 "next_action": "submit_manual_critic_response",
             }
         sampling_meta = sample.to_dict()
