@@ -21,7 +21,6 @@ from critic.graph_heuristics import run_graph_heuristics
 from critic.models import CriticFinding, CriticScorecard, CriticTarget, ValidationSummary
 from critic.scorecard import build_deterministic_scorecard, merge_scorecards
 from critic.serializer_python import analyze_python_serializer
-from critic.finding_diff import FindingDiffResult
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "critic"
 

@@ -234,6 +234,7 @@ def _append_audit(
                 previous_event_sha256 = str(last.get("event_sha256") or previous_event_sha256)
                 sequence = int(last.get("sequence") or 0)
             except (json.JSONDecodeError, TypeError, ValueError):
+                # Corrupt trailing audit line: start a new chain segment.
                 pass
     sequence += 1
     body = {
@@ -1548,7 +1549,6 @@ def finalize_critic_review(session_id: str) -> dict[str, Any]:
             }
 
         outcome = finalize_outcome_from_summary(summary)
-        validation = summary.get("validation") or {}
         if outcome == "validation_incomplete":
             raise CriticSessionError("critic_session_validation_incomplete")
         if outcome == "needs_revision":

@@ -202,7 +202,7 @@ def prepare_critic_handoff(
             fd = os.open(
                 str(dest),
                 os.O_CREAT | os.O_EXCL | os.O_WRONLY,
-                0o644,
+                0o600,
             )
         except FileExistsError as exc:
             raise CriticSessionError(
@@ -217,6 +217,7 @@ def prepare_critic_handoff(
             try:
                 os.unlink(dest)
             except OSError:
+                # Best-effort cleanup of a partial handoff write.
                 pass
             raise
         written = str(dest)

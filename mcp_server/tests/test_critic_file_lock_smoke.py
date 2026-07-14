@@ -7,7 +7,6 @@ from pathlib import Path
 import graph_validator
 from critic.file_lock import FileLock, ensure_lock_file
 from critic.sessions import start_critic_review, submit_manual_critic_response
-from graph_validator import GraphValidationReport
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "critic"
 
@@ -37,7 +36,7 @@ def test_file_lock_and_manual_session_smoke(tmp_path, monkeypatch):
     monkeypatch.setattr(
         graph_validator,
         "validate_graph_file",
-        lambda *a, **k: GraphValidationReport(
+        lambda *a, **k: graph_validator.GraphValidationReport(
             conforms=True,
             warning_count=0,
             violation_count=0,

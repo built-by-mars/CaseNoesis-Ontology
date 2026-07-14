@@ -18,13 +18,12 @@ from critic.sessions import (
     submit_manual_critic_response,
 )
 from critic.handoff import prepare_critic_handoff
-from graph_validator import GraphValidationReport
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "critic"
 
 
-def _conforming_report(**kwargs) -> GraphValidationReport:
-    return GraphValidationReport(
+def _conforming_report(**kwargs) -> graph_validator.GraphValidationReport:
+    return graph_validator.GraphValidationReport(
         conforms=True,
         warning_count=0,
         violation_count=0,

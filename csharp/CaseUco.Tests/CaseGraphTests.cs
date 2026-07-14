@@ -283,7 +283,7 @@ namespace CaseUco.Tests
         {
             var graph = new CaseGraph();
             graph.AddWithId(new Tool { Name = "Streamed" }, "kb:t-stream");
-            var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"caseuco-stream-{Guid.NewGuid()}.jsonld");
+            var path = System.IO.Path.Join(System.IO.Path.GetTempPath(), $"caseuco-stream-{Guid.NewGuid()}.jsonld");
             try
             {
                 var metrics = graph.WriteStreaming(path);
@@ -306,7 +306,7 @@ namespace CaseUco.Tests
         {
             // Atomic WriteStreaming must replace in place via temp+File.Replace/Move,
             // not delete-then-write (which races readers and loses the prior file on failure).
-            var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"caseuco-replace-{Guid.NewGuid()}.jsonld");
+            var path = System.IO.Path.Join(System.IO.Path.GetTempPath(), $"caseuco-replace-{Guid.NewGuid()}.jsonld");
             try
             {
                 System.IO.File.WriteAllText(path, "OLD");
@@ -338,7 +338,7 @@ namespace CaseUco.Tests
         [Fact]
         public void WriteStreaming_InducedReplaceFailure_PreservesOldBytes()
         {
-            var path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"caseuco-fail-replace-{Guid.NewGuid()}.jsonld");
+            var path = System.IO.Path.Join(System.IO.Path.GetTempPath(), $"caseuco-fail-replace-{Guid.NewGuid()}.jsonld");
             CaseGraph.SimulateReplaceFailureForTests = null;
             try
             {
@@ -402,11 +402,11 @@ namespace CaseUco.Tests
             });
 
             var parts = graph.PartitionByRoots(new[] { "kb:root-a", "kb:root-b" });
-            Assert.True(parts.ContainsKey("kb:root-a"));
-            Assert.True(parts.ContainsKey("kb:root-b"));
+            Assert.True(parts.TryGetValue("kb:root-a", out var partA));
+            Assert.True(parts.TryGetValue("kb:root-b", out var partB));
             Assert.False(parts.ContainsKey("_shared"));
-            Assert.True(parts["kb:root-a"].Contains("kb:shared"));
-            Assert.True(parts["kb:root-b"].Contains("kb:shared"));
+            Assert.True(partA.Contains("kb:shared"));
+            Assert.True(partB.Contains("kb:shared"));
         }
 
         [Fact]
@@ -424,8 +424,8 @@ namespace CaseUco.Tests
             });
 
             var parts = graph.PartitionByRoots(new[] { "kb:root-a", "kb:root-b" }, "shared");
-            Assert.True(parts.ContainsKey("_shared"));
-            Assert.True(parts["_shared"].Contains("kb:shared"));
+            Assert.True(parts.TryGetValue("_shared", out var sharedPart));
+            Assert.True(sharedPart.Contains("kb:shared"));
         }
 
         [Fact]

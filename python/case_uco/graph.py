@@ -10,7 +10,7 @@ import uuid
 import threading
 import warnings
 import dataclasses
-from dataclasses import Field, dataclass, fields, is_dataclass
+from dataclasses import Field, dataclass, is_dataclass
 from datetime import date, datetime
 from typing import Any, Callable, TypeVar, Type
 
@@ -795,6 +795,7 @@ class CASEGraph:
                 try:
                     pg._ingest_raw_node(dict(by_id[nid]), policy="merge_compatible")
                 except DuplicateNodeError:
+                    # Already present under merge_compatible; ignore.
                     pass
             partitions[root] = pg
 
@@ -806,6 +807,7 @@ class CASEGraph:
                     try:
                         shared._ingest_raw_node(dict(by_id[nid]), policy="merge_compatible")
                     except DuplicateNodeError:
+                        # Already present under merge_compatible; ignore.
                         pass
             if len(shared) > 0:
                 partitions["_shared"] = shared

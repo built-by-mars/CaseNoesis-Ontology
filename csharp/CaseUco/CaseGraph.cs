@@ -654,7 +654,7 @@ namespace CaseUco
                 if (string.IsNullOrEmpty(dir))
                     dir = ".";
                 Directory.CreateDirectory(dir);
-                tmpPath = Path.Combine(dir, $".casegraph-{Guid.NewGuid():N}.jsonld.tmp");
+                tmpPath = CombinePath(dir, $".casegraph-{Guid.NewGuid():N}.jsonld.tmp");
                 outPath = tmpPath;
             }
 
@@ -936,10 +936,8 @@ namespace CaseUco
             var reverseIndex = BuildReverseIdIndex(byId);
 
             var rootEntries = new List<(string Key, string Expanded)>();
-            foreach (var root in rootIris)
+            foreach (var root in rootIris.Where(r => !string.IsNullOrEmpty(r)))
             {
-                if (string.IsNullOrEmpty(root))
-                    continue;
                 var expanded = ExpandIri(root);
                 if (rootEntries.Any(entry => entry.Expanded == expanded))
                     continue;
@@ -947,10 +945,8 @@ namespace CaseUco
             }
 
             var rootReachable = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
-            foreach (var entry in rootEntries)
+            foreach (var entry in rootEntries.Where(e => byId.ContainsKey(e.Expanded)))
             {
-                if (!byId.ContainsKey(entry.Expanded))
-                    continue;
                 rootReachable[entry.Expanded] = CollectReachable(
                     entry.Expanded, byId, reverseIndex, includeIncoming);
             }
@@ -971,16 +967,14 @@ namespace CaseUco
             }
 
             var partitions = new Dictionary<string, CaseGraph>(StringComparer.Ordinal);
-            foreach (var entry in rootEntries)
+            foreach (var entry in rootEntries.Where(e => !partitions.ContainsKey(e.Key)))
             {
-                if (!partitions.ContainsKey(entry.Key))
-                    partitions[entry.Key] = CreatePartitionShell();
+                partitions[entry.Key] = CreatePartitionShell();
             }
 
-            foreach (var kv in nodeRoots)
+            foreach (var kv in nodeRoots.Where(pair => byId.ContainsKey(pair.Key)))
             {
-                if (!byId.TryGetValue(kv.Key, out var node))
-                    continue;
+                var node = byId[kv.Key];
 
                 if (kv.Value.Count == 1)
                 {
@@ -991,9 +985,9 @@ namespace CaseUco
 
                 if (sharedNodePolicy == "replicate-identical")
                 {
-                    foreach (var expandedRoot in kv.Value)
+                    foreach (var rootKey in kv.Value.Select(
+                        expandedRoot => RootKeyForExpanded(rootEntries, expandedRoot)))
                     {
-                        var rootKey = RootKeyForExpanded(rootEntries, expandedRoot);
                         IngestIntoPartition(partitions[rootKey], node);
                     }
                     continue;
@@ -1031,10 +1025,10 @@ namespace CaseUco
             var partitions = new Dictionary<string, CaseGraph>(StringComparer.Ordinal);
             var membership = new Dictionary<string, string>(StringComparer.Ordinal);
 
-            foreach (var obj in _objects)
+            foreach (var obj in _objects.Where(
+                o => o.TryGetValue("@id", out var idObj) && idObj is string))
             {
-                if (!obj.TryGetValue("@id", out var idObj) || !(idObj is string nodeId))
-                    continue;
+                var nodeId = (string)obj["@id"];
                 var key = boundaryKey(obj);
                 if (key == null)
                     continue;
@@ -1045,10 +1039,8 @@ namespace CaseUco
             }
 
             var byId = BuildNodeIndex();
-            foreach (var obj in _objects)
+            foreach (var obj in _objects.Where(IsRelationshipNode))
             {
-                if (!IsRelationshipNode(obj))
-                    continue;
                 var sourceId = FirstEndpointId(obj, "uco-core:source");
                 var targetId = FirstEndpointId(obj, "uco-core:target");
                 if (sourceId == null || targetId == null)
@@ -1067,19 +1059,20 @@ namespace CaseUco
                 {
                     if (!partitions.ContainsKey(partName))
                         partitions[partName] = CreatePartitionShell();
-                    foreach (var nid in new[] { sourceId, targetId })
+                    foreach (var nid in new[] { sourceId, targetId }.Where(id => id != null))
                     {
-                        if (nid != null && byId.TryGetValue(ExpandIri(nid), out var endpoint))
+                        if (byId.TryGetValue(ExpandIri(nid), out var endpoint))
                             IngestIntoPartition(partitions[partName], endpoint);
                     }
                     IngestIntoPartition(partitions[partName], obj);
                 }
             }
 
-            foreach (var sharedId in sharedIds)
+            foreach (var sharedNode in sharedIds
+                .Select(ExpandIri)
+                .Where(expanded => byId.ContainsKey(expanded))
+                .Select(expanded => byId[expanded]))
             {
-                if (!byId.TryGetValue(ExpandIri(sharedId), out var sharedNode))
-                    continue;
                 foreach (var partition in partitions.Values)
                     IngestIntoPartition(partition, sharedNode);
             }
@@ -1098,12 +1091,20 @@ namespace CaseUco
 
         private static string RootKeyForExpanded(List<(string Key, string Expanded)> rootEntries, string expandedRoot)
         {
-            foreach (var entry in rootEntries)
-            {
-                if (entry.Expanded == expandedRoot)
-                    return entry.Key;
-            }
+            foreach (var entry in rootEntries.Where(e => e.Expanded == expandedRoot))
+                return entry.Key;
             return expandedRoot;
+        }
+
+        /// <summary>
+        /// Combines path segments without dropping an earlier base when a later
+        /// segment is rooted (CodeQL cs/path-combine).
+        /// </summary>
+        private static string CombinePath(string basePath, string relativeOrAbsolute)
+        {
+            if (Path.IsPathRooted(relativeOrAbsolute))
+                return relativeOrAbsolute;
+            return Path.Combine(basePath, relativeOrAbsolute);
         }
 
         private static string NormalizeSharedNodePolicy(string policy)
@@ -1118,10 +1119,10 @@ namespace CaseUco
         private Dictionary<string, Dictionary<string, object>> BuildNodeIndex()
         {
             var byId = new Dictionary<string, Dictionary<string, object>>(StringComparer.Ordinal);
-            foreach (var obj in _objects)
+            foreach (var obj in _objects.Where(
+                o => o.TryGetValue("@id", out var idObj) && idObj is string))
             {
-                if (!obj.TryGetValue("@id", out var idObj) || !(idObj is string nodeId))
-                    continue;
+                var nodeId = (string)obj["@id"];
                 var expanded = ExpandIri(nodeId);
                 byId[expanded] = obj;
                 if (!byId.ContainsKey(nodeId))
@@ -1134,18 +1135,15 @@ namespace CaseUco
             Dictionary<string, Dictionary<string, object>> byId)
         {
             var reverse = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
-            foreach (var obj in _objects)
+            foreach (var obj in _objects.Where(
+                o => o.TryGetValue("@id", out var idObj) && idObj is string))
             {
-                if (!obj.TryGetValue("@id", out var idObj) || !(idObj is string ownerId))
-                    continue;
+                var ownerId = (string)obj["@id"];
                 var ownerExpanded = ExpandIri(ownerId);
-                foreach (var refId in CollectReferencedIds(obj))
+                foreach (var expanded in CollectReferencedIds(obj)
+                    .Select(ExpandIri)
+                    .Where(e => e != ownerExpanded && byId.ContainsKey(e)))
                 {
-                    var expanded = ExpandIri(refId);
-                    if (expanded == ownerExpanded)
-                        continue;
-                    if (!byId.ContainsKey(expanded))
-                        continue;
                     if (!reverse.TryGetValue(expanded, out var owners))
                     {
                         owners = new HashSet<string>(StringComparer.Ordinal);
@@ -1175,20 +1173,20 @@ namespace CaseUco
                 if (!byId.TryGetValue(current, out var node))
                     continue;
 
-                foreach (var refId in CollectReferencedIds(node))
+                foreach (var expanded in CollectReferencedIds(node)
+                    .Select(ExpandIri)
+                    .Where(e => byId.ContainsKey(e) && !visited.Contains(e)))
                 {
-                    var expanded = ExpandIri(refId);
-                    if (byId.ContainsKey(expanded) && !visited.Contains(expanded))
-                        queue.Enqueue(expanded);
+                    queue.Enqueue(expanded);
                 }
 
                 if (includeIncoming && reverseIndex != null
                     && reverseIndex.TryGetValue(current, out var referrers))
                 {
-                    foreach (var referrer in referrers)
+                    foreach (var referrer in referrers.Where(
+                        r => byId.ContainsKey(r) && !visited.Contains(r)))
                     {
-                        if (byId.ContainsKey(referrer) && !visited.Contains(referrer))
-                            queue.Enqueue(referrer);
+                        queue.Enqueue(referrer);
                     }
                 }
             }
@@ -1218,10 +1216,8 @@ namespace CaseUco
             {
                 if (dict.TryGetValue("@id", out var idObj) && idObj is string id && id.Length > 0)
                     yield return id;
-                foreach (var kv in dict)
+                foreach (var kv in dict.Where(pair => pair.Key != "@id"))
                 {
-                    if (kv.Key == "@id")
-                        continue;
                     foreach (var nested in WalkIdReferences(kv.Value))
                         yield return nested;
                 }
@@ -1252,15 +1248,9 @@ namespace CaseUco
         {
             if (!node.TryGetValue("@type", out var typeObj) || typeObj == null)
                 return false;
-            foreach (var typeStr in AsTypeList(typeObj))
-            {
-                if (typeStr == "uco-core:Relationship"
-                    || typeStr == "https://ontology.unifiedcyberontology.org/uco/core/Relationship")
-                {
-                    return true;
-                }
-            }
-            return false;
+            return AsTypeList(typeObj).Any(t =>
+                t == "uco-core:Relationship"
+                || t == "https://ontology.unifiedcyberontology.org/uco/core/Relationship");
         }
 
         private static string FirstEndpointId(Dictionary<string, object> node, string key)
@@ -1269,10 +1259,11 @@ namespace CaseUco
                 return null;
             if (value is Dictionary<string, object> dict && dict.TryGetValue("@id", out var idObj) && idObj is string id)
                 return id;
-            if (value is List<object> list && list.Count > 0)
+            if (value is List<object> list && list.Count > 0
+                && list[0] is Dictionary<string, object> first
+                && first.TryGetValue("@id", out var listId) && listId is string lid)
             {
-                if (list[0] is Dictionary<string, object> first && first.TryGetValue("@id", out var listId) && listId is string lid)
-                    return lid;
+                return lid;
             }
             if (value is IList ilist && ilist.Count > 0 && ilist[0] is Dictionary<string, object> iFirst
                 && iFirst.TryGetValue("@id", out var iidObj) && iidObj is string iid)

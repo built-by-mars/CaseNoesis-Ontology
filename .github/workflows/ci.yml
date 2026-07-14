@@ -202,15 +202,8 @@ jobs:
       - name: Run MCP server tests
         run: python -m pytest mcp_server/tests -v
 
-      - name: Run critic loop suite
-        env:
-          CASE_UCO_EXTENSIONS: legalproc,rico,cryptoinv,attack-technique:full,solveit,weapons,drugs,cac
-          CASE_UCO_MCP_READ_ROOTS: ${{ github.workspace }}
-          CASE_UCO_MCP_WRITE_ROOTS: ${{ github.workspace }}/artifacts/critic-write
-          CASE_UCO_CRITIC_SESSION_ROOT: ${{ github.workspace }}/artifacts/critic-write/critic-sessions
-          CASE_UCO_MCP_ALLOW_OVERWRITE: "1"
+      - name: Run critic unit tests
         run: |
-          mkdir -p artifacts/critic-write/critic-sessions evaluation/critic/reports
           python -m pytest \
             mcp_server/tests/test_critic.py \
             mcp_server/tests/test_critic_sessions.py \
@@ -219,6 +212,16 @@ jobs:
             mcp_server/tests/test_critic_fastmcp_sampling.py \
             mcp_server/tests/test_critic_file_lock_smoke.py \
             -v
+
+      - name: Run critic oracles and accepted repair replay
+        env:
+          CASE_UCO_EXTENSIONS: legalproc,rico,cryptoinv,attack-technique:full,solveit,weapons,drugs,cac
+          CASE_UCO_MCP_READ_ROOTS: ${{ github.workspace }}
+          CASE_UCO_MCP_WRITE_ROOTS: ${{ github.workspace }}/artifacts/critic-write
+          CASE_UCO_CRITIC_SESSION_ROOT: ${{ github.workspace }}/artifacts/critic-write/critic-sessions
+          CASE_UCO_MCP_ALLOW_OVERWRITE: "1"
+        run: |
+          mkdir -p artifacts/critic-write/critic-sessions evaluation/critic/reports
           PYTHONPATH=mcp_server python evaluation/critic/harness/run_oracles.py \
             --report evaluation/critic/reports/oracles-latest.json
           PYTHONPATH=mcp_server python evaluation/critic/harness/run_session_replay.py \

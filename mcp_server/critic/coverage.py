@@ -557,7 +557,6 @@ def _finding(
     evidence_kind: str = "source",
     verifier_rule_id: str | None = None,
 ) -> CriticFinding:
-    finding_id = make_stable_finding_id(rule_id, *target.semantic_parts(), *evidence[:1])
     # Keep identity semantic: rule + target primarily
     finding_id = make_stable_finding_id(rule_id, *target.semantic_parts())
     return CriticFinding(

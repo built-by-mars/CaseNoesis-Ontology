@@ -68,7 +68,6 @@ def test_maybe_sample_critic_string_messages_and_policy_gate(tmp_path, monkeypat
     import graph_validator
     from critic.sampling import FakeSampleContext, maybe_sample_critic
     from critic.sessions import start_critic_review
-    from graph_validator import GraphValidationReport
 
     fixtures = (
         Path(__file__).resolve().parent
@@ -91,7 +90,7 @@ def test_maybe_sample_critic_string_messages_and_policy_gate(tmp_path, monkeypat
     monkeypatch.setattr(
         graph_validator,
         "validate_graph_file",
-        lambda *a, **k: GraphValidationReport(
+        lambda *a, **k: graph_validator.GraphValidationReport(
             conforms=True,
             warning_count=0,
             violation_count=0,
