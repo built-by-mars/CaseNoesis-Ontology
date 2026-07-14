@@ -200,7 +200,11 @@ def _locked(session_id: str) -> Iterator[Path]:
 
 
 def _atomic_write_json(path: Path, data: dict[str, Any]) -> str:
-    """Atomically write JSON and return SHA-256 of the exact written bytes."""
+    """Atomically write JSON and return SHA-256 of the exact written bytes.
+
+    Always writes UTF-8 bytes in binary mode so Windows does not translate
+    ``\\n`` to ``\\r\\n`` (which would invalidate the digest).
+    """
 
     path.parent.mkdir(parents=True, exist_ok=True)
     raw = json.dumps(data, indent=2, sort_keys=True) + "\n"
@@ -208,8 +212,8 @@ def _atomic_write_json(path: Path, data: dict[str, Any]) -> str:
     digest = hashlib.sha256(encoded).hexdigest()
     fd, tmp_name = tempfile.mkstemp(prefix=path.name, dir=str(path.parent))
     try:
-        with os.fdopen(fd, "w", encoding="utf-8") as handle:
-            handle.write(raw)
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(encoded)
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(tmp_name, path)

@@ -2,13 +2,29 @@
 
 from __future__ import annotations
 
+import hashlib
 from pathlib import Path
 
 import graph_validator
 from critic.file_lock import FileLock, ensure_lock_file
-from critic.sessions import start_critic_review, submit_manual_critic_response
+from critic.sessions import (
+    _atomic_write_json,
+    start_critic_review,
+    submit_manual_critic_response,
+)
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "critic"
+
+
+def test_atomic_write_json_digest_matches_on_disk_bytes(tmp_path):
+    """Binary write so Windows CRLF translation cannot invalidate pass-file digests."""
+
+    path = tmp_path / "config-pass-1.json"
+    digest = _atomic_write_json(path, {"schema_version": "1.2.0", "ok": True})
+    raw = path.read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == digest
+    assert b"\r\n" not in raw
+    assert raw.endswith(b"\n")
 
 
 def test_file_lock_and_manual_session_smoke(tmp_path, monkeypatch):
