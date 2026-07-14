@@ -312,11 +312,11 @@ def _extra_ontology_hashes(paths: list[str] | None) -> dict[str, str]:
 
 
 def _project_root_for_config(cfg: dict[str, Any]) -> Path:
-    from graph_validator import PROJECT_ROOT
+    import graph_validator
 
     if cfg.get("project_root"):
         return Path(str(cfg["project_root"])).expanduser().resolve()
-    return PROJECT_ROOT
+    return graph_validator.PROJECT_ROOT
 
 
 def _resolve_and_hash_bundle(cfg: dict[str, Any]) -> dict[str, Any]:

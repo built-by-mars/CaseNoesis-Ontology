@@ -28,7 +28,6 @@ from critic.sessions import (
 )
 from critic_tools import (
     tool_start_critic_review_with_sampling,
-    tool_submit_critic_revision_with_sampling,
 )
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "critic"
@@ -159,9 +158,6 @@ def test_phantom_gate_markings_extracted_from_gold_graph():
 
 def test_marked_phantom_gate_sampling_blocked(workspace, monkeypatch):
     """Marked Phantom Gate–style graph: ctx.sample never called; prompt still returned."""
-
-    import asyncio
-    from critic_tools import tool_start_critic_review_with_sampling
 
     read, _ = workspace
     graph = _copy(read, MARKED_FIXTURE, "phantom-marked.jsonld")
@@ -561,11 +557,6 @@ def test_two_pass_sampled_vs_manual_completed_pass_equivalent(workspace, monkeyp
     p1 = _pass1_finding_payload(manual["prompt_package"])
     r1 = submit_manual_critic_response(manual["session_id"], p1)
     assert r1["completed_critic_responses"] == 1
-    model_ids = [
-        fid
-        for fid in (r1.get("prior_finding_ids") or [])
-        if fid.startswith("CRIT-")
-    ]
     # Recover model finding id from completed pass / ledger on revision.
     revised = submit_critic_revision(
         manual["session_id"], graph_path=str(graph), change_summary="confirm"
