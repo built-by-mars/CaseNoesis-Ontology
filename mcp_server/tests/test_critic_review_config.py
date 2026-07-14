@@ -155,6 +155,7 @@ def test_session_config_tamper_fails_submit(workspace):
     with pytest.raises(CriticSessionError) as exc:
         submit_manual_critic_response(sid, _empty_critic_response(started))
     assert exc.value.code in {
+        "critic_session_audit_reconcile_mismatch",
         "critic_session_prompt_rebuild_mismatch",
         "critic_session_hash_mismatch",
     }

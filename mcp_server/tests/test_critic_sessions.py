@@ -1056,3 +1056,178 @@ def test_interrupted_transaction_latest_audit_event_sha_fails(workspace):
         get_critic_review_status(sid)
     assert exc.value.code == "critic_session_incomplete_transaction"
 
+
+def _set_dotted(session: dict, dotted: str, value) -> None:
+    """Mutate a dotted path; ``passes[0].critic`` selects the first pass entry."""
+
+    parts = dotted.replace("passes[0]", "passes.0").split(".")
+    cur: object = session
+    for part in parts[:-1]:
+        if isinstance(cur, list):
+            cur = cur[int(part)]
+        else:
+            cur = cur[part]  # type: ignore[index]
+    last = parts[-1]
+    if isinstance(cur, list):
+        cur[int(last)] = value
+    else:
+        cur[last] = value  # type: ignore[index]
+
+
+@pytest.mark.parametrize(
+    "field_path,mutator",
+    [
+        ("prior_findings", lambda s: s.__setitem__("prior_findings", [])),
+        ("prior_finding_ids", lambda s: s.__setitem__("prior_finding_ids", [])),
+        (
+            "config.source_paths",
+            lambda s: _set_dotted(s, "config.source_paths", ["/tmp/forged"]),
+        ),
+        (
+            "config.coverage_contract_path",
+            lambda s: _set_dotted(
+                s, "config.coverage_contract_path", "/tmp/forged-contract.json"
+            ),
+        ),
+        (
+            "config.critic_scope",
+            lambda s: _set_dotted(s, "config.critic_scope", "investigation"),
+        ),
+        (
+            "config.extensions",
+            lambda s: _set_dotted(s, "config.extensions", ["forged-ext"]),
+        ),
+        (
+            "config.profiles",
+            lambda s: _set_dotted(s, "config.profiles", ["forged-profile"]),
+        ),
+        (
+            "config.report_output",
+            lambda s: _set_dotted(s, "config.report_output", "/tmp/forged-report.json"),
+        ),
+        (
+            "config.project_root",
+            lambda s: _set_dotted(s, "config.project_root", "/tmp"),
+        ),
+        (
+            "extend_approval_token",
+            lambda s: s.__setitem__("extend_approval_token", "forged-token"),
+        ),
+        (
+            "extend_approval_challenge",
+            lambda s: s.__setitem__("extend_approval_challenge", "forged-challenge"),
+        ),
+        (
+            "passes[0].critic",
+            lambda s: _set_dotted(
+                s, "passes[0].critic", {"status": "accepted", "finding_count": 0}
+            ),
+        ),
+        (
+            "passes[0].completed_pass",
+            lambda s: _set_dotted(
+                s,
+                "passes[0].completed_pass",
+                {"status": "accepted", "open_finding_ids": []},
+            ),
+        ),
+        (
+            "latest_prompt_package_hash",
+            lambda s: s.__setitem__("latest_prompt_package_hash", "a" * 64),
+        ),
+        (
+            "latest_review_request_sha256",
+            lambda s: s.__setitem__("latest_review_request_sha256", "b" * 64),
+        ),
+    ],
+)
+def test_full_session_projection_detects_omitted_field_tamper(
+    workspace, field_path, mutator
+):
+    """Any semantic session.json edit must break audit projection binding."""
+
+    sid, sess_dir = _two_pass_awaiting_revision(workspace)
+    session = json.loads((sess_dir / "session.json").read_text(encoding="utf-8"))
+    assert "latest_audit_event_sha256" in session
+    mutator(session)
+    _rewrite_session(sess_dir, session)
+
+    with pytest.raises(CriticSessionError) as exc:
+        get_critic_review_status(sid)
+    assert exc.value.code == "critic_session_audit_reconcile_mismatch"
+    assert "session_projection_sha256" in str(exc.value)
+
+
+def test_prior_findings_model_finding_cannot_be_erased_before_pass_two(workspace):
+    """Deleting a pass-1 model finding from session.json is detected; ledger keeps it."""
+
+    read, write = workspace
+    graph = _copy_gold(read)
+    started = start_critic_review(
+        graph_path=str(graph), critic_scope="graph", model_policy="manual"
+    )
+    sid = started["session_id"]
+    payload = _empty_critic_response(started)
+    payload["findings"] = [
+        {
+            "severity": "medium",
+            "category": "investigation_structure",
+            "confidence": 0.85,
+            "claim_type": "sampled_model_claim",
+            "target": {"node_id": "urn:example:investigation"},
+            "evidence": ["model observed structure"],
+            "rationale": "pass-1 model finding",
+            "recommended_change": "clarify object link",
+            "verification_method": "re-analyze",
+        }
+    ]
+    submit_manual_critic_response(sid, payload)
+
+    sess_dir = write / "critic-sessions" / sid
+    session = json.loads((sess_dir / "session.json").read_text(encoding="utf-8"))
+    prior = list(session.get("prior_findings") or [])
+    model_findings = [
+        f
+        for f in prior
+        if f.get("evidence_kind") == "critic_inference"
+        or f.get("claim_type") == "sampled_model_claim"
+    ]
+    assert model_findings, "expected pass-1 model finding in prior_findings"
+    model_id = model_findings[0]["finding_id"]
+    assert model_id in (session.get("prior_finding_ids") or [])
+
+    # Tamper: erase model finding from the live session projection only.
+    session["prior_findings"] = [
+        f for f in prior if f.get("finding_id") != model_id
+    ]
+    session["prior_finding_ids"] = [
+        fid for fid in (session.get("prior_finding_ids") or []) if fid != model_id
+    ]
+    _rewrite_session(sess_dir, session)
+
+    with pytest.raises(CriticSessionError) as exc:
+        get_critic_review_status(sid)
+    assert exc.value.code == "critic_session_audit_reconcile_mismatch"
+
+    with pytest.raises(CriticSessionError) as exc2:
+        submit_critic_revision(sid, graph_path=str(graph), change_summary="tamper")
+    assert exc2.value.code == "critic_session_audit_reconcile_mismatch"
+
+    # Untampered path: pass-1 model finding remains in the pass-2 ledger.
+    clean = start_critic_review(
+        graph_path=str(graph), critic_scope="graph", model_policy="manual"
+    )
+    clean_payload = _empty_critic_response(clean)
+    clean_payload["findings"] = list(payload["findings"])
+    submit_manual_critic_response(clean["session_id"], clean_payload)
+    revised = submit_critic_revision(
+        clean["session_id"], graph_path=str(graph), change_summary="confirm"
+    )
+    ledger = revised["assessment_ledger"]
+    model_open = [
+        fid
+        for fid, meta in ledger.items()
+        if meta.get("evidence_kind") == "critic_inference"
+    ]
+    assert model_open, "pass-1 model finding must remain in pass-2 lifecycle"
+

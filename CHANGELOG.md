@@ -13,10 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **#75/#76/#78 session↔audit reconciliation**: audit history is authoritative for
   pass-file digests and state; each transition binds `session_projection_sha256`
-  and stamps `latest_audit_event_sha256` (audit-then-save). Retargeting hashes
-  only in `session.json`, forging `state=finalized`, or altering outcome/
-  summary without a matching audit event fails closed
-  (`critic_session_audit_reconcile_mismatch` /
+  over the **complete** semantic `session.json` (excluding only
+  `latest_audit_event_sha256`) and stamps that event hash (audit-then-save).
+  Retargeting hashes, forging `state=finalized`, altering omitted control fields
+  (`prior_findings`, `config`, extend approval, pass metadata), or interrupting
+  the transaction fails closed (`critic_session_audit_reconcile_mismatch` /
   `critic_session_incomplete_transaction`). Integrity also gates extend/cancel.
 - **#75 bundle finalization**: re-resolve and rehash OWL/SHACL/bridge/auxiliary
   resources from disk at finalize; compare to `config-pass-N.json`; include

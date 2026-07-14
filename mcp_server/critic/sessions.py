@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import os
@@ -224,49 +225,16 @@ def _atomic_write_json(path: Path, data: dict[str, Any]) -> str:
 
 
 def _session_projection_payload(session: dict[str, Any]) -> dict[str, Any]:
-    """Canonical fields bound into each audit transition.
+    """Full semantic session bound into each audit transition.
 
-    Excludes ``latest_audit_event_sha256`` (set after the audit event is hashed).
+    Hashes the complete session object so newly added control fields are
+    protected automatically. Excludes only ``latest_audit_event_sha256``, which
+    is stamped after the audit event is hashed (back-reference).
     """
 
-    pass_file_hashes = {
-        str(k): str(v)
-        for k, v in sorted((session.get("pass_file_hashes") or {}).items())
-    }
-    passes_files: list[dict[str, Any]] = []
-    for item in session.get("passes") or []:
-        files = item.get("files") if isinstance(item, dict) else None
-        files_map = (
-            {str(k): str(v) for k, v in sorted(files.items())}
-            if isinstance(files, dict)
-            else {}
-        )
-        passes_files.append(
-            {
-                "pass_number": int(item.get("pass_number") or 0),
-                "files": files_map,
-            }
-        )
-    return {
-        "session_id": session.get("session_id"),
-        "state": session.get("state"),
-        "current_pass": session.get("current_pass"),
-        "model_policy": session.get("model_policy"),
-        "pass_file_hashes": pass_file_hashes,
-        "passes_files": passes_files,
-        "latest_artifact_hash": session.get("latest_artifact_hash"),
-        "latest_reviewed_hash": session.get("latest_reviewed_hash"),
-        "latest_reviewed_artifacts": session.get("latest_reviewed_artifacts"),
-        "latest_review_config_sha256": session.get("latest_review_config_sha256"),
-        "latest_artifact_set": session.get("latest_artifact_set"),
-        "additional_passes_approved": session.get("additional_passes_approved"),
-        "target_passes": session.get("target_passes"),
-        "completed_critic_responses": session.get("completed_critic_responses"),
-        "completed_deterministic_passes": session.get("completed_deterministic_passes"),
-        "final_outcome": session.get("final_outcome"),
-        "accepted": session.get("accepted"),
-        "latest_review_summary": session.get("latest_review_summary"),
-    }
+    projection = copy.deepcopy(session)
+    projection.pop("latest_audit_event_sha256", None)
+    return projection
 
 
 def _compute_session_projection_sha256(session: dict[str, Any]) -> str:
@@ -966,9 +934,8 @@ def _verify_session_integrity(directory: Path, session: dict[str, Any]) -> None:
         )
 
     expected_proj = _compute_session_projection_sha256(session)
-    if latest.get("session_projection_sha256") and (
-        latest["session_projection_sha256"] != expected_proj
-    ):
+    stored_proj = latest.get("session_projection_sha256")
+    if not stored_proj or stored_proj != expected_proj:
         raise CriticSessionError(
             "critic_session_audit_reconcile_mismatch",
             "session_projection_sha256",
