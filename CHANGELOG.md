@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `extensions/trajectories/`: candidate state-machine/trajectory extension (State, Transition, Trajectory, PhaseAssertion, StateMachineModel/TransitionEstimate) with an observed≠inferred SHACL firewall; validated via the SDK path with `extensions=['trajectories']`, `profiles=['time','prov-o']`.
+
 ## [1.22.4] - 2026-07-15
 
 SDK hardening from the v1.22.1 CTI review: provenance-manifest integrity across
