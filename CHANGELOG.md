@@ -21,6 +21,11 @@ for this tag).
 - README status badges for CI, CodeQL, Rust Security, Upstream Freshness, and
   the latest GitHub Release (live from Actions / shields.io).
 
+#### Security
+
+- CodeQL `py/empty-except`: log and skip when optional epistemic-tags vocab
+  cannot be read (`list_all_vocabs`).
+
 #### Critic / provenance
 
 - Bind `provenance_manifest_path` through resumable sessions (`SessionConfig`,

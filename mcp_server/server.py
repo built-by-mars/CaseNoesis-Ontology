@@ -1253,8 +1253,10 @@ def list_all_vocabs() -> list[dict]:
                     "description": payload.get("description", ""),
                 }
             )
-        except (OSError, json.JSONDecodeError):
-            pass
+        except (OSError, json.JSONDecodeError) as exc:
+            # Optional SDK vocab — omit on I/O or parse failure rather than
+            # failing list_all_vocabs for a non-core catalog.
+            _logger.debug("Skipping epistemic-tags vocabulary: %s", exc)
     return results
 
 
