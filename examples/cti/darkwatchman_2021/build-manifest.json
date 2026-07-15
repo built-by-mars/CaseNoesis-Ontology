@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.1",
+  "note": "Build/critic provenance sidecar \u2014 these paths are NOT domain subjects of the CTI investigation graph.",
+  "artifacts": [
+    {
+      "role": "builder_source",
+      "path": "examples/cti/darkwatchman_2021/build_darkwatchman.py",
+      "sha256": "d6f93aa4245bc1a4453933accf4bf3f9dff2d35f12aa4f009d6a4644f8064ee7"
+    },
+    {
+      "role": "modeling_guidance",
+      "path": "docs/recipes/cyber-threat-intelligence.md",
+      "sha256": "220c8b886576fbb0817a25e5ed130bf1333f2bb99dcab1e244171bd06b704adb"
+    },
+    {
+      "role": "output_artifact",
+      "path": "examples/cti/darkwatchman_2021/darkwatchman-prevailion.jsonld",
+      "sha256": "9087826ae96263e87c559123bade7dad400144305bc14ee9acd4dfb222b43edd"
+    }
+  ],
+  "builder": {
+    "path": "examples/cti/darkwatchman_2021/build_darkwatchman.py",
+    "sha256": "d6f93aa4245bc1a4453933accf4bf3f9dff2d35f12aa4f009d6a4644f8064ee7",
+    "role": "builder_source"
+  },
+  "recipe": {
+    "path": "docs/recipes/cyber-threat-intelligence.md",
+    "sha256": "220c8b886576fbb0817a25e5ed130bf1333f2bb99dcab1e244171bd06b704adb",
+    "role": "modeling_guidance"
+  },
+  "output": {
+    "path": "examples/cti/darkwatchman_2021/darkwatchman-prevailion.jsonld",
+    "sha256": "9087826ae96263e87c559123bade7dad400144305bc14ee9acd4dfb222b43edd",
+    "role": "output_artifact"
+  }
+}

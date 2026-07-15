@@ -12,6 +12,7 @@ import warnings
 import dataclasses
 from dataclasses import Field, dataclass, is_dataclass
 from datetime import date, datetime
+from pathlib import Path
 from typing import Any, Callable, TypeVar, Type
 
 T = TypeVar("T")
@@ -458,6 +459,10 @@ class CASEGraph:
     def validate(self, *, case_version: str = "case-1.4.0") -> str:
         """Validate this graph against CASE/UCO SHACL constraints.
 
+        Thin CLI wrapper that returns ``case_validate`` stdout. For the rich
+        structured report (extensions, profiles, concept coverage), use
+        :meth:`validate_report` or ``case_uco.validation.validate_graph_file``.
+
         Requires ``case-utils`` to be installed::
 
             pip install case-uco[validation]
@@ -489,6 +494,46 @@ class CASEGraph:
                 msg = result.stderr.strip() or result.stdout.strip()
                 raise RuntimeError(f"Validation failed:\n{msg}")
             return result.stdout
+        finally:
+            os.unlink(tmp)
+
+    def validate_report(
+        self,
+        *,
+        extensions: list[str] | None = None,
+        profiles: list[str] | None = None,
+        strict_concepts: bool = True,
+        project_root: str | Path | None = None,
+        extra_ontology_graphs: list[str | Path] | None = None,
+        force_rdfs_inference: bool = False,
+        allow_warning: bool = True,
+    ):
+        """Validate via the rich public API and return a structured report.
+
+        Writes a temporary JSON-LD file and delegates to
+        :func:`case_uco.validation.validate_graph_file`. Does not raise on
+        SHACL non-conformance — inspect ``report.conforms``.
+        """
+        import os
+        import tempfile
+
+        from case_uco.validation import validate_graph_file
+
+        fd, tmp = tempfile.mkstemp(suffix=".jsonld")
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
+                f.write(self.serialize())
+            kwargs: dict[str, Any] = {
+                "allow_warning": allow_warning,
+                "extensions": extensions,
+                "profiles": profiles,
+                "strict_concepts": strict_concepts,
+                "extra_ontology_graphs": extra_ontology_graphs,
+                "force_rdfs_inference": force_rdfs_inference,
+            }
+            if project_root is not None:
+                kwargs["project_root"] = Path(project_root)
+            return validate_graph_file(tmp, **kwargs)
         finally:
             os.unlink(tmp)
 

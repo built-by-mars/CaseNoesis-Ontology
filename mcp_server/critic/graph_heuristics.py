@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections import Counter, defaultdict
 from typing import Callable
 
@@ -43,13 +44,23 @@ from critic.canonical import (
 from critic.finding_diff import make_stable_finding_id
 from critic.models import CriticFinding, CriticTarget
 
-RULE_VERSION = "1.2.0"
+RULE_VERSION = "1.3.2"
 
 _ACTION_NAME_TOKENS = ("acquir", "extract", "analy", "hash", "image", "export")
 _ACQUISITION_NAME_TOKENS = ("acquir", "extract", "image", "export")
 _CUSTODY_NAME_TOKENS = ("custody", "transfer", "release", "receipt")
 _FORENSIC_IMAGE_TOKENS = ("e01", "dd", "ufed", "raw image", ".raw", "aff4", "ewf")
-_LINK_KINDS = frozenset({"Contained_Within", "Extracted_From", "Parent_Of"})
+_LINK_KINDS = frozenset({
+    "Contained_Within",
+    "Extracted_From",
+    "Parent_Of",
+    "Moved_To",
+    "Moved_From",
+    "Copied_To",
+    "Copied_From",
+    "Renamed_To",
+    "Renamed_From",
+})
 _PROVENANCE_KINDS = frozenset({"Extracted_From", "Created_By", "Contained_Within"})
 _DERIVED_KINDS = frozenset({"Extracted_From", "Contained_Within"})
 
@@ -91,6 +102,8 @@ def run_graph_heuristics(
         ("CRIT-H-CUSTODY-UNPAIRED", _custody_release_unpaired),
         ("CRIT-H-IMAGE-CONTAINER-MISMATCH", _physical_logical_image_mismatch),
         ("CRIT-H-CONTEXTUAL-COMPILATION-OMISSION", _final_artifact_not_in_compilation),
+        ("CRIT-H-ACTION-ROLE-CONTRADICTION", _action_role_contradiction),
+        ("CRIT-H-ORPHAN-TOP-LEVEL", _orphan_top_level_nodes),
     ]
     for rule_id, runner in runners:
         try:
@@ -138,6 +151,8 @@ _ALL_RULE_IDS = [
     "CRIT-H-CUSTODY-UNPAIRED",
     "CRIT-H-IMAGE-CONTAINER-MISMATCH",
     "CRIT-H-CONTEXTUAL-COMPILATION-OMISSION",
+    "CRIT-H-ACTION-ROLE-CONTRADICTION",
+    "CRIT-H-ORPHAN-TOP-LEVEL",
 ]
 
 
@@ -577,6 +592,7 @@ def _proxy_duplicate_artifacts(
         for hv in hashes:
             by_hash[hv.lower()].append(node.iri)
     linked = _linked_pairs(view, _LINK_KINDS)
+    linked |= _action_co_referenced_pairs(view)
     findings: list[CriticFinding] = []
     for hv, iris in by_hash.items():
         unique = sorted(set(iris))
@@ -600,13 +616,18 @@ def _proxy_duplicate_artifacts(
                         evidence=[f"hashValue={hv}"],
                         rationale=(
                             "Distinct File/Observable IRIs share the same ContentDataFacet "
-                            "hashValue without Contained_Within/Extracted_From/Parent_Of."
+                            "hashValue without Contained_Within/Extracted_From/Parent_Of "
+                            "or a shared Action object/result/instrument link."
                         ),
                         recommended_change=(
-                            "Link proxies with a governed containment/extraction relationship "
-                            "or collapse duplicate nodes."
+                            "Link proxies with a governed containment/extraction relationship, "
+                            "connect them via the install/move Action that relates the "
+                            "instances, or collapse duplicate nodes."
                         ),
-                        verification_method="Group ContentDataFacet hashValue; check link kinds.",
+                        verification_method=(
+                            "Group ContentDataFacet hashValue; check link kinds and "
+                            "shared Action endpoints."
+                        ),
                     )
                 )
     return findings, examined
@@ -615,7 +636,16 @@ def _proxy_duplicate_artifacts(
 def _derived_without_hash(
     view: CanonicalGraphView,
 ) -> tuple[list[CriticFinding], int]:
+    """Flag derived artifacts lacking digests.
+
+    Forensic acquisition results without a digest remain high-severity.
+    CTI-style contained/extracted artifacts that are otherwise identifiable
+    (name/filename + inbound Contained_Within/Extracted_From) degrade to
+    medium completeness warnings so builders are not forced to invent hashes
+    or weaken source-faithful containment relationships.
+    """
     derived = _derived_file_iris(view)
+    inbound_prov = _inbound_provenance_targets(view)
     findings: list[CriticFinding] = []
     examined = 0
     for iri in sorted(derived):
@@ -624,6 +654,51 @@ def _derived_without_hash(
             continue
         examined += 1
         if _node_hash_values(view, node):
+            continue
+        identifiable = _node_has_accountable_identity(node)
+        has_provenance = iri in inbound_prov
+        tags = {t.lower() for t in node.literals(IRI_TAG)}
+        hash_not_published = "hash-status:not-published" in tags or (
+            "source-bytes:not-acquired" in tags
+        )
+        if (identifiable and has_provenance) or hash_not_published:
+            evidence = [
+                "derived_without_ContentDataFacet_hashValue",
+            ]
+            if identifiable:
+                evidence.append("accountable_identity_present")
+            if has_provenance:
+                evidence.append("inbound_containment_or_extraction_present")
+            if hash_not_published:
+                evidence.append("hash-status:not-published_or_source-bytes:not-acquired")
+            findings.append(
+                _finding(
+                    rule_id="CRIT-H-DERIVED-NO-HASH",
+                    severity="medium",
+                    category="provenance",
+                    target=CriticTarget(
+                        node_id=iri,
+                        predicate=IRI_HASH_VALUE,
+                        json_pointer=node.location.json_pointer,
+                        path=node.location.path,
+                    ),
+                    evidence=evidence,
+                    rationale=(
+                        "A derived File/Observable lacks a ContentDataFacet hashValue, "
+                        "but CTI-accountable identity/containment or an explicit "
+                        "hash-status:not-published / source-bytes:not-acquired tag "
+                        "explains the gap."
+                    ),
+                    recommended_change=(
+                        "Attach a digest when bytes are available; otherwise keep "
+                        "source-faithful Contained_Within/Extracted_From and tag "
+                        "hash-status:not-published (do not invent digests)."
+                    ),
+                    verification_method=(
+                        "hashValue absent; identity/provenance or hash-status tag present."
+                    ),
+                )
+            )
             continue
         findings.append(
             _finding(
@@ -902,7 +977,206 @@ def _final_artifact_not_in_compilation(
     return findings, examined
 
 
+def _action_role_contradiction(
+    view: CanonicalGraphView,
+) -> tuple[list[CriticFinding], int]:
+    """Flag actions whose name implies a victim/user role but performer is an actor."""
+
+    victim_tokens = (
+        "victim",
+        "user opens",
+        "user open",
+        "recipient",
+        "target opens",
+        "user executes",
+        "user execution",
+    )
+    actor_tokens = (
+        "threat-actor",
+        "threat actor",
+        "operator",
+        "apt",
+        "adversary",
+        "attacker",
+    )
+    findings: list[CriticFinding] = []
+    examined = 0
+    for node in view.iter_nodes():
+        if not _is_action_node(node):
+            continue
+        examined += 1
+        names = [n.lower() for n in node.literals(IRI_NAME)]
+        if not any(any(tok in name for tok in victim_tokens) for name in names):
+            continue
+        for pref in node.refs(IRI_PERFORMER):
+            performer = view.get(pref)
+            if not performer:
+                continue
+            labels = [x.lower() for x in performer.literals(IRI_NAME)]
+            tags = [x.lower() for x in performer.literals(IRI_TAG)]
+            hay = " ".join(labels + tags)
+            if any(tok in hay for tok in actor_tokens):
+                findings.append(
+                    _finding(
+                        rule_id="CRIT-H-ACTION-ROLE-CONTRADICTION",
+                        severity="high",
+                        category="action_grammar",
+                        target=CriticTarget(
+                            node_id=node.iri,
+                            predicate=IRI_PERFORMER,
+                            counterpart_id=pref,
+                            json_pointer=node.location.json_pointer,
+                            path=node.location.path,
+                        ),
+                        evidence=[
+                            f"action_name={names[0] if names else ''}",
+                            f"performer={labels[0] if labels else pref}",
+                        ],
+                        rationale=(
+                            "Action name implies a victim/user execution role, but "
+                            "performer is tagged/named as a threat actor/operator."
+                        ),
+                        recommended_change=(
+                            "Omit performer, or assign the victim/user as performer; "
+                            "keep the adversary as campaign participant if needed."
+                        ),
+                        verification_method=(
+                            "Action name victim/user tokens vs performer name/tag "
+                            "actor tokens."
+                        ),
+                    )
+                )
+                break
+    return findings, examined
+
+
+def _orphan_top_level_nodes(
+    view: CanonicalGraphView,
+) -> tuple[list[CriticFinding], int]:
+    """Report top-level @graph nodes not reachable from Investigation/compilation roots."""
+
+    _TOP_LEVEL = re.compile(r"^/@graph/\d+$")
+    _IRI_GROUPING = "https://ontology.unifiedcyberontology.org/uco/core/Grouping"
+    _IRI_ANNOTATION = "https://ontology.unifiedcyberontology.org/uco/core/Annotation"
+    _IRI_EVENT = "https://ontology.unifiedcyberontology.org/uco/core/Event"
+    _IRI_EVENT_CONTEXT = (
+        "https://ontology.unifiedcyberontology.org/uco/core/eventContext"
+    )
+
+    roots = set()
+    for node in view.iter_nodes():
+        if node.has_type(
+            IRI_INVESTIGATION,
+            IRI_PROVENANCE_RECORD,
+            IRI_CONTEXTUAL_COMPILATION,
+            _IRI_GROUPING,
+        ):
+            roots.add(node.iri)
+            roots.update(node.refs(IRI_OBJECT))
+
+    reachable = set(roots)
+    changed = True
+    while changed:
+        changed = False
+        before = len(reachable)
+        for node in view.iter_nodes():
+            if node.has_type(IRI_RELATIONSHIP):
+                srcs = set(node.refs(IRI_SOURCE))
+                tgts = set(node.refs(IRI_TARGET))
+                if (srcs & reachable) or (tgts & reachable):
+                    reachable.update(srcs)
+                    reachable.update(tgts)
+                    reachable.add(node.iri)
+            # Expand membership / annotation / event context from reached nodes
+            if node.iri in reachable:
+                reachable.update(node.refs(IRI_OBJECT))
+                reachable.update(node.refs(_IRI_EVENT_CONTEXT))
+                if _is_action_node(node):
+                    reachable.update(node.refs(IRI_PERFORMER))
+                    reachable.update(node.refs(IRI_INSTRUMENT))
+                    reachable.update(node.refs(IRI_ACTION_OBJECT))
+                    reachable.update(node.refs(IRI_ACTION_RESULT))
+            if node.has_type(_IRI_ANNOTATION, _IRI_GROUPING, _IRI_EVENT):
+                about = set(node.refs(IRI_OBJECT)) | set(node.refs(_IRI_EVENT_CONTEXT))
+                if node.iri in reachable or (about & reachable):
+                    reachable.add(node.iri)
+                    reachable.update(about)
+        if len(reachable) > before:
+            changed = True
+
+    findings: list[CriticFinding] = []
+    examined = 0
+    orphans: list[str] = []
+    for node in view.iter_nodes():
+        pointer = node.location.json_pointer or ""
+        # Nested facet/hash/registry-value expansions are not independent subjects
+        if not _TOP_LEVEL.match(pointer):
+            continue
+        if node.has_type(IRI_RELATIONSHIP):
+            continue
+        if node.has_type(
+            IRI_INVESTIGATION, IRI_PROVENANCE_RECORD, IRI_CONTEXTUAL_COMPILATION
+        ):
+            continue
+        if any("Facet" in t for t in node.types):
+            continue
+        examined += 1
+        if node.iri not in reachable:
+            orphans.append(node.iri)
+
+    for iri in orphans[:25]:
+        node = view.get(iri)
+        if not node:
+            continue
+        findings.append(
+            _finding(
+                rule_id="CRIT-H-ORPHAN-TOP-LEVEL",
+                severity="medium",
+                category="investigation_structure",
+                target=CriticTarget(
+                    node_id=iri,
+                    json_pointer=node.location.json_pointer,
+                    path=node.location.path,
+                ),
+                evidence=[
+                    f"orphan_count={len(orphans)}",
+                    f"reachable_count={len(reachable)}",
+                    f"examined_top_level={examined}",
+                ],
+                rationale=(
+                    "Top-level @graph node is not reachable from any Investigation / "
+                    "ProvenanceRecord / ContextualCompilation / Grouping via object "
+                    "membership, annotation/event links, or connecting relationships."
+                ),
+                recommended_change=(
+                    "Add a relationship or compilation membership, or nest under a "
+                    "contextual compilation that is itself investigation-linked."
+                ),
+                verification_method=(
+                    "BFS from investigation/compilation/grouping roots across object, "
+                    "annotation, eventContext, action endpoint, and relationship edges; "
+                    "only /@graph/N nodes are examined."
+                ),
+            )
+        )
+    return findings, examined
+
+
 # --- helpers -----------------------------------------------------------------
+
+
+def _node_has_accountable_identity(node: CanonicalNode) -> bool:
+    if node.literals(IRI_NAME):
+        return True
+    raw = node.raw_json or {}
+    for facet in raw.get("uco-core:hasFacet") or []:
+        if not isinstance(facet, dict):
+            continue
+        if facet.get("uco-observable:fileName") or facet.get("uco-observable:filePath"):
+            return True
+        if facet.get("uco-observable:sizeInBytes") is not None:
+            return True
+    return False
 
 
 def _is_action_node(node: CanonicalNode) -> bool:
@@ -927,6 +1201,24 @@ def _linked_pairs(view: CanonicalGraphView, kinds: frozenset[str]) -> set[frozen
         for src in node.refs(IRI_SOURCE):
             for tgt in node.refs(IRI_TARGET):
                 pairs.add(frozenset({src, tgt}))
+    return pairs
+
+
+def _action_co_referenced_pairs(view: CanonicalGraphView) -> set[frozenset[str]]:
+    """Pairs that share object/result/instrument roles on the same Action."""
+
+    pairs: set[frozenset[str]] = set()
+    for node in view.iter_nodes():
+        if not _is_action_node(node):
+            continue
+        endpoints = sorted(
+            set(node.refs(IRI_ACTION_OBJECT))
+            | set(node.refs(IRI_ACTION_RESULT))
+            | set(node.refs(IRI_INSTRUMENT))
+        )
+        for i, left in enumerate(endpoints):
+            for right in endpoints[i + 1 :]:
+                pairs.add(frozenset({left, right}))
     return pairs
 
 

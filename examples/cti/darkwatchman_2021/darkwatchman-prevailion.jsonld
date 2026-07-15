@@ -1,0 +1,3534 @@
+{
+  "@context": {
+  "case-investigation": "https://ontology.caseontology.org/case/investigation/",
+  "uco-action": "https://ontology.unifiedcyberontology.org/uco/action/",
+  "uco-core": "https://ontology.unifiedcyberontology.org/uco/core/",
+  "uco-identity": "https://ontology.unifiedcyberontology.org/uco/identity/",
+  "uco-observable": "https://ontology.unifiedcyberontology.org/uco/observable/",
+  "uco-tool": "https://ontology.unifiedcyberontology.org/uco/tool/",
+  "uco-types": "https://ontology.unifiedcyberontology.org/uco/types/",
+  "uco-configuration": "https://ontology.unifiedcyberontology.org/uco/configuration/",
+  "uco-pattern": "https://ontology.unifiedcyberontology.org/uco/pattern/",
+  "xsd": "http://www.w3.org/2001/XMLSchema#"
+},
+  "@graph": [
+    {
+      "@id": "urn:uuid:c3b9e280-e80a-51c2-848b-3c6d9e933877",
+      "@type": "uco-identity:Organization",
+      "uco-core:name": "Prevailion",
+      "uco-core:description": "Publisher; Adversarial Counterintelligence Team (PACT)."
+    },
+    {
+      "@id": "urn:uuid:0c7415f9-2b59-5e27-99f9-46a17f53f652",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Matt Stafford",
+      "uco-core:description": "Prevailion PACT analyst; co-author."
+    },
+    {
+      "@id": "urn:uuid:c15a12b5-d7f5-59c2-a205-0934b33b439e",
+      "@type": "uco-identity:Person",
+      "uco-core:name": "Sherman Smith",
+      "uco-core:description": "Prevailion PACT analyst; co-author."
+    },
+    {
+      "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "DarkWatchman: A new evolution in fileless techniques.",
+      "uco-core:description": "Prevailion PACT blog post published 2021-12-14. Live URL https://www.prevailion.com/darkwatchman-new-fileless-techniques/; archival capture https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/. Authors: Matt Stafford and Sherman Smith. Attribution of the operators was not possible per the report's closing analysis.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:0975b6ee-09af-52e0-8b5a-98ce4e176e65",
+          "@type": "uco-observable:URLFacet",
+          "uco-observable:fullValue": "https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:61840d82-5a3b-5171-a270-2040ad2e4a09",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Internet Archive Wayback Machine capture"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:20a2821b-39fe-5f81-83f9-27dbdd936b23",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann authorship",
+      "uco-core:statement": "Report authored by Matt Stafford and Sherman Smith; published by Prevailion PACT.",
+      "uco-core:description": "Report authored by Matt Stafford and Sherman Smith; published by Prevailion PACT.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        },
+        {
+          "@id": "urn:uuid:0c7415f9-2b59-5e27-99f9-46a17f53f652"
+        },
+        {
+          "@id": "urn:uuid:c15a12b5-d7f5-59c2-a205-0934b33b439e"
+        },
+        {
+          "@id": "urn:uuid:c3b9e280-e80a-51c2-848b-3c6d9e933877"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:5ed1d7c7-d38e-513a-9415-19f2736c0e6a",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Prevailion DarkWatchman report"
+        }
+      ],
+      "uco-core:tag": [
+        "provenance:publication"
+      ]
+    },
+    {
+      "@id": "urn:uuid:78c3253c-e304-597e-9a47-eba024f14fa6",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "01-figure-1.png",
+      "uco-core:description": "Figure 1 \u2014 spoofed email headers: From/Reply-To/Return-Path mail@ponyexpress.ru; Date 2021-11-15 06:18:39 +0300.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:e67fc4ca-e6e2-5f21-92e2-6cebf079e71c",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "01-figure-1.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "55766"
+          }
+        },
+        {
+          "@id": "urn:uuid:1c396f57-93f2-5b96-a1de-c5f1f2b762b8",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:imageCompressionMethod": "PNG",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "790"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "346"
+          }
+        },
+        {
+          "@id": "urn:uuid:962f074e-cfd1-5da4-9e33-7a167dd2b398",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:e7f76fa1-0012-5aeb-9d8b-64c407fb1e2a",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "a0305a15155fccaa2a824d1a15234649664e70df1b62cd9f85554ca153119914"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:53f27964-4d83-5476-a2f8-52c6d1ca16da",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:78c3253c-e304-597e-9a47-eba024f14fa6"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic"
+    },
+    {
+      "@id": "urn:uuid:cfe940a5-b684-5d72-a387-5ddaac30c38b",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "02-figure-2.png",
+      "uco-core:description": "Figure 2 \u2014 true sender: Hop 1 rentbikespb.ru / 45.156.27.245 blacklisted.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:bb2450f2-c5de-5fb6-84d9-318669f5afb1",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "02-figure-2.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "9812"
+          }
+        },
+        {
+          "@id": "urn:uuid:d3a71abd-3898-51bc-9ed5-826168bc7b19",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:imageCompressionMethod": "PNG",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "799"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "63"
+          }
+        },
+        {
+          "@id": "urn:uuid:0f3d3e88-582e-5068-ba52-f4650c3c403b",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:5e470d9e-9970-594e-9e07-db5cbfb74038",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "b0ab4ae994fb3b79e2d2f2c9e25d47f0da9c2852604d5021c426c9d504c2f953"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ff302cc6-efee-5fac-a2a3-e3643fa3a711",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:cfe940a5-b684-5d72-a387-5ddaac30c38b"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic"
+    },
+    {
+      "@id": "urn:uuid:883d5568-845e-5b32-96a1-ec4d74f53dca",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "03-figure-3.png",
+      "uco-core:description": "Figure 3 \u2014 Relay Information: rentbikespb.ru \u2192 jino.ru ESMTPS 2021-11-15 03:48:51 UTC.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:0c735d22-b01c-5e58-bac8-a2b3ae17cb7b",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "03-figure-3.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "149593"
+          }
+        },
+        {
+          "@id": "urn:uuid:a5929a84-786f-5e4c-ba67-c6ec238a0330",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:imageCompressionMethod": "PNG",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1999"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "714"
+          }
+        },
+        {
+          "@id": "urn:uuid:7f56b3a4-5424-5ff6-af50-57ab293e9457",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:fc75ebc1-f3ac-5df4-9a51-fdc9e1c2d431",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "8206b0c9d7cac932436580a822b5cd8dc5f086b850553d6d0498c744d56f199e"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b7735506-215c-5e50-b215-a7b7b20e8e01",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:883d5568-845e-5b32-96a1-ec4d74f53dca"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic"
+    },
+    {
+      "@id": "urn:uuid:87cf6d2d-1d28-5317-beca-798a13250e07",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "04-figure-4.png",
+      "uco-core:description": "Figure 4 \u2014 Outlook Pony Express lure with ZIP attachment \u041d\u0430\u043a\u043b\u0430\u0434\u043d\u0430\u044f \u211612-6317-3621.zip (ANY.RUN).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:9669cd6d-b53c-574f-85a1-ed91d91c7bc0",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "04-figure-4.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "546940"
+          }
+        },
+        {
+          "@id": "urn:uuid:ee00a43e-0ebb-55cd-969a-c8f227e2af4c",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:imageCompressionMethod": "PNG",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1999"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "1064"
+          }
+        },
+        {
+          "@id": "urn:uuid:29fdb921-6144-54a5-adb5-5e3327e774d6",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:41ebb027-cad3-50b5-86f8-c67a7461cb5a",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "2fa81bd39831b39f073bbc72634b31700058f33c562c2a535d153934d0d5c384"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:92ef887e-19e7-5d26-82be-437799cdbed0",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:87cf6d2d-1d28-5317-beca-798a13250e07"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic"
+    },
+    {
+      "@id": "urn:uuid:c41dfed8-53e9-5f2a-9b97-7ea8db4eb50c",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "05-figure-5.png",
+      "uco-core:description": "Figure 5 \u2014 Forum victim post: NOD blocked bfdb1290.top / 91.208.206.44.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:a040fdee-cc8c-5433-b372-1f967bde7bca",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "05-figure-5.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "84554"
+          }
+        },
+        {
+          "@id": "urn:uuid:1dd193a4-63eb-52a3-9dc0-e308db5ca6ba",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:imageCompressionMethod": "PNG",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1474"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "474"
+          }
+        },
+        {
+          "@id": "urn:uuid:18bc9671-77cb-5519-b021-5f256540a771",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:77786511-667b-5faf-9ab0-684cc29073c9",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "90b65b5c19a8e6bffa3900dff6fda64227f2864bc70ad81fbcf1463ebd49153c"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b47a5e25-f37f-509c-b300-49b9d65e35dd",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:c41dfed8-53e9-5f2a-9b97-7ea8db4eb50c"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic"
+    },
+    {
+      "@id": "urn:uuid:87cc5641-3913-536a-a3e8-e34d37220de0",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "06-figure-6.png",
+      "uco-core:description": "Figure 6 \u2014 Forum reply: attachment was a hidden-extension .exe.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:eff2bbf6-9328-5d25-9bb5-f1021462c222",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "06-figure-6.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "29778"
+          }
+        },
+        {
+          "@id": "urn:uuid:9fd55ab3-5f96-5d9e-a5a7-734dd17dfb00",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:imageCompressionMethod": "PNG",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1382"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "196"
+          }
+        },
+        {
+          "@id": "urn:uuid:1f9f2bf7-54d8-5309-819e-c6a590e52856",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:bf9d2275-dc4d-532e-8dc6-a4d83d67fa33",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "5b7bbb069ff25fb1e80ca875c840f2518812caa0b0b899e6a76b4ca4c9398f90"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:be4f215e-5437-5c99-8af9-b2d1543962e0",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:87cc5641-3913-536a-a3e8-e34d37220de0"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic"
+    },
+    {
+      "@id": "urn:uuid:34f61f39-491c-5b7c-ae41-066eaaee208a",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "07-figure-7.png",
+      "uco-core:description": "Figure 7 \u2014 Forum reply: payload found in registry, would not uninstall.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:2c2b14e8-0304-5fdc-bb33-11e8df9f1b31",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "07-figure-7.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "21928"
+          }
+        },
+        {
+          "@id": "urn:uuid:af19afa8-60d7-519c-9fe7-c67bb41d380b",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:imageCompressionMethod": "PNG",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1260"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "188"
+          }
+        },
+        {
+          "@id": "urn:uuid:d2abfb9c-1024-5295-8c73-a69f14f34ef3",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:ea997e95-811a-5832-8d53-ba7cc0679df1",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "24c953ee296ea6e191cab4b6389d18f42c4a7c94253ae81e238a7459c33fa14a"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ec5db66f-1122-5a7b-a593-1517938d4861",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:34f61f39-491c-5b7c-ae41-066eaaee208a"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic"
+    },
+    {
+      "@id": "urn:uuid:07faa761-eb9a-50ca-80b5-57ecf0114c92",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "08-figure-8.png",
+      "uco-core:description": "Figure 8 \u2014 WinRAR SFX contains 134121811.js and 2204722946; Setup=134121811.js \"%sfxname%\", Path=%TEMP%.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:cf366914-a5c5-5be2-ae41-ee547a39a355",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "08-figure-8.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "266241"
+          }
+        },
+        {
+          "@id": "urn:uuid:a7dff8c0-754a-554a-8e99-0b46b484572f",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:imageCompressionMethod": "PNG",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1974"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "530"
+          }
+        },
+        {
+          "@id": "urn:uuid:07c06b3a-3151-5f7d-871e-ebf8e23bf319",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:5eff0916-5e7e-5ad4-9485-1310fda66ef8",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "980fe824078a0d3227e504088c157da8d5492cad27583cd664a4c98317e81562"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:42af7845-253a-5f82-b28c-f192f6d23a07",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:07faa761-eb9a-50ca-80b5-57ecf0114c92"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic"
+    },
+    {
+      "@id": "urn:uuid:a4c25826-d239-5cdb-ab0a-7bc87c12bcc4",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "09-figure-12-scheduled-task.png",
+      "uco-core:description": "Figure 12 \u2014 Task Scheduler: GUID task 26b799fa-\u2026 at logon of DESKTOP-JGLLJLD\\admin.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:828f93c1-c9a3-5b03-816c-438d8d805e42",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "09-figure-12-scheduled-task.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "448278"
+          }
+        },
+        {
+          "@id": "urn:uuid:bdac75d6-43ba-5387-a2b1-74942a4cc392",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:imageCompressionMethod": "PNG",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1999"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "1063"
+          }
+        },
+        {
+          "@id": "urn:uuid:6a3ebe1c-3019-53b7-9997-8da7b0b0ce19",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:0d0f72da-6d94-5a9c-b4c9-a59cf53de8b7",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "36e2ce081916af208ee68d27384df528187ab220147518102e70709864130abb"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:749e818f-ab61-5cd9-bd2e-40819e685279",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:a4c25826-d239-5cdb-ab0a-7bc87c12bcc4"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic"
+    },
+    {
+      "@id": "urn:uuid:5dc2c912-7b72-5f85-81c3-af204f58270d",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "10-figure-19-keylogger-powershell.png",
+      "uco-core:description": "Figure 19 \u2014 Base64 PowerShell decode of registry-stored C# keylogger.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:15800b35-0d02-5f34-9a19-a89ad16898c6",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "10-figure-19-keylogger-powershell.png",
+          "uco-observable:extension": "png",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "771396"
+          }
+        },
+        {
+          "@id": "urn:uuid:0fc38f7b-7c90-59f0-b6ba-109b7da967f1",
+          "@type": "uco-observable:RasterPictureFacet",
+          "uco-observable:imageCompressionMethod": "PNG",
+          "uco-observable:pictureWidth": {
+            "@type": "xsd:integer",
+            "@value": "1916"
+          },
+          "uco-observable:pictureHeight": {
+            "@type": "xsd:integer",
+            "@value": "1678"
+          }
+        },
+        {
+          "@id": "urn:uuid:a38676e0-9e9e-5978-91f8-571fa8b8af26",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:348f5901-6746-5173-b3a7-02841cafb3e5",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "e848ea803099b47a99767242b50437408685ebd05715d6a1ecfd235487613cf8"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:b05dc1c6-c0f1-57c6-811e-d9cedf761460",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:5dc2c912-7b72-5f85-81c3-af204f58270d"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "graphic"
+    },
+    {
+      "@id": "urn:uuid:44976b7a-022c-5fa7-a4d7-8058fb8cdd36",
+      "@type": "uco-core:Grouping",
+      "uco-core:name": "DarkWatchman activity cluster",
+      "uco-core:context": [
+        "Unattributed DarkWatchman activity analyzed by Prevailion PACT. Local analytic grouping \u2014 not a named attributed organization."
+      ],
+      "uco-core:description": "Activity cluster for DarkWatchman reporting. PACT stated attribution was not possible. Do not treat this Grouping as an action performer.",
+      "uco-core:tag": [
+        "epistemic:unattributed",
+        "activity-cluster"
+      ],
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        },
+        {
+          "@id": "urn:uuid:f8e2a8c5-32dc-5ea0-b088-e69d32a4b342"
+        },
+        {
+          "@id": "urn:uuid:cc0f4e3c-e36e-5f30-94d3-6bb0eba09ba0"
+        },
+        {
+          "@id": "urn:uuid:7e33062a-1d83-5ac5-8626-1832f0d2a534"
+        },
+        {
+          "@id": "urn:uuid:cc6a5980-d28d-529d-bc8a-611549b6fe92"
+        },
+        {
+          "@id": "urn:uuid:6bf634ba-9e27-5d4e-b139-24b44b04d24b"
+        },
+        {
+          "@id": "urn:uuid:69df071d-e918-50f9-89b2-fbf24d225dd5"
+        },
+        {
+          "@id": "urn:uuid:80c89cca-9e5c-5197-9f8f-f603036a635b"
+        },
+        {
+          "@id": "urn:uuid:05acd868-e9d2-5d67-9f05-97d6efeab80d"
+        },
+        {
+          "@id": "urn:uuid:2abe791f-6dc3-51cb-a73a-e35275b5c2c8"
+        },
+        {
+          "@id": "urn:uuid:4d43eb48-2b27-51fd-9ea3-2c10f43777ee"
+        },
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        },
+        {
+          "@id": "urn:uuid:3c293b44-fff4-5109-a9ff-53f333898eef"
+        },
+        {
+          "@id": "urn:uuid:d8747300-e49e-5356-9790-6bdc3e844c30"
+        },
+        {
+          "@id": "urn:uuid:df36e54e-9bb0-5fb0-91f8-c289033bce99"
+        },
+        {
+          "@id": "urn:uuid:fd57914d-9e30-5738-9129-0eb661f50c2d"
+        },
+        {
+          "@id": "urn:uuid:3345d095-1686-55a6-8be6-e5f065b7df74"
+        },
+        {
+          "@id": "urn:uuid:803d6c01-1cbd-5261-b583-3669c66d1c3e"
+        },
+        {
+          "@id": "urn:uuid:6b401f7a-0a14-5dec-84bf-1c5452a4d1cf"
+        },
+        {
+          "@id": "urn:uuid:074c3abd-0a1c-57e5-a295-044f29079772"
+        },
+        {
+          "@id": "urn:uuid:c5dd8d7d-fcc8-5bfe-b33b-be2b5db391c0"
+        },
+        {
+          "@id": "urn:uuid:9ba0c1e8-76ac-573f-96dd-472c46ab198a"
+        },
+        {
+          "@id": "urn:uuid:dbfcc2a7-c4d9-58d3-8bd6-1820af467e0f"
+        },
+        {
+          "@id": "urn:uuid:69066ae6-158b-532e-a26b-b8c9f4d3b31e"
+        },
+        {
+          "@id": "urn:uuid:74f9b120-bfa9-5243-9b93-93a32c0beac8"
+        },
+        {
+          "@id": "urn:uuid:30bf7791-569e-5409-a48b-d2447e0da4b3"
+        },
+        {
+          "@id": "urn:uuid:dc79b78e-8995-5531-b719-4c86d8993468"
+        },
+        {
+          "@id": "urn:uuid:a699fec9-6eaf-5481-9f06-602ef7ff9b38"
+        },
+        {
+          "@id": "urn:uuid:d512ee41-c7c3-5710-8cc1-eb4af656278d"
+        },
+        {
+          "@id": "urn:uuid:d4a5de13-5801-5479-9268-5c80e75c7914"
+        },
+        {
+          "@id": "urn:uuid:4c723e25-ba3e-51c4-bda7-0cd2c1eb048a"
+        },
+        {
+          "@id": "urn:uuid:64d9382d-8bca-5df9-abdc-83de3be6c929"
+        },
+        {
+          "@id": "urn:uuid:0131145a-9fc1-5bd2-bfd3-52eac540e356"
+        },
+        {
+          "@id": "urn:uuid:7735b4bb-668e-5931-ba46-aa08992c61c5"
+        },
+        {
+          "@id": "urn:uuid:9654ddb7-9c1d-5782-a966-a348e570c818"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f",
+      "@type": "uco-tool:MaliciousTool",
+      "uco-core:name": "DarkWatchman",
+      "uco-tool:toolType": "fileless JavaScript RAT + C# keylogger",
+      "uco-core:description": "JavaScript RAT (~32 KB) with C# keylogger (~8.5 KB compiled) storing state under HKCU\\Software\\Microsoft\\Windows\\DWM\\, DGA C2 (.top / Netlab360 tordwm), remote update, LOLbins.",
+      "uco-core:tag": [
+        "malware-family"
+      ]
+    },
+    {
+      "@id": "urn:uuid:4d43eb48-2b27-51fd-9ea3-2c10f43777ee",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "134121811.js",
+      "uco-core:description": "JS RAT instance dropped to %TEMP% by the WinRAR SFX (Figure 8).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:09a617c4-f9ef-5ed3-9ae5-1c52f50ebdf7",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "134121811.js",
+          "uco-observable:filePath": "%TEMP%\\134121811.js",
+          "uco-observable:extension": "js",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "32641"
+          }
+        },
+        {
+          "@id": "urn:uuid:f76fc67e-6324-58b1-89ad-964f54d1918a",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:9aee4b4b-3515-5282-8b15-776f6eea230f",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "ee9cd9a5ac70f7b55b52c02f54fd53186c294a940b2502bbe427d847dde83c85"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "<uid>0.js",
+      "uco-core:description": "Installed JS RAT path under %%LOCALAPPDATA%%\\<uid>0.js after move (Shell.NameSpace(28)). Same content hash as 134121811.js.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:eea15320-5ef2-54fd-947c-dd616a369f54",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "<uid>0.js",
+          "uco-observable:filePath": "%LOCALAPPDATA%\\<uid>0.js",
+          "uco-observable:extension": "js",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "32641"
+          }
+        },
+        {
+          "@id": "urn:uuid:bc4c2ba2-e277-5f5e-a90e-adb812a3b881",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:3ea6499f-77d9-57c2-8892-bfe170561505",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "ee9cd9a5ac70f7b55b52c02f54fd53186c294a940b2502bbe427d847dde83c85"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3c293b44-fff4-5109-a9ff-53f333898eef",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "2204722946",
+      "uco-core:description": "XOR-obfuscated keylogger hex inside the SFX. No standalone SHA-256 published in the report timeline; size 44424 bytes (Figure 8).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:ee1adc1b-2372-5eb1-86ae-d6b25ac6718d",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "2204722946",
+          "uco-observable:sizeInBytes": {
+            "@type": "xsd:integer",
+            "@value": "44424"
+          }
+        }
+      ],
+      "uco-core:tag": [
+        "hash-status:not-published",
+        "source-bytes:not-acquired",
+        "epistemic:reported"
+      ]
+    },
+    {
+      "@id": "urn:uuid:16e3db3f-64f2-52df-a2c5-e18505d05ed7",
+      "@type": "uco-observable:EmailAddress",
+      "uco-core:name": "mail@ponyexpress.ru",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:5a639b56-1572-537f-aa68-d2114cf820d7",
+          "@type": "uco-observable:EmailAddressFacet",
+          "uco-observable:addressValue": "mail@ponyexpress.ru"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f30d0bb0-0b40-5117-8192-f11f8f41f7c1",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "smtp.rentbikespb.ru",
+      "uco-core:description": "True SMTP host in Received header.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:ab2712ee-b69d-5cf1-8bf1-d47eb3dc4a1b",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "smtp.rentbikespb.ru"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ace1dcce-f1ef-5e44-a78b-9b41f1deb598",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "rentbikespb.ru",
+      "uco-core:description": "Registrable true-sender domain; parked at mail.ru outside brief operational window.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:01c44a2f-df0b-5ade-bad6-0eab141cc605",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "rentbikespb.ru"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:087f3a69-e4d0-52f7-9e09-ac58d2b26356",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "ponyexpress.ru",
+      "uco-core:description": "Impersonated legitimate courier domain.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:12f95124-8d05-50cb-9b4f-97c51354e9ad",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "ponyexpress.ru"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:e6723681-d2e5-5302-8edf-9a91ea7ed9b7",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "45.156.27.245",
+      "uco-core:description": "Operational SMTP sending IP for rentbikespb.ru.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:62fac413-536e-538c-b96f-b039928826c5",
+          "@type": "uco-observable:IPv4AddressFacet",
+          "uco-observable:addressValue": "45.156.27.245"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0ae47cc7-d206-5c88-95ba-b171e93eadf6",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "94.100.180.200",
+      "uco-core:description": "mail.ru parking target for rentbikespb.ru before/after operational use.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:1f498beb-4bc4-5d36-88aa-7e5a59c86932",
+          "@type": "uco-observable:IPv4AddressFacet",
+          "uco-observable:addressValue": "94.100.180.200"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:111e7ac6-0133-5300-a00b-286c3f0e4151",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:f30d0bb0-0b40-5117-8192-f11f8f41f7c1"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:e6723681-d2e5-5302-8edf-9a91ea7ed9b7"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Resolved_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Campaign window resolution",
+      "uco-core:tag": "operational-mail"
+    },
+    {
+      "@id": "urn:uuid:dd2fb88a-80eb-55ef-9a62-1b823b4886bc",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:ace1dcce-f1ef-5e44-a78b-9b41f1deb598"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:0ae47cc7-d206-5c88-95ba-b171e93eadf6"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Resolved_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Pre/post-operational parking at mail.ru",
+      "uco-core:tag": "parking"
+    },
+    {
+      "@id": "urn:uuid:f5d711ac-5182-5533-9ab9-ae91d177ed6b",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:f30d0bb0-0b40-5117-8192-f11f8f41f7c1"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:ace1dcce-f1ef-5e44-a78b-9b41f1deb598"
+        }
+      ],
+      "uco-core:kindOfRelationship": "FQDN_Of",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "smtp host under rentbikespb.ru"
+    },
+    {
+      "@id": "urn:uuid:7957de1d-e477-52ee-a5b8-f0392f7b21a3",
+      "@type": "uco-observable:EmailMessage",
+      "uco-core:name": "\u0423\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u0435 \u043e\u0431 \u043e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u0438 \u0441\u0440\u043e\u043a\u0430 \u0431\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u043e\u0433\u043e \u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f",
+      "uco-core:description": "Spearphishing lure spoofed as PONY EXPRESS. True sender evidenced by Received-from smtp.rentbikespb.ru [45.156.27.245].",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:8afb3140-0bfa-52d1-83b4-d621efd7916c",
+          "@type": "uco-observable:EmailMessageFacet",
+          "uco-observable:subject": "\u0423\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u0435 \u043e\u0431 \u043e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u0438 \u0441\u0440\u043e\u043a\u0430 \u0431\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u043e\u0433\u043e \u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f",
+          "uco-observable:sentTime": {
+            "@type": "xsd:dateTime",
+            "@value": "2021-11-15T06:18:39+03:00"
+          },
+          "uco-observable:from": {
+            "@id": "urn:uuid:16e3db3f-64f2-52df-a2c5-e18505d05ed7"
+          },
+          "uco-observable:receivedLines": [
+            "Received: from rentbikespb.ru (smtp.rentbikespb.ru [45.156.27.245])"
+          ],
+          "uco-observable:body": "Machine-translated lure: free storage for consignment #12-6317-3621 expires 2021-11-16; attachment is a scanned consignment note; contact +7-495-937-77-77."
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d8747300-e49e-5356-9790-6bdc3e844c30",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "\u041d\u0430\u043a\u043b\u0430\u0434\u043d\u0430\u044f \u211612-6317-3621.exe",
+      "uco-core:description": "VirusTotal-linked sample from the Prevailion timeline (submission Event at 2021-11-12T12:31:12Z).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:dbe6147d-c524-5606-a1eb-753e2e151270",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "\u041d\u0430\u043a\u043b\u0430\u0434\u043d\u0430\u044f \u211612-6317-3621.exe",
+          "uco-observable:extension": "exe"
+        },
+        {
+          "@id": "urn:uuid:b51b3ce3-8dac-54d2-9349-93d253f2fe2d",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:dfc7a962-d5ad-5a42-bf90-c3de3c78b943",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "409839f9c8327eff6208aeca4f7113f5a0abdfa97f266f404b14f9fa6ab1432f"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:abfa6771-072b-5e94-b8c9-95f8dacd6033",
+      "@type": "uco-core:Event",
+      "uco-core:name": "VirusTotal submission of \u041d\u0430\u043a\u043b\u0430\u0434\u043d\u0430\u044f \u211612-6317-3621.exe",
+      "uco-core:eventType": [
+        "virus-total-submission",
+        "first-observed"
+      ],
+      "uco-core:startTime": [
+        {
+          "@type": "xsd:dateTime",
+          "@value": "2021-11-12T12:31:12Z"
+        }
+      ],
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:d8747300-e49e-5356-9790-6bdc3e844c30"
+        }
+      ],
+      "uco-core:description": "Timestamp is a VirusTotal submission/observation time from the report timeline \u2014 not an intrinsic file creation time.",
+      "uco-core:tag": [
+        "epistemic:reported",
+        "timestamp:submitted"
+      ]
+    },
+    {
+      "@id": "urn:uuid:df36e54e-9bb0-5fb0-91f8-c289033bce99",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "\u041d\u0430\u043a\u043b\u0430\u0434\u043d\u0430\u044f \u211612-6317-3621.zip",
+      "uco-core:description": "VirusTotal-linked sample from the Prevailion timeline (submission Event at 2021-11-12T20:49:52Z).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:3a671ca0-7653-5577-ae79-954c8c801d09",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "\u041d\u0430\u043a\u043b\u0430\u0434\u043d\u0430\u044f \u211612-6317-3621.zip",
+          "uco-observable:extension": "zip"
+        },
+        {
+          "@id": "urn:uuid:58f6b4d1-1c2a-576a-a6b0-91b68fdb9975",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:bde06c57-d30a-539d-9b6b-515fb0b120ee",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "27c4e9f01e5142a021329163b074f0692a9b4e832e0b53a5e31d364fdbbcdef8"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:ec254604-9bd0-5f50-baf8-78bfed1603b2",
+      "@type": "uco-core:Event",
+      "uco-core:name": "VirusTotal submission of \u041d\u0430\u043a\u043b\u0430\u0434\u043d\u0430\u044f \u211612-6317-3621.zip",
+      "uco-core:eventType": [
+        "virus-total-submission",
+        "first-observed"
+      ],
+      "uco-core:startTime": [
+        {
+          "@type": "xsd:dateTime",
+          "@value": "2021-11-12T20:49:52Z"
+        }
+      ],
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:df36e54e-9bb0-5fb0-91f8-c289033bce99"
+        }
+      ],
+      "uco-core:description": "Timestamp is a VirusTotal submission/observation time from the report timeline \u2014 not an intrinsic file creation time.",
+      "uco-core:tag": [
+        "epistemic:reported",
+        "timestamp:submitted"
+      ]
+    },
+    {
+      "@id": "urn:uuid:30b8811b-d281-51e4-9d99-a5adeb7e0033",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "RAR SFX shell [0]",
+      "uco-core:description": "VirusTotal-linked sample from the Prevailion timeline (submission Event at 2021-11-15T01:28:57Z).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:c240da57-7f87-5411-b8c3-466986c63b39",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "RAR SFX shell [0]"
+        },
+        {
+          "@id": "urn:uuid:c9b88c97-8cb6-5dfc-acd3-38557d88b8b9",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:03d2e245-3c85-5abf-b6ae-84b05af9bd7b",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "74c85df7a1f1af78fde252e52d0bfbdec75a626f613f080bd3ca8e3feee34ce5"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:27b5d66d-161b-5264-8669-3476b0d4e07b",
+      "@type": "uco-core:Event",
+      "uco-core:name": "VirusTotal submission of RAR SFX shell [0]",
+      "uco-core:eventType": [
+        "virus-total-submission",
+        "first-observed"
+      ],
+      "uco-core:startTime": [
+        {
+          "@type": "xsd:dateTime",
+          "@value": "2021-11-15T01:28:57Z"
+        }
+      ],
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:30b8811b-d281-51e4-9d99-a5adeb7e0033"
+        }
+      ],
+      "uco-core:description": "Timestamp is a VirusTotal submission/observation time from the report timeline \u2014 not an intrinsic file creation time.",
+      "uco-core:tag": [
+        "epistemic:reported",
+        "timestamp:submitted"
+      ]
+    },
+    {
+      "@id": "urn:uuid:7ad6e45c-4fdf-5a0d-b3c9-774475face28",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "\u0423\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u0435 \u043e\u0431 \u043e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u0438 \u0441\u0440\u043e\u043a\u0430 \u0431\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u043e\u0433\u043e \u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f.msg",
+      "uco-core:description": "VirusTotal-linked sample from the Prevailion timeline (submission Event at 2021-11-15T05:28:07Z).",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:260bda2d-c9cd-5cb7-9676-39fbb780c22e",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "\u0423\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u0435 \u043e\u0431 \u043e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u0438 \u0441\u0440\u043e\u043a\u0430 \u0431\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u043e\u0433\u043e \u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f.msg",
+          "uco-observable:extension": "msg"
+        },
+        {
+          "@id": "urn:uuid:f11c21a3-74bf-54fa-9d7c-07bb8e711f9e",
+          "@type": "uco-observable:ContentDataFacet",
+          "uco-observable:hash": [
+            {
+              "@id": "urn:uuid:ad507574-c21e-50e9-ac33-829d05e3e5f1",
+              "@type": "uco-types:Hash",
+              "uco-types:hashMethod": "SHA256",
+              "uco-types:hashValue": {
+                "@type": "xsd:hexBinary",
+                "@value": "671ede00b5be118bab9238386fd3f7502ffa21f678d8f509b181d4a819524525"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c884393e-0eaa-586e-80d6-2479f1361785",
+      "@type": "uco-core:Event",
+      "uco-core:name": "VirusTotal submission of \u0423\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u0435 \u043e\u0431 \u043e\u043a\u043e\u043d\u0447\u0430\u043d\u0438\u0438 \u0441\u0440\u043e\u043a\u0430 \u0431\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u043e\u0433\u043e \u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f.msg",
+      "uco-core:eventType": [
+        "virus-total-submission",
+        "first-observed"
+      ],
+      "uco-core:startTime": [
+        {
+          "@type": "xsd:dateTime",
+          "@value": "2021-11-15T05:28:07Z"
+        }
+      ],
+      "uco-core:eventContext": [
+        {
+          "@id": "urn:uuid:7ad6e45c-4fdf-5a0d-b3c9-774475face28"
+        }
+      ],
+      "uco-core:description": "Timestamp is a VirusTotal submission/observation time from the report timeline \u2014 not an intrinsic file creation time.",
+      "uco-core:tag": [
+        "epistemic:reported",
+        "timestamp:submitted"
+      ]
+    },
+    {
+      "@id": "urn:uuid:59d5f975-c8bc-5b4e-913a-dc7274df0b49",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:df36e54e-9bb0-5fb0-91f8-c289033bce99"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:7957de1d-e477-52ee-a5b8-f0392f7b21a3"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:tag": "attachment"
+    },
+    {
+      "@id": "urn:uuid:39620cde-8455-5d33-8249-86c7bed26f39",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7957de1d-e477-52ee-a5b8-f0392f7b21a3"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:df36e54e-9bb0-5fb0-91f8-c289033bce99"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Had_Attachment",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:1176e734-ace2-5155-8639-5509af4d7ce9",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:d8747300-e49e-5356-9790-6bdc3e844c30"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:df36e54e-9bb0-5fb0-91f8-c289033bce99"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      }
+    },
+    {
+      "@id": "urn:uuid:73aa11f7-23a5-51a7-a7d0-f7e82edb1557",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:4d43eb48-2b27-51fd-9ea3-2c10f43777ee"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:d8747300-e49e-5356-9790-6bdc3e844c30"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "JS RAT inside WinRAR SFX (Figure 8)"
+    },
+    {
+      "@id": "urn:uuid:082db378-1fa2-588a-9f3a-e548a364419f",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:3c293b44-fff4-5109-a9ff-53f333898eef"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:d8747300-e49e-5356-9790-6bdc3e844c30"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Keylogger hex inside WinRAR SFX (Figure 8); no published standalone digest"
+    },
+    {
+      "@id": "urn:uuid:2946a033-3705-52c4-bad9-a7ca0e76752e",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:4d43eb48-2b27-51fd-9ea3-2c10f43777ee"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Moved_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Report: JS moved from %TEMP% to %LOCALAPPDATA%\\<uid>0.js",
+      "uco-core:tag": "install-path"
+    },
+    {
+      "@id": "urn:uuid:8be7b61a-939f-5152-8d8c-a7ee9299a411",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:7957de1d-e477-52ee-a5b8-f0392f7b21a3"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:7ad6e45c-4fdf-5a0d-b3c9-774475face28"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Contained_Within",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "EmailMessage represented by hashed .msg timeline sample",
+      "uco-core:tag": "msg-representation"
+    },
+    {
+      "@id": "urn:uuid:30bf7791-569e-5409-a48b-d2447e0da4b3",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "analytic family classification",
+      "uco-core:description": "Samples and components are classified as the DarkWatchman malware family based on Prevailion dynamic analysis and reverse engineering.",
+      "uco-core:statement": "Samples and components are classified as the DarkWatchman malware family based on Prevailion dynamic analysis and reverse engineering.",
+      "uco-core:tag": [
+        "epistemic:assessment",
+        "classification",
+        "confidence:high-verbal"
+      ],
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        },
+        {
+          "@id": "urn:uuid:4d43eb48-2b27-51fd-9ea3-2c10f43777ee"
+        },
+        {
+          "@id": "urn:uuid:3c293b44-fff4-5109-a9ff-53f333898eef"
+        },
+        {
+          "@id": "urn:uuid:d8747300-e49e-5356-9790-6bdc3e844c30"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:4e85ef30-5cf2-5cb6-b7b2-eba5e2c7b0b7",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Malware analysis / sample classification"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:64d9382d-8bca-5df9-abdc-83de3be6c929",
+      "@type": "uco-observable:WindowsRegistryKey",
+      "uco-core:name": "HKCU\\Software\\Microsoft\\Windows\\DWM",
+      "uco-core:description": "DarkWatchman configuration hive path. Observed install-flag value modeled below; code-derived parameter semantics are ConfigurationEntries.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:6d283ded-70e7-5d8b-94b2-79203517ab77",
+          "@type": "uco-observable:WindowsRegistryKeyFacet",
+          "uco-observable:key": "HKCU\\Software\\Microsoft\\Windows\\DWM",
+          "uco-observable:registryValues": [
+            {
+              "@id": "urn:uuid:995d66be-647f-52b0-bcc6-c15dd0b95269",
+              "@type": "uco-observable:WindowsRegistryValue",
+              "uco-core:name": "<uid>0",
+              "uco-observable:dataType": "reg_sz",
+              "uco-observable:data": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9654ddb7-9c1d-5782-a966-a348e570c818",
+      "@type": "uco-configuration:Configuration",
+      "uco-core:name": "DarkWatchman registry schema",
+      "uco-core:description": "Code-derived parameter semantics under HKCU\\Software\\Microsoft\\Windows\\DWM\\. uid+b and uid+r are referenced in code but never set.",
+      "uco-core:tag": [
+        "epistemic:reported",
+        "malware-configuration"
+      ],
+      "uco-configuration:configurationEntry": [
+        {
+          "@id": "urn:uuid:cb0f43be-a75c-54cf-b6cf-50bae7583cd8",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>0",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "Installation flag (observed value 1 = installed)",
+          "uco-configuration:itemValue": [
+            "1"
+          ]
+        },
+        {
+          "@id": "urn:uuid:53c845ce-bcab-5c05-8e0d-f1b258297bca",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>1",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "Base64 PowerShell that compiles/runs the C# keylogger (content not reproduced; stored under <uid>1)"
+        },
+        {
+          "@id": "urn:uuid:b6f8d87e-fa5c-51f7-861e-75f89e36fab1",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>a",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "Keylogger buffer (keystrokes + clipboard)"
+        },
+        {
+          "@id": "urn:uuid:55703bf9-659d-5015-9350-24abb051cc69",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>c",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "Current C2 server domain for the day"
+        },
+        {
+          "@id": "urn:uuid:d030332a-18d1-5e13-bec5-647105502893",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>h",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "clear_browsers_history flag"
+        },
+        {
+          "@id": "urn:uuid:6bc4848e-77d4-578b-bd17-0fea4b9a1659",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>j",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "JavaScript snippet to evaluate"
+        },
+        {
+          "@id": "urn:uuid:802596cb-98d1-5d77-8dc9-f0ebed8fbf99",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>m",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "Keylogger mutex"
+        },
+        {
+          "@id": "urn:uuid:45f89996-5a3e-5d00-b6da-03e4f9b25ed7",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>p",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "collect_user_profile flag"
+        },
+        {
+          "@id": "urn:uuid:dcb04341-f2e9-5bca-84d3-5d6782bd7038",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>s",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "Stop keylogger flag"
+        },
+        {
+          "@id": "urn:uuid:95c7f666-9cc1-5731-b598-0caa7310c4c4",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>t",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "Reconnect timeout"
+        },
+        {
+          "@id": "urn:uuid:918f307c-2d4a-52d3-9d05-623a9a645979",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>v",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "Autorun JavaScript snippet storage"
+        },
+        {
+          "@id": "urn:uuid:3910f9e7-cc61-5dd8-a2d4-6f4670a0c7e6",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "<uid>z",
+          "uco-configuration:itemType": "registry-value-name-template",
+          "uco-configuration:itemDescription": "Stop RAT flag"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:298db085-e30a-5a7c-9593-0b73a8920a10",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Registry / configuration table"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:92763671-6e38-503a-9fe0-ff6614125d87",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "wscript.exe",
+      "uco-core:description": "Windows Script Host used to launch the installed JS RAT.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:03234507-f49b-5fd8-8cec-d9b25a9c2afb",
+          "@type": "uco-observable:FileFacet",
+          "uco-observable:fileName": "wscript.exe",
+          "uco-observable:filePath": "%SystemRoot%\\System32\\wscript.exe",
+          "uco-observable:extension": "exe"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:0131145a-9fc1-5bd2-bfd3-52eac540e356",
+      "@type": "uco-observable:WindowsTask",
+      "uco-core:name": "26b799fa-\u2026 (partial GUID prefix; DarkWatchman logon task)",
+      "uco-core:description": "Scheduled task with partial GUID-like name from Figure 12 (26b799fa-\u2026). Logon trigger; runs wscript on installed JS. Account DESKTOP-JGLLJLD\\admin is an ANY.RUN analysis-environment account, not a confirmed victim identity.",
+      "uco-core:tag": [
+        "partial-task-id",
+        "analysis-environment-account"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:06accc99-6a81-5f49-8e4e-792cd2179ad5",
+          "@type": "uco-observable:WindowsTaskFacet",
+          "uco-observable:imageName": "wscript.exe",
+          "uco-observable:parameters": "\"%LOCALAPPDATA%\\<uid>0.js\"",
+          "uco-observable:application": {
+            "@id": "urn:uuid:92763671-6e38-503a-9fe0-ff6614125d87"
+          },
+          "uco-observable:taskComment": "At log on persistence for DarkWatchman",
+          "uco-observable:triggerList": [
+            {
+              "@id": "urn:uuid:07f10f97-480b-5909-ada6-ae06e729335d",
+              "@type": "uco-observable:TriggerType",
+              "uco-observable:triggerType": "TASK_TRIGGER_LOGON",
+              "uco-observable:isEnabled": {
+                "@type": "xsd:boolean",
+                "@value": "true"
+              }
+            }
+          ],
+          "uco-observable:actionList": [
+            {
+              "@id": "urn:uuid:2b330214-8f77-5eec-b9fe-7c8f7fa074ff",
+              "@type": "uco-observable:TaskActionType",
+              "uco-observable:actionType": "TASK_ACTION_EXEC",
+              "uco-observable:iExecAction": {
+                "@id": "urn:uuid:15f97323-5eab-5eac-b041-a1edf14e51a1",
+                "@type": "uco-observable:IExecActionType",
+                "uco-observable:execProgramPath": "%SystemRoot%\\System32\\wscript.exe",
+                "uco-observable:execArguments": "\"%LOCALAPPDATA%\\<uid>0.js\""
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:fd57914d-9e30-5738-9129-0eb661f50c2d",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "bfdb1290.top",
+      "uco-core:description": "Observed live C2 domain from Prevailion analysis.",
+      "uco-core:tag": [
+        "c2",
+        "epistemic:observed"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:eb3089a9-ef3e-59c3-b5e6-704362097ee8",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "bfdb1290.top"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3345d095-1686-55a6-8be6-e5f065b7df74",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "a3698d83.top",
+      "uco-core:description": "Observed live C2 domain from Prevailion analysis.",
+      "uco-core:tag": [
+        "c2",
+        "epistemic:observed"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:493a10f0-e74e-55e8-81d3-5e5823b7ba56",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "a3698d83.top"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:803d6c01-1cbd-5261-b583-3669c66d1c3e",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "3a60dc39.top",
+      "uco-core:description": "Observed live C2 domain from Prevailion analysis.",
+      "uco-core:tag": [
+        "c2",
+        "epistemic:observed"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:984735f7-4388-5e83-9377-6e2cd94ade17",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "3a60dc39.top"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:6b401f7a-0a14-5dec-84bf-1c5452a4d1cf",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "4d67ecaf.top",
+      "uco-core:description": "Seeded DGA candidate domain from malware configuration (Figure 17 / code); not asserted as observed traffic here.",
+      "uco-core:tag": [
+        "dga-candidate",
+        "epistemic:reported"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:f27f8e0a-1c96-5f6f-9bb6-96cf7a4c9266",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "4d67ecaf.top"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:074c3abd-0a1c-57e5-a295-044f29079772",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "d303790c.top",
+      "uco-core:description": "Seeded DGA candidate domain from malware configuration (Figure 17 / code); not asserted as observed traffic here.",
+      "uco-core:tag": [
+        "dga-candidate",
+        "epistemic:reported"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:364fbd86-cc4b-5381-a184-4896c3096567",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "d303790c.top"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c5dd8d7d-fcc8-5bfe-b33b-be2b5db391c0",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "a404499a.top",
+      "uco-core:description": "Seeded DGA candidate domain from malware configuration (Figure 17 / code); not asserted as observed traffic here.",
+      "uco-core:tag": [
+        "dga-candidate",
+        "epistemic:reported"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:6fac548d-d9a8-53d0-a20e-af94c83e5a21",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "a404499a.top"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:9ba0c1e8-76ac-573f-96dd-472c46ab198a",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "3d0d1820.top",
+      "uco-core:description": "Seeded DGA candidate domain from malware configuration (Figure 17 / code); not asserted as observed traffic here.",
+      "uco-core:tag": [
+        "dga-candidate",
+        "epistemic:reported"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:2e01fd16-618d-50de-9ef5-bb9a5467d122",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "3d0d1820.top"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:dbfcc2a7-c4d9-58d3-8bd6-1820af467e0f",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "4a0a28b6.top",
+      "uco-core:description": "Seeded DGA candidate domain from malware configuration (Figure 17 / code); not asserted as observed traffic here.",
+      "uco-core:tag": [
+        "dga-candidate",
+        "epistemic:reported"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:6f5dbde2-fbd3-5c2d-a485-63dec094b529",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "4a0a28b6.top"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:69066ae6-158b-532e-a26b-b8c9f4d3b31e",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "dab53527.top",
+      "uco-core:description": "Seeded DGA candidate domain from malware configuration (Figure 17 / code); not asserted as observed traffic here.",
+      "uco-core:tag": [
+        "dga-candidate",
+        "epistemic:reported"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:be5aa20b-948f-5904-9135-dc50213140ee",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "dab53527.top"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:74f9b120-bfa9-5243-9b93-93a32c0beac8",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "adb205b1.top",
+      "uco-core:description": "Seeded DGA candidate domain from malware configuration (Figure 17 / code); not asserted as observed traffic here.",
+      "uco-core:tag": [
+        "dga-candidate",
+        "epistemic:reported"
+      ],
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:128e9ff7-5e50-5e65-94b0-5cca7ef3b651",
+          "@type": "uco-observable:DomainNameFacet",
+          "uco-observable:value": "adb205b1.top"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:7735b4bb-668e-5931-ba46-aa08992c61c5",
+      "@type": "uco-configuration:Configuration",
+      "uco-core:name": "DarkWatchman DGA seed set",
+      "uco-core:description": "All ten seeded .top domains from Figure 17 / code. Candidate membership is separate from observed resolution/connection.",
+      "uco-core:tag": [
+        "epistemic:reported",
+        "dga-configuration"
+      ],
+      "uco-configuration:configurationEntry": [
+        {
+          "@id": "urn:uuid:c4b5dbe5-f223-5622-a12a-68ff382f3e5b",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "bfdb1290.top",
+          "uco-configuration:itemType": "dga-seed-domain",
+          "uco-configuration:itemDescription": "Observed live C2 seed",
+          "uco-configuration:itemObject": [
+            {
+              "@id": "urn:uuid:fd57914d-9e30-5738-9129-0eb661f50c2d"
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:c97c986b-68f4-576f-b2d4-dd0e44ab9029",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "a3698d83.top",
+          "uco-configuration:itemType": "dga-seed-domain",
+          "uco-configuration:itemDescription": "Observed live C2 seed",
+          "uco-configuration:itemObject": [
+            {
+              "@id": "urn:uuid:3345d095-1686-55a6-8be6-e5f065b7df74"
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:dde400d6-56f2-5bff-ab4b-d35db103134e",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "3a60dc39.top",
+          "uco-configuration:itemType": "dga-seed-domain",
+          "uco-configuration:itemDescription": "Observed live C2 seed",
+          "uco-configuration:itemObject": [
+            {
+              "@id": "urn:uuid:803d6c01-1cbd-5261-b583-3669c66d1c3e"
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:a8f4dd05-e194-5719-8f57-eb00efcee2fe",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "4d67ecaf.top",
+          "uco-configuration:itemType": "dga-seed-domain",
+          "uco-configuration:itemDescription": "Seeded DGA candidate (not asserted as observed traffic)",
+          "uco-configuration:itemObject": [
+            {
+              "@id": "urn:uuid:6b401f7a-0a14-5dec-84bf-1c5452a4d1cf"
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:2f782572-d247-513a-bc90-29095d5c0dfe",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "d303790c.top",
+          "uco-configuration:itemType": "dga-seed-domain",
+          "uco-configuration:itemDescription": "Seeded DGA candidate (not asserted as observed traffic)",
+          "uco-configuration:itemObject": [
+            {
+              "@id": "urn:uuid:074c3abd-0a1c-57e5-a295-044f29079772"
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:ebf82612-bf45-50c1-8120-ddce5188cb46",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "a404499a.top",
+          "uco-configuration:itemType": "dga-seed-domain",
+          "uco-configuration:itemDescription": "Seeded DGA candidate (not asserted as observed traffic)",
+          "uco-configuration:itemObject": [
+            {
+              "@id": "urn:uuid:c5dd8d7d-fcc8-5bfe-b33b-be2b5db391c0"
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:36335691-c62c-5dfb-992e-9313a78d7ebb",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "3d0d1820.top",
+          "uco-configuration:itemType": "dga-seed-domain",
+          "uco-configuration:itemDescription": "Seeded DGA candidate (not asserted as observed traffic)",
+          "uco-configuration:itemObject": [
+            {
+              "@id": "urn:uuid:9ba0c1e8-76ac-573f-96dd-472c46ab198a"
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:5c94401e-9e0b-5ada-b750-6bff7612ccf4",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "4a0a28b6.top",
+          "uco-configuration:itemType": "dga-seed-domain",
+          "uco-configuration:itemDescription": "Seeded DGA candidate (not asserted as observed traffic)",
+          "uco-configuration:itemObject": [
+            {
+              "@id": "urn:uuid:dbfcc2a7-c4d9-58d3-8bd6-1820af467e0f"
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:59799597-b807-576e-b6a6-625237dd6c8a",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "dab53527.top",
+          "uco-configuration:itemType": "dga-seed-domain",
+          "uco-configuration:itemDescription": "Seeded DGA candidate (not asserted as observed traffic)",
+          "uco-configuration:itemObject": [
+            {
+              "@id": "urn:uuid:69066ae6-158b-532e-a26b-b8c9f4d3b31e"
+            }
+          ]
+        },
+        {
+          "@id": "urn:uuid:a9a63bf5-d0cf-5053-bc37-5734139bec37",
+          "@type": "uco-configuration:ConfigurationEntry",
+          "uco-configuration:itemName": "adb205b1.top",
+          "uco-configuration:itemType": "dga-seed-domain",
+          "uco-configuration:itemDescription": "Seeded DGA candidate (not asserted as observed traffic)",
+          "uco-configuration:itemObject": [
+            {
+              "@id": "urn:uuid:74f9b120-bfa9-5243-9b93-93a32c0beac8"
+            }
+          ]
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:7459f959-1c79-5866-9b0e-f6d47dac98aa",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Figure 17 / DGA seed list"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:fd59b92f-f454-5cd3-ac3a-b651416d7c96",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "185.177.59.174",
+      "uco-core:description": "Observed C2 hosting IP from Prevailion report.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:4e942fda-ffac-5476-922e-0c5fa12d7baa",
+          "@type": "uco-observable:IPv4AddressFacet",
+          "uco-observable:addressValue": "185.177.59.174"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:574b383f-8ef3-54f9-96ad-09432344fff7",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "91.208.206.44",
+      "uco-core:description": "Observed C2 hosting IP from Prevailion report.",
+      "uco-core:hasFacet": [
+        {
+          "@id": "urn:uuid:57d4041a-e94f-5956-bddf-fbc8aa2bdd87",
+          "@type": "uco-observable:IPv4AddressFacet",
+          "uco-observable:addressValue": "91.208.206.44"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:7973f597-ff7c-532a-8915-efe4c5b45239",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fd57914d-9e30-5738-9129-0eb661f50c2d"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Observed C2 from persistent installed instance",
+      "uco-core:tag": "c2"
+    },
+    {
+      "@id": "urn:uuid:c5b5e5c4-1b7f-59a0-9478-ef0a42584bc7",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:fd57914d-9e30-5738-9129-0eb661f50c2d"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:574b383f-8ef3-54f9-96ad-09432344fff7"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Resolved_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Reported resolution during analysis window",
+      "uco-core:tag": "c2"
+    },
+    {
+      "@id": "urn:uuid:11cc4adb-4599-52c8-a064-d5b76bc70675",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:3345d095-1686-55a6-8be6-e5f065b7df74"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Observed C2 from persistent installed instance",
+      "uco-core:tag": "c2"
+    },
+    {
+      "@id": "urn:uuid:397b1cac-17db-5692-955e-8f8ec640b511",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:3345d095-1686-55a6-8be6-e5f065b7df74"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fd59b92f-f454-5cd3-ac3a-b651416d7c96"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Resolved_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Reported resolution during analysis window",
+      "uco-core:tag": "c2"
+    },
+    {
+      "@id": "urn:uuid:c1f6f746-1ab4-57e4-b9b5-548b8ebf8dfb",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:803d6c01-1cbd-5261-b583-3669c66d1c3e"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Connected_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Observed C2 from persistent installed instance",
+      "uco-core:tag": "c2"
+    },
+    {
+      "@id": "urn:uuid:b4b076f9-4dce-5c98-8ffd-09058efecbb7",
+      "@type": "uco-core:Relationship",
+      "uco-core:source": [
+        {
+          "@id": "urn:uuid:803d6c01-1cbd-5261-b583-3669c66d1c3e"
+        }
+      ],
+      "uco-core:target": [
+        {
+          "@id": "urn:uuid:fd59b92f-f454-5cd3-ac3a-b651416d7c96"
+        }
+      ],
+      "uco-core:kindOfRelationship": "Resolved_To",
+      "uco-core:isDirectional": {
+        "@type": "xsd:boolean",
+        "@value": "true"
+      },
+      "uco-core:description": "Reported resolution during analysis window",
+      "uco-core:tag": "c2"
+    },
+    {
+      "@id": "urn:uuid:042afcd1-b839-526b-b1fc-d3126c75b593",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann dga length contradiction",
+      "uco-core:statement": "Source contradiction: algorithm section describes 8-character DGA labels; detection section says 7-character alphanumeric domains. Code-derived 8-character interpretation has stronger support.",
+      "uco-core:description": "Source contradiction: algorithm section describes 8-character DGA labels; detection section says 7-character alphanumeric domains. Code-derived 8-character interpretation has stronger support.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        },
+        {
+          "@id": "urn:uuid:fd57914d-9e30-5738-9129-0eb661f50c2d"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:68c7727e-0dba-574f-95a6-deb7f44eea11",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Algorithm section vs Detection Opportunities"
+        }
+      ],
+      "uco-core:tag": [
+        "epistemic:source-contradiction"
+      ]
+    },
+    {
+      "@id": "urn:uuid:633af8f2-683e-5dd6-ad98-aa9f2e18babd",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann fileless characterization",
+      "uco-core:statement": "Vendor characterization (executive summary): malware 'never writes anything to disk'. Detailed installation section contradicts this by moving the JS file to LocalAppData. Graph models the detailed mechanics; this annotation preserves the stronger executive claim as sourced characterization, not an unqualified fact.",
+      "uco-core:description": "Vendor characterization (executive summary): malware 'never writes anything to disk'. Detailed installation section contradicts this by moving the JS file to LocalAppData. Graph models the detailed mechanics; this annotation preserves the stronger executive claim as sourced characterization, not an unqualified fact.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        },
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        },
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:46ccbac3-e12e-5036-baaf-1cb68d733c7c",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Executive summary vs installation section"
+        }
+      ],
+      "uco-core:tag": [
+        "epistemic:reported",
+        "epistemic:source-contradiction"
+      ]
+    },
+    {
+      "@id": "urn:uuid:4c723e25-ba3e-51c4-bda7-0cd2c1eb048a",
+      "@type": "uco-core:Grouping",
+      "uco-core:name": "DarkWatchman capability model",
+      "uco-core:description": "Capabilities / Notable Functionality from the report \u2014 code abilities, not individually observed historical occurrences.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:8b4cbab6-6475-5498-92b4-0c78cb3ebd5f"
+        },
+        {
+          "@id": "urn:uuid:dbe33c6d-c81e-5e7f-889f-3f8ef8c359a0"
+        },
+        {
+          "@id": "urn:uuid:67fb23e2-f4ea-5de5-a972-0cf9ceba9888"
+        },
+        {
+          "@id": "urn:uuid:5285046c-efb3-58a5-b932-1a8071c9c6d2"
+        }
+      ],
+      "uco-core:context": [
+        "malware-capability-model"
+      ]
+    },
+    {
+      "@id": "urn:uuid:8b4cbab6-6475-5498-92b4-0c78cb3ebd5f",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "cap wmi",
+      "uco-core:statement": "Capability: execute miscellaneous commands via WMI.",
+      "uco-core:description": "Capability: execute miscellaneous commands via WMI.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:e8b420fb-7f89-5c14-b63f-7124503aaee2",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Capabilities / Notable Functionality"
+        }
+      ],
+      "uco-core:tag": [
+        "epistemic:capability",
+        "att&ck-enrichment:T1047"
+      ]
+    },
+    {
+      "@id": "urn:uuid:dbe33c6d-c81e-5e7f-889f-3f8ef8c359a0",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "cap shadow",
+      "uco-core:statement": "Capability: if admin, delete shadow copies via 'vssadmin.exe Delete Shadows /All /Quiet' (conditional path).",
+      "uco-core:description": "Capability: if admin, delete shadow copies via 'vssadmin.exe Delete Shadows /All /Quiet' (conditional path).",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:e8b420fb-7f89-5c14-b63f-7124503aaee2",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Capabilities / Notable Functionality"
+        }
+      ],
+      "uco-core:tag": [
+        "epistemic:capability",
+        "att&ck-enrichment:T1490"
+      ]
+    },
+    {
+      "@id": "urn:uuid:67fb23e2-f4ea-5de5-a972-0cf9ceba9888",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "cap upload",
+      "uco-core:statement": "Capability: upload/exfiltrate files from victim to C2 (outbound).",
+      "uco-core:description": "Capability: upload/exfiltrate files from victim to C2 (outbound).",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:e8b420fb-7f89-5c14-b63f-7124503aaee2",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Capabilities / Notable Functionality"
+        }
+      ],
+      "uco-core:tag": [
+        "epistemic:capability",
+        "att&ck-enrichment:T1041"
+      ]
+    },
+    {
+      "@id": "urn:uuid:5285046c-efb3-58a5-b932-1a8071c9c6d2",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "cap ingress",
+      "uco-core:statement": "Capability: remote update of RAT/keylogger and ingress tool transfer (C2-to-victim; T1105).",
+      "uco-core:description": "Capability: remote update of RAT/keylogger and ingress tool transfer (C2-to-victim; T1105).",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:e8b420fb-7f89-5c14-b63f-7124503aaee2",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Capabilities / Notable Functionality"
+        }
+      ],
+      "uco-core:tag": [
+        "epistemic:capability",
+        "att&ck-enrichment:T1105"
+      ]
+    },
+    {
+      "@id": "urn:uuid:f8e2a8c5-32dc-5ea0-b088-e69d32a4b342",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1566.001"
+      ],
+      "uco-core:name": "Deliver Pony Express spearphishing lure",
+      "uco-core:description": "Spoofed ponyexpress.ru email from smtp.rentbikespb.ru with ZIP attachment.",
+      "uco-core:tag": [
+        "epistemic:reported"
+      ],
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:7957de1d-e477-52ee-a5b8-f0392f7b21a3"
+        }
+      ],
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:df36e54e-9bb0-5fb0-91f8-c289033bce99"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:3db4f324-cf5d-56bd-9886-2b9a3240ada3",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann attack action spearphish",
+      "uco-core:statement": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1566.001. Technique URLs: https://attack.mitre.org/techniques/T1566.001. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:description": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1566.001. Technique URLs: https://attack.mitre.org/techniques/T1566.001. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:f8e2a8c5-32dc-5ea0-b088-e69d32a4b342"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+        }
+      ],
+      "uco-core:tag": [
+        "att&ck-mapping",
+        "epistemic:enrichment",
+        "mapping-source:case-uco-modeler"
+      ]
+    },
+    {
+      "@id": "urn:uuid:cc0f4e3c-e36e-5f30-94d3-6bb0eba09ba0",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1204.002",
+        "https://attack.mitre.org/techniques/T1036",
+        "https://attack.mitre.org/techniques/T1036.008"
+      ],
+      "uco-core:name": "Victim opens masqueraded invoice SFX",
+      "uco-core:description": "Recipient opened the attached archive; SFX used a document icon and hidden extensions (forum corroboration). Performer omitted: the victim executed the file; operators are not the grammatical performer.",
+      "uco-core:tag": [
+        "epistemic:reported"
+      ],
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:d8747300-e49e-5356-9790-6bdc3e844c30"
+        }
+      ],
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:4d43eb48-2b27-51fd-9ea3-2c10f43777ee"
+        },
+        {
+          "@id": "urn:uuid:3c293b44-fff4-5109-a9ff-53f333898eef"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d1c13a7e-34ac-58f4-bf9b-3857ff321406",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann attack action user exec",
+      "uco-core:statement": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1204.002, T1036. Technique URLs: https://attack.mitre.org/techniques/T1204.002, https://attack.mitre.org/techniques/T1036. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:description": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1204.002, T1036. Technique URLs: https://attack.mitre.org/techniques/T1204.002, https://attack.mitre.org/techniques/T1036. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:cc0f4e3c-e36e-5f30-94d3-6bb0eba09ba0"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+        }
+      ],
+      "uco-core:tag": [
+        "att&ck-mapping",
+        "epistemic:enrichment",
+        "mapping-source:case-uco-modeler"
+      ]
+    },
+    {
+      "@id": "urn:uuid:e3f777de-0b51-51b3-a99d-995ce9b95770",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann attack T1036 008 enrichment",
+      "uco-core:statement": "T1036.008 (Masquerade File Type) added as present-day modeler enrichment; technique was created after the 2021 report. URL: https://attack.mitre.org/techniques/T1036.008.",
+      "uco-core:description": "T1036.008 (Masquerade File Type) added as present-day modeler enrichment; technique was created after the 2021 report. URL: https://attack.mitre.org/techniques/T1036.008.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:cc0f4e3c-e36e-5f30-94d3-6bb0eba09ba0"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:60dddc2d-07e1-5952-8403-b9ec0dbd9e95",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment (post-dated)"
+        }
+      ],
+      "uco-core:tag": [
+        "att&ck-mapping",
+        "epistemic:enrichment",
+        "mapping-source:case-uco-modeler",
+        "post-dated-technique"
+      ]
+    },
+    {
+      "@id": "urn:uuid:7e33062a-1d83-5ac5-8626-1832f0d2a534",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1059.007"
+      ],
+      "uco-core:name": "Execute DarkWatchman JavaScript RAT via wscript",
+      "uco-core:description": "SFX Setup runs 134121811.js with wscript.",
+      "uco-core:tag": [
+        "epistemic:reported"
+      ],
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:92763671-6e38-503a-9fe0-ff6614125d87"
+        }
+      ],
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:4d43eb48-2b27-51fd-9ea3-2c10f43777ee"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:05077fdb-eb3f-5920-aa2f-27e84150e446",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann attack action js exec",
+      "uco-core:statement": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1059.007. Technique URLs: https://attack.mitre.org/techniques/T1059.007. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:description": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1059.007. Technique URLs: https://attack.mitre.org/techniques/T1059.007. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:7e33062a-1d83-5ac5-8626-1832f0d2a534"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+        }
+      ],
+      "uco-core:tag": [
+        "att&ck-mapping",
+        "epistemic:enrichment",
+        "mapping-source:case-uco-modeler"
+      ]
+    },
+    {
+      "@id": "urn:uuid:cc6a5980-d28d-529d-bc8a-611549b6fe92",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1053.005",
+        "https://attack.mitre.org/techniques/T1112"
+      ],
+      "uco-core:name": "Install fileless registry config, move JS, create scheduled task",
+      "uco-core:description": "Moves JS to LocalAppData as <uid>0.js, writes keylogger Base64 into HKCU\\Software\\Microsoft\\Windows\\DWM\\<uid>1, sets <uid>0=1, creates logon scheduled task.",
+      "uco-core:tag": [
+        "epistemic:reported"
+      ],
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:4d43eb48-2b27-51fd-9ea3-2c10f43777ee"
+        }
+      ],
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:4d43eb48-2b27-51fd-9ea3-2c10f43777ee"
+        },
+        {
+          "@id": "urn:uuid:3c293b44-fff4-5109-a9ff-53f333898eef"
+        },
+        {
+          "@id": "urn:uuid:64d9382d-8bca-5df9-abdc-83de3be6c929"
+        }
+      ],
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        },
+        {
+          "@id": "urn:uuid:0131145a-9fc1-5bd2-bfd3-52eac540e356"
+        },
+        {
+          "@id": "urn:uuid:64d9382d-8bca-5df9-abdc-83de3be6c929"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:565b7ed3-0d63-5ba3-9e3e-0279e1fc01d8",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann attack action install",
+      "uco-core:statement": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1053.005, T1112. Technique URLs: https://attack.mitre.org/techniques/T1053.005, https://attack.mitre.org/techniques/T1112. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:description": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1053.005, T1112. Technique URLs: https://attack.mitre.org/techniques/T1053.005, https://attack.mitre.org/techniques/T1112. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:cc6a5980-d28d-529d-bc8a-611549b6fe92"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+        }
+      ],
+      "uco-core:tag": [
+        "att&ck-mapping",
+        "epistemic:enrichment",
+        "mapping-source:case-uco-modeler"
+      ]
+    },
+    {
+      "@id": "urn:uuid:6bf634ba-9e27-5d4e-b139-24b44b04d24b",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1140",
+        "https://attack.mitre.org/techniques/T1059.001"
+      ],
+      "uco-core:name": "XOR/Base64 decode and CSC-compile keylogger",
+      "uco-core:description": "Un-XOR 2204722946 into Base64 PowerShell under <uid>1; CSC compiles and runs the C# keylogger at RAT startup.",
+      "uco-core:tag": [
+        "epistemic:reported"
+      ],
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ],
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:3c293b44-fff4-5109-a9ff-53f333898eef"
+        }
+      ],
+      "uco-action:result": [
+        {
+          "@id": "urn:uuid:64d9382d-8bca-5df9-abdc-83de3be6c929"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:76443603-7b40-5f5e-b286-4826ee10f3ef",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann attack action decode keylogger",
+      "uco-core:statement": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1140, T1059.001. Technique URLs: https://attack.mitre.org/techniques/T1140, https://attack.mitre.org/techniques/T1059.001. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:description": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1140, T1059.001. Technique URLs: https://attack.mitre.org/techniques/T1140, https://attack.mitre.org/techniques/T1059.001. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:6bf634ba-9e27-5d4e-b139-24b44b04d24b"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+        }
+      ],
+      "uco-core:tag": [
+        "att&ck-mapping",
+        "epistemic:enrichment",
+        "mapping-source:case-uco-modeler"
+      ]
+    },
+    {
+      "@id": "urn:uuid:69df071d-e918-50f9-89b2-fbf24d225dd5",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1056.001",
+        "https://attack.mitre.org/techniques/T1115"
+      ],
+      "uco-core:name": "Capture keystrokes and clipboard via registry buffer",
+      "uco-core:description": "Keylogger hooks WH_KEYBOARD_LL; buffer in registry <uid>a; JS RAT scrapes/clears buffer before C2 transmission.",
+      "uco-core:tag": [
+        "epistemic:reported"
+      ],
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:3c293b44-fff4-5109-a9ff-53f333898eef"
+        },
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ],
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:64d9382d-8bca-5df9-abdc-83de3be6c929"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a52fbc70-da7e-573f-bc24-7c0a15f58b9e",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann attack action keylog",
+      "uco-core:statement": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1056.001, T1115. Technique URLs: https://attack.mitre.org/techniques/T1056.001, https://attack.mitre.org/techniques/T1115. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:description": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1056.001, T1115. Technique URLs: https://attack.mitre.org/techniques/T1056.001, https://attack.mitre.org/techniques/T1115. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:69df071d-e918-50f9-89b2-fbf24d225dd5"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+        }
+      ],
+      "uco-core:tag": [
+        "att&ck-mapping",
+        "epistemic:enrichment",
+        "mapping-source:case-uco-modeler"
+      ]
+    },
+    {
+      "@id": "urn:uuid:80c89cca-9e5c-5197-9f8f-f603036a635b",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1568.002",
+        "https://attack.mitre.org/techniques/T1071.001"
+      ],
+      "uco-core:name": "Resolve C2 via Domain Generation Algorithm",
+      "uco-core:description": "Builds up to 510 domains/day; probes https://<label>.top/index.php. Netlab360 tracks as tordwm.",
+      "uco-core:tag": [
+        "epistemic:reported"
+      ],
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ],
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:fd57914d-9e30-5738-9129-0eb661f50c2d"
+        },
+        {
+          "@id": "urn:uuid:3345d095-1686-55a6-8be6-e5f065b7df74"
+        },
+        {
+          "@id": "urn:uuid:803d6c01-1cbd-5261-b583-3669c66d1c3e"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:8c82fb3f-7eed-53fc-8c6e-95b458ed1bf3",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann attack action dga",
+      "uco-core:statement": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1568.002, T1071.001. Technique URLs: https://attack.mitre.org/techniques/T1568.002, https://attack.mitre.org/techniques/T1071.001. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:description": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1568.002, T1071.001. Technique URLs: https://attack.mitre.org/techniques/T1568.002, https://attack.mitre.org/techniques/T1071.001. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:80c89cca-9e5c-5197-9f8f-f603036a635b"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+        }
+      ],
+      "uco-core:tag": [
+        "att&ck-mapping",
+        "epistemic:enrichment",
+        "mapping-source:case-uco-modeler"
+      ]
+    },
+    {
+      "@id": "urn:uuid:05acd868-e9d2-5d67-9f05-97d6efeab80d",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1082",
+        "https://attack.mitre.org/techniques/T1518.001"
+      ],
+      "uco-core:name": "Collect host profile and security products",
+      "uco-core:description": "srv_send_info / collect_user_profile gather OS, AV, browser histories, smartcard PnP drivers (reported operating behavior).",
+      "uco-core:tag": [
+        "epistemic:reported"
+      ],
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:77571482-c591-53de-a838-8c093f2c081b",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann attack action discovery",
+      "uco-core:statement": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1082, T1518.001. Technique URLs: https://attack.mitre.org/techniques/T1082, https://attack.mitre.org/techniques/T1518.001. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:description": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1082, T1518.001. Technique URLs: https://attack.mitre.org/techniques/T1082, https://attack.mitre.org/techniques/T1518.001. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:05acd868-e9d2-5d67-9f05-97d6efeab80d"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+        }
+      ],
+      "uco-core:tag": [
+        "att&ck-mapping",
+        "epistemic:enrichment",
+        "mapping-source:case-uco-modeler"
+      ]
+    },
+    {
+      "@id": "urn:uuid:85c4534c-013a-57f3-86b1-7224b2ba4d7d",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Keylog buffer",
+      "uco-core:description": "Logical content: keystrokes + clipboard buffered under registry <uid>a before HTTPS C2 transmission.",
+      "uco-core:tag": [
+        "exfil-content",
+        "epistemic:reported"
+      ]
+    },
+    {
+      "@id": "urn:uuid:12d8e4a8-b211-571f-a5b5-2a46bdfc7283",
+      "@type": "uco-observable:ObservableObject",
+      "uco-core:name": "Host profile collection",
+      "uco-core:description": "Logical content: OS/AV/browser-history/smartcard profile gathered by srv_send_info / collect_user_profile.",
+      "uco-core:tag": [
+        "exfil-content",
+        "epistemic:reported"
+      ]
+    },
+    {
+      "@id": "urn:uuid:2abe791f-6dc3-51cb-a73a-e35275b5c2c8",
+      "@type": [
+        "uco-action:Action",
+        "https://attack.mitre.org/techniques/T1071.001",
+        "https://attack.mitre.org/techniques/T1041"
+      ],
+      "uco-core:name": "Exfiltrate keylogs and host data over HTTPS C2",
+      "uco-core:description": "WinHttpRequest.5.1 POST with forged IE11 UA (rv:11.1); body carries host profile and keylog buffer over the C2 channel. C2 domains are participants via Connected_To, not the Action object.",
+      "uco-core:tag": [
+        "epistemic:reported"
+      ],
+      "uco-action:instrument": [
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ],
+      "uco-action:object": [
+        {
+          "@id": "urn:uuid:85c4534c-013a-57f3-86b1-7224b2ba4d7d"
+        },
+        {
+          "@id": "urn:uuid:12d8e4a8-b211-571f-a5b5-2a46bdfc7283"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:f24277df-7de4-57da-9a97-43e56924ecd0",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "ann attack action c2 exfil",
+      "uco-core:statement": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1071.001, T1041. Technique URLs: https://attack.mitre.org/techniques/T1071.001, https://attack.mitre.org/techniques/T1041. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:description": "CASE/UCO modeler enrichment using MITRE ATT&CK technique IRIs; not vendor-asserted identifiers in the 2021 Prevailion prose. Techniques: T1071.001, T1041. Technique URLs: https://attack.mitre.org/techniques/T1071.001, https://attack.mitre.org/techniques/T1041. Mapping date: 2026-07-14; mapping author: CASE/UCO SDK exemplar.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:2abe791f-6dc3-51cb-a73a-e35275b5c2c8"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+        }
+      ],
+      "uco-core:tag": [
+        "att&ck-mapping",
+        "epistemic:enrichment",
+        "mapping-source:case-uco-modeler"
+      ]
+    },
+    {
+      "@id": "urn:uuid:dc79b78e-8995-5531-b719-4c86d8993468",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "analytic attribution impossible",
+      "uco-core:description": "PACT: attribution of DarkWatchman was not possible.",
+      "uco-core:statement": "PACT: attribution of DarkWatchman was not possible.",
+      "uco-core:tag": [
+        "epistemic:assessment"
+      ],
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:44976b7a-022c-5fa7-a4d7-8058fb8cdd36"
+        },
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:58f8c2f8-ed0a-5620-b850-c47085b4bc87",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Closing Analysis"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:a699fec9-6eaf-5481-9f06-602ef7ff9b38",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "analytic appears criminal",
+      "uco-core:description": "PACT: DarkWatchman appears to be used by criminal actors (Russian-language lures/code comments; mail servers in Russia).",
+      "uco-core:statement": "PACT: DarkWatchman appears to be used by criminal actors (Russian-language lures/code comments; mail servers in Russia).",
+      "uco-core:tag": [
+        "epistemic:assessment",
+        "confidence:appears-verbal"
+      ],
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:44976b7a-022c-5fa7-a4d7-8058fb8cdd36"
+        },
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:58f8c2f8-ed0a-5620-b850-c47085b4bc87",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Closing Analysis"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d512ee41-c7c3-5710-8cc1-eb4af656278d",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "analytic initial access",
+      "uco-core:description": "PACT assesses with moderate confidence that DarkWatchman is an initial-access tool for ransomware groups or affiliates.",
+      "uco-core:statement": "PACT assesses with moderate confidence that DarkWatchman is an initial-access tool for ransomware groups or affiliates.",
+      "uco-core:tag": [
+        "epistemic:assessment",
+        "confidence:moderate-verbal"
+      ],
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:44976b7a-022c-5fa7-a4d7-8058fb8cdd36"
+        },
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:58f8c2f8-ed0a-5620-b850-c47085b4bc87",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Closing Analysis"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d4a5de13-5801-5479-9268-5c80e75c7914",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "analytic ransomware hypothesis",
+      "uco-core:description": "Hypothesis (not confirmed): ransomware operators could provide DarkWatchman to affiliates for foothold and C2 under operator control.",
+      "uco-core:statement": "Hypothesis (not confirmed): ransomware operators could provide DarkWatchman to affiliates for foothold and C2 under operator control.",
+      "uco-core:tag": [
+        "epistemic:hypothesis",
+        "confidence:hypothesis-verbal"
+      ],
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:44976b7a-022c-5fa7-a4d7-8058fb8cdd36"
+        },
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:58f8c2f8-ed0a-5620-b850-c47085b4bc87",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Closing Analysis"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c6273ac5-02d7-5dd0-9432-a46ec79390b9",
+      "@type": "uco-pattern:LogicalPattern",
+      "uco-core:name": "DarkWatchman DWM registry name template",
+      "uco-core:description": "Anomalous keys under HKCU\\Software\\Microsoft\\Windows\\DWM\\ with 8-character uid + 1-character suffix.",
+      "uco-pattern:patternExpression": {
+        "@type": "https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression",
+        "@value": "HKCU/Software/Microsoft/Windows/DWM/[0-9a-f]{8}[a-z]"
+      },
+      "uco-core:tag": [
+        "detection-pattern",
+        "epistemic:reported"
+      ]
+    },
+    {
+      "@id": "urn:uuid:a73346c1-3a91-5f70-93a7-356a32e872b6",
+      "@type": "uco-pattern:LogicalPattern",
+      "uco-core:name": "DarkWatchman forged IE11 UA",
+      "uco-core:description": "Incorrect IE11 UA string using rv:11.1.",
+      "uco-pattern:patternExpression": {
+        "@type": "https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression",
+        "@value": "User-Agent contains 'rv:11.1'"
+      },
+      "uco-core:tag": [
+        "detection-pattern",
+        "epistemic:reported"
+      ]
+    },
+    {
+      "@id": "urn:uuid:7e6ca0b8-f99a-5a31-9983-e4086e0dd919",
+      "@type": "uco-pattern:LogicalPattern",
+      "uco-core:name": "DarkWatchman HTTP 8xx C2 commands",
+      "uco-core:description": "Abnormal HTTP status codes 820\u2013835 as C2 commands.",
+      "uco-pattern:patternExpression": {
+        "@type": "https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression",
+        "@value": "HTTP status in 820..835"
+      },
+      "uco-core:tag": [
+        "detection-pattern",
+        "epistemic:reported"
+      ]
+    },
+    {
+      "@id": "urn:uuid:dfdc27e1-63bf-5a82-b6ad-371a62d45935",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "detect registry template",
+      "uco-core:statement": "Detection opportunity: DWM registry name template (see LogicalPattern).",
+      "uco-core:description": "Detection opportunity: DWM registry name template (see LogicalPattern).",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:c6273ac5-02d7-5dd0-9432-a46ec79390b9"
+        },
+        {
+          "@id": "urn:uuid:64d9382d-8bca-5df9-abdc-83de3be6c929"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:26dbd0d5-ab8b-530a-af82-fa1c5a27e0a3",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Detection Opportunities"
+        }
+      ],
+      "uco-core:tag": [
+        "detection-pattern",
+        "epistemic:reported"
+      ]
+    },
+    {
+      "@id": "urn:uuid:73d308a9-bdca-59b0-9a40-bdc83f3c7b81",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "detect user agent",
+      "uco-core:statement": "Detection opportunity: forged IE11 UA with rv:11.1 (see LogicalPattern).",
+      "uco-core:description": "Detection opportunity: forged IE11 UA with rv:11.1 (see LogicalPattern).",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:a73346c1-3a91-5f70-93a7-356a32e872b6"
+        },
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:26dbd0d5-ab8b-530a-af82-fa1c5a27e0a3",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Detection Opportunities"
+        }
+      ],
+      "uco-core:tag": [
+        "detection-pattern",
+        "epistemic:reported"
+      ]
+    },
+    {
+      "@id": "urn:uuid:1341d0fd-19e8-5b72-bee5-b4f4cfb3e086",
+      "@type": "uco-core:Annotation",
+      "uco-core:name": "detect http 8xx",
+      "uco-core:statement": "Detection opportunity: HTTP 8xx C2 command channel (see LogicalPattern).",
+      "uco-core:description": "Detection opportunity: HTTP 8xx C2 command channel (see LogicalPattern).",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:7e6ca0b8-f99a-5a31-9983-e4086e0dd919"
+        },
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        }
+      ],
+      "uco-core:externalReference": [
+        {
+          "@id": "urn:uuid:26dbd0d5-ab8b-530a-af82-fa1c5a27e0a3",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
+          },
+          "uco-core:definingContext": "Section: Detection Opportunities"
+        }
+      ],
+      "uco-core:tag": [
+        "detection-pattern",
+        "epistemic:reported"
+      ]
+    },
+    {
+      "@id": "urn:uuid:e7a2f417-c913-5200-88f9-76c59c8b3da2",
+      "@type": "uco-core:ContextualCompilation",
+      "uco-core:name": "Source material",
+      "uco-core:description": "Report, authors, publisher, and in-report graphics.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:829b5186-3cbe-5757-8463-4dca2f11180c"
+        },
+        {
+          "@id": "urn:uuid:c3b9e280-e80a-51c2-848b-3c6d9e933877"
+        },
+        {
+          "@id": "urn:uuid:0c7415f9-2b59-5e27-99f9-46a17f53f652"
+        },
+        {
+          "@id": "urn:uuid:c15a12b5-d7f5-59c2-a205-0934b33b439e"
+        },
+        {
+          "@id": "urn:uuid:20a2821b-39fe-5f81-83f9-27dbdd936b23"
+        },
+        {
+          "@id": "urn:uuid:78c3253c-e304-597e-9a47-eba024f14fa6"
+        },
+        {
+          "@id": "urn:uuid:cfe940a5-b684-5d72-a387-5ddaac30c38b"
+        },
+        {
+          "@id": "urn:uuid:883d5568-845e-5b32-96a1-ec4d74f53dca"
+        },
+        {
+          "@id": "urn:uuid:87cf6d2d-1d28-5317-beca-798a13250e07"
+        },
+        {
+          "@id": "urn:uuid:c41dfed8-53e9-5f2a-9b97-7ea8db4eb50c"
+        },
+        {
+          "@id": "urn:uuid:87cc5641-3913-536a-a3e8-e34d37220de0"
+        },
+        {
+          "@id": "urn:uuid:34f61f39-491c-5b7c-ae41-066eaaee208a"
+        },
+        {
+          "@id": "urn:uuid:07faa761-eb9a-50ca-80b5-57ecf0114c92"
+        },
+        {
+          "@id": "urn:uuid:a4c25826-d239-5cdb-ab0a-7bc87c12bcc4"
+        },
+        {
+          "@id": "urn:uuid:5dc2c912-7b72-5f85-81c3-af204f58270d"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:d12110d8-dfbe-57d1-8bf5-861a7ab931ee",
+      "@type": "uco-core:ContextualCompilation",
+      "uco-core:name": "Delivery chain",
+      "uco-core:description": "Email lure, samples, SFX contents, VT submission Events, and delivery Actions.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:7957de1d-e477-52ee-a5b8-f0392f7b21a3"
+        },
+        {
+          "@id": "urn:uuid:16e3db3f-64f2-52df-a2c5-e18505d05ed7"
+        },
+        {
+          "@id": "urn:uuid:f30d0bb0-0b40-5117-8192-f11f8f41f7c1"
+        },
+        {
+          "@id": "urn:uuid:ace1dcce-f1ef-5e44-a78b-9b41f1deb598"
+        },
+        {
+          "@id": "urn:uuid:087f3a69-e4d0-52f7-9e09-ac58d2b26356"
+        },
+        {
+          "@id": "urn:uuid:e6723681-d2e5-5302-8edf-9a91ea7ed9b7"
+        },
+        {
+          "@id": "urn:uuid:0ae47cc7-d206-5c88-95ba-b171e93eadf6"
+        },
+        {
+          "@id": "urn:uuid:df36e54e-9bb0-5fb0-91f8-c289033bce99"
+        },
+        {
+          "@id": "urn:uuid:d8747300-e49e-5356-9790-6bdc3e844c30"
+        },
+        {
+          "@id": "urn:uuid:4d43eb48-2b27-51fd-9ea3-2c10f43777ee"
+        },
+        {
+          "@id": "urn:uuid:3c293b44-fff4-5109-a9ff-53f333898eef"
+        },
+        {
+          "@id": "urn:uuid:f8e2a8c5-32dc-5ea0-b088-e69d32a4b342"
+        },
+        {
+          "@id": "urn:uuid:cc0f4e3c-e36e-5f30-94d3-6bb0eba09ba0"
+        },
+        {
+          "@id": "urn:uuid:7e33062a-1d83-5ac5-8626-1832f0d2a534"
+        },
+        {
+          "@id": "urn:uuid:30b8811b-d281-51e4-9d99-a5adeb7e0033"
+        },
+        {
+          "@id": "urn:uuid:7ad6e45c-4fdf-5a0d-b3c9-774475face28"
+        },
+        {
+          "@id": "urn:uuid:abfa6771-072b-5e94-b8c9-95f8dacd6033"
+        },
+        {
+          "@id": "urn:uuid:ec254604-9bd0-5f50-baf8-78bfed1603b2"
+        },
+        {
+          "@id": "urn:uuid:27b5d66d-161b-5264-8669-3476b0d4e07b"
+        },
+        {
+          "@id": "urn:uuid:c884393e-0eaa-586e-80d6-2479f1361785"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:07477876-ee25-544d-bf4a-fcb3153e5c73",
+      "@type": "uco-core:ContextualCompilation",
+      "uco-core:name": "Malware behavior and persistence",
+      "uco-core:description": "Family, file instances, registry, task, and operating Actions.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+        },
+        {
+          "@id": "urn:uuid:acb9fffd-5f1d-501f-8a15-f519c7704ed9"
+        },
+        {
+          "@id": "urn:uuid:64d9382d-8bca-5df9-abdc-83de3be6c929"
+        },
+        {
+          "@id": "urn:uuid:9654ddb7-9c1d-5782-a966-a348e570c818"
+        },
+        {
+          "@id": "urn:uuid:0131145a-9fc1-5bd2-bfd3-52eac540e356"
+        },
+        {
+          "@id": "urn:uuid:92763671-6e38-503a-9fe0-ff6614125d87"
+        },
+        {
+          "@id": "urn:uuid:4c723e25-ba3e-51c4-bda7-0cd2c1eb048a"
+        },
+        {
+          "@id": "urn:uuid:85c4534c-013a-57f3-86b1-7224b2ba4d7d"
+        },
+        {
+          "@id": "urn:uuid:12d8e4a8-b211-571f-a5b5-2a46bdfc7283"
+        },
+        {
+          "@id": "urn:uuid:cc6a5980-d28d-529d-bc8a-611549b6fe92"
+        },
+        {
+          "@id": "urn:uuid:6bf634ba-9e27-5d4e-b139-24b44b04d24b"
+        },
+        {
+          "@id": "urn:uuid:69df071d-e918-50f9-89b2-fbf24d225dd5"
+        },
+        {
+          "@id": "urn:uuid:80c89cca-9e5c-5197-9f8f-f603036a635b"
+        },
+        {
+          "@id": "urn:uuid:05acd868-e9d2-5d67-9f05-97d6efeab80d"
+        },
+        {
+          "@id": "urn:uuid:2abe791f-6dc3-51cb-a73a-e35275b5c2c8"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:387afc30-553c-5524-9ce3-33d292d542f7",
+      "@type": "uco-core:ContextualCompilation",
+      "uco-core:name": "Infrastructure",
+      "uco-core:description": "Observed C2, DGA candidates/config, and mail infrastructure.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:fd57914d-9e30-5738-9129-0eb661f50c2d"
+        },
+        {
+          "@id": "urn:uuid:3345d095-1686-55a6-8be6-e5f065b7df74"
+        },
+        {
+          "@id": "urn:uuid:803d6c01-1cbd-5261-b583-3669c66d1c3e"
+        },
+        {
+          "@id": "urn:uuid:6b401f7a-0a14-5dec-84bf-1c5452a4d1cf"
+        },
+        {
+          "@id": "urn:uuid:074c3abd-0a1c-57e5-a295-044f29079772"
+        },
+        {
+          "@id": "urn:uuid:c5dd8d7d-fcc8-5bfe-b33b-be2b5db391c0"
+        },
+        {
+          "@id": "urn:uuid:9ba0c1e8-76ac-573f-96dd-472c46ab198a"
+        },
+        {
+          "@id": "urn:uuid:dbfcc2a7-c4d9-58d3-8bd6-1820af467e0f"
+        },
+        {
+          "@id": "urn:uuid:69066ae6-158b-532e-a26b-b8c9f4d3b31e"
+        },
+        {
+          "@id": "urn:uuid:74f9b120-bfa9-5243-9b93-93a32c0beac8"
+        },
+        {
+          "@id": "urn:uuid:fd59b92f-f454-5cd3-ac3a-b651416d7c96"
+        },
+        {
+          "@id": "urn:uuid:574b383f-8ef3-54f9-96ad-09432344fff7"
+        },
+        {
+          "@id": "urn:uuid:f30d0bb0-0b40-5117-8192-f11f8f41f7c1"
+        },
+        {
+          "@id": "urn:uuid:ace1dcce-f1ef-5e44-a78b-9b41f1deb598"
+        },
+        {
+          "@id": "urn:uuid:e6723681-d2e5-5302-8edf-9a91ea7ed9b7"
+        },
+        {
+          "@id": "urn:uuid:0ae47cc7-d206-5c88-95ba-b171e93eadf6"
+        },
+        {
+          "@id": "urn:uuid:7735b4bb-668e-5931-ba46-aa08992c61c5"
+        },
+        {
+          "@id": "urn:uuid:042afcd1-b839-526b-b1fc-d3126c75b593"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:942f3c4d-ccb0-5efe-a099-933cbdf1f01a",
+      "@type": "uco-core:ContextualCompilation",
+      "uco-core:name": "Analytic assessments",
+      "uco-core:description": "Unattributed cluster and PACT/modeler analytic assertions.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:44976b7a-022c-5fa7-a4d7-8058fb8cdd36"
+        },
+        {
+          "@id": "urn:uuid:dc79b78e-8995-5531-b719-4c86d8993468"
+        },
+        {
+          "@id": "urn:uuid:a699fec9-6eaf-5481-9f06-602ef7ff9b38"
+        },
+        {
+          "@id": "urn:uuid:d512ee41-c7c3-5710-8cc1-eb4af656278d"
+        },
+        {
+          "@id": "urn:uuid:d4a5de13-5801-5479-9268-5c80e75c7914"
+        },
+        {
+          "@id": "urn:uuid:30bf7791-569e-5409-a48b-d2447e0da4b3"
+        },
+        {
+          "@id": "urn:uuid:633af8f2-683e-5dd6-ad98-aa9f2e18babd"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:15caed6a-94dc-5182-b5ff-820da7d5fe0d",
+      "@type": "uco-core:ContextualCompilation",
+      "uco-core:name": "Detection patterns",
+      "uco-core:description": "LogicalPatterns plus provenance Annotations.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:c6273ac5-02d7-5dd0-9432-a46ec79390b9"
+        },
+        {
+          "@id": "urn:uuid:a73346c1-3a91-5f70-93a7-356a32e872b6"
+        },
+        {
+          "@id": "urn:uuid:7e6ca0b8-f99a-5a31-9983-e4086e0dd919"
+        },
+        {
+          "@id": "urn:uuid:dfdc27e1-63bf-5a82-b6ad-371a62d45935"
+        },
+        {
+          "@id": "urn:uuid:73d308a9-bdca-59b0-9a40-bdc83f3c7b81"
+        },
+        {
+          "@id": "urn:uuid:1341d0fd-19e8-5b72-bee5-b4f4cfb3e086"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:73927c72-58d9-597c-a22b-ec037880da7f",
+      "@type": "uco-core:ContextualCompilation",
+      "uco-core:name": "ATT&CK mappings and enrichment",
+      "uco-core:description": "Modeler ATT&CK mapping Annotations attached to observed Actions.",
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:3db4f324-cf5d-56bd-9886-2b9a3240ada3"
+        },
+        {
+          "@id": "urn:uuid:d1c13a7e-34ac-58f4-bf9b-3857ff321406"
+        },
+        {
+          "@id": "urn:uuid:e3f777de-0b51-51b3-a99d-995ce9b95770"
+        },
+        {
+          "@id": "urn:uuid:05077fdb-eb3f-5920-aa2f-27e84150e446"
+        },
+        {
+          "@id": "urn:uuid:565b7ed3-0d63-5ba3-9e3e-0279e1fc01d8"
+        },
+        {
+          "@id": "urn:uuid:76443603-7b40-5f5e-b286-4826ee10f3ef"
+        },
+        {
+          "@id": "urn:uuid:a52fbc70-da7e-573f-bc24-7c0a15f58b9e"
+        },
+        {
+          "@id": "urn:uuid:8c82fb3f-7eed-53fc-8c6e-95b458ed1bf3"
+        },
+        {
+          "@id": "urn:uuid:77571482-c591-53de-a838-8c093f2c081b"
+        },
+        {
+          "@id": "urn:uuid:f24277df-7de4-57da-9a97-43e56924ecd0"
+        }
+      ]
+    },
+    {
+      "@id": "urn:uuid:decf1276-1596-564d-ab17-80fb117b0231",
+      "@type": "case-investigation:Investigation",
+      "uco-core:name": "Prevailion CTI: DarkWatchman fileless RAT",
+      "uco-core:description": "Open-source CTI graph for Prevailion PACT's DarkWatchman report. Unattributed activity cluster; epistemic layers separate observed behavior, capabilities, and hypotheses. Built with CASEGraph public upsert APIs (critic serializer_mode=casegraph_raw).",
+      "case-investigation:focus": [
+        "Malware family analysis",
+        "Fileless registry persistence",
+        "DGA C2 infrastructure",
+        "Spearphishing delivery",
+        "Epistemic modeling of unattributed CTI"
+      ],
+      "uco-core:object": [
+        {
+          "@id": "urn:uuid:e7a2f417-c913-5200-88f9-76c59c8b3da2"
+        },
+        {
+          "@id": "urn:uuid:d12110d8-dfbe-57d1-8bf5-861a7ab931ee"
+        },
+        {
+          "@id": "urn:uuid:07477876-ee25-544d-bf4a-fcb3153e5c73"
+        },
+        {
+          "@id": "urn:uuid:387afc30-553c-5524-9ce3-33d292d542f7"
+        },
+        {
+          "@id": "urn:uuid:942f3c4d-ccb0-5efe-a099-933cbdf1f01a"
+        },
+        {
+          "@id": "urn:uuid:15caed6a-94dc-5182-b5ff-820da7d5fe0d"
+        },
+        {
+          "@id": "urn:uuid:73927c72-58d9-597c-a22b-ec037880da7f"
+        }
+      ]
+    }
+  ]
+}

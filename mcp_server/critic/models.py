@@ -268,13 +268,14 @@ class CriticArtifactRequest:
     serializer_path: str | None = None
     source_paths: list[str] = field(default_factory=list)
     coverage_contract_path: str | None = None
+    provenance_manifest_path: str | None = None
     extensions: list[str] = field(default_factory=list)
     profiles: list[str] = field(default_factory=list)
     critic_scope: CriticScope = "both"
     project_root: str | None = None
     prior_findings: list[CriticFinding] = field(default_factory=list)
     disputed_identity_keys: dict[str, str] = field(default_factory=dict)
-    serializer_mode: Literal["typed_sdk", "raw_fixture", "auto"] = "auto"
+    serializer_mode: Literal["typed_sdk", "raw_fixture", "auto", "casegraph_raw"] = "auto"
     pass_number: int = 1
     session_id: str | None = None
     extra_ontology_graphs: list[str] = field(default_factory=list)

@@ -14,7 +14,11 @@ from critic.context_builder import (
     build_serializer_overview,
     excerpt_serializer,
 )
-from critic.coverage import check_source_document_hash, compare_coverage_contract
+from critic.coverage import (
+    check_provenance_manifest,
+    check_source_document_hash,
+    compare_coverage_contract,
+)
 from critic.finding_diff import assign_display_indexes, diff_findings
 from critic.graph_heuristics import run_graph_heuristics
 from critic.graph_integrity import analyze_graph_integrity, sha256_file
@@ -138,6 +142,25 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
             )
             findings.extend(src_findings)
             rule_executions.extend(e.to_dict() for e in src_exec)
+
+        if request.provenance_manifest_path:
+            try:
+                manifest_path = workspace_policy.check_read_path(
+                    request.provenance_manifest_path, include_write_roots=True
+                )
+            except ValueError as exc:
+                raise CriticError("critic_path_outside_workspace", str(exc)) from exc
+            if not manifest_path.is_file():
+                raise CriticError(
+                    "critic_graph_missing", "provenance_manifest_missing"
+                )
+            man_findings, man_exec = check_provenance_manifest(
+                manifest_path,
+                project_root=project_root,
+                artifact_hash=hashes.graph_sha256,
+            )
+            findings.extend(man_findings)
+            rule_executions.extend(e.to_dict() for e in man_exec)
 
         if view and view.usable_for_heuristics:
             lint = lint_kind_of_relationship(view)

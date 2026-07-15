@@ -65,7 +65,7 @@ together. Sessions created on pre-release v1.22 builds before full-session
 projection binding may fail closed after upgrade — restart them rather than
 manually migrating state.
 
-## Graph heuristics (`CRIT-H-*`, `graph_heuristics` v1.2.0)
+## Graph heuristics (`CRIT-H-*`, `graph_heuristics` v1.3.0)
 
 | Rule ID | Intent |
 |---------|--------|
@@ -78,25 +78,34 @@ manually migrating state.
 | `CRIT-H-FACET-PROPS-ON-OBSERVABLE` | Facet properties on ObservableObject |
 | `CRIT-H-ACTION-COMPLETENESS` | Acquir/extract/analy/hash/image/export action missing performer\|instrument, object, or (acquisition) result |
 | `CRIT-H-IDENTITY-CONFLATION` | Person also typed Account/`*Account`/Role |
-| `CRIT-H-PROXY-DUPLICATE` | Same ContentDataFacet hashValue on distinct IRIs without link |
-| `CRIT-H-DERIVED-NO-HASH` | Action result / Extracted_From target without hashValue |
+| `CRIT-H-PROXY-DUPLICATE` | Same ContentDataFacet hashValue on distinct IRIs without Contained_Within/Extracted_From/Parent_Of/Moved_*/Copied_*/Renamed_* **or** a shared Action object/result/instrument link |
+| `CRIT-H-DERIVED-NO-HASH` | Derived artifact without hashValue — **high** for acquisition-style gaps; **medium** when identity + Contained_Within/Extracted_From explain a missing published digest, or tags `hash-status:not-published` / `source-bytes:not-acquired` are present |
 | `CRIT-H-DERIVED-NO-PROVENANCE` | Derived node with no container membership or inbound provenance |
 | `CRIT-H-MARKING-INHERITANCE` | Source has `objectMarking`, derived does not |
 | `CRIT-H-CUSTODY-UNPAIRED` | Custody/transfer/release/receipt action without object+result or Transferred_To |
 | `CRIT-H-IMAGE-CONTAINER-MISMATCH` | RasterPicture as forensic image, or File Contained_Within RasterPicture |
 | `CRIT-H-CONTEXTUAL-COMPILATION-OMISSION` | Action-result File/Observable not in Investigation/ProvenanceRecord/ContextualCompilation |
+| `CRIT-H-ACTION-ROLE-CONTRADICTION` | Action name implies victim/user execution but performer is a threat-actor/operator |
+| `CRIT-H-ORPHAN-TOP-LEVEL` | Top-level `/@graph/N` node unreachable from Investigation/compilation/Grouping roots (nested facet/hash expansions are ignored) |
+
+Source-path coverage (`CRIT-C-SOURCE-HASH`, coverage v1.2.0): when a submitted source file is **not** embedded as a domain-graph node, the rule is `not_applicable` — builders/recipes belong in the critic session manifest, not the investigation graph. Embedded source nodes are still hash-checked when present.
+
+Provenance sidecar (`CRIT-C-PROVENANCE-MANIFEST*`, coverage v1.3.0): when `provenance_manifest_path` is set, verify builder/recipe/output hashes from the sidecar (`builder_source` / `modeling_guidance` / `output_artifact` roles). Do not require those implementation files as Investigation graph nodes.
+
+Serializer modes: `typed_sdk` | `raw_fixture` | `casegraph_raw` | `auto`. Public `CASEGraph` builders that use `upsert_node` without generated dataclass `create()` should declare `casegraph_raw`.
 
 ## Python serializer AST (`CRIT-S-PY-*`)
 
 | Rule ID | Intent |
 |---------|--------|
+| `CRIT-S-PY-TYPED-MODE-WITHOUT-TYPED-OBJECTS` | `serializer_mode=typed_sdk` but script imports no generated domain classes / never calls typed `create()` |
 | `CRIT-S-PY-PRIVATE-OBJECTS` | Mutate `CASEGraph._objects` |
 | `CRIT-S-PY-JSON-DUMPS-ONLY` | `json.dumps` without graph write/serialize |
 | `CRIT-S-PY-FAIL-OPEN-VALIDATION` | Success when validator unavailable |
 | `CRIT-S-PY-SWALLOWED-EXCEPTION` | Broad `except` swallow |
 | `CRIT-S-PY-UNSCOPED-UUID5` | uuid5 ID helper without parent scope |
 | `CRIT-S-PY-GLOBAL-UUID-IDS` | uuid4 `make_*/new_*/build_*` without parent |
-| `CRIT-S-PY-NONEXISTENT-API` | Unknown method on `graph`/`g`/`case_graph` |
+| `CRIT-S-PY-NONEXISTENT-API` | Unknown method on a name **bound to** `CASEGraph` (constructor, annotation, or alias) — not bare variable-name matching |
 | `CRIT-S-PY-REL-ID-COLLAPSE` | `create_relationship` in `for` without assertion_id |
 | `CRIT-S-PY-SILENT-LOOKUP` | `.get(...)` then Return/Pass/Continue without Raise |
 | `CRIT-S-PY-UNSAFE-OVERWRITE` | `open(...,"w")` / `Path.write_*` without `workspace_policy` |

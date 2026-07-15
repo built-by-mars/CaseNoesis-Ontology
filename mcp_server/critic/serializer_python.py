@@ -11,7 +11,7 @@ from critic.canonical import RuleExecution
 from critic.finding_diff import make_stable_finding_id
 from critic.models import CriticFinding, CriticTarget
 
-RULE_VERSION = "1.1.0"
+RULE_VERSION = "1.3.0"
 
 _PY_RULES = (
     "CRIT-S-PY-PRIVATE-OBJECTS",
@@ -27,6 +27,7 @@ _PY_RULES = (
     "CRIT-S-PY-SOURCE-HASH-DRIFT",
     "CRIT-S-PY-SYNTHETIC-HASH",
     "CRIT-S-PY-QUADRATIC-SCAN",
+    "CRIT-S-PY-TYPED-MODE-WITHOUT-TYPED-OBJECTS",
 )
 
 _NESTED_ID_KEYWORDS = ("entry", "dict", "item", "child", "nested")
@@ -58,6 +59,7 @@ _CASEGRAPH_ALLOWLIST_STATIC = frozenset({
     "split",
     "upsert_node",
     "validate",
+    "validate_report",
     "write",
     "write_stream",
     "write_streaming",
@@ -108,6 +110,102 @@ def _casegraph_allowlist() -> frozenset[str]:
 
 _CASEGRAPH_ALLOWLIST = _casegraph_allowlist()
 
+
+def _collect_graph_bindings(tree: ast.AST) -> set[str]:
+    """Names bound to CASEGraph via import, constructor, annotation, or alias.
+
+    Falls back to legacy receiver names only when a CASEGraph symbol is in
+    scope (imported or annotated) so ordinary lists named ``g`` are ignored.
+    """
+
+    casegraph_symbols: set[str] = set()
+    bindings: set[str] = set()
+
+    def _is_casegraph_call(node: ast.AST) -> bool:
+        if not isinstance(node, ast.Call):
+            return False
+        func = node.func
+        if isinstance(func, ast.Name) and func.id in casegraph_symbols:
+            return True
+        if isinstance(func, ast.Attribute) and func.attr in casegraph_symbols:
+            return True
+        return False
+
+    def _annotation_is_casegraph(node: ast.AST | None) -> bool:
+        if node is None:
+            return False
+        if isinstance(node, ast.Name):
+            return node.id in casegraph_symbols or node.id == "CASEGraph"
+        if isinstance(node, ast.Attribute):
+            return node.attr in casegraph_symbols or node.attr == "CASEGraph"
+        if isinstance(node, ast.Subscript):
+            return _annotation_is_casegraph(node.value)
+        return False
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            mod = node.module or ""
+            if mod in {"case_uco", "case_uco.graph"} or mod.endswith(".graph"):
+                for alias in node.names:
+                    if alias.name == "CASEGraph":
+                        casegraph_symbols.add(alias.asname or "CASEGraph")
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name in {"case_uco", "case_uco.graph"}:
+                    # case_uco.CASEGraph via attribute — track module alias only
+                    casegraph_symbols.add("CASEGraph")
+
+    # Seed: bare CASEGraph always recognized as constructor name
+    casegraph_symbols.add("CASEGraph")
+
+    # First pass: constructors and annotations
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            if _is_casegraph_call(node.value):
+                for target in node.targets:
+                    if isinstance(target, ast.Name):
+                        bindings.add(target.id)
+        elif isinstance(node, ast.AnnAssign):
+            if isinstance(node.target, ast.Name) and (
+                _annotation_is_casegraph(node.annotation)
+                or (node.value is not None and _is_casegraph_call(node.value))
+            ):
+                bindings.add(node.target.id)
+        elif isinstance(node, ast.FunctionDef):
+            for arg in list(node.args.args) + list(node.args.kwonlyargs):
+                if arg.annotation is not None and _annotation_is_casegraph(
+                    arg.annotation
+                ):
+                    bindings.add(arg.arg)
+                elif arg.arg in _GRAPH_RECEIVER_NAMES:
+                    # Unannotated params named graph/g/case_graph/cg are treated
+                    # as CASEGraph receivers (legacy SDK call style).
+                    bindings.add(arg.arg)
+
+    # Alias closure: g = graph when graph is already bound
+    changed = True
+    while changed:
+        changed = False
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Assign) or not isinstance(
+                node.value, ast.Name
+            ):
+                continue
+            if node.value.id not in bindings:
+                continue
+            for target in node.targets:
+                if isinstance(target, ast.Name) and target.id not in bindings:
+                    bindings.add(target.id)
+                    changed = True
+
+    return bindings
+
+
+def _is_graph_receiver(node: ast.AST, bindings: set[str]) -> bool:
+    """True when ``node`` is a Name bound to a CASEGraph instance/symbol."""
+    return isinstance(node, ast.Name) and node.id in bindings
+
+
 def _exec(
     rule_id: str,
     artifact_hash: str,
@@ -134,7 +232,9 @@ def analyze_python_serializer(
     path: Path,
     source: str,
     *,
-    serializer_mode: Literal["typed_sdk", "raw_fixture", "auto"] = "auto",
+    serializer_mode: Literal[
+        "typed_sdk", "raw_fixture", "auto", "casegraph_raw"
+    ] = "auto",
     artifact_hash: str | None = None,
 ) -> tuple[list[CriticFinding], list[RuleExecution]]:
     findings: list[CriticFinding] = []
@@ -163,18 +263,23 @@ def analyze_python_serializer(
             )
         ]
 
+    graph_bindings = _collect_graph_bindings(tree)
+
     findings.extend(_private_objects_mutation(path, tree))
-    findings.extend(_json_dumps_as_serialization(path, tree, serializer_mode))
+    findings.extend(
+        _json_dumps_as_serialization(path, tree, serializer_mode, graph_bindings)
+    )
     findings.extend(_fail_open_validation(path, tree))
     findings.extend(_broad_swallowed_exceptions(path, tree))
     findings.extend(_uuid_helpers(path, tree))
-    findings.extend(_nonexistent_sdk_api(path, tree))
-    findings.extend(_relationship_id_collapse(path, tree))
+    findings.extend(_nonexistent_sdk_api(path, tree, graph_bindings))
+    findings.extend(_relationship_id_collapse(path, tree, graph_bindings))
     findings.extend(_silent_lookup_failure(path, tree))
     findings.extend(_unsafe_overwrite_or_workspace_bypass(path, tree, source))
     findings.extend(_source_hash_drift(path, tree))
     findings.extend(_synthetic_vs_evidence_hash(path, tree))
-    findings.extend(_quadratic_full_scans(path, tree))
+    findings.extend(_quadratic_full_scans(path, tree, graph_bindings))
+    findings.extend(_typed_mode_without_typed_objects(path, tree, serializer_mode))
 
     executions = [
         _exec(
@@ -240,8 +345,9 @@ def _json_dumps_as_serialization(
     path: Path,
     tree: ast.AST,
     serializer_mode: str,
+    bindings: set[str],
 ) -> list[CriticFinding]:
-    if serializer_mode == "raw_fixture":
+    if serializer_mode in {"raw_fixture", "casegraph_raw"}:
         return []
     uses_json_dumps = False
     uses_graph_write = False
@@ -256,17 +362,13 @@ def _json_dumps_as_serialization(
             "write",
             "serialize",
             "write_streaming",
+            "validate",
+            "validate_report",
         }:
-            # Prefer attribute on names suggestive of graph, not file handles
-            if isinstance(func.value, ast.Name) and func.value.id in {
-                "graph",
-                "g",
-                "case_graph",
-                "cg",
-            }:
+            if _is_graph_receiver(func.value, bindings):
                 uses_graph_write = True
             elif isinstance(func.value, ast.Attribute):
-                uses_graph_write = True  # graph.write path via attribute chain
+                uses_graph_write = True  # self.graph.write via attribute chain
     if uses_json_dumps and not uses_graph_write and serializer_mode in {"auto", "typed_sdk"}:
         return [
             _s(
@@ -479,7 +581,9 @@ def _uuid5_material_omits_parent(node: ast.FunctionDef) -> bool:
     return False
 
 
-def _nonexistent_sdk_api(path: Path, tree: ast.AST) -> list[CriticFinding]:
+def _nonexistent_sdk_api(
+    path: Path, tree: ast.AST, bindings: set[str]
+) -> list[CriticFinding]:
     findings: list[CriticFinding] = []
     for node in ast.walk(tree):
         if not isinstance(node, ast.Call):
@@ -487,7 +591,7 @@ def _nonexistent_sdk_api(path: Path, tree: ast.AST) -> list[CriticFinding]:
         func = node.func
         if not isinstance(func, ast.Attribute):
             continue
-        if not _is_graph_receiver(func.value):
+        if not _is_graph_receiver(func.value, bindings):
             continue
         method = func.attr
         if method in _CASEGRAPH_ALLOWLIST:
@@ -502,23 +606,24 @@ def _nonexistent_sdk_api(path: Path, tree: ast.AST) -> list[CriticFinding]:
                     line=getattr(node, "lineno", None),
                     qualified_name=method,
                 ),
-                evidence=[f"call={method}"],
+                evidence=[f"call={method}", f"receiver={func.value.id}"],
                 rationale=(
                     f"Call to unknown CASEGraph method {method!r}; not in the "
                     "public allowlist."
                 ),
                 recommended_change="Use a documented CASEGraph API method.",
-                verification_method="AST Attribute call on graph/g/case_graph allowlist.",
+                verification_method=(
+                    "AST Attribute call on a name bound to CASEGraph "
+                    "(constructor, annotation, or alias)."
+                ),
             )
         )
     return findings
 
 
-def _is_graph_receiver(node: ast.AST) -> bool:
-    return isinstance(node, ast.Name) and node.id in _GRAPH_RECEIVER_NAMES
-
-
-def _relationship_id_collapse(path: Path, tree: ast.AST) -> list[CriticFinding]:
+def _relationship_id_collapse(
+    path: Path, tree: ast.AST, bindings: set[str]
+) -> list[CriticFinding]:
     """Flag repeated create_relationship without assertion_id in the same scope.
 
     A single call site (even inside a loop) is medium; two or more unscoped
@@ -537,7 +642,7 @@ def _relationship_id_collapse(path: Path, tree: ast.AST) -> list[CriticFinding]:
             if not (
                 isinstance(func, ast.Attribute)
                 and func.attr == "create_relationship"
-                and _is_graph_receiver(func.value)
+                and _is_graph_receiver(func.value, bindings)
             ):
                 continue
             kw_names = {
@@ -918,18 +1023,73 @@ def _synthetic_vs_evidence_hash(path: Path, tree: ast.AST) -> list[CriticFinding
     return findings
 
 
-def _quadratic_full_scans(path: Path, tree: ast.AST) -> list[CriticFinding]:
+def _typed_mode_without_typed_objects(
+    path: Path, tree: ast.AST, serializer_mode: str
+) -> list[CriticFinding]:
+    """typed_sdk requires generated dataclass create()/add(), not only upsert_node."""
+
+    if serializer_mode != "typed_sdk":
+        return []
+    imports_typed = False
+    uses_create = False
+    uses_upsert = False
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            mod = node.module or ""
+            if mod.startswith("case_uco.uco") or mod.startswith("case_uco.case"):
+                imports_typed = True
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+            if node.func.attr == "create":
+                uses_create = True
+            if node.func.attr == "upsert_node":
+                uses_upsert = True
+    if imports_typed and uses_create:
+        return []
+    if not uses_upsert and uses_create:
+        return []
+    return [
+        _s(
+            rule_id="CRIT-S-PY-TYPED-MODE-WITHOUT-TYPED-OBJECTS",
+            severity="high",
+            category="serializer_api",
+            target=CriticTarget(
+                path=path.name, qualified_name="upsert_node"
+            ),
+            evidence=[
+                f"imports_typed_classes={imports_typed}",
+                f"uses_create={uses_create}",
+                f"uses_upsert_node={uses_upsert}",
+            ],
+            rationale=(
+                "serializer_mode=typed_sdk but the builder does not import generated "
+                "CASE/UCO dataclasses and construct them via CASEGraph.create()/add(); "
+                "raw upsert_node property maps are not typed construction."
+            ),
+            recommended_change=(
+                "Use generated classes with graph.create()/add(), or set "
+                "serializer_mode=casegraph_raw / raw_fixture honestly."
+            ),
+            verification_method=(
+                "AST: case_uco.uco/case imports + create() calls under typed_sdk."
+            ),
+        )
+    ]
+
+
+def _quadratic_full_scans(
+    path: Path, tree: ast.AST, bindings: set[str]
+) -> list[CriticFinding]:
     findings: list[CriticFinding] = []
     seen: set[int] = set()
     for outer in ast.walk(tree):
         if not isinstance(outer, ast.For):
             continue
-        if not _iterates_graph_objects(outer.iter):
+        if not _iterates_graph_objects(outer.iter, bindings):
             continue
         for inner in ast.walk(outer):
             if inner is outer or not isinstance(inner, ast.For):
                 continue
-            if not _iterates_graph_objects(inner.iter):
+            if not _iterates_graph_objects(inner.iter, bindings):
                 continue
             line = getattr(outer, "lineno", 0) or 0
             if line in seen:
@@ -958,23 +1118,23 @@ def _quadratic_full_scans(path: Path, tree: ast.AST) -> list[CriticFinding]:
     return findings
 
 
-def _iterates_graph_objects(iter_node: ast.AST) -> bool:
+def _iterates_graph_objects(iter_node: ast.AST, bindings: set[str]) -> bool:
     if isinstance(iter_node, ast.Attribute) and iter_node.attr == "_objects":
         return True
     if isinstance(iter_node, ast.Call):
         func = iter_node.func
         if isinstance(func, ast.Name) and func.id in {"list", "iter", "tuple"}:
             if iter_node.args:
-                return _iterates_graph_objects(iter_node.args[0])
+                return _iterates_graph_objects(iter_node.args[0], bindings)
         if isinstance(func, ast.Attribute) and func.attr in {"values", "keys", "items"}:
             if isinstance(func.value, ast.Attribute) and func.value.attr == "_objects":
                 return True
         # list(graph) / iter(graph)
         if isinstance(func, ast.Name) and func.id in {"list", "iter"} and iter_node.args:
             arg0 = iter_node.args[0]
-            if isinstance(arg0, ast.Name) and arg0.id in _GRAPH_RECEIVER_NAMES:
+            if _is_graph_receiver(arg0, bindings):
                 return True
-    if isinstance(iter_node, ast.Name) and iter_node.id in _GRAPH_RECEIVER_NAMES:
+    if _is_graph_receiver(iter_node, bindings):
         return True
     return False
 

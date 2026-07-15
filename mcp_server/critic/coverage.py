@@ -18,7 +18,7 @@ from critic.canonical import (
 from critic.finding_diff import make_stable_finding_id
 from critic.models import CriticFinding, CriticTarget
 
-RULE_VERSION = "1.1.0"
+RULE_VERSION = "1.3.0"
 
 
 def _exec(
@@ -382,24 +382,16 @@ def check_source_document_hash(
             matched_node = node
             break
     if matched_node is None:
-        f = _finding(
-            "CRIT-C-SOURCE-NODE-MISSING",
-            "high",
-            "source_fidelity",
-            CriticTarget(path=source_name),
-            [f"source_name={source_name}"],
-            "Source document node with matching name was not found.",
-            "Add an ObservableObject named after the source file with ContentDataFacet hash.",
-            "Find node where uco-core:name equals source file name.",
-            evidence_kind="source",
-            verifier_rule_id="CRIT-C-SOURCE-HASH",
-        )
-        return [f], [
+        # Builder/recipe/source paths belong in the critic session manifest
+        # (ArtifactHashes.source_sha256), not in the domain investigation graph.
+        # When the graph does not embed a matching node, treat coverage as
+        # not_applicable rather than forcing domain pollution.
+        return [], [
             _exec(
-                "CRIT-C-SOURCE-NODE-MISSING",
-                "evaluated",
+                "CRIT-C-SOURCE-HASH",
+                "not_applicable",
                 artifact_hash,
-                [f.finding_id],
+                [],
                 examined=0,
             )
         ]
@@ -453,6 +445,110 @@ def check_source_document_hash(
 
     return [], [
         _exec("CRIT-C-SOURCE-HASH", "evaluated", artifact_hash, [], examined=1)
+    ]
+
+
+def check_provenance_manifest(
+    manifest_path: Path,
+    *,
+    project_root: Path,
+    artifact_hash: str,
+) -> tuple[list[CriticFinding], list[RuleExecution]]:
+    """Verify builder/recipe/output hashes from a sidecar provenance manifest.
+
+    Domain investigation graphs should not embed builder/recipe implementation
+    files. This rule checks the sidecar instead.
+    """
+
+    findings: list[CriticFinding] = []
+    try:
+        payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        f = _finding(
+            "CRIT-C-PROVENANCE-MANIFEST",
+            "high",
+            "source_fidelity",
+            CriticTarget(path=manifest_path.name),
+            [type(exc).__name__],
+            "Provenance manifest could not be parsed.",
+            "Provide a valid JSON build/provenance sidecar.",
+            "json.loads provenance_manifest_path",
+        )
+        return [f], [
+            _exec(
+                "CRIT-C-PROVENANCE-MANIFEST",
+                "failed",
+                artifact_hash,
+                [f.finding_id],
+                error=type(exc).__name__,
+            )
+        ]
+
+    import hashlib
+
+    def _sha(path: Path) -> str:
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+
+    role_keys = (
+        ("builder", "builder_source"),
+        ("recipe", "modeling_guidance"),
+        ("output", "output_artifact"),
+    )
+    examined = 0
+    for key, role in role_keys:
+        entry = payload.get(key) or payload.get(role)
+        if not isinstance(entry, dict):
+            continue
+        rel = entry.get("path")
+        expected = entry.get("sha256")
+        if not rel or not expected:
+            continue
+        examined += 1
+        candidate = Path(rel)
+        if not candidate.is_absolute():
+            candidate = (project_root / candidate).resolve()
+        if not candidate.is_file():
+            findings.append(
+                _finding(
+                    "CRIT-C-PROVENANCE-MANIFEST-MISSING",
+                    "high",
+                    "source_fidelity",
+                    CriticTarget(path=str(rel)),
+                    [f"role={role}"],
+                    f"Provenance manifest path for {role} is missing on disk.",
+                    "Update the sidecar path or restore the referenced file.",
+                    "Path.exists for manifest entry",
+                )
+            )
+            continue
+        actual = _sha(candidate)
+        if actual.lower() != str(expected).lower():
+            findings.append(
+                _finding(
+                    "CRIT-C-PROVENANCE-MANIFEST-MISMATCH",
+                    "high",
+                    "source_fidelity",
+                    CriticTarget(path=str(rel)),
+                    [
+                        f"role={role}",
+                        f"manifest_sha256={expected}",
+                        f"file_sha256={actual}",
+                    ],
+                    f"Provenance manifest hash for {role} does not match the file.",
+                    "Rebuild the sidecar after changing builder/recipe/output.",
+                    "Compare manifest sha256 to sha256(file)",
+                )
+            )
+
+    status = "evaluated" if examined else "not_applicable"
+    return findings, [
+        _exec(
+            "CRIT-C-PROVENANCE-MANIFEST",
+            status,
+            artifact_hash,
+            [f.finding_id for f in findings],
+            examined=examined,
+        )
     ]
 
 

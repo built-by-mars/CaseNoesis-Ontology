@@ -204,8 +204,8 @@ def test_python_serializer_ast_findings():
     assert "CRIT-S-PY-FAIL-OPEN-VALIDATION" in rules
     exec_rules = {e.rule_id for e in executions}
     assert "CRIT-S-PY-PRIVATE-OBJECTS" in exec_rules
-    assert all(e.rule_version == "1.1.0" for e in executions)
-    assert all(f.rule_version == "1.1.0" for f in findings)
+    assert all(e.rule_version == "1.3.0" for e in executions)
+    assert all(f.rule_version == "1.3.0" for f in findings)
 
 
 def test_python_serializer_real_casegraph_api_not_nonexistent():
@@ -238,12 +238,14 @@ def build(output_path: str):
 
 def test_rel_id_collapse_requires_repeated_calls():
     single = '''
-def build(graph):
+from case_uco import CASEGraph
+def build(graph: CASEGraph):
     for item in items:  # noqa: F821
         graph.create_relationship(source=a, target=b)  # noqa: F821
 '''
     multi = '''
-def build(graph):
+from case_uco import CASEGraph
+def build(graph: CASEGraph):
     for item in items:  # noqa: F821
         graph.create_relationship(source=a, target=b)  # noqa: F821
         graph.create_relationship(source=c, target=d)  # noqa: F821
@@ -256,6 +258,28 @@ def build(graph):
     assert single_rel[0].severity == "medium"
     assert multi_rel
     assert all(f.severity == "high" for f in multi_rel)
+
+
+def test_nonexistent_api_tracks_bindings_not_bare_names():
+    """Renamed CASEGraph bindings are checked; FakeGraph named g is not."""
+
+    renamed = '''
+from case_uco import CASEGraph
+def build():
+    kb = CASEGraph()
+    kb.add_node({})
+'''
+    fake = '''
+class FakeGraph:
+    def bad(self): pass
+def build():
+    g = FakeGraph()
+    g.bad()
+'''
+    renamed_f, _ = analyze_python_serializer(Path("kb.py"), renamed)
+    fake_f, _ = analyze_python_serializer(Path("fake.py"), fake)
+    assert any(f.rule_id == "CRIT-S-PY-NONEXISTENT-API" for f in renamed_f)
+    assert not any(f.rule_id == "CRIT-S-PY-NONEXISTENT-API" for f in fake_f)
 
 
 def test_unsafe_overwrite_ignores_literal_write_text():

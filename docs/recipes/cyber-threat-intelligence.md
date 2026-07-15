@@ -3,36 +3,41 @@
 > See [Recipe Index](INDEX.md) for all recipes.
 
 Model an open-source cyber threat intelligence (CTI) report — a vendor
-analysis (Cisco Talos, Mandiant, etc.) of a threat actor, its malware
-families, its post-compromise toolkit, and its tactics, techniques, and
+analysis (Cisco Talos, Mandiant, Prevailion, etc.) of adversary activity,
+malware families, post-compromise tooling, and tactics, techniques, and
 procedures (TTPs). This is fundamentally different from a single-incident
-forensic case: the deliverable is *intelligence about an adversary*
-distilled from many intrusions, not evidence acquired from one host or
-capture. The distinctive modeling requirements are (1) **the report is the
-primary artifact** — including its graphics, which routinely carry IOCs,
-config dumps, and infection-chain detail that never appear in the prose;
-(2) **the threat actor is an actor, not an observable** — UCO has no
-`ThreatActor` class, so the group is a `uco-identity:Organization` whose
-behaviors are `uco-action:Action` nodes; and (3) **malware families and
-variants** are tools with a lineage and an activity timeline, distinct
-from the individual samples that carry hashes.
+forensic case: the deliverable is *intelligence distilled from reporting*
+(often many intrusions), not evidence acquired from one host or capture.
+The distinctive modeling requirements are (1) **the report is the primary
+artifact** — including graphics, tables, and inline code that routinely
+carry IOCs, config dumps, and infection-chain detail absent from prose;
+(2) **the actor abstraction follows source epistemology** — UCO has no
+`ThreatActor` class; use a named `Organization`, an unattributed
+`Grouping` activity cluster, or omit the actor entirely (see §2); and
+(3) **malware families and variants** are tools with a lineage and an
+activity timeline, distinct from the individual samples that carry hashes.
 
 Validated against `examples/cti/lotus_blossom_2025/` (Cisco Talos, "Lotus
 Blossom espionage group targets multiple industries with different
-versions of Sagerunex and hacking tools," Joey Chen, 2025-02-27).
+versions of Sagerunex and hacking tools," Joey Chen, 2025-02-27) and
+`examples/cti/darkwatchman_2021/` (Prevailion PACT, "DarkWatchman: A new
+evolution in fileless techniques," Matt Stafford and Sherman Smith,
+2021-12-14 — fileless registry-buffered RAT + DGA C2).
 
 **When to use this recipe**
 
-- The source is a threat-intelligence report / threat spotlight / APT
-  writeup attributing activity to a named group (Lotus Blossom, a.k.a.
-  Spring Dragon / Billbug / Thrip; APT41; etc.)
+- The source is a threat-intelligence report / threat spotlight / APT or
+  malware writeup — either attributing activity to a named group (Lotus
+  Blossom, APT41, etc.) **or** describing unattributed malware/activity
+  clusters where attribution is explicitly impossible (DarkWatchman)
 - The content describes malware families and variants, C2 infrastructure
   (including third-party cloud C2 such as Dropbox, Twitter/X, or webmail),
-  a post-compromise toolkit, registry/service persistence, victimology by
-  sector and region, and IOCs (hashes, IPs, domains, campaign codes,
+  a post-compromise toolkit, registry/service/task persistence, victimology
+  by sector and region, and IOCs (hashes, IPs, domains, campaign codes,
   Snort/ClamAV/YARA signatures)
-- The report embeds graphics (timelines, maps, infection-chain diagrams,
-  decompiled code, config hexdumps) that carry details absent from the text
+- The report embeds load-bearing source artifacts — graphics, tables,
+  inline code blocks, configuration excerpts, and machine-readable IOC
+  sections — that carry details absent from the surrounding prose
 - For a single intrusion with acquired packet capture or host evidence,
   use [network-investigation.md](network-investigation.md); for a
   delivery-chain narrative from a phishing email, use
@@ -44,47 +49,84 @@ versions of Sagerunex and hacking tools," Joey Chen, 2025-02-27).
 | Class | Role |
 |---|---|
 | `case-investigation:Investigation` | Report container; `focus` = attribution / malware / C2 / persistence |
+| `uco-core:ContextualCompilation` | Thematic bundles under the Investigation (source, delivery, malware, infra, analytics, detection, ATT&CK mappings) |
 | `uco-observable:ObservableObject` + `URLFacet` | The report itself (blog post) |
 | `uco-identity:Person` / `Organization` | Report author and publisher (e.g., Joey Chen / Cisco Talos) |
 | `uco-observable:ObservableObject` + `RasterPictureFacet` + `FileFacet` + `ContentDataFacet` | Each in-report graphic, captured by SHA-256 with a description of what it depicts |
-| `uco-identity:Organization` | **The threat actor** (no `ThreatActor` class exists); aliases in `tag`/description |
+| `uco-identity:Organization` **or** `uco-core:Grouping` | Named attributed actor **or** unattributed activity cluster (see §2); no `ThreatActor` class |
+| `uco-core:Annotation` | Assessments, capabilities, contradictions, detection provenance, ATT&CK mapping notes |
+| `uco-core:Event` | VT first-submission / first-seen style timestamps (not `FileFacet.observableCreatedTime`) |
+| `uco-core:ConfidenceFacet` | Numeric confidence **only** when the source publishes a number or a project policy defines the scale; otherwise prefer verbal `confidence:*` tags |
+| `uco-configuration:Configuration` + `ConfigurationEntry` | Code-derived malware parameter schemas (registry value-name templates, DGA seed sets) |
 | `uco-tool:MaliciousTool` | Malware family (backdoor/RAT) and offensive tools; `toolType` |
 | `uco-tool:Tool` | Dual-use / legitimate tooling (RAR, Impacket, VMProtect, HTran) |
-| `uco-observable:ObservableObject` + `FileFacet` | Malware samples/variants (with `observableCreatedTime` = activity-window start) and dropped DLLs |
-| `uco-observable:WindowsRegistryKey` + `WindowsRegistryKeyFacet` + `WindowsRegistryValue` | Registry persistence (service-DLL install) |
+| `uco-observable:ObservableObject` + `FileFacet` | Malware samples/variants and dropped DLLs (`observableCreatedTime` only for true creation times; see §3) |
+| `uco-observable:WindowsRegistryKey` + `WindowsRegistryKeyFacet` + `WindowsRegistryValue` | Observed registry state only (`name` / `data` / `dataType` — no `description` on the value) |
+| `uco-observable:WindowsTask` + `WindowsTaskFacet` | Scheduled-task persistence (`triggerList` / `actionList` when reported) |
 | `uco-observable:WindowsService` + `WindowsServiceFacet` | The hijacked/created service (`startType`, `serviceType`) |
+| `uco-pattern:LogicalPattern` | Machine-actionable detection expressions (`patternExpression` typed as `pattern:PatternExpression` under CASE 1.4.0) |
 | `uco-observable:IPv4AddressFacet` / `DomainNameFacet` | C2 servers, proxies, cloud-C2 endpoints, recon services |
 | `uco-location:Location` + `SimpleAddressFacet` | Targeted regions (victimology map) |
 | `uco-victim:VictimTargeting` | Targeted sectors (a `Victim` role subclass) |
-| `uco-action:Action` | Adversary behaviors: persistence, discovery, lateral movement, collection/exfil; also vendor detection coverage |
+| `uco-action:Action` | Observed/reported adversary (or victim) behaviors: persistence, discovery, lateral movement, collection/exfil — **not** capability bullets or vendor detection coverage |
 
 ## Modeling patterns
 
-### 1. The report and its graphics are first-class evidence
+### 1. The report and its load-bearing source artifacts are first-class evidence
 
 Model the blog post as an `ObservableObject` with a `URLFacet`, linked to
-its author (`Person`) and publisher (`Organization`). Then capture **every
-graphic** the report embeds. Threat reports put load-bearing detail into
-images — a Gantt timeline of malware activity, a targeted-countries map,
-infection-chain diagrams, decompiled code, and annotated config hexdumps
-with C2 IPs and tokens. Download each image, hash it (SHA-256), and create
-an `ObservableObject` with `FileFacet` + `RasterPictureFacet` +
+its author (`Person`) and publisher (`Organization`). Capture **every
+load-bearing source artifact**: graphics, tables, inline code blocks,
+configuration excerpts, and machine-readable IOC sections. Threat reports
+put decisive detail into images and code — Gantt timelines, infection-chain
+diagrams, DGA/registry handlers, and annotated config hexdumps with C2 IPs
+and tokens. Download each graphic, hash it (SHA-256), and create an
+`ObservableObject` with `FileFacet` + `RasterPictureFacet` +
 `ContentDataFacet`, and — critically — a `uco-core:description` recording
-*what the graphic shows*, so the intelligence survives even though the
-pixels are only referenced by hash. Link each graphic to the report with
-`Contained_Within` tagged `graphic`.
+*what the artifact shows*. Link graphics to the report with
+`Contained_Within` tagged `graphic`. Prefer hashing inline code excerpts
+the same way when they ground capability or contradiction Annotations.
 
-### 2. The threat actor is an Organization; its behaviors are Actions
+### 2. Actor abstraction — three branches (do not collapse epistemology)
 
-UCO has no dedicated ThreatActor/IntrusionSet class, so model the group as
-a `uco-identity:Organization`. Record its aliases (Spring Dragon, Billbug,
-Thrip) in `tag` and the description, and its "active since 2012" attribution
-narrative in the description. Every adversary behavior is a
-`uco-action:Action` whose `performer` is this Organization — this keeps the
-actor as the grammatical subject of the intrusion and lets a reader answer
-"what did the actor do?" from graph structure. Attribution evidence
-(exclusive malware use, victimology, TTP overlap) belongs in the
-`Investigation`/actor descriptions.
+UCO has no dedicated ThreatActor/IntrusionSet class. Choose the branch that
+matches the **source's epistemic state**, not a one-size-fits-all Organization:
+
+| Source says… | Model as | Performer of observed Actions? |
+|---|---|---|
+| Named/attributed group (aliases, MITRE group page, exclusive malware) | `uco-identity:Organization` with reported aliases in `tag` | Yes — `uco-action:performer` |
+| Unattributed activity / “attribution not possible” | `uco-core:Grouping` (activity cluster) + `uco-core:Annotation` claims with source locators | **No** — leave performer unset |
+| No defensible actor abstraction | Omit actor node | Leave performer unknown |
+
+Never invent aliases the report does not use. Never turn “appears criminal /
+moderate confidence / ransomware hypothesis” into flat Organization facts.
+Record those as `Annotation` statements with source provenance (report
+section, figure, or code excerpt via `ExternalReference.definingContext`).
+Prefer verbal confidence tags (`confidence:moderate-verbal`) over invented
+numeric `ConfidenceFacet` values unless the source publishes a number or a
+cited project normalization policy exists.
+
+Named-group exemplar: Lotus Blossom → Organization. Unattributed exemplar:
+DarkWatchman → Grouping + analytic Annotations
+(`examples/cti/darkwatchman_2021/`, `CASEGraph` public upsert APIs /
+`serializer_mode=casegraph_raw` + `case_uco.validation.validate_graph_file`).
+Keep builder/recipe hashes in a `build-manifest.json` sidecar — do not insert
+implementation files into the CTI domain graph.
+
+### 2b. Observed behavior vs capability vs enrichment
+
+Do not represent every capability bullet as an observed `Action` with a
+performer. Separate:
+
+| Source meaning | Representation |
+|---|---|
+| Observed / repeatedly executed behavior | `uco-action:Action` (tag `epistemic:observed` or `reported`) |
+| Code capability / conditional path | `Annotation` or capability-tagged `Grouping` on the tool; condition in description |
+| Analyst hypothesis | `Annotation` tagged `epistemic:hypothesis` (+ verbal confidence tag or sourced numeric facet) |
+| ATT&CK mapping | Technique punning on the Action **plus** mapping provenance Annotation (technique URL, mapping date/author, vendor-asserted vs modeler enrichment) |
+
+Victim/user execution (“victim opens the attachment”) must not list the
+adversary as `performer` — omit performer or use a redacted victim identity.
 
 ### 3. Malware families vs. variants vs. samples
 
@@ -94,13 +136,20 @@ Distinguish three levels:
   backdoor lineage, its `toolType`, injection method, and shared behaviors;
   link to its predecessor with `Related_To` ("assessed evolution of Evora").
 - **Variant** (`ObservableObject` + `FileFacet`): each distinct version
-  (Beta, original, Dropbox/Twitter, Zimbra), with its activity window as
-  `observableCreatedTime` (read from the report's timeline graphic) and its
-  distinguishing C2 mechanism in the description; `Related_To` the family.
+  (Beta, original, Dropbox/Twitter, Zimbra), with its distinguishing C2
+  mechanism in the description; `Related_To` the family.
 - **Sample**: an individual binary carrying a hash — attach a
   `ContentDataFacet` when the report gives one.
 
-Record the actor's `Used` relationship to the family and to each variant.
+**Timestamps:** use `observableCreatedTime` only for actual artifact creation
+times. VirusTotal *submission*, first-seen, first-analyzed, and estimated
+activity windows are `uco-core:Event` nodes (`eventType`, `startTime`,
+`eventContext` → sample) — never silently rewrite submission times as file
+creation.
+
+When a named Organization is justified, record its `Used` relationship to the
+family and to each variant. For unattributed clusters, classify samples via
+`AnalyticResult` instead of inventing a Used edge from a fake Organization.
 
 ### 4. Registry-based persistence is fully covered by core UCO
 
@@ -117,7 +166,30 @@ the `key` path and one embedded `WindowsRegistryValue` per value. On each
 `startType` = `service_auto_start` when `Start=2`, `serviceType`), and
 relate the `ServiceDll` value's key to the dropped DLL `ObservableObject`.
 Wrap the whole thing in a single persistence `uco-action:Action`
-(`performer` = actor, `object` = the keys, `result` = the services).
+(`performer` = named attributed Organization **only when justified**;
+`object` = the keys, `result` = the services).
+
+The same native coverage applies to **fileless registry-buffer** patterns
+(DarkWatchman): configuration, encoded payloads, and IPC buffers live under
+an application-looking hive (e.g. `HKCU\Software\Microsoft\Windows\DWM\`)
+with host-derived value-name suffixes. Model the hive as one
+`WindowsRegistryKey`. Use `WindowsRegistryValue` **only for observed state**
+(`uco-core:name`, `uco-observable:data`, `uco-observable:dataType` — values
+do **not** inherit `uco-core:description`). Put code-derived parameter
+semantics (what `<uid>a` means) on
+`uco-configuration:Configuration` / `ConfigurationEntry`, not as fake
+registry snapshots. Do **not** instantiate values the source says are unset
+(e.g. DGA salt never written). Pair with a `WindowsTask` observable
+(`triggerList` / `actionList` when reported) and scheduled-task persistence
+`Action` (T1053.005) when the report documents Task Scheduler rather than a
+service DLL. Label analysis-sandbox accounts (ANY.RUN hostnames) as
+analysis-environment identities, not victim accounts. Do not invent a
+"fileless" extension class — registry + configuration + task + Action is enough.
+
+Do not weaken `Contained_Within` merely because a contained file lacks a
+published digest — name, size, and report provenance are enough. Tag the
+artifact `hash-status:not-published` (or `source-bytes:not-acquired`) so the
+critic emits a medium completeness note rather than a high defect.
 
 > **Note on the value name property.** `WindowsRegistryValue` is a
 > `UcoInherentCharacterizationThing`, and its name is `uco-core:name` — not
@@ -186,7 +258,8 @@ cloud channel.
 
 Model targeted regions (from the report's map graphic) as
 `uco-location:Location` + `SimpleAddressFacet.country`, related to the actor
-with a `targeting`-tagged edge. Model targeted sectors as a
+abstraction or activity cluster through a sourced targeting assertion
+(`targeting`-tagged edge or Annotation). Model targeted sectors as a
 `uco-victim:VictimTargeting` node (a `Victim` role subclass) — put the
 sector list in the description and `tag`; there is no `targetSector`
 property, so do not invent one.
@@ -195,14 +268,19 @@ property, so do not invent one.
 
 | Anti-pattern | Fix |
 |---|---|
-| Dropping the report's graphics because they are "just images" | Capture each as a hashed `RasterPicture` observable with a description of the IOCs/diagram it carries |
-| Modeling the threat actor as an `ObservableObject` or a `Tool` | The actor is a `uco-identity:Organization`; its behaviors are `uco-action:Action` nodes with the actor as `performer` |
+| Dropping graphics/code/tables because they are "just media" | Capture each load-bearing artifact (hash + description); link claims to section/figure/code locators |
+| Forcing every CTI report into a named `Organization` actor | Choose Organization / unattributed `Grouping` / omit per §2; never use an unattributed cluster as `performer` |
+| Modeling the threat actor as an `ObservableObject` or a `Tool` | Named actor → `Organization`; unattributed cluster → `Grouping`; behaviors → `Action` (performer only when attributed) |
+| Claiming `serializer_mode=typed_sdk` while using only `upsert_node` | Use generated dataclasses + `graph.create()`, or label the builder `casegraph_raw` |
+| Invented numeric `ConfidenceFacet` values | Preserve verbal confidence, or cite a normalization policy / source-published number |
+| `uco-core:description` on `WindowsRegistryValue` | Values only expose `name` / `data` / `dataType`; put semantics on `ConfigurationEntry` |
 | `uco-observable:name` on a `WindowsRegistryValue` | Use `uco-core:name`; the value's data/type are `uco-observable:data` / `uco-observable:dataType` |
 | Free-text registry data type (`REG_EXPAND_SZ`) | Use `RegistryDatatypeVocab` members (`reg_expand_sz`, `reg_dword`, …) |
-| Inventing a bespoke Technique/Malware/ThreatActor class | Actor → Organization; malware → MaliciousTool; ATT&CK techniques → the `uco-action:Technique` metaclass (UCO #676) via the `attack-technique` catalog — reuse the canonical ATT&CK IRIs, don't mint your own |
+| Inventing a bespoke Technique/Malware/ThreatActor class | Actor abstraction per §2; malware → MaliciousTool; ATT&CK → `uco-action:Technique` metaclass via the `attack-technique` catalog |
 | Modeling a technique as a plain instance node (`x a uco-action:Technique` with `techniqueTactic`/`techniquePlatform`) | `uco-action:Technique` is a **metaclass**: a technique is an `owl:Class` (`a uco-action:Technique`, `rdfs:subClassOf uco-action:Action`) with `uco-action:techniqueID`; the merged PR has no framework/tactic/platform properties |
 | Linking an action to its technique with a `Uses_Technique` relationship | Type the action instance *with the technique class* (`rdf:type`); the punning type edge is the association — no relationship node |
-| Dropping ATT&CK techniques because the report's prose omits IDs | Enrich from the MITRE ATT&CK group (G0030) and software (S1156) pages |
+| Dropping ATT&CK techniques because the report's prose omits IDs | Enrich from MITRE group/software pages when available; always record mapping provenance |
+| Embedding builder/recipe files in the Investigation graph | Put implementation provenance in a sidecar manifest; keep the domain graph about the report |
 | Collapsing family, variant, and sample into one node | Family = `MaliciousTool`; variants/samples = `ObservableObject` + `FileFacet`/`ContentDataFacet`, `Related_To` the family |
 | Treating cloud C2 (Dropbox/Twitter/Zimbra) as benign | It is a C2 channel — `Connected_To` tagged `c2`, with exfil artifacts `Uploaded_To` it |
 
@@ -214,12 +292,15 @@ property, so do not invent one.
 2. Create the `Investigation`; model the report `ObservableObject`
    (`URLFacet`), its author and publisher, and one hashed `RasterPicture`
    observable per graphic linked `Contained_Within` the report.
-3. Model the threat actor as an `Organization` with aliases; wire it
-   `Subject_Of` the investigation. Add predecessor tooling and lineage.
+3. Model the actor abstraction per §2 (named `Organization`, unattributed
+   `Grouping` + analytic `Annotation`s, or omit). Do not invent aliases or
+   use an unattributed cluster as `performer`. Add predecessor tooling /
+   lineage when the source supports it.
 4. Model the malware family (`MaliciousTool`) and each variant
-   (`ObservableObject` + `FileFacet`, activity window in
-   `observableCreatedTime`); record `Used` edges from the actor; add
-   config-revealed artifacts (attacker host paths, debug-log temp files).
+   (`ObservableObject` + `FileFacet`). Put VT submission / first-seen times
+   on `Event` nodes (§3), not `observableCreatedTime`. Record `Used` only
+   when a named Organization is justified; otherwise classify via
+   `Annotation`. Add config-revealed artifacts (host paths, temp files).
 5. Model the post-compromise toolkit (`MaliciousTool` / `Tool`) with
    `toolType` and hashes where given.
 6. Model registry/service persistence with `WindowsRegistryKey` +
@@ -244,27 +325,43 @@ property, so do not invent one.
    --ontology-graph extensions/attack-technique/mitre-attack-catalog.ttl
    --inference rdfs --allow-info`; `Conforms: True` before presenting.
 
-## Validated exemplar
+## Validated exemplars
 
-`examples/cti/lotus_blossom_2025/build_lotus_blossom_sagerunex.py` — the
-Cisco Talos Lotus Blossom / Sagerunex report: the blog post and its 24
-graphics captured by hash, Lotus Blossom as an `Organization` (aliases
-Spring Dragon / Billbug / Thrip), the Sagerunex `MaliciousTool` family with
-Beta/original/Dropbox-Twitter/Zimbra variants on their timeline windows, the
-post-compromise toolkit (Chrome cookie stealer, Venom proxy,
-adjust-privilege, archiver, mtrain/HTran port relay, RAR, Impacket),
-registry service-DLL persistence for `tapisrv`/`swprv`/`appmgmt` with
-`WindowsService` pairing, legacy VPS + Dropbox/Twitter/Zimbra cloud C2,
-victimology (Philippines/Vietnam/Hong Kong/Taiwan; government/manufacturing/
-telecom/media), campaign-code IOCs, Snort/ClamAV coverage, and twelve MITRE
-ATT&CK techniques (G0030/S1156 mappings) modeled with the
-`uco-action:Technique` metaclass — each technique an `owl:Class` in the
-`attack-technique` catalog and typed onto the behavior `Action` that exhibits
-it. 246 nodes; passes `case_validate` (with RDFS inference) and strict concept
-coverage — all registry data against core UCO (which covers it natively) and
-the technique metaclass/classes against the local `attack-technique` extension
-(the [UCO #676](https://github.com/ucoProject/UCO/pull/676)
-forward-implementation).
+1. `examples/cti/lotus_blossom_2025/build_lotus_blossom_sagerunex.py` — the
+   Cisco Talos Lotus Blossom / Sagerunex report: the blog post and its 24
+   graphics captured by hash, Lotus Blossom as an `Organization` (aliases
+   Spring Dragon / Billbug / Thrip), the Sagerunex `MaliciousTool` family with
+   Beta/original/Dropbox-Twitter/Zimbra variants on their timeline windows, the
+   post-compromise toolkit (Chrome cookie stealer, Venom proxy,
+   adjust-privilege, archiver, mtrain/HTran port relay, RAR, Impacket),
+   registry service-DLL persistence for `tapisrv`/`swprv`/`appmgmt` with
+   `WindowsService` pairing, legacy VPS + Dropbox/Twitter/Zimbra cloud C2,
+   victimology (Philippines/Vietnam/Hong Kong/Taiwan; government/manufacturing/
+   telecom/media), campaign-code IOCs, Snort/ClamAV coverage, and twelve MITRE
+   ATT&CK techniques (G0030/S1156 mappings) modeled with the
+   `uco-action:Technique` metaclass — each technique an `owl:Class` in the
+   `attack-technique` catalog and typed onto the behavior `Action` that exhibits
+   it. Passes `case_validate` (with RDFS inference) and strict concept
+   coverage — all registry data against core UCO (which covers it natively) and
+   the technique metaclass/classes against the local `attack-technique` extension
+   (the [UCO #676](https://github.com/ucoProject/UCO/pull/676)
+   forward-implementation).
+
+2. `examples/cti/darkwatchman_2021/build_darkwatchman.py` — the Prevailion
+   PACT DarkWatchman report (2021-12-14), built with `CASEGraph` public upsert
+   APIs (`serializer_mode=casegraph_raw`, not a typed-dataclass exemplar):
+   unattributed `Grouping` activity cluster (no Organization performer);
+   DarkWatchman as a `MaliciousTool`; spearphish → ZIP → WinRAR SFX delivery;
+   VT submission `Event`s; capability Annotations (including conditional
+   shadow-copy deletion — not a T1490 Action); observed vs candidate DGA via
+   `Configuration` seed set; registry schema on `ConfigurationEntry` with
+   observed install-flag value only; `WindowsTask` structure; `LogicalPattern`
+   detection expressions; source-contradiction Annotations; ATT&CK mappings
+   as modeler enrichment with provenance; builder/recipe hashes in
+   `build-manifest.json`. Demonstrates the **fileless registry-buffer**
+   pattern that complements Lotus Blossom service-DLL persistence. Validated
+   with `case_uco.validation.validate_graph_file(...,
+   extensions=["attack-technique:full"])` (`Conforms: True`).
 
 ## Related
 

@@ -7,6 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.1] - 2026-07-14
+
+Public Python validation API, CTI epistemic modeling for DarkWatchman, critic
+policy alignment, and ATT&CK catalog coverage for the exemplar. Patch release
+on the v1.22 line; registry publication remains opt-in (**disabled** for this
+tag).
+
+#### Public validation API
+
+- Move the fail-closed SHACL + concept-coverage validator into
+  `python/case_uco/validation/` (`validate_graph_file`,
+  `validator_available`, `GraphValidationReport`, bundle/coverage helpers).
+- MCP modules (`graph_validator`, `validation_bundle`, `concept_coverage`,
+  `extension_paths`) become thin re-exports of the package implementation.
+- `CASEGraph.validate_report()` delegates to the public API.
+- Upper-ontology registry lives with the package
+  (`case_uco/validation/upper_ontology_registry.json`);
+  `mcp_server/upper_ontology_registry.json` is a symlink for compatibility.
+- Import-level tests: `python/tests/test_validation_api.py`.
+
+#### DarkWatchman CTI exemplar + recipe
+
+- Add `examples/cti/darkwatchman_2021/` — Prevailion PACT DarkWatchman report
+  (2021-12-14) as a `casegraph_raw` CASEGraph exemplar with unattributed
+  `Grouping` activity cluster, capability vs observed Actions, VT `Event`s,
+  registry/DGA `Configuration`, `WindowsTask`, `LogicalPattern` detections,
+  source-contradiction Annotations, and `build-manifest.json` sidecar.
+- Rewrite [`docs/recipes/cyber-threat-intelligence.md`](docs/recipes/cyber-threat-intelligence.md)
+  for the three-branch actor model (Organization / unattributed Grouping /
+  omit), claim provenance, and anti-pattern updates.
+
+#### Critic and ATT&CK catalog
+
+- `serializer_mode=casegraph_raw`; rule
+  `CRIT-S-PY-TYPED-MODE-WITHOUT-TYPED-OBJECTS` when `typed_sdk` lacks typed
+  `create()`.
+- CTI-aware `CRIT-H-DERIVED-NO-HASH` (medium with identity/containment or
+  `hash-status:not-published` / `source-bytes:not-acquired`).
+- Proxy-duplicate accepts Action object/result and Moved/Copied/Renamed links.
+- `provenance_manifest_path` verifies builder/recipe/output sidecar hashes
+  without requiring implementation files in the Investigation graph.
+- Extend `extensions/attack-technique/mitre-attack-catalog.ttl` with
+  DarkWatchman techniques; CI test
+  `python/tests/test_attack_catalog_coverage.py` fails when exemplars cite
+  undeclared ATT&CK IRIs.
+
+Package versions bumped to **1.22.1**.
+
 ## [1.22.0] - 2026-07-14
 
 Critic acceptance loop (#74–#78), performance foundations (#70–#73), and
@@ -1894,7 +1942,8 @@ digital forensics, cyber-investigation, and cyber-observable data.
 - GitHub Actions workflows: CI, CodeQL, dependency review, release
 - Dependabot configuration for automated dependency updates
 
-[Unreleased]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.0...HEAD
+[Unreleased]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.1...HEAD
+[1.22.1]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.0...v1.22.1
 [1.22.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.21.0...v1.22.0
 [1.21.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.20.0...v1.21.0
 [1.20.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.19.0...v1.20.0
