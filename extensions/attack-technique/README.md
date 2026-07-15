@@ -91,14 +91,27 @@ case_validate --built-version case-1.4.0 \
 Or via the SDK / MCP validator:
 `validate_graph(path, extensions=["attack-technique:full"])`.
 
-## Extending the catalog
+## Extending / refreshing the catalog
 
-When a new exemplar cites an ATT&CK technique not yet in
-`mitre-attack-catalog.ttl`, add a class for it following the pattern above
-(canonical `https://attack.mitre.org/techniques/<id>` IRI, `a owl:Class,
+The catalog is a **generated** partial set (techniques used by exemplars).
+Refresh labels and comments from the pinned MITRE ATT&CK STIX 2.1 release:
+
+```bash
+make sync-attack                        # fetch Enterprise ATT&CK v19.1
+make sync-attack ATTACK_VERSION=19.1
+make sync-attack-offline STIX=/path/to/enterprise-attack-19.1.json
+```
+
+The sync tool (`mcp_server/tools/sync_attack_catalog.py`) unions the current
+catalog membership with technique IRIs cited under `examples/cti/`, rewrites
+`mitre-attack-catalog.ttl`, and records provenance in `manifest.json`.
+
+To add a technique manually before regenerating, include it with
+`--include Txxxx` (or cite it from an exemplar and run `--from-exemplars`).
+Each class must keep the punning pattern: canonical
+`https://attack.mitre.org/techniques/<id>` IRI, `a owl:Class,
 uco-action:Technique`, `rdfs:subClassOf uco-action:Action`,
-`uco-action:techniqueID "<id>"`), recording tactic/platform context in
-`rdfs:comment`.
+`uco-action:techniqueID "<id>"`.
 
 ## Used by
 

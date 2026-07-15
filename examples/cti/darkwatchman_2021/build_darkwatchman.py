@@ -187,12 +187,24 @@ def build_graph() -> CASEGraph:
         return [{"@id": item} for item in dict.fromkeys(ids)]
 
     def report_reference(context: str) -> dict:
-        slug = "".join(ch if ch.isalnum() else "-" for ch in context.lower())[:48]
+        # Full-context UUIDv5 avoids collisions when long section locators share a prefix.
         return {
-            "@id": uid(f"ref-{slug}"),
+            "@id": uid(f"ref:{context}"),
             "@type": "uco-core:ExternalReference",
             "uco-core:referenceURL": lit("xsd:anyURI", REPORT_WAYBACK),
             "uco-core:definingContext": context,
+        }
+
+    def mitre_reference(tid: str) -> dict:
+        url = f"https://attack.mitre.org/techniques/{tid}"
+        return {
+            "@id": uid(f"ref:mitre-attack:{tid}"),
+            "@type": "uco-core:ExternalReference",
+            "uco-core:referenceURL": lit("xsd:anyURI", url),
+            "uco-core:definingContext": (
+                f"MITRE ATT&CK technique {tid} "
+                "(mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
+            ),
         }
 
     attack_mapping_ids: list[str] = []
@@ -603,13 +615,27 @@ def build_graph() -> CASEGraph:
             "@id": uid("regkey-dwm-facet"),
             "@type": "uco-observable:WindowsRegistryKeyFacet",
             "uco-observable:key": reg_root,
-            "uco-observable:registryValues": [{
-                "@id": uid("regkey-dwm:value:0"),
-                "@type": "uco-observable:WindowsRegistryValue",
-                "uco-core:name": "<uid>0",
-                "uco-observable:dataType": "reg_sz",
-                "uco-observable:data": "1",
-            }],
+            "uco-observable:registryValues": [
+                {
+                    "@id": uid("regkey-dwm:value:0"),
+                    "@type": "uco-observable:WindowsRegistryValue",
+                    "uco-core:name": "<uid>0",
+                    "uco-observable:dataType": "reg_sz",
+                    "uco-observable:data": "1",
+                },
+                {
+                    # Known to exist from the report; payload not reproduced here.
+                    "@id": uid("regkey-dwm:value:1"),
+                    "@type": "uco-observable:WindowsRegistryValue",
+                    "uco-core:name": "<uid>1",
+                    "uco-observable:dataType": "reg_sz",
+                    "uco-core:tag": ["content:not-reproduced", "epistemic:observed"],
+                    "uco-core:description": (
+                        "Observed registry value holding Base64 PowerShell that "
+                        "compiles/runs the C# keylogger; data omitted (not reproduced)."
+                    ),
+                },
+            ],
         }],
     })
     reg_schema_entries = []
@@ -729,6 +755,30 @@ def build_graph() -> CASEGraph:
         "uco-configuration:configurationEntry": dga_entries,
         "uco-core:externalReference": [
             report_reference("Figure 17 / DGA seed list")],
+    })
+
+    # Direct configuration → malware-family links for consumer queries.
+    cfg_tool_reg = add({
+        "@id": uid("configured-tool-registry"),
+        "@type": "uco-tool:ConfiguredTool",
+        "uco-core:name": "DarkWatchman (registry configuration)",
+        "uco-core:description": (
+            "ConfiguredTool view of DarkWatchman using the HKCU\\…\\DWM registry schema."
+        ),
+        "uco-configuration:isConfigurationOf": {"@id": dw_family},
+        "uco-configuration:usesConfiguration": {"@id": reg_schema},
+        "uco-core:tag": ["malware-configuration"],
+    })
+    cfg_tool_dga = add({
+        "@id": uid("configured-tool-dga"),
+        "@type": "uco-tool:ConfiguredTool",
+        "uco-core:name": "DarkWatchman (DGA configuration)",
+        "uco-core:description": (
+            "ConfiguredTool view of DarkWatchman using the seeded DGA domain set."
+        ),
+        "uco-configuration:isConfigurationOf": {"@id": dw_family},
+        "uco-configuration:usesConfiguration": {"@id": dga_config},
+        "uco-core:tag": ["dga-configuration"],
     })
 
     c2_ips: dict[str, str] = {}
@@ -855,7 +905,16 @@ def build_graph() -> CASEGraph:
             [aid],
             tags=["att&ck-mapping", "epistemic:enrichment",
                   "mapping-source:case-uco-modeler"],
-            source_ctx="CASE/UCO modeler ATT&CK enrichment",
+            source_ctx=f"Section: behavior supporting {', '.join(tids)}",
+        )
+        # Structured report + one MITRE ExternalReference per technique.
+        graph.set_property(
+            mid,
+            "uco-core:externalReference",
+            [
+                report_reference(f"Section: behavior supporting {', '.join(tids)}"),
+                *[mitre_reference(t) for t in tids],
+            ],
         )
         attack_mapping_ids.append(mid)
         if label == "action-user-exec":
@@ -868,7 +927,17 @@ def build_graph() -> CASEGraph:
                 [aid],
                 tags=["att&ck-mapping", "epistemic:enrichment",
                       "mapping-source:case-uco-modeler", "post-dated-technique"],
-                source_ctx="CASE/UCO modeler ATT&CK enrichment (post-dated)",
+                source_ctx="Section: SFX masquerade / document icon (T1036.008)",
+            )
+            graph.set_property(
+                mid2,
+                "uco-core:externalReference",
+                [
+                    report_reference(
+                        "Section: SFX masquerade / document icon (T1036.008)"
+                    ),
+                    mitre_reference("T1036.008"),
+                ],
             )
             attack_mapping_ids.append(mid2)
         return aid
@@ -1115,15 +1184,15 @@ def build_graph() -> CASEGraph:
     mal_comp = compilation(
         "comp-malware", "Malware behavior and persistence",
         "Family, file instances, registry, task, and operating Actions.",
-        [dw_family, js_installed, reg_key, reg_schema, task, wscript, caps,
-         keylog_buffer, host_profile, a_install, a_decode, a_keylog, a_dga,
-         a_discovery, a_exfil],
+        [dw_family, js_installed, reg_key, reg_schema, cfg_tool_reg, task,
+         wscript, caps, keylog_buffer, host_profile, a_install, a_decode,
+         a_keylog, a_dga, a_discovery, a_exfil],
     )
     infra_comp = compilation(
         "comp-infra", "Infrastructure",
         "Observed C2, DGA candidates/config, and mail infrastructure.",
         [*domain_ids.values(), *c2_ips.values(), smtp_host, rentbike,
-         ip_send, ip_park, dga_config, ann_dga_contradiction],
+         ip_send, ip_park, dga_config, cfg_tool_dga, ann_dga_contradiction],
     )
     analytic_comp = compilation(
         "comp-analytic", "Analytic assessments",

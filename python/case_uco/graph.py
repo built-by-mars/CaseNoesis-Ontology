@@ -15,7 +15,16 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Callable, TypeVar, Type
 
+from case_uco.typed_literal import TypedLiteral
+
 T = TypeVar("T")
+
+# Non-XSD RDF datatypes used as ``sh:datatype`` (lexical form + datatype IRI).
+_CUSTOM_RDF_DATATYPE_IRIS = frozenset(
+    {
+        "https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression",
+    }
+)
 
 _builtin_id = id
 
@@ -1275,6 +1284,11 @@ class CASEGraph:
 
     def _convert_value(self, value: Any, range_iri: str | None = None) -> Any:
         """Convert a Python value to JSON-LD representation."""
+        if isinstance(value, TypedLiteral):
+            datatype = value.datatype_iri
+            compact = self._compact_iri(datatype)
+            return {"@type": compact, "@value": str(value.value)}
+
         if is_dataclass(value) and not isinstance(value, type):
             # Nested object — create inline or reference
             self._validate_instance(value)
@@ -1286,6 +1300,16 @@ class CASEGraph:
 
         if range_iri in _RANGE_IRI_TO_TYPED_LITERAL:
             return self._typed_literal(_RANGE_IRI_TO_TYPED_LITERAL[range_iri], value)
+
+        if (
+            isinstance(value, str)
+            and range_iri
+            and range_iri in _CUSTOM_RDF_DATATYPE_IRIS
+        ):
+            return {
+                "@type": self._compact_iri(range_iri),
+                "@value": value,
+            }
 
         if isinstance(value, datetime):
             return self._typed_literal("xsd:dateTime", value)

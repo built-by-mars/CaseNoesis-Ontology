@@ -76,7 +76,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:5ed1d7c7-d38e-513a-9415-19f2736c0e6a",
+          "@id": "urn:uuid:a636bc7e-54e2-53eb-b5f2-d4943615e07f",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -1514,7 +1514,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:4e85ef30-5cf2-5cb6-b7b2-eba5e2c7b0b7",
+          "@id": "urn:uuid:2a744f68-8fe4-5191-8c63-5b9c2a8a2773",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -1541,6 +1541,17 @@
               "uco-core:name": "<uid>0",
               "uco-observable:dataType": "reg_sz",
               "uco-observable:data": "1"
+            },
+            {
+              "@id": "urn:uuid:4ebac521-2636-5756-9454-d6d37bfed7ff",
+              "@type": "uco-observable:WindowsRegistryValue",
+              "uco-core:name": "<uid>1",
+              "uco-observable:dataType": "reg_sz",
+              "uco-core:tag": [
+                "content:not-reproduced",
+                "epistemic:observed"
+              ],
+              "uco-core:description": "Observed registry value holding Base64 PowerShell that compiles/runs the C# keylogger; data omitted (not reproduced)."
             }
           ]
         }
@@ -1646,7 +1657,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:298db085-e30a-5a7c-9593-0b73a8920a10",
+          "@id": "urn:uuid:47549659-7c6e-5ee0-a573-4c3746343bb3",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -2020,7 +2031,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:7459f959-1c79-5866-9b0e-f6d47dac98aa",
+          "@id": "urn:uuid:3d808f56-8749-5199-b033-33685852348f",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -2028,6 +2039,36 @@
           },
           "uco-core:definingContext": "Figure 17 / DGA seed list"
         }
+      ]
+    },
+    {
+      "@id": "urn:uuid:c327d7a0-098e-57a4-ab81-326b3f7d314b",
+      "@type": "uco-tool:ConfiguredTool",
+      "uco-core:name": "DarkWatchman (registry configuration)",
+      "uco-core:description": "ConfiguredTool view of DarkWatchman using the HKCU\\\u2026\\DWM registry schema.",
+      "uco-configuration:isConfigurationOf": {
+        "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+      },
+      "uco-configuration:usesConfiguration": {
+        "@id": "urn:uuid:9654ddb7-9c1d-5782-a966-a348e570c818"
+      },
+      "uco-core:tag": [
+        "malware-configuration"
+      ]
+    },
+    {
+      "@id": "urn:uuid:f8a6e03a-86ed-5795-b603-5818a750c4d2",
+      "@type": "uco-tool:ConfiguredTool",
+      "uco-core:name": "DarkWatchman (DGA configuration)",
+      "uco-core:description": "ConfiguredTool view of DarkWatchman using the seeded DGA domain set.",
+      "uco-configuration:isConfigurationOf": {
+        "@id": "urn:uuid:28244f69-87df-5f78-80b1-4ff7a514dd5f"
+      },
+      "uco-configuration:usesConfiguration": {
+        "@id": "urn:uuid:7735b4bb-668e-5931-ba46-aa08992c61c5"
+      },
+      "uco-core:tag": [
+        "dga-configuration"
       ]
     },
     {
@@ -2198,7 +2239,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:68c7727e-0dba-574f-95a6-deb7f44eea11",
+          "@id": "urn:uuid:eaa8d72b-7252-5aaf-8892-ffedc26072d6",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -2230,7 +2271,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:46ccbac3-e12e-5036-baaf-1cb68d733c7c",
+          "@id": "urn:uuid:3ba7cf4e-1ed3-5bec-bc76-e0a2444b17dc",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -2280,7 +2321,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:e8b420fb-7f89-5c14-b63f-7124503aaee2",
+          "@id": "urn:uuid:a1b8222b-f3db-59cc-bf39-f3814bd7bb05",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -2307,7 +2348,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:e8b420fb-7f89-5c14-b63f-7124503aaee2",
+          "@id": "urn:uuid:a1b8222b-f3db-59cc-bf39-f3814bd7bb05",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -2334,7 +2375,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:e8b420fb-7f89-5c14-b63f-7124503aaee2",
+          "@id": "urn:uuid:a1b8222b-f3db-59cc-bf39-f3814bd7bb05",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -2361,7 +2402,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:e8b420fb-7f89-5c14-b63f-7124503aaee2",
+          "@id": "urn:uuid:a1b8222b-f3db-59cc-bf39-f3814bd7bb05",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -2410,13 +2451,22 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@id": "urn:uuid:e3a234a7-3458-5786-a0eb-9279d9448208",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
           },
-          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+          "uco-core:definingContext": "Section: behavior supporting T1566.001"
+        },
+        {
+          "@id": "urn:uuid:f951835f-4965-5ceb-ba7d-cdd77a250f0a",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1566.001"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1566.001 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
         }
       ],
       "uco-core:tag": [
@@ -2465,13 +2515,31 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@id": "urn:uuid:b3ad8b5f-1b71-582f-a045-bbaaa902dd24",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
           },
-          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+          "uco-core:definingContext": "Section: behavior supporting T1204.002, T1036"
+        },
+        {
+          "@id": "urn:uuid:56c6d097-dd55-507f-9d6d-153f0a49b0f6",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1204.002"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1204.002 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
+        },
+        {
+          "@id": "urn:uuid:e6daf75b-45b0-5d9d-be6d-3eeb6fb4263c",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1036"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1036 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
         }
       ],
       "uco-core:tag": [
@@ -2493,13 +2561,22 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:60dddc2d-07e1-5952-8403-b9ec0dbd9e95",
+          "@id": "urn:uuid:47f984ef-5c95-57d4-a687-af18c97e1b2e",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
           },
-          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment (post-dated)"
+          "uco-core:definingContext": "Section: SFX masquerade / document icon (T1036.008)"
+        },
+        {
+          "@id": "urn:uuid:fd503beb-f175-567d-9664-029c67053cba",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1036.008"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1036.008 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
         }
       ],
       "uco-core:tag": [
@@ -2544,13 +2621,22 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@id": "urn:uuid:cb8565c7-8157-5c72-a03a-57cc0803a08f",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
           },
-          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+          "uco-core:definingContext": "Section: behavior supporting T1059.007"
+        },
+        {
+          "@id": "urn:uuid:48ddf265-9d1c-5e96-b453-7b423cc08694",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1059.007"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1059.007 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
         }
       ],
       "uco-core:tag": [
@@ -2612,13 +2698,31 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@id": "urn:uuid:e0401290-b58b-540d-a3dc-28265901c5ea",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
           },
-          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+          "uco-core:definingContext": "Section: behavior supporting T1053.005, T1112"
+        },
+        {
+          "@id": "urn:uuid:62ca101d-5f4b-52c4-b4d9-4118866a62df",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1053.005"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1053.005 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
+        },
+        {
+          "@id": "urn:uuid:cb368ddd-d4c2-51d6-a58d-89ef1d8c43dc",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1112"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1112 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
         }
       ],
       "uco-core:tag": [
@@ -2668,13 +2772,31 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@id": "urn:uuid:ff6a3d07-30d6-5dd1-a06b-c3191564bfcc",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
           },
-          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+          "uco-core:definingContext": "Section: behavior supporting T1140, T1059.001"
+        },
+        {
+          "@id": "urn:uuid:b8ab493e-b6e3-51d3-ae63-f792193ee183",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1140"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1140 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
+        },
+        {
+          "@id": "urn:uuid:d294722e-9e01-546c-97e2-bbf9c86e65f4",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1059.001"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1059.001 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
         }
       ],
       "uco-core:tag": [
@@ -2722,13 +2844,31 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@id": "urn:uuid:ed75b794-9705-540d-b7d9-e0c1f203feed",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
           },
-          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+          "uco-core:definingContext": "Section: behavior supporting T1056.001, T1115"
+        },
+        {
+          "@id": "urn:uuid:f27da0a6-b1c6-5401-8530-d68362c4a907",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1056.001"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1056.001 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
+        },
+        {
+          "@id": "urn:uuid:eea1a4ff-aa58-5bd8-afa9-6b56f1d51489",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1115"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1115 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
         }
       ],
       "uco-core:tag": [
@@ -2779,13 +2919,31 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@id": "urn:uuid:ea52b1fc-70ab-5b0d-99bf-7a6abfb85333",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
           },
-          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+          "uco-core:definingContext": "Section: behavior supporting T1568.002, T1071.001"
+        },
+        {
+          "@id": "urn:uuid:2284c9ec-11e2-52e3-acdb-3392c60c2baa",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1568.002"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1568.002 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
+        },
+        {
+          "@id": "urn:uuid:8026dc7a-16a6-531f-b4e5-c75bca64b81a",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1071.001"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1071.001 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
         }
       ],
       "uco-core:tag": [
@@ -2825,13 +2983,31 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@id": "urn:uuid:9ab15835-a770-54ca-8a14-02d05af9f64d",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
           },
-          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+          "uco-core:definingContext": "Section: behavior supporting T1082, T1518.001"
+        },
+        {
+          "@id": "urn:uuid:a41c22bc-3ec8-5d25-9c93-fad5215b3ae1",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1082"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1082 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
+        },
+        {
+          "@id": "urn:uuid:48a5e0da-7758-5b87-b8f6-6b2bf172f7e5",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1518.001"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1518.001 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
         }
       ],
       "uco-core:tag": [
@@ -2899,13 +3075,31 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:080240dc-c3af-5af7-ae8e-05bb2d93450d",
+          "@id": "urn:uuid:9c48aa57-a39b-562d-9a47-fa56c3872517",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
             "@value": "https://web.archive.org/web/20220629230035/https://www.prevailion.com/darkwatchman-new-fileless-techniques/"
           },
-          "uco-core:definingContext": "CASE/UCO modeler ATT&CK enrichment"
+          "uco-core:definingContext": "Section: behavior supporting T1071.001, T1041"
+        },
+        {
+          "@id": "urn:uuid:8026dc7a-16a6-531f-b4e5-c75bca64b81a",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1071.001"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1071.001 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
+        },
+        {
+          "@id": "urn:uuid:0c1af636-49e9-5e17-9671-0b4487ef1acb",
+          "@type": "uco-core:ExternalReference",
+          "uco-core:referenceURL": {
+            "@type": "xsd:anyURI",
+            "@value": "https://attack.mitre.org/techniques/T1041"
+          },
+          "uco-core:definingContext": "MITRE ATT&CK technique T1041 (mapping enrichment; ATT&CK release pinned by attack-technique catalog)"
         }
       ],
       "uco-core:tag": [
@@ -2933,7 +3127,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:58f8c2f8-ed0a-5620-b850-c47085b4bc87",
+          "@id": "urn:uuid:4bdbb347-fec4-5972-a3c2-551c1129a1af",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -2963,7 +3157,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:58f8c2f8-ed0a-5620-b850-c47085b4bc87",
+          "@id": "urn:uuid:4bdbb347-fec4-5972-a3c2-551c1129a1af",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -2993,7 +3187,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:58f8c2f8-ed0a-5620-b850-c47085b4bc87",
+          "@id": "urn:uuid:4bdbb347-fec4-5972-a3c2-551c1129a1af",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -3023,7 +3217,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:58f8c2f8-ed0a-5620-b850-c47085b4bc87",
+          "@id": "urn:uuid:4bdbb347-fec4-5972-a3c2-551c1129a1af",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -3091,7 +3285,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:26dbd0d5-ab8b-530a-af82-fa1c5a27e0a3",
+          "@id": "urn:uuid:c42ad1fc-da2d-56f9-9a59-c0d36ffdc19f",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -3121,7 +3315,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:26dbd0d5-ab8b-530a-af82-fa1c5a27e0a3",
+          "@id": "urn:uuid:c42ad1fc-da2d-56f9-9a59-c0d36ffdc19f",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -3151,7 +3345,7 @@
       ],
       "uco-core:externalReference": [
         {
-          "@id": "urn:uuid:26dbd0d5-ab8b-530a-af82-fa1c5a27e0a3",
+          "@id": "urn:uuid:c42ad1fc-da2d-56f9-9a59-c0d36ffdc19f",
           "@type": "uco-core:ExternalReference",
           "uco-core:referenceURL": {
             "@type": "xsd:anyURI",
@@ -3305,6 +3499,9 @@
           "@id": "urn:uuid:9654ddb7-9c1d-5782-a966-a348e570c818"
         },
         {
+          "@id": "urn:uuid:c327d7a0-098e-57a4-ab81-326b3f7d314b"
+        },
+        {
           "@id": "urn:uuid:0131145a-9fc1-5bd2-bfd3-52eac540e356"
         },
         {
@@ -3395,6 +3592,9 @@
         },
         {
           "@id": "urn:uuid:7735b4bb-668e-5931-ba46-aa08992c61c5"
+        },
+        {
+          "@id": "urn:uuid:f8a6e03a-86ed-5795-b603-5818a750c4d2"
         },
         {
           "@id": "urn:uuid:042afcd1-b839-526b-b1fc-d3126c75b593"

@@ -2,6 +2,7 @@
        test-proposal validate-proposal sparql-test-proposal \
        test-extension-compat test-extension-main test-extension-develop test-extension-develop2 \
        playground-test test-docs sync-solveit sync-solveit-offline \
+       sync-attack sync-attack-offline \
        rebuild-upper-registry sync-upper sync-upstream
 
 VENV := .venv
@@ -111,6 +112,21 @@ sync-solveit:
 sync-solveit-offline:
 	$(PYTHON) mcp_server/tools/sync_solveit.py --skip-fetch
 
+# Refresh the pinned MITRE ATT&CK catalog labels/comments from STIX 2.1
+# (partial membership: current catalog ∪ exemplar citations):
+#   make sync-attack                        # ATT&CK v19.1 (or manifest pin)
+#   make sync-attack ATTACK_VERSION=19.1
+sync-attack:
+	$(PYTHON) mcp_server/tools/sync_attack_catalog.py \
+		--attack-version $(or $(ATTACK_VERSION),19.1) \
+		--keep-existing --from-exemplars
+
+# Regenerate the ATT&CK catalog from a local enterprise-attack STIX file:
+#   make sync-attack-offline STIX=/path/to/enterprise-attack-19.1.json
+sync-attack-offline:
+	$(PYTHON) mcp_server/tools/sync_attack_catalog.py \
+		--stix-file $(STIX) --keep-existing --from-exemplars
+
 # Rebuild the strict upper-ontology term registry from the vendored
 # snapshot in ontology/upper/ (offline; no network needed):
 rebuild-upper-registry:
@@ -128,6 +144,7 @@ sync-upstream:
 	git submodule update --remote --checkout ontology/UCO ontology/CASE \
 		ontology/cac/ontology ontology/aeo/ontology
 	$(MAKE) sync-solveit
+	$(MAKE) sync-attack
 	$(MAKE) sync-upper
 	@echo "All upstream snapshots refreshed; review diffs, run 'make test-mcp', and commit."
 

@@ -5,13 +5,13 @@ from __future__ import annotations
 import ast
 import re
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 from critic.canonical import RuleExecution
 from critic.finding_diff import make_stable_finding_id
 from critic.models import CriticFinding, CriticTarget
 
-RULE_VERSION = "1.3.0"
+RULE_VERSION = "1.3.1"
 
 _PY_RULES = (
     "CRIT-S-PY-PRIVATE-OBJECTS",
@@ -581,6 +581,110 @@ def _uuid5_material_omits_parent(node: ast.FunctionDef) -> bool:
     return False
 
 
+def _casegraph_method_signatures() -> dict[str, Any]:
+    """Map public CASEGraph method names to inspect.Signature when available."""
+
+    try:
+        import inspect
+
+        from case_uco.graph import CASEGraph
+    except Exception:  # noqa: BLE001
+        return {}
+    out: dict[str, Any] = {}
+    for name in _CASEGRAPH_ALLOWLIST:
+        try:
+            attr = getattr(CASEGraph, name)
+        except Exception:  # noqa: BLE001
+            continue
+        if not callable(attr):
+            continue
+        try:
+            out[name] = inspect.signature(attr)
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
+_CASEGRAPH_SIGNATURES = _casegraph_method_signatures()
+
+
+def _signature_mismatch(call: ast.Call, method: str) -> str | None:
+    """Return a short reason when static kwargs/arity cannot match the method."""
+
+    sig = _CASEGRAPH_SIGNATURES.get(method)
+    if sig is None:
+        return None
+    try:
+        import inspect
+    except Exception:  # noqa: BLE001
+        return None
+
+    params = sig.parameters
+    accepts_var_kw = any(
+        p.kind == inspect.Parameter.VAR_KEYWORD for p in params.values()
+    )
+    accepts_var_pos = any(
+        p.kind == inspect.Parameter.VAR_POSITIONAL for p in params.values()
+    )
+    # Bound methods: signature includes ``self``; AST calls omit it.
+    param_names = [
+        name
+        for name, p in params.items()
+        if name != "self" and p.kind != inspect.Parameter.VAR_KEYWORD
+        and p.kind != inspect.Parameter.VAR_POSITIONAL
+    ]
+    keyword_names = {kw.arg for kw in call.keywords if kw.arg}
+    if not accepts_var_kw:
+        unknown = sorted(keyword_names - set(param_names))
+        if unknown:
+            return f"unknown_kwargs={','.join(unknown)}"
+
+    positional = list(call.args)
+    # Keyword-only params cannot be filled by positional args.
+    positional_params = [
+        name
+        for name, p in params.items()
+        if name != "self"
+        and p.kind
+        in {
+            inspect.Parameter.POSITIONAL_ONLY,
+            inspect.Parameter.POSITIONAL_OR_KEYWORD,
+        }
+    ]
+    if not accepts_var_pos and len(positional) > len(positional_params):
+        return (
+            f"too_many_positional args={len(positional)} "
+            f"max={len(positional_params)}"
+        )
+
+    required = [
+        name
+        for name, p in params.items()
+        if name != "self"
+        and p.default is inspect.Parameter.empty
+        and p.kind
+        not in {
+            inspect.Parameter.VAR_POSITIONAL,
+            inspect.Parameter.VAR_KEYWORD,
+        }
+    ]
+    provided = set(keyword_names)
+    # Map positional args onto positional_params in order.
+    for idx, _arg in enumerate(positional):
+        if idx < len(positional_params):
+            provided.add(positional_params[idx])
+    missing = [name for name in required if name not in provided]
+    # Only flag missing when every argument is a constant/name we can count —
+    # skip when *args/**kwargs unpacking is present.
+    if any(kw.arg is None for kw in call.keywords):
+        return None
+    if any(isinstance(a, ast.Starred) for a in call.args):
+        return None
+    if missing:
+        return f"missing_required={','.join(missing)}"
+    return None
+
+
 def _nonexistent_sdk_api(
     path: Path, tree: ast.AST, bindings: set[str]
 ) -> list[CriticFinding]:
@@ -594,30 +698,64 @@ def _nonexistent_sdk_api(
         if not _is_graph_receiver(func.value, bindings):
             continue
         method = func.attr
-        if method in _CASEGRAPH_ALLOWLIST:
-            continue
-        findings.append(
-            _s(
-                rule_id="CRIT-S-PY-NONEXISTENT-API",
-                severity="high",
-                category="serializer_api",
-                target=CriticTarget(
-                    path=path.name,
-                    line=getattr(node, "lineno", None),
-                    qualified_name=method,
-                ),
-                evidence=[f"call={method}", f"receiver={func.value.id}"],
-                rationale=(
-                    f"Call to unknown CASEGraph method {method!r}; not in the "
-                    "public allowlist."
-                ),
-                recommended_change="Use a documented CASEGraph API method.",
-                verification_method=(
-                    "AST Attribute call on a name bound to CASEGraph "
-                    "(constructor, annotation, or alias)."
-                ),
-            )
+        receiver = (
+            func.value.id if isinstance(func.value, ast.Name) else type(func.value).__name__
         )
+        if method not in _CASEGRAPH_ALLOWLIST:
+            findings.append(
+                _s(
+                    rule_id="CRIT-S-PY-NONEXISTENT-API",
+                    severity="high",
+                    category="serializer_api",
+                    target=CriticTarget(
+                        path=path.name,
+                        line=getattr(node, "lineno", None),
+                        qualified_name=method,
+                    ),
+                    evidence=[f"call={method}", f"receiver={receiver}"],
+                    rationale=(
+                        f"Call to unknown CASEGraph method {method!r}; not in the "
+                        "public allowlist."
+                    ),
+                    recommended_change="Use a documented CASEGraph API method.",
+                    verification_method=(
+                        "AST Attribute call on a name bound to CASEGraph "
+                        "(constructor, annotation, or alias)."
+                    ),
+                )
+            )
+            continue
+        mismatch = _signature_mismatch(node, method)
+        if mismatch:
+            findings.append(
+                _s(
+                    rule_id="CRIT-S-PY-NONEXISTENT-API",
+                    severity="high",
+                    category="serializer_api",
+                    target=CriticTarget(
+                        path=path.name,
+                        line=getattr(node, "lineno", None),
+                        qualified_name=method,
+                    ),
+                    evidence=[
+                        f"call={method}",
+                        f"receiver={receiver}",
+                        mismatch,
+                    ],
+                    rationale=(
+                        f"CASEGraph.{method} call does not match the public signature "
+                        f"({mismatch})."
+                    ),
+                    recommended_change=(
+                        "Use the documented CASEGraph parameter names and arity "
+                        "(e.g. create_relationship(source_id, target_id, kind, ...))."
+                    ),
+                    verification_method=(
+                        "AST call kwargs/arity checked against "
+                        "inspect.signature(CASEGraph.method)."
+                    ),
+                )
+            )
     return findings
 
 

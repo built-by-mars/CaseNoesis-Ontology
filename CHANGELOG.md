@@ -7,6 +7,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.4] - 2026-07-15
+
+SDK hardening from the v1.22.1 CTI review: provenance-manifest integrity across
+critic sessions, installed-wheel extension contract, tighter heuristics,
+signature-aware serializer AST checks, TypedLiteral custom datatypes,
+DarkWatchman release gates, controlled epistemic tags, and a pinned ATT&CK
+STIX catalog synchronizer. Registry publication remains opt-in (**disabled**
+for this tag).
+
+#### Critic / provenance
+
+- Bind `provenance_manifest_path` through resumable sessions (`SessionConfig`,
+  pass rebuild, MCP tools).
+- `ArtifactHashes.provenance_manifest_sha256` in artifact-set and
+  `review_config_sha256`; JSON schemas updated.
+- Schema-1.1 `artifacts[]` parsing; workspace-policy on every referenced path;
+  exactly one `output_artifact` matching the graph under review; empty
+  manifests fail closed.
+- Heuristics **v1.3.3**: missing-hash medium only for `cti-report` /
+  explicit hash tags; proxy-duplicate = Action object→result only; orphan
+  BFS roots = Investigation / ProvenanceRecord / Bundle.
+- `CRIT-S-PY-NONEXISTENT-API` checks `inspect.signature` (kwargs/arity).
+
+#### Validation / packaging
+
+- Document **external-bundle** contract: named extensions require
+  `project_root` (or explicit ontology paths); wheel does not vendor
+  `extensions/`.
+- Tests for empty-root failure and DarkWatchman validate-with-`project_root`.
+
+#### Typed literals
+
+- `case_uco.TypedLiteral` + `LogicalPattern.patternExpression` as
+  `pattern:PatternExpression`; generator emits `Union[str, TypedLiteral]`
+  for custom RDF datatypes.
+
+#### ATT&CK + epistemic vocabulary
+
+- `make sync-attack` / `mcp_server/tools/sync_attack_catalog.py` regenerates
+  `mitre-attack-catalog.ttl` from pinned Enterprise ATT&CK STIX (v19.1).
+- Controlled epistemic-tag vocabulary:
+  `docs/vocabularies/epistemic-tags.{md,json}`; exposed via MCP
+  `list_all_vocabs`.
+
+#### DarkWatchman exemplar
+
+- Structured MITRE `ExternalReference`s; observed `<uid>1` with
+  `content:not-reproduced`; `ConfiguredTool` links; collision-resistant
+  source-reference IDs.
+- Release tests: rebuild ↔ committed digest, manifest, critic
+  `casegraph_raw` + provenance sidecar, validate complete.
+
+Package versions bumped to **1.22.4**.
+
 ## [1.22.3] - 2026-07-15
 
 mypy clean-up for the public `case_uco.validation` package moved in v1.22.1
@@ -1975,7 +2029,9 @@ digital forensics, cyber-investigation, and cyber-observable data.
 - GitHub Actions workflows: CI, CodeQL, dependency review, release
 - Dependabot configuration for automated dependency updates
 
-[Unreleased]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.2...HEAD
+[Unreleased]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.4...HEAD
+[1.22.4]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.3...v1.22.4
+[1.22.3]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.2...v1.22.3
 [1.22.2]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.1...v1.22.2
 [1.22.1]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.0...v1.22.1
 [1.22.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.21.0...v1.22.0

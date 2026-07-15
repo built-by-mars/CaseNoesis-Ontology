@@ -42,7 +42,8 @@
         "graph_sha256": { "type": "string", "minLength": 64, "maxLength": 64 },
         "serializer_sha256": { "type": ["string", "null"] },
         "source_sha256": { "type": "object" },
-        "coverage_contract_sha256": { "type": ["string", "null"] }
+        "coverage_contract_sha256": { "type": ["string", "null"] },
+        "provenance_manifest_sha256": { "type": ["string", "null"] }
       }
     },
     "validation_summary": { "type": "object" },

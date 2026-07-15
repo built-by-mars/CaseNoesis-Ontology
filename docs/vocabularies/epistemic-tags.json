@@ -1,0 +1,100 @@
+{
+  "id": "case-uco-epistemic-tags",
+  "name": "EpistemicTagVocab",
+  "version": "1.0.0",
+  "schema_version": "1.0",
+  "description": "Controlled uco-core:tag values for CASE/UCO CTI and investigation graphs that separate source fidelity, claim stance, and digest availability without inventing facts.",
+  "applies_to": ["uco-core:tag"],
+  "property_kind": "open_string_tag",
+  "note": "These are recommended string tags, not OWL individuals. Graphs remain valid if they use other tags; critics and recipes treat members of this vocabulary as first-class signals.",
+  "families": {
+    "epistemic_stance": {
+      "description": "How strongly the source supports the claim as a world-state fact.",
+      "members": [
+        {
+          "value": "epistemic:observed",
+          "description": "Directly observed or repeatedly executed behavior attributed by the source."
+        },
+        {
+          "value": "epistemic:reported",
+          "description": "Stated by the report/vendor but not independently re-observed by the modeler."
+        },
+        {
+          "value": "epistemic:capability",
+          "description": "Code/capability path or conditional functionality, not necessarily executed in the reported incident."
+        },
+        {
+          "value": "epistemic:assessment",
+          "description": "Analyst or vendor assessment about nature/motive/classification."
+        },
+        {
+          "value": "epistemic:hypothesis",
+          "description": "Explicit hypothesis; pair with verbal confidence tags when available."
+        },
+        {
+          "value": "epistemic:enrichment",
+          "description": "Modeler enrichment (e.g. ATT&CK mapping) not asserted by the original vendor prose."
+        },
+        {
+          "value": "epistemic:unattributed",
+          "description": "Activity cluster without a justified named Organization performer."
+        },
+        {
+          "value": "epistemic:source-contradiction",
+          "description": "Source text contains an internal contradiction that must be preserved, not resolved."
+        }
+      ]
+    },
+    "confidence_verbal": {
+      "description": "Verbal confidence when the source does not publish a numeric score.",
+      "members": [
+        {
+          "value": "confidence:low-verbal",
+          "description": "Low verbal confidence from the source or modeler."
+        },
+        {
+          "value": "confidence:moderate-verbal",
+          "description": "Moderate verbal confidence (e.g. 'appears', 'likely')."
+        },
+        {
+          "value": "confidence:high-verbal",
+          "description": "High verbal confidence without a numeric facet."
+        }
+      ]
+    },
+    "hash_and_bytes": {
+      "description": "Digest / byte-availability status for critic severity and provenance honesty.",
+      "members": [
+        {
+          "value": "hash-status:not-published",
+          "description": "Source does not publish a digest; do not invent one. Critic may emit medium CRIT-H-DERIVED-NO-HASH."
+        },
+        {
+          "value": "source-bytes:not-acquired",
+          "description": "Bytes were never acquired by the investigation (CTI/report-only)."
+        },
+        {
+          "value": "content:not-reproduced",
+          "description": "Object is known to exist but payload/content is intentionally omitted from the graph."
+        }
+      ]
+    },
+    "mapping_provenance": {
+      "description": "How ATT&CK or other framework mappings were produced.",
+      "members": [
+        {
+          "value": "att&ck-mapping",
+          "description": "Node carries an ATT&CK technique mapping."
+        },
+        {
+          "value": "mapping-source:case-uco-modeler",
+          "description": "Mapping authored by the CASE/UCO exemplar modeler, not vendor-asserted."
+        },
+        {
+          "value": "post-dated-technique",
+          "description": "Technique ID did not exist (or was not public) at the report date."
+        }
+      ]
+    }
+  }
+}

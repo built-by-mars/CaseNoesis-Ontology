@@ -1219,15 +1219,43 @@ def list_all_vocabs() -> list[dict]:
 
     Vocabulary types define constrained sets of allowed values for
     certain properties (e.g., ActionStatusTypeVocab, HashMethodVocab).
+    Also includes the SDK-controlled epistemic-tag vocabulary used on
+    ``uco-core:tag`` in CTI graphs (docs/vocabularies/epistemic-tags.json).
     """
-    results = list_vocabs()
-    return [
+    results = [
         {
             "name": r["name"],
             "members": r.get("members", []),
         }
-        for r in results
+        for r in list_vocabs()
     ]
+    epistemic_path = (
+        Path(__file__).resolve().parent.parent
+        / "docs"
+        / "vocabularies"
+        / "epistemic-tags.json"
+    )
+    if epistemic_path.is_file():
+        try:
+            payload = json.loads(epistemic_path.read_text(encoding="utf-8"))
+            members: list[str] = []
+            for family in (payload.get("families") or {}).values():
+                for item in family.get("members") or []:
+                    value = item.get("value")
+                    if value:
+                        members.append(str(value))
+            results.append(
+                {
+                    "name": payload.get("name") or "EpistemicTagVocab",
+                    "members": members,
+                    "source": "sdk",
+                    "path": "docs/vocabularies/epistemic-tags.json",
+                    "description": payload.get("description", ""),
+                }
+            )
+        except (OSError, json.JSONDecodeError):
+            pass
+    return results
 
 
 @mcp.tool
@@ -1816,6 +1844,7 @@ def start_critic_review(
     serializer_path: str | None = None,
     source_paths: list[str] | None = None,
     coverage_contract_path: str | None = None,
+    provenance_manifest_path: str | None = None,
     extensions: list[str] | None = None,
     profiles: list[str] | None = None,
     critic_scope: str = "both",
@@ -1836,6 +1865,7 @@ def start_critic_review(
         serializer_path=serializer_path,
         source_paths=source_paths,
         coverage_contract_path=coverage_contract_path,
+        provenance_manifest_path=provenance_manifest_path,
         extensions=extensions,
         profiles=profiles,
         critic_scope=critic_scope,
@@ -1855,6 +1885,7 @@ async def start_critic_review_with_sampling(
     serializer_path: str | None = None,
     source_paths: list[str] | None = None,
     coverage_contract_path: str | None = None,
+    provenance_manifest_path: str | None = None,
     extensions: list[str] | None = None,
     profiles: list[str] | None = None,
     critic_scope: str = "both",
@@ -1876,6 +1907,7 @@ async def start_critic_review_with_sampling(
         serializer_path=serializer_path,
         source_paths=source_paths,
         coverage_contract_path=coverage_contract_path,
+        provenance_manifest_path=provenance_manifest_path,
         extensions=extensions,
         profiles=profiles,
         critic_scope=critic_scope,

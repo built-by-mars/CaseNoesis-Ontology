@@ -288,6 +288,7 @@ class ArtifactHashes:
     serializer_sha256: str | None = None
     source_sha256: dict[str, str] = field(default_factory=dict)
     coverage_contract_sha256: str | None = None
+    provenance_manifest_sha256: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

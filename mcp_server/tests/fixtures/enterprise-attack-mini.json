@@ -1,0 +1,52 @@
+{
+  "type": "bundle",
+  "id": "bundle--case-uco-test",
+  "objects": [
+    {
+      "type": "x-mitre-collection",
+      "id": "x-mitre-collection--test",
+      "name": "Enterprise ATT&CK",
+      "x_mitre_version": "19.1"
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--t1566-001",
+      "name": "Spearphishing Attachment",
+      "description": "Adversaries send spearphishing emails with a malicious attachment.",
+      "kill_chain_phases": [
+        {
+          "kill_chain_name": "mitre-attack",
+          "phase_name": "initial-access"
+        }
+      ],
+      "x_mitre_platforms": ["Windows", "macOS", "Linux"],
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1566.001",
+          "url": "https://attack.mitre.org/techniques/T1566/001"
+        }
+      ]
+    },
+    {
+      "type": "attack-pattern",
+      "id": "attack-pattern--t1059-007",
+      "name": "JavaScript",
+      "description": "Adversaries abuse JavaScript interpreters.",
+      "kill_chain_phases": [
+        {
+          "kill_chain_name": "mitre-attack",
+          "phase_name": "execution"
+        }
+      ],
+      "x_mitre_platforms": ["Windows", "macOS", "Linux"],
+      "external_references": [
+        {
+          "source_name": "mitre-attack",
+          "external_id": "T1059.007",
+          "url": "https://attack.mitre.org/techniques/T1059/007"
+        }
+      ]
+    }
+  ]
+}

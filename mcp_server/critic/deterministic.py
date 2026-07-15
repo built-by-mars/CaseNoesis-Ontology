@@ -99,6 +99,17 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
             project_root = candidate
 
     source_aliases = _source_aliases(source_paths)
+    provenance_manifest_sha256: str | None = None
+    if request.provenance_manifest_path:
+        try:
+            early_manifest = workspace_policy.check_read_path(
+                request.provenance_manifest_path, include_write_roots=True
+            )
+        except ValueError as exc:
+            raise CriticError("critic_path_outside_workspace", str(exc)) from exc
+        if early_manifest.is_file():
+            provenance_manifest_sha256 = sha256_file(early_manifest)
+
     hashes = ArtifactHashes(
         graph_sha256=sha256_file(graph_path),
         serializer_sha256=sha256_file(serializer_path) if serializer_path else None,
@@ -108,6 +119,7 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
         coverage_contract_sha256=(
             sha256_file(coverage_path) if coverage_path else None
         ),
+        provenance_manifest_sha256=provenance_manifest_sha256,
     )
 
     findings: list[CriticFinding] = []
@@ -121,7 +133,9 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
         rule_executions.extend(e.to_dict() for e in integrity_exec)
 
         heur_findings, heur_exec = run_graph_heuristics(
-            view, artifact_hash=hashes.graph_sha256
+            view,
+            artifact_hash=hashes.graph_sha256,
+            profiles=list(request.profiles or []),
         )
         findings.extend(heur_findings)
         rule_executions.extend(e.to_dict() for e in heur_exec)
@@ -158,6 +172,7 @@ def analyze_artifact(request: CriticArtifactRequest) -> CriticReview:
                 manifest_path,
                 project_root=project_root,
                 artifact_hash=hashes.graph_sha256,
+                graph_sha256=hashes.graph_sha256,
             )
             findings.extend(man_findings)
             rule_executions.extend(e.to_dict() for e in man_exec)
@@ -512,10 +527,16 @@ def _run_validation(
         return summary, executions
 
     try:
+        # Critic-only profile tokens (e.g. cti-report) tune heuristics; they are
+        # not CDO validation profiles and must not be passed to case_validate.
+        _CRITIC_ONLY_PROFILES = {"cti-report"}
+        validation_profiles = [
+            p for p in (profiles or []) if str(p).strip().lower() not in _CRITIC_ONLY_PROFILES
+        ]
         report = graph_validator.validate_graph_file(
             graph_path,
             extensions=extensions or None,
-            profiles=profiles or None,
+            profiles=validation_profiles or None,
             project_root=project_root,
             extra_ontology_graphs=extra_ontology_graphs or None,
             force_rdfs_inference=force_rdfs_inference,

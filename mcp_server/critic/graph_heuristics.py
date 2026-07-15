@@ -44,7 +44,7 @@ from critic.canonical import (
 from critic.finding_diff import make_stable_finding_id
 from critic.models import CriticFinding, CriticTarget
 
-RULE_VERSION = "1.3.2"
+RULE_VERSION = "1.3.3"
 
 _ACTION_NAME_TOKENS = ("acquir", "extract", "analy", "hash", "image", "export")
 _ACQUISITION_NAME_TOKENS = ("acquir", "extract", "image", "export")
@@ -69,6 +69,7 @@ def run_graph_heuristics(
     view: CanonicalGraphView,
     *,
     artifact_hash: str,
+    profiles: list[str] | None = None,
 ) -> tuple[list[CriticFinding], list[RuleExecution]]:
     findings: list[CriticFinding] = []
     executions: list[RuleExecution] = []
@@ -85,6 +86,8 @@ def run_graph_heuristics(
             )
         return findings, executions
 
+    profile_set = {str(p).strip().lower() for p in (profiles or []) if str(p).strip()}
+
     runners: list[tuple[str, Callable[..., tuple[list[CriticFinding], int]]]] = [
         ("CRIT-H-INV-NO-OBJECT", _investigation_without_object),
         ("CRIT-H-AUTH-NON-INVESTIGATION", _relevant_authorization_misuse),
@@ -96,7 +99,10 @@ def run_graph_heuristics(
         ("CRIT-H-ACTION-COMPLETENESS", _action_profile_completeness),
         ("CRIT-H-IDENTITY-CONFLATION", _person_account_role_conflation),
         ("CRIT-H-PROXY-DUPLICATE", _proxy_duplicate_artifacts),
-        ("CRIT-H-DERIVED-NO-HASH", _derived_without_hash),
+        (
+            "CRIT-H-DERIVED-NO-HASH",
+            lambda v: _derived_without_hash(v, profiles=profile_set),
+        ),
         ("CRIT-H-DERIVED-NO-PROVENANCE", _derived_without_provenance),
         ("CRIT-H-MARKING-INHERITANCE", _marking_inheritance_gap),
         ("CRIT-H-CUSTODY-UNPAIRED", _custody_release_unpaired),
@@ -616,17 +622,18 @@ def _proxy_duplicate_artifacts(
                         evidence=[f"hashValue={hv}"],
                         rationale=(
                             "Distinct File/Observable IRIs share the same ContentDataFacet "
-                            "hashValue without Contained_Within/Extracted_From/Parent_Of "
-                            "or a shared Action object/result/instrument link."
+                            "hashValue without Contained_Within/Extracted_From/Parent_Of/"
+                            "Moved_*/Copied_*/Renamed_* or an Action object→result "
+                            "transformation link."
                         ),
                         recommended_change=(
-                            "Link proxies with a governed containment/extraction relationship, "
-                            "connect them via the install/move Action that relates the "
-                            "instances, or collapse duplicate nodes."
+                            "Link proxies with a governed containment/extraction/move "
+                            "relationship, connect them via an Action object→result "
+                            "transition, or collapse duplicate nodes."
                         ),
                         verification_method=(
                             "Group ContentDataFacet hashValue; check link kinds and "
-                            "shared Action endpoints."
+                            "Action object→result pairs."
                         ),
                     )
                 )
@@ -635,19 +642,20 @@ def _proxy_duplicate_artifacts(
 
 def _derived_without_hash(
     view: CanonicalGraphView,
+    *,
+    profiles: set[str] | None = None,
 ) -> tuple[list[CriticFinding], int]:
     """Flag derived artifacts lacking digests.
 
     Forensic acquisition results without a digest remain high-severity.
-    CTI-style contained/extracted artifacts that are otherwise identifiable
-    (name/filename + inbound Contained_Within/Extracted_From) degrade to
-    medium completeness warnings so builders are not forced to invent hashes
-    or weaken source-faithful containment relationships.
+    Downgrade to medium only when the review explicitly opts into CTI-report
+    semantics (``profiles`` contains ``cti-report``) or the node carries an
+    explicit unavailable-hash tag. Identity + containment alone is not enough.
     """
     derived = _derived_file_iris(view)
-    inbound_prov = _inbound_provenance_targets(view)
     findings: list[CriticFinding] = []
     examined = 0
+    cti_profile = "cti-report" in (profiles or set())
     for iri in sorted(derived):
         node = view.get(iri)
         if not node:
@@ -655,20 +663,16 @@ def _derived_without_hash(
         examined += 1
         if _node_hash_values(view, node):
             continue
-        identifiable = _node_has_accountable_identity(node)
-        has_provenance = iri in inbound_prov
         tags = {t.lower() for t in node.literals(IRI_TAG)}
         hash_not_published = "hash-status:not-published" in tags or (
             "source-bytes:not-acquired" in tags
         )
-        if (identifiable and has_provenance) or hash_not_published:
+        if cti_profile or hash_not_published:
             evidence = [
                 "derived_without_ContentDataFacet_hashValue",
             ]
-            if identifiable:
-                evidence.append("accountable_identity_present")
-            if has_provenance:
-                evidence.append("inbound_containment_or_extraction_present")
+            if cti_profile:
+                evidence.append("profile=cti-report")
             if hash_not_published:
                 evidence.append("hash-status:not-published_or_source-bytes:not-acquired")
             findings.append(
@@ -685,7 +689,7 @@ def _derived_without_hash(
                     evidence=evidence,
                     rationale=(
                         "A derived File/Observable lacks a ContentDataFacet hashValue, "
-                        "but CTI-accountable identity/containment or an explicit "
+                        "but an explicit CTI-report profile or "
                         "hash-status:not-published / source-bytes:not-acquired tag "
                         "explains the gap."
                     ),
@@ -695,7 +699,7 @@ def _derived_without_hash(
                         "hash-status:not-published (do not invent digests)."
                     ),
                     verification_method=(
-                        "hashValue absent; identity/provenance or hash-status tag present."
+                        "hashValue absent; cti-report profile or hash-status tag present."
                     ),
                 )
             )
@@ -1053,10 +1057,17 @@ def _action_role_contradiction(
 def _orphan_top_level_nodes(
     view: CanonicalGraphView,
 ) -> tuple[list[CriticFinding], int]:
-    """Report top-level @graph nodes not reachable from Investigation/compilation roots."""
+    """Report top-level @graph nodes not reachable from authoritative roots.
+
+    Authoritative roots are Investigation, ProvenanceRecord, and Bundle.
+    ContextualCompilation / Grouping become roots only after they are reached
+    from one of those distribution roots (so a detached Grouping cannot hide
+    an orphaned subgraph).
+    """
 
     _TOP_LEVEL = re.compile(r"^/@graph/\d+$")
     _IRI_GROUPING = "https://ontology.unifiedcyberontology.org/uco/core/Grouping"
+    _IRI_BUNDLE = "https://ontology.unifiedcyberontology.org/uco/core/Bundle"
     _IRI_ANNOTATION = "https://ontology.unifiedcyberontology.org/uco/core/Annotation"
     _IRI_EVENT = "https://ontology.unifiedcyberontology.org/uco/core/Event"
     _IRI_EVENT_CONTEXT = (
@@ -1065,12 +1076,7 @@ def _orphan_top_level_nodes(
 
     roots = set()
     for node in view.iter_nodes():
-        if node.has_type(
-            IRI_INVESTIGATION,
-            IRI_PROVENANCE_RECORD,
-            IRI_CONTEXTUAL_COMPILATION,
-            _IRI_GROUPING,
-        ):
+        if node.has_type(IRI_INVESTIGATION, IRI_PROVENANCE_RECORD, _IRI_BUNDLE):
             roots.add(node.iri)
             roots.update(node.refs(IRI_OBJECT))
             if node.has_type(IRI_INVESTIGATION):
@@ -1098,7 +1104,12 @@ def _orphan_top_level_nodes(
                     reachable.update(node.refs(IRI_INSTRUMENT))
                     reachable.update(node.refs(IRI_ACTION_OBJECT))
                     reachable.update(node.refs(IRI_ACTION_RESULT))
-            if node.has_type(_IRI_ANNOTATION, _IRI_GROUPING, _IRI_EVENT):
+            if node.has_type(
+                _IRI_ANNOTATION,
+                _IRI_GROUPING,
+                _IRI_EVENT,
+                IRI_CONTEXTUAL_COMPILATION,
+            ):
                 about = set(node.refs(IRI_OBJECT)) | set(node.refs(_IRI_EVENT_CONTEXT))
                 if node.iri in reachable or (about & reachable):
                     reachable.add(node.iri)
@@ -1116,9 +1127,7 @@ def _orphan_top_level_nodes(
             continue
         if node.has_type(IRI_RELATIONSHIP):
             continue
-        if node.has_type(
-            IRI_INVESTIGATION, IRI_PROVENANCE_RECORD, IRI_CONTEXTUAL_COMPILATION
-        ):
+        if node.has_type(IRI_INVESTIGATION, IRI_PROVENANCE_RECORD, _IRI_BUNDLE):
             continue
         if any("Facet" in t for t in node.types):
             continue
@@ -1147,15 +1156,15 @@ def _orphan_top_level_nodes(
                 ],
                 rationale=(
                     "Top-level @graph node is not reachable from any Investigation / "
-                    "ProvenanceRecord / ContextualCompilation / Grouping via object "
-                    "membership, annotation/event links, or connecting relationships."
+                    "ProvenanceRecord / Bundle via object membership, annotation/event "
+                    "links, or connecting relationships."
                 ),
                 recommended_change=(
-                    "Add a relationship or compilation membership, or nest under a "
-                    "contextual compilation that is itself investigation-linked."
+                    "Add a relationship or compilation membership under an "
+                    "Investigation/ProvenanceRecord/Bundle root."
                 ),
                 verification_method=(
-                    "BFS from investigation/compilation/grouping roots across object, "
+                    "BFS from Investigation/ProvenanceRecord/Bundle roots across object, "
                     "annotation, eventContext, action endpoint, and relationship edges; "
                     "only /@graph/N nodes are examined."
                 ),
@@ -1207,20 +1216,22 @@ def _linked_pairs(view: CanonicalGraphView, kinds: frozenset[str]) -> set[frozen
 
 
 def _action_co_referenced_pairs(view: CanonicalGraphView) -> set[frozenset[str]]:
-    """Pairs that share object/result/instrument roles on the same Action."""
+    """Object↔result pairs on the same Action (true transformation links).
+
+    Shared object-object, result-result, or instrument-instrument membership
+    alone does not suppress proxy-duplicate findings.
+    """
 
     pairs: set[frozenset[str]] = set()
     for node in view.iter_nodes():
         if not _is_action_node(node):
             continue
-        endpoints = sorted(
-            set(node.refs(IRI_ACTION_OBJECT))
-            | set(node.refs(IRI_ACTION_RESULT))
-            | set(node.refs(IRI_INSTRUMENT))
-        )
-        for i, left in enumerate(endpoints):
-            for right in endpoints[i + 1 :]:
-                pairs.add(frozenset({left, right}))
+        objects = set(node.refs(IRI_ACTION_OBJECT))
+        results = set(node.refs(IRI_ACTION_RESULT))
+        for src in objects:
+            for tgt in results:
+                if src != tgt:
+                    pairs.add(frozenset({src, tgt}))
     return pairs
 
 

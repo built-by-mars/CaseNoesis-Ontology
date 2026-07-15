@@ -104,7 +104,11 @@ Record those as `Annotation` statements with source provenance (report
 section, figure, or code excerpt via `ExternalReference.definingContext`).
 Prefer verbal confidence tags (`confidence:moderate-verbal`) over invented
 numeric `ConfidenceFacet` values unless the source publishes a number or a
-cited project normalization policy exists.
+cited project normalization policy exists. The controlled vocabulary for
+these tags (stance, verbal confidence, hash/bytes honesty, ATT&CK mapping
+provenance) is published at
+[`docs/vocabularies/epistemic-tags.md`](../vocabularies/epistemic-tags.md)
+(JSON: [`epistemic-tags.json`](../vocabularies/epistemic-tags.json)).
 
 Named-group exemplar: Lotus Blossom → Organization. Unattributed exemplar:
 DarkWatchman → Grouping + analytic Annotations

@@ -204,8 +204,8 @@ def test_python_serializer_ast_findings():
     assert "CRIT-S-PY-FAIL-OPEN-VALIDATION" in rules
     exec_rules = {e.rule_id for e in executions}
     assert "CRIT-S-PY-PRIVATE-OBJECTS" in exec_rules
-    assert all(e.rule_version == "1.3.0" for e in executions)
-    assert all(f.rule_version == "1.3.0" for f in findings)
+    assert all(e.rule_version == "1.3.1" for e in executions)
+    assert all(f.rule_version == "1.3.1" for f in findings)
 
 
 def test_python_serializer_real_casegraph_api_not_nonexistent():
@@ -219,9 +219,9 @@ def build(output_path: str):
     graph = CASEGraph()
     inv = graph.create(type("Investigation", (), {}), id="kb:inv")
     graph.create_relationship(
-        source=inv,
-        target=inv,
-        relationship_type="related-to",
+        "kb:inv",
+        "kb:inv",
+        "Related_To",
         assertion_id="kb:rel-1",
     )
     graph.get("kb:inv")
@@ -234,6 +234,26 @@ def build(output_path: str):
     )
     nonexistent = [f for f in findings if f.rule_id == "CRIT-S-PY-NONEXISTENT-API"]
     assert nonexistent == []
+
+
+def test_python_serializer_invalid_create_relationship_kwargs():
+    """Wrong keyword names on create_relationship must fire NONEXISTENT-API."""
+
+    source = '''
+from case_uco import CASEGraph
+
+def build():
+    graph = CASEGraph()
+    graph.create_relationship(
+        source="kb:a",
+        target="kb:b",
+        relationship_type="Related_To",
+    )
+'''
+    findings, _ = analyze_python_serializer(Path("bad_rel.py"), source)
+    nonexistent = [f for f in findings if f.rule_id == "CRIT-S-PY-NONEXISTENT-API"]
+    assert nonexistent
+    assert any("unknown_kwargs" in " ".join(f.evidence) for f in nonexistent)
 
 
 def test_rel_id_collapse_requires_repeated_calls():

@@ -292,6 +292,7 @@ def build_prompt_package(
         extra_ontology_sha256=extra_hashes,
         bundle_fingerprint=validation.bundle_fingerprint,
         bundle_resource_hashes=validation.bundle_resource_hashes,
+        provenance_manifest_sha256=artifact_hashes.provenance_manifest_sha256,
     )
     package["review_request_sha256"] = compute_review_request_sha256(
         schema_version=SUPPORTED_SCHEMA_VERSION,

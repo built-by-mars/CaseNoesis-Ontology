@@ -40,6 +40,10 @@
           "type": ["string", "null"],
           "pattern": "^[a-fA-F0-9]{64}$"
         },
+        "provenance_manifest_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
         "extra_ontology_sha256": {
           "type": "object",
           "additionalProperties": {

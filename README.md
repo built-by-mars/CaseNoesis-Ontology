@@ -2,7 +2,7 @@
 
 # CASE/UCO SDK
 
-**v1.22.3** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md#1223---2026-07-15)
+**v1.22.4** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md#1224---2026-07-15)
 
 A multi-language data modeling library for digital forensics, cyber-investigation, and cyber-observable data. If your software produces or consumes forensic evidence, this SDK gives you typed, validated builders in **Python**, **C#**, **Java**, and **Rust** — so you can model investigation data in your language and produce interoperable [CASE/UCO](https://caseontology.org/) JSON-LD output.
 
@@ -34,7 +34,7 @@ Beyond the generated code, the repository provides:
 
 Install the SDK package for your language. No need to clone the repo or run the generator.
 
-**v1.22.3** ships installable artifacts on the [GitHub Release](https://github.com/vulnmaster/CASE-UCO-SDK/releases/tag/v1.22.3) (wheel, sdist, NuGet package, Maven JAR, and Rust crate, with checksums and attestations). Registry publication to PyPI, NuGet, Maven Central, and crates.io is opt-in and is **not** enabled for this tag. You can also build from source via the CLI or MCP (see [Getting Started](#getting-started) below).
+**v1.22.4** ships installable artifacts on the [GitHub Release](https://github.com/vulnmaster/CASE-UCO-SDK/releases/tag/v1.22.4) (wheel, sdist, NuGet package, Maven JAR, and Rust crate, with checksums and attestations). Registry publication to PyPI, NuGet, Maven Central, and crates.io is opt-in and is **not** enabled for this tag. You can also build from source via the CLI or MCP (see [Getting Started](#getting-started) below).
 
 When registry packages are published in a later release:
 
@@ -50,7 +50,7 @@ For Java (once on Maven Central), add to your `pom.xml`:
 <dependency>
     <groupId>org.caseontology</groupId>
     <artifactId>case-uco</artifactId>
-    <version>1.22.3</version>
+    <version>1.22.4</version>
 </dependency>
 ```
 
@@ -553,7 +553,8 @@ All four language packages are released in lockstep from the same ontology sourc
 
 | SDK Version | UCO | CASE | Python `case-uco` | C# `CaseUco` | Java `case-uco` | Rust `case-uco` |
 |-------------|-----|------|-------------------|--------------|-----------------|-----------------|
-| 1.22.3 | 1.4.0 | 1.4.0 | 1.22.3 | 1.22.3 | 1.22.3 | 1.22.3 |
+| 1.22.4 | 1.4.0 | 1.4.0 | 1.22.4 | 1.22.4 | 1.22.4 | 1.22.4 |
+| 1.22.2 | 1.4.0 | 1.4.0 | 1.22.2 | 1.22.2 | 1.22.2 | 1.22.2 |
 | 1.22.1 | 1.4.0 | 1.4.0 | 1.22.1 | 1.22.1 | 1.22.1 | 1.22.1 |
 | 1.22.0 | 1.4.0 | 1.4.0 | 1.22.0 | 1.22.0 | 1.22.0 | 1.22.0 |
 | 1.21.0 | 1.4.0 | 1.4.0 | 1.21.0 | 1.21.0 | 1.21.0 | 1.21.0 |
@@ -589,7 +590,7 @@ The MCP server is the centerpiece. It carries a working knowledge of the entire 
 - **Investigation routing** — `route_investigation_content` classifies any submission (text, documents, partial graphs) into investigation families and returns the matching recipes, extensions, namespaces, and profiles; `route_cac_content` does deep routing within the crimes-against-children domain. Since v1.16.0 routing is hybrid: a deterministic keyword baseline plus an offline lexical-semantic stage with synonym expansion, per-family confidence scores, explainable match evidence, and calibrated abstention — colloquial phrasings route correctly, unknown content gets extension-gap guidance instead of a weak guess.
 - **Forensic method planning** — `plan_solveit_workflow` maps an investigation goal to [SOLVE-IT](https://solveit-df.org) objectives, candidate techniques, and per-technique weakness/mitigation checklists (ASTM E3016-18 Error Mitigation Analysis); `search_solveit` and `get_solveit_details` query the pinned knowledge base (23 objectives, 187 techniques, 339 weaknesses, 270 mitigations), and the `solveit` extension records the method in the graph via `SolveitInvestigativeAction` or the punned technique classes — kept current against SOLVE-IT's rapid release cycle with `make sync-solveit` and a weekly CI freshness check.
 - **Document processing** — `process_document_file` turns images, PDFs, Office documents, CSV tables, and PACER court filings into bounded CASE/UCO JSON-LD for human review. All extracted content is labeled untrusted evidence data, scanned for prompt-injection patterns, and confined by the configurable filesystem workspace policy (see [SECURITY.md](SECURITY.md)).
-- **Validation** — the public Python API `case_uco.validation.validate_graph_file` (and MCP `validate_graph`) runs SHACL validation plus a closed-world concept-coverage check against core, loaded extensions, and profiled upper ontologies. Coverage is exact-term and role-aware: profiled upper-ontology terms (BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, FOAF, ORG, PROF) are checked against pinned releases (`python/case_uco/validation/upper_ontology_registry.json`) so fabricated terms fail, and declared terms used in the wrong RDF position (a class as a predicate, a property as a type) are reported as role mismatches. The declared-term set refreshes automatically when ontology files change mid-process. Since v1.17.0 strict validation fails closed: reports carry a `verification_status`, and a missing or invalid registry, malformed extension manifest, missing dependency, or dependency cycle is a typed error rather than a silent pass.
+- **Validation** — the public Python API `case_uco.validation.validate_graph_file` (and MCP `validate_graph`) runs SHACL validation plus a closed-world concept-coverage check against core, loaded extensions, and profiled upper ontologies. Coverage is exact-term and role-aware: profiled upper-ontology terms (BFO, gUFO, PROV-O, OWL-Time, GeoSPARQL, FOAF, ORG, PROF) are checked against pinned releases (`python/case_uco/validation/upper_ontology_registry.json`) so fabricated terms fail, and declared terms used in the wrong RDF position (a class as a predicate, a property as a type) are reported as role mismatches. The declared-term set refreshes automatically when ontology files change mid-process. Since v1.17.0 strict validation fails closed: reports carry a `verification_status`, and a missing or invalid registry, malformed extension manifest, missing dependency, or dependency cycle is a typed error rather than a silent pass. **Named extensions are an external-bundle contract:** the PyPI/GitHub wheel does not vendor `extensions/` Turtle files; pass `project_root=` (or explicit ontology paths) pointing at a CASE-UCO-Libraries checkout when using names such as `attack-technique:full`.
 - **Knowledge lifecycle** — learned recipes and extension ontologies follow a staged candidate → validated → operational → deprecated lifecycle with validation-gated promotion, recorded provenance, emergency revocation, and one-command git rollback (`make promote-extension` / `promote-recipe` / `deprecate-extension` / `deprecate-recipe` / `rollback-extension` / `lifecycle-status`). Promotion gates require conforming exemplars, failing negative fixtures when SHACL shapes ship, subclass anchoring to declared classes, and (when declared) passing competency queries; promotion authority follows the deployment profile.
 - **Secure deployment** — a filesystem workspace policy confines file-handling tools to configured read/write roots, and deployment profiles (`development`, `offline-investigation`, `production-authoring`, `production-review`) make it enforceable: in secure mode the server refuses to start on a misconfigured policy and fails closed at runtime, and `get_security_profile` reports the active posture. Routing quality is guarded by a held-out external evaluation corpus (`evaluation/routing/`, `make eval-routing`) that runs in CI with a governance rule preventing silent co-modification of router and corpus.
 - **CDO community awareness** — the server knows the [Community Playground](https://docs.google.com/document/d/1EiXQiAeUGk-629xdKx7HZHVn927k891LGkPcQzNLLr8/edit?usp=sharing) submission requirements and the UCO/CASE/CAC change-proposal process, so its output is aimed at upstream adoption rather than one-off hacks.
@@ -739,6 +740,12 @@ Use the public composition API (`upsert_node` / `add_type` / `link` / `create_re
 ```python
 from case_uco.validation import validate_graph_file
 validate_graph_file("graph.jsonld", profiles=["prov-o", "time"])
+# Named extensions require a monorepo/ontology checkout:
+# validate_graph_file(
+#     "graph.jsonld",
+#     extensions=["attack-technique:full"],
+#     project_root="/path/to/CASE-UCO-Libraries",
+# )
 ```
 
 Recipes and exemplars live under [`docs/recipes/`](docs/recipes/) (see Cross-Ontology Composition) and [`examples/upper-ontology/`](examples/upper-ontology/). The CI `recipe-validation` job is the **upper-ontology exemplar quality gate** for the nine v1.21 entries in [`docs/recipes/recipe-execution.json`](docs/recipes/recipe-execution.json) (#69); full operational catalog migration is planned for v1.22. Profile discovery: MCP `get_uco_profiles` (includes ORG and PROF).

@@ -142,6 +142,16 @@ class OntologyProperty:
         return self.range_iri in XSD_TYPE_MAP
 
     @property
+    def is_custom_rdf_datatype(self) -> bool:
+        """True when SHACL uses a non-XSD ``sh:datatype`` (typed literal).
+
+        Distinguished from vocabulary enums by callers that also check
+        ``schema.vocabs``: custom datatypes are not vocabulary members.
+        """
+
+        return not self.range_is_class and not self.is_xsd_type
+
+    @property
     def all_range_iris(self) -> list[str]:
         ranges = [self.range_iri, *self.alternate_range_iris]
         seen: list[str] = []
@@ -160,10 +170,19 @@ class OntologyProperty:
             return UNION_FALLBACK_TYPE_MAP[lang]
         if self.is_xsd_type:
             return XSD_TYPE_MAP[self.range_iri][lang]
+        if self.is_custom_rdf_datatype:
+            # Python: TypedLiteral; other languages keep string until backends
+            # grow first-class typed-literal wrappers.
+            if lang == "python":
+                return "TypedLiteral"
+            return UNION_FALLBACK_TYPE_MAP[lang]
         return iri_local_name(self.range_iri)
 
     @property
     def is_vocab_type(self) -> bool:
+        # Historical name: non-XSD literal ranges. Prefer checking
+        # ``range_iri in schema.vocabs`` for true vocabulary enums, and
+        # ``is_custom_rdf_datatype`` for typed literals such as PatternExpression.
         return not self.range_is_class and not self.is_xsd_type
 
 

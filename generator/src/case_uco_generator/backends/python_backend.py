@@ -189,9 +189,17 @@ class PythonBackend(CodegenBackend):
             dc_parts.append("field")
         lines.append(f"from dataclasses import {', '.join(dc_parts)}")
 
+        needs_typed_literal = any(
+            prop.is_custom_rdf_datatype and prop.range_iri not in self.schema.vocabs
+            for cls in classes
+            for prop in cls.properties
+        )
+
         typing_imports: list[str] = []
         if needs_optional:
             typing_imports.append("Optional")
+        if needs_typed_literal:
+            typing_imports.append("Union")
 
         needs_any = self._needs_any_type(classes)
         if needs_any:
@@ -203,6 +211,9 @@ class PythonBackend(CodegenBackend):
         needs_datetime = self._needs_datetime(classes)
         if needs_datetime:
             lines.append("from datetime import datetime")
+
+        if needs_typed_literal:
+            lines.append("from case_uco.typed_literal import TypedLiteral")
 
         lines.append("")
 
@@ -416,7 +427,12 @@ class PythonBackend(CodegenBackend):
         return lines
 
     def _python_type(self, prop: OntologyProperty) -> str:
-        base_type = prop.type_name_for("python")
+        if prop.is_custom_rdf_datatype and prop.range_iri not in getattr(
+            self.schema, "vocabs", {}
+        ):
+            base_type = "Union[str, TypedLiteral]"
+        else:
+            base_type = prop.type_name_for("python")
         if prop.cardinality.is_list:
             return f"list[{base_type}]"
         return f"Optional[{base_type}]"
@@ -434,4 +450,8 @@ class PythonBackend(CodegenBackend):
             "range_iri": prop.range_iri,
             "alternate_range_iris": prop.alternate_range_iris,
         }
+        if prop.is_custom_rdf_datatype and prop.range_iri not in getattr(
+            self.schema, "vocabs", {}
+        ):
+            metadata["literal_datatype"] = True
         return f', metadata={metadata})'

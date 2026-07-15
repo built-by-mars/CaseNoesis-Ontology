@@ -8,6 +8,7 @@ from case_uco.graph import (
     InvalidSplitSizeError,
     clear_class_registry_cache,
 )
+from case_uco.typed_literal import TypedLiteral
 
 __all__ = [
     "CASEGraph",
@@ -15,6 +16,7 @@ __all__ = [
     "DuplicateClassIriError",
     "DuplicateNodeError",
     "InvalidSplitSizeError",
+    "TypedLiteral",
     "clear_class_registry_cache",
 ]
-__version__ = "1.22.3"
+__version__ = "1.22.4"

@@ -75,6 +75,7 @@ class SessionConfig:
     serializer_path: str | None = None
     source_paths: list[str] = field(default_factory=list)
     coverage_contract_path: str | None = None
+    provenance_manifest_path: str | None = None
     extensions: list[str] = field(default_factory=list)
     profiles: list[str] = field(default_factory=list)
     critic_scope: str = "both"
@@ -343,6 +344,7 @@ def _artifact_set_from_hashes(
         "serializer_sha256": hashes.get("serializer_sha256"),
         "source_sha256": dict(hashes.get("source_sha256") or {}),
         "coverage_contract_sha256": hashes.get("coverage_contract_sha256"),
+        "provenance_manifest_sha256": hashes.get("provenance_manifest_sha256"),
         "extra_ontology_sha256": dict(hashes.get("extra_ontology_sha256") or {}),
     }
     if review_config_sha256:
@@ -356,6 +358,7 @@ def _artifact_set_sha256(artifact_set: dict[str, Any]) -> str:
         "serializer_sha256": artifact_set.get("serializer_sha256"),
         "source_sha256": dict(sorted((artifact_set.get("source_sha256") or {}).items())),
         "coverage_contract_sha256": artifact_set.get("coverage_contract_sha256"),
+        "provenance_manifest_sha256": artifact_set.get("provenance_manifest_sha256"),
         "extra_ontology_sha256": dict(
             sorted((artifact_set.get("extra_ontology_sha256") or {}).items())
         ),
@@ -437,6 +440,17 @@ def _review_config_sha256_for(
     built_version: str | None = None,
     resolver_schema_version: str | None = None,
 ) -> str:
+    provenance_manifest_sha256: str | None = None
+    if cfg.get("provenance_manifest_path"):
+        try:
+            manifest = _resolve_artifact_path(
+                str(cfg["provenance_manifest_path"]),
+                allow_write_roots=True,
+                label="provenance_manifest",
+            )
+            provenance_manifest_sha256 = sha256_file(manifest)
+        except CriticSessionError:
+            provenance_manifest_sha256 = None
     return compute_review_config_sha256(
         critic_scope=str(cfg.get("critic_scope") or "both"),
         serializer_mode=str(cfg.get("serializer_mode") or "auto"),
@@ -453,6 +467,7 @@ def _review_config_sha256_for(
         validator_version=validator_version,
         built_version=built_version,
         resolver_schema_version=resolver_schema_version,
+        provenance_manifest_sha256=provenance_manifest_sha256,
     )
 
 
@@ -787,12 +802,21 @@ def _rehash_config_artifacts(cfg: dict[str, Any]) -> dict[str, Any]:
             label="coverage",
         )
         coverage_sha = sha256_file(cov)
+    provenance_sha = None
+    if cfg.get("provenance_manifest_path"):
+        man = _resolve_artifact_path(
+            cfg["provenance_manifest_path"],
+            allow_write_roots=True,
+            label="provenance_manifest",
+        )
+        provenance_sha = sha256_file(man)
     return _artifact_set_from_hashes(
         {
             "graph_sha256": sha256_file(graph_path),
             "serializer_sha256": serializer_sha,
             "source_sha256": source_sha,
             "coverage_contract_sha256": coverage_sha,
+            "provenance_manifest_sha256": provenance_sha,
             "extra_ontology_sha256": _extra_ontology_hashes(
                 cfg.get("extra_ontology_graphs")
             ),
@@ -1140,6 +1164,7 @@ def rebuild_prompt_package_for_pass(
         serializer_path=cfg.get("serializer_path"),
         source_paths=list(cfg.get("source_paths") or []),
         coverage_contract_path=cfg.get("coverage_contract_path"),
+        provenance_manifest_path=cfg.get("provenance_manifest_path"),
         extensions=list(cfg.get("extensions") or []),
         profiles=list(cfg.get("profiles") or []),
         critic_scope=cfg.get("critic_scope") or "both",
@@ -1274,6 +1299,7 @@ def start_critic_review(
     serializer_path: str | None = None,
     source_paths: list[str] | None = None,
     coverage_contract_path: str | None = None,
+    provenance_manifest_path: str | None = None,
     extensions: list[str] | None = None,
     profiles: list[str] | None = None,
     critic_scope: str = "both",
@@ -1324,6 +1350,7 @@ def start_critic_review(
         serializer_path=serializer_path,
         source_paths=list(source_paths or []),
         coverage_contract_path=coverage_contract_path,
+        provenance_manifest_path=provenance_manifest_path,
         extensions=list(extensions or []),
         profiles=list(profiles or []),
         critic_scope=critic_scope,  # type: ignore[arg-type]
@@ -1345,6 +1372,7 @@ def start_critic_review(
             serializer_path=serializer_path,
             source_paths=list(source_paths or []),
             coverage_contract_path=coverage_contract_path,
+            provenance_manifest_path=provenance_manifest_path,
             extensions=list(extensions or []),
             profiles=list(profiles or []),
             critic_scope=critic_scope,

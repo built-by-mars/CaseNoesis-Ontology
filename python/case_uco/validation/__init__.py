@@ -10,8 +10,15 @@ under ``mcp_server``. MCP tools and repo examples should import from here::
         extensions=["attack-technique:full"],
         profiles=[],
         strict_concepts=True,
+        project_root="/path/to/CASE-UCO-Libraries",  # required for named extensions
     )
     assert report.conforms
+
+**Extension ontology contract (external-bundle):** the installable ``case-uco``
+wheel ships core registries and upper-ontology registry data only. Named
+extensions such as ``attack-technique`` resolve from a repository/ontology
+checkout via ``project_root`` (or explicit ontology graph paths). A bare
+``pip install case-uco`` without a checkout cannot load named extensions.
 """
 
 from case_uco.validation.graph import (

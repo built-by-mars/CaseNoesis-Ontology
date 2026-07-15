@@ -18,7 +18,9 @@
   ],
   "bridge_files": [],
   "exemplar_files": [],
-  "uco_compat": ["1.4.0"],
+  "uco_compat": [
+    "1.4.0"
+  ],
   "upper_ontology": "none",
   "cdo_shapes_compatibility": {
     "CDO-Shapes-gufo": "compatible",
@@ -27,5 +29,13 @@
     "CDO-Shapes-Time": "compatible",
     "CDO-Shapes-GeoSPARQL": "compatible",
     "CDO-Shapes-FOAF": "compatible"
+  },
+  "provenance": {
+    "attack_stix_repo": "https://github.com/mitre-attack/attack-stix-data",
+    "attack_version": "19.1",
+    "attack_stix_source": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-19.1.json",
+    "technique_count": 27,
+    "synced": "2026-07-15T03:26:15+00:00",
+    "sync_tool": "mcp_server/tools/sync_attack_catalog.py"
   }
 }

@@ -135,6 +135,7 @@ def compute_review_config_sha256(
     validator_version: str | None = None,
     built_version: str | None = None,
     resolver_schema_version: str | None = None,
+    provenance_manifest_sha256: str | None = None,
 ) -> str:
     """Canonical digest over review configuration + validation bundle identity."""
 
@@ -158,6 +159,7 @@ def compute_review_config_sha256(
         "extra_ontology_sha256": dict(sorted(extra_ontology_sha256.items())),
         "force_rdfs_inference": bool(force_rdfs_inference),
         "profiles": sorted(profiles),
+        "provenance_manifest_sha256": provenance_manifest_sha256,
         "resolver_schema_version": resolver_schema_version,
         "serializer_mode": serializer_mode,
         "validator_version": validator_version,

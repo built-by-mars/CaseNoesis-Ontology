@@ -7,54 +7,29 @@
 # Partial MITRE ATT&CK technique catalog, expressed with the uco-action:
 # Technique metaclass added in ucoProject/UCO PR #676.
 #
+# GENERATED FILE — regenerate with:
+#   python3 mcp_server/tools/sync_attack_catalog.py --attack-version 19.1
+#   make sync-attack ATTACK_VERSION=19.1
+#
 # Per that PR, "A Technique instance is an owl:Class that is a subclass of
 # uco-action:Action." Each ATT&CK technique below is therefore a *punned
 # class*: it is simultaneously an instance of the uco-action:Technique
-# metaclass and an owl:Class that rdfs:subClassOf uco-action:Action. A
-# concrete action in a data graph that exhibits the technique is typed with
-# the technique class (rdf:type), which places it under uco-action:Action.
+# metaclass and an owl:Class that rdfs:subClassOf uco-action:Action.
 #
-# IRIs are the canonical MITRE ATT&CK technique pages so instance data is
-# interoperable with upstream ATT&CK (https://attack.mitre.org). This file
-# is a *partial* catalog covering the techniques used by CASE-UCO exemplars;
-# extend it as new exemplars cite additional techniques. The tactic/platform
-# context each technique serves is recorded in rdfs:comment (UCO #676 keeps
-# the general Technique class minimal — techniqueID is its only property).
-#
-# Source: https://github.com/ucoProject/UCO/pull/676
+# Pinned Enterprise ATT&CK: v19.1
+# Source: https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-19.1.json
+# Sync tool: mcp_server/tools/sync_attack_catalog.py
 #
 
-attack:T1543.003
+attack:T1016
 	a
 		owl:Class ,
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Create or Modify System Process: Windows Service"@en ;
-	rdfs:comment "Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries create or modify Windows services to repeatedly execute malicious payloads as part of persistence."@en ;
-	action:techniqueID "T1543.003" ;
-	.
-
-attack:T1112
-	a
-		owl:Class ,
-		action:Technique
-		;
-	rdfs:subClassOf action:Action ;
-	rdfs:label "Modify Registry"@en ;
-	rdfs:comment "Tactic: Defense Evasion. Platforms: Windows. Adversaries interact with the Windows Registry to hide configuration information, remove information, or evade defenses."@en ;
-	action:techniqueID "T1112" ;
-	.
-
-attack:T1055.001
-	a
-		owl:Class ,
-		action:Technique
-		;
-	rdfs:subClassOf action:Action ;
-	rdfs:label "Process Injection: Dynamic-link Library Injection"@en ;
-	rdfs:comment "Tactics: Defense Evasion, Privilege Escalation. Platforms: Windows. Adversaries inject dynamic-link libraries into processes to evade process-based defenses and elevate privileges."@en ;
-	action:techniqueID "T1055.001" ;
+	rdfs:label "System Network Configuration Discovery"@en ;
+	rdfs:comment "Tactic: Discovery. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries may look for details about the network configuration and settings, such as IP and/or MAC addresses, of systems they access or through information discovery of remote systems. Several operating system administration utilities exist that can be used to gather this information. Examples include [Arp](https://attack.mitre.org/software/S0099), [ipconfig](https://attack.mitre.org/software/S0"@en ;
+	action:techniqueID "T1016" ;
 	.
 
 attack:T1027.002
@@ -63,64 +38,31 @@ attack:T1027.002
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Obfuscated Files or Information: Software Packing"@en ;
-	rdfs:comment "Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries perform software packing to compress or encrypt an executable and hinder analysis or signature detection."@en ;
+	rdfs:label "Software Packing"@en ;
+	rdfs:comment "Tactic: Stealth. Platforms: Linux, macOS, Windows. Adversaries may perform software packing or virtual machine software protection to conceal their code. Software packing is a method of compressing or encrypting an executable. Packing an executable changes the file signature in an attempt to avoid signature-based detection. Most decompression techniques decompress the executable code in memory. Virtual machine software protection translates an exe"@en ;
 	action:techniqueID "T1027.002" ;
 	.
 
-attack:T1047
+attack:T1036
 	a
 		owl:Class ,
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Windows Management Instrumentation"@en ;
-	rdfs:comment "Tactic: Execution. Platforms: Windows. Adversaries abuse Windows Management Instrumentation (WMI) to execute malicious commands and payloads, including on remote hosts for lateral movement."@en ;
-	action:techniqueID "T1047" ;
+	rdfs:label "Masquerading"@en ;
+	rdfs:comment "Tactic: Stealth. Platforms: Containers, ESXi, Linux, macOS, Windows. Adversaries may attempt to manipulate features of their artifacts to make them appear legitimate or benign to users and/or security tools. Masquerading occurs when the name or location of an object, legitimate or malicious, is manipulated or abused for the sake of evading defenses and observation. This may include manipulating file metadata, tricking users into misidentifying the file type, and gi"@en ;
+	action:techniqueID "T1036" ;
 	.
 
-attack:T1090.001
+attack:T1036.008
 	a
 		owl:Class ,
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Proxy: Internal Proxy"@en ;
-	rdfs:comment "Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries use an internal proxy to direct command-and-control traffic between compromised systems and out to the internet."@en ;
-	action:techniqueID "T1090.001" ;
-	.
-
-attack:T1102.002
-	a
-		owl:Class ,
-		action:Technique
-		;
-	rdfs:subClassOf action:Action ;
-	rdfs:label "Web Service: Bidirectional Communication"@en ;
-	rdfs:comment "Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries use an existing, legitimate external web service for bidirectional command-and-control communication to blend with normal traffic."@en ;
-	action:techniqueID "T1102.002" ;
-	.
-
-attack:T1071.001
-	a
-		owl:Class ,
-		action:Technique
-		;
-	rdfs:subClassOf action:Action ;
-	rdfs:label "Application Layer Protocol: Web Protocols"@en ;
-	rdfs:comment "Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries communicate using application-layer web protocols (HTTP/HTTPS) to avoid detection by blending with existing traffic."@en ;
-	action:techniqueID "T1071.001" ;
-	.
-
-attack:T1560.001
-	a
-		owl:Class ,
-		action:Technique
-		;
-	rdfs:subClassOf action:Action ;
-	rdfs:label "Archive Collected Data: Archive via Utility"@en ;
-	rdfs:comment "Tactic: Collection. Platforms: Windows, Linux, macOS. Adversaries use a utility to compress and/or encrypt collected data prior to exfiltration."@en ;
-	action:techniqueID "T1560.001" ;
+	rdfs:label "Masquerade File Type"@en ;
+	rdfs:comment "Tactic: Stealth. Platforms: Linux, macOS, Windows. Adversaries may masquerade malicious payloads as legitimate files through changes to the payload's formatting, including the file’s signature, extension, icon, and contents. Various file types have a typical standard format, including how they are encoded and organized. For example, a file’s signature (also known as header or magic bytes) is the beginning bytes of a file and is often used to ident"@en ;
+	action:techniqueID "T1036.008" ;
 	.
 
 attack:T1041
@@ -130,78 +72,19 @@ attack:T1041
 		;
 	rdfs:subClassOf action:Action ;
 	rdfs:label "Exfiltration Over C2 Channel"@en ;
-	rdfs:comment "Tactic: Exfiltration. Platforms: Windows, Linux, macOS. Adversaries steal data by exfiltrating it over an existing command-and-control channel."@en ;
+	rdfs:comment "Tactic: Exfiltration. Platforms: ESXi, Linux, macOS, Windows. Adversaries may steal data by exfiltrating it over an existing command and control channel. Stolen data is encoded into the normal communications channel using the same protocol as command and control communications."@en ;
 	action:techniqueID "T1041" ;
 	.
 
-attack:T1016
+attack:T1047
 	a
 		owl:Class ,
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "System Network Configuration Discovery"@en ;
-	rdfs:comment "Tactic: Discovery. Platforms: Windows, Linux, macOS. Adversaries look for details about the network configuration and settings of compromised systems."@en ;
-	action:techniqueID "T1016" ;
-	.
-
-attack:T1539
-	a
-		owl:Class ,
-		action:Technique
-		;
-	rdfs:subClassOf action:Action ;
-	rdfs:label "Steal Web Session Cookie"@en ;
-	rdfs:comment "Tactic: Credential Access. Platforms: Windows, Linux, macOS. Adversaries steal web application or service session cookies to authenticate to systems as the compromised user."@en ;
-	action:techniqueID "T1539" ;
-	.
-
-# Techniques cited by the DarkWatchman / Prevailion CTI exemplar
-# (examples/cti/darkwatchman_2021/). Catalog is partial — extend as
-# additional exemplars cite ATT&CK IDs. See https://attack.mitre.org.
-
-attack:T1566.001
-	a
-		owl:Class ,
-		action:Technique
-		;
-	rdfs:subClassOf action:Action ;
-	rdfs:label "Phishing: Spearphishing Attachment"@en ;
-	rdfs:comment "Tactic: Initial Access. Platforms: Linux, macOS, Windows. Adversaries send spearphishing emails with a malicious attachment to gain access to victim systems. See https://attack.mitre.org/techniques/T1566/001/."@en ;
-	action:techniqueID "T1566.001" ;
-	.
-
-attack:T1204.002
-	a
-		owl:Class ,
-		action:Technique
-		;
-	rdfs:subClassOf action:Action ;
-	rdfs:label "User Execution: Malicious File"@en ;
-	rdfs:comment "Tactic: Execution. Platforms: Linux, macOS, Windows. An adversary relies upon a user opening a malicious file to gain execution. See https://attack.mitre.org/techniques/T1204/002/."@en ;
-	action:techniqueID "T1204.002" ;
-	.
-
-attack:T1059.007
-	a
-		owl:Class ,
-		action:Technique
-		;
-	rdfs:subClassOf action:Action ;
-	rdfs:label "Command and Scripting Interpreter: JavaScript"@en ;
-	rdfs:comment "Tactic: Execution. Platforms: Linux, macOS, Windows. Adversaries abuse JavaScript interpreters (including Windows Script Host / wscript) to execute scripts. See https://attack.mitre.org/techniques/T1059/007/."@en ;
-	action:techniqueID "T1059.007" ;
-	.
-
-attack:T1059.001
-	a
-		owl:Class ,
-		action:Technique
-		;
-	rdfs:subClassOf action:Action ;
-	rdfs:label "Command and Scripting Interpreter: PowerShell"@en ;
-	rdfs:comment "Tactic: Execution. Platforms: Windows. Adversaries abuse PowerShell to execute commands and scripts, including compiling and launching payloads at runtime. See https://attack.mitre.org/techniques/T1059/001/."@en ;
-	action:techniqueID "T1059.001" ;
+	rdfs:label "Windows Management Instrumentation"@en ;
+	rdfs:comment "Tactic: Execution. Platforms: Windows. Adversaries may abuse Windows Management Instrumentation (WMI) to execute malicious commands and payloads. WMI is designed for programmers and is the infrastructure for management data and operations on Windows systems.(Citation: WMI 1-3) WMI is an administration feature that provides a uniform environment to access Windows system components."@en ;
+	action:techniqueID "T1047" ;
 	.
 
 attack:T1053.005
@@ -210,20 +93,20 @@ attack:T1053.005
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Scheduled Task/Job: Scheduled Task"@en ;
-	rdfs:comment "Tactics: Execution, Persistence, Privilege Escalation. Platforms: Windows. Adversaries abuse the Windows Task Scheduler to execute malicious programs for persistence or privilege escalation. See https://attack.mitre.org/techniques/T1053/005/."@en ;
+	rdfs:label "Scheduled Task"@en ;
+	rdfs:comment "Tactics: Execution, Persistence, Privilege Escalation. Platforms: Windows. Adversaries may abuse the Windows Task Scheduler to perform task scheduling for initial or recurring execution of malicious code. There are multiple ways to access the Task Scheduler in Windows. The [schtasks](https://attack.mitre.org/software/S0111) utility can be run directly on the command line, or the Task Scheduler can be opened through the GUI within the Administrator Tools section of the Co"@en ;
 	action:techniqueID "T1053.005" ;
 	.
 
-attack:T1568.002
+attack:T1055.001
 	a
 		owl:Class ,
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Dynamic Resolution: Domain Generation Algorithms"@en ;
-	rdfs:comment "Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries use Domain Generation Algorithms (DGAs) to procedurally generate domain names for C2, increasing resiliency. See https://attack.mitre.org/techniques/T1568/002/."@en ;
-	action:techniqueID "T1568.002" ;
+	rdfs:label "Dynamic-link Library Injection"@en ;
+	rdfs:comment "Tactics: Stealth, Privilege Escalation. Platforms: Windows. Adversaries may inject dynamic-link libraries (DLLs) into processes in order to evade process-based defenses as well as possibly elevate privileges. DLL injection is a method of executing arbitrary code in the address space of a separate live process."@en ;
+	action:techniqueID "T1055.001" ;
 	.
 
 attack:T1056.001
@@ -232,20 +115,42 @@ attack:T1056.001
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Input Capture: Keylogging"@en ;
-	rdfs:comment "Tactics: Collection, Credential Access. Platforms: Linux, macOS, Windows. Adversaries log keystrokes to capture credentials and other sensitive information. See https://attack.mitre.org/techniques/T1056/001/."@en ;
+	rdfs:label "Keylogging"@en ;
+	rdfs:comment "Tactics: Collection, Credential Access. Platforms: Linux, macOS, Network Devices, Windows. Adversaries may log user keystrokes to intercept credentials as the user types them. Keylogging is likely to be used to acquire credentials for new access opportunities when [OS Credential Dumping](https://attack.mitre.org/techniques/T1003) efforts are not effective, and may require an adversary to intercept keystrokes on a system for a substantial period of time before credentials can be successf"@en ;
 	action:techniqueID "T1056.001" ;
 	.
 
-attack:T1490
+attack:T1059.001
 	a
 		owl:Class ,
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Inhibit System Recovery"@en ;
-	rdfs:comment "Tactic: Impact. Platforms: Windows, Linux, macOS. Adversaries delete or remove built-in operating system data and turn off services designed to aid in recovery (e.g., volume shadow copies via vssadmin). See https://attack.mitre.org/techniques/T1490/."@en ;
-	action:techniqueID "T1490" ;
+	rdfs:label "PowerShell"@en ;
+	rdfs:comment "Tactic: Execution. Platforms: Windows. Adversaries may abuse PowerShell commands and scripts for execution. PowerShell is a powerful interactive command-line interface and scripting environment included in the Windows operating system.(Citation: TechNet PowerShell) Adversaries can use PowerShell to perform a number of actions, including discovery of information and execution of code. Examples include the <code>Start-Process</code> cmdl"@en ;
+	action:techniqueID "T1059.001" ;
+	.
+
+attack:T1059.007
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "JavaScript"@en ;
+	rdfs:comment "Tactic: Execution. Platforms: Linux, macOS, Windows. Adversaries may abuse various implementations of JavaScript for execution. JavaScript (JS) is a platform-independent scripting language (compiled just-in-time at runtime) commonly associated with scripts in webpages, though JS can be executed in runtime environments outside the browser.(Citation: NodeJS)"@en ;
+	action:techniqueID "T1059.007" ;
+	.
+
+attack:T1071.001
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Web Protocols"@en ;
+	rdfs:comment "Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries may communicate using application layer protocols associated with web traffic to avoid detection/network filtering by blending in with existing traffic. Commands to the remote system, and often the results of those commands, will be embedded within the protocol traffic between the client and server."@en ;
+	action:techniqueID "T1071.001" ;
 	.
 
 attack:T1082
@@ -255,19 +160,52 @@ attack:T1082
 		;
 	rdfs:subClassOf action:Action ;
 	rdfs:label "System Information Discovery"@en ;
-	rdfs:comment "Tactic: Discovery. Platforms: Windows, Linux, macOS. Adversaries gather detailed information about the operating system and hardware. See https://attack.mitre.org/techniques/T1082/."@en ;
+	rdfs:comment "Tactic: Discovery. Platforms: ESXi, IaaS, Linux, macOS, Network Devices, Windows. An adversary may attempt to get detailed information about the operating system and hardware, including version, patches, hotfixes, service packs, and architecture. Adversaries may use this information to shape follow-on behaviors, including whether or not the adversary fully infects the target and/or attempts specific actions. This behavior is distinct from [Local Storage Discovery](https://attac"@en ;
 	action:techniqueID "T1082" ;
 	.
 
-attack:T1518.001
+attack:T1090.001
 	a
 		owl:Class ,
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Software Discovery: Security Software Discovery"@en ;
-	rdfs:comment "Tactic: Discovery. Platforms: Windows, Linux, macOS. Adversaries attempt to get a listing of security software, configurations, and sensors. See https://attack.mitre.org/techniques/T1518/001/."@en ;
-	action:techniqueID "T1518.001" ;
+	rdfs:label "Internal Proxy"@en ;
+	rdfs:comment "Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries may use an internal proxy to direct command and control traffic between two or more systems in a compromised environment. Many tools exist that enable traffic redirection through proxies or port redirection, including [HTRAN](https://attack.mitre.org/software/S0040), ZXProxy, and ZXPortMap. (Citation: Trend Micro APT Attack Tools) Adversaries use internal proxies to manage command and"@en ;
+	action:techniqueID "T1090.001" ;
+	.
+
+attack:T1102.002
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Bidirectional Communication"@en ;
+	rdfs:comment "Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Windows. Adversaries may use an existing, legitimate external Web service as a means for sending commands to and receiving output from a compromised system over the Web service channel. Compromised systems may leverage popular websites and social media to host command and control (C2) instructions. Those infected systems can then send the output from those commands back over that Web service channel. The r"@en ;
+	action:techniqueID "T1102.002" ;
+	.
+
+attack:T1105
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Ingress Tool Transfer"@en ;
+	rdfs:comment "Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries may transfer tools or other files from an external system into a compromised environment. Tools or files may be copied from an external adversary-controlled system to the victim network through the command and control channel or through alternate protocols such as [ftp](https://attack.mitre.org/software/S0095). Once present, adversaries may also transfer/spread tools between victim dev"@en ;
+	action:techniqueID "T1105" ;
+	.
+
+attack:T1112
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Modify Registry"@en ;
+	rdfs:comment "Tactics: Defense Impairment, Persistence. Platforms: Windows. Adversaries may interact with the Windows Registry as part of a variety of other techniques to aid in defense evasion, persistence, and execution."@en ;
+	action:techniqueID "T1112" ;
 	.
 
 attack:T1115
@@ -277,7 +215,7 @@ attack:T1115
 		;
 	rdfs:subClassOf action:Action ;
 	rdfs:label "Clipboard Data"@en ;
-	rdfs:comment "Tactic: Collection. Platforms: Linux, macOS, Windows. Adversaries collect data stored in the clipboard from users copying information. See https://attack.mitre.org/techniques/T1115/."@en ;
+	rdfs:comment "Tactic: Collection. Platforms: Linux, macOS, Windows. Adversaries may collect data stored in the clipboard from users copying information within or between applications."@en ;
 	action:techniqueID "T1115" ;
 	.
 
@@ -288,39 +226,94 @@ attack:T1140
 		;
 	rdfs:subClassOf action:Action ;
 	rdfs:label "Deobfuscate/Decode Files or Information"@en ;
-	rdfs:comment "Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries use obfuscated files or information to hide artifacts and decode them when needed (e.g., XOR + Base64). See https://attack.mitre.org/techniques/T1140/."@en ;
+	rdfs:comment "Tactic: Stealth. Platforms: ESXi, Linux, macOS, Windows. Adversaries may use [Obfuscated Files or Information](https://attack.mitre.org/techniques/T1027) to hide artifacts of an intrusion from analysis. They may require separate mechanisms to decode or deobfuscate that information depending on how they intend to use it. Methods for doing that include built-in functionality of malware or by using utilities present on the system."@en ;
 	action:techniqueID "T1140" ;
 	.
 
-attack:T1105
+attack:T1204.002
 	a
 		owl:Class ,
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Ingress Tool Transfer"@en ;
-	rdfs:comment "Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries transfer tools or other files from an external system into a compromised environment. See https://attack.mitre.org/techniques/T1105/."@en ;
-	action:techniqueID "T1105" ;
+	rdfs:label "Malicious File"@en ;
+	rdfs:comment "Tactic: Execution. Platforms: Linux, macOS, Windows. An adversary may rely upon a user opening a malicious file in order to gain execution. Users may be subjected to social engineering to get them to open a file that will lead to code execution. This user action will typically be observed as follow-on behavior from [Spearphishing Attachment](https://attack.mitre.org/techniques/T1566/001). Adversaries may use several types of files that require a use"@en ;
+	action:techniqueID "T1204.002" ;
 	.
 
-attack:T1036
+attack:T1490
 	a
 		owl:Class ,
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Masquerading"@en ;
-	rdfs:comment "Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries manipulate features of their artifacts to make them appear legitimate or benign (e.g., invoice-themed SFX with a document icon). See https://attack.mitre.org/techniques/T1036/."@en ;
-	action:techniqueID "T1036" ;
+	rdfs:label "Inhibit System Recovery"@en ;
+	rdfs:comment "Tactic: Impact. Platforms: Containers, ESXi, IaaS, Linux, macOS, Network Devices, Windows. Adversaries may delete or remove built-in data and turn off services designed to aid in the recovery of a corrupted system to prevent recovery.(Citation: Talos Olympic Destroyer 2018)(Citation: FireEye WannaCry 2017) This may deny access to available backups and recovery options."@en ;
+	action:techniqueID "T1490" ;
 	.
 
-attack:T1036.008
+attack:T1518.001
 	a
 		owl:Class ,
 		action:Technique
 		;
 	rdfs:subClassOf action:Action ;
-	rdfs:label "Masquerading: Masquerade File Type"@en ;
-	rdfs:comment "Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries masquerade a malicious file's type (e.g., executable with a document icon / double extension) so it appears benign. See https://attack.mitre.org/techniques/T1036/008/."@en ;
-	action:techniqueID "T1036.008" ;
+	rdfs:label "Security Software Discovery"@en ;
+	rdfs:comment "Tactic: Discovery. Platforms: IaaS, Linux, macOS, Windows. Adversaries may attempt to get a listing of security software, configurations, defensive tools, and sensors that are installed on a system or in a cloud environment. This may include things such as cloud monitoring agents and anti-virus. Adversaries may use the information from [Security Software Discovery](https://attack.mitre.org/techniques/T1518/001) during automated discovery to shape follow-o"@en ;
+	action:techniqueID "T1518.001" ;
+	.
+
+attack:T1539
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Steal Web Session Cookie"@en ;
+	rdfs:comment "Tactic: Credential Access. Platforms: Linux, macOS, Office Suite, SaaS, Windows. An adversary may steal web application or service session cookies and use them to gain access to web applications or Internet services as an authenticated user without needing credentials. Web applications and services often use session cookies as an authentication token after a user has authenticated to a website."@en ;
+	action:techniqueID "T1539" ;
+	.
+
+attack:T1543.003
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Windows Service"@en ;
+	rdfs:comment "Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries may create or modify Windows services to repeatedly execute malicious payloads as part of persistence. When Windows boots up, it starts programs or applications called services that perform background system functions.(Citation: TechNet Services) Windows service configuration information, including the file path to the service's executable or recovery programs/commands, is stored in th"@en ;
+	action:techniqueID "T1543.003" ;
+	.
+
+attack:T1560.001
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Archive via Utility"@en ;
+	rdfs:comment "Tactic: Collection. Platforms: Linux, macOS, Windows. Adversaries may use utilities to compress and/or encrypt collected data prior to exfiltration. Many utilities include functionalities to compress, encrypt, or otherwise package data into a format that is easier/more secure to transport."@en ;
+	action:techniqueID "T1560.001" ;
+	.
+
+attack:T1566.001
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Spearphishing Attachment"@en ;
+	rdfs:comment "Tactic: Initial Access. Platforms: Linux, macOS, Windows. Adversaries may send spearphishing emails with a malicious attachment in an attempt to gain access to victim systems. Spearphishing attachment is a specific variant of spearphishing. Spearphishing attachment is different from other forms of spearphishing in that it employs the use of malware attached to an email. All forms of spearphishing are electronically delivered social engineering targeted a"@en ;
+	action:techniqueID "T1566.001" ;
+	.
+
+attack:T1568.002
+	a
+		owl:Class ,
+		action:Technique
+		;
+	rdfs:subClassOf action:Action ;
+	rdfs:label "Domain Generation Algorithms"@en ;
+	rdfs:comment "Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Windows. Adversaries may make use of Domain Generation Algorithms (DGAs) to dynamically identify a destination domain for command and control traffic rather than relying on a list of static IP addresses or domains. This has the advantage of making it much harder for defenders to block, track, or take over the command and control channel, as there potentially could be thousands of domains that malware can c"@en ;
+	action:techniqueID "T1568.002" ;
 	.
