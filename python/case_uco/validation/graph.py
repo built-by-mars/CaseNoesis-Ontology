@@ -169,15 +169,18 @@ def resolve_extension_dependencies(
     manifest), ``extension_dependency_cycle`` (circular ``depends_on``).
     """
 
-    def _manifest_for(clean: str) -> dict | None:
+    def _manifest_for(clean: str) -> dict[str, Any] | None:
         ext_dir = _find_extension_dir(clean, project_root)
         manifest_path = None if ext_dir is None else ext_dir / "manifest.json"
         if manifest_path is None or not manifest_path.is_file():
             return None
         try:
-            return json.loads(manifest_path.read_text(encoding="utf-8"))
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:
             raise ValueError("extension_manifest_malformed") from exc
+        if not isinstance(payload, dict):
+            raise ValueError("extension_manifest_malformed")
+        return payload
 
     resolved: list[str] = []
     seen: set[str] = set()
@@ -552,7 +555,7 @@ def validate_graph_file(
 def report_to_dict(report: GraphValidationReport) -> dict[str, Any]:
     """Serialize a report into the MCP tool result shape."""
 
-    payload = {
+    payload: dict[str, Any] = {
         "conforms": report.conforms,
         "warning_count": report.warning_count,
         "violation_count": report.violation_count,

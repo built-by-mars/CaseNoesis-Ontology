@@ -242,10 +242,10 @@ class DeclaredTerms:
         )
 
 
-_DECLARED_CACHE: dict[tuple, DeclaredTerms] = {}
+_DECLARED_CACHE: dict[tuple[Any, ...], DeclaredTerms] = {}
 _DECLARED_CACHE_MAX_ENTRIES = 16
 _DECLARED_CACHE_LOCK = threading.RLock()
-_UPPER_REGISTRY_CACHE: dict[str, dict] = {}
+_UPPER_REGISTRY_CACHE: dict[str, dict[str, Any]] = {}
 _UPPER_REGISTRY_LOCK = threading.RLock()
 
 
@@ -511,7 +511,7 @@ def load_declared_terms(
     return result
 
 
-def _load_upper_registry() -> tuple[dict | None, str | None]:
+def _load_upper_registry() -> tuple[dict[str, Any] | None, str | None]:
     """Load the pinned upper-ontology term registry (role-aware).
 
     Returns ``(registry, error)``. ``registry`` is ``{"classes": frozenset,
@@ -821,10 +821,10 @@ def check_graph_concepts(
     )
 
 
-def coverage_report_to_dict(report: ConceptCoverageReport) -> dict:
+def coverage_report_to_dict(report: ConceptCoverageReport) -> dict[str, Any]:
     """Serialize a coverage report into the MCP tool result shape."""
 
-    payload: dict = {
+    payload: dict[str, Any] = {
         "ok": report.ok,
         "checked_class_count": report.checked_class_count,
         "checked_property_count": report.checked_property_count,

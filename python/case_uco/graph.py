@@ -507,12 +507,14 @@ class CASEGraph:
         extra_ontology_graphs: list[str | Path] | None = None,
         force_rdfs_inference: bool = False,
         allow_warning: bool = True,
-    ):
+    ) -> Any:
         """Validate via the rich public API and return a structured report.
 
         Writes a temporary JSON-LD file and delegates to
         :func:`case_uco.validation.validate_graph_file`. Does not raise on
         SHACL non-conformance — inspect ``report.conforms``.
+
+        Returns a :class:`case_uco.validation.GraphValidationReport`.
         """
         import os
         import tempfile

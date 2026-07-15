@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.3] - 2026-07-15
+
+mypy clean-up for the public `case_uco.validation` package moved in v1.22.1
+(typed dict/tuple annotations, `validate_report` return type). No behavioral
+change.
+
+Package versions bumped to **1.22.3**.
+
 ## [1.22.2] - 2026-07-15
 
 CI/CodeQL recovery after the v1.22.1 validation-module move, plus routine

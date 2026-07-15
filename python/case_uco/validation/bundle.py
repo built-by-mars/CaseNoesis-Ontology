@@ -223,7 +223,12 @@ def _normalize_profile_id(profile_id: str) -> str:
     if entry is None:
         raise ValidationBundleError("unknown_profile", f"Unknown profile id {profile_id!r}")
     if "alias_of" in entry:
-        return entry["alias_of"]
+        alias = entry["alias_of"]
+        if not isinstance(alias, str):
+            raise ValidationBundleError(
+                "unknown_profile", f"Invalid alias for profile id {profile_id!r}"
+            )
+        return alias
     return profile_id
 
 
