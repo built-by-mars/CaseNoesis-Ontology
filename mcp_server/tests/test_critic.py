@@ -665,7 +665,7 @@ def test_failed_required_rule_yields_analysis_incomplete(tmp_path, monkeypatch):
 
     monkeypatch.setattr(graph_validator, "validator_available", lambda: False)
 
-    def boom(view, *, artifact_hash):
+    def boom(view, *, artifact_hash, profiles=None):
         return [], [
             RuleExecution(
                 rule_id="CRIT-H-CHARGED-WITH-REVERSED",
