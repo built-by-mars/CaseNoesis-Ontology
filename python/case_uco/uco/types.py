@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from case_uco.uco.core import UcoInherentCharacterizationThing
+from case_uco.uco.core import UcoThing
 
 
 @dataclass
@@ -55,7 +56,7 @@ class Hash(UcoInherentCharacterizationThing):
     CLASS_IRI: str = "https://ontology.unifiedcyberontology.org/uco/types/Hash"
     NAMESPACE_PREFIX: str = "uco-types"
 
-    hash_method: Optional[str] = field(default=None, metadata={'jsonld_key': 'uco-types:hashMethod', 'required': True, 'cardinality': 'exactly_one', 'range_iri': 'http://www.w3.org/2001/XMLSchema#string', 'alternate_range_iris': []})
+    hash_method: list[str] = field(default_factory=list, metadata={'jsonld_key': 'uco-types:hashMethod', 'required': False, 'cardinality': 'zero_or_more', 'range_iri': 'http://www.w3.org/2001/XMLSchema#string', 'alternate_range_iris': []})
     hash_value: Optional[str] = field(default=None, metadata={'jsonld_key': 'uco-types:hashValue', 'required': True, 'cardinality': 'exactly_one', 'range_iri': 'http://www.w3.org/2001/XMLSchema#hexBinary', 'alternate_range_iris': []})
 
 
@@ -79,7 +80,7 @@ class ProperDictionary(Dictionary):
 
 
 @dataclass
-class Thread(UcoInherentCharacterizationThing):
+class Thread(UcoThing):
     """A semi-ordered array of items, that can be present in multiple copies.  Implemetation of a UCO Thread is similar to a Collections Ontology List, except a Thread may fork and merge - that is, one of it"""
 
     CLASS_IRI: str = "https://ontology.unifiedcyberontology.org/uco/types/Thread"
@@ -88,7 +89,7 @@ class Thread(UcoInherentCharacterizationThing):
 
 
 @dataclass
-class ThreadItem(UcoInherentCharacterizationThing):
+class ThreadItem(UcoThing):
     """A ThreadItem is a member of a thread."""
 
     CLASS_IRI: str = "https://ontology.unifiedcyberontology.org/uco/types/ThreadItem"

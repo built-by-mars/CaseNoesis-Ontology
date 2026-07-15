@@ -148,13 +148,31 @@ class RustBackend(CodegenBackend):
         imports: set[str] = set()
         local_names = {cls.name for cls in classes} | {vocab.name for vocab in vocabs}
 
+        _RUST_PRIMITIVES = {
+            "String",
+            "i64",
+            "u64",
+            "f64",
+            "f32",
+            "bool",
+            "Vec<u8>",
+            "serde_json::Value",
+        }
+
         for cls in classes:
             for prop in cls.properties:
                 if prop.is_xsd_type or prop.is_union:
                     continue
+                # Custom RDF datatypes serialize as lexical String — not imports.
+                if prop.is_custom_rdf_datatype and not prop.range_iri.rsplit("/", 1)[
+                    -1
+                ].endswith("Vocab"):
+                    continue
 
                 type_name = prop.type_name_for("rust")
-                if type_name in local_names:
+                if type_name in local_names or type_name in _RUST_PRIMITIVES:
+                    continue
+                if "::" in type_name:
                     continue
 
                 module_path = self._module_path_for_iri(prop.range_iri)

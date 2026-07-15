@@ -67,15 +67,19 @@ class PythonBackend(CodegenBackend):
             "from case_uco.graph import (\n"
             "    CASEGraph,\n"
             "    DeserializationWarning,\n"
+            "    DuplicateClassIriError,\n"
             "    DuplicateNodeError,\n"
             "    InvalidSplitSizeError,\n"
             "    clear_class_registry_cache,\n"
-            ")\n\n"
+            ")\n"
+            "from case_uco.typed_literal import TypedLiteral\n\n"
             "__all__ = [\n"
             '    "CASEGraph",\n'
             '    "DeserializationWarning",\n'
+            '    "DuplicateClassIriError",\n'
             '    "DuplicateNodeError",\n'
             '    "InvalidSplitSizeError",\n'
+            '    "TypedLiteral",\n'
             '    "clear_class_registry_cache",\n'
             "]\n"
             f'__version__ = "{self._package_version()}"\n',
@@ -190,7 +194,7 @@ class PythonBackend(CodegenBackend):
         lines.append(f"from dataclasses import {', '.join(dc_parts)}")
 
         needs_typed_literal = any(
-            prop.is_custom_rdf_datatype and prop.range_iri not in self.schema.vocabs
+            self._is_typed_literal_prop(prop)
             for cls in classes
             for prop in cls.properties
         )
@@ -426,10 +430,18 @@ class PythonBackend(CodegenBackend):
         lines.append("")
         return lines
 
+    def _is_typed_literal_prop(self, prop: OntologyProperty) -> bool:
+        """True for custom RDF datatypes that are not vocabulary enums."""
+
+        if not prop.is_custom_rdf_datatype:
+            return False
+        if prop.range_iri in self.schema.vocabs:
+            return False
+        local = prop.range_iri.rsplit("/", 1)[-1]
+        return not local.endswith("Vocab")
+
     def _python_type(self, prop: OntologyProperty) -> str:
-        if prop.is_custom_rdf_datatype and prop.range_iri not in getattr(
-            self.schema, "vocabs", {}
-        ):
+        if self._is_typed_literal_prop(prop):
             base_type = "Union[str, TypedLiteral]"
         else:
             base_type = prop.type_name_for("python")
@@ -450,8 +462,6 @@ class PythonBackend(CodegenBackend):
             "range_iri": prop.range_iri,
             "alternate_range_iris": prop.alternate_range_iris,
         }
-        if prop.is_custom_rdf_datatype and prop.range_iri not in getattr(
-            self.schema, "vocabs", {}
-        ):
+        if self._is_typed_literal_prop(prop):
             metadata["literal_datatype"] = True
         return f', metadata={metadata})'

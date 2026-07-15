@@ -14,7 +14,7 @@ pub struct Action {
     #[serde(rename = "uco-action:actionCount")]
     pub action_count: Option<u64>,
     #[serde(rename = "uco-action:actionStatus")]
-    pub action_status: Option<String>,
+    pub action_status: Vec<String>,
     #[serde(rename = "uco-action:endTime")]
     pub end_time: Option<String>,
     #[serde(rename = "uco-action:environment")]
@@ -46,7 +46,7 @@ impl Action {
     pub fn builder() -> ActionBuilder {
         ActionBuilder {
             action_count: None,
-            action_status: None,
+            action_status: Vec::new(),
             end_time: None,
             environment: None,
             error: Vec::new(),
@@ -65,7 +65,7 @@ impl Action {
 #[derive(Debug, Default, Clone)]
 pub struct ActionBuilder {
     action_count: Option<u64>,
-    action_status: Option<String>,
+    action_status: Vec<String>,
     end_time: Option<String>,
     environment: Option<UcoObject>,
     error: Vec<UcoObject>,
@@ -85,8 +85,8 @@ impl ActionBuilder {
         self
     }
 
-    pub fn action_status(mut self, value: String) -> Self {
-        self.action_status = Some(value);
+    pub fn action_status(mut self, value: Vec<String>) -> Self {
+        self.action_status = value;
         self
     }
 
@@ -317,7 +317,7 @@ pub struct ActionFrequencyFacet {
     #[serde(rename = "uco-action:scale")]
     pub scale: Option<String>,
     #[serde(rename = "uco-action:trend")]
-    pub trend: Option<String>,
+    pub trend: Vec<String>,
     #[serde(rename = "uco-action:units")]
     pub units: Option<String>,
 }
@@ -330,7 +330,7 @@ impl ActionFrequencyFacet {
         ActionFrequencyFacetBuilder {
             rate: None,
             scale: None,
-            trend: None,
+            trend: Vec::new(),
             units: None,
         }
     }
@@ -340,7 +340,7 @@ impl ActionFrequencyFacet {
 pub struct ActionFrequencyFacetBuilder {
     rate: Option<f64>,
     scale: Option<String>,
-    trend: Option<String>,
+    trend: Vec<String>,
     units: Option<String>,
 }
 
@@ -355,8 +355,8 @@ impl ActionFrequencyFacetBuilder {
         self
     }
 
-    pub fn trend(mut self, value: String) -> Self {
-        self.trend = Some(value);
+    pub fn trend(mut self, value: Vec<String>) -> Self {
+        self.trend = value;
         self
     }
 
@@ -385,9 +385,6 @@ impl CaseObject for ActionFrequencyFacet {
         }
         if self.scale.is_none() {
             return Err("ActionFrequencyFacet.scale is required but was not provided.".to_string());
-        }
-        if self.trend.is_none() {
-            return Err("ActionFrequencyFacet.trend is required but was not provided.".to_string());
         }
         if self.units.is_none() {
             return Err("ActionFrequencyFacet.units is required but was not provided.".to_string());

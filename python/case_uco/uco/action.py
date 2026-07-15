@@ -25,7 +25,7 @@ class Action(UcoObject):
     NAMESPACE_PREFIX: str = "uco-action"
 
     action_count: Optional[int] = field(default=None, metadata={'jsonld_key': 'uco-action:actionCount', 'required': False, 'cardinality': 'zero_or_one', 'range_iri': 'http://www.w3.org/2001/XMLSchema#nonNegativeInteger', 'alternate_range_iris': []})
-    action_status: Optional[str] = field(default=None, metadata={'jsonld_key': 'uco-action:actionStatus', 'required': False, 'cardinality': 'zero_or_one', 'range_iri': 'http://www.w3.org/2001/XMLSchema#string', 'alternate_range_iris': []})
+    action_status: list[str] = field(default_factory=list, metadata={'jsonld_key': 'uco-action:actionStatus', 'required': False, 'cardinality': 'zero_or_more', 'range_iri': 'http://www.w3.org/2001/XMLSchema#string', 'alternate_range_iris': []})
     end_time: Optional[datetime] = field(default=None, metadata={'jsonld_key': 'uco-action:endTime', 'required': False, 'cardinality': 'zero_or_one', 'range_iri': 'http://www.w3.org/2001/XMLSchema#dateTime', 'alternate_range_iris': []})
     environment: Optional[UcoObject] = field(default=None, metadata={'jsonld_key': 'uco-action:environment', 'required': False, 'cardinality': 'zero_or_one', 'range_iri': 'https://ontology.unifiedcyberontology.org/uco/core/UcoObject', 'alternate_range_iris': []})
     error: list[UcoObject] = field(default_factory=list, metadata={'jsonld_key': 'uco-action:error', 'required': False, 'cardinality': 'zero_or_more', 'range_iri': 'https://ontology.unifiedcyberontology.org/uco/core/UcoObject', 'alternate_range_iris': []})
@@ -72,21 +72,12 @@ class ActionFrequencyFacet(Facet):
 
     rate: Optional[float] = field(default=None, metadata={'jsonld_key': 'uco-action:rate', 'required': True, 'cardinality': 'exactly_one', 'range_iri': 'http://www.w3.org/2001/XMLSchema#decimal', 'alternate_range_iris': []})
     scale: Optional[str] = field(default=None, metadata={'jsonld_key': 'uco-action:scale', 'required': True, 'cardinality': 'exactly_one', 'range_iri': 'http://www.w3.org/2001/XMLSchema#string', 'alternate_range_iris': []})
-    trend: Optional[str] = field(default=None, metadata={'jsonld_key': 'uco-action:trend', 'required': True, 'cardinality': 'exactly_one', 'range_iri': 'http://www.w3.org/2001/XMLSchema#string', 'alternate_range_iris': []})
+    trend: list[str] = field(default_factory=list, metadata={'jsonld_key': 'uco-action:trend', 'required': False, 'cardinality': 'zero_or_more', 'range_iri': 'http://www.w3.org/2001/XMLSchema#string', 'alternate_range_iris': []})
     units: Optional[str] = field(default=None, metadata={'jsonld_key': 'uco-action:units', 'required': True, 'cardinality': 'exactly_one', 'range_iri': 'http://www.w3.org/2001/XMLSchema#string', 'alternate_range_iris': []})
 
 
 @dataclass
-class ActionPattern(Action):
-    """An action pattern is a grouping of characteristics unique to a combination of actions forming a consistent or characteristic arrangement."""
-
-    CLASS_IRI: str = "https://ontology.unifiedcyberontology.org/uco/action/ActionPattern"
-    NAMESPACE_PREFIX: str = "uco-action"
-
-
-
-@dataclass
-class ActionLifecycle(ActionPattern):
+class ActionLifecycle(Action):
     """An action lifecycle is an action pattern consisting of an ordered set of multiple actions or subordinate action lifecycles."""
 
     CLASS_IRI: str = "https://ontology.unifiedcyberontology.org/uco/action/ActionLifecycle"
@@ -97,6 +88,15 @@ class ActionLifecycle(ActionPattern):
     error: list[UcoObject] = field(default_factory=list, metadata={'jsonld_key': 'uco-action:error', 'required': False, 'cardinality': 'zero_or_more', 'range_iri': 'https://ontology.unifiedcyberontology.org/uco/core/UcoObject', 'alternate_range_iris': []})
     phase: Optional[ArrayOfAction] = field(default=None, metadata={'jsonld_key': 'uco-action:phase', 'required': True, 'cardinality': 'exactly_one', 'range_iri': 'https://ontology.unifiedcyberontology.org/uco/action/ArrayOfAction', 'alternate_range_iris': []})
     start_time: list[datetime] = field(default_factory=list, metadata={'jsonld_key': 'uco-action:startTime', 'required': False, 'cardinality': 'zero_or_more', 'range_iri': 'http://www.w3.org/2001/XMLSchema#dateTime', 'alternate_range_iris': []})
+
+
+@dataclass
+class ActionPattern(Action):
+    """An action pattern is a grouping of characteristics unique to a combination of actions forming a consistent or characteristic arrangement."""
+
+    CLASS_IRI: str = "https://ontology.unifiedcyberontology.org/uco/action/ActionPattern"
+    NAMESPACE_PREFIX: str = "uco-action"
+
 
 
 @dataclass

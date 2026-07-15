@@ -171,11 +171,16 @@ class OntologyProperty:
         if self.is_xsd_type:
             return XSD_TYPE_MAP[self.range_iri][lang]
         if self.is_custom_rdf_datatype:
-            # Python: TypedLiteral; other languages keep string until backends
-            # grow first-class typed-literal wrappers.
+            local = iri_local_name(self.range_iri)
+            # Vocabulary enums (HashNameVocab, …) share the non-class/non-XSD
+            # shape with custom RDF datatypes; keep their generated type names.
+            if local.endswith("Vocab"):
+                return local
+            # Custom RDF datatype (e.g. pattern:PatternExpression): Python gets
+            # TypedLiteral; other languages keep a lexical string for now.
             if lang == "python":
                 return "TypedLiteral"
-            return UNION_FALLBACK_TYPE_MAP[lang]
+            return XSD_TYPE_MAP["http://www.w3.org/2001/XMLSchema#string"][lang]
         return iri_local_name(self.range_iri)
 
     @property

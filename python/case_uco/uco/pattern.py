@@ -4,14 +4,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Optional, Union
-
 from case_uco.typed_literal import TypedLiteral
+
 from case_uco.uco.core import UcoInherentCharacterizationThing
 from case_uco.uco.core import UcoObject
-
-_PATTERN_EXPRESSION_IRI = (
-    "https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression"
-)
 
 
 @dataclass
@@ -30,18 +26,7 @@ class LogicalPattern(Pattern):
     CLASS_IRI: str = "https://ontology.unifiedcyberontology.org/uco/pattern/LogicalPattern"
     NAMESPACE_PREFIX: str = "uco-pattern"
 
-    # UCO 1.4 declares sh:datatype pattern:PatternExpression (custom RDF datatype).
-    pattern_expression: Optional[Union[str, TypedLiteral]] = field(
-        default=None,
-        metadata={
-            "jsonld_key": "uco-pattern:patternExpression",
-            "required": False,
-            "cardinality": "zero_or_one",
-            "range_iri": _PATTERN_EXPRESSION_IRI,
-            "alternate_range_iris": [],
-            "literal_datatype": True,
-        },
-    )
+    pattern_expression: Optional[Union[str, TypedLiteral]] = field(default=None, metadata={'jsonld_key': 'uco-pattern:patternExpression', 'required': False, 'cardinality': 'zero_or_one', 'range_iri': 'https://ontology.unifiedcyberontology.org/uco/pattern/PatternExpression', 'alternate_range_iris': [], 'literal_datatype': True})
 
 
 @dataclass

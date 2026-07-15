@@ -396,7 +396,14 @@ Classes for representing files, directories, file systems, and their metadata. U
 | **SymbolicLink** | uco.observable | Class | A symbolic link is a file that contains a reference to another file or directory in the form of a... |
 | **SymbolicLinkFacet** | uco.observable | Facet | A symbolic link facet is a grouping of characteristics unique to a file that contains a reference... |
 | **SystematicInstitutionalAbuse** | ext.cac.cacontology-institutional-exploitation | Class | Systematic pattern of abuse affecting multiple children over extended period. |
-| **T1102.002** | ext.attack-technique.attack | Class | Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries use an existing, legit... |
+| **T1027.002** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: Linux, macOS, Windows. Adversaries may perform software packing or vi... |
+| **T1036** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: Containers, ESXi, Linux, macOS, Windows. Adversaries may attempt to m... |
+| **T1036.008** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: Linux, macOS, Windows. Adversaries may masquerade malicious payloads ... |
+| **T1102.002** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Windows. Adversaries may use an exist... |
+| **T1105** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1140** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: ESXi, Linux, macOS, Windows. Adversaries may use [Obfuscated Files or... |
+| **T1204.002** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. An adversary may rely upon a user opening a ... |
+| **T1543.003** | ext.attack-technique.attack | Class | Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries may create or modify ... |
 | **TakedownRequestAction** | ext.cac.cacontology-hotlines | Class | The action of requesting content takedown from a hosting provider. Enhanced as gUFO Event for con... |
 | **TeamBasedExploitation** | ext.cac.cacontology-athletic-exploitation | Class | Contextual situation in which exploitation occurs using team dynamics, group pressure, and collec... |
 | **TeamDynamicsExploitation** | ext.cac.cacontology-athletic-exploitation | Class | Contextual situation in which exploitation occurs using team membership, group dynamics, and athl... |
@@ -1425,9 +1432,25 @@ Classes for network connections, IP addresses, DNS records, URLs, and related ar
 | **SymbolicLinkFacet** | uco.observable | Facet | A symbolic link facet is a grouping of characteristics unique to a file that contains a reference... |
 | **SystemInterventionFear** | ext.cac.cacontology-recantation | Class | Fear of court, child-protection action, family breakup, or other multidisciplinary system consequ... |
 | **SystematicInstitutionalAbuse** | ext.cac.cacontology-institutional-exploitation | Class | Systematic pattern of abuse affecting multiple children over extended period. |
-| **T1016** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: Windows, Linux, macOS. Adversaries look for details about the netwo... |
-| **T1047** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Windows. Adversaries abuse Windows Management Instrumentation (WMI)... |
-| **T1071.001** | ext.attack-technique.attack | Class | Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries communicate using appl... |
+| **T1016** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries may look ... |
+| **T1036** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: Containers, ESXi, Linux, macOS, Windows. Adversaries may attempt to m... |
+| **T1041** | ext.attack-technique.attack | Class | Tactic: Exfiltration. Platforms: ESXi, Linux, macOS, Windows. Adversaries may steal data by exfil... |
+| **T1053.005** | ext.attack-technique.attack | Class | Tactics: Execution, Persistence, Privilege Escalation. Platforms: Windows. Adversaries may abuse ... |
+| **T1056.001** | ext.attack-technique.attack | Class | Tactics: Collection, Credential Access. Platforms: Linux, macOS, Network Devices, Windows. Advers... |
+| **T1059.001** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Windows. Adversaries may abuse PowerShell commands and scripts for ... |
+| **T1059.007** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. Adversaries may abuse various implementation... |
+| **T1071.001** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1082** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: ESXi, IaaS, Linux, macOS, Network Devices, Windows. An adversary ma... |
+| **T1090.001** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1102.002** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Windows. Adversaries may use an exist... |
+| **T1105** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1115** | ext.attack-technique.attack | Class | Tactic: Collection. Platforms: Linux, macOS, Windows. Adversaries may collect data stored in the ... |
+| **T1140** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: ESXi, Linux, macOS, Windows. Adversaries may use [Obfuscated Files or... |
+| **T1204.002** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. An adversary may rely upon a user opening a ... |
+| **T1490** | ext.attack-technique.attack | Class | Tactic: Impact. Platforms: Containers, ESXi, IaaS, Linux, macOS, Network Devices, Windows. Advers... |
+| **T1518.001** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: IaaS, Linux, macOS, Windows. Adversaries may attempt to get a listi... |
+| **T1560.001** | ext.attack-technique.attack | Class | Tactic: Collection. Platforms: Linux, macOS, Windows. Adversaries may use utilities to compress a... |
+| **T1568.002** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Windows. Adversaries may make use of ... |
 | **TCPConnection** | uco.observable | Class | A TCP connection is a network connection that is conformant to the Transfer  |
 | **TCPConnectionFacet** | uco.observable | Facet | A TCP connection facet is a grouping of characteristics unique to portions of a network connectio... |
 | **TacticalEquipment** | ext.cac.cacontology-tactical | Class | Specialized equipment used in tactical operations. |
@@ -2364,6 +2387,13 @@ Classes for physical and virtual devices, storage media, and hardware characteri
 | **SuspensionEvent** | ext.cac.cacontology-temporal | Class | Event causing investigation to enter suspended state. Modeled as gUFO Event creating suspension s... |
 | **SyntheticArtifactPattern** | ext.cac.cacontology-integration-patterns | Class | gUFO pattern for modeling AI-generated artifacts with synthetic properties and detection characte... |
 | **SyntheticMediaCSAM** | ext.cac.cacontology-ai-csam | Class | Completely synthetic media generated using AI models trained on large datasets, creating realisti... |
+| **T1016** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries may look ... |
+| **T1056.001** | ext.attack-technique.attack | Class | Tactics: Collection, Credential Access. Platforms: Linux, macOS, Network Devices, Windows. Advers... |
+| **T1071.001** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1082** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: ESXi, IaaS, Linux, macOS, Network Devices, Windows. An adversary ma... |
+| **T1090.001** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1105** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1490** | ext.attack-technique.attack | Class | Tactic: Impact. Platforms: Containers, ESXi, IaaS, Linux, macOS, Network Devices, Windows. Advers... |
 | **Tablet** | uco.observable | Class | A tablet is a mobile computer that is primarily operated by touching the screen. (Devices categor... |
 | **TacticalUnit** | ext.cac.cacontology-specialized-units | Class | Unit handling high-risk tactical operations. Modeled as gUFO Organization. |
 | **TaskForceContactInformation** | ext.cac.cacontology-taskforce | Class | Contact information for CAC task force including phone, email, and website. |
@@ -2843,10 +2873,22 @@ Classes for installed applications, operating systems, software packages, and pr
 | **StressManagement** | ext.cac.cacontology-specialized-units | Class | Programs and techniques for managing work-related stress. Modeled as gUFO Organization. |
 | **StudentEducation** | ext.cac.cacontology-prevention | Class | Safety education program for students. |
 | **SubscriptionManagement** | ext.cac.cacontology-platform-infrastructure | Class | Systems managing user subscriptions, access levels, and recurring payment processing (gUFO Functi... |
-| **T1027.002** | ext.attack-technique.attack | Class | Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries perform software packing t... |
-| **T1055.001** | ext.attack-technique.attack | Class | Tactics: Defense Evasion, Privilege Escalation. Platforms: Windows. Adversaries inject dynamic-li... |
-| **T1071.001** | ext.attack-technique.attack | Class | Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries communicate using appl... |
-| **T1539** | ext.attack-technique.attack | Class | Tactic: Credential Access. Platforms: Windows, Linux, macOS. Adversaries steal web application or... |
+| **T1016** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries may look ... |
+| **T1027.002** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: Linux, macOS, Windows. Adversaries may perform software packing or vi... |
+| **T1047** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Windows. Adversaries may abuse Windows Management Instrumentation (... |
+| **T1053.005** | ext.attack-technique.attack | Class | Tactics: Execution, Persistence, Privilege Escalation. Platforms: Windows. Adversaries may abuse ... |
+| **T1055.001** | ext.attack-technique.attack | Class | Tactics: Stealth, Privilege Escalation. Platforms: Windows. Adversaries may inject dynamic-link l... |
+| **T1059.001** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Windows. Adversaries may abuse PowerShell commands and scripts for ... |
+| **T1059.007** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. Adversaries may abuse various implementation... |
+| **T1071.001** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1082** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: ESXi, IaaS, Linux, macOS, Network Devices, Windows. An adversary ma... |
+| **T1090.001** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1105** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1115** | ext.attack-technique.attack | Class | Tactic: Collection. Platforms: Linux, macOS, Windows. Adversaries may collect data stored in the ... |
+| **T1518.001** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: IaaS, Linux, macOS, Windows. Adversaries may attempt to get a listi... |
+| **T1539** | ext.attack-technique.attack | Class | Tactic: Credential Access. Platforms: Linux, macOS, Office Suite, SaaS, Windows. An adversary may... |
+| **T1543.003** | ext.attack-technique.attack | Class | Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries may create or modify ... |
+| **T1560.001** | ext.attack-technique.attack | Class | Tactic: Collection. Platforms: Linux, macOS, Windows. Adversaries may use utilities to compress a... |
 | **TeacherTraining** | ext.cac.cacontology-prevention | Class | Training program specifically for teachers. |
 | **TechnologySharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of technology resources including software, databases, communication systems, and analyti... |
 | **TipProcessing** | ext.cac.cacontology-us-ncmec | Class | Processing workflow for NCMEC tips from receipt to investigation referral. |
@@ -3332,7 +3374,11 @@ Classes for user accounts, identities, organizations, and authentication artifac
 | **SubscriptionManagement** | ext.cac.cacontology-platform-infrastructure | Class | Systems managing user subscriptions, access levels, and recurring payment processing (gUFO Functi... |
 | **SuspectProfile** | ext.cac.cacontology-tactical | Class | Assessment of suspect behavior, capabilities, and threat level. |
 | **SystemAdministratorRole** | ext.cac.cacontology-platform-infrastructure | Class | Role of person responsible for infrastructure system administration (gUFO Role - anti-rigid). |
-| **T1539** | ext.attack-technique.attack | Class | Tactic: Credential Access. Platforms: Windows, Linux, macOS. Adversaries steal web application or... |
+| **T1036** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: Containers, ESXi, Linux, macOS, Windows. Adversaries may attempt to m... |
+| **T1056.001** | ext.attack-technique.attack | Class | Tactics: Collection, Credential Access. Platforms: Linux, macOS, Network Devices, Windows. Advers... |
+| **T1115** | ext.attack-technique.attack | Class | Tactic: Collection. Platforms: Linux, macOS, Windows. Adversaries may collect data stored in the ... |
+| **T1204.002** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. An adversary may rely upon a user opening a ... |
+| **T1539** | ext.attack-technique.attack | Class | Tactic: Credential Access. Platforms: Linux, macOS, Office Suite, SaaS, Windows. An adversary may... |
 | **TacticalUnit** | ext.cac.cacontology-specialized-units | Class | Unit handling high-risk tactical operations. Modeled as gUFO Organization. |
 | **TakedownOperatorRole** | ext.cac.cacontology-platform-infrastructure | Class | Role of law enforcement personnel conducting takedown operations (gUFO Role - anti-rigid). |
 | **TaskForce** | ext.cac.cacontology-multi-jurisdiction | Class | Temporary multi-agency organization formed for specific operations. |
@@ -3575,6 +3621,9 @@ Classes for email messages, SMS/MMS, chat messages, and communication metadata. 
 | **Subject** | ext.cac.cacontology | Class | Role of a person whose conduct is within the scope of a CAC investigation. Equivalent to case-inv... |
 | **SubjectActionLifecycle** | case.investigation | Class | A subject action lifecycle is an action pattern consisting of an ordered set of multiple actions ... |
 | **SubjectMatterExpert** | ext.cac.cacontology-training | Class | Expert providing specialized knowledge in training. Modeled as anti-rigid gUFO Role. |
+| **T1140** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: ESXi, Linux, macOS, Windows. Adversaries may use [Obfuscated Files or... |
+| **T1204.002** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. An adversary may rely upon a user opening a ... |
+| **T1566.001** | ext.attack-technique.attack | Class | Tactic: Initial Access. Platforms: Linux, macOS, Windows. Adversaries may send spearphishing emai... |
 | **TaskForceContactInformation** | ext.cac.cacontology-taskforce | Class | Contact information for CAC task force including phone, email, and website. |
 | **TextMessageFollowUp** | ext.cac.cacontology-street-recruitment | Class | Follow-up through text messaging to reinforce trafficking proposition. |
 | **ThreatMessage** | ext.cac.cacontology-sextortion | Class | Message containing explicit threats about sharing images. |
@@ -3934,6 +3983,11 @@ Classes specific to mobile device forensics: SIM cards, contacts, call logs, cal
 | **StreetBasedGrooming** | ext.cac.cacontology-grooming | Class | Grooming that begins with street-based contact and recruitment. |
 | **StreetRecruitmentLocation** | ext.cac.cacontology-street-recruitment | Class | Specific location where street-based trafficking recruitment occurs. |
 | **SyntheticImageDetector** | ext.cac.cacontology-ai-csam | Class | Tool for detecting synthetically generated images using machine learning classifiers. Enhanced as... |
+| **T1036** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: Containers, ESXi, Linux, macOS, Windows. Adversaries may attempt to m... |
+| **T1204.002** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. An adversary may rely upon a user opening a ... |
+| **T1543.003** | ext.attack-technique.attack | Class | Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries may create or modify ... |
+| **T1566.001** | ext.attack-technique.attack | Class | Tactic: Initial Access. Platforms: Linux, macOS, Windows. Adversaries may send spearphishing emai... |
+| **T1568.002** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Windows. Adversaries may make use of ... |
 | **Tablet** | uco.observable | Class | A tablet is a mobile computer that is primarily operated by touching the screen. (Devices categor... |
 | **TaskForceContactInformation** | ext.cac.cacontology-taskforce | Class | Contact information for CAC task force including phone, email, and website. |
 | **TaskForceHotline** | ext.cac.cacontology-taskforce | Class | Dedicated phone line for CAC task force operations and reporting. |
@@ -4517,9 +4571,19 @@ Classes for modeling actions taken during an investigation or actions performed 
 | **SuspensionEvent** | ext.cac.cacontology-temporal | Class | Event causing investigation to enter suspended state. Modeled as gUFO Event creating suspension s... |
 | **SyntheticMediaAnalysis** | ext.cac.cacontology-ai-csam | Class | Forensic analysis of media to determine if it was artificially generated and identify generation ... |
 | **SystemInterventionFear** | ext.cac.cacontology-recantation | Class | Fear of court, child-protection action, family breakup, or other multidisciplinary system consequ... |
-| **T1027.002** | ext.attack-technique.attack | Class | Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries perform software packing t... |
-| **T1047** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Windows. Adversaries abuse Windows Management Instrumentation (WMI)... |
-| **T1543.003** | ext.attack-technique.attack | Class | Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries create or modify Wind... |
+| **T1027.002** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: Linux, macOS, Windows. Adversaries may perform software packing or vi... |
+| **T1047** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Windows. Adversaries may abuse Windows Management Instrumentation (... |
+| **T1053.005** | ext.attack-technique.attack | Class | Tactics: Execution, Persistence, Privilege Escalation. Platforms: Windows. Adversaries may abuse ... |
+| **T1059.001** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Windows. Adversaries may abuse PowerShell commands and scripts for ... |
+| **T1059.007** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. Adversaries may abuse various implementation... |
+| **T1071.001** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1082** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: ESXi, IaaS, Linux, macOS, Network Devices, Windows. An adversary ma... |
+| **T1090.001** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1105** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1204.002** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. An adversary may rely upon a user opening a ... |
+| **T1490** | ext.attack-technique.attack | Class | Tactic: Impact. Platforms: Containers, ESXi, IaaS, Linux, macOS, Network Devices, Windows. Advers... |
+| **T1518.001** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: IaaS, Linux, macOS, Windows. Adversaries may attempt to get a listi... |
+| **T1543.003** | ext.attack-technique.attack | Class | Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries may create or modify ... |
 | **TakedownRequestAction** | ext.cac.cacontology-hotlines | Class | The action of requesting content takedown from a hosting provider. Enhanced as gUFO Event for con... |
 | **TaskActionType** | uco.observable | Class | A task action type is a grouping of characteristics for a scheduled action to be completed. |
 | **TaskForceCoordination** | ext.cac.cacontology-partnerships | Class | Coordination through multi-partner task forces with representatives from different organizations.... |
@@ -5187,9 +5251,15 @@ Classes for documenting forensic tools, their versions, build information, and c
 | **SoftwareFacet** | uco.observable | Facet | A software facet is a grouping of characteristics unique to a software program (a definitively sc... |
 | **SolveitAwareInstrument** | ext.solveit.solveit-tool-profile | Class | A specialised tool that has been evaluated against SOLVE-IT tool capability profiles. Adds the co... |
 | **SyntheticImageDetector** | ext.cac.cacontology-ai-csam | Class | Tool for detecting synthetically generated images using machine learning classifiers. Enhanced as... |
-| **T1016** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: Windows, Linux, macOS. Adversaries look for details about the netwo... |
-| **T1027.002** | ext.attack-technique.attack | Class | Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries perform software packing t... |
-| **T1112** | ext.attack-technique.attack | Class | Tactic: Defense Evasion. Platforms: Windows. Adversaries interact with the Windows Registry to hi... |
+| **T1016** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries may look ... |
+| **T1027.002** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: Linux, macOS, Windows. Adversaries may perform software packing or vi... |
+| **T1036** | ext.attack-technique.attack | Class | Tactic: Stealth. Platforms: Containers, ESXi, Linux, macOS, Windows. Adversaries may attempt to m... |
+| **T1053.005** | ext.attack-technique.attack | Class | Tactics: Execution, Persistence, Privilege Escalation. Platforms: Windows. Adversaries may abuse ... |
+| **T1082** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: ESXi, IaaS, Linux, macOS, Network Devices, Windows. An adversary ma... |
+| **T1090.001** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1105** | ext.attack-technique.attack | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1518.001** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: IaaS, Linux, macOS, Windows. Adversaries may attempt to get a listi... |
+| **T1543.003** | ext.attack-technique.attack | Class | Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries may create or modify ... |
 | **TechnicalDataSharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of technical data including forensic tools, methodologies, and technical analysis results. |
 | **TechnologySharing** | ext.cac.cacontology-investigation-coordination | Class | Sharing of technology resources including software, databases, communication systems, and analyti... |
 | **Tool** | uco.tool | Class | A tool is an element of hardware and/or software utilized to carry out a particular function. |
@@ -5428,6 +5498,8 @@ Classes for representing timestamps, time intervals, and temporal relationships 
 | **SuspendedSituation** | ext.cac.cacontology-temporal | Class | Situation where investigation is temporarily suspended pending resources, legal decisions, or ext... |
 | **SwattingThreat** | ext.cac.cacontology-sextortion | Class | Threat mechanism involving swatting (threatened or induced false emergency report leading to arme... |
 | **SystematicInstitutionalAbuse** | ext.cac.cacontology-institutional-exploitation | Class | Systematic pattern of abuse affecting multiple children over extended period. |
+| **T1056.001** | ext.attack-technique.attack | Class | Tactics: Collection, Credential Access. Platforms: Linux, macOS, Network Devices, Windows. Advers... |
+| **T1059.007** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. Adversaries may abuse various implementation... |
 | **TemporalConsistency** | ext.cac.cacontology-integration-patterns | Class | Validation ensuring temporal relationships and constraints are properly modeled across modules. |
 | **TemporalPatternAnalysis** | ext.cac.cacontology-forensics | Class | Analysis of temporal patterns and timing correlations across different pieces of evidence. |
 | **TemporaryCustody** | ext.cac.cacontology-custodial | Class | Short-term custody arrangement or supervision of a child. Modeled as anti-rigid gUFO Phase with t... |
@@ -5638,7 +5710,13 @@ Classes for marking data with handling restrictions, classification levels, TLP 
 | **ServiceBasedExtractionData** | ext.solveit.solveit-observable | Class | Data obtained by interacting with services provided by a device rather than direct storage access. |
 | **StatementMarking** | uco.marking | Class | A statement marking is a grouping of characteristics unique to the expression of data marking def... |
 | **SubscriptionManagement** | ext.cac.cacontology-platform-infrastructure | Class | Systems managing user subscriptions, access levels, and recurring payment processing (gUFO Functi... |
-| **T1539** | ext.attack-technique.attack | Class | Tactic: Credential Access. Platforms: Windows, Linux, macOS. Adversaries steal web application or... |
+| **T1016** | ext.attack-technique.attack | Class | Tactic: Discovery. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries may look ... |
+| **T1047** | ext.attack-technique.attack | Class | Tactic: Execution. Platforms: Windows. Adversaries may abuse Windows Management Instrumentation (... |
+| **T1053.005** | ext.attack-technique.attack | Class | Tactics: Execution, Persistence, Privilege Escalation. Platforms: Windows. Adversaries may abuse ... |
+| **T1056.001** | ext.attack-technique.attack | Class | Tactics: Collection, Credential Access. Platforms: Linux, macOS, Network Devices, Windows. Advers... |
+| **T1490** | ext.attack-technique.attack | Class | Tactic: Impact. Platforms: Containers, ESXi, IaaS, Linux, macOS, Network Devices, Windows. Advers... |
+| **T1539** | ext.attack-technique.attack | Class | Tactic: Credential Access. Platforms: Linux, macOS, Office Suite, SaaS, Windows. An adversary may... |
+| **T1566.001** | ext.attack-technique.attack | Class | Tactic: Initial Access. Platforms: Linux, macOS, Windows. Adversaries may send spearphishing emai... |
 | **TacticalUnit** | ext.cac.cacontology-specialized-units | Class | Unit handling high-risk tactical operations. Modeled as gUFO Organization. |
 | **TacticalUnit** | ext.cac.cacontology-taskforce | Class | Unit handling high-risk arrests and tactical operations. |
 | **TechnologyPartner** | ext.cac.cacontology-partnerships | Class | Technology company or provider participating in partnership with technical capabilities and platf... |
@@ -5801,18 +5879,33 @@ Extension ontologies add domain-specific classes beyond the core CASE/UCO specif
 
 | Class | Type | Description |
 |-------|------|-------------|
-| **T1016** | Class | Tactic: Discovery. Platforms: Windows, Linux, macOS. Adversaries look for details about the netwo... |
-| **T1027.002** | Class | Tactic: Defense Evasion. Platforms: Windows, Linux, macOS. Adversaries perform software packing t... |
-| **T1041** | Class | Tactic: Exfiltration. Platforms: Windows, Linux, macOS. Adversaries steal data by exfiltrating it... |
-| **T1047** | Class | Tactic: Execution. Platforms: Windows. Adversaries abuse Windows Management Instrumentation (WMI)... |
-| **T1055.001** | Class | Tactics: Defense Evasion, Privilege Escalation. Platforms: Windows. Adversaries inject dynamic-li... |
-| **T1071.001** | Class | Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries communicate using appl... |
-| **T1090.001** | Class | Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries use an internal proxy ... |
-| **T1102.002** | Class | Tactic: Command and Control. Platforms: Windows, Linux, macOS. Adversaries use an existing, legit... |
-| **T1112** | Class | Tactic: Defense Evasion. Platforms: Windows. Adversaries interact with the Windows Registry to hi... |
-| **T1539** | Class | Tactic: Credential Access. Platforms: Windows, Linux, macOS. Adversaries steal web application or... |
-| **T1543.003** | Class | Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries create or modify Wind... |
-| **T1560.001** | Class | Tactic: Collection. Platforms: Windows, Linux, macOS. Adversaries use a utility to compress and/o... |
+| **T1016** | Class | Tactic: Discovery. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries may look ... |
+| **T1027.002** | Class | Tactic: Stealth. Platforms: Linux, macOS, Windows. Adversaries may perform software packing or vi... |
+| **T1036** | Class | Tactic: Stealth. Platforms: Containers, ESXi, Linux, macOS, Windows. Adversaries may attempt to m... |
+| **T1036.008** | Class | Tactic: Stealth. Platforms: Linux, macOS, Windows. Adversaries may masquerade malicious payloads ... |
+| **T1041** | Class | Tactic: Exfiltration. Platforms: ESXi, Linux, macOS, Windows. Adversaries may steal data by exfil... |
+| **T1047** | Class | Tactic: Execution. Platforms: Windows. Adversaries may abuse Windows Management Instrumentation (... |
+| **T1053.005** | Class | Tactics: Execution, Persistence, Privilege Escalation. Platforms: Windows. Adversaries may abuse ... |
+| **T1055.001** | Class | Tactics: Stealth, Privilege Escalation. Platforms: Windows. Adversaries may inject dynamic-link l... |
+| **T1056.001** | Class | Tactics: Collection, Credential Access. Platforms: Linux, macOS, Network Devices, Windows. Advers... |
+| **T1059.001** | Class | Tactic: Execution. Platforms: Windows. Adversaries may abuse PowerShell commands and scripts for ... |
+| **T1059.007** | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. Adversaries may abuse various implementation... |
+| **T1071.001** | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1082** | Class | Tactic: Discovery. Platforms: ESXi, IaaS, Linux, macOS, Network Devices, Windows. An adversary ma... |
+| **T1090.001** | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1102.002** | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Windows. Adversaries may use an exist... |
+| **T1105** | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Network Devices, Windows. Adversaries... |
+| **T1112** | Class | Tactics: Defense Impairment, Persistence. Platforms: Windows. Adversaries may interact with the W... |
+| **T1115** | Class | Tactic: Collection. Platforms: Linux, macOS, Windows. Adversaries may collect data stored in the ... |
+| **T1140** | Class | Tactic: Stealth. Platforms: ESXi, Linux, macOS, Windows. Adversaries may use [Obfuscated Files or... |
+| **T1204.002** | Class | Tactic: Execution. Platforms: Linux, macOS, Windows. An adversary may rely upon a user opening a ... |
+| **T1490** | Class | Tactic: Impact. Platforms: Containers, ESXi, IaaS, Linux, macOS, Network Devices, Windows. Advers... |
+| **T1518.001** | Class | Tactic: Discovery. Platforms: IaaS, Linux, macOS, Windows. Adversaries may attempt to get a listi... |
+| **T1539** | Class | Tactic: Credential Access. Platforms: Linux, macOS, Office Suite, SaaS, Windows. An adversary may... |
+| **T1543.003** | Class | Tactics: Persistence, Privilege Escalation. Platforms: Windows. Adversaries may create or modify ... |
+| **T1560.001** | Class | Tactic: Collection. Platforms: Linux, macOS, Windows. Adversaries may use utilities to compress a... |
+| **T1566.001** | Class | Tactic: Initial Access. Platforms: Linux, macOS, Windows. Adversaries may send spearphishing emai... |
+| **T1568.002** | Class | Tactic: Command And Control. Platforms: ESXi, Linux, macOS, Windows. Adversaries may make use of ... |
 
 ### cac.cac-core
 

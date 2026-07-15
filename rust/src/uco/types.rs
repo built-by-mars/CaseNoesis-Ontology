@@ -194,7 +194,7 @@ pub struct Hash {
     #[serde(skip_serializing)]
     pub class_iri: &'static str,
     #[serde(rename = "uco-types:hashMethod")]
-    pub hash_method: Option<String>,
+    pub hash_method: Vec<String>,
     #[serde(rename = "uco-types:hashValue")]
     pub hash_value: Option<Vec<u8>>,
 }
@@ -205,7 +205,7 @@ impl Hash {
 
     pub fn builder() -> HashBuilder {
         HashBuilder {
-            hash_method: None,
+            hash_method: Vec::new(),
             hash_value: None,
         }
     }
@@ -213,13 +213,13 @@ impl Hash {
 
 #[derive(Debug, Default, Clone)]
 pub struct HashBuilder {
-    hash_method: Option<String>,
+    hash_method: Vec<String>,
     hash_value: Option<Vec<u8>>,
 }
 
 impl HashBuilder {
-    pub fn hash_method(mut self, value: String) -> Self {
-        self.hash_method = Some(value);
+    pub fn hash_method(mut self, value: Vec<String>) -> Self {
+        self.hash_method = value;
         self
     }
 
@@ -241,9 +241,6 @@ impl CaseObject for Hash {
     fn class_iri() -> &'static str { Hash::CLASS_IRI }
     fn type_name() -> &'static str { "Hash" }
     fn validate(&self) -> Result<(), String> {
-        if self.hash_method.is_none() {
-            return Err("Hash.hash_method is required but was not provided.".to_string());
-        }
         if self.hash_value.is_none() {
             return Err("Hash.hash_value is required but was not provided.".to_string());
         }
