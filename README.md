@@ -2,6 +2,12 @@
 
 # CASE/UCO SDK
 
+[![CI](https://github.com/vulnmaster/CASE-UCO-SDK/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vulnmaster/CASE-UCO-SDK/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/vulnmaster/CASE-UCO-SDK/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/vulnmaster/CASE-UCO-SDK/actions/workflows/codeql.yml)
+[![Rust Security](https://github.com/vulnmaster/CASE-UCO-SDK/actions/workflows/rust-security.yml/badge.svg?branch=main)](https://github.com/vulnmaster/CASE-UCO-SDK/actions/workflows/rust-security.yml)
+[![Upstream Freshness](https://github.com/vulnmaster/CASE-UCO-SDK/actions/workflows/upstream-freshness.yml/badge.svg?branch=main)](https://github.com/vulnmaster/CASE-UCO-SDK/actions/workflows/upstream-freshness.yml)
+[![Release](https://img.shields.io/github/v/release/vulnmaster/CASE-UCO-SDK)](https://github.com/vulnmaster/CASE-UCO-SDK/releases/latest)
+
 **v1.22.4** · CASE 1.4.0 · UCO 1.4.0 · [Changelog](CHANGELOG.md#1224---2026-07-15)
 
 A multi-language data modeling library for digital forensics, cyber-investigation, and cyber-observable data. If your software produces or consumes forensic evidence, this SDK gives you typed, validated builders in **Python**, **C#**, **Java**, and **Rust** — so you can model investigation data in your language and produce interoperable [CASE/UCO](https://caseontology.org/) JSON-LD output.

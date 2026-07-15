@@ -16,6 +16,11 @@ DarkWatchman release gates, controlled epistemic tags, and a pinned ATT&CK
 STIX catalog synchronizer. Registry publication remains opt-in (**disabled**
 for this tag).
 
+#### Docs
+
+- README status badges for CI, CodeQL, Rust Security, Upstream Freshness, and
+  the latest GitHub Release (live from Actions / shields.io).
+
 #### Critic / provenance
 
 - Bind `provenance_manifest_path` through resumable sessions (`SessionConfig`,
