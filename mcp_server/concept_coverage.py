@@ -1,3 +1,55 @@
 """Compatibility shim — implementation lives in ``case_uco.validation.coverage``."""
 
-from case_uco.validation.coverage import *  # noqa: F403
+from __future__ import annotations
+
+from case_uco.validation.coverage import (
+    CORE_ONTOLOGY_GLOBS,
+    GUIDANCE,
+    PARSE_ERROR_GUIDANCE,
+    PROFILE_ID_TO_NAMESPACE_PREFIXES,
+    PROFILE_NOT_SELECTED_GUIDANCE,
+    ROLE_MISMATCH_GUIDANCE,
+    STANDARD_NAMESPACE_PREFIXES,
+    UCO_PROFILE_NAMESPACE_PREFIXES,
+    UPPER_ONTOLOGY_REGISTRY_PATH,
+    UPPER_TERM_GUIDANCE,
+    ConceptCoverageReport,
+    DeclaredTerms,
+    OntologyParseError,
+    ProfileNotSelected,
+    _DECLARED_CACHE,
+    _core_ontology_paths,
+    _is_standard,
+    _load_upper_registry,
+    _profile_for_upper_iri,
+    check_graph_concepts,
+    clear_declared_term_cache,
+    coverage_report_to_dict,
+    load_declared_terms,
+)
+
+__all__ = [
+    "CORE_ONTOLOGY_GLOBS",
+    "GUIDANCE",
+    "PARSE_ERROR_GUIDANCE",
+    "PROFILE_ID_TO_NAMESPACE_PREFIXES",
+    "PROFILE_NOT_SELECTED_GUIDANCE",
+    "ROLE_MISMATCH_GUIDANCE",
+    "STANDARD_NAMESPACE_PREFIXES",
+    "UCO_PROFILE_NAMESPACE_PREFIXES",
+    "UPPER_ONTOLOGY_REGISTRY_PATH",
+    "UPPER_TERM_GUIDANCE",
+    "ConceptCoverageReport",
+    "DeclaredTerms",
+    "OntologyParseError",
+    "ProfileNotSelected",
+    "_DECLARED_CACHE",
+    "_core_ontology_paths",
+    "_is_standard",
+    "_load_upper_registry",
+    "_profile_for_upper_iri",
+    "check_graph_concepts",
+    "clear_declared_term_cache",
+    "coverage_report_to_dict",
+    "load_declared_terms",
+]

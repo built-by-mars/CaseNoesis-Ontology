@@ -21,10 +21,20 @@ from __future__ import annotations
 
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-
 # Subdirectories of ontology/ that are not extension directories.
 _NON_EXTENSION_DIRS = {"CASE", "UCO", "upper"}
+
+
+def _discover_project_root() -> Path:
+    """Locate the monorepo root that holds ``extensions/`` and ``ontology/``."""
+    here = Path(__file__).resolve()
+    for candidate in (here.parents[3], here.parents[2], Path.cwd(), *here.parents):
+        if (candidate / "extensions").is_dir() and (candidate / "ontology").exists():
+            return candidate
+    return here.parents[3]
+
+
+PROJECT_ROOT = _discover_project_root()
 
 
 def extension_roots(project_root: Path = PROJECT_ROOT) -> tuple[Path, Path]:
@@ -94,3 +104,14 @@ def iter_extension_dirs(project_root: Path = PROJECT_ROOT) -> list[Path]:
                 continue
             found.setdefault(ext_dir.name, ext_dir)
     return [found[name] for name in sorted(found)]
+
+
+__all__ = [
+    "PROJECT_ROOT",
+    "extension_roots",
+    "native_extension_root",
+    "find_extension_dir",
+    "extension_dir",
+    "extension_manifest_path",
+    "iter_extension_dirs",
+]

@@ -17,4 +17,4 @@ __all__ = [
     "InvalidSplitSizeError",
     "clear_class_registry_cache",
 ]
-__version__ = "1.22.1"
+__version__ = "1.22.2"

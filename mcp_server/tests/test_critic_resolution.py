@@ -63,13 +63,13 @@ def _two_pass(
     return r1, r2
 
 
-def test_heuristic_findings_stamp_rule_version_1_2_0():
+def test_heuristic_findings_stamp_current_rule_version():
     view = load_canonical_graph(FIXTURES / "seeded-defects.jsonld")
     findings, executions = run_graph_heuristics(view, artifact_hash="rv")
-    assert RULE_VERSION == "1.2.0"
+    assert RULE_VERSION
     assert findings
-    assert all(f.rule_version == "1.2.0" for f in findings)
-    assert all(e.rule_version == "1.2.0" for e in executions)
+    assert all(f.rule_version == RULE_VERSION for f in findings)
+    assert all(e.rule_version == RULE_VERSION for e in executions)
 
 
 @pytest.mark.parametrize(
@@ -128,7 +128,7 @@ def test_heuristic_finding_resolves_on_repair(rule_id: str, pass1: Path, pass2: 
     open1 = _open_by_rule(r1)
     assert rule_id in open1, sorted(open1)
     finding = open1[rule_id]
-    assert finding.rule_version == "1.2.0"
+    assert finding.rule_version == RULE_VERSION
     assert finding.status in {"new", "persisting"}
 
     resolved = _resolved_by_rule(r2)

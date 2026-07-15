@@ -131,6 +131,8 @@ jobs:
           fi
 
       - name: Run held-out routing evaluation
+        env:
+          PYTHONPATH: python:mcp_server
         run: |
           python evaluation/routing/run_evaluation.py \
             --corpus evaluation/routing/heldout-corpus-v1.json \
@@ -200,9 +202,13 @@ jobs:
         run: PYTHONPATH=generator/src:python python -m pytest generator/tests python/tests -v
 
       - name: Run MCP server tests
+        env:
+          PYTHONPATH: python:mcp_server
         run: python -m pytest mcp_server/tests -v
 
       - name: Run critic unit tests
+        env:
+          PYTHONPATH: python:mcp_server
         run: |
           python -m pytest \
             mcp_server/tests/test_critic.py \
@@ -223,9 +229,9 @@ jobs:
           CASE_UCO_MCP_ALLOW_OVERWRITE: "1"
         run: |
           mkdir -p artifacts/critic-write/critic-sessions evaluation/critic/reports
-          PYTHONPATH=mcp_server python evaluation/critic/harness/run_oracles.py \
+          PYTHONPATH=python:mcp_server python evaluation/critic/harness/run_oracles.py \
             --report evaluation/critic/reports/oracles-latest.json
-          PYTHONPATH=mcp_server python evaluation/critic/harness/run_session_replay.py \
+          PYTHONPATH=python:mcp_server python evaluation/critic/harness/run_session_replay.py \
             --case-dir evaluation/critic/cases/micro/repair-charged-with \
             --pass1-graph evaluation/critic/cases/micro/repair-charged-with/pass1/graph.jsonld \
             --pass2-graph evaluation/critic/cases/micro/repair-charged-with/pass2/graph.jsonld \
@@ -319,6 +325,7 @@ jobs:
       - name: FileLock + session smoke
         env:
           CASE_UCO_MCP_ALLOW_OVERWRITE: "1"
+          PYTHONPATH: python:mcp_server
         run: python -m pytest mcp_server/tests/test_critic_file_lock_smoke.py -v
 
   test-csharp:

@@ -16,6 +16,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import concept_coverage
+import case_uco.validation.coverage as _coverage_impl
 import graph_validator
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -677,7 +678,7 @@ def _upper_term_graph(tmp_path):
 def test_missing_registry_fails_closed_for_upper_terms(tmp_path, monkeypatch):
     graph = _upper_term_graph(tmp_path)
     monkeypatch.setattr(
-        concept_coverage,
+        _coverage_impl,
         "UPPER_ONTOLOGY_REGISTRY_PATH",
         tmp_path / "no-such-registry.json",
     )
@@ -697,7 +698,7 @@ def test_corrupt_registry_fails_closed_for_upper_terms(tmp_path, monkeypatch):
     bad_registry = tmp_path / "registry.json"
     bad_registry.write_text("{not json", encoding="utf-8")
     monkeypatch.setattr(
-        concept_coverage, "UPPER_ONTOLOGY_REGISTRY_PATH", bad_registry
+        _coverage_impl, "UPPER_ONTOLOGY_REGISTRY_PATH", bad_registry
     )
     concept_coverage.clear_declared_term_cache()
     report = concept_coverage.check_graph_concepts(
@@ -724,7 +725,7 @@ def test_provenance_invalid_registry_fails_closed(tmp_path, monkeypatch):
         encoding="utf-8",
     )
     monkeypatch.setattr(
-        concept_coverage, "UPPER_ONTOLOGY_REGISTRY_PATH", bad_registry
+        _coverage_impl, "UPPER_ONTOLOGY_REGISTRY_PATH", bad_registry
     )
     concept_coverage.clear_declared_term_cache()
     report = concept_coverage.check_graph_concepts(
@@ -746,7 +747,7 @@ def test_missing_registry_irrelevant_without_upper_terms(tmp_path, monkeypatch):
         ],
     )
     monkeypatch.setattr(
-        concept_coverage,
+        _coverage_impl,
         "UPPER_ONTOLOGY_REGISTRY_PATH",
         tmp_path / "no-such-registry.json",
     )

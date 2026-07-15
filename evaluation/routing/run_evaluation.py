@@ -33,7 +33,10 @@ from collections import defaultdict
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(PROJECT_ROOT / "mcp_server"))
+for _path in (PROJECT_ROOT / "mcp_server", PROJECT_ROOT / "python"):
+    _path_str = str(_path)
+    if _path_str not in sys.path:
+        sys.path.insert(0, _path_str)
 
 
 def evaluate(corpus: dict) -> dict:

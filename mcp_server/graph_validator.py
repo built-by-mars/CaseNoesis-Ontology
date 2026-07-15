@@ -15,7 +15,6 @@ import case_uco.validation.graph as _impl
 # Exposed so existing tests can monkeypatch ``graph_validator.shutil.which``.
 shutil = _impl.shutil
 
-# Re-export public and test-facing private helpers.
 DEFAULT_BUILT_VERSION = _impl.DEFAULT_BUILT_VERSION
 DEFAULT_TIMEOUT_SECONDS = _impl.DEFAULT_TIMEOUT_SECONDS
 MAX_GRAPH_BYTES = _impl.MAX_GRAPH_BYTES
@@ -28,7 +27,6 @@ extension_ontology_args = _impl.extension_ontology_args
 load_extension_ontology_paths = _impl.load_extension_ontology_paths
 report_to_dict = _impl.report_to_dict
 resolve_extension_dependencies = _impl.resolve_extension_dependencies
-_parse_conforms = _impl._parse_conforms
 
 
 def validator_available() -> bool:
@@ -44,3 +42,28 @@ def validate_graph_file(*args: Any, **kwargs: Any):
         return _impl.validate_graph_file(*args, **kwargs)
     finally:
         _impl.MAX_GRAPH_BYTES = saved
+
+
+def _parse_conforms(output: str) -> bool | None:
+    """Compatibility wrapper for tests that still call the private helper."""
+    return _impl._parse_conforms(output)
+
+
+__all__ = [
+    "DEFAULT_BUILT_VERSION",
+    "DEFAULT_TIMEOUT_SECONDS",
+    "MAX_GRAPH_BYTES",
+    "PROJECT_ROOT",
+    "SUPPORTED_GRAPH_EXTENSIONS",
+    "VALIDATOR_NAME",
+    "GraphValidationReport",
+    "extension_has_validation_subset",
+    "extension_ontology_args",
+    "load_extension_ontology_paths",
+    "report_to_dict",
+    "resolve_extension_dependencies",
+    "shutil",
+    "validate_graph_file",
+    "validator_available",
+    "_parse_conforms",
+]

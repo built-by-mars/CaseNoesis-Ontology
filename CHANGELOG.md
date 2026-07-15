@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.2] - 2026-07-15
+
+CI/CodeQL recovery after the v1.22.1 validation-module move, plus routine
+dependency bumps. Registry publication remains opt-in (**disabled** for this
+tag).
+
+#### Fixes
+
+- MCP / routing / Windows critic jobs can import `case_uco.validation`
+  (`PYTHONPATH=python:mcp_server`, conftest + routing harness path fixes).
+- Replace polluting star-import shims with explicit re-exports and `__all__`
+  (CodeQL `py/polluting-import`, `py/unused-import`, unused `_parse_conforms`).
+- Correct `extension_paths.PROJECT_ROOT` discovery after the package move.
+- Orphan reachability follows `case-investigation:relevantAuthorization`.
+- Concept-coverage fail-closed tests monkeypatch the implementation module;
+  heuristic resolution tests track current `RULE_VERSION`.
+
+#### Dependencies
+
+- `sha2` 0.10 → 0.11 (Rust).
+- `Microsoft.NET.Test.Sdk` 18.7.0 → 18.8.1.
+- `ontology/UCO` submodule `748aea0` → `8335d32`.
+
+Package versions bumped to **1.22.2**.
+
 ## [1.22.1] - 2026-07-14
 
 Public Python validation API, CTI epistemic modeling for DarkWatchman, critic
@@ -1942,7 +1967,8 @@ digital forensics, cyber-investigation, and cyber-observable data.
 - GitHub Actions workflows: CI, CodeQL, dependency review, release
 - Dependabot configuration for automated dependency updates
 
-[Unreleased]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.1...HEAD
+[Unreleased]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.2...HEAD
+[1.22.2]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.1...v1.22.2
 [1.22.1]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.22.0...v1.22.1
 [1.22.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.21.0...v1.22.0
 [1.21.0]: https://github.com/vulnmaster/CASE-UCO-SDK/compare/v1.20.0...v1.21.0

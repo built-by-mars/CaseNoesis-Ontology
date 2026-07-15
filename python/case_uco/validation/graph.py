@@ -612,3 +612,21 @@ def _parse_conforms(output: str) -> bool | None:
         if normalized == "false":
             return False
     return None
+
+__all__ = [
+    "DEFAULT_BUILT_VERSION",
+    "DEFAULT_TIMEOUT_SECONDS",
+    "MAX_GRAPH_BYTES",
+    "PROJECT_ROOT",
+    "SUPPORTED_GRAPH_EXTENSIONS",
+    "VALIDATOR_NAME",
+    "GraphValidationReport",
+    "extension_has_validation_subset",
+    "extension_ontology_args",
+    "load_extension_ontology_paths",
+    "report_to_dict",
+    "resolve_extension_dependencies",
+    "validate_graph_file",
+    "validator_available",
+    "_parse_conforms",
+]

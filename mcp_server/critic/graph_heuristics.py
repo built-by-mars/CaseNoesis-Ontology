@@ -1073,6 +1073,8 @@ def _orphan_top_level_nodes(
         ):
             roots.add(node.iri)
             roots.update(node.refs(IRI_OBJECT))
+            if node.has_type(IRI_INVESTIGATION):
+                roots.update(node.refs(IRI_RELEVANT_AUTH))
 
     reachable = set(roots)
     changed = True
