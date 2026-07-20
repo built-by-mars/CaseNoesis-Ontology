@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `extensions/trajectories/`: candidate state-machine/trajectory extension (State, Transition, Trajectory, PhaseAssertion, StateMachineModel/TransitionEstimate) with an observed≠inferred SHACL firewall; validated via the SDK path with `extensions=['trajectories']`, `profiles=['time','prov-o']`.
+- `extensions/trajectories/`: terminal-polarity pair `traj:isTerminal` / `traj:terminalPolarity` (v0.2.0) marking a Trajectory's realized outcome (`completed` / `disrupted`) without requiring a second, opposite-polarity branch.
+- `extensions/trajectories/`: Exploitation State Machine metamodel additions (v0.3.0) — `traj:enactsAction` (Transition → Action, additive alongside `traj:trigger`, carries the abused affordance via `action:instrument`) and `traj:initialState` (StateMachineModel → State, marks s₀).
+- `extensions/trajectories/` (v0.3.1): `traj:enactsAction` is multi-valued (SHACL `sh:maxCount` removed) so affordance-labeled multi-action edges validate.
+- `extensions/elder-fraud/`, `extensions/extortion/`, `extensions/trafficking/`: three narrow, machine-only ESM domain extensions (phase `skos:ConceptScheme` + `uco-action:Technique`-typed action catalog + minimal SHACL + real exemplar each), grounded in United States v. Castanos Garcia et al. (D. Mass. 1:24-cr-10138), United States v. Matthew D. Lane (D. Mass.), and United States v. Chase Anthony Young (N.D. Tex.) respectively.
+
 ## [1.22.4] - 2026-07-15
 
 SDK hardening from the v1.22.1 CTI review: provenance-manifest integrity across

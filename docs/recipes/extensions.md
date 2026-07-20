@@ -259,9 +259,11 @@ Complex extensions with multiple modules can provide a `manifest.json` file in t
 | `shacl_files` | No | Relative paths to SHACL shapes files |
 | `bridge_files` | No | Relative paths to bridge/alignment modules |
 | `exemplar_files` | No | Relative paths to example instance data |
+| `invalid_exemplar_files` | No | Relative paths to expected-invalid negative fixtures that must fail SHACL validation |
 | `uco_compat` | Yes | List of compatible UCO versions |
 | `upper_ontology` | No | `"gufo"`, `"bfo"`, or `"none"` |
 | `cdo_shapes_compatibility` | No | Map of CDO Shapes profile → compatibility status |
+| `status` | No | Staged promotion lifecycle state: `"candidate"`, `"operational"`, or `"deprecated"` (see [`mcp_server/knowledge_lifecycle.py`](../../mcp_server/knowledge_lifecycle.py)). Manifests without this field are treated as `"operational"`. |
 
 ### Example Manifest
 
